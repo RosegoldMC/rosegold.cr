@@ -1,0 +1,79 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  CheckFormat:
+    if: github.repository != 'grepsedawk/sharded.cr'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - uses: oprypin/install-crystal@v1
+        with:
+          crystal: latest
+
+      - name: Format
+        run: crystal tool format --check
+
+      - name: Set up Crystal cache
+        uses: actions/cache@v2.1.7
+        id: crystal-cache
+        with:
+          path: |
+            ~/.cache/crystal
+            bin/ameba
+            lib
+          key: ${{ runner.os }}-crystal-${{ hashFiles('**/shard.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-crystal-
+
+      - name: Install shards
+        if: steps.crystal-cache.outputs.cache-hit != 'true'
+        run: shards check || shards install --ignore-crystal-version
+
+      - name: Run ameba linter
+        run: ./bin/ameba
+
+  RunSpecs:
+    if: github.repository != 'grepsedawk/sharded.cr'
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        crystal_version:
+          - 1.2.0
+          - latest
+        experimental:
+          - false
+
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - uses: oprypin/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal_version }}
+
+      - name: Set up Crystal cache
+        uses: actions/cache@v2.1.7
+        id: crystal-cache
+        with:
+          path: |
+            ~/.cache/crystal
+            bin/ameba
+            lib
+          key: ${{ runner.os }}-crystal-${{ matrix.crystal_version }}-${{ hashFiles('**/shard.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-crystal-
+
+      - name: Install shards
+        if: steps.crystal-cache.outputs.cache-hit != 'true'
+        run: shards check || shards install --ignore-crystal-version
+
+      - name: Run tests
+        run: crystal spec

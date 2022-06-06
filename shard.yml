@@ -1,0 +1,25 @@
+name: rosegold
+version: 0.1.0
+
+authors:
+  - grepsedawk <grepsedawk@users.noreply.github.com>
+
+crystal: 1.4.1
+
+license: MIT
+dependencies:
+  habitat:
+    github: luckyframework/habitat
+
+development_dependencies:
+  ameba:
+    github: crystal-ameba/ameba
+    version: ~> 0.14
+  dotenv:
+    github: drum445/dotenv
+  spectator:
+    github: icy-arctic-fox/spectator
+    version: ~> 0.10
+  openssl_ext:
+    github: spider-gazelle/openssl_ext
+    version: ~> 2.0
