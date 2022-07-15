@@ -1,5 +1,7 @@
 require "./microsoft/mobile_oauth"
 
+ticket = Microsoft::MobileOAuth.prompt_for_login!
+
 HTTP::Client.post(
   "https://user.auth.xboxlive.com/user/authenticate",
   headers: HTTP::Headers{
@@ -10,7 +12,7 @@ HTTP::Client.post(
     "Properties" => {
       "AuthMethod" => "RPS",
       "SiteName"   => "user.auth.xboxlive.com",
-      "RpsTicket"  => "d=#{Microsoft::MobileOAuth.prompt_for_login!}",
+      "RpsTicket"  => "d=#{ticket}",
     },
     "RelyingParty" => "http://auth.xboxlive.com",
     "TokenType"    => "JWT",

@@ -14,7 +14,7 @@ module Microsoft::MobileOAuth
         form: "client_id=#{CLIENT_ID}&scope=XboxLive.signin offline_access"
       ).body
     ).try do |json|
-      puts json["message"]
+      STDERR.puts json["message"]
 
       loop do
         sleep 5
@@ -25,7 +25,7 @@ module Microsoft::MobileOAuth
           ).body).try do |token|
           next if token["error"]?
 
-          puts "Login successful!"
+          STDERR.puts "Login successful!"
 
           return token["access_token"].as_s
         end
