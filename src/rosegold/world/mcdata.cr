@@ -15,14 +15,10 @@ class Rosegold::MCData
 
   def initialize(mc_version : String)
     # for arbitrary version support, we would need to parse dataPaths.json
-    # so we only support 1.18 for now
-    # blocks_json = File.open "#{MCD_ROOT}/#{mc_version}/blocks.json" do |f|
-    blocks_json = File.open "blocks.json" do |f|
-      Array(Block).from_json f
-    end
-    block_collision_shapes_json = File.open "blockCollisionShapes.json" do |f|
-      BlockCollisionShapes.from_json f
-    end
+    raise "we only support 1.18 for now" if mc_version != "1.18"
+
+    blocks_json = Array(Block).from_json {{read_file "blocks.json"}}
+    block_collision_shapes_json = BlockCollisionShapes.from_json {{read_file "blockCollisionShapes.json"}}
 
     @blocks_by_id = Hash.zip(blocks_json.map &.name, blocks_json)
 
