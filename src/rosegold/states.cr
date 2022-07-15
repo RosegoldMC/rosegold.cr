@@ -4,7 +4,7 @@ class Rosegold::State::Status
     when 0x00
       Clientbound::Status
     else
-      raise "Unknown packet id: #{packet_id} for Status: Rosegold::State::Status"
+      raise "Unknown packet id: 0x#{Bytes[packet_id].hexstring} for Status: Rosegold::State::Status"
     end
   end
 
@@ -27,7 +27,7 @@ class Rosegold::State::Login
     when 0x04
       Clientbound::LoginPluginRequest
     else
-      raise "Unknown packet id: #{packet_id} for Status: Rosegold::State::Login"
+      raise "Unknown packet id: 0x#{Bytes[packet_id].hexstring} for Status: Rosegold::State::Login"
     end
   end
 
