@@ -14,6 +14,5 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.state = State::Play.new
   end
 end
