@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::State::Play - rosegold main</title>
+  <title>Rosegold::Clientbound::JoinGame - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -116,7 +116,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
@@ -126,7 +126,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/JoinGame" data-name="rosegold::clientbound::joingame">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/JoinGame" data-name="rosegold::clientbound::joingame">
       <a href="../../Rosegold/Clientbound/JoinGame.html">JoinGame</a>
       
     </li>
@@ -206,7 +206,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/State" data-name="rosegold::state">
+  <li class="parent " data-id="rosegold/Rosegold/State" data-name="rosegold::state">
       <a href="../../Rosegold/State.html">State</a>
       
         <ul>
@@ -216,7 +216,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/State/Play" data-name="rosegold::state::play">
+  <li class=" " data-id="rosegold/Rosegold/State/Play" data-name="rosegold::state::play">
       <a href="../../Rosegold/State/Play.html">Play</a>
       
     </li>
@@ -245,26 +245,15 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::State::Play
+  <span class="kind">class</span> Rosegold::Clientbound::JoinGame
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/State/Play.html">Rosegold::State::Play</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/JoinGame.html">Rosegold::Clientbound::JoinGame</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>https://wiki.vg/index.php?title=Protocol&amp;oldid=17499</p>
 
 
 
@@ -289,8 +278,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/states.cr#L40" target="_blank">
-        rosegold/states.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/packets/clientbound/join_game.cr#L1" target="_blank">
+        rosegold/packets/clientbound/join_game.cr
       </a>
     
     <br/>
@@ -299,6 +288,23 @@
 
 
 
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28entity_id%2Chardcore%29-class-method" class="signature"><strong>.new</strong>(entity_id, hardcore)</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -313,7 +319,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%5B%5D%28packet_id%29-class-method" class="signature"><strong>.[]</strong>(packet_id)</a>
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
         
       </li>
     
@@ -332,7 +338,27 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%5B%5D%28packet_id%29-instance-method" class="signature"><strong>#[]</strong>(packet_id)</a>
+        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#entity_id%3AInt32-instance-method" class="signature"><strong>#entity_id</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#entity_id%3D%28entity_id%3AInt32%29-instance-method" class="signature"><strong>#entity_id=</strong>(entity_id : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#hardcore%3ABool-instance-method" class="signature"><strong>#hardcore</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#hardcore%3D%28hardcore%3ABool%29-instance-method" class="signature"><strong>#hardcore=</strong>(hardcore : Bool)</a>
         
       </li>
     
@@ -343,6 +369,25 @@
 
 
 <div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#callback%28client%29-instance-method" class="tooltip">
+      <span>callback(client)</span>
+    callback</a>
+    
+  
+
+
+    
+
+
+    
+
+
   
     
 
@@ -367,6 +412,32 @@
 </div>
 
 
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(entity_id,hardcore)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(entity_id, hardcore)
+
+        <a class="method-permalink" href="#new%28entity_id%2Chardcore%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/packets/clientbound/join_game.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
 
   <h2>
@@ -378,18 +449,18 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="[](packet_id)-class-method">
+    <div class="entry-detail" id="read(packet)-class-method">
       <div class="signature">
         
-        def self.<strong>[]</strong>(packet_id)
+        def self.<strong>read</strong>(packet)
 
-        <a class="method-permalink" href="#%5B%5D%28packet_id%29-class-method">#</a>
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/states.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/packets/clientbound/join_game.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -406,18 +477,82 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="[](packet_id)-instance-method">
+    <div class="entry-detail" id="callback(client)-instance-method">
       <div class="signature">
         
-        def <strong>[]</strong>(packet_id)
+        def <strong>callback</strong>(client)
 
-        <a class="method-permalink" href="#%5B%5D%28packet_id%29-instance-method">#</a>
+        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/states.cr#L51" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/packets/clientbound/join_game.cr#L16" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entity_id:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>entity_id</strong> : Int32
+
+        <a class="method-permalink" href="#entity_id%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/packets/clientbound/join_game.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entity_id=(entity_id:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>entity_id=</strong>(entity_id : Int32)
+
+        <a class="method-permalink" href="#entity_id%3D%28entity_id%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/packets/clientbound/join_game.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="hardcore:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>hardcore</strong> : Bool
+
+        <a class="method-permalink" href="#hardcore%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/packets/clientbound/join_game.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="hardcore=(hardcore:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>hardcore=</strong>(hardcore : Bool)
+
+        <a class="method-permalink" href="#hardcore%3D%28hardcore%3ABool%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/41ff4cf34b6486c523001be5df038e18283d8eb6/src/rosegold/packets/clientbound/join_game.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
