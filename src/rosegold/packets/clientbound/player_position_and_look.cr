@@ -1,5 +1,5 @@
-require "../../look"
-require "../../vec3"
+require "../../world/look"
+require "../../world/vec3"
 
 # flags: x/y/z/yaw/pitch. If a flag is set, its value is relative to the current player position/look.
 class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Packet

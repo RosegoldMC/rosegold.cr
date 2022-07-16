@@ -136,12 +136,6 @@ class Minecraft::EncryptedTCPSocket
     upstream_size
   end
 
-  def read_byte
-    buf = Bytes.new 1
-    read_fully(buf)
-    buf[0]
-  end
-
   def write(slice : Bytes) : Nil
     @io.write @write_cipher.update(slice)
   end
