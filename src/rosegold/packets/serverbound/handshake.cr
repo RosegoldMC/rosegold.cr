@@ -5,9 +5,9 @@ class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
 
   property \
     protocol_version : UInt32,
-    server_address,
-    server_port,
-    next_state
+    server_address : String,
+    server_port : UInt16,
+    next_state : UInt32
 
   def initialize(
     @protocol_version : UInt32,
