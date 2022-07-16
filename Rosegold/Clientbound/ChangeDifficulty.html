@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Clientbound::Status - rosegold main</title>
+  <title>Rosegold::Clientbound::ChangeDifficulty - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -121,7 +121,7 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChangeDifficulty" data-name="rosegold::clientbound::changedifficulty">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/ChangeDifficulty" data-name="rosegold::clientbound::changedifficulty">
       <a href="../../Rosegold/Clientbound/ChangeDifficulty.html">ChangeDifficulty</a>
       
     </li>
@@ -166,7 +166,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/Status" data-name="rosegold::clientbound::status">
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/Status" data-name="rosegold::clientbound::status">
       <a href="../../Rosegold/Clientbound/Status.html">Status</a>
       
     </li>
@@ -255,12 +255,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::Clientbound::Status
+  <span class="kind">class</span> Rosegold::Clientbound::ChangeDifficulty
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/Status.html">Rosegold::Clientbound::Status</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/ChangeDifficulty.html">Rosegold::Clientbound::ChangeDifficulty</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -288,8 +288,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/status.cr#L3" target="_blank">
-        rosegold/packets/clientbound/status.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/change_difficulty.cr#L1" target="_blank">
+        rosegold/packets/clientbound/change_difficulty.cr
       </a>
     
     <br/>
@@ -310,7 +310,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28json_response%29-class-method" class="signature"><strong>.new</strong>(json_response)</a>
+        <a href="#new%28difficulty%2Cdifficulty_locked%29-class-method" class="signature"><strong>.new</strong>(difficulty, difficulty_locked)</a>
         
       </li>
     
@@ -348,12 +348,27 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#json_response%3AJSON%3A%3AAny-instance-method" class="signature"><strong>#json_response</strong> : JSON::Any</a>
+        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#json_response%3D%28json_response%3AJSON%3A%3AAny%29-instance-method" class="signature"><strong>#json_response=</strong>(json_response : JSON::Any)</a>
+        <a href="#difficulty%3AUInt8%3F-instance-method" class="signature"><strong>#difficulty</strong> : UInt8?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#difficulty%3D%28difficulty%3AUInt8%3F%29-instance-method" class="signature"><strong>#difficulty=</strong>(difficulty : UInt8?)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#difficulty_locked%3ABool-instance-method" class="signature"><strong>#difficulty_locked</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#difficulty_locked%3D%28difficulty_locked%3ABool%29-instance-method" class="signature"><strong>#difficulty_locked=</strong>(difficulty_locked : Bool)</a>
         
       </li>
     
@@ -416,18 +431,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(json_response)-class-method">
+    <div class="entry-detail" id="new(difficulty,difficulty_locked)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(json_response)
+        def self.<strong>new</strong>(difficulty, difficulty_locked)
 
-        <a class="method-permalink" href="#new%28json_response%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28difficulty%2Cdifficulty_locked%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/status.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/change_difficulty.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -455,7 +470,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/status.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/change_difficulty.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -472,34 +487,82 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="json_response:JSON::Any-instance-method">
+    <div class="entry-detail" id="callback(client)-instance-method">
       <div class="signature">
         
-        def <strong>json_response</strong> : JSON::Any
+        def <strong>callback</strong>(client)
 
-        <a class="method-permalink" href="#json_response%3AJSON%3A%3AAny-instance-method">#</a>
+        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/status.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/change_difficulty.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="json_response=(json_response:JSON::Any)-instance-method">
+    <div class="entry-detail" id="difficulty:UInt8?-instance-method">
       <div class="signature">
         
-        def <strong>json_response=</strong>(json_response : JSON::Any)
+        def <strong>difficulty</strong> : UInt8?
 
-        <a class="method-permalink" href="#json_response%3D%28json_response%3AJSON%3A%3AAny%29-instance-method">#</a>
+        <a class="method-permalink" href="#difficulty%3AUInt8%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/status.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/change_difficulty.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="difficulty=(difficulty:UInt8?)-instance-method">
+      <div class="signature">
+        
+        def <strong>difficulty=</strong>(difficulty : UInt8?)
+
+        <a class="method-permalink" href="#difficulty%3D%28difficulty%3AUInt8%3F%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/change_difficulty.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="difficulty_locked:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>difficulty_locked</strong> : Bool
+
+        <a class="method-permalink" href="#difficulty_locked%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/change_difficulty.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="difficulty_locked=(difficulty_locked:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>difficulty_locked=</strong>(difficulty_locked : Bool)
+
+        <a class="method-permalink" href="#difficulty_locked%3D%28difficulty_locked%3ABool%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/bd6367ec1fb1a35c6b383e75ea4d019a723f43ea/src/rosegold/packets/clientbound/change_difficulty.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
