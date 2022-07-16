@@ -13,7 +13,7 @@ class Rosegold::Serverbound::Pong < Rosegold::Serverbound::Packet
   def to_packet : Minecraft::IO
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write PACKET_ID
-      buffer.write ping_id
+      buffer.write_int32 ping_id
     end
   end
 end

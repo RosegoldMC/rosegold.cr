@@ -16,6 +16,14 @@ module Minecraft::IO
     write value ? Bytes[0x01] : Bytes[0x00]
   end
 
+  def write_int32(value : Int32)
+    write_bytes value, ::IO::ByteFormat::BigEndian
+  end
+
+  def write_uint64(value : UInt64)
+    write_bytes value, ::IO::ByteFormat::BigEndian
+  end
+
   def write(value : UInt32 | UInt64) : Nil
     a = Array(UInt8).new
     more = true
@@ -45,6 +53,10 @@ module Minecraft::IO
 
   def read_int32 : Int32
     read_bytes Int32, ::IO::ByteFormat::BigEndian
+  end
+
+  def read_uint64 : UInt64
+    read_bytes UInt64, ::IO::ByteFormat::BigEndian
   end
 
   def read_float32 : Float32
