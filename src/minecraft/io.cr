@@ -38,6 +38,11 @@ module Minecraft::IO
     write a.to_unsafe.to_slice a.size
   end
 
+  def write_position(x : Int32, y : Int32, z : Int32)
+    x, y, z = x.to_i64, y.to_i64, z.to_i64
+    write_full ((x & 0x3FFFFFF) << 38) | ((z & 0x3FFFFFF) << 12) | (y & 0xFFF)
+  end
+
   def read_byte
     buf = Bytes.new 1
     read_fully(buf)
