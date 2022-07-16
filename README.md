@@ -1,8 +1,18 @@
 # rosegold
 
-TODO: Write a description here
+Minecraft client written in [Crystal](http://crystal-lang.org/), following the [botting rules](https://civwiki.org/wiki/Botting#Botting_Rules) of [CivMC](https://civwiki.org/wiki/CivMC)
 
-## Installation
+## Use as a standalone client
+
+0. [Install Crystal](https://crystal-lang.org/install/)
+1. [Install the Shards dependency manager](https://github.com/crystal-lang/shards#install)
+2. Download the code: `git clone git@github.com:grepsedawk/rosegold.cr.git`
+3. Install the dependencies: `shards install`
+4. Build the executable: `crystal build src/rosegold.cr`
+5. Launch the client: `./rosegold`
+5. Follow the instructions to log into your Minecraft account
+
+## Use as a library
 
 1. Add the dependency to your `shard.yml`:
 
@@ -13,18 +23,11 @@ TODO: Write a description here
    ```
 
 2. Run `shards install`
+3. Import the module:
 
-## Usage
-
-```crystal
-require "rosegold"
-```
-
-TODO: Write usage instructions here
-
-## Development
-
-TODO: Write development instructions here
+   ```crystal
+   require "rosegold"
+   ```
 
 ## Contributing
 
@@ -37,3 +40,4 @@ TODO: Write development instructions here
 ## Contributors
 
 - [grepsedawk](https://github.com/grepsedawk) - creator and maintainer
+- [Gjum](https://github.com/Gjum) - contributor
