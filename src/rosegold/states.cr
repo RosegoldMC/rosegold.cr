@@ -36,13 +36,15 @@ class Rosegold::State::Login
   end
 end
 
+# https://wiki.vg/index.php?title=Protocol&oldid=17499
 class Rosegold::State::Play
   def self.[](packet_id)
     case packet_id
     # when 0x23
-    #   Clientbound::Login # TODO
+    when 0x26
+      Clientbound::JoinGame
     else
-      raise "Unknown packet id: #{packet_id} for Status: Rosegold::State::Play"
+      raise "Unknown packet id: 0x#{Bytes[packet_id].hexstring} for Status: Rosegold::State::Play"
     end
   end
 
