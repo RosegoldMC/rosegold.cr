@@ -1,3 +1,4 @@
+require "io/hexdump"
 require "socket"
 require "uuid"
 
@@ -102,6 +103,10 @@ module Minecraft::IO
 end
 
 class Minecraft::IO::Memory < IO::Memory
+  include Minecraft::IO
+end
+
+class Minecraft::IO::Hexdump < IO::Hexdump
   include Minecraft::IO
 end
 
