@@ -24,11 +24,20 @@ class Rosegold::Client
     new(Minecraft::TCPSocket.new(host, port), host, port)
   end
 
+  def log_info(&build_msg : -> String)
+    STDERR.puts build_msg.call
+  end
+
+  def log_debug(&build_msg : -> String)
+    # STDERR.puts build_msg.call
+  end
+
   def compress?
     compression_threshold.positive?
   end
 
   def send_packet(packet : Rosegold::Serverbound::Packet)
+    log_debug { "tx -> #{packet.class}".gsub "Rosegold::Serverbound::", "" }
     packet.to_packet.try do |packet|
       if compress?
         Minecraft::IO::Memory.new.tap do |buffer|
@@ -73,6 +82,7 @@ class Rosegold::Client
     Minecraft::IO::Memory.new(pkt_bytes).try do |pkt_io|
       pkt_type = state[pkt_io.read_var_int]
       if pkt_type
+        log_debug { "rx <- #{pkt_type}".gsub "Rosegold::Clientbound::", "" }
         return pkt_type.read(pkt_io).tap &.callback(self)
       else
         return nil # packet not parsed

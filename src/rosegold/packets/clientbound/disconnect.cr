@@ -12,7 +12,7 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    puts "Disconnected: #{reason}"
+    client.log_info { "Disconnected: #{reason}" }
     exit 0
   end
 end

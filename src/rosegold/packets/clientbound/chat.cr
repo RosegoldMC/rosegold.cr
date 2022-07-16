@@ -16,6 +16,6 @@ class Rosegold::Clientbound::Chat < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    puts "[Chat] #{message}"
+    client.log_info { "[Chat] #{message}" }
   end
 end
