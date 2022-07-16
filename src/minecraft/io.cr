@@ -75,6 +75,14 @@ module Minecraft::IO
     read_fully(buffer = Bytes.new(16))
     UUID.new buffer
   end
+
+  def read_double : Float64
+    read_bytes Float64, ::IO::ByteFormat::BigEndian
+  end
+
+  def read_float : Float32
+    read_bytes Float32, ::IO::ByteFormat::BigEndian
+  end
 end
 
 class Minecraft::IO::Memory < IO::Memory

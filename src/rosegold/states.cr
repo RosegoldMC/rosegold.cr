@@ -40,9 +40,30 @@ end
 class Rosegold::State::Play
   def self.[](packet_id)
     case packet_id
-    # when 0x23
+    when 0x12
+      # TODO: Clientbound::DeclareCommands
+    when 0x18
+      # TODO: Clientbound::PluginMessage
     when 0x26
       Clientbound::JoinGame
+    when 0x32
+      # TODO: Clientbound::PlayerAbilities
+    when 0x38
+      Clientbound::PlayerPositionAndLook
+    when 0x39
+      # TODO: Clientbound::UnlockRecipes
+    when 0x48
+      # TODO: Clientbound::HeldItemChange
+    when 0x55
+      # TODO: Clientbound::Teams
+    when 0x66
+      # TODO: Clientbound::DeclareRecipes
+    when 0x67
+      # TODO: Clientbound::Tags
+    when 0x1b
+      # TODO: Clientbound::EntityAction
+    when 0x0e
+      Clientbound::ChangeDifficulty
     else
       raise "Unknown packet id: 0x#{Bytes[packet_id].hexstring} for Status: Rosegold::State::Play"
     end
