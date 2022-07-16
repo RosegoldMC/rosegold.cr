@@ -17,7 +17,7 @@ class Rosegold::State::Login
   def self.[](packet_id)
     case packet_id
     when 0x00
-      Clientbound::LoginDisconnect
+      Clientbound::Disconnect
     when 0x01
       Clientbound::EncryptionRequest
     when 0x02

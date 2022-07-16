@@ -1,4 +1,4 @@
-class Rosegold::Clientbound::LoginDisconnect < Rosegold::Clientbound::Packet
+class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
   property \
     reason : String
 
@@ -12,7 +12,7 @@ class Rosegold::Clientbound::LoginDisconnect < Rosegold::Clientbound::Packet
   end
 
   def self.callback(client)
-    puts "Disconnected!"
+    puts "Disconnected: #{reason}"
     exit 0
   end
 end
