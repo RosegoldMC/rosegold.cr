@@ -66,7 +66,7 @@ class Rosegold::State::Play
     when 0x66; nil # TODO: Clientbound::DeclareRecipes
 
     # botting
-    when 0x0f; nil # TODO: Clientbound::Chat
+    when 0x0f; Clientbound::Chat
     when 0x36; nil # TODO: Clientbound::PlayerInfo # tab list
     when 0x0d; nil # TODO: Clientbound::BossBar
     when 0x41; nil # TODO: Clientbound::ActionBar # text above hotbar
