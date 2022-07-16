@@ -38,18 +38,18 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     )
   end
 
-  def feet_vec(reference : Vec3d)
+  def feet(reference : Vec3d)
     Vec3d.new(
       relative_flags & 0b001 ? reference.x + x_raw : x_raw,
       relative_flags & 0b010 ? reference.y + y_raw : y_raw,
       relative_flags & 0b100 ? reference.z + z_raw : z_raw)
   end
 
-  def look_rad(reference_rad : LookRad)
+  def look(reference_rad : LookRad)
     look_deg(reference_rad.to_deg).to_rad
   end
 
-  def look_deg(reference_deg : LookDeg)
+  def look(reference_deg : LookDeg)
     LookDeg.new(
       relative_flags & 0b1000 ? reference_deg.yaw + yaw_deg_raw : yaw_deg_raw,
       relative_flags & 0b10000 ? reference_deg.pitch + pitch_deg_raw : pitch_deg_raw)
