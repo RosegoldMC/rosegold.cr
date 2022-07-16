@@ -40,11 +40,38 @@ end
 class Rosegold::State::Play
   def self.[](packet_id)
     case packet_id
-    # when 0x23
-    when 0x26
-      Clientbound::JoinGame
-    else
-      raise "Unknown packet id: 0x#{Bytes[packet_id].hexstring} for Status: Rosegold::State::Play"
+    # connection
+    when 0x1a; Clientbound::Disconnect
+    when 0x26; Clientbound::JoinGame
+    when 0x21; nil # TODO: Clientbound::KeepAlive
+    when 0x30; nil # TODO: Clientbound::Ping
+
+    # player state
+    when 0x38; nil # TODO: Clientbound::PlayerPositionAndLook
+    when 0x3d; nil # TODO: Clientbound::Respawn
+    when 0x52; nil # TODO: Clientbound::UpdateHealth # and food
+
+    # physics
+    when 0x22; nil # TODO: Clientbound::ChunkDataAndUpdateLight
+    when 0x1d; nil # TODO: Clientbound::UnloadChunk
+    when 0x0c; nil # TODO: Clientbound::BlockChange
+    when 0x3f; nil # TODO: Clientbound::MultiBlockChange
+
+    # inventory
+    when 0x48; nil # TODO: Clientbound::HeldItemChange
+    when 0x2e; nil # TODO: Clientbound::OpenWindow
+    when 0x13; nil # TODO: Clientbound::CloseWindow
+    when 0x14; nil # TODO: Clientbound::WindowItems
+    when 0x16; nil # TODO: Clientbound::SetSlot
+    when 0x66; nil # TODO: Clientbound::DeclareRecipes
+
+    # botting
+    when 0x0f; nil # TODO: Clientbound::Chat
+    when 0x36; nil # TODO: Clientbound::PlayerInfo # tab list
+    when 0x0d; nil # TODO: Clientbound::BossBar
+    when 0x41; nil # TODO: Clientbound::ActionBar # text above hotbar
+    when 0x59; nil # Time Update # to measure TPS
+    when 0x5f; nil # Player List Header And Footer # to measure TPS
     end
   end
 
