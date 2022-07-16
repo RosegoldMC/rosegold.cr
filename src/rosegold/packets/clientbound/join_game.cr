@@ -8,7 +8,7 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     self.new(
-      packet.read_int,
+      packet.read_int32,
       packet.read_bool
     )
   end

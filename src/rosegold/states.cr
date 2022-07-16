@@ -47,7 +47,7 @@ class Rosegold::State::Play
     when 0x30; nil # TODO: Clientbound::Ping
 
     # player state
-    when 0x38; nil # TODO: Clientbound::PlayerPositionAndLook
+    when 0x38; Clientbound::PlayerPositionAndLook
     when 0x3d; nil # TODO: Clientbound::Respawn
     when 0x52; nil # TODO: Clientbound::UpdateHealth # and food
 
