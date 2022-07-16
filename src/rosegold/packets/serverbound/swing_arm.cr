@@ -1,7 +1,7 @@
 require "./packet"
 
 class Rosegold::Serverbound::SwingArm < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x2c_u32
+  PACKET_ID = 0x2c_u8
 
   property \
     hand : UInt8

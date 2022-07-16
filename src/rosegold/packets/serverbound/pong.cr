@@ -1,7 +1,7 @@
 require "./packet"
 
 class Rosegold::Serverbound::Pong < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x1d_u32
+  PACKET_ID = 0x1d_u8
 
   property \
     ping_id : Int32
@@ -13,7 +13,7 @@ class Rosegold::Serverbound::Pong < Rosegold::Serverbound::Packet
   def to_packet : Minecraft::IO
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write PACKET_ID
-      buffer.write_int32 ping_id
+      buffer.write_full ping_id
     end
   end
 end

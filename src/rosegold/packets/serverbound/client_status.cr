@@ -2,7 +2,7 @@ require "./packet"
 
 # Respawn: action=0
 class Rosegold::Serverbound::ClientStatus < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x04_u32
+  PACKET_ID = 0x04_u8
 
   property \
     action : UInt8

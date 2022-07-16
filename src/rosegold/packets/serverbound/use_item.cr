@@ -1,7 +1,7 @@
 require "./packet"
 
 class Rosegold::Serverbound::UseItem < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x2f_u32
+  PACKET_ID = 0x2f_u8
 
   property \
     hand : UInt8

@@ -3,7 +3,7 @@ require "json"
 require "./packet"
 
 class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x01u32
+  PACKET_ID = 0x01_u8
 
   UUID         = ENV["UUID"]
   ACCESS_TOKEN = ENV["ACCESS_TOKEN"]

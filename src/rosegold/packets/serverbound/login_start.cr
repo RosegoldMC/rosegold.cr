@@ -1,7 +1,7 @@
 require "./packet"
 
 class Rosegold::Serverbound::LoginStart < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x00u32
+  PACKET_ID = 0x00_u8
 
   property \
     username : String

@@ -1,7 +1,7 @@
 require "./packet"
 
 class Rosegold::Serverbound::TeleportConfirm < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x00_u32
+  PACKET_ID = 0x00_u8
 
   property \
     teleport_id : UInt32

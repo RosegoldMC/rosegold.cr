@@ -2,7 +2,7 @@ require "./packet"
 
 # sneak/sprint/leave bed
 class Rosegold::Serverbound::EntityAction < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x1b_u32
+  PACKET_ID = 0x1b_u8
 
   property \
     entity_id : UInt32,

@@ -1,7 +1,7 @@
 require "./packet"
 
 class Rosegold::Serverbound::Chat < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x03_u32
+  PACKET_ID = 0x03_u8
 
   property \
     message : String

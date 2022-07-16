@@ -1,7 +1,7 @@
 require "./packet"
 
 class Rosegold::Serverbound::KeepAlive < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x0f_u32
+  PACKET_ID = 0x0f_u8
 
   property \
     keep_alive_id : UInt64
@@ -13,7 +13,7 @@ class Rosegold::Serverbound::KeepAlive < Rosegold::Serverbound::Packet
   def to_packet : Minecraft::IO
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write PACKET_ID
-      buffer.write_uint64 keep_alive_id
+      buffer.write_full keep_alive_id
     end
   end
 end

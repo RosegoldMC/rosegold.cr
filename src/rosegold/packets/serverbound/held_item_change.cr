@@ -1,7 +1,7 @@
 require "./packet"
 
 class Rosegold::Serverbound::HeldItemChange < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x25_u32
+  PACKET_ID = 0x25_u8
 
   property \
     hotbar_nr : UInt8

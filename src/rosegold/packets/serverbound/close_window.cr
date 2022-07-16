@@ -1,7 +1,7 @@
 require "./packet"
 
 class Rosegold::Serverbound::CloseWindow < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x09_u32
+  PACKET_ID = 0x09_u8
 
   property \
     window_id : UInt16

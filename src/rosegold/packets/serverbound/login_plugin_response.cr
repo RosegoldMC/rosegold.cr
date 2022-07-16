@@ -1,5 +1,5 @@
 class Rosegold::Serverbound::LoginPluginResponse < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x02u32
+  PACKET_ID = 0x02_u8
 
   property \
     message_id : UInt32

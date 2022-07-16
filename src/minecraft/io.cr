@@ -2,29 +2,26 @@ require "socket"
 require "uuid"
 
 module Minecraft::IO
+  def write(value : Bool)
+    write_byte value ? 1_u8 : 0_u8
+  end
+
   def write(value : String)
     write value.bytesize.to_u32
     print value
   end
 
-  def write_var_bytes(bytes : Bytes)
-    write bytes.size.to_u32
-    write bytes
-  end
-
-  def write(value : Bool)
-    write value ? Bytes[0x01] : Bytes[0x00]
-  end
-
-  def write_int32(value : Int32)
+  def write(value : Float32 | Float64 | UInt8)
     write_bytes value, ::IO::ByteFormat::BigEndian
   end
 
-  def write_uint64(value : UInt64)
+  # writes all bytes even for small magnitudes, not var int
+  def write_full(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64)
     write_bytes value, ::IO::ByteFormat::BigEndian
   end
 
-  def write(value : UInt32 | UInt64) : Nil
+  # writes var int
+  def write(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64)
     a = Array(UInt8).new
     more = true
     while more
@@ -48,7 +45,7 @@ module Minecraft::IO
   end
 
   def read_bool
-    read_byte == 0x01
+    read_byte != 0
   end
 
   def read_int32 : Int32
