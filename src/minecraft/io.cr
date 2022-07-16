@@ -1,4 +1,5 @@
 require "io/hexdump"
+require "nbt"
 require "socket"
 require "uuid"
 
@@ -99,6 +100,10 @@ module Minecraft::IO
   def read_uuid : UUID
     read_fully(buffer = Bytes.new(16))
     UUID.new buffer
+  end
+
+  def read_nbt : NBT::Tag
+    NBT::Reader.new(self).read_named[:tag]
   end
 end
 

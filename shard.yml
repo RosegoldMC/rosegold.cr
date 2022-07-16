@@ -17,9 +17,11 @@ development_dependencies:
     version: ~> 0.14
   dotenv:
     github: drum445/dotenv
-  spectator:
-    github: icy-arctic-fox/spectator
-    version: ~> 0.10
+  nbt:
+    gitlab: rymiel/nbt
   openssl_ext:
     github: spider-gazelle/openssl_ext
     version: ~> 2.0
+  spectator:
+    github: icy-arctic-fox/spectator
+    version: ~> 0.10
