@@ -80,7 +80,7 @@ class Rosegold::Client
     end
   end
 
-  def start(username : String = "Steve") # TODO: this shouldn't take a username arg
+  def start
     send_packet Serverbound::Handshake.new(
       PROTOCOL_VERSION,
       host,
@@ -91,9 +91,7 @@ class Rosegold::Client
     self.state = State::Login.new
     state
 
-    send_packet Serverbound::LoginStart.new(
-      username
-    )
+    send_packet Serverbound::LoginStart.new ENV["MC_NAME"]
 
     # spawn do
     loop do

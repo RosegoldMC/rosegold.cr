@@ -13,4 +13,4 @@ module Rosegold
   # TODO: Put your code here
 end
 
-Rosegold::Client.new("minecraft.grepscraft.com", 25565).start(ENV["MC_NAME"])
+Rosegold::Client.new("minecraft.grepscraft.com", 25565).start
