@@ -7,7 +7,7 @@ class Rosegold::Clientbound::KeepAlive < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     self.new(
-      packet.read_uint64
+      packet.read_var_uint
     )
   end
 
