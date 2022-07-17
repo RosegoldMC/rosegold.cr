@@ -1,4 +1,6 @@
 class Rosegold::Clientbound::Chat < Rosegold::Clientbound::Packet
+  Log = ::Log.for(self)
+
   property \
     message : JSON::Any,
     position : UInt8,
@@ -16,6 +18,6 @@ class Rosegold::Clientbound::Chat < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.log_info { "[Chat] #{message}" }
+    Log.info { message }
   end
 end

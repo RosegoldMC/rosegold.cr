@@ -31,14 +31,6 @@ class Rosegold::Client
     end
   end
 
-  def log_info(&build_msg : -> String)
-    STDERR.puts build_msg.call
-  end
-
-  def log_debug(&build_msg : -> String)
-    # STDERR.puts build_msg.call
-  end
-
   def compress?
     compression_threshold.positive?
   end
@@ -113,7 +105,7 @@ class Rosegold::Client
     Minecraft::IO::Memory.new(pkt_bytes).try do |pkt_io|
       pkt_type = current_state[pkt_io.read_var_int]
       if pkt_type
-        log_debug { "rx <- #{pkt_type}".gsub "Rosegold::Clientbound::", "" }
+        Log.debug { "rx <- #{pkt_type}".gsub "Rosegold::Clientbound::", "" }
         pkt_type.read(pkt_io).tap &.callback(self)
       else
         nil # packet not parsed
