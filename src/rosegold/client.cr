@@ -35,6 +35,50 @@ class Rosegold::Client
     compression_threshold.positive?
   end
 
+  def start
+    queue_packet Serverbound::Handshake.new(
+      PROTOCOL_VERSION,
+      host,
+      port.to_u16,
+      2.to_u8
+    )
+
+    self.state = State::Login.new
+
+    queue_packet Serverbound::LoginStart.new ENV["MC_NAME"]
+
+    spawn do
+      loop do
+        read_packet
+      end
+    end
+
+    sleep
+  end
+
+  def start_physics
+    spawn do
+      loop do
+        break unless state.is_a? State::Play
+
+        sleep 0.05 # assume 20 ticks per second for now
+      end
+    end
+  end
+
+  def status
+    send_packet Serverbound::Handshake.new(
+      PROTOCOL_VERSION,
+      host,
+      port.to_u16,
+      1.to_u8
+    )
+
+    send_packet Serverbound::Status.new
+
+    read_packet
+  end
+
   # Used to send a packet to the server concurrently
   def queue_packet(packet : Rosegold::Serverbound::Packet)
     spawn do
@@ -79,7 +123,7 @@ class Rosegold::Client
     end
   end
 
-  def read_packet
+  private def read_packet
     current_state = state
     pkt_bytes = Bytes.new 0
 
@@ -111,39 +155,5 @@ class Rosegold::Client
         nil # packet not parsed
       end
     end
-  end
-
-  def start
-    queue_packet Serverbound::Handshake.new(
-      PROTOCOL_VERSION,
-      host,
-      port.to_u16,
-      2.to_u8
-    )
-
-    self.state = State::Login.new
-
-    queue_packet Serverbound::LoginStart.new ENV["MC_NAME"]
-
-    spawn do
-      loop do
-        read_packet
-      end
-    end
-
-    sleep
-  end
-
-  def status
-    send_packet Serverbound::Handshake.new(
-      PROTOCOL_VERSION,
-      host,
-      port.to_u16,
-      1.to_u8
-    )
-
-    send_packet Serverbound::Status.new
-
-    read_packet
   end
 end
