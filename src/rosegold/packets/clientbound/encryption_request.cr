@@ -18,7 +18,7 @@ class Rosegold::Clientbound::EncryptionRequest < Rosegold::Clientbound::Packet
   def callback(client)
     encryption_response = Serverbound::EncryptionResponse.new self
 
-    client.send_packet encryption_response
+    client.send_packet! encryption_response
 
     client.io = Minecraft::EncryptedTCPSocket.new \
       client.io,

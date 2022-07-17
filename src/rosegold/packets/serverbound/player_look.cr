@@ -16,7 +16,7 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
 
   def to_packet : Minecraft::IO
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write_var_int PACKET_ID
+      buffer.write PACKET_ID
       buffer.write yaw_deg
       buffer.write pitch_deg
       buffer.write on_ground

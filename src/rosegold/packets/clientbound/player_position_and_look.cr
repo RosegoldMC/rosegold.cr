@@ -56,7 +56,7 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
   end
 
   def callback(client)
-    client.send_packet Serverbound::TeleportConfirm.new teleport_id
+    client.queue_packet Serverbound::TeleportConfirm.new teleport_id
 
     # TODO: set client feet/look
     # TODO: close the “Downloading Terrain” screen when joining/respawning

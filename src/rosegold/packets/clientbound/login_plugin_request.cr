@@ -16,7 +16,7 @@ class Rosegold::Clientbound::LoginPluginRequest < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.send_packet Serverbound::LoginPluginResponse.new(
+    client.queue_packet Serverbound::LoginPluginResponse.new(
       self.message_id
     )
   end
