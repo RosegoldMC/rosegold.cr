@@ -438,7 +438,7 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L9" target="_blank">
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L9" target="_blank">
         rosegold/client.cr
       </a>
     
@@ -560,6 +560,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#queue_packet%28packet%3ARosegold%3A%3AServerbound%3A%3APacket%29-instance-method" class="signature"><strong>#queue_packet</strong>(packet : Rosegold::Serverbound::Packet)</a>
+        
+          <div class="summary"><p>Used to send a packet to the server concurrently</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#read_mutex%3AMutex-instance-method" class="signature"><strong>#read_mutex</strong> : Mutex</a>
         
       </li>
@@ -575,7 +582,9 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#send_packet%28packet%3ARosegold%3A%3AServerbound%3A%3APacket%29-instance-method" class="signature"><strong>#send_packet</strong>(packet : Rosegold::Serverbound::Packet)</a>
+        <a href="#send_packet%21%28packet%3ARosegold%3A%3AServerbound%3A%3APacket%29-instance-method" class="signature"><strong>#send_packet!</strong>(packet : Rosegold::Serverbound::Packet)</a>
+        
+          <div class="summary"><p>Used to send a packet in the current fiber, useful for things like EncryptionRequest, because it must change the IO socket only AFTER a EncryptionResponse has been sent</p></div>
         
       </li>
     
@@ -595,7 +604,22 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#state%3D%28state%29-instance-method" class="signature"><strong>#state=</strong>(state)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#status-instance-method" class="signature"><strong>#status</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#write_mutex%3AMutex-instance-method" class="signature"><strong>#write_mutex</strong> : Mutex</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#write_mutex%3D%28write_mutex%3AMutex%29-instance-method" class="signature"><strong>#write_mutex=</strong>(write_mutex : Mutex)</a>
         
       </li>
     
@@ -650,7 +674,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -666,7 +690,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -696,7 +720,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -712,7 +736,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -728,7 +752,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -744,7 +768,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -760,7 +784,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -776,7 +800,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -792,7 +816,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -808,7 +832,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -824,7 +848,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -840,7 +864,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -856,7 +880,28 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="queue_packet(packet:Rosegold::Serverbound::Packet)-instance-method">
+      <div class="signature">
+        
+        def <strong>queue_packet</strong>(packet : <a href="../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a>)
+
+        <a class="method-permalink" href="#queue_packet%28packet%3ARosegold%3A%3AServerbound%3A%3APacket%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used to send a packet to the server concurrently</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -872,7 +917,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -888,7 +933,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -904,23 +949,30 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L66" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="send_packet(packet:Rosegold::Serverbound::Packet)-instance-method">
+    <div class="entry-detail" id="send_packet!(packet:Rosegold::Serverbound::Packet)-instance-method">
       <div class="signature">
         
-        def <strong>send_packet</strong>(packet : <a href="../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a>)
+        def <strong>send_packet!</strong>(packet : <a href="../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a>)
 
-        <a class="method-permalink" href="#send_packet%28packet%3ARosegold%3A%3AServerbound%3A%3APacket%29-instance-method">#</a>
+        <a class="method-permalink" href="#send_packet%21%28packet%3ARosegold%3A%3AServerbound%3A%3APacket%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Used to send a packet in the current fiber, useful for things like
+EncryptionRequest, because it must change the IO socket only AFTER
+a EncryptionResponse has been sent</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -936,7 +988,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L124" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -952,7 +1004,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -968,7 +1020,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="state=(state)-instance-method">
+      <div class="signature">
+        
+        def <strong>state=</strong>(state)
+
+        <a class="method-permalink" href="#state%3D%28state%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -984,7 +1052,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c5be6ab10895e4fa6725c6eb81389f5e9004c6d5/src/rosegold/client.cr#L116" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L145" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="write_mutex:Mutex-instance-method">
+      <div class="signature">
+        
+        def <strong>write_mutex</strong> : Mutex
+
+        <a class="method-permalink" href="#write_mutex%3AMutex-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="write_mutex=(write_mutex:Mutex)-instance-method">
+      <div class="signature">
+        
+        def <strong>write_mutex=</strong>(write_mutex : Mutex)
+
+        <a class="method-permalink" href="#write_mutex%3D%28write_mutex%3AMutex%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/c1bf2f1a3915c7de2a040ba499fdd4c544f46efa/src/rosegold/client.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
