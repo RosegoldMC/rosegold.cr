@@ -1,4 +1,5 @@
 require "json"
+require "./aabb"
 
 # parsed minecraft-data for a particular mc version
 class Rosegold::MCData
@@ -10,7 +11,7 @@ class Rosegold::MCData
 
   # getter block_state_names : Array(String)
 
-  # block state nr -> all AABBs that combine to make up that block state shape
+  # block state nr -> array of AABBs that combine to make up that block state shape
   getter block_state_collision_shapes : Array(Array(AABB))
 
   def initialize(mc_version : String)
@@ -35,7 +36,8 @@ class Rosegold::MCData
       (block.minStateId..block.maxStateId).each do |state_nr|
         state_nr_in_block = (state_nr - block.minStateId) % block_shape_nrs.size
         shape_nr = block_shape_nrs[state_nr_in_block]
-        block_state_collision_shapes[state_nr] = block_collision_shapes_json.shapes[shape_nr.to_s]
+        shape = block_collision_shapes_json.shapes[shape_nr.to_s]
+        block_state_collision_shapes[state_nr] = shape.map { |aabb| AABB.new *aabb }
       end
     end
   end
@@ -78,9 +80,9 @@ class Rosegold::MCData
 
     # block id string -> block's shape nr (if same for all states) | each block state's shape nr
     getter blocks : Hash(String, UInt16 | Array(UInt16))
-    # shape nr -> all AABBs that combine to make up that block state shape
-    getter shapes : Hash(String, Array(AABB))
+    # shape nr -> array of AABBs that combine to make up that block state shape
+    getter shapes : Hash(String, Shape)
   end
 
-  alias AABB = {Float32, Float32, Float32, Float32, Float32, Float32}
+  alias Shape = Array({Float32, Float32, Float32, Float32, Float32, Float32})
 end
