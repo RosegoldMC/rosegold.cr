@@ -12,6 +12,6 @@ class Rosegold::Clientbound::Ping < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.send_packet Serverbound::Pong.new ping_id
+    client.queue_packet Serverbound::Pong.new ping_id
   end
 end

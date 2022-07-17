@@ -15,13 +15,20 @@ class Rosegold::Client
     port : UInt32,
     state : State::Status | State::Login | State::Play = State::Status.new,
     compression_threshold : UInt32 = 0,
-    read_mutex : Mutex = Mutex.new
+    read_mutex : Mutex = Mutex.new,
+    write_mutex : Mutex = Mutex.new
 
   def initialize(@io : Minecraft::TCPSocket, @host : String, @port : UInt32)
   end
 
   def self.new(host : String, port : UInt32 = 25565)
     new(Minecraft::TCPSocket.new(host, port), host, port)
+  end
+
+  def state=(state)
+    read_mutex.synchronize do
+      @state = state
+    end
   end
 
   def log_info(&build_msg : -> String)
@@ -36,8 +43,22 @@ class Rosegold::Client
     compression_threshold.positive?
   end
 
-  def send_packet(packet : Rosegold::Serverbound::Packet)
-    log_debug { "tx -> #{packet.class}".gsub "Rosegold::Serverbound::", "" }
+  # Used to send a packet to the server concurrently
+  def queue_packet(packet : Rosegold::Serverbound::Packet)
+    spawn do
+      Fiber.yield
+      send_packet packet
+    end
+  end
+
+  # Used to send a packet in the current fiber, useful for things like
+  # EncryptionRequest, because it must change the IO socket only AFTER
+  # a EncryptionResponse has been sent
+  def send_packet!(packet : Rosegold::Serverbound::Packet)
+    send_packet packet
+  end
+
+  private def send_packet(packet : Rosegold::Serverbound::Packet)
     packet.to_packet.try do |packet|
       if compress?
         Minecraft::IO::Memory.new.tap do |buffer|
@@ -56,42 +77,52 @@ class Rosegold::Client
         end
       else
         packet
-      end.try do |serialized|
-        io.write serialized.size.to_u32
-        io.write serialized.to_slice
+      end
+    end.try do |packet|
+      write_mutex.synchronize do
+        io.write packet.size.to_u32
+        io.write packet.to_slice
+        io.flush
       end
     end
   end
 
   def read_packet
-    if compress?
-      frame_len = io.read_var_int
-      # it's inconvenient to get the bytes length of uncompressed_data_len, so we just read it including the header
-      io.read_fully(frame_bytes = Bytes.new(frame_len))
-      frame_io = Minecraft::IO::Memory.new(frame_bytes)
-      uncompressed_data_len = frame_io.read_var_int
-      if uncompressed_data_len == 0 # packet size is below compression_threshold
-        uncompressed_data_len = frame_len - 1
-      else # packet is in fact compressed
-        frame_io = Compress::Zlib::Reader.new(frame_io)
+    current_state = state
+    pkt_bytes = Bytes.new 0
+
+    read_mutex.synchronize do
+      current_state = state
+      if compress?
+        frame_len = io.read_var_int
+        io.read_fully(frame_bytes = Bytes.new(frame_len))
+
+        frame_io = Minecraft::IO::Memory.new(frame_bytes)
+        uncompressed_data_len = frame_io.read_var_int
+        if uncompressed_data_len == 0 # packet size is below compression_threshold
+          uncompressed_data_len = frame_len - 1
+        else # packet is in fact compressed
+          frame_io = Compress::Zlib::Reader.new(frame_io)
+        end
+        frame_io.read_fully(pkt_bytes = Bytes.new uncompressed_data_len)
+      else
+        io.read_fully(pkt_bytes = Bytes.new io.read_var_int)
       end
-      frame_io.read_fully(pkt_bytes = Bytes.new uncompressed_data_len)
-    else # compression is disabled
-      io.read_fully(pkt_bytes = Bytes.new io.read_var_int)
     end
+
     Minecraft::IO::Memory.new(pkt_bytes).try do |pkt_io|
-      pkt_type = state[pkt_io.read_var_int]
+      pkt_type = current_state[pkt_io.read_var_int]
       if pkt_type
         log_debug { "rx <- #{pkt_type}".gsub "Rosegold::Clientbound::", "" }
-        return pkt_type.read(pkt_io).tap &.callback(self)
+        pkt_type.read(pkt_io).tap &.callback(self)
       else
-        return nil # packet not parsed
+        nil # packet not parsed
       end
     end
   end
 
   def start
-    send_packet Serverbound::Handshake.new(
+    queue_packet Serverbound::Handshake.new(
       PROTOCOL_VERSION,
       host,
       port.to_u16,
@@ -99,17 +130,15 @@ class Rosegold::Client
     )
 
     self.state = State::Login.new
-    state
 
-    send_packet Serverbound::LoginStart.new ENV["MC_NAME"]
+    queue_packet Serverbound::LoginStart.new ENV["MC_NAME"]
 
-    # spawn do
-    loop do
-      read_mutex.synchronize do
+    spawn do
+      loop do
         read_packet
       end
     end
-    # end
+
     sleep
   end
 
