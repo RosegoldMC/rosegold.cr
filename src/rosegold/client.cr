@@ -65,11 +65,11 @@ class Rosegold::Client
 
   def read_packet
     if compress?
-      frame_len = io.read_var_uint
+      frame_len = io.read_var_int
       # it's inconvenient to get the bytes length of uncompressed_data_len, so we just read it including the header
       io.read_fully(frame_bytes = Bytes.new(frame_len))
       frame_io = Minecraft::IO::Memory.new(frame_bytes)
-      uncompressed_data_len = frame_io.read_var_uint
+      uncompressed_data_len = frame_io.read_var_int
       if uncompressed_data_len == 0 # packet size is below compression_threshold
         uncompressed_data_len = frame_len - 1
       else # packet is in fact compressed
@@ -77,10 +77,10 @@ class Rosegold::Client
       end
       frame_io.read_fully(pkt_bytes = Bytes.new uncompressed_data_len)
     else # compression is disabled
-      io.read_fully(pkt_bytes = Bytes.new io.read_var_uint)
+      io.read_fully(pkt_bytes = Bytes.new io.read_var_int)
     end
     Minecraft::IO::Memory.new(pkt_bytes).try do |pkt_io|
-      pkt_type = state[pkt_io.read_var_uint]
+      pkt_type = state[pkt_io.read_var_int]
       if pkt_type
         log_debug { "rx <- #{pkt_type}".gsub "Rosegold::Clientbound::", "" }
         return pkt_type.read(pkt_io).tap &.callback(self)

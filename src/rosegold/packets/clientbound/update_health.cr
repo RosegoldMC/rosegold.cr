@@ -10,7 +10,7 @@ class Rosegold::Clientbound::UpdateHealth < Rosegold::Clientbound::Packet
   def self.read(packet)
     self.new(
       packet.read_float,
-      packet.read_var_uint,
+      packet.read_var_int,
       packet.read_float
     )
   end

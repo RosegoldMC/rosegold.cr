@@ -7,7 +7,7 @@ class Rosegold::Clientbound::SetCompression < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     self.new(
-      packet.read_var_uint,
+      packet.read_var_int,
     )
   end
 

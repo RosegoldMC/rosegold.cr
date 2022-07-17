@@ -67,12 +67,11 @@ module Minecraft::IO
     read_bytes Float64, ::IO::ByteFormat::BigEndian
   end
 
-  def read_var_uint : UInt32
+  def read_var_int : UInt32
     result = 0_u32
     shift = 0
     loop do
       b = read_byte
-      return result if b.nil?
       result |= ((0x7F & b).to_u32) << shift
       return result if b & 0x80 == 0
       shift += 7
@@ -80,7 +79,7 @@ module Minecraft::IO
   end
 
   def read_var_string : String
-    read_var_string(read_var_uint)
+    read_var_string(read_var_int)
   end
 
   def read_var_string(size : UInt32) : String
@@ -91,7 +90,7 @@ module Minecraft::IO
   end
 
   def read_var_bytes : Bytes
-    buffer = Bytes.new read_var_uint
+    buffer = Bytes.new read_var_int
     read buffer
 
     buffer

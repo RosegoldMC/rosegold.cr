@@ -9,7 +9,7 @@ class Rosegold::Clientbound::LoginPluginRequest < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     self.new(
-      packet.read_var_uint,
+      packet.read_var_int,
       packet.read_var_string,
       packet.read_var_bytes
     )
