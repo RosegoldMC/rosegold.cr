@@ -10,6 +10,8 @@ require "./rosegold/client"
 module Rosegold
   VERSION = "0.1.0"
 
+  Log.setup_from_env
+
   # TODO: Put your code here
 end
 

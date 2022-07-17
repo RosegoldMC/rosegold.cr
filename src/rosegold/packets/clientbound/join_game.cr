@@ -16,6 +16,6 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.log_debug { "Ingame. gamemode=#{gamemode} entity_id=#{entity_id}" }
+    Log.debug { "Ingame. gamemode=#{gamemode} entity_id=#{entity_id}" }
   end
 end

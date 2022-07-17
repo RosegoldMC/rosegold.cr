@@ -16,7 +16,7 @@ class Rosegold::Clientbound::UpdateHealth < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.log_debug { "health=#{health/2}❤ food=#{food*5}% saturation=#{saturation}" }
+    Log.debug { "health=#{health/2}❤ food=#{food*5}% saturation=#{saturation}" }
     # TODO: update health/food/saturation
     # TODO: check death
   end
