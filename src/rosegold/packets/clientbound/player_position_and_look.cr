@@ -27,9 +27,9 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
 
   def self.read(packet)
     self.new(
-      packet.read_float64,
-      packet.read_float64,
-      packet.read_float64,
+      packet.read_double,
+      packet.read_double,
+      packet.read_double,
       packet.read_float32,
       packet.read_float32,
       packet.read_byte,
