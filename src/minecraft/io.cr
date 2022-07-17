@@ -59,7 +59,7 @@ module Minecraft::IO
     read_bytes Int32, ::IO::ByteFormat::BigEndian
   end
 
-  def read_float32 : Float32
+  def read_float : Float32
     read_bytes Float32, ::IO::ByteFormat::BigEndian
   end
 

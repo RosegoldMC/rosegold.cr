@@ -30,8 +30,8 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
       packet.read_double,
       packet.read_double,
       packet.read_double,
-      packet.read_float32,
-      packet.read_float32,
+      packet.read_float,
+      packet.read_float,
       packet.read_byte,
       packet.read_var_uint,
       packet.read_bool
