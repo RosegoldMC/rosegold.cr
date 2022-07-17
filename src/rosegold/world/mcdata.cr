@@ -9,7 +9,8 @@ class Rosegold::MCData
 
   getter blocks_by_id : Hash(String, Block)
 
-  # getter block_state_names : Array(String)
+  # block state nr -> "oak_slab[type=top, waterlogged=true]"
+  getter block_state_names : Array(String)
 
   # block state nr -> array of AABBs that combine to make up that block state shape
   getter block_state_collision_shapes : Array(Array(AABB))
@@ -24,6 +25,28 @@ class Rosegold::MCData
     @blocks_by_id = Hash.zip(blocks_json.map &.name, blocks_json)
 
     max_block_state = blocks_json.map(&.maxStateId).flatten.max
+
+    @block_state_names = Array(String).new(max_block_state + 1, "")
+    blocks_json.each do |block|
+      if block.states.empty?
+        block_state_names[block.minStateId] = block.name
+      else
+        # example (slab): [["type=top", "waterlogged=true"], ["type=top", "waterlogged=false"], ["type=bottom", "waterlogged=true"], ["type=bottom", "waterlogged=false"], ["type=double", "waterlogged=true"], ["type=double", "waterlogged=false"]]
+        prop_combos = Indexable.cartesian_product block.states.map { |prop|
+          case prop.type
+          when BlockPropertyType::ENUM; prop.values.not_nil!
+          when BlockPropertyType::INT ; (0...prop.num_values)
+          when BlockPropertyType::BOOL; ["true", "false"] # weird order but that's how it is
+          else
+            raise "Invalid block property type #{prop.type} in #{block.name}.#{prop.name}"
+          end.map { |value| "#{prop.name}=#{value}" }
+        }
+        prop_combos.each_with_index do |props, i|
+          state_nr = block.minStateId + i
+          block_state_names[state_nr] = block.name + "[#{props.join ", "}]"
+        end
+      end
+    end
 
     # because there's no 1.18/blockCollisionShapes.json we use 1.19
     # all 1.18->1.19 block states stayed the same except leaves (waterlogged) but it still works because all leaves' shapes are the same
