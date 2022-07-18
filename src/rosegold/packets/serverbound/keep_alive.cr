@@ -11,7 +11,6 @@ class Rosegold::Serverbound::KeepAlive < Rosegold::Serverbound::Packet
   ); end
 
   def to_packet : Minecraft::IO
-    Log.debug { "tx -> KeepAlive: #{keep_alive_id}" }
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write PACKET_ID
       buffer.write_full keep_alive_id
