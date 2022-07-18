@@ -61,8 +61,10 @@ class Rosegold::Client
 
   def start_physics
     spawn do
-      loop do
-        break unless state.is_a? State::Play
+      while state.is_a? State::Play
+        queue_packet Serverbound::PlayerPositionAndLook.new(
+          player.feet, player.look, player.on_ground
+        )
 
         sleep 0.05 # assume 20 ticks per second for now
       end
