@@ -5,8 +5,12 @@ class Rosegold::World::Dimension
 
   @chunks = Hash(ChunkPos, Chunk).new
 
-  def set_chunk(chunk_pos : ChunkPos, chunk : Chunk)
+  def load_chunk(chunk_pos : ChunkPos, chunk : Chunk)
     @chunks[chunk_pos] = chunk
+  end
+
+  def unload_chunk(chunk_pos : ChunkPos)
+    @chunks.delete chunk_pos
   end
 
   def block_state(x : Int32, y : Int32, z : Int32) : UInt16 | Nil
