@@ -12,7 +12,6 @@ class Rosegold::Clientbound::KeepAlive < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    Log.debug { "rx <- KeepAlive: #{@keep_alive_id}" }
     client.queue_packet Serverbound::KeepAlive.new keep_alive_id
   end
 end
