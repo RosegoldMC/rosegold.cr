@@ -26,6 +26,10 @@ abstract struct Rosegold::Look(T)
   def +(look : self)
     self.new(x + look.x, y + look.y, z + look.z)
   end
+
+  def inspect(io)
+    io << "#<Look yaw=" << yaw << " pitch=" << pitch << ">"
+  end
 end
 
 struct Rosegold::LookRad < Rosegold::Look(Float32)

@@ -22,4 +22,8 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     chunk = World::Chunk.new source
     client.dimension.load_chunk ({chunk_x, chunk_z}), chunk
   end
+
+  def inspect(io)
+    io << "#<Clientbound::ChunkData " << chunk_x << "," << chunk_z << ">"
+  end
 end
