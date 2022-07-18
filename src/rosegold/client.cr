@@ -5,6 +5,7 @@ require "./packets/clientbound/packet"
 require "./packets/clientbound/*"
 require "./packets/serverbound/*"
 require "./states"
+require "./world/*"
 
 class Rosegold::Client
   PROTOCOL_VERSION = 758_u32
@@ -13,6 +14,8 @@ class Rosegold::Client
     io : Minecraft::TCPSocket | Minecraft::EncryptedTCPSocket,
     host : String,
     port : UInt32,
+    player : Player = Player.new,
+    dimension : World::Dimension = World::Dimension.new,
     state : State::Status | State::Login | State::Play = State::Status.new,
     compression_threshold : UInt32 = 0,
     read_mutex : Mutex = Mutex.new,
