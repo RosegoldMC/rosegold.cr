@@ -83,6 +83,19 @@ module Minecraft::IO
       result |= ((0x7F & b).to_u32) << shift
       return result if b & 0x80 == 0
       shift += 7
+      raise "VarInt is too big: #{shift}" if shift >= 32
+    end
+  end
+
+  def read_var_long : UInt64
+    result = 0_u64
+    shift = 0
+    loop do
+      b = read_byte
+      result |= ((0x7F & b).to_u64) << shift
+      return result if b & 0x80 == 0
+      shift += 7
+      raise "VarLong is too big: #{shift}" if shift >= 64
     end
   end
 
@@ -111,6 +124,15 @@ module Minecraft::IO
 
   def read_nbt : NBT::Tag
     NBT::Reader.new(self).read_named[:tag]
+  end
+
+  def read_position : Tuple(Int32, Int32, Int32)
+    value = read_long
+    # here ordered LSB to MSB; use arithmetic shift to preserve sign
+    y = ((value << 52) >> 52).to_i32 # 12 bits
+    z = ((value << 26) >> 38).to_i32 # 26 bits
+    x = (value >> 38).to_i32         # 26 bits
+    {x, y, z}
   end
 end
 

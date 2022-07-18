@@ -52,9 +52,9 @@ class Rosegold::State::Play
       # physics
     when 0x22; Clientbound::ChunkData
     when 0x1d; Clientbound::UnloadChunk
-    when 0x0c; nil # TODO: Clientbound::BlockChange
-    when 0x3f; nil # TODO: Clientbound::MultiBlockChange
-    # inventory
+    when 0x0c; Clientbound::BlockChange
+    when 0x3f; Clientbound::MultiBlockChange
+      # inventory
     when 0x48; nil # TODO: Clientbound::HeldItemChange
     when 0x2e; nil # TODO: Clientbound::OpenWindow
     when 0x13; nil # TODO: Clientbound::CloseWindow
