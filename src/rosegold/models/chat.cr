@@ -5,7 +5,7 @@ class Rosegold::Chat
   include JSON::Serializable
 
   property \
-    text : String,
+    text : String?,
     color : String?,
     bold : Bool?,
     italic : Bool?,
