@@ -31,6 +31,10 @@ abstract struct Rosegold::Vec3(T)
   def /(scalar : T)
     self.new(x / scalar, y / scalar, z / scalar)
   end
+
+  def inspect(io)
+    io << "#<Vec3 " << x << "," << y << "," << z << ">"
+  end
 end
 
 struct Rosegold::Vec3f < Rosegold::Vec3(Float32)
