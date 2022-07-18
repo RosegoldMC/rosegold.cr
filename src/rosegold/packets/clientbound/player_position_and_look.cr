@@ -58,6 +58,8 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
   def callback(client)
     client.queue_packet Serverbound::TeleportConfirm.new teleport_id
 
+    Log.debug { "Position reset: #{feet client.player.feet} #{look client.player.look} dismount=#{dismount_vehicle}" }
+
     client.player.feet = feet client.player.feet
 
     # TODO: close the “Downloading Terrain” screen when joining/respawning
