@@ -39,8 +39,17 @@ class Rosegold::Client
   end
 
   def start
-    Log.info { "Connected to #{host}:#{port}" }
+    start
 
+    until state.is_a? State::Play
+      sleep 0.1
+    end
+
+    yield self
+  end
+
+  def start
+    Log.info { "Connected to #{host}:#{port}" }
     queue_packet Serverbound::Handshake.new(
       PROTOCOL_VERSION,
       host,
@@ -58,7 +67,7 @@ class Rosegold::Client
       end
     end
 
-    sleep
+    self
   end
 
   def start_physics
