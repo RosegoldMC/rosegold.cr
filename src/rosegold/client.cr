@@ -100,7 +100,8 @@ class Rosegold::Client
   end
 
   private def send_packet(packet : Rosegold::Serverbound::Packet)
-    Log.trace { "tx -> #{packet.class}".gsub "Rosegold::Serverbound::", "" }
+    Log.trace { "tx -> " + packet.pretty_inspect(999, " ", 0) \
+      .gsub("Rosegold::", "").gsub("Serverbound::", "").sub(/:0x\S+/, "") }
     packet.to_packet.try do |packet|
       if compress?
         Minecraft::IO::Memory.new.tap do |buffer|
@@ -155,8 +156,10 @@ class Rosegold::Client
     Minecraft::IO::Memory.new(pkt_bytes).try do |pkt_io|
       pkt_type = current_state[pkt_io.read_var_int]
       if pkt_type
-        Log.trace { "rx <- #{pkt_type}".gsub "Rosegold::Clientbound::", "" }
-        pkt_type.read(pkt_io).tap &.callback(self)
+        packet = pkt_type.read(pkt_io)
+        Log.trace { "rx <- " + packet.pretty_inspect(999, " ", 0) \
+          .gsub("Rosegold::", "").gsub("Clientbound::", "").sub(/:0x\S+/, "") }
+        packet.callback(self)
       else
         nil # packet not parsed
       end
