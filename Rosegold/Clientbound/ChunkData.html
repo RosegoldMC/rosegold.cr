@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Clientbound::LoginSuccess - rosegold main</title>
+  <title>Rosegold::Clientbound::ChunkData - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -141,7 +141,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChunkData" data-name="rosegold::clientbound::chunkdata">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/ChunkData" data-name="rosegold::clientbound::chunkdata">
       <a href="../../Rosegold/Clientbound/ChunkData.html">ChunkData</a>
       
     </li>
@@ -171,7 +171,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/LoginSuccess" data-name="rosegold::clientbound::loginsuccess">
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/LoginSuccess" data-name="rosegold::clientbound::loginsuccess">
       <a href="../../Rosegold/Clientbound/LoginSuccess.html">LoginSuccess</a>
       
     </li>
@@ -475,12 +475,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::Clientbound::LoginSuccess
+  <span class="kind">class</span> Rosegold::Clientbound::ChunkData
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/LoginSuccess.html">Rosegold::Clientbound::LoginSuccess</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/ChunkData.html">Rosegold::Clientbound::ChunkData</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -508,8 +508,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/login_success.cr#L1" target="_blank">
-        rosegold/packets/clientbound/login_success.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L1" target="_blank">
+        rosegold/packets/clientbound/chunk_data.cr
       </a>
     
     <br/>
@@ -530,7 +530,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28uuid%2Cusername%29-class-method" class="signature"><strong>.new</strong>(uuid, username)</a>
+        <a href="#new%28chunk_x%2Cchunk_z%2Cheightmaps%2Cdata%29-class-method" class="signature"><strong>.new</strong>(chunk_x, chunk_z, heightmaps, data)</a>
         
       </li>
     
@@ -573,22 +573,42 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#username%3AString-instance-method" class="signature"><strong>#username</strong> : String</a>
+        <a href="#chunk_x%3AInt32-instance-method" class="signature"><strong>#chunk_x</strong> : Int32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#username%3D%28username%3AString%29-instance-method" class="signature"><strong>#username=</strong>(username : String)</a>
+        <a href="#chunk_x%3D%28chunk_x%3AInt32%29-instance-method" class="signature"><strong>#chunk_x=</strong>(chunk_x : Int32)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#uuid%3AUUID-instance-method" class="signature"><strong>#uuid</strong> : UUID</a>
+        <a href="#chunk_z%3AInt32-instance-method" class="signature"><strong>#chunk_z</strong> : Int32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#uuid%3D%28uuid%3AUUID%29-instance-method" class="signature"><strong>#uuid=</strong>(uuid : UUID)</a>
+        <a href="#chunk_z%3D%28chunk_z%3AInt32%29-instance-method" class="signature"><strong>#chunk_z=</strong>(chunk_z : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#data%3ABytes-instance-method" class="signature"><strong>#data</strong> : Bytes</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#data%3D%28data%3ABytes%29-instance-method" class="signature"><strong>#data=</strong>(data : Bytes)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#heightmaps%3ANBT%3A%3ATag-instance-method" class="signature"><strong>#heightmaps</strong> : NBT::Tag</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#heightmaps%3D%28heightmaps%3ANBT%3A%3ATag%29-instance-method" class="signature"><strong>#heightmaps=</strong>(heightmaps : NBT::Tag)</a>
         
       </li>
     
@@ -651,18 +671,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(uuid,username)-class-method">
+    <div class="entry-detail" id="new(chunk_x,chunk_z,heightmaps,data)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(uuid, username)
+        def self.<strong>new</strong>(chunk_x, chunk_z, heightmaps, data)
 
-        <a class="method-permalink" href="#new%28uuid%2Cusername%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28chunk_x%2Cchunk_z%2Cheightmaps%2Cdata%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/login_success.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -690,7 +710,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/login_success.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -718,71 +738,135 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/login_success.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="username:String-instance-method">
+    <div class="entry-detail" id="chunk_x:Int32-instance-method">
       <div class="signature">
         
-        def <strong>username</strong> : String
+        def <strong>chunk_x</strong> : Int32
 
-        <a class="method-permalink" href="#username%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#chunk_x%3AInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/login_success.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="username=(username:String)-instance-method">
+    <div class="entry-detail" id="chunk_x=(chunk_x:Int32)-instance-method">
       <div class="signature">
         
-        def <strong>username=</strong>(username : String)
+        def <strong>chunk_x=</strong>(chunk_x : Int32)
 
-        <a class="method-permalink" href="#username%3D%28username%3AString%29-instance-method">#</a>
+        <a class="method-permalink" href="#chunk_x%3D%28chunk_x%3AInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/login_success.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="uuid:UUID-instance-method">
+    <div class="entry-detail" id="chunk_z:Int32-instance-method">
       <div class="signature">
         
-        def <strong>uuid</strong> : UUID
+        def <strong>chunk_z</strong> : Int32
 
-        <a class="method-permalink" href="#uuid%3AUUID-instance-method">#</a>
+        <a class="method-permalink" href="#chunk_z%3AInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/login_success.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="uuid=(uuid:UUID)-instance-method">
+    <div class="entry-detail" id="chunk_z=(chunk_z:Int32)-instance-method">
       <div class="signature">
         
-        def <strong>uuid=</strong>(uuid : UUID)
+        def <strong>chunk_z=</strong>(chunk_z : Int32)
 
-        <a class="method-permalink" href="#uuid%3D%28uuid%3AUUID%29-instance-method">#</a>
+        <a class="method-permalink" href="#chunk_z%3D%28chunk_z%3AInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/login_success.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="data:Bytes-instance-method">
+      <div class="signature">
+        
+        def <strong>data</strong> : Bytes
+
+        <a class="method-permalink" href="#data%3ABytes-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="data=(data:Bytes)-instance-method">
+      <div class="signature">
+        
+        def <strong>data=</strong>(data : Bytes)
+
+        <a class="method-permalink" href="#data%3D%28data%3ABytes%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="heightmaps:NBT::Tag-instance-method">
+      <div class="signature">
+        
+        def <strong>heightmaps</strong> : NBT::Tag
+
+        <a class="method-permalink" href="#heightmaps%3ANBT%3A%3ATag-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="heightmaps=(heightmaps:NBT::Tag)-instance-method">
+      <div class="signature">
+        
+        def <strong>heightmaps=</strong>(heightmaps : NBT::Tag)
+
+        <a class="method-permalink" href="#heightmaps%3D%28heightmaps%3ANBT%3A%3ATag%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
