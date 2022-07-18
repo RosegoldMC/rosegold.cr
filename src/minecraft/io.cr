@@ -55,20 +55,24 @@ module Minecraft::IO
     read_byte != 0
   end
 
-  def read_int32 : Int32
-    read_bytes Int32, ::IO::ByteFormat::BigEndian
-  end
-
-  def read_long : Int64
-    read_bytes Int64, ::IO::ByteFormat::BigEndian
-  end
-
   def read_float : Float32
     read_bytes Float32, ::IO::ByteFormat::BigEndian
   end
 
   def read_double : Float64
     read_bytes Float64, ::IO::ByteFormat::BigEndian
+  end
+
+  def read_short : Int16
+    read_bytes Int16, ::IO::ByteFormat::BigEndian
+  end
+
+  def read_int : Int32
+    read_bytes Int32, ::IO::ByteFormat::BigEndian
+  end
+
+  def read_long : Int64
+    read_bytes Int64, ::IO::ByteFormat::BigEndian
   end
 
   def read_var_int : UInt32

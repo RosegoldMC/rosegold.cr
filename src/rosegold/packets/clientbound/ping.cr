@@ -7,7 +7,7 @@ class Rosegold::Clientbound::Ping < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     self.new(
-      packet.read_int32
+      packet.read_int
     )
   end
 
