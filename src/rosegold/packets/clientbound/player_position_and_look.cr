@@ -61,6 +61,7 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     Log.debug { "Position reset: #{feet client.player.feet} #{look client.player.look} dismount=#{dismount_vehicle}" }
 
     client.player.feet = feet client.player.feet
+    client.player.look = look client.player.look
 
     # TODO: close the “Downloading Terrain” screen when joining/respawning
   end
