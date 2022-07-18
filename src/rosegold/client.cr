@@ -100,6 +100,7 @@ class Rosegold::Client
   end
 
   private def send_packet(packet : Rosegold::Serverbound::Packet)
+    Log.debug { "tx -> #{packet.class}".gsub "Rosegold::Clientbound::", "" }
     packet.to_packet.try do |packet|
       if compress?
         Minecraft::IO::Memory.new.tap do |buffer|
