@@ -50,7 +50,7 @@ class Rosegold::State::Play
     when 0x3d; nil # TODO: Clientbound::Respawn
     when 0x52; Clientbound::UpdateHealth
       # physics
-    when 0x22; nil # TODO: Clientbound::ChunkDataAndUpdateLight
+    when 0x22; Clientbound::ChunkData
     when 0x1d; nil # TODO: Clientbound::UnloadChunk
     when 0x0c; nil # TODO: Clientbound::BlockChange
     when 0x3f; nil # TODO: Clientbound::MultiBlockChange
