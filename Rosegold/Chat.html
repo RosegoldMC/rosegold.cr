@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::AABB - rosegold main</title>
+  <title>Rosegold::Chat - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -116,12 +116,12 @@
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb">
+  <li class=" " data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb">
       <a href="../Rosegold/AABB.html">AABB</a>
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Chat" data-name="rosegold::chat">
+  <li class=" current" data-id="rosegold/Rosegold/Chat" data-name="rosegold::chat">
       <a href="../Rosegold/Chat.html">Chat</a>
       
     </li>
@@ -435,30 +435,33 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">struct</span> Rosegold::AABB
+  <span class="kind">class</span> Rosegold::Chat
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/AABB.html">Rosegold::AABB</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/Chat.html">Rosegold::Chat</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
 
 
 
 
   <h2>
-    <a id="overview" class="anchor" href="#overview">
+    <a id="included-modules" class="anchor" href="#included-modules">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Overview
+    Included Modules
   </h2>
-
-  <p>axis aligned bounding box</p>
-
-
-
-
+  <ul class="other-types-list">
+    
+      <li class="other-type">JSON::Serializable</li>
+    
+  </ul>
 
 
 
@@ -479,8 +482,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L2" target="_blank">
-        rosegold/world/aabb.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L4" target="_blank">
+        rosegold/models/chat.cr
       </a>
     
     <br/>
@@ -501,7 +504,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28x_min%2Cy_min%2Cz_min%2Cx_max%2Cy_max%2Cz_max%29-class-method" class="signature"><strong>.new</strong>(x_min, y_min, z_min, x_max, y_max, z_max)</a>
+        <a href="#new%28pull%3AJSON%3A%3APullParser%29-class-method" class="signature"><strong>.new</strong>(pull : JSON::PullParser)</a>
         
       </li>
     
@@ -522,62 +525,124 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#x_max%3AFloat32-instance-method" class="signature"><strong>#x_max</strong> : Float32</a>
+        <a href="#bold%3ABool%3F-instance-method" class="signature"><strong>#bold</strong> : Bool?</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#x_max%3D%28x_max%3AFloat32%29-instance-method" class="signature"><strong>#x_max=</strong>(x_max : Float32)</a>
+        <a href="#bold%3D%28bold%3ABool%3F%29-instance-method" class="signature"><strong>#bold=</strong>(bold : Bool?)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#x_min%3AFloat32-instance-method" class="signature"><strong>#x_min</strong> : Float32</a>
+        <a href="#clickEvent%3AJSON%3A%3AAny%3F-instance-method" class="signature"><strong>#clickEvent</strong> : JSON::Any?</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#x_min%3D%28x_min%3AFloat32%29-instance-method" class="signature"><strong>#x_min=</strong>(x_min : Float32)</a>
+        <a href="#clickEvent%3D%28clickEvent%3AJSON%3A%3AAny%3F%29-instance-method" class="signature"><strong>#clickEvent=</strong>(clickEvent : JSON::Any?)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y_max%3AFloat32-instance-method" class="signature"><strong>#y_max</strong> : Float32</a>
+        <a href="#color%3AString%3F-instance-method" class="signature"><strong>#color</strong> : String?</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y_max%3D%28y_max%3AFloat32%29-instance-method" class="signature"><strong>#y_max=</strong>(y_max : Float32)</a>
+        <a href="#color%3D%28color%3AString%3F%29-instance-method" class="signature"><strong>#color=</strong>(color : String?)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y_min%3AFloat32-instance-method" class="signature"><strong>#y_min</strong> : Float32</a>
+        <a href="#extra%3AArray%28Rosegold%3A%3AChat%29%3F-instance-method" class="signature"><strong>#extra</strong> : Array(Rosegold::Chat)?</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y_min%3D%28y_min%3AFloat32%29-instance-method" class="signature"><strong>#y_min=</strong>(y_min : Float32)</a>
+        <a href="#extra%3D%28extra%3AArray%28Rosegold%3A%3AChat%29%3F%29-instance-method" class="signature"><strong>#extra=</strong>(extra : Array(Rosegold::Chat)?)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#z_max%3AFloat32-instance-method" class="signature"><strong>#z_max</strong> : Float32</a>
+        <a href="#extra_text-instance-method" class="signature"><strong>#extra_text</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#z_max%3D%28z_max%3AFloat32%29-instance-method" class="signature"><strong>#z_max=</strong>(z_max : Float32)</a>
+        <a href="#hoverEvent%3AJSON%3A%3AAny%3F-instance-method" class="signature"><strong>#hoverEvent</strong> : JSON::Any?</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#z_min%3AFloat32-instance-method" class="signature"><strong>#z_min</strong> : Float32</a>
+        <a href="#hoverEvent%3D%28hoverEvent%3AJSON%3A%3AAny%3F%29-instance-method" class="signature"><strong>#hoverEvent=</strong>(hoverEvent : JSON::Any?)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#z_min%3D%28z_min%3AFloat32%29-instance-method" class="signature"><strong>#z_min=</strong>(z_min : Float32)</a>
+        <a href="#insertion%3AString%3F-instance-method" class="signature"><strong>#insertion</strong> : String?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#insertion%3D%28insertion%3AString%3F%29-instance-method" class="signature"><strong>#insertion=</strong>(insertion : String?)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#italic%3ABool%3F-instance-method" class="signature"><strong>#italic</strong> : Bool?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#italic%3D%28italic%3ABool%3F%29-instance-method" class="signature"><strong>#italic=</strong>(italic : Bool?)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#obfuscated%3ABool%3F-instance-method" class="signature"><strong>#obfuscated</strong> : Bool?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#obfuscated%3D%28obfuscated%3ABool%3F%29-instance-method" class="signature"><strong>#obfuscated=</strong>(obfuscated : Bool?)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#strikethrough%3ABool%3F-instance-method" class="signature"><strong>#strikethrough</strong> : Bool?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#strikethrough%3D%28strikethrough%3ABool%3F%29-instance-method" class="signature"><strong>#strikethrough=</strong>(strikethrough : Bool?)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#text%3AString-instance-method" class="signature"><strong>#text</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#text%3D%28text%3AString%29-instance-method" class="signature"><strong>#text=</strong>(text : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_s%28io%3AIO%29%3ANil-instance-method" class="signature"><strong>#to_s</strong>(io : IO) : Nil</a>
+        
+          <div class="summary"><p>Appends a short String representation of this object which includes its class name and its object address.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#underlined%3ABool%3F-instance-method" class="signature"><strong>#underlined</strong> : Bool?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#underlined%3D%28underlined%3ABool%3F%29-instance-method" class="signature"><strong>#underlined=</strong>(underlined : Bool?)</a>
         
       </li>
     
@@ -631,18 +696,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(x_min,y_min,z_min,x_max,y_max,z_max)-class-method">
+    <div class="entry-detail" id="new(pull:JSON::PullParser)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(x_min, y_min, z_min, x_max, y_max, z_max)
+        def self.<strong>new</strong>(pull : JSON::PullParser)
 
-        <a class="method-permalink" href="#new%28x_min%2Cy_min%2Cz_min%2Cx_max%2Cy_max%2Cz_max%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28pull%3AJSON%3A%3APullParser%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -661,194 +726,402 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="x_max:Float32-instance-method">
+    <div class="entry-detail" id="bold:Bool?-instance-method">
       <div class="signature">
         
-        def <strong>x_max</strong> : Float32
+        def <strong>bold</strong> : Bool?
 
-        <a class="method-permalink" href="#x_max%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#bold%3ABool%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x_max=(x_max:Float32)-instance-method">
+    <div class="entry-detail" id="bold=(bold:Bool?)-instance-method">
       <div class="signature">
         
-        def <strong>x_max=</strong>(x_max : Float32)
+        def <strong>bold=</strong>(bold : Bool?)
 
-        <a class="method-permalink" href="#x_max%3D%28x_max%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#bold%3D%28bold%3ABool%3F%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x_min:Float32-instance-method">
+    <div class="entry-detail" id="clickEvent:JSON::Any?-instance-method">
       <div class="signature">
         
-        def <strong>x_min</strong> : Float32
+        def <strong>clickEvent</strong> : JSON::Any?
 
-        <a class="method-permalink" href="#x_min%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#clickEvent%3AJSON%3A%3AAny%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x_min=(x_min:Float32)-instance-method">
+    <div class="entry-detail" id="clickEvent=(clickEvent:JSON::Any?)-instance-method">
       <div class="signature">
         
-        def <strong>x_min=</strong>(x_min : Float32)
+        def <strong>clickEvent=</strong>(clickEvent : JSON::Any?)
 
-        <a class="method-permalink" href="#x_min%3D%28x_min%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#clickEvent%3D%28clickEvent%3AJSON%3A%3AAny%3F%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y_max:Float32-instance-method">
+    <div class="entry-detail" id="color:String?-instance-method">
       <div class="signature">
         
-        def <strong>y_max</strong> : Float32
+        def <strong>color</strong> : String?
 
-        <a class="method-permalink" href="#y_max%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#color%3AString%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y_max=(y_max:Float32)-instance-method">
+    <div class="entry-detail" id="color=(color:String?)-instance-method">
       <div class="signature">
         
-        def <strong>y_max=</strong>(y_max : Float32)
+        def <strong>color=</strong>(color : String?)
 
-        <a class="method-permalink" href="#y_max%3D%28y_max%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#color%3D%28color%3AString%3F%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y_min:Float32-instance-method">
+    <div class="entry-detail" id="extra:Array(Rosegold::Chat)?-instance-method">
       <div class="signature">
         
-        def <strong>y_min</strong> : Float32
+        def <strong>extra</strong> : Array(<a href="../Rosegold/Chat.html">Rosegold::Chat</a>)?
 
-        <a class="method-permalink" href="#y_min%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#extra%3AArray%28Rosegold%3A%3AChat%29%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y_min=(y_min:Float32)-instance-method">
+    <div class="entry-detail" id="extra=(extra:Array(Rosegold::Chat)?)-instance-method">
       <div class="signature">
         
-        def <strong>y_min=</strong>(y_min : Float32)
+        def <strong>extra=</strong>(extra : Array(<a href="../Rosegold/Chat.html">Rosegold::Chat</a>)?)
 
-        <a class="method-permalink" href="#y_min%3D%28y_min%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#extra%3D%28extra%3AArray%28Rosegold%3A%3AChat%29%3F%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="z_max:Float32-instance-method">
+    <div class="entry-detail" id="extra_text-instance-method">
       <div class="signature">
         
-        def <strong>z_max</strong> : Float32
+        def <strong>extra_text</strong>
 
-        <a class="method-permalink" href="#z_max%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#extra_text-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="z_max=(z_max:Float32)-instance-method">
+    <div class="entry-detail" id="hoverEvent:JSON::Any?-instance-method">
       <div class="signature">
         
-        def <strong>z_max=</strong>(z_max : Float32)
+        def <strong>hoverEvent</strong> : JSON::Any?
 
-        <a class="method-permalink" href="#z_max%3D%28z_max%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#hoverEvent%3AJSON%3A%3AAny%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="z_min:Float32-instance-method">
+    <div class="entry-detail" id="hoverEvent=(hoverEvent:JSON::Any?)-instance-method">
       <div class="signature">
         
-        def <strong>z_min</strong> : Float32
+        def <strong>hoverEvent=</strong>(hoverEvent : JSON::Any?)
 
-        <a class="method-permalink" href="#z_min%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#hoverEvent%3D%28hoverEvent%3AJSON%3A%3AAny%3F%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="z_min=(z_min:Float32)-instance-method">
+    <div class="entry-detail" id="insertion:String?-instance-method">
       <div class="signature">
         
-        def <strong>z_min=</strong>(z_min : Float32)
+        def <strong>insertion</strong> : String?
 
-        <a class="method-permalink" href="#z_min%3D%28z_min%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#insertion%3AString%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="insertion=(insertion:String?)-instance-method">
+      <div class="signature">
+        
+        def <strong>insertion=</strong>(insertion : String?)
+
+        <a class="method-permalink" href="#insertion%3D%28insertion%3AString%3F%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="italic:Bool?-instance-method">
+      <div class="signature">
+        
+        def <strong>italic</strong> : Bool?
+
+        <a class="method-permalink" href="#italic%3ABool%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="italic=(italic:Bool?)-instance-method">
+      <div class="signature">
+        
+        def <strong>italic=</strong>(italic : Bool?)
+
+        <a class="method-permalink" href="#italic%3D%28italic%3ABool%3F%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="obfuscated:Bool?-instance-method">
+      <div class="signature">
+        
+        def <strong>obfuscated</strong> : Bool?
+
+        <a class="method-permalink" href="#obfuscated%3ABool%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="obfuscated=(obfuscated:Bool?)-instance-method">
+      <div class="signature">
+        
+        def <strong>obfuscated=</strong>(obfuscated : Bool?)
+
+        <a class="method-permalink" href="#obfuscated%3D%28obfuscated%3ABool%3F%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="strikethrough:Bool?-instance-method">
+      <div class="signature">
+        
+        def <strong>strikethrough</strong> : Bool?
+
+        <a class="method-permalink" href="#strikethrough%3ABool%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="strikethrough=(strikethrough:Bool?)-instance-method">
+      <div class="signature">
+        
+        def <strong>strikethrough=</strong>(strikethrough : Bool?)
+
+        <a class="method-permalink" href="#strikethrough%3D%28strikethrough%3ABool%3F%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="text:String-instance-method">
+      <div class="signature">
+        
+        def <strong>text</strong> : String
+
+        <a class="method-permalink" href="#text%3AString-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="text=(text:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>text=</strong>(text : String)
+
+        <a class="method-permalink" href="#text%3D%28text%3AString%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_s(io:IO):Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>to_s</strong>(io : IO) : Nil
+
+        <a class="method-permalink" href="#to_s%28io%3AIO%29%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class Reference
+            </div>
+          
+          <p>Appends a short String representation of this object
+which includes its class name and its object address.</p>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Person</span>
+  <span class="k">def</span> <span class="m">initialize</span>(@name : <span class="t">String</span>, @age : <span class="t">Int32</span>)
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="t">Person</span>.<span class="k">new</span>(<span class="s">&quot;John&quot;</span>, <span class="n">32</span>).to_s <span class="c"># =&gt; #&lt;Person:0x10a199f20&gt;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L20" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="underlined:Bool?-instance-method">
+      <div class="signature">
+        
+        def <strong>underlined</strong> : Bool?
+
+        <a class="method-permalink" href="#underlined%3ABool%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="underlined=(underlined:Bool?)-instance-method">
+      <div class="signature">
+        
+        def <strong>underlined=</strong>(underlined : Bool?)
+
+        <a class="method-permalink" href="#underlined%3D%28underlined%3ABool%3F%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/398235083dc44b8a1793074a4e65c36bd4e284d6/src/rosegold/models/chat.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
