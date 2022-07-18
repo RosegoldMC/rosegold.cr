@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Vec3f - rosegold main</title>
+  <title>Rosegold::Player - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -251,7 +251,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Player" data-name="rosegold::player">
+  <li class=" current" data-id="rosegold/Rosegold/Player" data-name="rosegold::player">
       <a href="../Rosegold/Player.html">Player</a>
       
     </li>
@@ -396,7 +396,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Vec3f" data-name="rosegold::vec3f">
+  <li class=" " data-id="rosegold/Rosegold/Vec3f" data-name="rosegold::vec3f">
       <a href="../Rosegold/Vec3f.html">Vec3f</a>
       
     </li>
@@ -430,12 +430,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">struct</span> Rosegold::Vec3f
+  <span class="kind">class</span> Rosegold::Player
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/Vec3f.html">Rosegold::Vec3f</a></li><li class="superclass"><a href="../Rosegold/Vec3.html">Rosegold::Vec3(Float32)</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/Player.html">Rosegold::Player</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -463,8 +463,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/vec3.cr#L36" target="_blank">
-        rosegold/world/vec3.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L4" target="_blank">
+        rosegold/world/player.cr
       </a>
     
     <br/>
@@ -472,44 +472,89 @@
 
 
 
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-      Constant Summary
-    </h2>
-  
-  <dl>
-    
-      <dt class="entry-const" id="ORIGIN">
-        <strong>ORIGIN</strong> = <code><span class="k">self</span>.<span class="k">new</span>(<span class="n">0</span>, <span class="n">0</span>, <span class="n">0</span>)</code>
-      </dt>
-      
-    
-  </dl>
+
+
+
 
 
 
   <h2>
-    <a id="constructors" class="anchor" href="#constructors">
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Constructors
+    Instance Method Summary
   </h2>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28x%3AT%2Cy%3AT%2Cz%3AT%29-class-method" class="signature"><strong>.new</strong>(x : T, y : T, z : T)</a>
+        <a href="#feet%3AVec3d-instance-method" class="signature"><strong>#feet</strong> : Vec3d</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#new%28xyz%3ATuple%28T%2CT%2CT%29%29-class-method" class="signature"><strong>.new</strong>(xyz : Tuple(T, T, T))</a>
+        <a href="#feet%3D%28feet%3AVec3d%29-instance-method" class="signature"><strong>#feet=</strong>(feet : Vec3d)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#food%3AFloat32-instance-method" class="signature"><strong>#food</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#food%3D%28food%3AFloat32%29-instance-method" class="signature"><strong>#food=</strong>(food : Float32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#gamemode%3AUInt8-instance-method" class="signature"><strong>#gamemode</strong> : UInt8</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#gamemode%3D%28gamemode%3AUInt8%29-instance-method" class="signature"><strong>#gamemode=</strong>(gamemode : UInt8)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#health%3AFloat32-instance-method" class="signature"><strong>#health</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#health%3D%28health%3AFloat32%29-instance-method" class="signature"><strong>#health=</strong>(health : Float32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#look%3ALookDeg-instance-method" class="signature"><strong>#look</strong> : LookDeg</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#look%3D%28look%3ALookDeg%29-instance-method" class="signature"><strong>#look=</strong>(look : LookDeg)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#onGround%3ABool-instance-method" class="signature"><strong>#onGround</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#onGround%3D%28onGround%3ABool%29-instance-method" class="signature"><strong>#onGround=</strong>(onGround : Bool)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#saturation%3AFloat32-instance-method" class="signature"><strong>#saturation</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#saturation%3D%28saturation%3AFloat32%29-instance-method" class="signature"><strong>#saturation=</strong>(saturation : Float32)</a>
         
       </li>
     
@@ -519,99 +564,7 @@
 
 
 
-
-
-
-
 <div class="methods-inherited">
-  
-    
-
-  <h3>Instance methods inherited from struct <code><a href="../Rosegold/Vec3.html">Rosegold::Vec3(Float32)</a></code></h3>
-  
-  
-    <a href="../Rosegold/Vec3.html#%26%2A%28scalar%3AT%29-instance-method" class="tooltip">
-      <span>&*(scalar : T)</span>
-    &*</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#%2A%28scalar%3AT%29-instance-method" class="tooltip">
-      <span>*(scalar : T)</span>
-    *</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#%2B%28vec%3Aself%29-instance-method" class="tooltip">
-      <span>+(vec : <span class="k">self</span>)</span>
-    +</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#-%28vec%3Aself%29-instance-method" class="tooltip">
-      <span>-(vec : <span class="k">self</span>)<br/>-</span>
-    -</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#/%28scalar%3AT%29-instance-method" class="tooltip">
-      <span>/(scalar : T)</span>
-    /</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#x-instance-method" class="tooltip">
-      <span>x</span>
-    x</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#x%3D%28x%29-instance-method" class="tooltip">
-      <span>x=(x)</span>
-    x=</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#y-instance-method" class="tooltip">
-      <span>y</span>
-    y</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#y%3D%28y%29-instance-method" class="tooltip">
-      <span>y=(y)</span>
-    y=</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#z-instance-method" class="tooltip">
-      <span>z</span>
-    z</a>, 
-    
-  
-    <a href="../Rosegold/Vec3.html#z%3D%28z%29-instance-method" class="tooltip">
-      <span>z=(z)</span>
-    z=</a>
-    
-  
-
-
-    
-
-  <h3>Constructor methods inherited from struct <code><a href="../Rosegold/Vec3.html">Rosegold::Vec3(Float32)</a></code></h3>
-  
-  
-    <a href="../Rosegold/Vec3.html#new%28x%3AT%2Cy%3AT%2Cz%3AT%29-class-method" class="tooltip">
-      <span>new(x : T, y : T, z : T)<br/>new(xyz : Tuple(T, T, T))</span>
-    new</a>
-    
-  
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-
   
     
 
@@ -636,51 +589,243 @@
 </div>
 
 
+
+
+
+
   <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Constructor Detail
+    Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="new(x:T,y:T,z:T)-class-method">
+    <div class="entry-detail" id="feet:Vec3d-instance-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(x : T, y : T, z : T)
+        def <strong>feet</strong> : <a href="../Rosegold/Vec3d.html">Vec3d</a>
 
-        <a class="method-permalink" href="#new%28x%3AT%2Cy%3AT%2Cz%3AT%29-class-method">#</a>
+        <a class="method-permalink" href="#feet%3AVec3d-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/vec3.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="new(xyz:Tuple(T,T,T))-class-method">
+    <div class="entry-detail" id="feet=(feet:Vec3d)-instance-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(xyz : Tuple(T, T, T))
+        def <strong>feet=</strong>(feet : <a href="../Rosegold/Vec3d.html">Vec3d</a>)
 
-        <a class="method-permalink" href="#new%28xyz%3ATuple%28T%2CT%2CT%29%29-class-method">#</a>
+        <a class="method-permalink" href="#feet%3D%28feet%3AVec3d%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/vec3.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
   
+    <div class="entry-detail" id="food:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>food</strong> : Float32
 
+        <a class="method-permalink" href="#food%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="food=(food:Float32)-instance-method">
+      <div class="signature">
+        
+        def <strong>food=</strong>(food : Float32)
 
+        <a class="method-permalink" href="#food%3D%28food%3AFloat32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="gamemode:UInt8-instance-method">
+      <div class="signature">
+        
+        def <strong>gamemode</strong> : UInt8
 
+        <a class="method-permalink" href="#gamemode%3AUInt8-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="gamemode=(gamemode:UInt8)-instance-method">
+      <div class="signature">
+        
+        def <strong>gamemode=</strong>(gamemode : UInt8)
 
+        <a class="method-permalink" href="#gamemode%3D%28gamemode%3AUInt8%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="health:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>health</strong> : Float32
+
+        <a class="method-permalink" href="#health%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="health=(health:Float32)-instance-method">
+      <div class="signature">
+        
+        def <strong>health=</strong>(health : Float32)
+
+        <a class="method-permalink" href="#health%3D%28health%3AFloat32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="look:LookDeg-instance-method">
+      <div class="signature">
+        
+        def <strong>look</strong> : <a href="../Rosegold/LookDeg.html">LookDeg</a>
+
+        <a class="method-permalink" href="#look%3ALookDeg-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="look=(look:LookDeg)-instance-method">
+      <div class="signature">
+        
+        def <strong>look=</strong>(look : <a href="../Rosegold/LookDeg.html">LookDeg</a>)
+
+        <a class="method-permalink" href="#look%3D%28look%3ALookDeg%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="onGround:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>onGround</strong> : Bool
+
+        <a class="method-permalink" href="#onGround%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="onGround=(onGround:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>onGround=</strong>(onGround : Bool)
+
+        <a class="method-permalink" href="#onGround%3D%28onGround%3ABool%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="saturation:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>saturation</strong> : Float32
+
+        <a class="method-permalink" href="#saturation%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="saturation=(saturation:Float32)-instance-method">
+      <div class="signature">
+        
+        def <strong>saturation=</strong>(saturation : Float32)
+
+        <a class="method-permalink" href="#saturation%3D%28saturation%3AFloat32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/player.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 

@@ -116,6 +116,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb">
+      <a href="../Rosegold/AABB.html">AABB</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Client" data-name="rosegold::client">
       <a href="../Rosegold/Client.html">Client</a>
       
@@ -216,11 +221,6 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/MCData/AABB" data-name="rosegold::mcdata::aabb">
-      <a href="../Rosegold/MCData/AABB.html">AABB</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Rosegold/MCData/Block" data-name="rosegold::mcdata::block">
       <a href="../Rosegold/MCData/Block.html">Block</a>
       
@@ -241,8 +241,18 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/MCData/Shape" data-name="rosegold::mcdata::shape">
+      <a href="../Rosegold/MCData/Shape.html">Shape</a>
+      
+    </li>
+  
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Player" data-name="rosegold::player">
+      <a href="../Rosegold/Player.html">Player</a>
       
     </li>
   
@@ -391,6 +401,21 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/World" data-name="rosegold::world">
+      <a href="../Rosegold/World.html">World</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/World/Dimension" data-name="rosegold::world::dimension">
+      <a href="../Rosegold/World/Dimension.html">Dimension</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
 </ul>
 
       
@@ -449,7 +474,7 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/96439246097d0fe25b976fcdc79b6ae024d18eb5/src/rosegold/world/mcdata.cr#L4" target="_blank">
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/mcdata.cr#L5" target="_blank">
         rosegold/world/mcdata.cr
       </a>
     
@@ -513,7 +538,14 @@
       <li class="entry-summary">
         <a href="#block_state_collision_shapes%3AArray%28Array%28AABB%29%29-instance-method" class="signature"><strong>#block_state_collision_shapes</strong> : Array(Array(AABB))</a>
         
-          <div class="summary"><p>block state nr -&gt; all AABBs that combine to make up that block state shape</p></div>
+          <div class="summary"><p>block state nr -&gt; array of AABBs that combine to make up that block state shape</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#block_state_names%3AArray%28String%29-instance-method" class="signature"><strong>#block_state_names</strong> : Array(String)</a>
+        
+          <div class="summary"><p>block state nr -&gt; &quot;oak_slab[type=top, waterlogged=true]&quot;</p></div>
         
       </li>
     
@@ -573,7 +605,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/96439246097d0fe25b976fcdc79b6ae024d18eb5/src/rosegold/world/mcdata.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/mcdata.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -595,20 +627,41 @@
     <div class="entry-detail" id="block_state_collision_shapes:Array(Array(AABB))-instance-method">
       <div class="signature">
         
-        def <strong>block_state_collision_shapes</strong> : Array(Array(<a href="../Rosegold/MCData/AABB.html">AABB</a>))
+        def <strong>block_state_collision_shapes</strong> : Array(Array(<a href="../Rosegold/AABB.html">AABB</a>))
 
         <a class="method-permalink" href="#block_state_collision_shapes%3AArray%28Array%28AABB%29%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>block state nr -&gt; all AABBs that combine to make up that block state shape</p>
+          <p>block state nr -&gt; array of AABBs that combine to make up that block state shape</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/96439246097d0fe25b976fcdc79b6ae024d18eb5/src/rosegold/world/mcdata.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/mcdata.cr#L16" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block_state_names:Array(String)-instance-method">
+      <div class="signature">
+        
+        def <strong>block_state_names</strong> : Array(String)
+
+        <a class="method-permalink" href="#block_state_names%3AArray%28String%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>block state nr -&gt; &quot;oak_slab[type=top, waterlogged=true]&quot;</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/mcdata.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -624,7 +677,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/96439246097d0fe25b976fcdc79b6ae024d18eb5/src/rosegold/world/mcdata.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/905a21de93635096654e2f322e7760cbd27687d8/src/rosegold/world/mcdata.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
