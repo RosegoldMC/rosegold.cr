@@ -1,8 +1,10 @@
+require "../../models/chat"
+
 class Rosegold::Clientbound::Chat < Rosegold::Clientbound::Packet
   Log = ::Log.for(self)
 
   property \
-    message : JSON::Any,
+    message : Rosegold::Chat,
     position : UInt8,
     sender : UUID
 
@@ -11,7 +13,7 @@ class Rosegold::Clientbound::Chat < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     self.new(
-      JSON.parse(packet.read_var_string),
+      Rosegold::Chat.from_json(packet.read_var_string),
       packet.read_byte || 0_u8,
       packet.read_uuid
     )
