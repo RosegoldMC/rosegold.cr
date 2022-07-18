@@ -39,6 +39,8 @@ class Rosegold::Client
   end
 
   def start
+    Log.info { "Connected to #{host}:#{port}" }
+
     queue_packet Serverbound::Handshake.new(
       PROTOCOL_VERSION,
       host,
