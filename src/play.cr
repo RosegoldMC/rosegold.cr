@@ -7,7 +7,7 @@ def show_help
   puts "\\position - Displays the current coordinates of the player"
 end
 
-Rosegold::Client.new("minecraft.grepscraft.com", 25565).start do |client|
+Rosegold::Client.new("localhost", 25565).start do |client|
   show_help
   loop do
     gets.try do |input|
