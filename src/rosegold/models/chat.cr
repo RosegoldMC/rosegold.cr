@@ -13,9 +13,12 @@ class Rosegold::Chat
     strikethrough : Bool?,
     obfuscated : Bool?,
     insertion : String?,
-    clickEvent : JSON::Any?,
-    hoverEvent : JSON::Any?,
     extra : Array(Rosegold::Chat)?
+
+  @[JSON::Field(key: "clickEvent")]
+  property click_event : JSON::Any?
+  @[JSON::Field(key: "hoverEvent")]
+  property hover_event : JSON::Any?
 
   def to_s(io : IO) : Nil
     io << text
