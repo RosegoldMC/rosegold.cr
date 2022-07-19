@@ -5,7 +5,7 @@ class Rosegold::Player
   property \
     feet : Vec3d = Vec3d::ORIGIN,
     look : LookDeg = LookDeg::SOUTH,
-    onGround : Bool = true,
+    on_ground : Bool = true,
     health : Float32 = 0,
     food : Float32 = 0,
     saturation : Float32 = 0,

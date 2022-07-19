@@ -24,12 +24,12 @@ class Rosegold::MCData
 
     @blocks_by_id = Hash.zip(blocks_json.map &.name, blocks_json)
 
-    max_block_state = blocks_json.map(&.maxStateId).flatten.max
+    max_block_state = blocks_json.flat_map(&.max_state_id).max
 
     @block_state_names = Array(String).new(max_block_state + 1, "")
     blocks_json.each do |block|
       if block.states.empty?
-        block_state_names[block.minStateId] = block.name
+        block_state_names[block.min_state_id] = block.name
       else
         # example (slab): [["type=top", "waterlogged=true"], ["type=top", "waterlogged=false"], ["type=bottom", "waterlogged=true"], ["type=bottom", "waterlogged=false"], ["type=double", "waterlogged=true"], ["type=double", "waterlogged=false"]]
         prop_combos = Indexable.cartesian_product block.states.map { |prop|
@@ -42,7 +42,7 @@ class Rosegold::MCData
           end.map { |value| "#{prop.name}=#{value}" }
         }
         prop_combos.each_with_index do |props, i|
-          state_nr = block.minStateId + i
+          state_nr = block.min_state_id + i
           block_state_names[state_nr] = block.name + "[#{props.join ", "}]"
         end
       end
@@ -56,8 +56,8 @@ class Rosegold::MCData
       block_shape_nrs = block_collision_shapes_json.blocks[block.name].try do |j|
         j.is_a?(Array) ? j : [j]
       end
-      (block.minStateId..block.maxStateId).each do |state_nr|
-        state_nr_in_block = (state_nr - block.minStateId) % block_shape_nrs.size
+      (block.min_state_id..block.max_state_id).each do |state_nr|
+        state_nr_in_block = (state_nr - block.min_state_id) % block_shape_nrs.size
         shape_nr = block_shape_nrs[state_nr_in_block]
         shape = block_collision_shapes_json.shapes[shape_nr.to_s]
         block_state_collision_shapes[state_nr] = shape.map { |aabb| AABB.new *aabb }
@@ -71,11 +71,17 @@ class Rosegold::MCData
 
     getter id : UInt16
     getter name : String
-    getter displayName : String
-    getter stackSize : UInt8
-    getter minStateId : UInt16
-    getter maxStateId : UInt16
-    getter defaultState : UInt16
+    @[JSON::Field(key: "displayName")]
+    getter display_name : String
+    @[JSON::Field(key: "stackSize")]
+    getter stack_size : UInt8
+    @[JSON::Field(key: "MinStateId")]
+    getter min_state_id : UInt16
+    @[JSON::Field(key: "maxStateId")]
+    getter max_state_id : UInt16
+    @[JSON::Field(key: "defaultState")]
+    getter default_state : UInt16
+
     # Not individual block states, but the properties that, in combination, make up each block state.
     # Empty array if block has only one state.
     getter states : Array(BlockProperty)
