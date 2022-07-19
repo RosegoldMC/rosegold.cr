@@ -13,7 +13,8 @@ class Rosegold::MCData
   getter block_state_names : Array(String)
 
   # block state nr -> array of AABBs that combine to make up that block state shape
-  getter block_state_collision_shapes : Array(Array(AABB))
+  # TODO: more compact memory layout: only store one Shape if it's the same for all variants of a block
+  getter block_state_collision_shapes : Array(Array(AABBf))
 
   def initialize(mc_version : String)
     # for arbitrary version support, we would need to parse dataPaths.json
@@ -51,7 +52,7 @@ class Rosegold::MCData
     # because there's no 1.18/blockCollisionShapes.json we use 1.19
     # all 1.18->1.19 block states stayed the same except leaves (waterlogged) but it still works because all leaves' shapes are the same
     # veryfy by diffing: jq -c '.[]|{name,states:[.states[]|{name,num_values}]}' < 1.18/blocks.json | sort
-    @block_state_collision_shapes = Array(Array(AABB)).new(max_block_state + 1, [] of AABB)
+    @block_state_collision_shapes = Array(Array(AABBf)).new(max_block_state + 1, [] of AABBf)
     blocks_json.each do |block|
       block_shape_nrs = block_collision_shapes_json.blocks[block.name].try do |j|
         j.is_a?(Array) ? j : [j]
@@ -60,7 +61,7 @@ class Rosegold::MCData
         state_nr_in_block = (state_nr - block.min_state_id) % block_shape_nrs.size
         shape_nr = block_shape_nrs[state_nr_in_block]
         shape = block_collision_shapes_json.shapes[shape_nr.to_s]
-        block_state_collision_shapes[state_nr] = shape.map { |aabb| AABB.new *aabb }
+        block_state_collision_shapes[state_nr] = shape.map { |aabb| AABBf.new *aabb }
       end
     end
   end
