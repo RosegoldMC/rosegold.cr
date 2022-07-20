@@ -16,6 +16,5 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
   def callback(client)
     client.state = State::Play.new
     Log.info { "Logged in as #{username} #{uuid}" }
-    client.start_physics
   end
 end

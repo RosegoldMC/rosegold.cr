@@ -7,11 +7,13 @@ class Rosegold::World::Chunk
 
   def initialize(io : Minecraft::IO)
     @min_y = -64
-    @world_height = 64 + 256 + 64
+    @max_y = 256 + 64
+    @world_height = @max_y - @min_y
     section_count = world_height >> 4
     @sections = Array(Section).new(section_count) { Section.new io }
   end
 
+  # Returns nil if outside world vertically.
   def block_state(x : Int32, y : Int32, z : Int32) : BlockStateNr | Nil
     x, z = x & 15, z & 15
     section = sections[(y - min_y) >> 4]? || return nil
