@@ -56,12 +56,18 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
   end
 
   def callback(client)
+    player = client.player
+    player.feet = feet player.feet
+    player.look = look player.look
+    player.velocity = Vec3d::ORIGIN
+
     client.queue_packet Serverbound::TeleportConfirm.new teleport_id
 
-    Log.debug { "Position reset: #{feet client.player.feet} #{look client.player.look} dismount=#{dismount_vehicle} flags=#{relative_flags}" }
+    Log.debug { "Position reset: #{player.feet} #{player.look} dismount=#{dismount_vehicle} flags=#{relative_flags}" }
 
-    client.player.feet = feet client.player.feet
-    client.player.look = look client.player.look
+    client.start_physics
+
+    client.physics.try &.reset
 
     # TODO: close the “Downloading Terrain” screen when joining/respawning
   end
