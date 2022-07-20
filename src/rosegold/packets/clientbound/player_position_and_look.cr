@@ -40,9 +40,9 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
 
   def feet(reference : Vec3d)
     Vec3d.new(
-      relative_flags & 0b001 ? reference.x + x_raw : x_raw,
-      relative_flags & 0b010 ? reference.y + y_raw : y_raw,
-      relative_flags & 0b100 ? reference.z + z_raw : z_raw)
+      relative_flags.bits_set?(0b001) ? reference.x + x_raw : x_raw,
+      relative_flags.bits_set?(0b010) ? reference.y + y_raw : y_raw,
+      relative_flags.bits_set?(0b100) ? reference.z + z_raw : z_raw)
   end
 
   def look(reference_rad : LookRad)
@@ -51,14 +51,14 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
 
   def look(reference_deg : LookDeg)
     LookDeg.new(
-      relative_flags & 0b1000 ? reference_deg.yaw + yaw_deg_raw : yaw_deg_raw,
-      relative_flags & 0b10000 ? reference_deg.pitch + pitch_deg_raw : pitch_deg_raw)
+      relative_flags.bits_set?(0b1000) ? reference_deg.yaw + yaw_deg_raw : yaw_deg_raw,
+      relative_flags.bits_set?(0b10000) ? reference_deg.pitch + pitch_deg_raw : pitch_deg_raw)
   end
 
   def callback(client)
     client.queue_packet Serverbound::TeleportConfirm.new teleport_id
 
-    Log.debug { "Position reset: #{feet client.player.feet} #{look client.player.look} dismount=#{dismount_vehicle}" }
+    Log.debug { "Position reset: #{feet client.player.feet} #{look client.player.look} dismount=#{dismount_vehicle} flags=#{relative_flags}" }
 
     client.player.feet = feet client.player.feet
     client.player.look = look client.player.look
