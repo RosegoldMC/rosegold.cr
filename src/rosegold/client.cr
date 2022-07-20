@@ -16,6 +16,7 @@ class Rosegold::Client
     port : UInt32,
     player : Player = Player.new,
     dimension : World::Dimension = World::Dimension.new,
+    physics : Physics?,
     state : State::Status | State::Login | State::Play = State::Status.new,
     compression_threshold : UInt32 = 0,
     read_mutex : Mutex = Mutex.new,
@@ -71,15 +72,7 @@ class Rosegold::Client
   end
 
   def start_physics
-    spawn do
-      while state.is_a? State::Play
-        queue_packet Serverbound::PlayerPositionAndLook.new(
-          player.feet, player.look, player.on_ground
-        )
-
-        sleep 0.05 # assume 20 ticks per second for now
-      end
-    end
+    @physics ||= Physics.new self
   end
 
   def status

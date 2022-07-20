@@ -1,4 +1,8 @@
 module Rosegold::Vec3(T)
+  getter x : T, y : T, z : T
+
+  def initialize(@x : T, @y : T, @z : T); end
+
   def west(len : T = 1) : self
     self.class.new x - 1, y, z
   end
@@ -163,14 +167,16 @@ module Rosegold::Vec3(T)
   end
 end
 
+struct Rosegold::Vec3i
+  include Rosegold::Vec3(Int32)
+
+  ORIGIN = self.new 0, 0, 0
+end
+
 struct Rosegold::Vec3f
   include Rosegold::Vec3(Float32)
 
   ORIGIN = self.new 0, 0, 0
-
-  getter x : Float32, y : Float32, z : Float32
-
-  def initialize(@x : Float32, @y : Float32, @z : Float32); end
 
   # additional methods that "upgrade" to Vec3d
 
@@ -200,11 +206,11 @@ struct Rosegold::Vec3d
 
   ORIGIN = self.new 0, 0, 0
 
-  getter x : Float64, y : Float64, z : Float64
-
-  def initialize(@x : Float64, @y : Float64, @z : Float64); end
-
   def to_f32 : Vec3f
     Vec3f.new x, y, z
+  end
+
+  def floored_i32 : Vec3i
+    Vec3i.new x.floor.to_i32, y.floor.to_i32, z.floor.to_i32
   end
 end
