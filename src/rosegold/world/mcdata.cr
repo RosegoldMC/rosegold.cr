@@ -75,7 +75,7 @@ class Rosegold::MCData
     getter display_name : String
     @[JSON::Field(key: "stackSize")]
     getter stack_size : UInt8
-    @[JSON::Field(key: "MinStateId")]
+    @[JSON::Field(key: "minStateId")]
     getter min_state_id : UInt16
     @[JSON::Field(key: "maxStateId")]
     getter max_state_id : UInt16
