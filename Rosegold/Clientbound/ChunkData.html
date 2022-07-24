@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.2.2">
+<meta name="generator" content="Crystal Docs 1.4.1">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="rosegold">
 
@@ -50,6 +50,11 @@
 
   <div class="types-list">
     <ul>
+  
+  <li class=" " data-id="rosegold/toplevel" data-name="top level namespace">
+      <a href="../../toplevel.html">Top Level Namespace</a>
+      
+    </li>
   
   <li class="parent " data-id="rosegold/Microsoft" data-name="microsoft">
       <a href="../../Microsoft.html">Microsoft</a>
@@ -136,6 +141,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/BlockChange" data-name="rosegold::clientbound::blockchange">
+      <a href="../../Rosegold/Clientbound/BlockChange.html">BlockChange</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Chat" data-name="rosegold::clientbound::chat">
       <a href="../../Rosegold/Clientbound/Chat.html">Chat</a>
       
@@ -176,6 +186,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/MultiBlockChange" data-name="rosegold::clientbound::multiblockchange">
+      <a href="../../Rosegold/Clientbound/MultiBlockChange.html">MultiBlockChange</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Packet" data-name="rosegold::clientbound::packet">
       <a href="../../Rosegold/Clientbound/Packet.html">Packet</a>
       
@@ -198,6 +213,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Status" data-name="rosegold::clientbound::status">
       <a href="../../Rosegold/Clientbound/Status.html">Status</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/UnloadChunk" data-name="rosegold::clientbound::unloadchunk">
+      <a href="../../Rosegold/Clientbound/UnloadChunk.html">UnloadChunk</a>
       
     </li>
   
@@ -508,7 +528,7 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L1" target="_blank">
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L1" target="_blank">
         rosegold/packets/clientbound/chunk_data.cr
       </a>
     
@@ -530,7 +550,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28chunk_x%2Cchunk_z%2Cheightmaps%2Cdata%29-class-method" class="signature"><strong>.new</strong>(chunk_x, chunk_z, heightmaps, data)</a>
+        <a href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3ANBT%3A%3ATag%2Cdata%3ASlice%28UInt8%29%29-class-method" class="signature"><strong>.new</strong>(chunk_x : Int32, chunk_z : Int32, heightmaps : NBT::Tag, data : Slice(UInt8))</a>
         
       </li>
     
@@ -612,6 +632,11 @@
         
       </li>
     
+      <li class="entry-summary">
+        <a href="#inspect%28io%29-instance-method" class="signature"><strong>#inspect</strong>(io)</a>
+        
+      </li>
+    
   </ul>
 
 
@@ -671,18 +696,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(chunk_x,chunk_z,heightmaps,data)-class-method">
+    <div class="entry-detail" id="new(chunk_x:Int32,chunk_z:Int32,heightmaps:NBT::Tag,data:Slice(UInt8))-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(chunk_x, chunk_z, heightmaps, data)
+        def self.<strong>new</strong>(chunk_x : Int32, chunk_z : Int32, heightmaps : NBT::Tag, data : Slice(UInt8))
 
-        <a class="method-permalink" href="#new%28chunk_x%2Cchunk_z%2Cheightmaps%2Cdata%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3ANBT%3A%3ATag%2Cdata%3ASlice%28UInt8%29%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -710,7 +735,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -738,7 +763,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -754,7 +779,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -770,7 +795,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -786,7 +811,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -802,7 +827,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -818,7 +843,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -834,7 +859,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -850,7 +875,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -866,7 +891,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="inspect(io)-instance-method">
+      <div class="signature">
+        
+        def <strong>inspect</strong>(io)
+
+        <a class="method-permalink" href="#inspect%28io%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/chunk_data.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>

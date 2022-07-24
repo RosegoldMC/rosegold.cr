@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.2.2">
+<meta name="generator" content="Crystal Docs 1.4.1">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="rosegold">
 
@@ -50,6 +50,11 @@
 
   <div class="types-list">
     <ul>
+  
+  <li class=" " data-id="rosegold/toplevel" data-name="top level namespace">
+      <a href="../toplevel.html">Top Level Namespace</a>
+      
+    </li>
   
   <li class="parent " data-id="rosegold/Microsoft" data-name="microsoft">
       <a href="../Microsoft.html">Microsoft</a>
@@ -136,6 +141,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/BlockChange" data-name="rosegold::clientbound::blockchange">
+      <a href="../Rosegold/Clientbound/BlockChange.html">BlockChange</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Chat" data-name="rosegold::clientbound::chat">
       <a href="../Rosegold/Clientbound/Chat.html">Chat</a>
       
@@ -176,6 +186,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/MultiBlockChange" data-name="rosegold::clientbound::multiblockchange">
+      <a href="../Rosegold/Clientbound/MultiBlockChange.html">MultiBlockChange</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Packet" data-name="rosegold::clientbound::packet">
       <a href="../Rosegold/Clientbound/Packet.html">Packet</a>
       
@@ -198,6 +213,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Status" data-name="rosegold::clientbound::status">
       <a href="../Rosegold/Clientbound/Status.html">Status</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/UnloadChunk" data-name="rosegold::clientbound::unloadchunk">
+      <a href="../Rosegold/Clientbound/UnloadChunk.html">UnloadChunk</a>
       
     </li>
   
@@ -508,8 +528,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/world/PalettedContainer.cr#L1" target="_blank">
-        rosegold/world/PalettedContainer.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/paletted_container.cr#L1" target="_blank">
+        rosegold/world/paletted_container.cr
       </a>
     
     <br/>
@@ -551,12 +571,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%5B%5D%28index%3AUInt32%29%3AUInt16-instance-method" class="signature"><strong>#[]</strong>(index : UInt32) : UInt16</a>
+        <a href="#%5B%5D%28index%3AIndex%29%3AEntry-instance-method" class="signature"><strong>#[]</strong>(index : Index) : Entry</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#%5B%5D%3D%28index%3AUInt32%2Cvalue%3AUInt16%29-instance-method" class="signature"><strong>#[]=</strong>(index : UInt32, value : UInt16)</a>
+        <a href="#%5B%5D%3D%28index%3AIndex%2Cvalue%3AEntry%29%3ANil-instance-method" class="signature"><strong>#[]=</strong>(index : Index, value : Entry) : Nil</a>
         
       </li>
     
@@ -611,7 +631,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/world/PalettedContainer.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/paletted_container.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -630,34 +650,34 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="[](index:UInt32):UInt16-instance-method">
+    <div class="entry-detail" id="[](index:Index):Entry-instance-method">
       <div class="signature">
         
-        def <strong>[]</strong>(index : UInt32) : UInt16
+        def <strong>[]</strong>(index : Index) : Entry
 
-        <a class="method-permalink" href="#%5B%5D%28index%3AUInt32%29%3AUInt16-instance-method">#</a>
+        <a class="method-permalink" href="#%5B%5D%28index%3AIndex%29%3AEntry-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/world/PalettedContainer.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/paletted_container.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="[]=(index:UInt32,value:UInt16)-instance-method">
+    <div class="entry-detail" id="[]=(index:Index,value:Entry):Nil-instance-method">
       <div class="signature">
         
-        def <strong>[]=</strong>(index : UInt32, value : UInt16)
+        def <strong>[]=</strong>(index : Index, value : Entry) : Nil
 
-        <a class="method-permalink" href="#%5B%5D%3D%28index%3AUInt32%2Cvalue%3AUInt16%29-instance-method">#</a>
+        <a class="method-permalink" href="#%5B%5D%3D%28index%3AIndex%2Cvalue%3AEntry%29%3ANil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/1cf9a2b4c0c3404ddb2bb1f2bae59f340ac890d0/src/rosegold/world/PalettedContainer.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/paletted_container.cr#L52" target="_blank">View source</a>]
         
       </div>
     </div>

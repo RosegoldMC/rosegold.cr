@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Clientbound::Packet - rosegold main</title>
+  <title>Rosegold::Clientbound::UnloadChunk - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -191,7 +191,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/Packet" data-name="rosegold::clientbound::packet">
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/Packet" data-name="rosegold::clientbound::packet">
       <a href="../../Rosegold/Clientbound/Packet.html">Packet</a>
       
     </li>
@@ -216,7 +216,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/UnloadChunk" data-name="rosegold::clientbound::unloadchunk">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/UnloadChunk" data-name="rosegold::clientbound::unloadchunk">
       <a href="../../Rosegold/Clientbound/UnloadChunk.html">UnloadChunk</a>
       
     </li>
@@ -495,12 +495,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">abstract class</span> Rosegold::Clientbound::Packet
+  <span class="kind">class</span> Rosegold::Clientbound::UnloadChunk
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/UnloadChunk.html">Rosegold::Clientbound::UnloadChunk</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -512,50 +512,6 @@
 
 
 
-
-  <h2>
-    <a id="direct-known-subclasses" class="anchor" href="#direct-known-subclasses">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Direct Known Subclasses
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/BlockChange.html">Rosegold::Clientbound::BlockChange</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/Chat.html">Rosegold::Clientbound::Chat</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/ChunkData.html">Rosegold::Clientbound::ChunkData</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/Disconnect.html">Rosegold::Clientbound::Disconnect</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/EncryptionRequest.html">Rosegold::Clientbound::EncryptionRequest</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/JoinGame.html">Rosegold::Clientbound::JoinGame</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/KeepAlive.html">Rosegold::Clientbound::KeepAlive</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/LoginPluginRequest.html">Rosegold::Clientbound::LoginPluginRequest</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/LoginSuccess.html">Rosegold::Clientbound::LoginSuccess</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/MultiBlockChange.html">Rosegold::Clientbound::MultiBlockChange</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/Ping.html">Rosegold::Clientbound::Ping</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/PlayerPositionAndLook.html">Rosegold::Clientbound::PlayerPositionAndLook</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/SetCompression.html">Rosegold::Clientbound::SetCompression</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/Status.html">Rosegold::Clientbound::Status</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/UnloadChunk.html">Rosegold::Clientbound::UnloadChunk</a></li>
-    
-      <li class="other-type"><a href="../../Rosegold/Clientbound/UpdateHealth.html">Rosegold::Clientbound::UpdateHealth</a></li>
-    
-  </ul>
 
 
 
@@ -572,8 +528,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/packet.cr#L1" target="_blank">
-        rosegold/packets/clientbound/packet.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/unload_chunk.cr#L1" target="_blank">
+        rosegold/packets/clientbound/unload_chunk.cr
       </a>
     
     <br/>
@@ -583,7 +539,41 @@
 
 
 
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%29-class-method" class="signature"><strong>.new</strong>(chunk_x : Int32, chunk_z : Int32)</a>
+        
+      </li>
+    
+  </ul>
 
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -602,6 +592,26 @@
         
       </li>
     
+      <li class="entry-summary">
+        <a href="#chunk_x%3AInt32-instance-method" class="signature"><strong>#chunk_x</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#chunk_x%3D%28chunk_x%3AInt32%29-instance-method" class="signature"><strong>#chunk_x=</strong>(chunk_x : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#chunk_z%3AInt32-instance-method" class="signature"><strong>#chunk_z</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#chunk_z%3D%28chunk_z%3AInt32%29-instance-method" class="signature"><strong>#chunk_z=</strong>(chunk_z : Int32)</a>
+        
+      </li>
+    
   </ul>
 
 
@@ -609,6 +619,25 @@
 
 
 <div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#callback%28client%29-instance-method" class="tooltip">
+      <span>callback(client)</span>
+    callback</a>
+    
+  
+
+
+    
+
+
+    
+
+
   
     
 
@@ -633,7 +662,59 @@
 </div>
 
 
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(chunk_x:Int32,chunk_z:Int32)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(chunk_x : Int32, chunk_z : Int32)
 
+        <a class="method-permalink" href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/unload_chunk.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="read(packet)-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(packet)
+
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/unload_chunk.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 
@@ -657,7 +738,71 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/packet.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/unload_chunk.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="chunk_x:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>chunk_x</strong> : Int32
+
+        <a class="method-permalink" href="#chunk_x%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/unload_chunk.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="chunk_x=(chunk_x:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>chunk_x=</strong>(chunk_x : Int32)
+
+        <a class="method-permalink" href="#chunk_x%3D%28chunk_x%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/unload_chunk.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="chunk_z:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>chunk_z</strong> : Int32
+
+        <a class="method-permalink" href="#chunk_z%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/unload_chunk.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="chunk_z=(chunk_z:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>chunk_z=</strong>(chunk_z : Int32)
+
+        <a class="method-permalink" href="#chunk_z%3D%28chunk_z%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/packets/clientbound/unload_chunk.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
