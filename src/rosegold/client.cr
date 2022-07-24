@@ -18,6 +18,7 @@ class Rosegold::Client
     dimension : World::Dimension = World::Dimension.new,
     physics : Physics?,
     state : State::Status | State::Login | State::Play = State::Status.new,
+    state : State::Status | State::Login | State::Play | State::Disconnected = State::Status.new,
     compression_threshold : UInt32 = 0,
     read_mutex : Mutex = Mutex.new,
     write_mutex : Mutex = Mutex.new
@@ -64,6 +65,11 @@ class Rosegold::Client
 
     spawn do
       loop do
+        if state.is_a? State::Disconnected
+          Fiber.yield
+          Log.info { "Disconnected from #{host}:#{port} (stopping reader)" }
+          break
+        end
         read_packet
       end
     end
@@ -104,6 +110,8 @@ class Rosegold::Client
   end
 
   private def send_packet(packet : Rosegold::Serverbound::Packet)
+    return if state.is_a? State::Disconnected
+
     Log.trace { "SEND " + packet.pretty_inspect(999, " ", 0) \
       .gsub("Rosegold::", "").gsub("Serverbound::", "").sub(/:0x\S+/, "") }
     packet.to_packet.try do |packet_buffer|
@@ -132,6 +140,9 @@ class Rosegold::Client
         io.flush
       end
     end
+  rescue e : IO::Error
+    Log.error { "IO Error: #{e.message}" }
+    self.state = State::Disconnected.new
   end
 
   private def read_packet
@@ -168,5 +179,8 @@ class Rosegold::Client
         nil # packet not parsed
       end
     end
+  rescue e : IO::EOFError
+    Log.error { "IO Error: #{e.message}" }
+    self.state = State::Disconnected.new
   end
 end

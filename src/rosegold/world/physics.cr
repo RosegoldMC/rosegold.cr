@@ -44,7 +44,6 @@ class Rosegold::Physics
   def tick
     prev_feet = player.feet
     prev_look = player.look
-    prev_velocity = player.velocity
 
     input_velocity = velocity_for_inputs
 
@@ -171,7 +170,7 @@ class Rosegold::Physics
       x, y, z = block_coords
       dimension.block_state(x, y, z).try do |block_state|
         block_shape = MCData::MC118.block_state_collision_shapes[block_state]
-        block_shape.map { |aabb| aabb.to_f64.offset x, y, z }
+        block_shape.map(&.to_f64.offset(x, y, z))
       end || Array(AABBd).new 0 # outside world or outside loaded chunks
     end
     # we can freely move in blocks that we already collide with before the movement

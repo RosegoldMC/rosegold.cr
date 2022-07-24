@@ -13,6 +13,16 @@ class Rosegold::State::Status
   end
 end
 
+class Rosegold::State::Disconnected
+  def self.[](packet_id)
+    nil
+  end
+
+  def [](packet_id)
+    self.class[packet_id]
+  end
+end
+
 class Rosegold::State::Login
   def self.[](packet_id)
     case packet_id

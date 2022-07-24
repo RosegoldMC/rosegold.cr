@@ -75,6 +75,10 @@ module Rosegold::Vec3(T)
     self.class.new block.call(x), block.call(y), block.call(z)
   end
 
+  def ==(vec : Vec3(T)) : Bool
+    x.round(4) == vec.x.round(4) && y.round(4) == vec.y.round(4) && z.round(4) == vec.z.round(4)
+  end
+
   def normed : self
     self / len
   end
@@ -151,7 +155,7 @@ module Rosegold::Vec3(T)
   end
 
   def almost_eq(other : self, closer_than = 0.01) : Bool
-    return dist_sq(other) < closer_than * closer_than
+    dist_sq(other) < closer_than * closer_than
   end
 
   def [](i) : T
