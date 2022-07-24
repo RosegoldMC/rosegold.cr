@@ -11,6 +11,7 @@ services:
       ONLINE_MODE: "FALSE"
       MAX_WORLD_SIZE: 10
       LEVEL_TYPE: flat
+      OPS: rosegold_test
 
     tty: true
     stdin_open: true
