@@ -13,8 +13,6 @@ jobs:
         with:
           persist-credentials: false
       - uses: crystal-lang/install-crystal@v1
-        with:
-          crystal: 1.3.2
       - name: "Install shards"
         run: shards install
       - name: "Generate docs"
