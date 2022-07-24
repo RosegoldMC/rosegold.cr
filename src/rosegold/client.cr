@@ -111,29 +111,29 @@ class Rosegold::Client
   private def send_packet(packet : Rosegold::Serverbound::Packet)
     Log.trace { "SEND " + packet.pretty_inspect(999, " ", 0) \
       .gsub("Rosegold::", "").gsub("Serverbound::", "").sub(/:0x\S+/, "") }
-    packet.to_packet.try do |packet|
+    packet.to_packet.try do |packet_buffer|
       if compress?
         Minecraft::IO::Memory.new.tap do |buffer|
-          size = packet.to_slice.size
+          size = packet_buffer.to_slice.size
 
           if size > compression_threshold
             buffer.write size.to_u32
 
             Compress::Zlib::Writer.open(buffer) do |zlib|
-              zlib.write packet.to_slice
+              zlib.write packet_buffer.to_slice
             end
           else
             buffer.write 0_u32
-            buffer.write packet.to_slice
+            buffer.write packet_buffer.to_slice
           end
         end
       else
-        packet
+        packet_buffer
       end
-    end.try do |packet|
+    end.try do |packet_buffer|
       write_mutex.synchronize do
-        io.write packet.size.to_u32
-        io.write packet.to_slice
+        io.write packet_buffer.size.to_u32
+        io.write packet_buffer.to_slice
         io.flush
       end
     end
