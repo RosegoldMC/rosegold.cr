@@ -9,5 +9,6 @@
 # Dependencies will be locked in applications that use them
 /shard.lock
 
-# for now, we don't care about saving spec server data
-spec/fixtures/server
+# whole entire minecraft server for specs
+spec/fixtures/server/*
+!spec/fixtures/server/ops.json
