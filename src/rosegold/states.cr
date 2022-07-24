@@ -38,37 +38,33 @@ end
 
 # https://wiki.vg/index.php?title=Protocol&oldid=17499
 class Rosegold::State::Play
+  MAP = {
+    0x1a => Clientbound::Disconnect,
+    0x26 => Clientbound::JoinGame,
+    0x21 => Clientbound::KeepAlive,
+    0x30 => Clientbound::Ping,
+    0x38 => Clientbound::PlayerPositionAndLook,
+    # 0x3d => Clientbound::Respawn,
+    0x22 => Clientbound::ChunkData,
+    0x1d => Clientbound::UnloadChunk,
+    0x0c => Clientbound::BlockChange,
+    0x3f => Clientbound::MultiBlockChange,
+    # 0x48 => Clientbound::HeldItemChange,
+    # 0x2e => Clientbound::OpenWindow,
+    # 0x13 => Clientbound::CloseWindow,
+    # 0x14 => Clientbound::WindowItems,
+    # 0x16 => Clientbound::SetSlot,
+    # 0x66 => Clientbound::DeclareRecipes,
+    0x0f => Clientbound::Chat,
+    # 0x36 => Clientbound::PlayerInfo,
+    # 0x0d => Clientbound::BossBar,
+    # 0x41 => Clientbound::ActionBar,
+    # 0x59 => Clientbound::TimeUpdate,
+    # 0x5f => Clientbound::PlayerListHeaderAndFooter,
+  }
+
   def self.[](packet_id)
-    case packet_id
-    # connection
-    when 0x1a; Clientbound::Disconnect
-    when 0x26; Clientbound::JoinGame
-    when 0x21; Clientbound::KeepAlive
-    when 0x30; Clientbound::Ping
-      # player state
-    when 0x38; Clientbound::PlayerPositionAndLook
-    when 0x3d; nil # TODO: Clientbound::Respawn
-    when 0x52; Clientbound::UpdateHealth
-      # physics
-    when 0x22; Clientbound::ChunkData
-    when 0x1d; Clientbound::UnloadChunk
-    when 0x0c; Clientbound::BlockChange
-    when 0x3f; Clientbound::MultiBlockChange
-      # inventory
-    when 0x48; nil # TODO: Clientbound::HeldItemChange
-    when 0x2e; nil # TODO: Clientbound::OpenWindow
-    when 0x13; nil # TODO: Clientbound::CloseWindow
-    when 0x14; nil # TODO: Clientbound::WindowItems
-    when 0x16; nil # TODO: Clientbound::SetSlot
-    when 0x66; nil # TODO: Clientbound::DeclareRecipes
-    # botting
-    when 0x0f; Clientbound::Chat
-    when 0x36; nil # TODO: Clientbound::PlayerInfo # tab list
-    when 0x0d; nil # TODO: Clientbound::BossBar
-    when 0x41; nil # TODO: Clientbound::ActionBar # text above hotbar
-    when 0x59; nil # Time Update # to measure TPS
-    when 0x5f; nil # Player List Header And Footer # to measure TPS
-    end
+    MAP[packet_id]?
   end
 
   def [](packet_id)
