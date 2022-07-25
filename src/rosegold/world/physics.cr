@@ -13,12 +13,11 @@ class Rosegold::Physics
   VERY_CLOSE = 0.00001 # consider arrived at target if squared distance is closer than this
 
   private getter client : Rosegold::Client
-  property movement_speed : Float64
+  property movement_speed : Float64 = WALK_SPEED
   property movement_target : Vec3d?
   property jump_queued : Bool = false
 
   def initialize(@client : Rosegold::Client)
-    @movement_speed = 0
     spawn do
       while client.state.is_a? State::Play
         tick

@@ -16,7 +16,6 @@ Spectator.describe Rosegold::Physics do
       client.queue_packet Rosegold::Serverbound::Chat.new "/tp 1 -60 1"
       sleep 1
       client.physics.try do |physics|
-        physics.movement_speed = 0.235
         physics.movement_target = Rosegold::Vec3d.new(5.5, -60, 5.5)
         sleep 2
         expect(client.player.feet).to eq(Rosegold::Vec3d.new(5.5, -60, 5.5))
