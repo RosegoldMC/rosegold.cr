@@ -20,6 +20,18 @@ Rosegold::Client.new("localhost", 25565).start do |client|
           show_help
         when "\\position"
           puts client.player.feet
+        when "\\pitch"
+          if command.size > 1
+            client.player.pitch = command[1].to_f
+          else
+            puts client.player.pitch
+          end
+        when "\\yaw"
+          if command.size > 1
+            client.player.yaw = command[1].to_f
+          else
+            puts client.player.yaw
+          end
         when "\\debug"
           Log.setup :debug
         when "\\trace"

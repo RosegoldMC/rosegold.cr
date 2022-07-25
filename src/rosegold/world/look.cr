@@ -15,6 +15,14 @@ abstract struct Rosegold::Look(T)
     @yaw, @pitch = yaw_pitch
   end
 
+  def yaw=(yaw : Float64)
+    @yaw = yaw.to_f32
+  end
+
+  def pitch=(pitch : Float64)
+    @pitch = pitch.to_f32
+  end
+
   def -
     self.new(-x, -y)
   end
