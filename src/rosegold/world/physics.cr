@@ -16,6 +16,8 @@ class Rosegold::Physics
   property movement_speed : Float64 = WALK_SPEED
   property movement_target : Vec3d?
   property jump_queued : Bool = false
+  property last_feet : Vec3d?
+  property last_look : LookDeg?
 
   def initialize(@client : Rosegold::Client)
     spawn do
@@ -41,9 +43,6 @@ class Rosegold::Physics
   end
 
   def tick
-    prev_feet = player.feet
-    prev_look = player.look
-
     input_velocity = velocity_for_inputs
 
     movement, player.velocity = Physics.predict_movement_collision(
@@ -54,8 +53,8 @@ class Rosegold::Physics
     player.on_ground = movement.y > input_velocity.y
 
     # anticheat requires sending these different packets
-    if player.feet != prev_feet
-      if player.look != prev_look
+    if player.feet != bump_feet
+      if player.look != bump_look
         client.queue_packet Serverbound::PlayerPositionAndLook.new(
           player.feet, player.look, player.on_ground,
         )
@@ -63,12 +62,26 @@ class Rosegold::Physics
         client.queue_packet Serverbound::PlayerPosition.new player.feet, player.on_ground
       end
     else
-      if player.look != prev_look
+      if player.look != bump_look
         client.queue_packet Serverbound::PlayerLook.new player.look, player.on_ground
       else
         client.queue_packet Serverbound::PlayerNoMovement.new player.on_ground
       end
     end
+  end
+
+  def bump_look
+    last = last_look
+    self.last_look = player.look
+
+    last
+  end
+
+  def bump_feet
+    last = last_feet
+    self.last_feet = player.feet
+
+    last
   end
 
   private def velocity_for_inputs

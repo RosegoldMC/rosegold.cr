@@ -23,4 +23,15 @@ class Rosegold::Player
   def eyes
     feet.up 1.625
   end
+
+  def pitch=(pitch)
+    look.pitch = pitch
+  end
+
+  def yaw=(yaw)
+    look.yaw = yaw
+  end
+
+  delegate pitch, to: look
+  delegate yaw, to: look
 end
