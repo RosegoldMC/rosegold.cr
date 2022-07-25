@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Microsoft::MobileOAuth - rosegold main</title>
+  <title>Rosegold::Physics - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -56,12 +56,12 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Microsoft" data-name="microsoft">
+  <li class="parent " data-id="rosegold/Microsoft" data-name="microsoft">
       <a href="../Microsoft.html">Microsoft</a>
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Microsoft/MobileOAuth" data-name="microsoft::mobileoauth">
+  <li class=" " data-id="rosegold/Microsoft/MobileOAuth" data-name="microsoft::mobileoauth">
       <a href="../Microsoft/MobileOAuth.html">MobileOAuth</a>
       
     </li>
@@ -116,7 +116,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold" data-name="rosegold">
+  <li class="parent open current" data-id="rosegold/Rosegold" data-name="rosegold">
       <a href="../Rosegold.html">Rosegold</a>
       
         <ul>
@@ -296,7 +296,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
+  <li class=" current" data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
       <a href="../Rosegold/Physics.html">Physics</a>
       
     </li>
@@ -525,13 +525,26 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">module</span> Microsoft::MobileOAuth
+  <span class="kind">class</span> Rosegold::Physics
 
 </h1>
 
 
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/Physics.html">Rosegold::Physics</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Updates the player feet/look/velocity/on_ground by sending movement packets.</p>
 
 
 
@@ -556,8 +569,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/microsoft/mobile_oauth.cr#L4" target="_blank">
-        microsoft/mobile_oauth.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L4" target="_blank">
+        rosegold/world/physics.cr
       </a>
     
     <br/>
@@ -577,14 +590,64 @@
   
   <dl>
     
-      <dt class="entry-const" id="CLIENT_ID">
-        <strong>CLIENT_ID</strong> = <code><span class="s">&quot;e550efe8-765e-41aa-a7cf-9bcaaa82d2b9&quot;</span></code>
+      <dt class="entry-const" id="DRAG">
+        <strong>DRAG</strong> = <code><span class="n">0.98</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="GRAVITY">
+        <strong>GRAVITY</strong> = <code><span class="n">0.08</span></code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>y velocity multiplicator per tick when not on ground</p>
+      </dd>
+      
+    
+      <dt class="entry-const" id="JUMP_FORCE">
+        <strong>JUMP_FORCE</strong> = <code><span class="n">0.42</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="RUN_SPEED">
+        <strong>RUN_SPEED</strong> = <code><span class="n">5.612</span> <span class="o">/</span> <span class="n">20</span></code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>m/t</p>
+      </dd>
+      
+    
+      <dt class="entry-const" id="VERY_CLOSE">
+        <strong>VERY_CLOSE</strong> = <code><span class="n">0.00001</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="WALK_SPEED">
+        <strong>WALK_SPEED</strong> = <code><span class="n">4.3</span> <span class="o">/</span> <span class="n">20</span></code>
       </dt>
       
     
   </dl>
 
 
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28client%3ARosegold%3A%3AClient%29-class-method" class="signature"><strong>.new</strong>(client : Rosegold::Client)</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -599,9 +662,75 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#prompt_for_login%21%3AString-class-method" class="signature"><strong>.prompt_for_login!</strong> : String</a>
+        <a href="#collide_movement%28start_aabb%3AAABBd%2Cvec%3AVec3d%2Cobstacles%3AArray%28AABBd%29%29-class-method" class="signature"><strong>.collide_movement</strong>(start_aabb : AABBd, vec : Vec3d, obstacles : Array(AABBd))</a>
         
-          <div class="summary"><p>Prompts the user to follow Microsoft's Device Flow for OAuth.</p></div>
+          <div class="summary"><p>Updates <code>vec</code> according to collision rules.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_obstacles%28start_aabb%3AAABBd%2Cvec%3AVec3d%2Cdimension%3AWorld%3A%3ADimension%29-class-method" class="signature"><strong>.get_obstacles</strong>(start_aabb : AABBd, vec : Vec3d, dimension : World::Dimension)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#predict_movement_collision%28aabb%3AAABBd%2Corig_velocity%3AVec3d%2Cdimension%3AWorld%3A%3ADimension%29-class-method" class="signature"><strong>.predict_movement_collision</strong>(aabb : AABBd, orig_velocity : Vec3d, dimension : World::Dimension)</a>
+        
+          <div class="summary"><p>Applies collision handling including stepping.</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#jump_queued%3ABool-instance-method" class="signature"><strong>#jump_queued</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#jump_queued%3D%28jump_queued%3ABool%29-instance-method" class="signature"><strong>#jump_queued=</strong>(jump_queued : Bool)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#movement_speed%3AFloat64-instance-method" class="signature"><strong>#movement_speed</strong> : Float64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#movement_speed%3D%28movement_speed%3AFloat64%29-instance-method" class="signature"><strong>#movement_speed=</strong>(movement_speed : Float64)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#movement_target%3AVec3d%3F-instance-method" class="signature"><strong>#movement_target</strong> : Vec3d?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#movement_target%3D%28movement_target%3AVec3d%3F%29-instance-method" class="signature"><strong>#movement_target=</strong>(movement_target : Vec3d?)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reset-instance-method" class="signature"><strong>#reset</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#tick-instance-method" class="signature"><strong>#tick</strong></a>
         
       </li>
     
@@ -611,12 +740,56 @@
 
 
 
-
-
 <div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
   
 </div>
 
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(client:Rosegold::Client)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(client : <a href="../Rosegold/Client.html">Rosegold::Client</a>)
+
+        <a class="method-permalink" href="#new%28client%3ARosegold%3A%3AClient%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L20" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 
@@ -629,31 +802,206 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="prompt_for_login!:String-class-method">
+    <div class="entry-detail" id="collide_movement(start_aabb:AABBd,vec:Vec3d,obstacles:Array(AABBd))-class-method">
       <div class="signature">
         
-        def self.<strong>prompt_for_login!</strong> : String
+        def self.<strong>collide_movement</strong>(start_aabb : <a href="../Rosegold/AABBd.html">AABBd</a>, vec : <a href="../Rosegold/Vec3d.html">Vec3d</a>, obstacles : Array(<a href="../Rosegold/AABBd.html">AABBd</a>))
 
-        <a class="method-permalink" href="#prompt_for_login%21%3AString-class-method">#</a>
+        <a class="method-permalink" href="#collide_movement%28start_aabb%3AAABBd%2Cvec%3AVec3d%2Cobstacles%3AArray%28AABBd%29%29-class-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Prompts the user to follow Microsoft's Device Flow for OAuth.
-https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-device-code
-Returns the access token as a String</p>
+          <p>Updates <code>vec</code> according to collision rules.
+<code>aabb</code> is the entity bounding box at the entity's location.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/microsoft/mobile_oauth.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L144" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_obstacles(start_aabb:AABBd,vec:Vec3d,dimension:World::Dimension)-class-method">
+      <div class="signature">
+        
+        def self.<strong>get_obstacles</strong>(start_aabb : <a href="../Rosegold/AABBd.html">AABBd</a>, vec : <a href="../Rosegold/Vec3d.html">Vec3d</a>, dimension : <a href="../Rosegold/World/Dimension.html">World::Dimension</a>)
+
+        <a class="method-permalink" href="#get_obstacles%28start_aabb%3AAABBd%2Cvec%3AVec3d%2Cdimension%3AWorld%3A%3ADimension%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L156" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="predict_movement_collision(aabb:AABBd,orig_velocity:Vec3d,dimension:World::Dimension)-class-method">
+      <div class="signature">
+        
+        def self.<strong>predict_movement_collision</strong>(aabb : <a href="../Rosegold/AABBd.html">AABBd</a>, orig_velocity : <a href="../Rosegold/Vec3d.html">Vec3d</a>, dimension : <a href="../Rosegold/World/Dimension.html">World::Dimension</a>)
+
+        <a class="method-permalink" href="#predict_movement_collision%28aabb%3AAABBd%2Corig_velocity%3AVec3d%2Cdimension%3AWorld%3A%3ADimension%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Applies collision handling including stepping.
+Returns adjusted movement vector and adjusted future velocity.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L107" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="jump_queued:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>jump_queued</strong> : Bool
+
+        <a class="method-permalink" href="#jump_queued%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L18" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="jump_queued=(jump_queued:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>jump_queued=</strong>(jump_queued : Bool)
+
+        <a class="method-permalink" href="#jump_queued%3D%28jump_queued%3ABool%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L18" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="movement_speed:Float64-instance-method">
+      <div class="signature">
+        
+        def <strong>movement_speed</strong> : Float64
+
+        <a class="method-permalink" href="#movement_speed%3AFloat64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L16" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="movement_speed=(movement_speed:Float64)-instance-method">
+      <div class="signature">
+        
+        def <strong>movement_speed=</strong>(movement_speed : Float64)
+
+        <a class="method-permalink" href="#movement_speed%3D%28movement_speed%3AFloat64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L16" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="movement_target:Vec3d?-instance-method">
+      <div class="signature">
+        
+        def <strong>movement_target</strong> : <a href="../Rosegold/Vec3d.html">Vec3d</a>?
+
+        <a class="method-permalink" href="#movement_target%3AVec3d%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="movement_target=(movement_target:Vec3d?)-instance-method">
+      <div class="signature">
+        
+        def <strong>movement_target=</strong>(movement_target : <a href="../Rosegold/Vec3d.html">Vec3d</a>?)
+
+        <a class="method-permalink" href="#movement_target%3D%28movement_target%3AVec3d%3F%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reset-instance-method">
+      <div class="signature">
+        
+        def <strong>reset</strong>
+
+        <a class="method-permalink" href="#reset-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L38" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="tick-instance-method">
+      <div class="signature">
+        
+        def <strong>tick</strong>
+
+        <a class="method-permalink" href="#tick-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/physics.cr#L44" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 

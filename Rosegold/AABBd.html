@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Microsoft::MobileOAuth - rosegold main</title>
+  <title>Rosegold::AABBd - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -56,12 +56,12 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Microsoft" data-name="microsoft">
+  <li class="parent " data-id="rosegold/Microsoft" data-name="microsoft">
       <a href="../Microsoft.html">Microsoft</a>
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Microsoft/MobileOAuth" data-name="microsoft::mobileoauth">
+  <li class=" " data-id="rosegold/Microsoft/MobileOAuth" data-name="microsoft::mobileoauth">
       <a href="../Microsoft/MobileOAuth.html">MobileOAuth</a>
       
     </li>
@@ -116,7 +116,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold" data-name="rosegold">
+  <li class="parent open current" data-id="rosegold/Rosegold" data-name="rosegold">
       <a href="../Rosegold.html">Rosegold</a>
       
         <ul>
@@ -126,7 +126,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/AABBd" data-name="rosegold::aabbd">
+  <li class=" current" data-id="rosegold/Rosegold/AABBd" data-name="rosegold::aabbd">
       <a href="../Rosegold/AABBd.html">AABBd</a>
       
     </li>
@@ -525,17 +525,33 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">module</span> Microsoft::MobileOAuth
+  <span class="kind">struct</span> Rosegold::AABBd
 
 </h1>
 
 
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/AABBd.html">Rosegold::AABBd</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
 
 
 
 
 
 
+
+
+  <h2>
+    <a id="included-modules" class="anchor" href="#included-modules">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Included Modules
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../Rosegold/AABB.html">Rosegold::AABB(Float64)</a></li>
+    
+  </ul>
 
 
 
@@ -556,8 +572,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/microsoft/mobile_oauth.cr#L4" target="_blank">
-        microsoft/mobile_oauth.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L60" target="_blank">
+        rosegold/world/aabb.cr
       </a>
     
     <br/>
@@ -565,43 +581,25 @@
 
 
 
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-      Constant Summary
-    </h2>
-  
-  <dl>
-    
-      <dt class="entry-const" id="CLIENT_ID">
-        <strong>CLIENT_ID</strong> = <code><span class="s">&quot;e550efe8-765e-41aa-a7cf-9bcaaa82d2b9&quot;</span></code>
-      </dt>
-      
-    
-  </dl>
-
-
-
 
 
   <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+    <a id="constructors" class="anchor" href="#constructors">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Class Method Summary
+    Constructors
   </h2>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#prompt_for_login%21%3AString-class-method" class="signature"><strong>.prompt_for_login!</strong> : String</a>
+        <a href="#containing_all%28%2Aaabbs%3AAABBd%29%3AAABBd-class-method" class="signature"><strong>.containing_all</strong>(*aabbs : AABBd) : AABBd</a>
         
-          <div class="summary"><p>Prompts the user to follow Microsoft's Device Flow for OAuth.</p></div>
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28min_x%3AFloat64%2Cmin_y%3AFloat64%2Cmin_z%3AFloat64%2Cmax_x%3AFloat64%2Cmax_y%3AFloat64%2Cmax_z%3AFloat64%29-class-method" class="signature"><strong>.new</strong>(min_x : Float64, min_y : Float64, min_z : Float64, max_x : Float64, max_y : Float64, max_z : Float64)</a>
         
       </li>
     
@@ -613,45 +611,139 @@
 
 
 
+
+
 <div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from module <code><a href="../Rosegold/AABB.html">Rosegold::AABB(Float64)</a></code></h3>
+  
+  
+    <a href="../Rosegold/AABB.html#%5B%5D%28i%29%3AVec3%28T%29-instance-method" class="tooltip">
+      <span>[](i) : Vec3(T)</span>
+    []</a>, 
+    
+  
+    <a href="../Rosegold/AABB.html#grow%28dx%3AT%2Cdy%3AT%2Cdz%3AT%29%3Aself-instance-method" class="tooltip">
+      <span>grow(dx : T, dy : T, dz : T) : <span class="k">self</span><br/>grow(vec : Vec3(T)) : <span class="k">self</span></span>
+    grow</a>, 
+    
+  
+    <a href="../Rosegold/AABB.html#intersects%3F%28other%3AAABB%28T%29%29%3ABool-instance-method" class="tooltip">
+      <span>intersects?(other : AABB(T)) : Bool</span>
+    intersects?</a>, 
+    
+  
+    <a href="../Rosegold/AABB.html#max%3AVec3%28T%29-instance-method" class="tooltip">
+      <span>max : Vec3(T)</span>
+    max</a>, 
+    
+  
+    <a href="../Rosegold/AABB.html#min%3AVec3%28T%29-instance-method" class="tooltip">
+      <span>min : Vec3(T)</span>
+    min</a>, 
+    
+  
+    <a href="../Rosegold/AABB.html#offset%28x%3AT%2Cy%3AT%2Cz%3AT%29%3Aself-instance-method" class="tooltip">
+      <span>offset(x : T, y : T, z : T) : <span class="k">self</span><br/>offset(vec : Vec3(T)) : <span class="k">self</span></span>
+    offset</a>
+    
+  
+
+
+    
+
+  <h3>Constructor methods inherited from module <code><a href="../Rosegold/AABB.html">Rosegold::AABB(Float64)</a></code></h3>
+  
+  
+    <a href="../Rosegold/AABB.html#new%28min%3AVec3%28T%29%2Cmax%3AVec3%28T%29%29-class-method" class="tooltip">
+      <span>new(min : Vec3(T), max : Vec3(T))</span>
+    new</a>
+    
+  
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
   
 </div>
 
 
-
-
   <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Class Method Detail
+    Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="prompt_for_login!:String-class-method">
+    <div class="entry-detail" id="containing_all(*aabbs:AABBd):AABBd-class-method">
       <div class="signature">
         
-        def self.<strong>prompt_for_login!</strong> : String
+        def self.<strong>containing_all</strong>(*aabbs : <a href="../Rosegold/AABBd.html">AABBd</a>) : <a href="../Rosegold/AABBd.html">AABBd</a>
 
-        <a class="method-permalink" href="#prompt_for_login%21%3AString-class-method">#</a>
+        <a class="method-permalink" href="#containing_all%28%2Aaabbs%3AAABBd%29%3AAABBd-class-method">#</a>
       </div>
-      
-        <div class="doc">
-          
-          <p>Prompts the user to follow Microsoft's Device Flow for OAuth.
-https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-device-code
-Returns the access token as a String</p>
-        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/microsoft/mobile_oauth.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
   
+    <div class="entry-detail" id="new(min_x:Float64,min_y:Float64,min_z:Float64,max_x:Float64,max_y:Float64,max_z:Float64)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(min_x : Float64, min_y : Float64, min_z : Float64, max_x : Float64, max_y : Float64, max_z : Float64)
+
+        <a class="method-permalink" href="#new%28min_x%3AFloat64%2Cmin_y%3AFloat64%2Cmin_z%3AFloat64%2Cmax_x%3AFloat64%2Cmax_y%3AFloat64%2Cmax_z%3AFloat64%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L63" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
 
 
 

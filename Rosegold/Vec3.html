@@ -121,8 +121,18 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb">
+  <li class=" " data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb(t)">
       <a href="../Rosegold/AABB.html">AABB</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/AABBd" data-name="rosegold::aabbd">
+      <a href="../Rosegold/AABBd.html">AABBd</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/AABBf" data-name="rosegold::aabbf">
+      <a href="../Rosegold/AABBf.html">AABBf</a>
       
     </li>
   
@@ -286,6 +296,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
+      <a href="../Rosegold/Physics.html">Physics</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Player" data-name="rosegold::player">
       <a href="../Rosegold/Player.html">Player</a>
       
@@ -356,6 +371,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerNoMovement" data-name="rosegold::serverbound::playernomovement">
+      <a href="../Rosegold/Serverbound/PlayerNoMovement.html">PlayerNoMovement</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerPosition" data-name="rosegold::serverbound::playerposition">
       <a href="../Rosegold/Serverbound/PlayerPosition.html">PlayerPosition</a>
       
@@ -401,6 +421,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/State/Disconnected" data-name="rosegold::state::disconnected">
+      <a href="../Rosegold/State/Disconnected.html">Disconnected</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/State/Login" data-name="rosegold::state::login">
       <a href="../Rosegold/State/Login.html">Login</a>
       
@@ -433,6 +458,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Vec3f" data-name="rosegold::vec3f">
       <a href="../Rosegold/Vec3f.html">Vec3f</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Vec3i" data-name="rosegold::vec3i">
+      <a href="../Rosegold/Vec3i.html">Vec3i</a>
       
     </li>
   
@@ -495,12 +525,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">abstract struct</span> Rosegold::Vec3(T)
+  <span class="kind">module</span> Rosegold::Vec3(T)
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/Vec3.html">Rosegold::Vec3(T)</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+
 
 
 
@@ -514,12 +544,12 @@
 
 
   <h2>
-    <a id="direct-known-subclasses" class="anchor" href="#direct-known-subclasses">
+    <a id="direct-including-types" class="anchor" href="#direct-including-types">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Direct Known Subclasses
+    Direct including types
   </h2>
   <ul class="other-types-list">
     
@@ -527,9 +557,9 @@
     
       <li class="other-type"><a href="../Rosegold/Vec3f.html">Rosegold::Vec3f</a></li>
     
+      <li class="other-type"><a href="../Rosegold/Vec3i.html">Rosegold::Vec3i</a></li>
+    
   </ul>
-
-
 
 
 
@@ -544,7 +574,7 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L1" target="_blank">
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L1" target="_blank">
         rosegold/world/vec3.cr
       </a>
     
@@ -570,11 +600,6 @@
         
       </li>
     
-      <li class="entry-summary">
-        <a href="#new%28xyz%3ATuple%28T%2CT%2CT%29%29-class-method" class="signature"><strong>.new</strong>(xyz : Tuple(T, T, T))</a>
-        
-      </li>
-    
   </ul>
 
 
@@ -592,32 +617,86 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%26%2A%28scalar%3AT%29-instance-method" class="signature"><strong>#&*</strong>(scalar : T)</a>
+        <a href="#%26%2A%28scalar%3AT%29%3Aself-instance-method" class="signature"><strong>#&*</strong>(scalar : T) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#%2A%28scalar%3AT%29-instance-method" class="signature"><strong>#*</strong>(scalar : T)</a>
+        <a href="#%2A%28scalar%3AT%29%3Aself-instance-method" class="signature"><strong>#*</strong>(scalar : T) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#%2B%28vec%3Aself%29-instance-method" class="signature"><strong>#+</strong>(vec : <span class="k">self</span>)</a>
+        <a href="#%2B%28vec%3Aself%29%3Aself-instance-method" class="signature"><strong>#+</strong>(vec : <span class="k">self</span>) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#-%28vec%3Aself%29-instance-method" class="signature"><strong>#-</strong>(vec : <span class="k">self</span>)</a>
+        <a href="#-%28vec%3Aself%29%3Aself-instance-method" class="signature"><strong>#-</strong>(vec : <span class="k">self</span>) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#--instance-method" class="signature"><strong>#-</strong></a>
+        <a href="#-%3Aself-instance-method" class="signature"><strong>#-</strong> : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#/%28scalar%3AT%29-instance-method" class="signature"><strong>#/</strong>(scalar : T)</a>
+        <a href="#/%28scalar%3AT%29%3Aself-instance-method" class="signature"><strong>#/</strong>(scalar : T) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#%3D%3D%28vec%3AVec3%28T%29%29%3ABool-instance-method" class="signature"><strong>#==</strong>(vec : Vec3(T)) : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#%5B%5D%28i%29%3AT-instance-method" class="signature"><strong>#[]</strong>(i) : T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#almost_eq%28other%3Aself%2Ccloser_than%3D0.01%29%3ABool-instance-method" class="signature"><strong>#almost_eq</strong>(other : <span class="k">self</span>, closer_than = <span class="n">0.01</span>) : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#centered_3d%3Aself-instance-method" class="signature"><strong>#centered_3d</strong> : <span class="k">self</span></a>
+        
+          <div class="summary"><p>Useful for getting the center of a block.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#centered_floor%3Aself-instance-method" class="signature"><strong>#centered_floor</strong> : <span class="k">self</span></a>
+        
+          <div class="summary"><p>Useful for standing centered on a block.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#dist%28other%3Aself%29%3AT-instance-method" class="signature"><strong>#dist</strong>(other : <span class="k">self</span>) : T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#dist_sq%28other%3Aself%29%3AT-instance-method" class="signature"><strong>#dist_sq</strong>(other : <span class="k">self</span>) : T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#down%28len%3AT%3D1%29%3Aself-instance-method" class="signature"><strong>#down</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#east%28len%3AT%3D1%29%3Aself-instance-method" class="signature"><strong>#east</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#floored%3Aself-instance-method" class="signature"><strong>#floored</strong> : <span class="k">self</span></a>
         
       </li>
     
@@ -627,37 +706,118 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#len%3AT-instance-method" class="signature"><strong>#len</strong> : T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#len_sq%3AT-instance-method" class="signature"><strong>#len_sq</strong> : T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#map%28block%3AT-%3ET%29%3Aself-instance-method" class="signature"><strong>#map</strong>(block : T -> T) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#minus%28dx%3AT%2Cdy%3AT%2Cdz%3AT%29%3Aself-instance-method" class="signature"><strong>#minus</strong>(dx : T, dy : T, dz : T) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#normed%3Aself-instance-method" class="signature"><strong>#normed</strong> : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#north%28len%3AT%3D1%29%3Aself-instance-method" class="signature"><strong>#north</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#plus%28dx%3AT%2Cdy%3AT%2Cdz%3AT%29%3Aself-instance-method" class="signature"><strong>#plus</strong>(dx : T, dy : T, dz : T) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#project_onto_line%28start%3Aself%2Cdirection%3Aself%29%3Aself-instance-method" class="signature"><strong>#project_onto_line</strong>(start : <span class="k">self</span>, direction : <span class="k">self</span>) : <span class="k">self</span></a>
+        
+          <div class="summary"><p>The point on the line through <code>start</code> and <code>start+direction</code> that is closest to <code>self</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#projected_factor_along_line%28start%3Aself%2Cdirection%3Aself%29%3AT-instance-method" class="signature"><strong>#projected_factor_along_line</strong>(start : <span class="k">self</span>, direction : <span class="k">self</span>) : T</a>
+        
+          <div class="summary"><p>How far to move from <code>start</code> in <code>direction</code> units to arrive at the point that is closest to <code>self</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#rounded%3Aself-instance-method" class="signature"><strong>#rounded</strong> : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#south%28len%3AT%3D1%29%3Aself-instance-method" class="signature"><strong>#south</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#to_s%28io%29-instance-method" class="signature"><strong>#to_s</strong>(io)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#x-instance-method" class="signature"><strong>#x</strong></a>
+        <a href="#up%28len%3AT%3D1%29%3Aself-instance-method" class="signature"><strong>#up</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#x%3D%28x%3AT%29-instance-method" class="signature"><strong>#x=</strong>(x : T)</a>
+        <a href="#west%28len%3AT%3D1%29%3Aself-instance-method" class="signature"><strong>#west</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y-instance-method" class="signature"><strong>#y</strong></a>
+        <a href="#with_length%28length%3AT%29%3Aself-instance-method" class="signature"><strong>#with_length</strong>(length : T) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y%3D%28y%3AT%29-instance-method" class="signature"><strong>#y=</strong>(y : T)</a>
+        <a href="#with_x%28x%3AT%29%3Aself-instance-method" class="signature"><strong>#with_x</strong>(x : T) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#z-instance-method" class="signature"><strong>#z</strong></a>
+        <a href="#with_y%28y%3AT%29%3Aself-instance-method" class="signature"><strong>#with_y</strong>(y : T) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#z%3D%28z%3AT%29-instance-method" class="signature"><strong>#z=</strong>(z : T)</a>
+        <a href="#with_z%28z%3AT%29%3Aself-instance-method" class="signature"><strong>#with_z</strong>(z : T) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#x%3AT-instance-method" class="signature"><strong>#x</strong> : T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#xz_dist%28other%3Aself%29%3AT-instance-method" class="signature"><strong>#xz_dist</strong>(other : <span class="k">self</span>) : T</a>
+        
+          <div class="summary"><p>Ignores y difference.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#y%3AT-instance-method" class="signature"><strong>#y</strong> : T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#z%3AT-instance-method" class="signature"><strong>#z</strong> : T</a>
         
       </li>
     
@@ -668,36 +828,6 @@
 
 
 <div class="methods-inherited">
-  
-    
-
-
-    
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-
   
 </div>
 
@@ -722,23 +852,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L4" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="new(xyz:Tuple(T,T,T))-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(xyz : Tuple(T, T, T))
-
-        <a class="method-permalink" href="#new%28xyz%3ATuple%28T%2CT%2CT%29%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -757,98 +871,268 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="&amp;*(scalar:T)-instance-method">
+    <div class="entry-detail" id="&amp;*(scalar:T):self-instance-method">
       <div class="signature">
         
-        def <strong>&*</strong>(scalar : T)
+        def <strong>&*</strong>(scalar : T) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#%26%2A%28scalar%3AT%29-instance-method">#</a>
+        <a class="method-permalink" href="#%26%2A%28scalar%3AT%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L66" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="*(scalar:T)-instance-method">
+    <div class="entry-detail" id="*(scalar:T):self-instance-method">
       <div class="signature">
         
-        def <strong>*</strong>(scalar : T)
+        def <strong>*</strong>(scalar : T) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#%2A%28scalar%3AT%29-instance-method">#</a>
+        <a class="method-permalink" href="#%2A%28scalar%3AT%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L62" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="+(vec:self)-instance-method">
+    <div class="entry-detail" id="+(vec:self):self-instance-method">
       <div class="signature">
         
-        def <strong>+</strong>(vec : <span class="k">self</span>)
+        def <strong>+</strong>(vec : <span class="k">self</span>) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#%2B%28vec%3Aself%29-instance-method">#</a>
+        <a class="method-permalink" href="#%2B%28vec%3Aself%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="-(vec:self)-instance-method">
+    <div class="entry-detail" id="-(vec:self):self-instance-method">
       <div class="signature">
         
-        def <strong>-</strong>(vec : <span class="k">self</span>)
+        def <strong>-</strong>(vec : <span class="k">self</span>) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#-%28vec%3Aself%29-instance-method">#</a>
+        <a class="method-permalink" href="#-%28vec%3Aself%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="--instance-method">
+    <div class="entry-detail" id="-:self-instance-method">
       <div class="signature">
         
-        def <strong>-</strong>
+        def <strong>-</strong> : <span class="k">self</span>
 
-        <a class="method-permalink" href="#--instance-method">#</a>
+        <a class="method-permalink" href="#-%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="/(scalar:T)-instance-method">
+    <div class="entry-detail" id="/(scalar:T):self-instance-method">
       <div class="signature">
         
-        def <strong>/</strong>(scalar : T)
+        def <strong>/</strong>(scalar : T) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#/%28scalar%3AT%29-instance-method">#</a>
+        <a class="method-permalink" href="#/%28scalar%3AT%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L70" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="==(vec:Vec3(T)):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>==</strong>(vec : <a href="../Rosegold/Vec3.html">Vec3</a>(T)) : Bool
+
+        <a class="method-permalink" href="#%3D%3D%28vec%3AVec3%28T%29%29%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L78" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="[](i):T-instance-method">
+      <div class="signature">
+        
+        def <strong>[]</strong>(i) : T
+
+        <a class="method-permalink" href="#%5B%5D%28i%29%3AT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L161" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="almost_eq(other:self,closer_than=0.01):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>almost_eq</strong>(other : <span class="k">self</span>, closer_than = <span class="n">0.01</span>) : Bool
+
+        <a class="method-permalink" href="#almost_eq%28other%3Aself%2Ccloser_than%3D0.01%29%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L157" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="centered_3d:self-instance-method">
+      <div class="signature">
+        
+        def <strong>centered_3d</strong> : <span class="k">self</span>
+
+        <a class="method-permalink" href="#centered_3d%3Aself-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Useful for getting the center of a block.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L100" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="centered_floor:self-instance-method">
+      <div class="signature">
+        
+        def <strong>centered_floor</strong> : <span class="k">self</span>
+
+        <a class="method-permalink" href="#centered_floor%3Aself-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Useful for standing centered on a block.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L95" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="dist(other:self):T-instance-method">
+      <div class="signature">
+        
+        def <strong>dist</strong>(other : <span class="k">self</span>) : T
+
+        <a class="method-permalink" href="#dist%28other%3Aself%29%3AT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L125" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="dist_sq(other:self):T-instance-method">
+      <div class="signature">
+        
+        def <strong>dist_sq</strong>(other : <span class="k">self</span>) : T
+
+        <a class="method-permalink" href="#dist_sq%28other%3Aself%29%3AT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L121" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="down(len:T=1):self-instance-method">
+      <div class="signature">
+        
+        def <strong>down</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#down%28len%3AT%3D1%29%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="east(len:T=1):self-instance-method">
+      <div class="signature">
+        
+        def <strong>east</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#east%28len%3AT%3D1%29%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L10" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="floored:self-instance-method">
+      <div class="signature">
+        
+        def <strong>floored</strong> : <span class="k">self</span>
+
+        <a class="method-permalink" href="#floored%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -864,7 +1148,195 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L169" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="len:T-instance-method">
+      <div class="signature">
+        
+        def <strong>len</strong> : T
+
+        <a class="method-permalink" href="#len%3AT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L117" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="len_sq:T-instance-method">
+      <div class="signature">
+        
+        def <strong>len_sq</strong> : T
+
+        <a class="method-permalink" href="#len_sq%3AT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L113" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="map(block:T-&gt;T):self-instance-method">
+      <div class="signature">
+        
+        def <strong>map</strong>(block : T -> T) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#map%28block%3AT-%3ET%29%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L74" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="minus(dx:T,dy:T,dz:T):self-instance-method">
+      <div class="signature">
+        
+        def <strong>minus</strong>(dx : T, dy : T, dz : T) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#minus%28dx%3AT%2Cdy%3AT%2Cdz%3AT%29%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L50" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="normed:self-instance-method">
+      <div class="signature">
+        
+        def <strong>normed</strong> : <span class="k">self</span>
+
+        <a class="method-permalink" href="#normed%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L82" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="north(len:T=1):self-instance-method">
+      <div class="signature">
+        
+        def <strong>north</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#north%28len%3AT%3D1%29%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L22" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="plus(dx:T,dy:T,dz:T):self-instance-method">
+      <div class="signature">
+        
+        def <strong>plus</strong>(dx : T, dy : T, dz : T) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#plus%28dx%3AT%2Cdy%3AT%2Cdz%3AT%29%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L58" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="project_onto_line(start:self,direction:self):self-instance-method">
+      <div class="signature">
+        
+        def <strong>project_onto_line</strong>(start : <span class="k">self</span>, direction : <span class="k">self</span>) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#project_onto_line%28start%3Aself%2Cdirection%3Aself%29%3Aself-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>The point on the line through <code>start</code> and <code>start+direction</code> that is closest to <code>self</code>.
+See also <code><a href="../Rosegold/Vec3.html#projected_factor_along_line%28start%3Aself%2Cdirection%3Aself%29%3AT-instance-method">#projected_factor_along_line</a></code>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L138" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="projected_factor_along_line(start:self,direction:self):T-instance-method">
+      <div class="signature">
+        
+        def <strong>projected_factor_along_line</strong>(start : <span class="k">self</span>, direction : <span class="k">self</span>) : T
+
+        <a class="method-permalink" href="#projected_factor_along_line%28start%3Aself%2Cdirection%3Aself%29%3AT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>How far to move from <code>start</code> in <code>direction</code> units to arrive at the point that is closest to <code>self</code>.
+See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2Cdirection%3Aself%29%3Aself-instance-method">#project_onto_line</a></code>.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L148" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="rounded:self-instance-method">
+      <div class="signature">
+        
+        def <strong>rounded</strong> : <span class="k">self</span>
+
+        <a class="method-permalink" href="#rounded%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L86" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="south(len:T=1):self-instance-method">
+      <div class="signature">
+        
+        def <strong>south</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#south%28len%3AT%3D1%29%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -880,103 +1352,172 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L165" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x-instance-method">
+    <div class="entry-detail" id="up(len:T=1):self-instance-method">
       <div class="signature">
         
-        def <strong>x</strong>
+        def <strong>up</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#x-instance-method">#</a>
+        <a class="method-permalink" href="#up%28len%3AT%3D1%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x=(x:T)-instance-method">
+    <div class="entry-detail" id="west(len:T=1):self-instance-method">
       <div class="signature">
         
-        def <strong>x=</strong>(x : T)
+        def <strong>west</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#x%3D%28x%3AT%29-instance-method">#</a>
+        <a class="method-permalink" href="#west%28len%3AT%3D1%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y-instance-method">
+    <div class="entry-detail" id="with_length(length:T):self-instance-method">
       <div class="signature">
         
-        def <strong>y</strong>
+        def <strong>with_length</strong>(length : T) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#y-instance-method">#</a>
+        <a class="method-permalink" href="#with_length%28length%3AT%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L104" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y=(y:T)-instance-method">
+    <div class="entry-detail" id="with_x(x:T):self-instance-method">
       <div class="signature">
         
-        def <strong>y=</strong>(y : T)
+        def <strong>with_x</strong>(x : T) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#y%3D%28y%3AT%29-instance-method">#</a>
+        <a class="method-permalink" href="#with_x%28x%3AT%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="z-instance-method">
+    <div class="entry-detail" id="with_y(y:T):self-instance-method">
       <div class="signature">
         
-        def <strong>z</strong>
+        def <strong>with_y</strong>(y : T) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#z-instance-method">#</a>
+        <a class="method-permalink" href="#with_y%28y%3AT%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="z=(z:T)-instance-method">
+    <div class="entry-detail" id="with_z(z:T):self-instance-method">
       <div class="signature">
         
-        def <strong>z=</strong>(z : T)
+        def <strong>with_z</strong>(z : T) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#z%3D%28z%3AT%29-instance-method">#</a>
+        <a class="method-permalink" href="#with_z%28z%3AT%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L38" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="x:T-instance-method">
+      <div class="signature">
+        
+        def <strong>x</strong> : T
+
+        <a class="method-permalink" href="#x%3AT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="xz_dist(other:self):T-instance-method">
+      <div class="signature">
+        
+        def <strong>xz_dist</strong>(other : <span class="k">self</span>) : T
+
+        <a class="method-permalink" href="#xz_dist%28other%3Aself%29%3AT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Ignores y difference.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L130" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="y:T-instance-method">
+      <div class="signature">
+        
+        def <strong>y</strong> : T
+
+        <a class="method-permalink" href="#y%3AT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="z:T-instance-method">
+      <div class="signature">
+        
+        def <strong>z</strong> : T
+
+        <a class="method-permalink" href="#z%3AT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>

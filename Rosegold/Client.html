@@ -121,8 +121,18 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb">
+  <li class=" " data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb(t)">
       <a href="../Rosegold/AABB.html">AABB</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/AABBd" data-name="rosegold::aabbd">
+      <a href="../Rosegold/AABBd.html">AABBd</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/AABBf" data-name="rosegold::aabbf">
+      <a href="../Rosegold/AABBf.html">AABBf</a>
       
     </li>
   
@@ -286,6 +296,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
+      <a href="../Rosegold/Physics.html">Physics</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Player" data-name="rosegold::player">
       <a href="../Rosegold/Player.html">Player</a>
       
@@ -356,6 +371,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerNoMovement" data-name="rosegold::serverbound::playernomovement">
+      <a href="../Rosegold/Serverbound/PlayerNoMovement.html">PlayerNoMovement</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerPosition" data-name="rosegold::serverbound::playerposition">
       <a href="../Rosegold/Serverbound/PlayerPosition.html">PlayerPosition</a>
       
@@ -401,6 +421,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/State/Disconnected" data-name="rosegold::state::disconnected">
+      <a href="../Rosegold/State/Disconnected.html">Disconnected</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/State/Login" data-name="rosegold::state::login">
       <a href="../Rosegold/State/Login.html">Login</a>
       
@@ -433,6 +458,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Vec3f" data-name="rosegold::vec3f">
       <a href="../Rosegold/Vec3f.html">Vec3f</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Vec3i" data-name="rosegold::vec3i">
+      <a href="../Rosegold/Vec3i.html">Vec3i</a>
       
     </li>
   
@@ -528,7 +558,7 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L10" target="_blank">
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L10" target="_blank">
         rosegold/client.cr
       </a>
     
@@ -640,6 +670,16 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#physics%3APhysics%3F-instance-method" class="signature"><strong>#physics</strong> : Physics?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#physics%3D%28physics%3APhysics%3F%29-instance-method" class="signature"><strong>#physics=</strong>(physics : Physics?)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#player%3APlayer-instance-method" class="signature"><strong>#player</strong> : Player</a>
         
       </li>
@@ -699,12 +739,17 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#state%3AState%3A%3AStatus%7CState%3A%3ALogin%7CState%3A%3APlay-instance-method" class="signature"><strong>#state</strong> : State::Status | State::Login | State::Play</a>
+        <a href="#state%3AState%3A%3AStatus%7CState%3A%3ALogin%7CState%3A%3APlay%7CState%3A%3ADisconnected-instance-method" class="signature"><strong>#state</strong> : State::Status | State::Login | State::Play | State::Disconnected</a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#state%3D%28state%3AState%3A%3AStatus%7CState%3A%3ALogin%7CState%3A%3APlay%29-instance-method" class="signature"><strong>#state=</strong>(state : State::Status | State::Login | State::Play)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#state%3D%28state%3AState%3A%3AStatus%7CState%3A%3ALogin%7CState%3A%3APlay%7CState%3A%3ADisconnected%29-instance-method" class="signature"><strong>#state=</strong>(state : State::Status | State::Login | State::Play | State::Disconnected)</a>
         
       </li>
     
@@ -779,7 +824,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -795,7 +840,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L29" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -825,7 +870,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -841,7 +886,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -857,7 +902,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -873,7 +918,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -889,7 +934,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -905,7 +950,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -921,7 +966,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -937,7 +982,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -953,7 +998,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="physics:Physics?-instance-method">
+      <div class="signature">
+        
+        def <strong>physics</strong> : <a href="../Rosegold/Physics.html">Physics</a>?
+
+        <a class="method-permalink" href="#physics%3APhysics%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="physics=(physics:Physics?)-instance-method">
+      <div class="signature">
+        
+        def <strong>physics=</strong>(physics : <a href="../Rosegold/Physics.html">Physics</a>?)
+
+        <a class="method-permalink" href="#physics%3D%28physics%3APhysics%3F%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -969,7 +1046,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -985,7 +1062,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1001,7 +1078,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1017,7 +1094,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1038,7 +1115,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L97" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L98" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1054,7 +1131,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1070,7 +1147,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1093,7 +1170,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L107" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L108" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1109,7 +1186,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1125,7 +1202,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L51" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L53" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1141,23 +1218,23 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L73" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L80" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="state:State::Status|State::Login|State::Play-instance-method">
+    <div class="entry-detail" id="state:State::Status|State::Login|State::Play|State::Disconnected-instance-method">
       <div class="signature">
         
-        def <strong>state</strong> : <a href="../Rosegold/State/Status.html">State::Status</a> | <a href="../Rosegold/State/Login.html">State::Login</a> | <a href="../Rosegold/State/Play.html">State::Play</a>
+        def <strong>state</strong> : <a href="../Rosegold/State/Status.html">State::Status</a> | <a href="../Rosegold/State/Login.html">State::Login</a> | <a href="../Rosegold/State/Play.html">State::Play</a> | <a href="../Rosegold/State/Disconnected.html">State::Disconnected</a>
 
-        <a class="method-permalink" href="#state%3AState%3A%3AStatus%7CState%3A%3ALogin%7CState%3A%3APlay-instance-method">#</a>
+        <a class="method-permalink" href="#state%3AState%3A%3AStatus%7CState%3A%3ALogin%7CState%3A%3APlay%7CState%3A%3ADisconnected-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1173,7 +1250,23 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="state=(state:State::Status|State::Login|State::Play|State::Disconnected)-instance-method">
+      <div class="signature">
+        
+        def <strong>state=</strong>(state : <a href="../Rosegold/State/Status.html">State::Status</a> | <a href="../Rosegold/State/Login.html">State::Login</a> | <a href="../Rosegold/State/Play.html">State::Play</a> | <a href="../Rosegold/State/Disconnected.html">State::Disconnected</a>)
+
+        <a class="method-permalink" href="#state%3D%28state%3AState%3A%3AStatus%7CState%3A%3ALogin%7CState%3A%3APlay%7CState%3A%3ADisconnected%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1189,7 +1282,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1205,7 +1298,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L84" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1221,7 +1314,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1237,7 +1330,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/client.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/client.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>

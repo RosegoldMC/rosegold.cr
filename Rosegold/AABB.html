@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::AABB - rosegold main</title>
+  <title>Rosegold::AABB(T) - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -121,8 +121,18 @@
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb">
+  <li class=" current" data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb(t)">
       <a href="../Rosegold/AABB.html">AABB</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/AABBd" data-name="rosegold::aabbd">
+      <a href="../Rosegold/AABBd.html">AABBd</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/AABBf" data-name="rosegold::aabbf">
+      <a href="../Rosegold/AABBf.html">AABBf</a>
       
     </li>
   
@@ -286,6 +296,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
+      <a href="../Rosegold/Physics.html">Physics</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Player" data-name="rosegold::player">
       <a href="../Rosegold/Player.html">Player</a>
       
@@ -356,6 +371,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerNoMovement" data-name="rosegold::serverbound::playernomovement">
+      <a href="../Rosegold/Serverbound/PlayerNoMovement.html">PlayerNoMovement</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerPosition" data-name="rosegold::serverbound::playerposition">
       <a href="../Rosegold/Serverbound/PlayerPosition.html">PlayerPosition</a>
       
@@ -401,6 +421,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/State/Disconnected" data-name="rosegold::state::disconnected">
+      <a href="../Rosegold/State/Disconnected.html">Disconnected</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/State/Login" data-name="rosegold::state::login">
       <a href="../Rosegold/State/Login.html">Login</a>
       
@@ -433,6 +458,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Vec3f" data-name="rosegold::vec3f">
       <a href="../Rosegold/Vec3f.html">Vec3f</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Vec3i" data-name="rosegold::vec3i">
+      <a href="../Rosegold/Vec3i.html">Vec3i</a>
       
     </li>
   
@@ -495,12 +525,10 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">struct</span> Rosegold::AABB
+  <span class="kind">module</span> Rosegold::AABB(T)
 
 </h1>
 
-
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/AABB.html">Rosegold::AABB</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
 
 
 
@@ -526,6 +554,22 @@
 
 
 
+  <h2>
+    <a id="direct-including-types" class="anchor" href="#direct-including-types">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Direct including types
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../Rosegold/AABBd.html">Rosegold::AABBd</a></li>
+    
+      <li class="other-type"><a href="../Rosegold/AABBf.html">Rosegold::AABBf</a></li>
+    
+  </ul>
+
 
 
 
@@ -539,7 +583,7 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L2" target="_blank">
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L4" target="_blank">
         rosegold/world/aabb.cr
       </a>
     
@@ -561,7 +605,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28x_min%3AFloat32%2Cy_min%3AFloat32%2Cz_min%3AFloat32%2Cx_max%3AFloat32%2Cy_max%3AFloat32%2Cz_max%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(x_min : Float32, y_min : Float32, z_min : Float32, x_max : Float32, y_max : Float32, z_max : Float32)</a>
+        <a href="#new%28min%3AVec3%28T%29%2Cmax%3AVec3%28T%29%29-class-method" class="signature"><strong>.new</strong>(min : Vec3(T), max : Vec3(T))</a>
         
       </li>
     
@@ -582,62 +626,42 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#x_max%3AFloat32-instance-method" class="signature"><strong>#x_max</strong> : Float32</a>
+        <a href="#%5B%5D%28i%29%3AVec3%28T%29-instance-method" class="signature"><strong>#[]</strong>(i) : Vec3(T)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#x_max%3D%28x_max%3AFloat32%29-instance-method" class="signature"><strong>#x_max=</strong>(x_max : Float32)</a>
+        <a href="#grow%28dx%3AT%2Cdy%3AT%2Cdz%3AT%29%3Aself-instance-method" class="signature"><strong>#grow</strong>(dx : T, dy : T, dz : T) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#x_min%3AFloat32-instance-method" class="signature"><strong>#x_min</strong> : Float32</a>
+        <a href="#grow%28vec%3AVec3%28T%29%29%3Aself-instance-method" class="signature"><strong>#grow</strong>(vec : Vec3(T)) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#x_min%3D%28x_min%3AFloat32%29-instance-method" class="signature"><strong>#x_min=</strong>(x_min : Float32)</a>
+        <a href="#intersects%3F%28other%3AAABB%28T%29%29%3ABool-instance-method" class="signature"><strong>#intersects?</strong>(other : AABB(T)) : Bool</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y_max%3AFloat32-instance-method" class="signature"><strong>#y_max</strong> : Float32</a>
+        <a href="#max%3AVec3%28T%29-instance-method" class="signature"><strong>#max</strong> : Vec3(T)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y_max%3D%28y_max%3AFloat32%29-instance-method" class="signature"><strong>#y_max=</strong>(y_max : Float32)</a>
+        <a href="#min%3AVec3%28T%29-instance-method" class="signature"><strong>#min</strong> : Vec3(T)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y_min%3AFloat32-instance-method" class="signature"><strong>#y_min</strong> : Float32</a>
+        <a href="#offset%28x%3AT%2Cy%3AT%2Cz%3AT%29%3Aself-instance-method" class="signature"><strong>#offset</strong>(x : T, y : T, z : T) : <span class="k">self</span></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#y_min%3D%28y_min%3AFloat32%29-instance-method" class="signature"><strong>#y_min=</strong>(y_min : Float32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#z_max%3AFloat32-instance-method" class="signature"><strong>#z_max</strong> : Float32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#z_max%3D%28z_max%3AFloat32%29-instance-method" class="signature"><strong>#z_max=</strong>(z_max : Float32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#z_min%3AFloat32-instance-method" class="signature"><strong>#z_min</strong> : Float32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#z_min%3D%28z_min%3AFloat32%29-instance-method" class="signature"><strong>#z_min=</strong>(z_min : Float32)</a>
+        <a href="#offset%28vec%3AVec3%28T%29%29%3Aself-instance-method" class="signature"><strong>#offset</strong>(vec : Vec3(T)) : <span class="k">self</span></a>
         
       </li>
     
@@ -648,36 +672,6 @@
 
 
 <div class="methods-inherited">
-  
-    
-
-
-    
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-
   
 </div>
 
@@ -691,18 +685,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(x_min:Float32,y_min:Float32,z_min:Float32,x_max:Float32,y_max:Float32,z_max:Float32)-class-method">
+    <div class="entry-detail" id="new(min:Vec3(T),max:Vec3(T))-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(x_min : Float32, y_min : Float32, z_min : Float32, x_max : Float32, y_max : Float32, z_max : Float32)
+        def self.<strong>new</strong>(min : <a href="../Rosegold/Vec3.html">Vec3</a>(T), max : <a href="../Rosegold/Vec3.html">Vec3</a>(T))
 
-        <a class="method-permalink" href="#new%28x_min%3AFloat32%2Cy_min%3AFloat32%2Cz_min%3AFloat32%2Cx_max%3AFloat32%2Cy_max%3AFloat32%2Cz_max%3AFloat32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28min%3AVec3%28T%29%2Cmax%3AVec3%28T%29%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -721,194 +715,130 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="x_max:Float32-instance-method">
+    <div class="entry-detail" id="[](i):Vec3(T)-instance-method">
       <div class="signature">
         
-        def <strong>x_max</strong> : Float32
+        def <strong>[]</strong>(i) : <a href="../Rosegold/Vec3.html">Vec3</a>(T)
 
-        <a class="method-permalink" href="#x_max%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#%5B%5D%28i%29%3AVec3%28T%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x_max=(x_max:Float32)-instance-method">
+    <div class="entry-detail" id="grow(dx:T,dy:T,dz:T):self-instance-method">
       <div class="signature">
         
-        def <strong>x_max=</strong>(x_max : Float32)
+        def <strong>grow</strong>(dx : T, dy : T, dz : T) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#x_max%3D%28x_max%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#grow%28dx%3AT%2Cdy%3AT%2Cdz%3AT%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x_min:Float32-instance-method">
+    <div class="entry-detail" id="grow(vec:Vec3(T)):self-instance-method">
       <div class="signature">
         
-        def <strong>x_min</strong> : Float32
+        def <strong>grow</strong>(vec : <a href="../Rosegold/Vec3.html">Vec3</a>(T)) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#x_min%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#grow%28vec%3AVec3%28T%29%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x_min=(x_min:Float32)-instance-method">
+    <div class="entry-detail" id="intersects?(other:AABB(T)):Bool-instance-method">
       <div class="signature">
         
-        def <strong>x_min=</strong>(x_min : Float32)
+        def <strong>intersects?</strong>(other : <a href="../Rosegold/AABB.html">AABB</a>(T)) : Bool
 
-        <a class="method-permalink" href="#x_min%3D%28x_min%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#intersects%3F%28other%3AAABB%28T%29%29%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y_max:Float32-instance-method">
+    <div class="entry-detail" id="max:Vec3(T)-instance-method">
       <div class="signature">
         
-        def <strong>y_max</strong> : Float32
+        def <strong>max</strong> : <a href="../Rosegold/Vec3.html">Vec3</a>(T)
 
-        <a class="method-permalink" href="#y_max%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#max%3AVec3%28T%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y_max=(y_max:Float32)-instance-method">
+    <div class="entry-detail" id="min:Vec3(T)-instance-method">
       <div class="signature">
         
-        def <strong>y_max=</strong>(y_max : Float32)
+        def <strong>min</strong> : <a href="../Rosegold/Vec3.html">Vec3</a>(T)
 
-        <a class="method-permalink" href="#y_max%3D%28y_max%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#min%3AVec3%28T%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y_min:Float32-instance-method">
+    <div class="entry-detail" id="offset(x:T,y:T,z:T):self-instance-method">
       <div class="signature">
         
-        def <strong>y_min</strong> : Float32
+        def <strong>offset</strong>(x : T, y : T, z : T) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#y_min%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#offset%28x%3AT%2Cy%3AT%2Cz%3AT%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="y_min=(y_min:Float32)-instance-method">
+    <div class="entry-detail" id="offset(vec:Vec3(T)):self-instance-method">
       <div class="signature">
         
-        def <strong>y_min=</strong>(y_min : Float32)
+        def <strong>offset</strong>(vec : <a href="../Rosegold/Vec3.html">Vec3</a>(T)) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#y_min%3D%28y_min%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#offset%28vec%3AVec3%28T%29%29%3Aself-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="z_max:Float32-instance-method">
-      <div class="signature">
-        
-        def <strong>z_max</strong> : Float32
-
-        <a class="method-permalink" href="#z_max%3AFloat32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="z_max=(z_max:Float32)-instance-method">
-      <div class="signature">
-        
-        def <strong>z_max=</strong>(z_max : Float32)
-
-        <a class="method-permalink" href="#z_max%3D%28z_max%3AFloat32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="z_min:Float32-instance-method">
-      <div class="signature">
-        
-        def <strong>z_min</strong> : Float32
-
-        <a class="method-permalink" href="#z_min%3AFloat32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="z_min=(z_min:Float32)-instance-method">
-      <div class="signature">
-        
-        def <strong>z_min=</strong>(z_min : Float32)
-
-        <a class="method-permalink" href="#z_min%3D%28z_min%3AFloat32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/89e4b30b4ca36bbc17a42b60ea665badb12d6978/src/rosegold/world/aabb.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/f46332577bf587b0bce192052c65b4c04f448f00/src/rosegold/world/aabb.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
