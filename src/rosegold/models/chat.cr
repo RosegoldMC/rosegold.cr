@@ -4,6 +4,8 @@ require "colorize"
 class Rosegold::Chat
   include JSON::Serializable
 
+  TRANSLATIONS = Hash(String, String).from_json {{ read_file "./src/game_assets/language.json" }}
+
   property \
     text : String?,
     color : String?,
@@ -13,7 +15,9 @@ class Rosegold::Chat
     strikethrough : Bool?,
     obfuscated : Bool?,
     insertion : String?,
-    extra : Array(Rosegold::Chat)?
+    extra : Array(Rosegold::Chat)?,
+    translate : String?,
+    with : Array(Chat | String)?
 
   @[JSON::Field(key: "clickEvent")]
   property click_event : JSON::Any?
@@ -21,8 +25,12 @@ class Rosegold::Chat
   property hover_event : JSON::Any?
 
   def to_s(io : IO) : Nil
-    io << text
-    io << extra_text
+    if translate
+      io << TRANSLATIONS[translate] % self.with.try &.map(&.to_s)
+    else
+      io << text
+      io << extra_text
+    end
   end
 
   def extra_text
