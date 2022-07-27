@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Look(T) - rosegold main</title>
+  <title>Rosegold::Bot - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -136,7 +136,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
+  <li class=" current" data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
       <a href="../Rosegold/Bot.html">Bot</a>
       
     </li>
@@ -246,7 +246,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Look" data-name="rosegold::look(t)">
+  <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look(t)">
       <a href="../Rosegold/Look.html">Look</a>
       
     </li>
@@ -530,29 +530,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">abstract struct</span> Rosegold::Look(T)
+  <span class="kind">class</span> Rosegold::Bot
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/Look.html">Rosegold::Look(T)</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
-
-
-
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>The unit circle of yaw on the XZ-plane has 0° at (0, 1), 90° at (-1, 0), 180° at (0, -1) and 270° at (1, 0).</p>
-<p>Yaw is not clamped to between 0 and 360 degrees; any number is valid, including negative numbers and numbers greater than 360.</p>
-<p>Pitch 0 is looking straight ahead, -90° is looking straight up, and 90° is looking straight down.</p>
-<p>There are an infinite number of &quot;down&quot;/&quot;up&quot; looks with different yaw; use e.g. <code>NORTH.down</code>.</p>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/Bot.html">Rosegold::Bot</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -562,21 +545,8 @@
 
 
 
-  <h2>
-    <a id="direct-known-subclasses" class="anchor" href="#direct-known-subclasses">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Direct Known Subclasses
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../Rosegold/LookDeg.html">Rosegold::LookDeg</a></li>
-    
-      <li class="other-type"><a href="../Rosegold/LookRad.html">Rosegold::LookRad</a></li>
-    
-  </ul>
+
+
 
 
 
@@ -593,8 +563,8 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L8" target="_blank">
-        rosegold/world/look.cr
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L1" target="_blank">
+        rosegold/bot.cr
       </a>
     
     <br/>
@@ -615,12 +585,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28yaw%3AT%2Cpitch%3AT%29-class-method" class="signature"><strong>.new</strong>(yaw : T, pitch : T)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#new%28yaw_pitch%3ATuple%28T%2CT%29%29-class-method" class="signature"><strong>.new</strong>(yaw_pitch : Tuple(T, T))</a>
+        <a href="#new%28client%3ARosegold%3A%3AClient%29-class-method" class="signature"><strong>.new</strong>(client : Rosegold::Client)</a>
         
       </li>
     
@@ -641,52 +606,69 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%2B%28look%3Aself%29-instance-method" class="signature"><strong>#+</strong>(look : <span class="k">self</span>)</a>
+        <a href="#chat%28message%3AString%29-instance-method" class="signature"><strong>#chat</strong>(message : String)</a>
+        
+          <div class="summary"><p>Used to send a message or / command</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#-%28look%3Aself%29-instance-method" class="signature"><strong>#-</strong>(look : <span class="k">self</span>)</a>
+        <a href="#client%3ARosegold%3A%3AClient-instance-method" class="signature"><strong>#client</strong> : Rosegold::Client</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#--instance-method" class="signature"><strong>#-</strong></a>
+        <a href="#jump-instance-method" class="signature"><strong>#jump</strong></a>
+        
+          <div class="summary"><p>Used to queue a jump to the physics engine</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#inspect%28io%29-instance-method" class="signature"><strong>#inspect</strong>(io)</a>
+        <a href="#move_to%28x%2Cy%2Cz%29-instance-method" class="signature"><strong>#move_to</strong>(x, y, z)</a>
+        
+          <div class="summary"><p>Use to move the player to a location, does not take into account y (height) moves bluntly without avoiding obstructions to comply with Civ botting rules</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#pitch-instance-method" class="signature"><strong>#pitch</strong></a>
+        <a href="#move_to%28x%2Cz%29-instance-method" class="signature"><strong>#move_to</strong>(x, z)</a>
+        
+          <div class="summary"><p>Use to move the player to a location, does not take into account y (height) moves bluntly without avoiding obstructions to comply with Civ botting rules</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#pitch%3D%28pitch%3AFloat64%29-instance-method" class="signature"><strong>#pitch=</strong>(pitch : Float64)</a>
+        <a href="#pitch%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#pitch</strong>(*args, **options)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#pitch%3D%28pitch%3AFloat32%7CT%29-instance-method" class="signature"><strong>#pitch=</strong>(pitch : Float32 | T)</a>
+        <a href="#pitch%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#pitch</strong>(*args, **options, &)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#yaw-instance-method" class="signature"><strong>#yaw</strong></a>
+        <a href="#pitch%3D%28angle%29-instance-method" class="signature"><strong>#pitch=</strong>(angle)</a>
+        
+          <div class="summary"><p>Used to set the pitch the player is looking</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#yaw%3D%28yaw%3AFloat64%29-instance-method" class="signature"><strong>#yaw=</strong>(yaw : Float64)</a>
+        <a href="#yaw%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#yaw</strong>(*args, **options)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#yaw%3D%28yaw%3AFloat32%7CT%29-instance-method" class="signature"><strong>#yaw=</strong>(yaw : Float32 | T)</a>
+        <a href="#yaw%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#yaw</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#yaw%3D%28angle%29-instance-method" class="signature"><strong>#yaw=</strong>(angle)</a>
+        
+          <div class="summary"><p>Used to set the yaw the player is looking</p></div>
         
       </li>
     
@@ -694,19 +676,26 @@
 
 
 
+  <h2>
+    <a id="macro-summary" class="anchor" href="#macro-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#method_missing%28call%29-macro" class="signature"><strong>method_missing</strong>(call)</a>
+        
+      </li>
+    
+  </ul>
+
 
 
 <div class="methods-inherited">
-  
-    
-
-
-    
-
-
-    
-
-
   
     
 
@@ -740,34 +729,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(yaw:T,pitch:T)-class-method">
+    <div class="entry-detail" id="new(client:Rosegold::Client)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(yaw : T, pitch : T)
+        def self.<strong>new</strong>(client : <a href="../Rosegold/Client.html">Rosegold::Client</a>)
 
-        <a class="method-permalink" href="#new%28yaw%3AT%2Cpitch%3AT%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28client%3ARosegold%3A%3AClient%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L11" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="new(yaw_pitch:Tuple(T,T))-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(yaw_pitch : Tuple(T, T))
-
-        <a class="method-permalink" href="#new%28yaw_pitch%3ATuple%28T%2CT%29%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -786,168 +759,242 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="+(look:self)-instance-method">
+    <div class="entry-detail" id="chat(message:String)-instance-method">
       <div class="signature">
         
-        def <strong>+</strong>(look : <span class="k">self</span>)
+        def <strong>chat</strong>(message : String)
 
-        <a class="method-permalink" href="#%2B%28look%3Aself%29-instance-method">#</a>
+        <a class="method-permalink" href="#chat%28message%3AString%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used to send a message or / command</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="client:Rosegold::Client-instance-method">
+      <div class="signature">
+        
+        def <strong>client</strong> : <a href="../Rosegold/Client.html">Rosegold::Client</a>
+
+        <a class="method-permalink" href="#client%3ARosegold%3A%3AClient-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="-(look:self)-instance-method">
+    <div class="entry-detail" id="jump-instance-method">
       <div class="signature">
         
-        def <strong>-</strong>(look : <span class="k">self</span>)
+        def <strong>jump</strong>
 
-        <a class="method-permalink" href="#-%28look%3Aself%29-instance-method">#</a>
+        <a class="method-permalink" href="#jump-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used to queue a jump to the physics engine</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="move_to(x,y,z)-instance-method">
+      <div class="signature">
+        
+        def <strong>move_to</strong>(x, y, z)
+
+        <a class="method-permalink" href="#move_to%28x%2Cy%2Cz%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Use to move the player to a location, does not take into account y (height)
+moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L33" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="move_to(x,z)-instance-method">
+      <div class="signature">
+        
+        def <strong>move_to</strong>(x, z)
+
+        <a class="method-permalink" href="#move_to%28x%2Cz%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Use to move the player to a location, does not take into account y (height)
+moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L38" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pitch(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>pitch</strong>(*args, **options)
+
+        <a class="method-permalink" href="#pitch%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="--instance-method">
+    <div class="entry-detail" id="pitch(*args,**options,&amp;)-instance-method">
       <div class="signature">
         
-        def <strong>-</strong>
+        def <strong>pitch</strong>(*args, **options, &)
 
-        <a class="method-permalink" href="#--instance-method">#</a>
+        <a class="method-permalink" href="#pitch%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="inspect(io)-instance-method">
+    <div class="entry-detail" id="pitch=(angle)-instance-method">
       <div class="signature">
         
-        def <strong>inspect</strong>(io)
+        def <strong>pitch=</strong>(angle)
 
-        <a class="method-permalink" href="#inspect%28io%29-instance-method">#</a>
+        <a class="method-permalink" href="#pitch%3D%28angle%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used to set the pitch the player is looking</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L18" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="yaw(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>yaw</strong>(*args, **options)
+
+        <a class="method-permalink" href="#yaw%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L29" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="pitch-instance-method">
+    <div class="entry-detail" id="yaw(*args,**options,&amp;)-instance-method">
       <div class="signature">
         
-        def <strong>pitch</strong>
+        def <strong>yaw</strong>(*args, **options, &)
 
-        <a class="method-permalink" href="#pitch-instance-method">#</a>
+        <a class="method-permalink" href="#yaw%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L29" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="pitch=(pitch:Float64)-instance-method">
+    <div class="entry-detail" id="yaw=(angle)-instance-method">
       <div class="signature">
         
-        def <strong>pitch=</strong>(pitch : Float64)
+        def <strong>yaw=</strong>(angle)
 
-        <a class="method-permalink" href="#pitch%3D%28pitch%3AFloat64%29-instance-method">#</a>
+        <a class="method-permalink" href="#yaw%3D%28angle%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used to set the yaw the player is looking</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="macro-detail" class="anchor" href="#macro-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Detail
+  </h2>
+  
+    <div class="entry-detail" id="method_missing(call)-macro">
+      <div class="signature">
+        
+        macro <strong>method_missing</strong>(call)
+
+        <a class="method-permalink" href="#method_missing%28call%29-macro">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="pitch=(pitch:Float32|T)-instance-method">
-      <div class="signature">
-        
-        def <strong>pitch=</strong>(pitch : Float32 | T)
-
-        <a class="method-permalink" href="#pitch%3D%28pitch%3AFloat32%7CT%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L9" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="yaw-instance-method">
-      <div class="signature">
-        
-        def <strong>yaw</strong>
-
-        <a class="method-permalink" href="#yaw-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L9" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="yaw=(yaw:Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>yaw=</strong>(yaw : Float64)
-
-        <a class="method-permalink" href="#yaw%3D%28yaw%3AFloat64%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L18" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="yaw=(yaw:Float32|T)-instance-method">
-      <div class="signature">
-        
-        def <strong>yaw=</strong>(yaw : Float32 | T)
-
-        <a class="method-permalink" href="#yaw%3D%28yaw%3AFloat32%7CT%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/world/look.cr#L9" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
-
 
 
 </div>
