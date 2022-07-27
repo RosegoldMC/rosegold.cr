@@ -19,6 +19,7 @@ class Rosegold::Bot
     player.look.pitch = angle
   end
 
+  # Used to retrieve the pitch the player is looking
   delegate pitch, to: player.look
 
   # Used to set the yaw the player is looking
@@ -26,6 +27,7 @@ class Rosegold::Bot
     player.look.yaw = angle
   end
 
+  # Used to retrieve the yaw the player is looking
   delegate yaw, to: player.look
 
   # Use to move the player to a location, does not take into account y (height)
@@ -37,6 +39,17 @@ class Rosegold::Bot
   # :ditto:
   def move_to(x, z)
     move_to x, player.position.y, z
+  end
+
+  # Use to add a callback processed upon specified incoming packet
+  #
+  # ```
+  # client.on_packet Rosegold::Clientbound::Chat do |chat|
+  #   puts "Received chat: #{chat.message}"
+  # end
+  # ```
+  def on(packet_type : T.class, &block : T ->) forall T
+    client.on packet_type, &block
   end
 
   forward_missing_to client
