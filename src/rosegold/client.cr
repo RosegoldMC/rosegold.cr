@@ -22,7 +22,8 @@ class Rosegold::Client
     state : State::Status | State::Login | State::Play | State::Disconnected = State::Status.new,
     compression_threshold : UInt32 = 0,
     read_mutex : Mutex = Mutex.new,
-    write_mutex : Mutex = Mutex.new
+    write_mutex : Mutex = Mutex.new,
+    callbacks : Hash(Clientbound::Packet.class, Array(Proc(Clientbound::Packet, Nil))) = Hash(Clientbound::Packet.class, Array(Proc(Clientbound::Packet, Nil))).new
 
   def initialize(@io : Minecraft::TCPSocket, @host : String, @port : UInt32)
     @physics = uninitialized Physics
@@ -80,8 +81,13 @@ class Rosegold::Client
     Bot.new self
   end
 
-  def start_physics
-    @physics ||= Physics.new self
+  def on(packet : T.class, &block : T ->) forall T
+    callbacks[packet] ||= [] of Proc(Clientbound::Packet, Nil)
+    callbacks[packet] << Proc(Clientbound::Packet, Nil).new do |parent_type_packet|
+      Proc(T, Nil).new do |child_type_packet|
+        block.call child_type_packet
+      end.call(parent_type_packet.as T)
+    end
   end
 
   def status
@@ -177,7 +183,12 @@ class Rosegold::Client
         packet = pkt_type.read(pkt_io)
         Log.trace { "RECV " + packet.pretty_inspect(999, " ", 0) \
           .gsub("Rosegold::", "").gsub("Clientbound::", "").sub(/:0x\S+/, "") }
+
         packet.callback(self)
+
+        callbacks[packet.class]?.try do |callback|
+          callback.each &.call packet
+        end
       else
         nil # packet not parsed
       end
