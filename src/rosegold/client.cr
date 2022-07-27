@@ -1,6 +1,7 @@
 require "compress/zlib"
 require "socket"
 require "../minecraft/*"
+require "./bot"
 require "./packets/clientbound/packet"
 require "./packets/clientbound/*"
 require "./packets/serverbound/*"
@@ -16,7 +17,7 @@ class Rosegold::Client
     port : UInt32,
     player : Player = Player.new,
     dimension : World::Dimension = World::Dimension.new,
-    physics : Physics?,
+    physics : Physics,
     state : State::Status | State::Login | State::Play = State::Status.new,
     state : State::Status | State::Login | State::Play | State::Disconnected = State::Status.new,
     compression_threshold : UInt32 = 0,
@@ -24,6 +25,8 @@ class Rosegold::Client
     write_mutex : Mutex = Mutex.new
 
   def initialize(@io : Minecraft::TCPSocket, @host : String, @port : UInt32)
+    @physics = uninitialized Physics
+    @physics = Physics.new self
   end
 
   def self.new(host : String, port : UInt32 = 25565)
@@ -41,13 +44,13 @@ class Rosegold::Client
   end
 
   def start
-    start
+    start.try do |bot|
+      until state.is_a? State::Play
+        sleep 0.1
+      end
 
-    until state.is_a? State::Play
-      sleep 0.1
+      yield bot
     end
-
-    yield self
   end
 
   def start
@@ -74,7 +77,7 @@ class Rosegold::Client
       end
     end
 
-    self
+    Bot.new self
   end
 
   def start_physics
