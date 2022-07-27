@@ -20,6 +20,9 @@ class Rosegold::Physics
   property last_look : LookDeg?
 
   def initialize(@client : Rosegold::Client)
+  end
+
+  def start
     spawn do
       while client.state.is_a? State::Play
         tick
