@@ -563,7 +563,7 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L11" target="_blank">
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L11" target="_blank">
         rosegold/client.cr
       </a>
     
@@ -630,6 +630,16 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#callbacks%3AHash%28Clientbound%3A%3APacket.class%2CArray%28Proc%28Clientbound%3A%3APacket%2CNil%29%29%29-instance-method" class="signature"><strong>#callbacks</strong> : Hash(<span class="t">Clientbound</span><span class="t">::</span><span class="t">Packet</span>.<span class="k">class</span>, Array(Proc(Clientbound::Packet, Nil)))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#callbacks%3D%28callbacks%3AHash%28Clientbound%3A%3APacket.class%2CArray%28Proc%28Clientbound%3A%3APacket%2CNil%29%29%29%29-instance-method" class="signature"><strong>#callbacks=</strong>(callbacks : Hash(<span class="t">Clientbound</span><span class="t">::</span><span class="t">Packet</span>.<span class="k">class</span>, Array(Proc(Clientbound::Packet, Nil))))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#compress%3F-instance-method" class="signature"><strong>#compress?</strong></a>
         
       </li>
@@ -671,6 +681,11 @@
     
       <li class="entry-summary">
         <a href="#io%3D%28io%3AMinecraft%3A%3ATCPSocket%7CMinecraft%3A%3AEncryptedTCPSocket%29-instance-method" class="signature"><strong>#io=</strong>(io : Minecraft::TCPSocket | Minecraft::EncryptedTCPSocket)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on%28packet%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method" class="signature"><strong>#on</strong>(packet : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T</a>
         
       </li>
     
@@ -735,11 +750,6 @@
     
       <li class="entry-summary">
         <a href="#start-instance-method" class="signature"><strong>#start</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#start_physics-instance-method" class="signature"><strong>#start_physics</strong></a>
         
       </li>
     
@@ -829,7 +839,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -845,7 +855,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -864,6 +874,38 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="callbacks:Hash(Clientbound::Packet.class,Array(Proc(Clientbound::Packet,Nil)))-instance-method">
+      <div class="signature">
+        
+        def <strong>callbacks</strong> : Hash(<span class="t">Clientbound</span><span class="t">::</span><span class="t">Packet</span>.<span class="k">class</span>, Array(Proc(<a href="../Rosegold/Clientbound/Packet.html">Clientbound::Packet</a>, Nil)))
+
+        <a class="method-permalink" href="#callbacks%3AHash%28Clientbound%3A%3APacket.class%2CArray%28Proc%28Clientbound%3A%3APacket%2CNil%29%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="callbacks=(callbacks:Hash(Clientbound::Packet.class,Array(Proc(Clientbound::Packet,Nil))))-instance-method">
+      <div class="signature">
+        
+        def <strong>callbacks=</strong>(callbacks : Hash(<span class="t">Clientbound</span><span class="t">::</span><span class="t">Packet</span>.<span class="k">class</span>, Array(Proc(<a href="../Rosegold/Clientbound/Packet.html">Clientbound::Packet</a>, Nil))))
+
+        <a class="method-permalink" href="#callbacks%3D%28callbacks%3AHash%28Clientbound%3A%3APacket.class%2CArray%28Proc%28Clientbound%3A%3APacket%2CNil%29%29%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="compress?-instance-method">
       <div class="signature">
         
@@ -875,7 +917,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L42" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -891,7 +933,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -907,7 +949,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -923,7 +965,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -939,7 +981,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -955,7 +997,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -971,7 +1013,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -987,7 +1029,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1003,7 +1045,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on(packet:T.class,&amp;block:T-&gt;)forallT-instance-method">
+      <div class="signature">
+        
+        def <strong>on</strong>(packet : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T
+
+        <a class="method-permalink" href="#on%28packet%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L84" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1019,7 +1077,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1035,7 +1093,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1051,7 +1109,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1067,7 +1125,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1083,7 +1141,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1099,7 +1157,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1120,7 +1178,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L107" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1136,7 +1194,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1152,7 +1210,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1175,7 +1233,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L111" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1191,7 +1249,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1207,23 +1265,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L56" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="start_physics-instance-method">
-      <div class="signature">
-        
-        def <strong>start_physics</strong>
-
-        <a class="method-permalink" href="#start_physics-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1239,7 +1281,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1255,7 +1297,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1271,7 +1313,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1287,7 +1329,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1303,7 +1345,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L87" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1319,7 +1361,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1335,7 +1377,7 @@ a EncryptionResponse has been sent</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/client.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/client.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>

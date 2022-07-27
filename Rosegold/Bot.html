@@ -563,7 +563,7 @@
   </h2>
   
     
-      <a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L1" target="_blank">
+      <a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L1" target="_blank">
         rosegold/bot.cr
       </a>
     
@@ -639,12 +639,23 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#on%28packet_type%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method" class="signature"><strong>#on</strong>(packet_type : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T</a>
+        
+          <div class="summary"><p>Use to add a callback processed upon specified incoming packet</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#pitch%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#pitch</strong>(*args, **options)</a>
+        
+          <div class="summary"><p>Used to retrieve the pitch the player is looking</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#pitch%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#pitch</strong>(*args, **options, &)</a>
+        
+          <div class="summary"><p>Used to retrieve the pitch the player is looking</p></div>
         
       </li>
     
@@ -658,10 +669,14 @@
       <li class="entry-summary">
         <a href="#yaw%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#yaw</strong>(*args, **options)</a>
         
+          <div class="summary"><p>Used to retrieve the yaw the player is looking</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#yaw%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#yaw</strong>(*args, **options, &)</a>
+        
+          <div class="summary"><p>Used to retrieve the yaw the player is looking</p></div>
         
       </li>
     
@@ -740,7 +755,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -775,7 +790,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -791,7 +806,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -812,7 +827,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -834,7 +849,7 @@ moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -856,7 +871,31 @@ moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L40" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on(packet_type:T.class,&amp;block:T-&gt;)forallT-instance-method">
+      <div class="signature">
+        
+        def <strong>on</strong>(packet_type : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T
+
+        <a class="method-permalink" href="#on%28packet_type%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Use to add a callback processed upon specified incoming packet</p>
+<pre><code class="language-crystal">client.on_packet <span class="t">Rosegold</span><span class="t">::</span><span class="t">Clientbound</span><span class="t">::</span><span class="t">Chat</span> <span class="k">do</span> <span class="o">|</span>chat<span class="o">|</span>
+  puts <span class="s">&quot;Received chat: </span><span class="i">#{</span>chat.message<span class="i">}</span><span class="s">&quot;</span>
+<span class="k">end</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L51" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -869,10 +908,15 @@ moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
         <a class="method-permalink" href="#pitch%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Used to retrieve the pitch the player is looking</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -885,10 +929,15 @@ moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
         <a class="method-permalink" href="#pitch%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Used to retrieve the pitch the player is looking</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -909,7 +958,7 @@ moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -922,10 +971,15 @@ moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
         <a class="method-permalink" href="#yaw%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Used to retrieve the yaw the player is looking</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -938,10 +992,15 @@ moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
         <a class="method-permalink" href="#yaw%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Used to retrieve the yaw the player is looking</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -962,7 +1021,7 @@ moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -990,7 +1049,7 @@ moves bluntly without avoiding obstructions to comply with Civ botting rules</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/42d6d7b51c206b1397b6391e015de268df09f103/src/rosegold/bot.cr#L42" target="_blank">View source</a>]
+          [<a href="https://github.com/grepsedawk/rosegold.cr/blob/469fb475a5a9f2746c44b14a11d527b17362edcd/src/rosegold/bot.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
