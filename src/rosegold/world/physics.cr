@@ -1,5 +1,15 @@
 require "../client"
 
+struct Int32
+  def ticks
+    self / 20
+  end
+
+  def tick
+    ticks
+  end
+end
+
 # Updates the player feet/look/velocity/on_ground by sending movement packets.
 class Rosegold::Physics
   DRAG    = 0.98 # y velocity multiplicator per tick when not on ground
@@ -18,15 +28,20 @@ class Rosegold::Physics
   property jump_queued : Bool = false
   property last_feet : Vec3d?
   property last_look : LookDeg?
+  property ticker : Fiber?
 
   def initialize(@client : Rosegold::Client)
   end
 
   def start
-    spawn do
+    ticker.try do |t|
+      return ticker unless t.dead?
+    end
+
+    self.ticker = spawn do
       while client.state.is_a? State::Play
         tick
-        sleep 0.05 # assume 20 ticks per second for now
+        sleep 1.tick
       end
     end
   end
