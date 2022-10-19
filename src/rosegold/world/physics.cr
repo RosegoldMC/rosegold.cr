@@ -1,4 +1,5 @@
 require "../client"
+require "./raytracing"
 
 struct Int32
   def ticks
@@ -13,7 +14,7 @@ end
 # Updates the player feet/look/velocity/on_ground by sending movement packets.
 class Rosegold::Physics
   DRAG    = 0.98 # y velocity multiplicator per tick when not on ground
-  GRAVITY = 0.08 # m/t/t; subtracted from y velocity per tick when not on ground
+  GRAVITY = 0.08 # m/t/t; subtracted from y velocity each tick when not on ground
 
   WALK_SPEED = 4.3 / 20   # m/t
   RUN_SPEED  = 5.612 / 20 # m/t
@@ -23,14 +24,34 @@ class Rosegold::Physics
   VERY_CLOSE = 0.00001 # consider arrived at target if squared distance is closer than this
 
   private getter client : Rosegold::Client
-  property movement_speed : Float64 = WALK_SPEED
-  property movement_target : Vec3d?
+  private property ticker : Fiber?
   property jump_queued : Bool = false
-  property last_feet : Vec3d?
-  property last_look : Look?
-  property ticker : Fiber?
+  property movement_speed : Float64 = WALK_SPEED
+  private getter movement_action : Action(Vec3d)?
+  private getter look_action : Action(Look)?
+  private getter action_mutex : Mutex = Mutex.new
+
+  def movement_target
+    movement_action.try &.target
+  end
+
+  def look_target
+    look_action.try &.target
+  end
 
   def initialize(@client : Rosegold::Client)
+  end
+
+  def reset
+    @jump_queued = false
+
+    action_mutex.synchronize do
+      @movement_action.try &.fail("Physics reset")
+      @movement_action = nil
+
+      @look_action.try &.fail("Physics reset")
+      @look_action = nil
+    end
   end
 
   def start
@@ -46,6 +67,43 @@ class Rosegold::Physics
     end
   end
 
+  private struct Action(T)
+    SUCCESS = ""
+
+    getter channel : Channel(String) = Channel(String).new
+    getter target : T
+
+    def initialize(@target : T); end
+
+    def fail(msg : String)
+      @channel.send(msg)
+    end
+
+    def succeed
+      @channel.send(SUCCESS)
+    end
+  end
+
+  def move(target : Vec3d)
+    action = Action.new(target)
+    action_mutex.synchronize do
+      @movement_action.try &.fail "Replaced by movement to #{target}"
+      @movement_action = action
+    end
+    result = action.channel.receive
+    raise Exception.new(result) if result != Action::SUCCESS
+  end
+
+  def look(target : Look)
+    action = Action.new(target)
+    action_mutex.synchronize do
+      @look_action.try &.fail "Replaced by look of #{target}"
+      @look_action = action
+    end
+    result = action.channel.receive
+    raise Exception.new(result) if result != Action::SUCCESS
+  end
+
   private def player
     client.player
   end
@@ -54,25 +112,46 @@ class Rosegold::Physics
     client.dimension
   end
 
-  def reset
-    # TODO: emit abort event for any ongoing movement
-    @movement_target = nil
-    @jump_queued = false
-  end
-
-  def tick
+  private def tick
     input_velocity = velocity_for_inputs
 
-    movement, player.velocity = Physics.predict_movement_collision(
-      player.aabb, input_velocity, dimension)
+    movement, next_velocity = Physics.predict_movement_collision(
+      player.feet, input_velocity, Player::DEFAULT_AABB, dimension)
 
-    player.feet += movement
+    action_mutex.synchronize do
+      look_action = @look_action
+      @look_action = nil
+    end
+    look = look_action.try(&.target) || player.look # TODO allow changing this
+
+    feet = player.feet + movement
+    # align with grid in case of rounding errors
+    feet = feet.with_y feet.y.round(4)
+
     # TODO: this only works with gravity on
-    player.on_ground = movement.y > input_velocity.y
+    on_ground = movement.y > input_velocity.y
 
+    send_movement_packet feet, look, on_ground
+    player.velocity = next_velocity
+
+    action_mutex.synchronize do
+      look_action.try &.succeed
+
+      @movement_action.try do |movement_action|
+        # movement_action.target only influences x,z; rely on stepping/falling to change y
+        move_horiz_vec = (movement_action.target - player.feet).with_y(0)
+        if move_horiz_vec.len < VERY_CLOSE
+          movement_action.succeed
+          @movement_action = nil
+        end
+      end
+    end
+  end
+
+  private def send_movement_packet(feet : Vec3d, look : Look, on_ground : Bool)
     # anticheat requires sending these different packets
-    if player.feet != bump_feet
-      if player.look != bump_look
+    if feet != player.feet
+      if look != player.look
         client.queue_packet Serverbound::PlayerPositionAndLook.new(
           player.feet, player.look, player.on_ground,
         )
@@ -80,38 +159,25 @@ class Rosegold::Physics
         client.queue_packet Serverbound::PlayerPosition.new player.feet, player.on_ground
       end
     else
-      if player.look != bump_look
+      if look != player.look
         client.queue_packet Serverbound::PlayerLook.new player.look, player.on_ground
       else
         client.queue_packet Serverbound::PlayerNoMovement.new player.on_ground
       end
     end
-  end
-
-  def bump_look
-    last = last_look
-    self.last_look = player.look
-
-    last
-  end
-
-  def bump_feet
-    last = last_feet
-    self.last_feet = player.feet
-
-    last
+    player.feet = feet
+    player.look = look
+    player.on_ground = on_ground
   end
 
   private def velocity_for_inputs
-    curr_movement_target = @movement_target
-    if curr_movement_target
-      # movement_target only influences x,z; rely on stepping/falling to change y
-      move_horiz_vec = (curr_movement_target - player.feet).with_y(0)
+    curr_movement = @movement_action
+    if curr_movement
+      # curr_movement.target only influences x,z; rely on stepping/falling to change y
+      move_horiz_vec = (curr_movement.target - player.feet).with_y(0)
       move_horiz_vec_len = move_horiz_vec.len
       if move_horiz_vec_len < VERY_CLOSE
         move_horiz_vec = Vec3d::ORIGIN
-        @movement_target = nil
-        # TODO: emit "arrival" event
       elsif move_horiz_vec_len > movement_speed
         # take one step of the length of movement_speed
         move_horiz_vec *= movement_speed / move_horiz_vec_len
@@ -133,62 +199,65 @@ class Rosegold::Physics
   end
 
   # Applies collision handling including stepping.
-  # Returns adjusted movement vector and adjusted future velocity.
-  def self.predict_movement_collision(aabb : AABBd, orig_velocity : Vec3d, dimension : World::Dimension)
-    obstacles = get_obstacles aabb, orig_velocity, dimension
+  # Returns adjusted movement vector and adjusted post-movement velocity.
+  def self.predict_movement_collision(start : Vec3d, velocity : Vec3d, entity_aabb : AABBf, dimension : World::Dimension)
+    obstacles = get_grown_obstacles start, velocity, entity_aabb, dimension
+    predict_movement_collision start, velocity, obstacles
+  end
 
-    movement = collide_movement aabb, orig_velocity, obstacles
-    collided_x = movement.x != orig_velocity.x
-    collided_y = movement.y != orig_velocity.y
-    collided_z = movement.z != orig_velocity.z
-    new_velocity = orig_velocity
-    new_velocity = new_velocity.with_x 0 if collided_x
-    new_velocity = new_velocity.with_y 0 if collided_y
-    new_velocity = new_velocity.with_z 0 if collided_z
+  # :ditto:
+  def self.predict_movement_collision(start : Vec3d, velocity : Vec3d, obstacles : Array(AABBd))
+    # we can freely move in blocks that we already collide with before the movement
+    obstacles = obstacles.reject &.contains? start
+
+    result = Raytracing.raytrace start, velocity, obstacles
+    movement = result.try { |r| start - r.intercept } || velocity
+    collided_x = movement.x != velocity.x
+    collided_y = movement.y != velocity.y
+    collided_z = movement.z != velocity.z
 
     if collided_x || collided_z
       # try stepping
-      step_aabb = aabb.offset(0, 0.5, 0)
+      step_start = start.plus(0, 0.5, 0)
       # gravity would pull us into the step, preventing stepping
       # TODO: if collision checks are x/z then y, we can keep gravity to end up on top of step
-      step_velocity = orig_velocity.with_y 0
-      step_movement = collide_movement step_aabb, step_velocity, obstacles
+      step_velocity = velocity.with_y 0
+      step_result = Raytracing.raytrace step_start, step_velocity, obstacles
+      step_movement = step_result.try { |r| start - r.intercept } || step_velocity
 
       step_different_x = step_movement.x != movement.x
       step_different_z = step_movement.z != movement.z
       if step_different_x || step_different_z
         movement = step_movement
         new_velocity = step_velocity
-        step_collided_x = step_movement.x != orig_velocity.x
-        step_collided_z = step_movement.z != orig_velocity.z
-        new_velocity = new_velocity.with_x 0 if step_collided_x
-        new_velocity = new_velocity.with_z 0 if step_collided_z
+        step_collided_x = step_movement.x != velocity.x
+        step_collided_z = step_movement.z != velocity.z
+        collided_x = step_collided_x
+        collided_z = step_collided_z
       end
     end
+
+    new_velocity = velocity
+    new_velocity = new_velocity.with_x 0 if collided_x
+    new_velocity = new_velocity.with_y 0 if collided_y
+    new_velocity = new_velocity.with_z 0 if collided_z
 
     {movement, new_velocity}
   end
 
-  # Updates `vec` according to collision rules.
-  # `aabb` is the entity bounding box at the entity's location.
-  def self.collide_movement(start_aabb : AABBd, vec : Vec3d, obstacles : Array(AABBd))
-    end_aabb = start_aabb.offset vec
-
-    movement = vec # XXX
-
-    if obstacles.any? &.intersects? end_aabb
-      movement = movement.with_y start_aabb.min.y.floor - start_aabb.min.y # XXX
-    end
-
-    movement
-  end
-
-  def self.get_obstacles(start_aabb : AABBd, vec : Vec3d, dimension : World::Dimension)
-    moved_aabb = start_aabb.offset vec
+  # Returns all block collision boxes that may intersect `entity_aabb` during the movement from `start` by `vec`,
+  # including boxes 0.5m higher for stepping.
+  # `entity_aabb` is at 0,0,0; the returned AABBs are grown by `entity_aabb` so collision checks are just raytracing.
+  def self.get_grown_obstacles(
+    start : Vec3d, movement : Vec3d, entity_aabb : AABBf, dimension : World::Dimension
+  ) : Array(AABBd)
+    entity_aabb = entity_aabb.to_f64
     # get all blocks that may potentially collide
-    min_hull, max_hull = AABBd.containing_all start_aabb, moved_aabb
-    # fences are 1.5 tall so we must check 1.5m below
-    min_hull = min_hull.minus(1, 1.5, 1).floored_i32
+    min_hull, max_hull = AABBd.containing_all(
+      entity_aabb.offset(start),
+      entity_aabb.offset(start + movement))
+    # fences are 1.5m tall
+    min_hull = min_hull.down(0.5).floored_i32
     # add maximum stepping height (0.5) so we can reuse the obstacles when stepping
     max_hull = max_hull.up(0.5).floored_i32
     blocks_coords = Indexable.cartesian_product({
@@ -196,14 +265,12 @@ class Rosegold::Physics
       (min_hull.y..max_hull.y).to_a,
       (min_hull.z..max_hull.z).to_a,
     })
-    obstacles : Array(AABBd) = blocks_coords.flat_map do |block_coords|
+    blocks_coords.flat_map do |block_coords|
       x, y, z = block_coords
       dimension.block_state(x, y, z).try do |block_state|
         block_shape = MCData::MC118.block_state_collision_shapes[block_state]
-        block_shape.map(&.to_f64.offset(x, y, z))
-      end || Array(AABBd).new 0 # outside world or outside loaded chunks
+        block_shape.map &.to_f64.offset(x, y, z).grow(entity_aabb)
+      end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
     end
-    # we can freely move in blocks that we already collide with before the movement
-    obstacles.reject &.intersects? start_aabb
   end
 end

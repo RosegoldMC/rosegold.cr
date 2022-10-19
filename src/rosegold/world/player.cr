@@ -4,7 +4,7 @@ require "./vec3"
 # Holds assumed server-side player state.
 # Only gets updated when reading/writing packets.
 class Rosegold::Player
-  PLAYER_AABB = AABBf.new -0.3, 0.0, -0.3, 0.3, 1.8, 0.3
+  DEFAULT_AABB = AABBf.new -0.3, 0.0, -0.3, 0.3, 1.8, 0.3
 
   property \
     on_ground : Bool = false,
@@ -17,7 +17,7 @@ class Rosegold::Player
     gamemode : UInt8 = 0
 
   def aabb
-    PLAYER_AABB + feet
+    DEFAULT_AABB + feet
   end
 
   def eyes
