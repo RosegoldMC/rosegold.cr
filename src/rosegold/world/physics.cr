@@ -234,7 +234,6 @@ class Rosegold::Physics
       # try stepping
       step_start = start.plus(0, 0.5, 0)
       # gravity would pull us into the step, preventing stepping
-      # TODO: if collision checks are x/z then y, we can keep gravity to end up on top of step
       step_velocity = velocity.with_y 0
       step_result = Raytracing.raytrace step_start, step_velocity, obstacles
       step_movement = step_result.try { |r| start - r.intercept } || step_velocity
@@ -242,8 +241,14 @@ class Rosegold::Physics
       step_different_x = step_movement.x != movement.x
       step_different_z = step_movement.z != movement.z
       if step_different_x || step_different_z
-        movement = step_movement
-        new_velocity = step_velocity
+        # we may have stepped too far up, land on top surface of step block
+        step_end = step_result.try(&.intercept) || start + step_velocity
+        down_velocity = Vec3d.new(0, -1, 0)
+        down_result = Raytracing.raytrace step_end, down_velocity, obstacles
+        down_end = down_result.try(&.intercept) || step_end + down_velocity
+
+        movement = down_end - start
+        new_velocity = velocity.with_y 0
         step_collided_x = step_movement.x != velocity.x
         step_collided_z = step_movement.z != velocity.z
         collided_x = step_collided_x
