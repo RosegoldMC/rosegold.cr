@@ -70,6 +70,7 @@ class Rosegold::Physics
   private struct Action(T)
     SUCCESS = ""
 
+    # TODO try channel size 1 so #succeed/#fail aren't rendezvous
     getter channel : Channel(String) = Channel(String).new
     getter target : T
 
@@ -84,8 +85,19 @@ class Rosegold::Physics
     end
   end
 
-  def move(target : Vec3d)
-    action = Action.new(target)
+  # Set the movement target location and wait until it is achieved.
+  # If there is already a movement target, it is cancelled, and replaced with this new target.
+  # Set `target=nil` to stop moving and cancel any current movement.
+  def move(target : Vec3d?)
+    if target == nil
+      action_mutex.synchronize do
+        @movement_action.try &.fail "Movement stopped"
+        @movement_action = nil
+      end
+      return
+    end
+
+    action = Action(Vec3d).new(target)
     action_mutex.synchronize do
       @movement_action.try &.fail "Replaced by movement to #{target}"
       @movement_action = action
@@ -94,6 +106,8 @@ class Rosegold::Physics
     raise Exception.new(result) if result != Action::SUCCESS
   end
 
+  # Set the look target and wait until it is achieved.
+  # If there is already a look target, it is cancelled, and replaced with this new target.
   def look(target : Look)
     action = Action.new(target)
     action_mutex.synchronize do
@@ -122,7 +136,7 @@ class Rosegold::Physics
       look_action = @look_action
       @look_action = nil
     end
-    look = look_action.try(&.target) || player.look # TODO allow changing this
+    look = look_action.try(&.target) || player.look
 
     feet = player.feet + movement
     # align with grid in case of rounding errors
@@ -139,8 +153,8 @@ class Rosegold::Physics
 
       @movement_action.try do |movement_action|
         # movement_action.target only influences x,z; rely on stepping/falling to change y
-        move_horiz_vec = (movement_action.target - player.feet).with_y(0)
-        if move_horiz_vec.len < VERY_CLOSE
+        target_diff = (movement_action.target - player.feet).with_y(0)
+        if target_diff.len < VERY_CLOSE
           movement_action.succeed
           @movement_action = nil
         end
