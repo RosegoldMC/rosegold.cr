@@ -27,23 +27,32 @@ Rosegold::Client.new("localhost", 25565).start do |bot|
         when "\\help"
           show_help
         when "\\position"
-          puts bot.player.feet
+          puts bot.feet
         when "\\pitch"
           if command.size > 1
-            bot.pitch = command[1].to_f
+            bot.look_by bot.look.with_pitch_deg command[1].to_f.to_f32
           else
-            puts bot.pitch
+            puts bot.look.pitch_deg
           end
         when "\\yaw"
           if command.size > 1
-            bot.yaw = command[1].to_f
+            bot.look_by bot.look.with_yaw_deg command[1].to_f.to_f32
           else
-            puts bot.yaw
+            puts bot.look.yaw_deg
           end
         when "\\move"
-          bot.move_to command[1].to_f, command[2].to_f, command[3].to_f
+          spawn do
+            location = Rosegold::Vec3d.new command[1].to_f, bot.feet.y, command[3].to_f
+            begin
+              bot.move_to location
+              puts "Arrived at #{bot.feet}"
+            rescue ex
+              puts "Movement to #{location} failed:"
+              puts ex
+            end
+          end
         when "\\jump"
-          bot.jump
+          bot.start_jump
         when "\\debug"
           Log.setup :debug
         when "\\trace"
