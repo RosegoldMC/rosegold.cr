@@ -27,7 +27,7 @@ class Rosegold::Physics
   property movement_target : Vec3d?
   property jump_queued : Bool = false
   property last_feet : Vec3d?
-  property last_look : LookDeg?
+  property last_look : Look?
   property ticker : Fiber?
 
   def initialize(@client : Rosegold::Client)

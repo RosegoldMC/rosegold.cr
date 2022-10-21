@@ -45,14 +45,10 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
       relative_flags.bits_set?(0b100) ? reference.z + z_raw : z_raw)
   end
 
-  def look(reference_rad : LookRad)
-    look_deg(reference_rad.to_deg).to_rad
-  end
-
-  def look(reference_deg : LookDeg)
-    LookDeg.new(
-      relative_flags.bits_set?(0b1000) ? reference_deg.yaw + yaw_deg_raw : yaw_deg_raw,
-      relative_flags.bits_set?(0b10000) ? reference_deg.pitch + pitch_deg_raw : pitch_deg_raw)
+  def look(reference : Look)
+    Look.from_deg(
+      relative_flags.bits_set?(0b1000) ? reference.yaw_deg + yaw_deg_raw : yaw_deg_raw,
+      relative_flags.bits_set?(0b10000) ? reference.pitch_deg + pitch_deg_raw : pitch_deg_raw)
   end
 
   def callback(client)

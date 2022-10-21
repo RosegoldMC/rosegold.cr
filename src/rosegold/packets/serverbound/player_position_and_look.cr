@@ -7,10 +7,10 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
 
   property \
     feet : Vec3d,
-    look_deg : LookDeg,
+    look : Look,
     on_ground : Bool
 
-  def initialize(@feet, @look_deg, @on_ground); end
+  def initialize(@feet, @look, @on_ground); end
 
   def to_packet : Minecraft::IO
     Minecraft::IO::Memory.new.tap do |buffer|
@@ -18,8 +18,8 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
       buffer.write feet.x
       buffer.write feet.y
       buffer.write feet.z
-      buffer.write look_deg.yaw
-      buffer.write look_deg.pitch
+      buffer.write look.yaw_deg
+      buffer.write look.pitch_deg
       buffer.write on_ground
     end
   end

@@ -8,7 +8,7 @@ class Rosegold::Player
 
   property \
     on_ground : Bool = false,
-    look : LookDeg = LookDeg::SOUTH,
+    look : Look = Look::SOUTH,
     feet : Vec3d = Vec3d::ORIGIN,
     velocity : Vec3d = Vec3d::ORIGIN,
     health : Float32 = 0,

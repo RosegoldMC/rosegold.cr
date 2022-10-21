@@ -10,8 +10,8 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
 
   def initialize(@yaw_deg, @pitch_deg, @on_ground); end
 
-  def self.new(look_deg : LookDeg, on_ground)
-    self.new(look_deg.yaw, look_deg.pitch, on_ground)
+  def self.new(look : Look, on_ground)
+    self.new(look.yaw_deg, look.pitch_deg, on_ground)
   end
 
   def to_packet : Minecraft::IO
