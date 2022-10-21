@@ -30,6 +30,6 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
 
     client.dimension = World::Dimension.new min_y, world_height
 
-    Log.debug { "Ingame. gamemode=#{gamemode} entity_id=#{entity_id}" }
+    Log.debug { "Ingame. #{dimension_name} gamemode=#{gamemode} entity_id=#{entity_id}" }
   end
 end

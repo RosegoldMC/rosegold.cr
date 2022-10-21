@@ -51,10 +51,10 @@ class Rosegold::State::Play
   MAP = {
     0x1a => Clientbound::Disconnect,
     0x26 => Clientbound::JoinGame,
+    0x3d => Clientbound::Respawn,
     0x21 => Clientbound::KeepAlive,
     0x30 => Clientbound::Ping,
     0x38 => Clientbound::PlayerPositionAndLook,
-    # 0x3d => Clientbound::Respawn,
     0x22 => Clientbound::ChunkData,
     0x1d => Clientbound::UnloadChunk,
     0x0c => Clientbound::BlockChange,
