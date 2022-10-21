@@ -5,6 +5,11 @@ class Rosegold::World::Dimension
 
   @chunks = Hash(ChunkPos, Chunk).new
 
+  getter min_y
+  getter world_height
+
+  def initialize(@min_y = -64, @world_height = 256 + 64 + 64); end
+
   def load_chunk(chunk_pos : ChunkPos, chunk : Chunk)
     @chunks[chunk_pos] = chunk
   end
