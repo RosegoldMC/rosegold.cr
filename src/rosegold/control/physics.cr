@@ -167,16 +167,15 @@ class Rosegold::Physics
     if feet != player.feet
       if look != player.look
         client.queue_packet Serverbound::PlayerPositionAndLook.new(
-          player.feet, player.look, player.on_ground,
-        )
+          feet, look, on_ground)
       else
-        client.queue_packet Serverbound::PlayerPosition.new player.feet, player.on_ground
+        client.queue_packet Serverbound::PlayerPosition.new feet, on_ground
       end
     else
       if look != player.look
-        client.queue_packet Serverbound::PlayerLook.new player.look, player.on_ground
+        client.queue_packet Serverbound::PlayerLook.new look, on_ground
       else
-        client.queue_packet Serverbound::PlayerNoMovement.new player.on_ground
+        client.queue_packet Serverbound::PlayerNoMovement.new on_ground
       end
     end
     player.feet = feet
