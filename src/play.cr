@@ -1,5 +1,7 @@
 require "./rosegold"
 
+include Rosegold
+
 def show_help
   puts "Rosegold v#{Rosegold::VERSION}"
   puts "~"*20
@@ -7,12 +9,12 @@ def show_help
   puts "\\position - Displays the current coordinates of the player"
 end
 
-Rosegold::Client.new("localhost", 25565).start do |bot|
+Client.new("localhost", 25565).start do |bot|
   show_help
 
   spawn do
     loop do
-      bot.move_to rand(-10..10), -60, rand(-10..10)
+      bot.walk_to rand(-10..10), rand(-10..10)
       sleep 3
     end
   end
@@ -30,21 +32,21 @@ Rosegold::Client.new("localhost", 25565).start do |bot|
           puts bot.feet
         when "\\pitch"
           if command.size > 1
-            bot.look_by bot.look.with_pitch_deg command[1].to_f.to_f32
+            bot.look &.with_pitch_deg command[1].to_f.to_f32
           else
             puts bot.look.pitch_deg
           end
         when "\\yaw"
           if command.size > 1
-            bot.look_by bot.look.with_yaw_deg command[1].to_f.to_f32
+            bot.look &.with_yaw_deg command[1].to_f.to_f32
           else
             puts bot.look.yaw_deg
           end
         when "\\move"
           spawn do
-            location = Rosegold::Vec3d.new command[1].to_f, bot.feet.y, command[3].to_f
+            location = Vec3d.new command[1].to_f, bot.feet.y, command[3].to_f
             begin
-              bot.move_to location
+              bot.walk_to location
               puts "Arrived at #{bot.feet}"
             rescue ex
               puts "Movement to #{location} failed:"
