@@ -1,5 +1,5 @@
-require "./aabb"
-require "./vec3"
+require "../world/aabb"
+require "../world/vec3"
 
 module Rosegold::Raytracing
   struct Ray
