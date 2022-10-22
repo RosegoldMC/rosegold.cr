@@ -52,19 +52,26 @@ class Rosegold::State::Play
     0x1a => Clientbound::Disconnect,
     0x26 => Clientbound::JoinGame,
     0x3d => Clientbound::Respawn,
+    0x38 => Clientbound::PlayerPositionAndLook,
+
     0x21 => Clientbound::KeepAlive,
     0x30 => Clientbound::Ping,
-    0x38 => Clientbound::PlayerPositionAndLook,
+
+    # blocks
     0x22 => Clientbound::ChunkData,
     0x1d => Clientbound::UnloadChunk,
     0x0c => Clientbound::BlockChange,
     0x3f => Clientbound::MultiBlockChange,
-    # 0x48 => Clientbound::HeldItemChange,
+    # 0x1c => Clientbound::Explosion, # TODO change blocks, update velocity
+
+    # inventory
+    0x48 => Clientbound::HeldItemChange,
     # 0x2e => Clientbound::OpenWindow,
     # 0x13 => Clientbound::CloseWindow,
     # 0x14 => Clientbound::WindowItems,
     # 0x16 => Clientbound::SetSlot,
     # 0x66 => Clientbound::DeclareRecipes,
+
     0x0f => Clientbound::Chat,
     # 0x36 => Clientbound::PlayerInfo,
     # 0x0d => Clientbound::BossBar,

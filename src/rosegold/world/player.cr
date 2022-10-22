@@ -14,6 +14,7 @@ class Rosegold::Player
     health : Float32 = 0,
     food : Float32 = 0,
     saturation : Float32 = 0,
+    hotbar_selection : UInt16 = 0,
     gamemode : UInt8 = 0
 
   def aabb
