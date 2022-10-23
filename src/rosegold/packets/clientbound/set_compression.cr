@@ -1,4 +1,8 @@
+require "../packet"
+
 class Rosegold::Clientbound::SetCompression < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x03_u8
+
   property \
     threshold : UInt32
 
@@ -12,6 +16,8 @@ class Rosegold::Clientbound::SetCompression < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.compression_threshold = threshold
+    client.connection!.compression_threshold = threshold
   end
 end
+
+Rosegold::ProtocolState::LOGIN.register Rosegold::Clientbound::SetCompression

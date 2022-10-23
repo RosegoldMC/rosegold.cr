@@ -1,4 +1,8 @@
+require "../packet"
+
 class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x26_u8
+
   property \
     entity_id : Int32,
     hardcore : Bool,
@@ -33,3 +37,5 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
     Log.debug { "Ingame. #{dimension_name} gamemode=#{gamemode} entity_id=#{entity_id}" }
   end
 end
+
+Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::JoinGame

@@ -1,4 +1,8 @@
+require "../packet"
+
 class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x3d_u8
+
   property \
     dimension : NBT::Tag,
     dimension_name : String,
@@ -33,3 +37,5 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
     Log.debug { "Respawned in #{dimension_name} gamemode=#{gamemode}" }
   end
 end
+
+Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::Respawn

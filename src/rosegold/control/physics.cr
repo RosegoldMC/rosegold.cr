@@ -60,7 +60,7 @@ class Rosegold::Physics
     end
 
     self.ticker = spawn do
-      while client.state.is_a? State::Play
+      while client.connected?
         tick
         sleep 1.tick
       end

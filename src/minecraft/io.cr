@@ -41,7 +41,7 @@ module Minecraft::IO
     write a.to_unsafe.to_slice a.size
   end
 
-  def write(slot : Slot)
+  def write(slot : Rosegold::Slot)
     write slot.empty?
     return if slot.empty?
     write slot.item_id
@@ -141,9 +141,9 @@ module Minecraft::IO
     NBT::Reader.new(self).read_named[:tag]
   end
 
-  def read_slot : Slot
-    return Slot.new unless read_bool
-    Slot.new(read_var_int, read_byte, read_nbt)
+  def read_slot : Rosegold::Slot
+    return Rosegold::Slot.new unless read_bool
+    Rosegold::Slot.new(read_var_int, read_byte, read_nbt)
   end
 
   def read_position : Tuple(Int32, Int32, Int32)
@@ -153,6 +153,20 @@ module Minecraft::IO
     z = ((value << 26) >> 38).to_i32 # 26 bits
     x = (value >> 38).to_i32         # 26 bits
     {x, y, z}
+  end
+end
+
+class Minecraft::IO::Wrap < IO
+  include Minecraft::IO
+
+  def initialize(@io : ::IO); end
+
+  def read(slice : Bytes)
+    @io.read slice
+  end
+
+  def write(slice : Bytes) : Nil
+    @io.write slice
   end
 end
 
@@ -168,7 +182,7 @@ class Minecraft::TCPSocket < TCPSocket
   include Minecraft::IO
 end
 
-class Minecraft::EncryptedTCPSocket
+class Minecraft::EncryptedTCPSocket < IO
   include Minecraft::IO
 
   getter read_cipher : OpenSSL::Cipher
@@ -185,7 +199,7 @@ class Minecraft::EncryptedTCPSocket
     @write_cipher.iv = iv
   end
 
-  def read_fully(slice : Bytes)
+  def read(slice : Bytes)
     upstream_size = @io.read_fully slice
     upstream = slice[0, upstream_size]
     o = @read_cipher.update upstream
@@ -195,9 +209,5 @@ class Minecraft::EncryptedTCPSocket
 
   def write(slice : Bytes) : Nil
     @io.write @write_cipher.update(slice)
-  end
-
-  def flush
-    @io.flush
   end
 end

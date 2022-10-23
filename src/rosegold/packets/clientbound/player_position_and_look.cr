@@ -1,8 +1,11 @@
 require "../../world/look"
 require "../../world/vec3"
+require "../packet"
 
 # relative_flags: x/y/z/yaw/pitch. If a flag is set, its value is relative to the current player position/look.
 class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x38_u8
+
   property \
     x_raw : Float64,
     y_raw : Float64,
@@ -22,8 +25,7 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     @relative_flags,
     @teleport_id,
     @dismount_vehicle
-  )
-  end
+  ); end
 
   def self.read(packet)
     self.new(
@@ -68,3 +70,5 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     # TODO: close the “Downloading Terrain” screen when joining/respawning
   end
 end
+
+Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::PlayerPositionAndLook

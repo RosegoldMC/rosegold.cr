@@ -1,7 +1,7 @@
-require "./packet"
+require "../packet"
 
 class Rosegold::Clientbound::HeldItemChange < Rosegold::Clientbound::Packet
-  PACKET_ID = 0x48_u8
+  class_getter packet_id = 0x48_u8
 
   property hotbar_nr : UInt8
 
@@ -16,3 +16,5 @@ class Rosegold::Clientbound::HeldItemChange < Rosegold::Clientbound::Packet
     client.player.hotbar_selection = hotbar_nr
   end
 end
+
+Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::HeldItemChange

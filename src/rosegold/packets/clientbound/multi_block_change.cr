@@ -1,4 +1,8 @@
+require "../packet"
+
 class Rosegold::Clientbound::MultiBlockChange < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x3f_u8
+
   property \
     section_x : Int32,
     section_y : Int32,
@@ -39,3 +43,5 @@ class Rosegold::Clientbound::MultiBlockChange < Rosegold::Clientbound::Packet
     end
   end
 end
+
+Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::MultiBlockChange
