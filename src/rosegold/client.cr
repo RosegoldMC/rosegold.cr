@@ -83,7 +83,7 @@ class Rosegold::Client
     send_packet! Serverbound::Handshake.new protocol_version, host, port, 1
     connection.state = ProtocolState::STATUS.clientbound
 
-    queue_packet Serverbound::Status.new
+    queue_packet Serverbound::StatusRequest.new
 
     read_packet
   end
