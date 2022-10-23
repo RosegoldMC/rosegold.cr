@@ -29,9 +29,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def state=(state)
-    read_mutex.synchronize do
-      @state = state
-    end
+    @state = state
   end
 
   def disconnect(reason : String)
@@ -45,11 +43,15 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def read_packet : InboundPacket?
+    packet = decode_packet read_raw_packet
+    Log.trace { "RECV " + inspect_packet(packet) }
+    packet
+  end
+
+  def read_raw_packet : Bytes
     raise "Disconnected: #{close_reason}" if close_reason
 
-    current_state = state
-    pkt_bytes = Bytes.new 0
-
+    packet_bytes = Bytes.new 0
     read_mutex.synchronize do
       if compress?
         frame_len = io.read_var_int
@@ -62,48 +64,52 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
         else # packet is in fact compressed
           frame_io = Compress::Zlib::Reader.new frame_io
         end
-        frame_io.read_fully(pkt_bytes = Bytes.new uncompressed_data_len)
+        frame_io.read_fully(packet_bytes = Bytes.new uncompressed_data_len)
       else
-        io.read_fully(pkt_bytes = Bytes.new io.read_var_int)
+        io.read_fully(packet_bytes = Bytes.new io.read_var_int)
       end
     end
-
-    Minecraft::IO::Memory.new(pkt_bytes).try do |pkt_io|
-      pkt_id = pkt_io.read_byte.not_nil!
-      pkt_type = current_state[pkt_id]?
-      return nil unless pkt_type
-      return nil unless pkt_type.responds_to? :read
-      packet = pkt_type.read pkt_io
-      Log.trace { "RECV " + inspect_packet(packet) }
-    end
+    packet_bytes
   rescue e : IO::EOFError
     @close_reason = "IO Error: #{e.message}"
     raise e
   end
 
+  def decode_packet(packet_bytes : Bytes) : InboundPacket?
+    Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
+      pkt_id = pkt_io.read_byte.not_nil!
+      pkt_type = state[pkt_id]?
+      return nil unless pkt_type
+      return nil unless pkt_type.responds_to? :read
+      packet = pkt_type.read pkt_io
+    end
+  end
+
   def send_packet(packet : OutboundPacket)
+    Log.trace { "SEND " + inspect_packet(packet) }
+    send_packet packet.write
+  end
+
+  def send_packet(packet_bytes : Bytes)
     raise "Disconnected: #{close_reason}" if close_reason
 
-    Log.trace { "SEND " + inspect_packet(packet) }
-    packet.write.try do |packet_bytes|
-      if compress?
-        Minecraft::IO::Memory.new.tap do |buffer|
-          size = packet_bytes.size
+    if compress?
+      Minecraft::IO::Memory.new.tap do |buffer|
+        size = packet_bytes.size
 
-          if size > compression_threshold
-            buffer.write size.to_u32
+        if size > compression_threshold
+          buffer.write size.to_u32
 
-            Compress::Zlib::Writer.open(buffer) do |zlib|
-              zlib.write packet_bytes
-            end
-          else
-            buffer.write 0_u32
-            buffer.write packet_bytes
+          Compress::Zlib::Writer.open(buffer) do |zlib|
+            zlib.write packet_bytes
           end
-        end.to_slice
-      else
-        packet_bytes
-      end
+        else
+          buffer.write 0_u32
+          buffer.write packet_bytes
+        end
+      end.to_slice
+    else
+      packet_bytes
     end.try do |packet_bytes|
       write_mutex.synchronize do
         io.write packet_bytes.size.to_u32
