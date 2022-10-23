@@ -13,6 +13,7 @@ class Rosegold::Client
   getter connection : Connection::Client?
 
   property \
+    online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
     player : Player = Player.new,
     dimension : World::Dimension = World::Dimension.new,
     physics : Physics
@@ -61,6 +62,8 @@ class Rosegold::Client
     connection.state = ProtocolState::LOGIN.clientbound
 
     queue_packet Serverbound::LoginStart.new ENV["MC_NAME"]
+
+    @online_players = Hash(UUID, PlayerList::Entry).new
 
     spawn do
       loop do

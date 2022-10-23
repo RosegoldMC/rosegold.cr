@@ -9,9 +9,14 @@ module Minecraft::IO
     write_byte value ? 1_u8 : 0_u8
   end
 
-  def write(value : String)
-    write value.bytesize.to_u32
-    print value
+  def write(str : String)
+    write str.bytesize.to_u32
+    print str
+  end
+
+  def write_opt_string(str : String?)
+    write !str.nil?
+    write str unless str.nil?
   end
 
   def write(value : Float32 | Float64 | UInt8 | Int8)
@@ -120,6 +125,11 @@ module Minecraft::IO
       shift += 7
       raise "VarLong is too big: #{shift}" if shift >= 64
     end
+  end
+
+  def read_opt_string : String?
+    return nil unless read_bool
+    read_var_string
   end
 
   def read_var_string : String
