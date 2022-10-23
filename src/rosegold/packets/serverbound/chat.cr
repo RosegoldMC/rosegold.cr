@@ -7,6 +7,10 @@ class Rosegold::Serverbound::Chat < Rosegold::Serverbound::Packet
 
   def initialize(@message : String); end
 
+  def self.read(io)
+    self.new(io.read_var_string)
+  end
+
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id

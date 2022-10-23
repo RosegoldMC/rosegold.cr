@@ -1,3 +1,4 @@
+require "nbt"
 require "../packet"
 
 class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
@@ -18,6 +19,17 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
       packet.read_nbt,
       packet.read_var_bytes
     )
+  end
+
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write_full chunk_x
+      buffer.write_full chunk_z
+      buffer.write heightmaps
+      buffer.write data.size
+      buffer.write data
+    end.to_slice
   end
 
   def callback(client)

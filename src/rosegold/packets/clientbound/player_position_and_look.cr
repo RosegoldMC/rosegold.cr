@@ -27,6 +27,16 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     @dismount_vehicle
   ); end
 
+  def self.new(pos : Vec3d, look : Look, teleport_id : UInt32, dismount_vehicle = false)
+    self.new(
+      pos.x, pos.y, pos.z,
+      look.yaw_deg, look.pitch_deg,
+      0,
+      teleport_id,
+      dismount_vehicle,
+    )
+  end
+
   def self.read(packet)
     self.new(
       packet.read_double,
@@ -38,6 +48,20 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
       packet.read_var_int,
       packet.read_bool
     )
+  end
+
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write x_raw
+      buffer.write y_raw
+      buffer.write z_raw
+      buffer.write yaw_deg_raw
+      buffer.write pitch_deg_raw
+      buffer.write relative_flags
+      buffer.write teleport_id
+      buffer.write dismount_vehicle
+    end.to_slice
   end
 
   def feet(reference : Vec3d)

@@ -14,13 +14,17 @@ module Minecraft::IO
     print value
   end
 
-  def write(value : Float32 | Float64 | UInt8)
+  def write(value : Float32 | Float64 | UInt8 | Int8)
     write_bytes value, ::IO::ByteFormat::BigEndian
   end
 
   # writes all bytes even for small magnitudes, not var int
   def write_full(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64)
     write_bytes value, ::IO::ByteFormat::BigEndian
+  end
+
+  def write(uuid : UUID)
+    write uuid.bytes.to_slice
   end
 
   # writes var int
@@ -39,6 +43,10 @@ module Minecraft::IO
       a << b
     end
     write a.to_unsafe.to_slice a.size
+  end
+
+  def write(nbt : NBT::Tag)
+    raise "Not implemented" # TODO
   end
 
   def write(slot : Rosegold::Slot)
