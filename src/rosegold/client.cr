@@ -18,7 +18,9 @@ class Rosegold::Client
     dimension : World::Dimension = World::Dimension.new,
     physics : Physics
 
-  property callbacks : Callbacks = Callbacks.new
+  getter raw_packet_handlers : Array(Proc(Bytes, Nil)) = Array(Proc(Bytes, Nil)).new
+
+  getter callbacks : Callbacks = Callbacks.new
 
   private alias Callbacks = Hash(Clientbound::Packet.class, Array(Proc(Clientbound::Packet, Nil)))
 
@@ -103,7 +105,7 @@ class Rosegold::Client
     raise "Not connected" unless connection
     spawn do
       Fiber.yield
-      connection!.send_packet packet
+      send_packet! packet
     end
   end
 
@@ -117,8 +119,13 @@ class Rosegold::Client
 
   private def read_packet
     raise "Not connected" unless connection
-    packet = connection!.read_packet
+    raw_packet = connection!.read_raw_packet
+
+    raw_packet_handlers.each &.call raw_packet
+
+    packet = connection!.decode_packet raw_packet
     return nil unless packet
+    Log.trace { "RECV " + inspect_packet(packet) }
 
     packet.callback(self)
 
@@ -126,4 +133,9 @@ class Rosegold::Client
 
     packet
   end
+end
+
+private def inspect_packet(packet)
+  packet.pretty_inspect(999, " ", 0).sub(/:0x\S+/, "") \
+    .gsub(/Rosegold::|Clientbound::|Serverbound::/, "")
 end

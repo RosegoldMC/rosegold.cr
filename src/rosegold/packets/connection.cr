@@ -43,9 +43,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def read_packet : InboundPacket?
-    packet = decode_packet read_raw_packet
-    Log.trace { "RECV " + inspect_packet(packet) }
-    packet
+    decode_packet read_raw_packet
   end
 
   def read_raw_packet : Bytes
@@ -86,7 +84,6 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def send_packet(packet : OutboundPacket)
-    Log.trace { "SEND " + inspect_packet(packet) }
     send_packet packet.write
   end
 
@@ -121,9 +118,4 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     @close_reason = "IO Error: #{e.message}"
     raise e
   end
-end
-
-private def inspect_packet(packet)
-  packet.pretty_inspect(999, " ", 0).sub(/:0x\S+/, "") \
-    .gsub(/Rosegold::|Clientbound::|Serverbound::/, "")
 end
