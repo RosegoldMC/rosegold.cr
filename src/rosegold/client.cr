@@ -6,11 +6,14 @@ require "./packets/connection"
 require "./packets/packet"
 require "./world/*"
 
-# Holds data kept between (re)connections.
+# Holds world state (player, chunks, etc.)
+# and control state (physics, open window, etc.).
+# Can be reconnected.
 class Rosegold::Client
+  class_getter protocol_version = 758_u32
+
   property host : String, port : UInt16
-  property protocol_version = 758_u32
-  getter connection : Connection::Client?
+  @connection : Connection::Client?
 
   property \
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
@@ -29,22 +32,23 @@ class Rosegold::Client
     @physics = Physics.new self
   end
 
-  def connection!
+  # Raises an error if this client has never been connected
+  def connection
     @connection.not_nil!
   end
 
   def connected?
-    @connection && !connection!.close_reason
+    @connection && !connection.close_reason
   end
 
   def state=(state)
-    connection!.state = state
+    connection.state = state
   end
 
   def join_game
     connect
 
-    until connection!.state == ProtocolState::PLAY.clientbound
+    until connection.state == ProtocolState::PLAY.clientbound
       sleep 0.1
     end
     Log.info { "Ingame" }
@@ -60,7 +64,7 @@ class Rosegold::Client
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound
     Log.info { "Connected to #{host}:#{port}" }
 
-    send_packet! Serverbound::Handshake.new protocol_version, host, port, 2
+    send_packet! Serverbound::Handshake.new Client.protocol_version, host, port, 2
     connection.state = ProtocolState::LOGIN.clientbound
 
     queue_packet Serverbound::LoginStart.new ENV["MC_NAME"]
@@ -80,17 +84,18 @@ class Rosegold::Client
   end
 
   def status
-    raise "Already connected" if connected?
+    self.class.status host, port
+  end
 
+  def self.status(host : String, port : UInt16 = 25565)
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
-    connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound
+    connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound
 
-    send_packet! Serverbound::Handshake.new protocol_version, host, port, 1
+    connection.send_packet Serverbound::Handshake.new Client.protocol_version, host, port, 1
     connection.state = ProtocolState::STATUS.clientbound
 
-    queue_packet Serverbound::StatusRequest.new
-
-    read_packet
+    connection.send_packet Serverbound::StatusRequest.new
+    connection.read_packet.not_nil!
   end
 
   def on(packet_type : T.class, &block : T ->) forall T
@@ -102,7 +107,7 @@ class Rosegold::Client
 
   # Send a packet to the server concurrently.
   def queue_packet(packet : Serverbound::Packet)
-    raise "Not connected" unless connection
+    raise "Not connected" unless connected?
     spawn do
       Fiber.yield
       send_packet! packet
@@ -113,17 +118,18 @@ class Rosegold::Client
   # EncryptionRequest, because it must change the IO socket only AFTER
   # a EncryptionResponse has been sent.
   def send_packet!(packet : Serverbound::Packet)
-    raise "Not connected" unless connection
-    connection!.send_packet packet
+    raise "Not connected" unless connected?
+    Log.trace { "SEND " + inspect_packet(packet) }
+    connection.send_packet packet
   end
 
   private def read_packet
-    raise "Not connected" unless connection
-    raw_packet = connection!.read_raw_packet
+    raise "Not connected" unless connected?
+    raw_packet = connection.read_raw_packet
 
     raw_packet_handlers.each &.call raw_packet
 
-    packet = connection!.decode_packet raw_packet
+    packet = Connection.decode_packet raw_packet, connection.state
     return nil unless packet
     Log.trace { "RECV " + inspect_packet(packet) }
 

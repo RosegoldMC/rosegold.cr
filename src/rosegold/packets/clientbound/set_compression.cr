@@ -16,7 +16,7 @@ class Rosegold::Clientbound::SetCompression < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.connection!.compression_threshold = threshold
+    client.connection.compression_threshold = threshold
   end
 end
 

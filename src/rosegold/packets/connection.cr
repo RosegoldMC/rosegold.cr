@@ -4,7 +4,9 @@ require "./packet"
 require "./clientbound/*"
 require "./serverbound/*"
 
+# Something that packets can be read from and sent to.
 # Can be used for client and server.
+# Caller of #read_packet must update #state= appropriately.
 # Useless after disconnect; create a new instance to reconnect.
 class Rosegold::Connection(InboundPacket, OutboundPacket)
   alias Client = Connection(Clientbound::Packet, Serverbound::Packet)
@@ -43,7 +45,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def read_packet : InboundPacket?
-    decode_packet read_raw_packet
+    Connection.decode_packet read_raw_packet, state
   end
 
   def read_raw_packet : Bytes
@@ -73,13 +75,16 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     raise e
   end
 
-  def decode_packet(packet_bytes : Bytes) : InboundPacket?
+  def self.decode_packet(
+    packet_bytes : Bytes,
+    state : Hash(UInt8, InboundPacket.class)
+  ) : InboundPacket?
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
       pkt_id = pkt_io.read_byte.not_nil!
       pkt_type = state[pkt_id]?
       return nil unless pkt_type
       return nil unless pkt_type.responds_to? :read
-      packet = pkt_type.read pkt_io
+      pkt_type.read pkt_io
     end
   end
 

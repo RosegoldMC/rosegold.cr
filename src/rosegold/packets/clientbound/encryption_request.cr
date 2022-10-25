@@ -23,8 +23,8 @@ class Rosegold::Clientbound::EncryptionRequest < Rosegold::Clientbound::Packet
 
     client.send_packet! encryption_response
 
-    client.connection!.io = Minecraft::EncryptedTCPSocket.new \
-      client.connection!.io,
+    client.connection.io = Minecraft::EncryptedTCPSocket.new \
+      client.connection.io,
       "aes-128-cfb8",
       encryption_response.shared_secret,
       encryption_response.shared_secret
