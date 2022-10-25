@@ -1,10 +1,10 @@
-class Rosegold::World::Chunk
+class Rosegold::Chunk
   alias BlockStateNr = UInt16
 
   getter sections : Array(Section)
   private getter min_y : Int32
 
-  def initialize(io : Minecraft::IO, dimension : World::Dimension)
+  def initialize(io : Minecraft::IO, dimension : Dimension)
     @min_y = dimension.min_y
     section_count = dimension.world_height >> 4
     @sections = Array(Section).new(section_count) { Section.new io }

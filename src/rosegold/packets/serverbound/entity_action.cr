@@ -5,15 +5,11 @@ class Rosegold::Serverbound::EntityAction < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x1b_u8
 
   property \
-    entity_id : UInt32,
+    entity_id : Int32,
     action_id : UInt8,
     jump_boost : UInt8
 
-  def initialize(
-    @entity_id : UInt32,
-    @action_id : UInt8,
-    @jump_boost : UInt8
-  ); end
+  def initialize(@entity_id, @action_id, @jump_boost); end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|

@@ -213,7 +213,7 @@ class Rosegold::Physics
 
   # Applies collision handling including stepping.
   # Returns adjusted movement vector and adjusted post-movement velocity.
-  def self.predict_movement_collision(start : Vec3d, velocity : Vec3d, entity_aabb : AABBf, dimension : World::Dimension)
+  def self.predict_movement_collision(start : Vec3d, velocity : Vec3d, entity_aabb : AABBf, dimension : Dimension)
     obstacles = get_grown_obstacles start, velocity, entity_aabb, dimension
     predict_movement_collision start, velocity, obstacles
   end
@@ -267,7 +267,7 @@ class Rosegold::Physics
   # including boxes 0.5m higher for stepping.
   # `entity_aabb` is at 0,0,0; the returned AABBs are grown by `entity_aabb` so collision checks are just raytracing.
   def self.get_grown_obstacles(
-    start : Vec3d, movement : Vec3d, entity_aabb : AABBf, dimension : World::Dimension
+    start : Vec3d, movement : Vec3d, entity_aabb : AABBf, dimension : Dimension
   ) : Array(AABBd)
     entity_aabb = entity_aabb.to_f64
     # get all blocks that may potentially collide

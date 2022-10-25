@@ -9,6 +9,7 @@ class Rosegold::Player
   CRAWLING_AABB = AABBf.new -0.3, 0.0, -0.3, 0.3, 0.625, 0.3
 
   property \
+    entity_id : Int32 = 0,
     on_ground : Bool = false,
     look : Look = Look::SOUTH,
     feet : Vec3d = Vec3d::ORIGIN,
@@ -17,7 +18,7 @@ class Rosegold::Player
     food : Float32 = 0,
     saturation : Float32 = 0,
     hotbar_selection : UInt16 = 0,
-    gamemode : UInt8 = 0
+    gamemode : Int8 = 0
 
   def aabb
     DEFAULT_AABB + feet # TODO depends on sneaking/crawling/swimming

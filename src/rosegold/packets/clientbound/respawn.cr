@@ -29,10 +29,8 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    min_y = dimension["min_y"].as_i
-    world_height = dimension["height"].as_i
-
-    client.dimension = World::Dimension.new min_y, world_height
+    client.player.gamemode = gamemode
+    client.dimension = Dimension.new dimension_name, dimension
 
     Log.debug { "Respawned in #{dimension_name} gamemode=#{gamemode}" }
   end

@@ -15,7 +15,7 @@ class Rosegold::Client
   property \
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
     player : Player = Player.new,
-    dimension : World::Dimension = World::Dimension.new,
+    dimension : Dimension = Dimension.new,
     physics : Physics
 
   getter raw_packet_handlers : Array(Proc(Bytes, Nil)) = Array(Proc(Bytes, Nil)).new

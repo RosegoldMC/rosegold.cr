@@ -68,11 +68,9 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.dimension = World::Dimension.new(
-      dimension["min_y"].as_i,
-      dimension["height"].as_i,
-      dimension,
-      dimension_name)
+    client.player.entity_id = entity_id
+    client.player.gamemode = gamemode
+    client.dimension = Dimension.new dimension_name, dimension
 
     Log.debug { "Ingame. #{dimension_name} gamemode=#{gamemode} entity_id=#{entity_id}" }
   end
