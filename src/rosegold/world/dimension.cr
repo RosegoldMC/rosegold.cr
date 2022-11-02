@@ -4,7 +4,7 @@ require "./chunk"
 class Rosegold::Dimension
   alias ChunkPos = {Int32, Int32}
 
-  @chunks = Hash(ChunkPos, Chunk).new
+  getter chunks = Hash(ChunkPos, Chunk).new
 
   getter name : String
   getter nbt : NBT::Tag
