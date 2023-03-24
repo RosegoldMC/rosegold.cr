@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::State::Play - rosegold main</title>
+  <title>Rosegold::Clientbound::AcknowledgePlayerDigging - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -156,12 +156,12 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
       <a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging.html">AcknowledgePlayerDigging</a>
       
     </li>
@@ -436,7 +436,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/State" data-name="rosegold::state">
+  <li class="parent " data-id="rosegold/Rosegold/State" data-name="rosegold::state">
       <a href="../../Rosegold/State.html">State</a>
       
         <ul>
@@ -451,7 +451,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/State/Play" data-name="rosegold::state::play">
+  <li class=" " data-id="rosegold/Rosegold/State/Play" data-name="rosegold::state::play">
       <a href="../../Rosegold/State/Play.html">Play</a>
       
     </li>
@@ -545,26 +545,15 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::State::Play
+  <span class="kind">class</span> Rosegold::Clientbound::AcknowledgePlayerDigging
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/State/Play.html">Rosegold::State::Play</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging.html">Rosegold::Clientbound::AcknowledgePlayerDigging</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>https://wiki.vg/index.php?title=Protocol&amp;oldid=17499</p>
 
 
 
@@ -589,8 +578,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/states.cr#L50" target="_blank">
-        rosegold/states.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L1" target="_blank">
+        rosegold/packets/clientbound/acknowledge_player_digging.cr
       </a>
     
     <br/>
@@ -598,26 +587,24 @@
 
 
 
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-      Constant Summary
-    </h2>
-  
-  <dl>
+    Constructors
+  </h2>
+  <ul class="list-summary">
     
-      <dt class="entry-const" id="MAP">
-        <strong>MAP</strong> = <code>{<span class="n">26</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">Disconnect</span>, <span class="n">38</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">JoinGame</span>, <span class="n">33</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">KeepAlive</span>, <span class="n">48</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">Ping</span>, <span class="n">56</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">PlayerPositionAndLook</span>, <span class="n">34</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">ChunkData</span>, <span class="n">29</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">UnloadChunk</span>, <span class="n">12</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">BlockChange</span>, <span class="n">63</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">MultiBlockChange</span>, <span class="n">8</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">AcknowledgePlayerDigging</span>, <span class="n">15</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">Chat</span>}</code>
-      </dt>
-      
+      <li class="entry-summary">
+        <a href="#new%28location%3ATuple%28Int32%2CInt32%2CInt32%29%2Cblock%3AUInt32%2Cstatus%3AUInt32%2Csuccessful%3ABool%29-class-method" class="signature"><strong>.new</strong>(location : Tuple(Int32, Int32, Int32), block : UInt32, status : UInt32, successful : Bool)</a>
+        
+      </li>
     
-  </dl>
-
-
+  </ul>
 
 
 
@@ -632,7 +619,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%5B%5D%28packet_id%29-class-method" class="signature"><strong>.[]</strong>(packet_id)</a>
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
         
       </li>
     
@@ -651,7 +638,52 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%5B%5D%28packet_id%29-instance-method" class="signature"><strong>#[]</strong>(packet_id)</a>
+        <a href="#block%3AUInt32-instance-method" class="signature"><strong>#block</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#block%3D%28block%3AUInt32%29-instance-method" class="signature"><strong>#block=</strong>(block : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#location%3ATuple%28Int32%2CInt32%2CInt32%29-instance-method" class="signature"><strong>#location</strong> : Tuple(Int32, Int32, Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#location%3D%28location%3ATuple%28Int32%2CInt32%2CInt32%29%29-instance-method" class="signature"><strong>#location=</strong>(location : Tuple(Int32, Int32, Int32))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#location_vec-instance-method" class="signature"><strong>#location_vec</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#status%3AUInt32-instance-method" class="signature"><strong>#status</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#status%3D%28status%3AUInt32%29-instance-method" class="signature"><strong>#status=</strong>(status : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#successful%3ABool-instance-method" class="signature"><strong>#successful</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#successful%3D%28successful%3ABool%29-instance-method" class="signature"><strong>#successful=</strong>(successful : Bool)</a>
         
       </li>
     
@@ -662,6 +694,25 @@
 
 
 <div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#callback%28client%29-instance-method" class="tooltip">
+      <span>callback(client)</span>
+    callback</a>
+    
+  
+
+
+    
+
+
+    
+
+
   
     
 
@@ -686,6 +737,32 @@
 </div>
 
 
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(location:Tuple(Int32,Int32,Int32),block:UInt32,status:UInt32,successful:Bool)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(location : Tuple(<a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>), block : UInt32, status : UInt32, successful : Bool)
+
+        <a class="method-permalink" href="#new%28location%3ATuple%28Int32%2CInt32%2CInt32%29%2Cblock%3AUInt32%2Cstatus%3AUInt32%2Csuccessful%3ABool%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
 
   <h2>
@@ -697,18 +774,18 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="[](packet_id)-class-method">
+    <div class="entry-detail" id="read(packet)-class-method">
       <div class="signature">
         
-        def self.<strong>[]</strong>(packet_id)
+        def self.<strong>read</strong>(packet)
 
-        <a class="method-permalink" href="#%5B%5D%28packet_id%29-class-method">#</a>
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/states.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -725,18 +802,162 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="[](packet_id)-instance-method">
+    <div class="entry-detail" id="block:UInt32-instance-method">
       <div class="signature">
         
-        def <strong>[]</strong>(packet_id)
+        def <strong>block</strong> : UInt32
 
-        <a class="method-permalink" href="#%5B%5D%28packet_id%29-instance-method">#</a>
+        <a class="method-permalink" href="#block%3AUInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/states.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block=(block:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>block=</strong>(block : UInt32)
+
+        <a class="method-permalink" href="#block%3D%28block%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="callback(client)-instance-method">
+      <div class="signature">
+        
+        def <strong>callback</strong>(client)
+
+        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L20" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="location:Tuple(Int32,Int32,Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>location</strong> : Tuple(<a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>)
+
+        <a class="method-permalink" href="#location%3ATuple%28Int32%2CInt32%2CInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="location=(location:Tuple(Int32,Int32,Int32))-instance-method">
+      <div class="signature">
+        
+        def <strong>location=</strong>(location : Tuple(<a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>))
+
+        <a class="method-permalink" href="#location%3D%28location%3ATuple%28Int32%2CInt32%2CInt32%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="location_vec-instance-method">
+      <div class="signature">
+        
+        def <strong>location_vec</strong>
+
+        <a class="method-permalink" href="#location_vec-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L33" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="status:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>status</strong> : UInt32
+
+        <a class="method-permalink" href="#status%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="status=(status:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>status=</strong>(status : UInt32)
+
+        <a class="method-permalink" href="#status%3D%28status%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="successful:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>successful</strong> : Bool
+
+        <a class="method-permalink" href="#successful%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="successful=(successful:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>successful=</strong>(successful : Bool)
+
+        <a class="method-permalink" href="#successful%3D%28successful%3ABool%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>

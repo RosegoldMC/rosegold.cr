@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::State::Play - rosegold main</title>
+  <title>Rosegold::Serverbound::PlayerDigging - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -321,7 +321,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
+  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
       <a href="../../Rosegold/Serverbound.html">Serverbound</a>
       
         <ul>
@@ -381,7 +381,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
+  <li class=" current" data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
       <a href="../../Rosegold/Serverbound/PlayerDigging.html">PlayerDigging</a>
       
     </li>
@@ -436,7 +436,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/State" data-name="rosegold::state">
+  <li class="parent " data-id="rosegold/Rosegold/State" data-name="rosegold::state">
       <a href="../../Rosegold/State.html">State</a>
       
         <ul>
@@ -451,7 +451,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/State/Play" data-name="rosegold::state::play">
+  <li class=" " data-id="rosegold/Rosegold/State/Play" data-name="rosegold::state::play">
       <a href="../../Rosegold/State/Play.html">Play</a>
       
     </li>
@@ -545,26 +545,15 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::State::Play
+  <span class="kind">class</span> Rosegold::Serverbound::PlayerDigging
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/State/Play.html">Rosegold::State::Play</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Serverbound/PlayerDigging.html">Rosegold::Serverbound::PlayerDigging</a></li><li class="superclass"><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>https://wiki.vg/index.php?title=Protocol&amp;oldid=17499</p>
 
 
 
@@ -589,8 +578,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/states.cr#L50" target="_blank">
-        rosegold/states.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/serverbound/player_digging.cr#L3" target="_blank">
+        rosegold/packets/serverbound/player_digging.cr
       </a>
     
     <br/>
@@ -610,8 +599,8 @@
   
   <dl>
     
-      <dt class="entry-const" id="MAP">
-        <strong>MAP</strong> = <code>{<span class="n">26</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">Disconnect</span>, <span class="n">38</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">JoinGame</span>, <span class="n">33</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">KeepAlive</span>, <span class="n">48</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">Ping</span>, <span class="n">56</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">PlayerPositionAndLook</span>, <span class="n">34</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">ChunkData</span>, <span class="n">29</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">UnloadChunk</span>, <span class="n">12</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">BlockChange</span>, <span class="n">63</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">MultiBlockChange</span>, <span class="n">8</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">AcknowledgePlayerDigging</span>, <span class="n">15</span> <span class="o">=&gt;</span> <span class="t">Clientbound</span><span class="t">::</span><span class="t">Chat</span>}</code>
+      <dt class="entry-const" id="PACKET_ID">
+        <strong>PACKET_ID</strong> = <code><span class="n">26_u8</span></code>
       </dt>
       
     
@@ -619,24 +608,24 @@
 
 
 
-
-
   <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+    <a id="constructors" class="anchor" href="#constructors">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Class Method Summary
+    Constructors
   </h2>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%5B%5D%28packet_id%29-class-method" class="signature"><strong>.[]</strong>(packet_id)</a>
+        <a href="#new%28status%3AUInt32%2Clocation%3AVec3d%2Cface%3AUInt8%29-class-method" class="signature"><strong>.new</strong>(status : UInt32, location : Vec3d, face : UInt8)</a>
         
       </li>
     
   </ul>
+
+
 
 
 
@@ -651,7 +640,37 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%5B%5D%28packet_id%29-instance-method" class="signature"><strong>#[]</strong>(packet_id)</a>
+        <a href="#face%3AUInt8-instance-method" class="signature"><strong>#face</strong> : UInt8</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#face%3D%28face%3AUInt8%29-instance-method" class="signature"><strong>#face=</strong>(face : UInt8)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#location%3AVec3d-instance-method" class="signature"><strong>#location</strong> : Vec3d</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#location%3D%28location%3AVec3d%29-instance-method" class="signature"><strong>#location=</strong>(location : Vec3d)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#status%3AUInt32-instance-method" class="signature"><strong>#status</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#status%3D%28status%3AUInt32%29-instance-method" class="signature"><strong>#status=</strong>(status : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_packet%3AMinecraft%3A%3AIO-instance-method" class="signature"><strong>#to_packet</strong> : Minecraft::IO</a>
         
       </li>
     
@@ -662,6 +681,25 @@
 
 
 <div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Serverbound/Packet.html#to_packet%3AMinecraft%3A%3AIO-instance-method" class="tooltip">
+      <span>to_packet : Minecraft::IO</span>
+    to_packet</a>
+    
+  
+
+
+    
+
+
+    
+
+
   
     
 
@@ -686,33 +724,33 @@
 </div>
 
 
-
-
   <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Class Method Detail
+    Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="[](packet_id)-class-method">
+    <div class="entry-detail" id="new(status:UInt32,location:Vec3d,face:UInt8)-class-method">
       <div class="signature">
         
-        def self.<strong>[]</strong>(packet_id)
+        def self.<strong>new</strong>(status : UInt32, location : <a href="../../Rosegold/Vec3d.html">Vec3d</a>, face : UInt8)
 
-        <a class="method-permalink" href="#%5B%5D%28packet_id%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28status%3AUInt32%2Clocation%3AVec3d%2Cface%3AUInt8%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/states.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/serverbound/player_digging.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
   
+
+
 
 
 
@@ -725,18 +763,114 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="[](packet_id)-instance-method">
+    <div class="entry-detail" id="face:UInt8-instance-method">
       <div class="signature">
         
-        def <strong>[]</strong>(packet_id)
+        def <strong>face</strong> : UInt8
 
-        <a class="method-permalink" href="#%5B%5D%28packet_id%29-instance-method">#</a>
+        <a class="method-permalink" href="#face%3AUInt8-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/states.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/serverbound/player_digging.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="face=(face:UInt8)-instance-method">
+      <div class="signature">
+        
+        def <strong>face=</strong>(face : UInt8)
+
+        <a class="method-permalink" href="#face%3D%28face%3AUInt8%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/serverbound/player_digging.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="location:Vec3d-instance-method">
+      <div class="signature">
+        
+        def <strong>location</strong> : <a href="../../Rosegold/Vec3d.html">Vec3d</a>
+
+        <a class="method-permalink" href="#location%3AVec3d-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/serverbound/player_digging.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="location=(location:Vec3d)-instance-method">
+      <div class="signature">
+        
+        def <strong>location=</strong>(location : <a href="../../Rosegold/Vec3d.html">Vec3d</a>)
+
+        <a class="method-permalink" href="#location%3D%28location%3AVec3d%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/serverbound/player_digging.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="status:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>status</strong> : UInt32
+
+        <a class="method-permalink" href="#status%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/serverbound/player_digging.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="status=(status:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>status=</strong>(status : UInt32)
+
+        <a class="method-permalink" href="#status%3D%28status%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/serverbound/player_digging.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_packet:Minecraft::IO-instance-method">
+      <div class="signature">
+        
+        def <strong>to_packet</strong> : <a href="../../Minecraft/IO.html">Minecraft::IO</a>
+
+        <a class="method-permalink" href="#to_packet%3AMinecraft%3A%3AIO-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/23cf6e93cc25cfada82b8606c1e37224803a1670/src/rosegold/packets/serverbound/player_digging.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
