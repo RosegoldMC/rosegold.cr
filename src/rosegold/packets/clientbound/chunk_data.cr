@@ -2,7 +2,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   property \
     chunk_x : Int32,
     chunk_z : Int32,
-    heightmaps : NBT::Tag,
+    heightmaps : Minecraft::NBT::Tag,
     data : Bytes
 
   def initialize(@chunk_x, @chunk_z, @heightmaps, @data)
@@ -19,7 +19,11 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
 
   def callback(client)
     source = Minecraft::IO::Memory.new data
-    chunk = World::Chunk.new source
+    chunk = World::Chunk.new \
+      source,
+      min_y: client.dimension.min_y,
+      world_height: client.dimension.height
+
     client.dimension.load_chunk ({chunk_x, chunk_z}), chunk
   end
 

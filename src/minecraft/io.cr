@@ -1,5 +1,4 @@
 require "io/hexdump"
-require "nbt"
 require "socket"
 require "uuid"
 
@@ -71,6 +70,10 @@ module Minecraft::IO
     read_bytes Float64, ::IO::ByteFormat::BigEndian
   end
 
+  def read_ushort : UInt16
+    read_bytes UInt16, ::IO::ByteFormat::BigEndian
+  end
+
   def read_short : Int16
     read_bytes Int16, ::IO::ByteFormat::BigEndian
   end
@@ -131,7 +134,7 @@ module Minecraft::IO
   end
 
   def read_nbt : NBT::Tag
-    NBT::Reader.new(self).read_named[:tag]
+    NBT::Tag.read_named(self)
   end
 
   def read_position : Tuple(Int32, Int32, Int32)
