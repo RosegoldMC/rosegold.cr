@@ -81,7 +81,7 @@ class Rosegold::PalettedContainer
   end
 
   private def grow_from_single_state(index : Index, value : Entry) : Nil
-    @bits_per_entry = 1_u8
+    @bits_per_entry = 4_u8
     @entries_per_long = 64_u8 // bits_per_entry
     @entry_mask = (1_i64 << bits_per_entry) - 1
     @palette = [@palette.not_nil![0], value]
