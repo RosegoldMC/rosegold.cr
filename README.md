@@ -4,13 +4,13 @@ Minecraft client written in [Crystal](http://crystal-lang.org/), following the [
 
 ## Use as a standalone client
 
-0. [Install Crystal](https://crystal-lang.org/install/)
+1. [Install Crystal](https://crystal-lang.org/install/)
 1. [Install the Shards dependency manager](https://github.com/crystal-lang/shards#install)
-2. Download the code: `git clone git@github.com:grepsedawk/rosegold.cr.git`
-3. Install the dependencies: `shards install`
-4. Build the executable: `crystal build src/rosegold.cr`
-5. Launch the client: `./rosegold`
-5. Follow the instructions to log into your Minecraft account
+1. Download the code: `git clone git@github.com:grepsedawk/rosegold.cr.git`
+1. Install the dependencies: `shards install`
+1. Build the executable: `crystal build src/rosegold.cr`
+1. Launch the client: `./rosegold`
+1. Follow the instructions to log into your Minecraft account
 
 ## Use as a library
 
