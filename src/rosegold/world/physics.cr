@@ -69,7 +69,6 @@ class Rosegold::Physics
     player.feet += movement
     # TODO: this only works with gravity on
     player.on_ground = movement.y > input_velocity.y
-    player.feet = player.feet.with_y input_velocity.y if player.on_ground
 
     # anticheat requires sending these different packets
     if player.feet != bump_feet

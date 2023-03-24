@@ -18,7 +18,6 @@ class Rosegold::Client
     player : Player = Player.new,
     dimension : World::Dimension = World::Dimension.new,
     physics : Physics,
-    state : State::Status | State::Login | State::Play = State::Status.new,
     state : State::Status | State::Login | State::Play | State::Disconnected = State::Status.new,
     compression_threshold : UInt32 = 0,
     read_mutex : Mutex = Mutex.new,
