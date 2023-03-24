@@ -97,7 +97,12 @@ class Rosegold::PalettedContainer
     new_long_array = Array(Long).new(long_array.not_nil!.size * 2, 0_i64)
 
     (0.to_u32...(long_array.not_nil!.size * entries_per_long).to_u32).each do |i|
-      new_long_array[i] = self[i]
+      long_index = i // entries_per_long
+      bit_offset_in_long = (i % entries_per_long) * bits_per_entry
+      long = long_array.not_nil![long_index]
+      long &= ~(entry_mask << bit_offset_in_long) # clear previous value
+      long |= (self[i] & entry_mask) << bit_offset_in_long
+      new_long_array[long_index] = long
     end
 
     @long_array = new_long_array
