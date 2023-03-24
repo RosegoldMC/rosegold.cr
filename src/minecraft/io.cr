@@ -45,6 +45,14 @@ module Minecraft::IO
     write_full ((x & 0x3FFFFFF) << 38) | ((z & 0x3FFFFFF) << 12) | (y & 0xFFF)
   end
 
+  def write(position : Rosegold::Vec3d)
+    write_position position.x.floor.to_i, position.y.floor.to_i, position.z.floor.to_i
+  end
+
+  def write(position : Tuple(Int32, Int32, Int32))
+    write_position position[0], position[1], position[2]
+  end
+
   def read_byte
     buf = Bytes.new 1
     read_fully(buf)
