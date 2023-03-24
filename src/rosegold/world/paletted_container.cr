@@ -50,14 +50,13 @@ class Rosegold::PalettedContainer
   end
 
   def []=(index : Index, value : Entry) : Nil
-    # type checker assumes these may be changed concurrently, changing whether they are nil
     palette = self.palette
     long_array = self.long_array
     if !long_array # we're storing a single value
       if palette.not_nil![0] == value
         return # nothing to do, value is already set
       else
-        raise "Growing PalettedContainer from single-state is not implemented" # TODO
+        grow_from_single_state(index, value)
       end
     end
     entry = value
@@ -69,16 +68,39 @@ class Rosegold::PalettedContainer
           palette << value
           entry
         else
-          # the palette indices do not fit into bits_per_entry anymore
-          raise "Growing PalettedContainer palette is not implemented" # TODO
+          grow_palette(index, value)
         end
       end
     end
     long_index = index // entries_per_long
     bit_offset_in_long = (index % entries_per_long) * bits_per_entry
-    long = long_array[long_index]
+    long = long_array.not_nil![long_index]
     long &= ~(entry_mask << bit_offset_in_long) # clear previous value
-    long |= (entry & entry_mask) << bit_offset_in_long
-    long_array[long_index] = long
+    long |= (entry.not_nil! & entry_mask) << bit_offset_in_long
+    long_array.not_nil![long_index] = long
+  end
+
+  private def grow_from_single_state(index : Index, value : Entry) : Nil
+    @bits_per_entry = 1_u8
+    @entries_per_long = 64_u8 // bits_per_entry
+    @entry_mask = (1_i64 << bits_per_entry) - 1
+    @palette = [@palette.not_nil![0], value]
+    @long_array = Array(Long).new(1, 0_i64)
+    self[index] = value
+  end
+
+  private def grow_palette(index : Index, value : Entry) : Nil
+    @bits_per_entry += 1
+    @entries_per_long = 64_u8 // bits_per_entry
+    @entry_mask = (1_i64 << bits_per_entry) - 1
+    @palette.not_nil! << value
+    new_long_array = Array(Long).new(long_array.not_nil!.size * 2, 0_i64)
+
+    (0.to_u32...(long_array.not_nil!.size * entries_per_long).to_u32).each do |i|
+      new_long_array[i] = self[i]
+    end
+
+    @long_array = new_long_array
+    self[index] = value
   end
 end
