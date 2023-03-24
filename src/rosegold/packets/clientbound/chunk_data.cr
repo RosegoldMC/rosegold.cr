@@ -19,7 +19,11 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
 
   def callback(client)
     source = Minecraft::IO::Memory.new data
-    chunk = World::Chunk.new source
+    chunk = World::Chunk.new \
+      source,
+      min_y: client.dimension.min_y,
+      world_height: client.dimension.height
+
     client.dimension.load_chunk ({chunk_x, chunk_z}), chunk
   end
 
