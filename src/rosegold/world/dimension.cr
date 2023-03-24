@@ -1,6 +1,10 @@
 require "./chunk"
 
 class Rosegold::World::Dimension
+  property \
+    min_y : Int32 = 64,
+    height : Int32 = 256
+
   alias ChunkPos = {Int32, Int32}
 
   @chunks = Hash(ChunkPos, Chunk).new
