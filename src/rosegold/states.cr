@@ -59,6 +59,7 @@ class Rosegold::State::Play
     0x1d => Clientbound::UnloadChunk,
     0x0c => Clientbound::BlockChange,
     0x3f => Clientbound::MultiBlockChange,
+    0x08 => Clientbound::AcknowledgePlayerDigging,
     # 0x48 => Clientbound::HeldItemChange,
     # 0x2e => Clientbound::OpenWindow,
     # 0x13 => Clientbound::CloseWindow,
