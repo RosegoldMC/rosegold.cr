@@ -7,7 +7,6 @@ class Rosegold::Player
   PLAYER_AABB = AABBf.new -0.3, 0.0, -0.3, 0.3, 1.8, 0.3
 
   property \
-    on_ground : Bool = false,
     look : LookDeg = LookDeg::SOUTH,
     feet : Vec3d = Vec3d::ORIGIN,
     velocity : Vec3d = Vec3d::ORIGIN,
@@ -15,6 +14,8 @@ class Rosegold::Player
     food : Float32 = 0,
     saturation : Float32 = 0,
     gamemode : UInt8 = 0
+  property? \
+    on_ground : Bool = false
 
   def aabb
     PLAYER_AABB + feet

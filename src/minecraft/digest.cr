@@ -3,7 +3,7 @@ require "big"
 require "openssl_ext"
 
 class Minecraft::Digest < Digest::SHA1
-  def self.hexdigest : String
+  def self.hexdigest(&) : String
     digest = Digest::SHA1.new
     yield digest
     big = BigInt.new(OpenSSL::BN.from_bin(digest.final).to_dec)
