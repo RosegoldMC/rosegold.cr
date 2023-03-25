@@ -25,7 +25,7 @@ class Rosegold::Physics
   private getter client : Rosegold::Client
   property movement_speed : Float64 = WALK_SPEED
   property movement_target : Vec3d?
-  property jump_queued : Bool = false
+  property? jump_queued : Bool = false
   property last_feet : Vec3d?
   property last_look : LookDeg?
   property ticker : Fiber?
@@ -74,16 +74,16 @@ class Rosegold::Physics
     if player.feet != bump_feet
       if player.look != bump_look
         client.queue_packet Serverbound::PlayerPositionAndLook.new(
-          player.feet, player.look, player.on_ground,
+          player.feet, player.look, player.on_ground?,
         )
       else
-        client.queue_packet Serverbound::PlayerPosition.new player.feet, player.on_ground
+        client.queue_packet Serverbound::PlayerPosition.new player.feet, player.on_ground?
       end
     else
       if player.look != bump_look
-        client.queue_packet Serverbound::PlayerLook.new player.look, player.on_ground
+        client.queue_packet Serverbound::PlayerLook.new player.look, player.on_ground?
       else
-        client.queue_packet Serverbound::PlayerNoMovement.new player.on_ground
+        client.queue_packet Serverbound::PlayerNoMovement.new player.on_ground?
       end
     end
   end
@@ -120,7 +120,7 @@ class Rosegold::Physics
       move_horiz_vec = Vec3d::ORIGIN
     end
 
-    if jump_queued && player.on_ground
+    if jump_queued? && player.on_ground?
       @jump_queued = false
       vel_y = JUMP_FORCE
     else

@@ -2,7 +2,8 @@ class Rosegold::Clientbound::AcknowledgePlayerDigging < Rosegold::Clientbound::P
   property \
     location : Tuple(Int32, Int32, Int32),
     block : UInt32,
-    status : UInt32,
+    status : UInt32
+  property? \
     successful : Bool
 
   def initialize(@location, @block, @status, @successful)

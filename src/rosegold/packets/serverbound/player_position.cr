@@ -6,7 +6,8 @@ class Rosegold::Serverbound::PlayerPosition < Rosegold::Serverbound::Packet
   property \
     x : Float64,
     y : Float64,
-    z : Float64,
+    z : Float64
+  property? \
     on_ground : Bool
 
   def initialize(@x, @y, @z, @on_ground); end
@@ -21,7 +22,7 @@ class Rosegold::Serverbound::PlayerPosition < Rosegold::Serverbound::Packet
       buffer.write x
       buffer.write y
       buffer.write z
-      buffer.write on_ground
+      buffer.write on_ground?
     end
   end
 end

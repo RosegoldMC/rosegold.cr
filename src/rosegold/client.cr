@@ -43,7 +43,7 @@ class Rosegold::Client
     compression_threshold.positive?
   end
 
-  def start
+  def start(&)
     start.try do |bot|
       until state.is_a? State::Play
         sleep 0.1

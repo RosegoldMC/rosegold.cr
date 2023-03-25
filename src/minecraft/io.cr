@@ -133,8 +133,8 @@ module Minecraft::IO
     UUID.new buffer
   end
 
-  def read_nbt : NBT::Tag
-    NBT::Tag.read_named(self)
+  def read_nbt : Minecraft::NBT::Tag
+    NBT::Tag.read_named(self)[1]
   end
 
   def read_position : Tuple(Int32, Int32, Int32)

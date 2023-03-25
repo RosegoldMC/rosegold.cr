@@ -3,7 +3,6 @@ require "../../../minecraft/nbt"
 class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   property \
     entity_id : Int32,
-    hardcore : Bool,
     gamemode : UInt8,
     previous_gamemode : UInt8,
     world_count : UInt32,
@@ -15,10 +14,13 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
     max_players : UInt32,
     view_distance : UInt32,
     simulation_distance : UInt32,
-    reduced_debug_info : Bool,
-    enable_respawn_screen : Bool,
+    gamemode : UInt8
+  property? \
+    hardcore : Bool,
     is_debug : Bool,
-    is_flat : Bool
+    is_flat : Bool,
+    reduced_debug_info : Bool,
+    enable_respawn_screen : Bool
 
   def initialize(
     @entity_id, @hardcore, @gamemode, @previous_gamemode, @world_count, @dimension_names,

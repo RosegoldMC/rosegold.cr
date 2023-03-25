@@ -10,7 +10,8 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     yaw_deg_raw : Float32,
     pitch_deg_raw : Float32,
     relative_flags : UInt8,
-    teleport_id : UInt32,
+    teleport_id : UInt32
+  property? \
     dismount_vehicle : Bool
 
   def initialize(
@@ -63,7 +64,7 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
 
     client.queue_packet Serverbound::TeleportConfirm.new teleport_id
 
-    Log.debug { "Position reset: #{player.feet} #{player.look} dismount=#{dismount_vehicle} flags=#{relative_flags}" }
+    Log.debug { "Position reset: #{player.feet} #{player.look} dismount=#{dismount_vehicle?} flags=#{relative_flags}" }
 
     client.physics.start
 

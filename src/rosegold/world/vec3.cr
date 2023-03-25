@@ -103,7 +103,7 @@ module Rosegold::Vec3(T)
 
   def with_length(length : T) : self
     my_length = this.len
-    if (my_length === 0)
+    if my_length === 0
       self * 0
     else
       self * (length / my_length)

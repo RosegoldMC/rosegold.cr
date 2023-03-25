@@ -1,6 +1,6 @@
 module Minecraft::NBT
   abstract class Tag
-    def self.read(io : IO, tag_type = io.read_byte) : Tag
+    def self.read(io : IO, tag_type = io.read_byte, &) : Tag # ameba:disable Metrics/CyclomaticComplexity
       yield tag_type
 
       case tag_type
@@ -262,7 +262,7 @@ module Minecraft::NBT
 
       list_length.times do
         tag = Tag.read io, list_tag_type
-        tags << tag.not_nil!
+        tags << tag
       end
 
       new(tags)
