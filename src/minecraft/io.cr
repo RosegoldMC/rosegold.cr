@@ -17,7 +17,7 @@ module Minecraft::IO
   end
 
   # writes all bytes even for small magnitudes, not var int
-  def write_full(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64)
+  def write_full(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64 | Float32 | Float64)
     write_bytes value, ::IO::ByteFormat::BigEndian
   end
 
