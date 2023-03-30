@@ -668,7 +668,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/1c5d0601be000a81a615b032c1879136193dd712/src/minecraft/nbt.cr#L178" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8e8954240f9101c64f29d995bd5c5cc0df8479b/src/minecraft/nbt.cr#L257" target="_blank">
         minecraft/nbt.cr
       </a>
     
@@ -695,7 +695,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#read%28io%3AIO%29%3AStringTag-class-method" class="signature"><strong>.read</strong>(io : IO) : StringTag</a>
+        <a href="#read%28io%3AMinecraft%3A%3AIO%29%3AStringTag-class-method" class="signature"><strong>.read</strong>(io : Minecraft::IO) : StringTag</a>
         
       </li>
     
@@ -721,7 +721,17 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#tag_type%3AUInt8-instance-method" class="signature"><strong>#tag_type</strong> : UInt8</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#value%3AString-instance-method" class="signature"><strong>#value</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#write%28io%3AMinecraft%3A%3AIO%29-instance-method" class="signature"><strong>#write</strong>(io : Minecraft::IO)</a>
         
       </li>
     
@@ -743,9 +753,19 @@
     []</a>, 
     
   
+    <a href="../../Minecraft/NBT/Tag.html#tag_type%3AUInt8-instance-method" class="tooltip">
+      <span>tag_type : UInt8</span>
+    tag_type</a>, 
+    
+  
     <a href="../../Minecraft/NBT/Tag.html#value-instance-method" class="tooltip">
       <span>value</span>
-    value</a>
+    value</a>, 
+    
+  
+    <a href="../../Minecraft/NBT/Tag.html#write_named%28io%3AMinecraft%3A%3AIO%2Cname%3AString%29-instance-method" class="tooltip">
+      <span>write_named(io : Minecraft::IO, name : String)</span>
+    write_named</a>
     
   
 
@@ -818,23 +838,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1c5d0601be000a81a615b032c1879136193dd712/src/minecraft/nbt.cr#L181" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8e8954240f9101c64f29d995bd5c5cc0df8479b/src/minecraft/nbt.cr#L264" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read(io:IO):StringTag-class-method">
+    <div class="entry-detail" id="read(io:Minecraft::IO):StringTag-class-method">
       <div class="signature">
         
-        def self.<strong>read</strong>(io : <a href="../../Minecraft/IO.html">IO</a>) : <a href="../../Minecraft/NBT/StringTag.html">StringTag</a>
+        def self.<strong>read</strong>(io : <a href="../../Minecraft/IO.html">Minecraft::IO</a>) : <a href="../../Minecraft/NBT/StringTag.html">StringTag</a>
 
-        <a class="method-permalink" href="#read%28io%3AIO%29%3AStringTag-class-method">#</a>
+        <a class="method-permalink" href="#read%28io%3AMinecraft%3A%3AIO%29%3AStringTag-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1c5d0601be000a81a615b032c1879136193dd712/src/minecraft/nbt.cr#L184" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8e8954240f9101c64f29d995bd5c5cc0df8479b/src/minecraft/nbt.cr#L267" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -864,7 +884,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1c5d0601be000a81a615b032c1879136193dd712/src/minecraft/nbt.cr#L188" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8e8954240f9101c64f29d995bd5c5cc0df8479b/src/minecraft/nbt.cr#L276" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="tag_type:UInt8-instance-method">
+      <div class="signature">
+        
+        def <strong>tag_type</strong> : UInt8
+
+        <a class="method-permalink" href="#tag_type%3AUInt8-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8e8954240f9101c64f29d995bd5c5cc0df8479b/src/minecraft/nbt.cr#L258" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -880,7 +916,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1c5d0601be000a81a615b032c1879136193dd712/src/minecraft/nbt.cr#L179" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8e8954240f9101c64f29d995bd5c5cc0df8479b/src/minecraft/nbt.cr#L262" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="write(io:Minecraft::IO)-instance-method">
+      <div class="signature">
+        
+        def <strong>write</strong>(io : <a href="../../Minecraft/IO.html">Minecraft::IO</a>)
+
+        <a class="method-permalink" href="#write%28io%3AMinecraft%3A%3AIO%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8e8954240f9101c64f29d995bd5c5cc0df8479b/src/minecraft/nbt.cr#L271" target="_blank">View source</a>]
         
       </div>
     </div>
