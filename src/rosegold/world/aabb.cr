@@ -4,7 +4,16 @@ require "./vec3"
 module Rosegold::AABB(T, V)
   getter min : V, max : V
 
-  def initialize(@min : V, @max : V); end
+  def initialize(min : V, max : V)
+    @min = V.new(
+      Math.min(min.x, max.x),
+      Math.min(min.y, max.y),
+      Math.min(min.z, max.z))
+    @max = V.new(
+      Math.max(min.x, max.x),
+      Math.max(min.y, max.y),
+      Math.max(min.z, max.z))
+  end
 
   def offset(vec : V) : self
     self.class.new min + vec, max + vec
@@ -24,6 +33,10 @@ module Rosegold::AABB(T, V)
 
   def grow(aabb : AABB(T, V)) : self
     self.class.new min + aabb.min, max + aabb.max
+  end
+
+  def *(scalar : T) : self
+    self.class.new min * scalar, max * scalar
   end
 
   def contains?(vec : V) : Bool

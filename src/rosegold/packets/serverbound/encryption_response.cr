@@ -7,7 +7,7 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x01_u8
 
   UUID         = ENV["UUID"]
-  ACCESS_TOKEN = ENV["ACCESS_TOKEN"]
+  ACCESS_TOKEN = ENV["ACCESS_TOKEN"]?
 
   property \
     encryption_request : Rosegold::Clientbound::EncryptionRequest,

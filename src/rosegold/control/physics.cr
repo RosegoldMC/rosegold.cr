@@ -226,7 +226,7 @@ class Rosegold::Physics
     obstacles = obstacles.reject &.contains? start
 
     result = Raytracing.raytrace start, velocity, obstacles
-    movement = result.try { |r| start - r.intercept } || velocity
+    movement = result.try { |r| r.intercept - start } || velocity
     collided_x = movement.x != velocity.x
     collided_y = movement.y != velocity.y
     collided_z = movement.z != velocity.z
@@ -237,7 +237,7 @@ class Rosegold::Physics
       # gravity would pull us into the step, preventing stepping
       step_velocity = velocity.with_y 0
       step_result = Raytracing.raytrace step_start, step_velocity, obstacles
-      step_movement = step_result.try { |r| start - r.intercept } || step_velocity
+      step_movement = step_result.try { |r| r.intercept - start } || step_velocity
 
       step_different_x = step_movement.x != movement.x
       step_different_z = step_movement.z != movement.z
@@ -272,6 +272,7 @@ class Rosegold::Physics
     start : Vec3d, movement : Vec3d, entity_aabb : AABBf, dimension : Dimension
   ) : Array(AABBd)
     entity_aabb = entity_aabb.to_f64
+    grow_aabb = entity_aabb * -1
     # get all blocks that may potentially collide
     min_hull, max_hull = AABBd.containing_all(
       entity_aabb.offset(start),
@@ -289,7 +290,7 @@ class Rosegold::Physics
       x, y, z = block_coords
       dimension.block_state(x, y, z).try do |block_state|
         block_shape = MCData::MC118.block_state_collision_shapes[block_state]
-        block_shape.map &.to_f64.offset(x, y, z).grow(entity_aabb)
+        block_shape.map &.to_f64.offset(x, y, z).grow(grow_aabb)
       end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
     end
   end
