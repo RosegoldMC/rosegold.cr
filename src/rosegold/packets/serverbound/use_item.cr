@@ -10,7 +10,7 @@ class Rosegold::Serverbound::UseItem < Rosegold::Serverbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write PACKET_ID
+      buffer.write @@packet_id
       buffer.write hand
     end.to_slice
   end

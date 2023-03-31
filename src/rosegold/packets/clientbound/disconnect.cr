@@ -12,7 +12,7 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.connection.try &.disconnect reason
+    client.connection.disconnect reason
   end
 end
 
