@@ -80,7 +80,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     state : Hash(UInt8, InboundPacket.class)
   ) : InboundPacket?
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
-      pkt_id = pkt_io.read_byte.not_nil!
+      pkt_id = pkt_io.read_byte || raise "Connection closed"
       pkt_type = state[pkt_id]?
       return nil unless pkt_type
       return nil unless pkt_type.responds_to? :read

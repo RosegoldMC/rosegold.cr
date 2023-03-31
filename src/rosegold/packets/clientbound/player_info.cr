@@ -58,20 +58,20 @@ class Rosegold::Clientbound::PlayerInfo < Rosegold::Clientbound::Packet
         buffer.write player.uuid
         case action
         when .add?
-          buffer.write player.name.not_nil! # ameba:disable
+          buffer.write player.name.not_nil! # ameba:disable Lint/NotNil
           buffer.write player.properties.size
           player.properties.each do |prop|
             buffer.write prop.name
             buffer.write prop.value
             buffer.write_opt_string prop.signature
           end
-          buffer.write player.gamemode.not_nil! # ameba:disable
-          buffer.write player.ping.not_nil!     # ameba:disable
+          buffer.write player.gamemode.not_nil! # ameba:disable Lint/NotNil
+          buffer.write player.ping.not_nil!     # ameba:disable Lint/NotNil
           buffer.write_opt_string player.display_name.try &.to_json
         when .gamemode?
-          buffer.write player.gamemode.not_nil! # ameba:disable
+          buffer.write player.gamemode.not_nil! # ameba:disable Lint/NotNil
         when .ping?
-          buffer.write player.ping.not_nil! # ameba:disable
+          buffer.write player.ping.not_nil! # ameba:disable Lint/NotNil
         when .display_name?
           buffer.write_opt_string player.display_name.try &.to_json
         when .remove?

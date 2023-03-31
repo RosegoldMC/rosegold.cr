@@ -31,9 +31,8 @@ class Rosegold::Client
     @physics = Physics.new self
   end
 
-  def connection
-    raise "Client was never connected" if @connection.nil?
-    @connection.not_nil!
+  def connection : Connection::Client
+    @connection || raise "Client was never connected"
   end
 
   def connected?
@@ -93,7 +92,7 @@ class Rosegold::Client
     connection.state = ProtocolState::STATUS.clientbound
 
     connection.send_packet Serverbound::StatusRequest.new
-    connection.read_packet.not_nil!
+    connection.read_packet || raise "Server responded with unknown packet"
   end
 
   def on(packet_type : T.class, &block : T ->) forall T
