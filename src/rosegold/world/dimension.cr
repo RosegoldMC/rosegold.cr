@@ -1,4 +1,3 @@
-require "nbt"
 require "./chunk"
 
 class Rosegold::Dimension

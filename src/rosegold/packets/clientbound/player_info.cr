@@ -48,6 +48,7 @@ class Rosegold::Clientbound::PlayerInfo < Rosegold::Clientbound::Packet
     self.new(action, players)
   end
 
+  # TODO rewrite without .not_nil! checks
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id
@@ -57,20 +58,20 @@ class Rosegold::Clientbound::PlayerInfo < Rosegold::Clientbound::Packet
         buffer.write player.uuid
         case action
         when .add?
-          buffer.write player.name.not_nil!
+          buffer.write player.name.not_nil! # ameba:disable
           buffer.write player.properties.size
           player.properties.each do |prop|
             buffer.write prop.name
             buffer.write prop.value
             buffer.write_opt_string prop.signature
           end
-          buffer.write player.gamemode.not_nil!
-          buffer.write player.ping.not_nil!
+          buffer.write player.gamemode.not_nil! # ameba:disable
+          buffer.write player.ping.not_nil!     # ameba:disable
           buffer.write_opt_string player.display_name.try &.to_json
         when .gamemode?
-          buffer.write player.gamemode.not_nil!
+          buffer.write player.gamemode.not_nil! # ameba:disable
         when .ping?
-          buffer.write player.ping.not_nil!
+          buffer.write player.ping.not_nil! # ameba:disable
         when .display_name?
           buffer.write_opt_string player.display_name.try &.to_json
         when .remove?
