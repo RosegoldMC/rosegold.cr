@@ -25,7 +25,7 @@ class Rosegold::Physics
 
   private getter client : Rosegold::Client
   private property ticker : Fiber?
-  property jump_queued : Bool = false
+  property? jump_queued : Bool = false
   property movement_speed : Float64 = WALK_SPEED
   private getter movement_action : Action(Vec3d)?
   private getter look_action : Action(Look)?
@@ -132,9 +132,10 @@ class Rosegold::Physics
     movement, next_velocity = Physics.predict_movement_collision(
       player.feet, input_velocity, Player::DEFAULT_AABB, dimension)
 
-    action_mutex.synchronize do
-      look_action = @look_action
+    look_action = action_mutex.synchronize do
+      action = @look_action
       @look_action = nil
+      action
     end
     look = look_action.try(&.target) || player.look
 
@@ -199,7 +200,7 @@ class Rosegold::Physics
       move_horiz_vec = Vec3d::ORIGIN
     end
 
-    if jump_queued && player.on_ground?
+    if jump_queued? && player.on_ground?
       @jump_queued = false
       vel_y = JUMP_FORCE
     else
@@ -219,6 +220,7 @@ class Rosegold::Physics
   end
 
   # :ditto:
+  # ameba:disable Metrics/CyclomaticComplexity
   def self.predict_movement_collision(start : Vec3d, velocity : Vec3d, obstacles : Array(AABBd))
     # we can freely move in blocks that we already collide with before the movement
     obstacles = obstacles.reject &.contains? start
@@ -247,11 +249,11 @@ class Rosegold::Physics
         down_end = down_result.try(&.intercept) || step_end + down_velocity
 
         movement = down_end - start
-        new_velocity = velocity.with_y 0
         step_collided_x = step_movement.x != velocity.x
         step_collided_z = step_movement.z != velocity.z
         collided_x = step_collided_x
         collided_z = step_collided_z
+        collided_y = true
       end
     end
 

@@ -78,6 +78,7 @@ module Rosegold::Raytracing
     end || {min_scalar, min_result}
   end
 
+  # ameba:disable Metrics/CyclomaticComplexity
   private def self.intersect_plane(
     ray : Ray, box : AABBd, plane_coord : Float64, axis : Axis
   ) : Tuple(Float64, Vec3d)?

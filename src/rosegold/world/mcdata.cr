@@ -85,11 +85,11 @@ class Rosegold::MCData
     @[JSON::Field(key: "stackSize")]
     getter stack_size : UInt8
     @[JSON::Field(key: "maxDurability")]
-    getter max_durability : UInt16
+    getter max_durability : UInt16?
     @[JSON::Field(key: "repairWith")]
-    getter repair_with : Array(String)
+    getter repair_with : Array(String)?
     @[JSON::Field(key: "enchantCategories")]
-    getter enchant_categories : Array(String)
+    getter enchant_categories : Array(String)?
   end
 
   # entries of blocks.json

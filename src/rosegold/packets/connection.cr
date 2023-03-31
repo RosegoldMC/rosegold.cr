@@ -112,10 +112,10 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
       end.to_slice
     else
       packet_bytes
-    end.try do |packet_bytes|
+    end.try do |bytes_compressed|
       write_mutex.synchronize do
-        io.write packet_bytes.size.to_u32
-        io.write packet_bytes
+        io.write bytes_compressed.size.to_u32
+        io.write bytes_compressed
         io.flush
       end
     end

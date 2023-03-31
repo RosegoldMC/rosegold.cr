@@ -8,7 +8,8 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
     dimension_name : String,
     hashed_seed : Int64,
     gamemode : Int8,
-    prev_gamemode : Int8,
+    prev_gamemode : Int8
+  property? \
     is_debug : Bool,
     is_flat : Bool,
     copy_metadata : Bool

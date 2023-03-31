@@ -39,7 +39,8 @@ struct Rosegold::Look
     yaw_rad = Math.atan2(-vec.x, vec.z)
     ground_distance = Math.sqrt(vec.x * vec.x + vec.z * vec.z)
     pitch_rad = -Math.atan2(vec.y, ground_distance)
-    return Look.from_rad(yaw_rad.as_f32, pitch_rad.as_f32)
+
+    Look.from_rad(yaw_rad.as_f32, pitch_rad.as_f32)
   end
 
   def inspect(io)

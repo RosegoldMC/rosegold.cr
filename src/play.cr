@@ -1,4 +1,5 @@
 require "./rosegold"
+require "./rosegold/bot"
 
 include Rosegold
 
@@ -9,7 +10,9 @@ def show_help
   puts "\\position - Displays the current coordinates of the player"
 end
 
-Client.new("localhost").join_game do |bot|
+Client.new("localhost").join_game do |client|
+  bot = Rosegold::Bot.new client
+
   show_help
 
   spawn do

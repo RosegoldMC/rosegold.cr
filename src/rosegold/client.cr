@@ -1,6 +1,5 @@
 require "socket"
 require "../minecraft/io"
-require "./bot"
 require "./control/*"
 require "./packets/connection"
 require "./packets/packet"
@@ -32,20 +31,20 @@ class Rosegold::Client
     @physics = Physics.new self
   end
 
-  # Raises an error if this client has never been connected
   def connection
+    raise "Client was never connected" if @connection.nil?
     @connection.not_nil!
   end
 
   def connected?
-    @connection && !connection.close_reason
+    !@connection.nil? && !connection.close_reason
   end
 
   def state=(state)
     connection.state = state
   end
 
-  def join_game
+  def join_game(&)
     connect
 
     until connection.state == ProtocolState::PLAY.clientbound
@@ -53,8 +52,7 @@ class Rosegold::Client
     end
     Log.info { "Ingame" }
 
-    bot = Bot.new self
-    with bot yield bot
+    yield self
   end
 
   def connect
