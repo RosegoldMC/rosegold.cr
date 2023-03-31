@@ -83,7 +83,7 @@ module Minecraft::IO
   def read_signed_byte
     buf = Bytes.new 1
     read_fully(buf)
-    buf[0].to_i8
+    buf[0].to_i8!
   end
 
   def read_bool
