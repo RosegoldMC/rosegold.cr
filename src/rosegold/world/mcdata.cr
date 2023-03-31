@@ -42,7 +42,7 @@ class Rosegold::MCData
         # example (slab): [["type=top", "waterlogged=true"], ["type=top", "waterlogged=false"], ["type=bottom", "waterlogged=true"], ["type=bottom", "waterlogged=false"], ["type=double", "waterlogged=true"], ["type=double", "waterlogged=false"]]
         prop_combos = Indexable.cartesian_product block.states.map { |prop|
           case prop.type
-          when BlockPropertyType::ENUM; prop.values.not_nil!
+          when BlockPropertyType::ENUM; prop.values.not_nil! # ameba:disable Lint/NotNil
           when BlockPropertyType::INT ; (0...prop.num_values)
           when BlockPropertyType::BOOL; ["true", "false"] # weird order but that's how it is
           else

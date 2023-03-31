@@ -1,5 +1,4 @@
 require "io/hexdump"
-require "nbt"
 require "socket"
 require "uuid"
 require "../rosegold/world/slot"
@@ -24,7 +23,7 @@ module Minecraft::IO
   end
 
   # writes all bytes even for small magnitudes, not var int
-  def write_full(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64)
+  def write_full(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64 | Float32 | Float64)
     write_bytes value, ::IO::ByteFormat::BigEndian
   end
 
@@ -67,6 +66,14 @@ module Minecraft::IO
     write_full ((x & 0x3FFFFFF) << 38) | ((z & 0x3FFFFFF) << 12) | (y & 0xFFF)
   end
 
+  def write(position : Rosegold::Vec3d)
+    write_position position.x.floor.to_i, position.y.floor.to_i, position.z.floor.to_i
+  end
+
+  def write(position : Tuple(Int32, Int32, Int32))
+    write_position position[0], position[1], position[2]
+  end
+
   def read_byte
     buf = Bytes.new 1
     read_fully(buf)
@@ -89,6 +96,10 @@ module Minecraft::IO
 
   def read_double : Float64
     read_bytes Float64, ::IO::ByteFormat::BigEndian
+  end
+
+  def read_ushort : UInt16
+    read_bytes UInt16, ::IO::ByteFormat::BigEndian
   end
 
   def read_short : Int16
@@ -155,8 +166,8 @@ module Minecraft::IO
     UUID.new buffer
   end
 
-  def read_nbt : NBT::Tag
-    NBT::Reader.new(self).read_named[:tag]
+  def read_nbt : Minecraft::NBT::Tag
+    NBT::Tag.read_named(self)[1]
   end
 
   def read_slot : Rosegold::Slot

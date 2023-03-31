@@ -1,27 +1,27 @@
-require "nbt"
+require "../../../minecraft/nbt"
 require "../packet"
 
 class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x26_u8
 
   property entity_id : Int32
-  property hardcore : Bool
+  property? hardcore : Bool
   property gamemode : Int8
-  property prev_gamemode : Int8
+  property previous_gamemode : Int8
   property dimension_names : Array(String)
-  property dimension_codec : NBT::Tag
-  property dimension : NBT::Tag
+  property dimension_codec : Minecraft::NBT::Tag
+  property dimension : Minecraft::NBT::Tag
   property dimension_name : String
   property hashed_seed : Int64
   property max_players : UInt32
   property view_distance : UInt32
   property simulation_distance : UInt32
-  property reduced_debug_info : Bool
-  property enable_respawn_screen : Bool
-  property is_debug : Bool
-  property is_flat : Bool
+  property? reduced_debug_info : Bool
+  property? enable_respawn_screen : Bool
+  property? is_debug : Bool
+  property? is_flat : Bool
 
-  def initialize(@entity_id, @hardcore, @gamemode, @prev_gamemode, @dimension_names, @dimension_codec, @dimension, @dimension_name, @hashed_seed, @max_players, @view_distance, @simulation_distance, @reduced_debug_info, @enable_respawn_screen, @is_debug, @is_flat); end
+  def initialize(@entity_id, @hardcore, @gamemode, @previous_gamemode, @dimension_names, @dimension_codec, @dimension, @dimension_name, @hashed_seed, @max_players, @view_distance, @simulation_distance, @reduced_debug_info, @enable_respawn_screen, @is_debug, @is_flat); end
 
   def self.read(io)
     self.new(

@@ -5,7 +5,8 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
 
   property \
     yaw_deg : Float32,
-    pitch_deg : Float32,
+    pitch_deg : Float32
+  property? \
     on_ground : Bool
 
   def initialize(@yaw_deg, @pitch_deg, @on_ground); end
@@ -19,7 +20,7 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
       buffer.write @@packet_id
       buffer.write yaw_deg
       buffer.write pitch_deg
-      buffer.write on_ground
+      buffer.write on_ground?
     end.to_slice
   end
 end

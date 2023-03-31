@@ -4,7 +4,7 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x3d_u8
 
   property \
-    dimension : NBT::Tag,
+    dimension : Minecraft::NBT::Tag,
     dimension_name : String,
     hashed_seed : Int64,
     gamemode : Int8,

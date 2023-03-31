@@ -199,7 +199,7 @@ class Rosegold::Physics
       move_horiz_vec = Vec3d::ORIGIN
     end
 
-    if jump_queued && player.on_ground
+    if jump_queued && player.on_ground?
       @jump_queued = false
       vel_y = JUMP_FORCE
     else

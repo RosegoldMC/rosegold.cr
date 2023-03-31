@@ -1,4 +1,3 @@
-require "nbt"
 require "../packet"
 
 class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
@@ -7,7 +6,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   property \
     chunk_x : Int32,
     chunk_z : Int32,
-    heightmaps : NBT::Tag,
+    heightmaps : Minecraft::NBT::Tag,
     data : Bytes
 
   def initialize(@chunk_x, @chunk_z, @heightmaps, @data); end

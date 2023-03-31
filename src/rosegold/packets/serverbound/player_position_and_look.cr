@@ -7,7 +7,8 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
 
   property \
     feet : Vec3d,
-    look : Look,
+    look : Look
+  property? \
     on_ground : Bool
 
   def initialize(@feet, @look, @on_ground); end
@@ -20,7 +21,7 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
       buffer.write feet.z
       buffer.write look.yaw_deg
       buffer.write look.pitch_deg
-      buffer.write on_ground
+      buffer.write on_ground?
     end.to_slice
   end
 end

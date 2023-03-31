@@ -6,8 +6,8 @@ class Rosegold::PalettedContainer
   private getter bits_per_entry : UInt8
   private getter entries_per_long : UInt8
   private getter entry_mask : Long
-  private getter long_array : Array(Long)?
-  private getter palette : Array(Entry)?
+  private getter long_array : Array(Long)
+  private getter palette : Array(Entry)
 
   # TODO read+write lock
 
@@ -19,13 +19,12 @@ class Rosegold::PalettedContainer
       @entry_mask = 0
       num_longs = io.read_var_int
       raise "Unexpected num_longs=#{num_longs} should be 0" if num_longs > 0
-      @long_array = nil
+      @long_array = [] of Long
       return
     end
 
     if bits_per_entry >= num_bits_direct
-      @palette = nil # long_array stores the values directly
-
+      @palette = [] of Entry
     else
       @palette = Array(Entry).new(io.read_var_int) { io.read_var_int.to_u16 }
     end
@@ -41,7 +40,7 @@ class Rosegold::PalettedContainer
 
   def [](index : Index) : Entry
     long_array = self.long_array
-    return palette.not_nil![0] if !long_array
+    return palette.[0] if long_array.empty?
     long_index = index // entries_per_long
     bit_offset_in_long = (index % entries_per_long) * bits_per_entry
     value = long_array[long_index] >> bit_offset_in_long
@@ -50,18 +49,17 @@ class Rosegold::PalettedContainer
   end
 
   def []=(index : Index, value : Entry) : Nil
-    # type checker assumes these may be changed concurrently, changing whether they are nil
     palette = self.palette
     long_array = self.long_array
-    if !long_array # we're storing a single value
-      if palette.not_nil![0] == value
+    if long_array.empty? # we're storing a single value
+      if palette[0] == value
         return # nothing to do, value is already set
       else
-        raise "Growing PalettedContainer from single-state is not implemented" # TODO
+        grow_from_single_state(index, value)
       end
     end
     entry = value
-    if palette
+    unless palette.empty?
       entry = palette.index(value) || begin
         max_palette_size = 1_u64 << bits_per_entry
         if palette.size < max_palette_size
@@ -69,16 +67,44 @@ class Rosegold::PalettedContainer
           palette << value
           entry
         else
-          # the palette indices do not fit into bits_per_entry anymore
-          raise "Growing PalettedContainer palette is not implemented" # TODO
+          grow_palette(index, value)
         end
       end
     end
     long_index = index // entries_per_long
     bit_offset_in_long = (index % entries_per_long) * bits_per_entry
     long = long_array[long_index]
-    long &= ~(entry_mask << bit_offset_in_long) # clear previous value
-    long |= (entry & entry_mask) << bit_offset_in_long
+    long &= ~(entry_mask << bit_offset_in_long)                 # clear previous value
+    long |= (entry.not_nil! & entry_mask) << bit_offset_in_long # ameba:disable Lint/NotNil
     long_array[long_index] = long
+  end
+
+  private def grow_from_single_state(index : Index, value : Entry) : Nil
+    @bits_per_entry = 4_u8
+    @entries_per_long = 64_u8 // bits_per_entry
+    @entry_mask = (1_i64 << bits_per_entry) - 1
+    @palette = [@palette[0], value]
+    @long_array = Array(Long).new(1, 0_i64)
+    self[index] = value
+  end
+
+  private def grow_palette(index : Index, value : Entry) : Nil
+    @bits_per_entry += 1
+    @entries_per_long = 64_u8 // bits_per_entry
+    @entry_mask = (1_i64 << bits_per_entry) - 1
+    @palette << value
+    new_long_array = Array(Long).new(long_array.size * 2, 0_i64)
+
+    (0.to_u32...(long_array.size * entries_per_long).to_u32).each do |i|
+      long_index = i // entries_per_long
+      bit_offset_in_long = (i % entries_per_long) * bits_per_entry
+      long = long_array[long_index]
+      long &= ~(entry_mask << bit_offset_in_long) # clear previous value
+      long |= (self[i] & entry_mask) << bit_offset_in_long
+      new_long_array[long_index] = long
+    end
+
+    @long_array = new_long_array
+    self[index] = value
   end
 end

@@ -7,19 +7,19 @@ class Rosegold::Dimension
   getter chunks = Hash(ChunkPos, Chunk).new
 
   getter name : String
-  getter nbt : NBT::Tag
+  getter nbt : Minecraft::NBT::Tag
   getter min_y = -64
   getter world_height = 256 + 64 + 64
 
   def initialize(@name, @nbt)
-    @min_y = @nbt["min_y"].as_i
-    @world_height = @nbt["height"].as_i
+    @min_y = @nbt["min_y"].as_i32
+    @world_height = @nbt["height"].as_i32
   end
 
   def self.new
-    self.new "minecraft:overworld", NBT::Tag.new({
-      "min_y"  => NBT::Tag.new(-64_i32),
-      "height" => NBT::Tag.new(384_i32),
+    self.new "minecraft:overworld", Minecraft::NBT::CompoundTag.new({
+      "min_y"  => Minecraft::NBT::IntTag.new(-64_i32).as(Minecraft::NBT::Tag),
+      "height" => Minecraft::NBT::IntTag.new(384_i32).as(Minecraft::NBT::Tag),
     })
   end
 

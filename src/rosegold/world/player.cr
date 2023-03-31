@@ -10,7 +10,6 @@ class Rosegold::Player
 
   property \
     entity_id : Int32 = 0,
-    on_ground : Bool = false,
     look : Look = Look::SOUTH,
     feet : Vec3d = Vec3d::ORIGIN,
     velocity : Vec3d = Vec3d::ORIGIN,
@@ -19,6 +18,8 @@ class Rosegold::Player
     saturation : Float32 = 0,
     hotbar_selection : UInt16 = 0,
     gamemode : Int8 = 0
+  property? \
+    on_ground : Bool = false
 
   def aabb
     DEFAULT_AABB + feet # TODO depends on sneaking/crawling/swimming
