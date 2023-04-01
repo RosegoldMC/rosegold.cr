@@ -34,5 +34,3 @@ class Rosegold::Clientbound::Chat < Rosegold::Clientbound::Packet
     Log.info { "[CHAT] " + message.to_s }
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::Chat

@@ -2,6 +2,7 @@ require "../packet"
 
 class Rosegold::Serverbound::LoginStart < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x00_u8
+  class_getter state = Rosegold::ProtocolState::LOGIN
 
   property username : String
 
@@ -14,5 +15,3 @@ class Rosegold::Serverbound::LoginStart < Rosegold::Serverbound::Packet
     end.to_slice
   end
 end
-
-Rosegold::ProtocolState::LOGIN.register Rosegold::Serverbound::LoginStart

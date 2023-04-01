@@ -2,6 +2,7 @@ require "../packet"
 
 class Rosegold::Clientbound::EncryptionRequest < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x01_u8
+  class_getter state = Rosegold::ProtocolState::LOGIN
 
   property \
     server_id : String,
@@ -30,5 +31,3 @@ class Rosegold::Clientbound::EncryptionRequest < Rosegold::Clientbound::Packet
       encryption_response.shared_secret
   end
 end
-
-Rosegold::ProtocolState::LOGIN.register Rosegold::Clientbound::EncryptionRequest

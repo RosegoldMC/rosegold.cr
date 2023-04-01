@@ -15,5 +15,3 @@ class Rosegold::Serverbound::SwingArm < Rosegold::Serverbound::Packet
     end.to_slice
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Serverbound::SwingArm

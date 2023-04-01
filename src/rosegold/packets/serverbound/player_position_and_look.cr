@@ -25,5 +25,3 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
     end.to_slice
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Serverbound::PlayerPositionAndLook

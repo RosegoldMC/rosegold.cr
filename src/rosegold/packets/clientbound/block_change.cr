@@ -22,5 +22,3 @@ class Rosegold::Clientbound::BlockChange < Rosegold::Clientbound::Packet
     client.dimension.set_block_state x, y, z, block_state
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::BlockChange

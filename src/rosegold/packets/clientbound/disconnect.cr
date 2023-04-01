@@ -15,5 +15,3 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
     client.connection.disconnect reason
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::Disconnect

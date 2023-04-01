@@ -15,5 +15,3 @@ class Rosegold::Clientbound::Ping < Rosegold::Clientbound::Packet
     client.queue_packet Serverbound::Pong.new ping_id
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::Ping

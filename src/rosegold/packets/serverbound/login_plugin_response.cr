@@ -2,6 +2,7 @@ require "../packet"
 
 class Rosegold::Serverbound::LoginPluginResponse < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x02_u8
+  class_getter state = Rosegold::ProtocolState::LOGIN
 
   property message_id : UInt32
 
@@ -15,5 +16,3 @@ class Rosegold::Serverbound::LoginPluginResponse < Rosegold::Serverbound::Packet
     end.to_slice
   end
 end
-
-Rosegold::ProtocolState::LOGIN.register Rosegold::Serverbound::LoginPluginResponse

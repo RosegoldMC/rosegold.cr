@@ -33,5 +33,3 @@ class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packe
     end.to_slice
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Serverbound::PlayerBlockPlacement

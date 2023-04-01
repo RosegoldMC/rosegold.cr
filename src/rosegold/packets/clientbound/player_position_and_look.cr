@@ -95,5 +95,3 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     # TODO: close the “Downloading Terrain” screen when joining/respawning
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::PlayerPositionAndLook
