@@ -4,35 +4,28 @@ require "./vec3"
 # Holds assumed server-side player state.
 # Only gets updated when reading/writing packets.
 class Rosegold::Player
-  PLAYER_AABB = AABBf.new -0.3, 0.0, -0.3, 0.3, 1.8, 0.3
+  DEFAULT_AABB  = AABBf.new -0.3, 0.0, -0.3, 0.3, 1.8, 0.3
+  SNEAKING_AABB = AABBf.new -0.3, 0.0, -0.3, 0.3, 1.5, 0.3
+  CRAWLING_AABB = AABBf.new -0.3, 0.0, -0.3, 0.3, 0.625, 0.3
 
   property \
-    look : LookDeg = LookDeg::SOUTH,
+    entity_id : Int32 = 0,
+    look : Look = Look::SOUTH,
     feet : Vec3d = Vec3d::ORIGIN,
     velocity : Vec3d = Vec3d::ORIGIN,
     health : Float32 = 0,
     food : Float32 = 0,
     saturation : Float32 = 0,
-    gamemode : UInt8 = 0
+    hotbar_selection : UInt16 = 0,
+    gamemode : Int8 = 0
   property? \
     on_ground : Bool = false
 
   def aabb
-    PLAYER_AABB + feet
+    DEFAULT_AABB + feet # TODO depends on sneaking/crawling/swimming
   end
 
   def eyes
-    feet.up 1.625
+    feet.up 1.625 # TODO depends on sneaking/crawling/swimming
   end
-
-  def pitch=(pitch)
-    look.pitch = pitch
-  end
-
-  def yaw=(yaw)
-    look.yaw = yaw
-  end
-
-  delegate pitch, to: look
-  delegate yaw, to: look
 end

@@ -1,8 +1,11 @@
 require "../../world/look"
 require "../../world/vec3"
+require "../packet"
 
 # relative_flags: x/y/z/yaw/pitch. If a flag is set, its value is relative to the current player position/look.
 class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x38_u8
+
   property \
     x_raw : Float64,
     y_raw : Float64,
@@ -23,7 +26,16 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     @relative_flags,
     @teleport_id,
     @dismount_vehicle
-  )
+  ); end
+
+  def self.new(pos : Vec3d, look : Look, teleport_id : UInt32, dismount_vehicle = false)
+    self.new(
+      pos.x, pos.y, pos.z,
+      look.yaw_deg, look.pitch_deg,
+      0,
+      teleport_id,
+      dismount_vehicle,
+    )
   end
 
   def self.read(packet)
@@ -39,6 +51,20 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     )
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write x_raw
+      buffer.write y_raw
+      buffer.write z_raw
+      buffer.write yaw_deg_raw
+      buffer.write pitch_deg_raw
+      buffer.write relative_flags
+      buffer.write teleport_id
+      buffer.write dismount_vehicle
+    end.to_slice
+  end
+
   def feet(reference : Vec3d)
     Vec3d.new(
       relative_flags.bits_set?(0b001) ? reference.x + x_raw : x_raw,
@@ -46,14 +72,10 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
       relative_flags.bits_set?(0b100) ? reference.z + z_raw : z_raw)
   end
 
-  def look(reference_rad : LookRad)
-    look_deg(reference_rad.to_deg).to_rad
-  end
-
-  def look(reference_deg : LookDeg)
-    LookDeg.new(
-      relative_flags.bits_set?(0b1000) ? reference_deg.yaw + yaw_deg_raw : yaw_deg_raw,
-      relative_flags.bits_set?(0b10000) ? reference_deg.pitch + pitch_deg_raw : pitch_deg_raw)
+  def look(reference : Look)
+    Look.from_deg(
+      relative_flags.bits_set?(0b1000) ? reference.yaw_deg + yaw_deg_raw : yaw_deg_raw,
+      relative_flags.bits_set?(0b10000) ? reference.pitch_deg + pitch_deg_raw : pitch_deg_raw)
   end
 
   def callback(client)
@@ -73,3 +95,5 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     # TODO: close the “Downloading Terrain” screen when joining/respawning
   end
 end
+
+Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::PlayerPositionAndLook
