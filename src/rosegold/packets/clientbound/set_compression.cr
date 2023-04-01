@@ -2,6 +2,7 @@ require "../packet"
 
 class Rosegold::Clientbound::SetCompression < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x03_u8
+  class_getter state = Rosegold::ProtocolState::LOGIN
 
   property \
     threshold : UInt32
@@ -19,5 +20,3 @@ class Rosegold::Clientbound::SetCompression < Rosegold::Clientbound::Packet
     client.connection.compression_threshold = threshold
   end
 end
-
-Rosegold::ProtocolState::LOGIN.register Rosegold::Clientbound::SetCompression

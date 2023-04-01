@@ -20,5 +20,3 @@ class Rosegold::Clientbound::UnloadChunk < Rosegold::Clientbound::Packet
     client.dimension.unload_chunk({chunk_x, chunk_z})
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::UnloadChunk

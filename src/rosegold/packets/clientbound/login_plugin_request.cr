@@ -2,6 +2,7 @@ require "../packet"
 
 class Rosegold::Clientbound::LoginPluginRequest < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x04_u8
+  class_getter state = Rosegold::ProtocolState::LOGIN
 
   property \
     message_id : UInt32,
@@ -24,5 +25,3 @@ class Rosegold::Clientbound::LoginPluginRequest < Rosegold::Clientbound::Packet
     )
   end
 end
-
-Rosegold::ProtocolState::LOGIN.register Rosegold::Clientbound::LoginPluginRequest

@@ -36,5 +36,3 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
     Log.debug { "Respawned in #{dimension_name} gamemode=#{gamemode}" }
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::Respawn

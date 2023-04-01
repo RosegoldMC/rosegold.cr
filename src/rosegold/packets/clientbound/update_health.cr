@@ -24,5 +24,3 @@ class Rosegold::Clientbound::UpdateHealth < Rosegold::Clientbound::Packet
     # TODO: check death
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::UpdateHealth

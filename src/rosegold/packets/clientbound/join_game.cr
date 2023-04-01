@@ -75,5 +75,3 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
     Log.debug { "Ingame. #{dimension_name} gamemode=#{gamemode} entity_id=#{entity_id}" }
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::JoinGame

@@ -5,6 +5,7 @@ require "../packet"
 
 class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x01_u8
+  class_getter state = Rosegold::ProtocolState::LOGIN
 
   UUID         = ENV["UUID"]
   ACCESS_TOKEN = ENV["ACCESS_TOKEN"]?
@@ -65,5 +66,3 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
     end
   end
 end
-
-Rosegold::ProtocolState::LOGIN.register Rosegold::Serverbound::EncryptionResponse

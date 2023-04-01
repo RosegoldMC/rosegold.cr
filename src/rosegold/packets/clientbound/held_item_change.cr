@@ -16,5 +16,3 @@ class Rosegold::Clientbound::HeldItemChange < Rosegold::Clientbound::Packet
     client.player.hotbar_selection = hotbar_nr
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::HeldItemChange

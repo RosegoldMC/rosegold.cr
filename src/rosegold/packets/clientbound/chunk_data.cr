@@ -41,5 +41,3 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     io << "#<Clientbound::ChunkData " << chunk_x << "," << chunk_z << ">"
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::ChunkData

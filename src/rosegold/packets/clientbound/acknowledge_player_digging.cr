@@ -1,4 +1,5 @@
 class Rosegold::Clientbound::AcknowledgePlayerDigging < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x08_u8
   property \
     location : Tuple(Int32, Int32, Int32),
     block : UInt32,

@@ -15,5 +15,3 @@ class Rosegold::Clientbound::KeepAlive < Rosegold::Clientbound::Packet
     client.queue_packet Serverbound::KeepAlive.new keep_alive_id
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::KeepAlive
