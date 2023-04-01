@@ -768,7 +768,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/f36651f60ee1750d809ed2b7ddd7a6aa807c073f/src/rosegold/packets/packet.cr#L13" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/83d023f40783c35d3d69fc2f09d852059bf84312/src/rosegold/packets/packet.cr#L19" target="_blank">
         rosegold/packets/packet.cr
       </a>
     
@@ -790,22 +790,22 @@
   <dl>
     
       <dt class="entry-const" id="HANDSHAKING">
-        <strong>HANDSHAKING</strong> = <code><span class="t">ProtocolState</span>.new</code>
+        <strong>HANDSHAKING</strong> = <code><span class="t">ProtocolState</span>.new(<span class="s">&quot;HANDSHAKING&quot;</span>)</code>
       </dt>
       
     
       <dt class="entry-const" id="LOGIN">
-        <strong>LOGIN</strong> = <code><span class="t">ProtocolState</span>.new</code>
+        <strong>LOGIN</strong> = <code><span class="t">ProtocolState</span>.new(<span class="s">&quot;LOGIN&quot;</span>)</code>
       </dt>
       
     
       <dt class="entry-const" id="PLAY">
-        <strong>PLAY</strong> = <code><span class="t">ProtocolState</span>.new</code>
+        <strong>PLAY</strong> = <code><span class="t">ProtocolState</span>.new(<span class="s">&quot;PLAY&quot;</span>)</code>
       </dt>
       
     
       <dt class="entry-const" id="STATUS">
-        <strong>STATUS</strong> = <code><span class="t">ProtocolState</span>.new</code>
+        <strong>STATUS</strong> = <code><span class="t">ProtocolState</span>.new(<span class="s">&quot;STATUS&quot;</span>)</code>
       </dt>
       
     
@@ -813,7 +813,41 @@
 
 
 
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28name%3AString%29-class-method" class="signature"><strong>.new</strong>(name : String)</a>
+        
+      </li>
+    
+  </ul>
 
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#register%28packet%3APacket.class%29-class-method" class="signature"><strong>.register</strong>(packet : <span class="t">Packet</span>.<span class="k">class</span>)</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -833,7 +867,17 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#register%28packet%3APacket.class%29-instance-method" class="signature"><strong>#register</strong>(packet : <span class="t">Packet</span>.<span class="k">class</span>)</a>
+        <a href="#name%3AString-instance-method" class="signature"><strong>#name</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#register%28packet%3AClientbound%3A%3APacket.class%29-instance-method" class="signature"><strong>#register</strong>(packet : <span class="t">Clientbound</span><span class="t">::</span><span class="t">Packet</span>.<span class="k">class</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#register%28packet%3AServerbound%3A%3APacket.class%29-instance-method" class="signature"><strong>#register</strong>(packet : <span class="t">Serverbound</span><span class="t">::</span><span class="t">Packet</span>.<span class="k">class</span>)</a>
         
       </li>
     
@@ -873,7 +917,59 @@
 </div>
 
 
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(name:String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(name : String)
 
+        <a class="method-permalink" href="#new%28name%3AString%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/83d023f40783c35d3d69fc2f09d852059bf84312/src/rosegold/packets/packet.cr#L29" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="register(packet:Packet.class)-class-method">
+      <div class="signature">
+        
+        def self.<strong>register</strong>(packet : <span class="t">Packet</span>.<span class="k">class</span>)
+
+        <a class="method-permalink" href="#register%28packet%3APacket.class%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/83d023f40783c35d3d69fc2f09d852059bf84312/src/rosegold/packets/packet.cr#L32" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 
@@ -897,23 +993,55 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f36651f60ee1750d809ed2b7ddd7a6aa807c073f/src/rosegold/packets/packet.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/83d023f40783c35d3d69fc2f09d852059bf84312/src/rosegold/packets/packet.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="register(packet:Packet.class)-instance-method">
+    <div class="entry-detail" id="name:String-instance-method">
       <div class="signature">
         
-        def <strong>register</strong>(packet : <span class="t">Packet</span>.<span class="k">class</span>)
+        def <strong>name</strong> : String
 
-        <a class="method-permalink" href="#register%28packet%3APacket.class%29-instance-method">#</a>
+        <a class="method-permalink" href="#name%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f36651f60ee1750d809ed2b7ddd7a6aa807c073f/src/rosegold/packets/packet.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/83d023f40783c35d3d69fc2f09d852059bf84312/src/rosegold/packets/packet.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="register(packet:Clientbound::Packet.class)-instance-method">
+      <div class="signature">
+        
+        def <strong>register</strong>(packet : <span class="t">Clientbound</span><span class="t">::</span><span class="t">Packet</span>.<span class="k">class</span>)
+
+        <a class="method-permalink" href="#register%28packet%3AClientbound%3A%3APacket.class%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/83d023f40783c35d3d69fc2f09d852059bf84312/src/rosegold/packets/packet.cr#L36" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="register(packet:Serverbound::Packet.class)-instance-method">
+      <div class="signature">
+        
+        def <strong>register</strong>(packet : <span class="t">Serverbound</span><span class="t">::</span><span class="t">Packet</span>.<span class="k">class</span>)
+
+        <a class="method-permalink" href="#register%28packet%3AServerbound%3A%3APacket.class%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/83d023f40783c35d3d69fc2f09d852059bf84312/src/rosegold/packets/packet.cr#L41" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -929,7 +1057,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f36651f60ee1750d809ed2b7ddd7a6aa807c073f/src/rosegold/packets/packet.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/83d023f40783c35d3d69fc2f09d852059bf84312/src/rosegold/packets/packet.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
