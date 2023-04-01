@@ -14,5 +14,3 @@ class Rosegold::Serverbound::Pong < Rosegold::Serverbound::Packet
     end.to_slice
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Serverbound::Pong

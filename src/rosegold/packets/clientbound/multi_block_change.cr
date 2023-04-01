@@ -43,5 +43,3 @@ class Rosegold::Clientbound::MultiBlockChange < Rosegold::Clientbound::Packet
     end
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::MultiBlockChange

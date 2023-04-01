@@ -95,5 +95,3 @@ class Rosegold::Clientbound::PlayerInfo < Rosegold::Clientbound::Packet
     end
   end
 end
-
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::PlayerInfo
