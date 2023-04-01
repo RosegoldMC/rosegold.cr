@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Serverbound::PlayerNoMovement - rosegold main</title>
+  <title>Rosegold::Clientbound::OpenWindow - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -281,7 +281,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
@@ -351,7 +351,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/OpenWindow" data-name="rosegold::clientbound::openwindow">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/OpenWindow" data-name="rosegold::clientbound::openwindow">
       <a href="../../Rosegold/Clientbound/OpenWindow.html">OpenWindow</a>
       
     </li>
@@ -576,7 +576,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
       <a href="../../Rosegold/Serverbound.html">Serverbound</a>
       
         <ul>
@@ -656,7 +656,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Serverbound/PlayerNoMovement" data-name="rosegold::serverbound::playernomovement">
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerNoMovement" data-name="rosegold::serverbound::playernomovement">
       <a href="../../Rosegold/Serverbound/PlayerNoMovement.html">PlayerNoMovement</a>
       
     </li>
@@ -750,12 +750,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::Serverbound::PlayerNoMovement
+  <span class="kind">class</span> Rosegold::Clientbound::OpenWindow
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Serverbound/PlayerNoMovement.html">Rosegold::Serverbound::PlayerNoMovement</a></li><li class="superclass"><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/OpenWindow.html">Rosegold::Clientbound::OpenWindow</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -783,14 +783,33 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/serverbound/player_no_movement.cr#L3" target="_blank">
-        rosegold/packets/serverbound/player_no_movement.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L3" target="_blank">
+        rosegold/packets/clientbound/open_window.cr
       </a>
     
     <br/>
   
 
 
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="Log">
+        <strong>Log</strong> = <code><span class="t">::</span><span class="t">Log</span>.<span class="k">for</span>(<span class="k">self</span>)</code>
+      </dt>
+      
+    
+  </dl>
 
 
 
@@ -805,7 +824,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28on_ground%3ABool%29-class-method" class="signature"><strong>.new</strong>(on_ground : Bool)</a>
+        <a href="#new%28window_id%3AUInt32%2Cwindow_type%3AUInt32%2Cwindow_title%3ARosegold%3A%3AChat%29-class-method" class="signature"><strong>.new</strong>(window_id : UInt32, window_type : UInt32, window_title : Rosegold::Chat)</a>
         
       </li>
     
@@ -828,6 +847,11 @@
         
       </li>
     
+      <li class="entry-summary">
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
+        
+      </li>
+    
   </ul>
 
 
@@ -843,17 +867,37 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#on_ground%3D%28on_ground%3ABool%29-instance-method" class="signature"><strong>#on_ground=</strong>(on_ground : Bool)</a>
+        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#on_ground%3F%3ABool-instance-method" class="signature"><strong>#on_ground?</strong> : Bool</a>
+        <a href="#window_id%3AUInt32-instance-method" class="signature"><strong>#window_id</strong> : UInt32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#write%3ABytes-instance-method" class="signature"><strong>#write</strong> : Bytes</a>
+        <a href="#window_id%3D%28window_id%3AUInt32%29-instance-method" class="signature"><strong>#window_id=</strong>(window_id : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#window_title%3ARosegold%3A%3AChat-instance-method" class="signature"><strong>#window_title</strong> : Rosegold::Chat</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#window_title%3D%28window_title%3ARosegold%3A%3AChat%29-instance-method" class="signature"><strong>#window_title=</strong>(window_title : Rosegold::Chat)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#window_type%3AUInt32-instance-method" class="signature"><strong>#window_type</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#window_type%3D%28window_type%3AUInt32%29-instance-method" class="signature"><strong>#window_type=</strong>(window_type : UInt32)</a>
         
       </li>
     
@@ -872,6 +916,15 @@
 
 
     
+
+  <h3>Class methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#state-class-method" class="tooltip">
+      <span>state</span>
+    state</a>
+    
+  
 
 
   
@@ -931,18 +984,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(on_ground:Bool)-class-method">
+    <div class="entry-detail" id="new(window_id:UInt32,window_type:UInt32,window_title:Rosegold::Chat)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(on_ground : Bool)
+        def self.<strong>new</strong>(window_id : UInt32, window_type : UInt32, window_title : <a href="../../Rosegold/Chat.html">Rosegold::Chat</a>)
 
-        <a class="method-permalink" href="#new%28on_ground%3ABool%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28window_id%3AUInt32%2Cwindow_type%3AUInt32%2Cwindow_title%3ARosegold%3A%3AChat%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/serverbound/player_no_movement.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -970,7 +1023,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/serverbound/player_no_movement.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(packet)-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(packet)
+
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -987,50 +1056,114 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="on_ground=(on_ground:Bool)-instance-method">
+    <div class="entry-detail" id="callback(client)-instance-method">
       <div class="signature">
         
-        def <strong>on_ground=</strong>(on_ground : Bool)
+        def <strong>callback</strong>(client)
 
-        <a class="method-permalink" href="#on_ground%3D%28on_ground%3ABool%29-instance-method">#</a>
+        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/serverbound/player_no_movement.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="on_ground?:Bool-instance-method">
+    <div class="entry-detail" id="window_id:UInt32-instance-method">
       <div class="signature">
         
-        def <strong>on_ground?</strong> : Bool
+        def <strong>window_id</strong> : UInt32
 
-        <a class="method-permalink" href="#on_ground%3F%3ABool-instance-method">#</a>
+        <a class="method-permalink" href="#window_id%3AUInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/serverbound/player_no_movement.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="write:Bytes-instance-method">
+    <div class="entry-detail" id="window_id=(window_id:UInt32)-instance-method">
       <div class="signature">
         
-        def <strong>write</strong> : Bytes
+        def <strong>window_id=</strong>(window_id : UInt32)
 
-        <a class="method-permalink" href="#write%3ABytes-instance-method">#</a>
+        <a class="method-permalink" href="#window_id%3D%28window_id%3AUInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/serverbound/player_no_movement.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="window_title:Rosegold::Chat-instance-method">
+      <div class="signature">
+        
+        def <strong>window_title</strong> : <a href="../../Rosegold/Chat.html">Rosegold::Chat</a>
+
+        <a class="method-permalink" href="#window_title%3ARosegold%3A%3AChat-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="window_title=(window_title:Rosegold::Chat)-instance-method">
+      <div class="signature">
+        
+        def <strong>window_title=</strong>(window_title : <a href="../../Rosegold/Chat.html">Rosegold::Chat</a>)
+
+        <a class="method-permalink" href="#window_title%3D%28window_title%3ARosegold%3A%3AChat%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="window_type:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>window_type</strong> : UInt32
+
+        <a class="method-permalink" href="#window_type%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="window_type=(window_type:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>window_type=</strong>(window_type : UInt32)
+
+        <a class="method-permalink" href="#window_type%3D%28window_type%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bbe0320a39f6f60a5b3dc43a415d0f520f54819e/src/rosegold/packets/clientbound/open_window.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
