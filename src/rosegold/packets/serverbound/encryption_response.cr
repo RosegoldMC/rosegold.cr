@@ -1,12 +1,13 @@
 require "http/client"
 require "json"
-require "./packet"
+require "../../../minecraft/digest"
+require "../packet"
 
 class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x01_u8
+  class_getter packet_id = 0x01_u8
 
   UUID         = ENV["UUID"]
-  ACCESS_TOKEN = ENV["ACCESS_TOKEN"]
+  ACCESS_TOKEN = ENV["ACCESS_TOKEN"]?
 
   property \
     encryption_request : Rosegold::Clientbound::EncryptionRequest,
@@ -44,12 +45,12 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
     ).status_code == 204
   end
 
-  def to_packet : Minecraft::IO
+  def write : Bytes
     send_join_request!
 
     OpenSSL::PKey::RSA.new(IO::Memory.new("-----BEGIN PUBLIC KEY-----\n" + Base64.encode(encryption_request.public_key) + "-----END PUBLIC KEY-----\n")).try do |key|
       Minecraft::IO::Memory.new.tap do |buffer|
-        buffer.write PACKET_ID
+        buffer.write @@packet_id
 
         key.public_encrypt(shared_secret).try do |encrypted_secret|
           buffer.write encrypted_secret.size.to_u32
@@ -60,7 +61,9 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
           buffer.write encrypted_nonce.size.to_u32
           buffer.write encrypted_nonce
         end
-      end
+      end.to_slice
     end
   end
 end
+
+Rosegold::ProtocolState::LOGIN.register Rosegold::Serverbound::EncryptionResponse

@@ -1,12 +1,21 @@
 require "./vec3"
 
 # axis aligned bounding box
-module Rosegold::AABB(T)
-  getter min : Vec3(T), max : Vec3(T)
+module Rosegold::AABB(T, V)
+  getter min : V, max : V
 
-  def initialize(@min : Vec3(T), @max : Vec3(T)); end
+  def initialize(min : V, max : V)
+    @min = V.new(
+      Math.min(min.x, max.x),
+      Math.min(min.y, max.y),
+      Math.min(min.z, max.z))
+    @max = V.new(
+      Math.max(min.x, max.x),
+      Math.max(min.y, max.y),
+      Math.max(min.z, max.z))
+  end
 
-  def offset(vec : Vec3(T)) : self
+  def offset(vec : V) : self
     self.class.new min + vec, max + vec
   end
 
@@ -14,7 +23,7 @@ module Rosegold::AABB(T)
     self.class.new min.plus(x, y, z), max.plus(x, y, z)
   end
 
-  def grow(vec : Vec3(T)) : self
+  def grow(vec : V) : self
     self.class.new min - vec, max + vec
   end
 
@@ -22,7 +31,21 @@ module Rosegold::AABB(T)
     self.class.new min.minus(dx, dy, dz), max.plus(dx, dy, dz)
   end
 
-  def intersects?(other : AABB(T)) : Bool
+  def grow(aabb : AABB(T, V)) : self
+    self.class.new min + aabb.min, max + aabb.max
+  end
+
+  def *(scalar : T) : self
+    self.class.new min * scalar, max * scalar
+  end
+
+  def contains?(vec : V) : Bool
+    (self.min.x < vec.x < self.max.x) &&
+      (self.min.y < vec.y < self.max.y) &&
+      (self.min.z < vec.z < self.max.z)
+  end
+
+  def intersects?(other : AABB(T, V)) : Bool
     other.max.x > self.min.x &&
       other.min.x < self.max.x &&
       other.max.y > self.min.y &&
@@ -31,13 +54,13 @@ module Rosegold::AABB(T)
       other.min.z < self.max.z
   end
 
-  def [](i) : Vec3(T)
+  def [](i) : V
     {min, max}[i]
   end
 end
 
 struct Rosegold::AABBf
-  include Rosegold::AABB(Float32)
+  include Rosegold::AABB(Float32, Vec3f)
 
   def self.new(
     min_x : Float32, min_y : Float32, min_z : Float32,
@@ -52,13 +75,17 @@ struct Rosegold::AABBf
     AABBd.new min + vec, max + vec
   end
 
+  def offset(vec : Vec3d) : AABBd
+    AABBd.new min + vec, max + vec
+  end
+
   def to_f64 : AABBd
     AABBd.new min.to_f64, max.to_f64
   end
 end
 
 struct Rosegold::AABBd
-  include Rosegold::AABB(Float64)
+  include Rosegold::AABB(Float64, Vec3d)
 
   def self.new(
     min_x : Float64, min_y : Float64, min_z : Float64,

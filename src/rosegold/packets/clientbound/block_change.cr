@@ -1,4 +1,8 @@
+require "../packet"
+
 class Rosegold::Clientbound::BlockChange < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x0c_u8
+
   property \
     x : Int32,
     y : Int32,
@@ -18,3 +22,5 @@ class Rosegold::Clientbound::BlockChange < Rosegold::Clientbound::Packet
     client.dimension.set_block_state x, y, z, block_state
   end
 end
+
+Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::BlockChange

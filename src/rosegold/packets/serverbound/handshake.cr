@@ -1,7 +1,7 @@
-require "./packet"
+require "../packet"
 
 class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x00_u8
+  class_getter packet_id = 0x00_u8
 
   property \
     protocol_version : UInt32,
@@ -16,13 +16,15 @@ class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
     @next_state : UInt32
   ); end
 
-  def to_packet : Minecraft::IO
+  def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write PACKET_ID
+      buffer.write @@packet_id
       buffer.write protocol_version
       buffer.write server_address
       buffer.write_full server_port
       buffer.write next_state
-    end
+    end.to_slice
   end
 end
+
+Rosegold::ProtocolState::HANDSHAKING.register Rosegold::Serverbound::Handshake

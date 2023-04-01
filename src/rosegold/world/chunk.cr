@@ -1,12 +1,14 @@
-class Rosegold::World::Chunk
+require "./paletted_container"
+
+class Rosegold::Chunk
   alias BlockStateNr = UInt16
 
   getter sections : Array(Section)
-  getter min_y : Int32
-  getter world_height : Int32
+  private getter min_y : Int32
 
-  def initialize(io : Minecraft::IO, @min_y : Int32, @world_height : Int32)
-    section_count = world_height >> 4
+  def initialize(io, dimension : Dimension)
+    @min_y = dimension.min_y
+    section_count = dimension.world_height >> 4
     @sections = Array(Section).new(section_count) { Section.new io }
   end
 
@@ -27,7 +29,9 @@ class Rosegold::World::Chunk
 
   # Chunk Section (16x16x16 blocks), data format 1.16-1.18
   class Section
-    def initialize(io : Minecraft::IO)
+    @block_count : Int16
+
+    def initialize(io)
       # Number of non-air blocks present in the chunk section. If the block count reaches 0, the whole chunk section is not rendered.
       @block_count = io.read_short
       @blocks = PalettedContainer.new io, 9, 4096

@@ -3,6 +3,7 @@ class Rosegold::PalettedContainer
   private alias Index = UInt32
   private alias Long = Int64
 
+  private getter num_entries : Index
   private getter bits_per_entry : UInt8
   private getter entries_per_long : UInt8
   private getter entry_mask : Long
@@ -11,7 +12,7 @@ class Rosegold::PalettedContainer
 
   # TODO read+write lock
 
-  def initialize(io : Minecraft::IO, num_bits_direct, size = nil)
+  def initialize(io : Minecraft::IO, num_bits_direct, @num_entries)
     @bits_per_entry = io.read_byte
     if bits_per_entry == 0
       @palette = [io.read_var_int.to_u16]
@@ -33,7 +34,7 @@ class Rosegold::PalettedContainer
     @entry_mask = (1_i64 << bits_per_entry) - 1
 
     num_longs = io.read_var_int
-    raise "Data too short! #{num_longs} * #{entries_per_long} < #{size}" if size && num_longs * entries_per_long < size
+    raise "Data too short! #{num_longs} * #{entries_per_long} < #{num_entries}" if num_longs * entries_per_long < num_entries
 
     @long_array = Array(Long).new(num_longs) { io.read_long }
   end
@@ -55,56 +56,55 @@ class Rosegold::PalettedContainer
       if palette[0] == value
         return # nothing to do, value is already set
       else
-        grow_from_single_state(index, value)
+        grow_from_single_state
       end
     end
-    entry = value
-    unless palette.empty?
+    if palette.empty?
+      entry = value
+    else
       entry = palette.index(value) || begin
         max_palette_size = 1_u64 << bits_per_entry
-        if palette.size < max_palette_size
-          entry = palette.size
-          palette << value
-          entry
-        else
-          grow_palette(index, value)
+        if palette.size >= max_palette_size
+          grow_palette
         end
+        entry = palette.size
+        palette << value
+        entry
       end
     end
     long_index = index // entries_per_long
     bit_offset_in_long = (index % entries_per_long) * bits_per_entry
     long = long_array[long_index]
-    long &= ~(entry_mask << bit_offset_in_long)                 # clear previous value
-    long |= (entry.not_nil! & entry_mask) << bit_offset_in_long # ameba:disable Lint/NotNil
+    long &= ~(entry_mask << bit_offset_in_long) # clear previous value
+    long |= (entry & entry_mask) << bit_offset_in_long
     long_array[long_index] = long
   end
 
-  private def grow_from_single_state(index : Index, value : Entry) : Nil
+  private def grow_from_single_state : Nil
     @bits_per_entry = 4_u8
     @entries_per_long = 64_u8 // bits_per_entry
     @entry_mask = (1_i64 << bits_per_entry) - 1
-    @palette = [@palette[0], value]
     @long_array = Array(Long).new(1, 0_i64)
-    self[index] = value
   end
 
-  private def grow_palette(index : Index, value : Entry) : Nil
-    @bits_per_entry += 1
-    @entries_per_long = 64_u8 // bits_per_entry
-    @entry_mask = (1_i64 << bits_per_entry) - 1
-    @palette << value
-    new_long_array = Array(Long).new(long_array.size * 2, 0_i64)
+  private def grow_palette : Nil
+    new_bits_per_entry = bits_per_entry + 1
+    new_entries_per_long = 64_u8 // new_bits_per_entry
+    new_entry_mask = (1_i64 << new_bits_per_entry) - 1
+    new_long_array = Array(Long).new((num_entries / new_entries_per_long).ceil.to_i, 0_i64)
 
-    (0.to_u32...(long_array.size * entries_per_long).to_u32).each do |i|
-      long_index = i // entries_per_long
-      bit_offset_in_long = (i % entries_per_long) * bits_per_entry
-      long = long_array[long_index]
-      long &= ~(entry_mask << bit_offset_in_long) # clear previous value
-      long |= (self[i] & entry_mask) << bit_offset_in_long
+    (0_u32...num_entries).each do |i|
+      long_index = i // new_entries_per_long
+      bit_offset_in_long = (i % new_entries_per_long) * new_bits_per_entry
+      long = new_long_array[long_index]
+      # no need to zero-out previous value's bits, are already 0
+      long |= (self[i] & new_entry_mask) << bit_offset_in_long
       new_long_array[long_index] = long
     end
 
+    @bits_per_entry = new_bits_per_entry
+    @entries_per_long = new_entries_per_long
+    @entry_mask = new_entry_mask
     @long_array = new_long_array
-    self[index] = value
   end
 end

@@ -1,13 +1,26 @@
 require "./chunk"
 
-class Rosegold::World::Dimension
-  property \
-    min_y : Int32 = 64,
-    height : Int32 = 256
-
+class Rosegold::Dimension
   alias ChunkPos = {Int32, Int32}
 
-  @chunks = Hash(ChunkPos, Chunk).new
+  getter chunks = Hash(ChunkPos, Chunk).new
+
+  getter name : String
+  getter nbt : Minecraft::NBT::Tag
+  getter min_y = -64
+  getter world_height = 256 + 64 + 64
+
+  def initialize(@name, @nbt)
+    @min_y = @nbt["min_y"].as_i32
+    @world_height = @nbt["height"].as_i32
+  end
+
+  def self.new
+    self.new "minecraft:overworld", Minecraft::NBT::CompoundTag.new({
+      "min_y"  => Minecraft::NBT::IntTag.new(-64_i32).as(Minecraft::NBT::Tag),
+      "height" => Minecraft::NBT::IntTag.new(384_i32).as(Minecraft::NBT::Tag),
+    })
+  end
 
   def load_chunk(chunk_pos : ChunkPos, chunk : Chunk)
     @chunks[chunk_pos] = chunk

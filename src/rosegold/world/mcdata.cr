@@ -7,6 +7,10 @@ class Rosegold::MCData
 
   MC118 = Rosegold::MCData.new "1.18"
 
+  getter items_array : Array(Item)
+  getter items_by_id : Hash(String, Item)
+
+  getter blocks_array : Array(Block)
   getter blocks_by_id : Hash(String, Block)
 
   # block state nr -> "oak_slab[type=top, waterlogged=true]"
@@ -20,17 +24,20 @@ class Rosegold::MCData
     # for arbitrary version support, we would need to parse dataPaths.json
     raise "we only support 1.18 for now" if mc_version != "1.18"
 
-    blocks_json = Array(Block).from_json {{read_file "blocks.json"}}
-    block_collision_shapes_json = BlockCollisionShapes.from_json {{read_file "blockCollisionShapes.json"}}
+    @items_array = Array(Item).from_json {{read_file "game_assets/items.json"}}
+    @items_by_id = Hash.zip(items_array.map &.id_str, items_array)
 
-    @blocks_by_id = Hash.zip(blocks_json.map &.name, blocks_json)
+    @blocks_array = Array(Block).from_json {{read_file "game_assets/blocks.json"}}
+    @blocks_by_id = Hash.zip(blocks_array.map &.id_str, blocks_array)
 
-    max_block_state = blocks_json.flat_map(&.max_state_id).max
+    block_collision_shapes_json = BlockCollisionShapes.from_json {{read_file "game_assets/blockCollisionShapes.json"}}
+
+    max_block_state = blocks_array.flat_map(&.max_state_id).max
 
     @block_state_names = Array(String).new(max_block_state + 1, "")
-    blocks_json.each do |block|
+    blocks_array.each do |block|
       if block.states.empty?
-        block_state_names[block.min_state_id] = block.name
+        block_state_names[block.min_state_id] = block.id_str
       else
         # example (slab): [["type=top", "waterlogged=true"], ["type=top", "waterlogged=false"], ["type=bottom", "waterlogged=true"], ["type=bottom", "waterlogged=false"], ["type=double", "waterlogged=true"], ["type=double", "waterlogged=false"]]
         prop_combos = Indexable.cartesian_product block.states.map { |prop|
@@ -39,12 +46,12 @@ class Rosegold::MCData
           when BlockPropertyType::INT ; (0...prop.num_values)
           when BlockPropertyType::BOOL; ["true", "false"] # weird order but that's how it is
           else
-            raise "Invalid block property type #{prop.type} in #{block.name}.#{prop.name}"
+            raise "Invalid block property type #{prop.type} in #{block.id_str}.#{prop.name}"
           end.map { |value| "#{prop.name}=#{value}" }
         }
         prop_combos.each_with_index do |props, i|
           state_nr = block.min_state_id + i
-          block_state_names[state_nr] = block.name + "[#{props.join ", "}]"
+          block_state_names[state_nr] = block.id_str + "[#{props.join ", "}]"
         end
       end
     end
@@ -53,8 +60,8 @@ class Rosegold::MCData
     # all 1.18->1.19 block states stayed the same except leaves (waterlogged) but it still works because all leaves' shapes are the same
     # veryfy by diffing: jq -c '.[]|{name,states:[.states[]|{name,num_values}]}' < 1.18/blocks.json | sort
     @block_state_collision_shapes = Array(Array(AABBf)).new(max_block_state + 1, [] of AABBf)
-    blocks_json.each do |block|
-      block_shape_nrs = block_collision_shapes_json.blocks[block.name].try do |j|
+    blocks_array.each do |block|
+      block_shape_nrs = block_collision_shapes_json.blocks[block.id_str].try do |j|
         j.is_a?(Array) ? j : [j]
       end
       (block.min_state_id..block.max_state_id).each do |state_nr|
@@ -66,12 +73,32 @@ class Rosegold::MCData
     end
   end
 
+  # entries of items.json
+  class Item
+    include JSON::Serializable
+
+    getter id : UInt16
+    @[JSON::Field(key: "name")]
+    getter id_str : String
+    @[JSON::Field(key: "displayName")]
+    getter display_name : String
+    @[JSON::Field(key: "stackSize")]
+    getter stack_size : UInt8
+    @[JSON::Field(key: "maxDurability")]
+    getter max_durability : UInt16?
+    @[JSON::Field(key: "repairWith")]
+    getter repair_with : Array(String)?
+    @[JSON::Field(key: "enchantCategories")]
+    getter enchant_categories : Array(String)?
+  end
+
   # entries of blocks.json
   class Block
     include JSON::Serializable
 
     getter id : UInt16
-    getter name : String
+    @[JSON::Field(key: "name")]
+    getter id_str : String
     @[JSON::Field(key: "displayName")]
     getter display_name : String
     @[JSON::Field(key: "stackSize")]

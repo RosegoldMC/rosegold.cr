@@ -1,19 +1,18 @@
-require "./packet"
+require "../packet"
 
 class Rosegold::Serverbound::CloseWindow < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x09_u8
+  class_getter packet_id = 0x09_u8
 
-  property \
-    window_id : UInt16
+  property window_id : UInt16
 
-  def initialize(
-    @window_id : UInt16
-  ); end
+  def initialize(@window_id : UInt16); end
 
-  def to_packet : Minecraft::IO
+  def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write PACKET_ID
+      buffer.write @@packet_id
       buffer.write window_id
-    end
+    end.to_slice
   end
 end
+
+Rosegold::ProtocolState::PLAY.register Rosegold::Serverbound::CloseWindow

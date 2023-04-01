@@ -1,7 +1,7 @@
 require "../packet"
 
-class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x1a_u8
+class Rosegold::Clientbound::LoginDisconnect < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x00_u8
 
   property reason : String
 
@@ -16,4 +16,4 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
   end
 end
 
-Rosegold::ProtocolState::PLAY.register Rosegold::Clientbound::Disconnect
+Rosegold::ProtocolState::LOGIN.register Rosegold::Clientbound::LoginDisconnect
