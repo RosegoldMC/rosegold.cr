@@ -19,6 +19,8 @@ class Rosegold::Chat
     translate : String?,
     with : Array(Chat | String)?
 
+  def initialize(@text : String); end
+
   @[JSON::Field(key: "clickEvent")]
   property click_event : JSON::Any?
   @[JSON::Field(key: "hoverEvent")]

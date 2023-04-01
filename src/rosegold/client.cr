@@ -4,6 +4,7 @@ require "./control/*"
 require "./packets/connection"
 require "./packets/packet"
 require "./world/*"
+require "./models/*"
 
 # Holds world state (player, chunks, etc.)
 # and control state (physics, open window, etc.).
@@ -18,7 +19,9 @@ class Rosegold::Client
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
     player : Player = Player.new,
     dimension : Dimension = Dimension.new,
-    physics : Physics
+    physics : Physics,
+    current_window : Window? = nil,
+    inventory_window : Window = Window.new(0_u32, 64_u32, Chat.new "Player Inventory")
 
   getter raw_packet_handlers : Array(Proc(Bytes, Nil)) = Array(Proc(Bytes, Nil)).new
 
