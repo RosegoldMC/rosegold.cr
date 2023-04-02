@@ -5,6 +5,7 @@ require "io/hexdump"
 Dotenv.load
 
 require "./rosegold/client"
+require "./rosegold/bot"
 
 # TODO: Write documentation for `Rosegold`
 module Rosegold
