@@ -162,13 +162,13 @@ class Rosegold::Bot
   def drop_hand_single
     client.connection.send_packet Serverbound::PlayerDigging.new \
       Serverbound::PlayerDigging::Status::DropHandSingle, Vec3i.ORIGIN, 0
-      client.connection.send_packet Serverbound::SwingArm.new
+    client.connection.send_packet Serverbound::SwingArm.new
   end
 
   def drop_hand_full
     client.connection.send_packet Serverbound::PlayerDigging.new \
       Serverbound::PlayerDigging::Status::DropHandFull, Vec3i.ORIGIN, 0
-      client.connection.send_packet Serverbound::SwingArm.new
+    client.connection.send_packet Serverbound::SwingArm.new
   end
 
   # Moves the slot to the hotbar and selects it.
