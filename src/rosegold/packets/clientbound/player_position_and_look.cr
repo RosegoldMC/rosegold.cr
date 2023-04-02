@@ -28,9 +28,9 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     @dismount_vehicle
   ); end
 
-  def self.new(pos : Vec3d, look : Look, teleport_id : UInt32, dismount_vehicle = false)
+  def self.new(location : Vec3d, look : Look, teleport_id : UInt32, dismount_vehicle = false)
     self.new(
-      pos.x, pos.y, pos.z,
+      location.x, location.y, location.z,
       look.yaw_deg, look.pitch_deg,
       0,
       teleport_id,

@@ -1,13 +1,5 @@
 require "../rosegold"
 
-enum BlockFace
-  Bottom; Top; West; East; North; South
-end
-
-enum Hand
-  MainHand; OffHand
-end
-
 class Rosegold::Bot
   private getter client : Client
 

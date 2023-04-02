@@ -1,3 +1,5 @@
+require "../../minecraft/nbt"
+
 struct Rosegold::Slot
   property item_id : UInt32
   property count : UInt8
