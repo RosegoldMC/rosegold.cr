@@ -265,17 +265,17 @@ class Rosegold::Physics
     entity_aabb = entity_aabb.to_f64
     grow_aabb = entity_aabb * -1
     # get all blocks that may potentially collide
-    min_hull, max_hull = AABBd.containing_all(
+    bounds = AABBd.containing_all(
       entity_aabb.offset(start),
       entity_aabb.offset(start + movement))
     # fences are 1.5m tall
-    min_hull = min_hull.down(0.5).floored_i32
+    min_block = bounds.min.down(0.5).floored_i32
     # add maximum stepping height (0.5) so we can reuse the obstacles when stepping
-    max_hull = max_hull.up(0.5).floored_i32
+    max_block = bounds.max.up(0.5).floored_i32
     blocks_coords = Indexable.cartesian_product({
-      (min_hull.x..max_hull.x).to_a,
-      (min_hull.y..max_hull.y).to_a,
-      (min_hull.z..max_hull.z).to_a,
+      (min_block.x..max_block.x).to_a,
+      (min_block.y..max_block.y).to_a,
+      (min_block.z..max_block.z).to_a,
     })
     blocks_coords.flat_map do |block_coords|
       x, y, z = block_coords

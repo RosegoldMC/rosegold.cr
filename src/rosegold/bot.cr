@@ -139,18 +139,21 @@ class Rosegold::Bot
 
   # TODO select interact/placement location/entity by raytracing; if location is passed, just look there, but interact with whatever may be in the way
 
-  def interact_block(location : Vec3d, face : BlockFace, look = true)
-    place_block_against(location, face, look, 0)
-  end
-
-  # Raises an error if the hand slot is not updated within `timeout_ticks`.
-  def place_block_against(location : Vec3d, face : BlockFace, look = true, timeout_ticks = 0)
-    cursor = (location - location.floored).to_f32
+  def interact_block(look_location : Vec3d? = nil)
+    reached = reach_block_or_entity
+    return unless reached
+    intercept, location, face = reached
+    cursor = (intercept - location).to_f32
     hand = Hand::MainHand # TODO
     inside_block = false  # TODO
     client.connection.send_packet Serverbound::PlayerBlockPlacement.new \
-      location.floored_i32, face, cursor, hand, inside_block
+      location, face, cursor, hand, inside_block
     client.connection.send_packet Serverbound::SwingArm.new hand
+  end
+
+  # Raises an error if the hand slot is not updated within `timeout_ticks`.
+  def place_block_against(look_location : Vec3d? = nil, timeout_ticks = 0)
+    interact_block(look_location)
     # TODO raise an error if the hand slot is not updated within `timeout_ticks`
   end
 
@@ -206,17 +209,27 @@ class Rosegold::Bot
   # TODO select dig location by raytracing; if location is passed, just look there, but interact with whatever may be in the way
 
   # waits for completion, throws error if cancelled
-  def dig(location : Vec3d, face : BlockFace, ticks : UInt32, look = true)
-    action = start_digging(location, face)
+  def dig(ticks : UInt32, look_location : Vec3d)
+    action = start_digging(look_location)
     wait_ticks ticks
     finish_digging
     action.join
   end
 
   # cancels any ongoing dig action
-  def start_digging(location : Vec3d, face : BlockFace)
+  def start_digging(look_location : Vec3d)
     cancel_digging if @dig_action
     raise "Already digging #{@dig_action.target}" if @dig_action # above cancellation immediately triggered a new dig
+    look_at look_location if look_location
+    raise "Already digging #{@dig_action.target}" if @dig_action # while looking, a new dig was triggered
+
+    reached = reach_block_or_entity
+    unless reached
+      dig_action = DigAction.new({Vec3d.ORIGIN, 0}).tap &.succeed
+      return dig_action
+    end
+    _intercept, location, face = reached
+
     dig_action = @dig_action = DigAction.new({location, face})
     client.connection.send_packet Serverbound::PlayerDigging.new \
       Serverbound::PlayerDigging::Status::Start, location, face
@@ -263,6 +276,36 @@ class Rosegold::Bot
         @dig_hand_swing_countdown = 6
         client.connection.send_packet Serverbound::SwingArm.new
       end
+    end
+  end
+
+  private def reach_block_or_entity(look_location : Vec3d? = nil) : RaytraceResult?
+    look_at look_location if look_location
+    reach = look.to_vec3.scale(4)
+    boxes = get_block_hitboxes(head, reach)
+    Raytracing.raytrace(head, reach, boxes).try do |reached|
+      location = boxes[reached.box_nr].min.floored_i32
+      {reached.intercept, location, reached.face}
+    end
+  end
+
+  # Returns all block collision boxes that may intersect from `start` towards `reach`.
+  private def get_block_hitboxes(start : Vec3d, reach : Vec3d) : Array(AABBd)
+    bounds = AABBd.new(start, start + reach)
+    # fences are 1.5m tall
+    min_block = bounds.min.down(0.5).floored_i32
+    max_block = bounds.max.floored_i32
+    blocks_coords = Indexable.cartesian_product({
+      (min_block.x..max_block.x).to_a,
+      (min_block.y..max_block.y).to_a,
+      (min_block.z..max_block.z).to_a,
+    })
+    blocks_coords.flat_map do |block_coords|
+      x, y, z = block_coords
+      client.dimension.block_state(x, y, z).try do |block_state|
+        block_shape = MCData::MC118.block_state_collision_shapes[block_state]
+        block_shape.map &.to_f64.offset(x, y, z)
+      end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
     end
   end
 end
