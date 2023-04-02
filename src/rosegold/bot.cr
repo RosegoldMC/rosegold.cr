@@ -22,6 +22,10 @@ class Rosegold::Bot
     sleep ticks / 20 # TODO adjust to server TPS, changing over time
   end
 
+  def wait_tick
+    wait_ticks 1
+  end
+
   # Direction the player is looking.
   def look
     client.player.look
@@ -29,23 +33,38 @@ class Rosegold::Bot
 
   # Waits for the new look to be sent to the server.
   def look=(look : Look)
-    client.physics.look look
+    client.physics.look = look
+  end
+
+  # Waits for the new look to be sent to the server.
+  def look=(vec : Vec3d)
+    client.physics.look = vec
   end
 
   # Computes the new look from the current look.
   # Waits for the new look to be sent to the server.
   def look(&block : Look -> Look)
-    client.physics.look block.call look
+    client.physics.look = block.call look
   end
 
-  # Waits for the new look to be sent to the server.
-  def look(look : Look)
-    client.physics.look look
+  # Sets the yaw of the look
+  # Waits for the new look to be sent to the server
+  def yaw=(yaw : Float64)
+    self.look = look.with_yaw yaw
   end
 
-  # Waits for the new look to be sent to the server.
-  def look(vec : Vec3d)
-    client.physics.look vec
+  # Sets the pitch of the look
+  # Waits for the new look to be sent to the server
+  def pitch=(pitch : Float64)
+    self.look = look.with_pitch pitch
+  end
+
+  def yaw
+    look.yaw_deg
+  end
+
+  def pitch
+    look.pitch_deg
   end
 
   # Waits for the new look to be sent to the server.
@@ -70,6 +89,12 @@ class Rosegold::Bot
     client.player.eyes
   end
 
+  # Location of the player's feet.
+  # To change the location, use #move_to.
+  def feet
+    client.player.feet
+  end
+
   # Moves straight towards `location`.
   # Waits for arrival.
   def move_to(location : Vec3d)
@@ -89,9 +114,11 @@ class Rosegold::Bot
     client.physics.move block.call feet
   end
 
-  # Does nothing if there is no current movement target.
+  # Stop moving towards the target specified in #move_to
+  # Dequeue any jump queued with #start_jump
   def stop_moving
-    client.physics.move nil
+    client.physics.move = nil
+    client.physics.jump_queued = false
   end
 
   # Jumps the next time the player is on the ground.

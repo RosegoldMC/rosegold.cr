@@ -108,7 +108,7 @@ class Rosegold::Physics
 
   # Set the look target and wait until it is achieved.
   # If there is already a look target, it is cancelled, and replaced with this new target.
-  def look(target : Look)
+  def look=(target : Look)
     action = Action.new(target)
     action_mutex.synchronize do
       @look_action.try &.fail "Replaced by look of #{target}"

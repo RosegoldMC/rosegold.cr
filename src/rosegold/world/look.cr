@@ -15,14 +15,30 @@ struct Rosegold::Look
   getter pitch_deg : Float32
 
   def yaw_rad
-    yaw_deg * Math.TAU / 360
+    yaw_deg * Math::TAU / 360
   end
 
   def pitch_rad
-    pitch_deg * Math.TAU / 360
+    pitch_deg * Math::TAU / 360
   end
 
-  private def initialize(@yaw_deg : Float32, @pitch_deg : Float32); end
+  def with_yaw(yaw : Float32)
+    Look.new(yaw, pitch_deg)
+  end
+
+  def with_yaw(yaw : Float64)
+    with_yaw yaw.to_f32
+  end
+
+  def with_pitch(pitch : Float32)
+    Look.new(yaw_deg, pitch)
+  end
+
+  def with_pitch(pitch : Float64)
+    with_pitch pitch.to_f32
+  end
+
+  def initialize(@yaw_deg : Float32, @pitch_deg : Float32); end
 
   def self.from_deg(yaw_deg : Float32, pitch_deg : Float32)
     while yaw_deg < 0
@@ -32,7 +48,7 @@ struct Rosegold::Look
   end
 
   def self.from_rad(yaw_rad : Float32, pitch_rad : Float32)
-    self.from_deg yaw_rad * 360 / Math.TAU, pitch_rad * 360 / Math.TAU
+    self.from_deg yaw_rad * 360 / Math::TAU, pitch_rad * 360 / Math::TAU
   end
 
   def self.from_vec(vec : Vec3d | Vec3f)
