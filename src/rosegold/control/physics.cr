@@ -1,4 +1,5 @@
 require "../client"
+require "./action"
 require "./raytracing"
 
 struct Int32
@@ -75,24 +76,6 @@ class Rosegold::Physics
     end
   end
 
-  private struct Action(T)
-    SUCCESS = ""
-
-    # TODO try channel size 1 so #succeed/#fail aren't rendezvous
-    getter channel : Channel(String) = Channel(String).new
-    getter target : T
-
-    def initialize(@target : T); end
-
-    def fail(msg : String)
-      @channel.send(msg)
-    end
-
-    def succeed
-      @channel.send(SUCCESS)
-    end
-  end
-
   # Set the movement target location and wait until it is achieved.
   # If there is already a movement target, it is cancelled, and replaced with this new target.
   # Set `target=nil` to stop moving and cancel any current movement.
@@ -110,8 +93,7 @@ class Rosegold::Physics
       @movement_action.try &.fail "Replaced by movement to #{target}"
       @movement_action = action
     end
-    result = action.channel.receive
-    raise Exception.new(result) if result != Action::SUCCESS
+    action.join
   end
 
   # Set the look target and wait until it is achieved.
@@ -122,8 +104,7 @@ class Rosegold::Physics
       @look_action.try &.fail "Replaced by look of #{target}"
       @look_action = action
     end
-    result = action.channel.receive
-    raise Exception.new(result) if result != Action::SUCCESS
+    action.join
   end
 
   private def player

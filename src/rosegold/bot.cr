@@ -1,4 +1,5 @@
 require "../rosegold"
+require "./control/action"
 
 class Rosegold::Bot
   private getter client : Client
@@ -136,6 +137,8 @@ class Rosegold::Bot
       client.player.entity_id, Serverbound::EntityAction::Type::LeaveBed
   end
 
+  # TODO select interact/placement location/entity by raytracing; if location is passed, just look there, but interact with whatever may be in the way
+
   def interact_block(location : Vec3d, face : BlockFace, look = true)
     place_block_against(location, face, look, 0)
   end
@@ -197,23 +200,49 @@ class Rosegold::Bot
   end
 
   # not exposed, for rules compliance
-  @digging_location : Vec3d?
+  @dig_action : Action(Tuple(Vec3d, BlockFace))?
+  @dig_hand_swing_countdown = 0_i8
 
-  # waits for completion
+  # TODO select dig location by raytracing; if location is passed, just look there, but interact with whatever may be in the way
+
+  # waits for completion, throws error if cancelled
   def dig(location : Vec3d, face : BlockFace, ticks : UInt32, look = true)
-    raise "Not implemented" # TODO
+    action = start_digging(location, face)
+    wait_ticks ticks
+    finish_digging
+    action.join
   end
 
-  def start_digging(location : Vec3d, face : BlockFace, look = true)
-    raise "Not implemented" # TODO
+  # cancels any ongoing dig action
+  def start_digging(location : Vec3d, face : BlockFace)
+    cancel_digging if @dig_action
+    raise "Already digging #{@dig_action.target}" if @dig_action # above cancellation immediately triggered a new dig
+    dig_action = @dig_action = DigAction.new({location, face})
+    client.connection.send_packet Serverbound::PlayerDigging.new \
+      Serverbound::PlayerDigging::Status::Start, location, face
+    client.connection.send_packet Serverbound::SwingArm.new
+    @dig_hand_swing_countdown = 6
+    dig_action
   end
 
   def finish_digging
-    raise "Not implemented" # TODO
+    dig_action = @dig_action
+    return unless dig_action
+    location, face = dig_action.target
+    client.connection.send_packet Serverbound::PlayerDigging.new \
+      Serverbound::PlayerDigging::Status::Finish, location, face
+    @dig_action = nil
+    dig_action.succeed
   end
 
   def cancel_digging
-    raise "Not implemented" # TODO
+    dig_action = @dig_action
+    return unless dig_action
+    location, face = dig_action.target
+    client.connection.send_packet Serverbound::PlayerDigging.new \
+      Serverbound::PlayerDigging::Status::Finish, location, face
+    @dig_action = nil
+    dig_action.fail "Cancelled"
   end
 
   # Add a callback processed upon specified incoming packet
@@ -225,5 +254,15 @@ class Rosegold::Bot
   # ```
   def on(packet_type : T.class, &block : T ->) forall T
     client.on packet_type, &block
+  end
+
+  private def on_physics_tick
+    if @digging_location
+      @dig_hand_swing_countdown -= 1
+      if @dig_hand_swing_countdown <= 0
+        @dig_hand_swing_countdown = 6
+        client.connection.send_packet Serverbound::SwingArm.new
+      end
+    end
   end
 end
