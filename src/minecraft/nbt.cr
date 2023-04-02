@@ -347,7 +347,10 @@ module Minecraft::NBT
 
     getter value : Hash(String, Tag)
 
-    def initialize(@value : Hash(String, Tag))
+    def initialize(@value : Hash(String, Tag)); end
+
+    def self.new
+      self.new({} of String => Tag)
     end
 
     def self.read(io : IO)

@@ -39,6 +39,21 @@ class Rosegold::PalettedContainer
     @long_array = Array(Long).new(num_longs) { io.read_long }
   end
 
+  def write(io : Minecraft::IO)
+    io.write bits_per_entry
+    if bits_per_entry == 0
+      io.write palette[0]
+      io.write 0_i32
+      return
+    end
+    unless palette.empty?
+      io.write palette.size
+      palette.each { |id| io.write id }
+    end
+    io.write long_array.size
+    long_array.each { |id| io.write_full id }
+  end
+
   def [](index : Index) : Entry
     long_array = self.long_array
     return palette.[0] if long_array.empty?
