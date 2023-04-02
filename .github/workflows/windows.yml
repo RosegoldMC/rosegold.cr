@@ -1,0 +1,55 @@
+name: CI (windows)
+
+on: pull_request
+
+jobs:
+  RunSpecs:
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: true
+      matrix:
+        crystal_version:
+          - 1.7.3
+          - latest
+        experimental:
+          - false
+
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - name: Install Crystal
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal_version }}
+
+      - name: Set up Crystal cache
+        uses: actions/cache@v2.1.7
+        id: crystal-cache
+        with:
+          path: |
+            ~/.cache/crystal
+            bin/ameba
+            lib
+          key: ${{ runner.os }}-crystal-${{ matrix.crystal_version }}-${{ hashFiles('**/shard.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-crystal-
+
+      - name: Install shards
+        if: steps.crystal-cache.outputs.cache-hit != 'true'
+        run: |
+          shards check
+          if ($LASTEXITCODE -ne 0) {
+            shards install --ignore-crystal-version --skip-postinstall --skip-executables
+          }
+        shell: pwsh
+
+      - name: Create .env
+        run: New-Item -Path . -Name ".env" -ItemType "file"
+
+      - name: Run tests
+        run: crystal spec spec/rosegold_spec.cr spec/models spec/minecraft
+        env:
+          UUID: 00000000-0000-0000-0000-000000000000
+          ACCESS_TOKEN: ""
+          MC_NAME: rosegold_test
