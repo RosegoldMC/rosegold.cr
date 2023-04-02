@@ -13,7 +13,7 @@ struct Rosegold::Slot
 
     item_id = io.read_var_int
     count = io.read_byte
-    nbt = Minecraft::NBT::Tag.read_named(io)[1]
+    nbt = io.read_nbt
     nbt = nil if nbt.is_a? Minecraft::NBT::EndTag
 
     new(item_id, count, nbt)
