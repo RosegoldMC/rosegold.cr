@@ -59,38 +59,38 @@ class Rosegold::Bot
   end
 
   # Location of the player's feet.
-  # To change the location, use #walk_to.
+  # To change the location, use #move_to.
   def feet
     client.player.feet
   end
 
   # Location of the player's eyes.
-  # To change the location, use #walk_to.
+  # To change the location, use #move_to.
   def eyes
     client.player.eyes
   end
 
-  # Walks straight towards `location`.
+  # Moves straight towards `location`.
   # Waits for arrival.
-  def walk_to(location : Vec3d)
+  def move_to(location : Vec3d)
     client.physics.move location
   end
 
-  # Walks straight towards `location`.
+  # Moves straight towards `location`.
   # Waits for arrival.
-  def walk_to(x : Float64, z : Float64)
+  def move_to(x : Float64, z : Float64)
     client.physics.move Vec3d.new x, feet.y, z
   end
 
   # Computes the destination location from the current feet location.
-  # Walks straight towards the destination.
+  # Moves straight towards the destination.
   # Waits for arrival.
-  def walk_to(&block : Vec3d -> Vec3d)
+  def move_to(&block : Vec3d -> Vec3d)
     client.physics.move block.call feet
   end
 
-  # Does nothing if there is no current walk target.
-  def stop_walking
+  # Does nothing if there is no current movement target.
+  def stop_moving
     client.physics.move nil
   end
 
