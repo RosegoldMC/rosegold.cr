@@ -1,6 +1,9 @@
 name: rosegold
 version: 0.1.0
 
+crystalline:
+  main: .crystalline_main.cr
+
 authors:
   - grepsedawk <grepsedawk@users.noreply.github.com>
   - Gjum <Gjum@users.noreply.github.com>

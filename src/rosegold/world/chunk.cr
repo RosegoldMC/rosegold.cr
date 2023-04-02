@@ -1,3 +1,4 @@
+require "../../minecraft/nbt"
 require "./paletted_container"
 
 class Rosegold::Chunk

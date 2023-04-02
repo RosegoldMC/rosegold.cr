@@ -48,9 +48,9 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id
       buffer.write_full entity_id
-      buffer.write hardcore
+      buffer.write hardcore?
       buffer.write gamemode
-      buffer.write prev_gamemode
+      buffer.write previous_gamemode
       buffer.write dimension_names.size
       dimension_names.each { |name| buffer.write name }
       buffer.write dimension_codec
@@ -60,10 +60,10 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
       buffer.write max_players
       buffer.write view_distance
       buffer.write simulation_distance
-      buffer.write reduced_debug_info
-      buffer.write enable_respawn_screen
-      buffer.write is_debug
-      buffer.write is_flat
+      buffer.write reduced_debug_info?
+      buffer.write enable_respawn_screen?
+      buffer.write is_debug?
+      buffer.write is_flat?
     end.to_slice
   end
 

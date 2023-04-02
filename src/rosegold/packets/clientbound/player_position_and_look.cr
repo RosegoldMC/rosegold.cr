@@ -61,7 +61,7 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
       buffer.write pitch_deg_raw
       buffer.write relative_flags
       buffer.write teleport_id
-      buffer.write dismount_vehicle
+      buffer.write dismount_vehicle?
     end.to_slice
   end
 
