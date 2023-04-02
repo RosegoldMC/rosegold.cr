@@ -105,7 +105,9 @@ module Minecraft::NBT
 
     def self.read_named(io : IO, tag_type = io.read_byte) : NamedTag
       name = ""
-      tag = read(io, tag_type) { name = StringTag.read(io).value }
+      tag = Tag.read(io, tag_type) do |tag_type|
+        name = StringTag.read(io).value unless tag_type == 0
+      end
 
       {name, tag}
     end
