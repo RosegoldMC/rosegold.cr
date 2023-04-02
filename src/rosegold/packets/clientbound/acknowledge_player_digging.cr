@@ -12,7 +12,7 @@ class Rosegold::Clientbound::AcknowledgePlayerDigging < Rosegold::Clientbound::P
 
   def self.read(packet)
     self.new(
-      packet.read_position,
+      packet.read_bit_position,
       packet.read_var_int,
       packet.read_var_int,
       packet.read_bool
