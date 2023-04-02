@@ -44,6 +44,10 @@ class Rosegold::Dimension
     @chunks[chunk_pos]?.try &.block_state(x, y, z)
   end
 
+  def set_block_state(location : Vec3i, block_state : UInt16)
+    set_block_state location.x, location.y, location.z, block_state
+  end
+
   def set_block_state(x : Int32, y : Int32, z : Int32, block_state : UInt16)
     chunk_pos = {x >> 4, z >> 4}
     @chunks[chunk_pos]?.try &.set_block_state(x, y, z, block_state)

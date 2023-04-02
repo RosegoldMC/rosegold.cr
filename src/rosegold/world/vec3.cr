@@ -158,8 +158,12 @@ module Rosegold::Vec3(T)
     dist_sq(other) < closer_than * closer_than
   end
 
-  def [](i) : T
+  def [](i : Number) : T
     {x, y, z}[i]
+  end
+
+  def [](axis : Axis) : T
+    {x, y, z}[axis.value]
   end
 
   def to_s(io)
@@ -217,4 +221,13 @@ struct Rosegold::Vec3d
   def floored_i32 : Vec3i
     Vec3i.new x.floor.to_i32, y.floor.to_i32, z.floor.to_i32
   end
+end
+
+enum Rosegold::Axis
+  X; Y; Z
+end
+
+enum BlockFace
+  # order matters for packet serialization
+  Bottom; Top; North; South; West; East
 end

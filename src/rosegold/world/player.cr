@@ -29,3 +29,7 @@ class Rosegold::Player
     feet.up 1.625 # TODO depends on sneaking/crawling/swimming
   end
 end
+
+enum Rosegold::Hand
+  MainHand; OffHand
+end

@@ -17,7 +17,7 @@ Client.new("localhost").join_game do |client|
 
   spawn do
     loop do
-      bot.walk_to rand(-10..10), rand(-10..10)
+      bot.move_to rand(-10..10), rand(-10..10)
       sleep 3
     end
   end
@@ -49,7 +49,7 @@ Client.new("localhost").join_game do |client|
       spawn do
         location = Vec3d.new command[1].to_f, bot.feet.y, command[3].to_f
         begin
-          bot.walk_to location
+          bot.move_to location
           puts "Arrived at #{bot.feet}"
         rescue ex
           puts "Movement to #{location} failed:"
