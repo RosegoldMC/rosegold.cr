@@ -9,24 +9,14 @@ struct Rosegold::Slot
 
   def self.read(io : IO) : Rosegold::Slot
     present = io.read_bool
+    return new unless present # Empty slot
 
-    if present
-      item_id = io.read_var_int
-      count = io.read_byte
+    item_id = io.read_var_int
+    count = io.read_byte
+    nbt = Minecraft::NBT::Tag.read(io)
+    nbt = nil if nbt.is_a? Minecraft::NBT::EndTag
 
-      # Check if there's any NBT data
-      first_byte = io.peek
-      if first_byte == 0
-        io.read_byte # Skip the TAG_END byte
-        nbt = nil
-      else
-        nbt = Minecraft::NBT::Tag.read(io)
-      end
-
-      new(item_id, count, nbt)
-    else
-      new # Empty slot
-    end
+    new(item_id, count, nbt)
   end
 
   def empty?
