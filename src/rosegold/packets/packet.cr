@@ -8,6 +8,10 @@ abstract class Rosegold::Packet
   macro packet_id(id)
     class_getter packet_id = {{id}}_u8
   end
+
+  macro protocol_state(s)
+    class_getter state = {{s}}
+  end
 end
 
 abstract class Rosegold::Clientbound::Packet < Rosegold::Packet

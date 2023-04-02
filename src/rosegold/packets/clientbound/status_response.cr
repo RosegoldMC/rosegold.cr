@@ -2,7 +2,8 @@ require "json"
 require "../packet"
 
 class Rosegold::Clientbound::StatusResponse < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0_u8
+  packet_id 0
+  protocol_state Rosegold::ProtocolState::STATUS
 
   property json_response : JSON::Any
 
@@ -19,5 +20,3 @@ class Rosegold::Clientbound::StatusResponse < Rosegold::Clientbound::Packet
     end.to_slice
   end
 end
-
-Rosegold::ProtocolState::STATUS.register Rosegold::Clientbound::StatusResponse
