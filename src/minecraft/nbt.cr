@@ -354,11 +354,7 @@ module Minecraft::NBT
       loop do
         name = ""
         tag = Tag.read(io) do |tag_type|
-          name = if tag_type == 0
-                   ""
-                 else
-                   StringTag.read(io).value
-                 end
+          name = StringTag.read(io).value unless tag_type == 0
         end
 
         if tag.is_a? EndTag
