@@ -13,7 +13,7 @@ class Rosegold::Clientbound::BlockChange < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     self.new(
-      *packet.read_position,
+      *packet.read_bit_position,
       packet.read_var_int.to_u16
     )
   end

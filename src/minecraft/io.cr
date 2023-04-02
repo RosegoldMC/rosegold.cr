@@ -61,17 +61,13 @@ module Minecraft::IO
     write slot.nbt || 0_u8
   end
 
-  def write_position(x : Int32, y : Int32, z : Int32)
+  def write_bit_position(x : Int32, y : Int32, z : Int32)
     x, y, z = x.to_i64, y.to_i64, z.to_i64
     write_full ((x & 0x3FFFFFF) << 38) | ((z & 0x3FFFFFF) << 12) | (y & 0xFFF)
   end
 
-  def write(position : Rosegold::Vec3d)
-    write_position position.x.floor.to_i, position.y.floor.to_i, position.z.floor.to_i
-  end
-
-  def write(position : Tuple(Int32, Int32, Int32))
-    write_position position[0], position[1], position[2]
+  def write_bit_position(position : Rosegold::Vec3d)
+    write_bit_position position.x.floor.to_i, position.y.floor.to_i, position.z.floor.to_i
   end
 
   def read_byte
@@ -175,7 +171,7 @@ module Minecraft::IO
     Rosegold::Slot.new(read_var_int, read_byte, read_nbt)
   end
 
-  def read_position : Tuple(Int32, Int32, Int32)
+  def read_bit_position : Tuple(Int32, Int32, Int32)
     value = read_long
     # here ordered LSB to MSB; use arithmetic shift to preserve sign
     y = ((value << 52) >> 52).to_i32 # 12 bits
