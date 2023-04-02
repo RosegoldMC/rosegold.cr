@@ -30,6 +30,10 @@ class Rosegold::Client
   private alias Callbacks = Hash(Clientbound::Packet.class, Array(Proc(Clientbound::Packet, Nil)))
 
   def initialize(@host : String, @port : UInt16 = 25565)
+    if host.includes? ":"
+      @host, port_str = host.split ":"
+      @port = port_str.to_u16
+    end
     @physics = uninitialized Physics
     @physics = Physics.new self
   end

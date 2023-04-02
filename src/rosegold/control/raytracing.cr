@@ -14,14 +14,6 @@ module Rosegold::Raytracing
     def initialize(@intercept : Vec3d, @box_nr : Int32, @axis : Axis); end
   end
 
-  enum Axis
-    X; Y; Z
-
-    def [](vec : Vec3d) : Float64
-      vec[self.value]
-    end
-  end
-
   def self.raytrace(start : Vec3d, delta : Vec3d, boxes : Array(AABBd))
     raytrace(Ray.new(start, delta), boxes)
   end
@@ -82,8 +74,8 @@ module Rosegold::Raytracing
   private def self.intersect_plane(
     ray : Ray, box : AABBd, plane_coord : Float64, axis : Axis
   ) : Tuple(Float64, Vec3d)?
-    delta_coord = axis[ray.delta]
-    start_coord = axis[ray.start]
+    delta_coord = ray.delta[axis]
+    start_coord = ray.start[axis]
     return nil if delta_coord * delta_coord < 0.0000001 # ray parallel to plane
     scalar = (plane_coord - start_coord) / delta_coord
     return nil if !(0 <= scalar && scalar < 1) # plane too far behind/ahead of ray
