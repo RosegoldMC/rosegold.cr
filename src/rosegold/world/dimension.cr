@@ -22,7 +22,8 @@ class Rosegold::Dimension
     })
   end
 
-  def load_chunk(chunk_pos : ChunkPos, chunk : Chunk)
+  def load_chunk(chunk : Chunk)
+    chunk_pos = {chunk.x, chunk.z}
     @chunks[chunk_pos] = chunk
   end
 

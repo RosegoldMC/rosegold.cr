@@ -13,6 +13,10 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
 
   def initialize(@chunk_x, @chunk_z, @heightmaps, @data, @block_entities, @light_data); end
 
+  def self.new(chunk : Chunk)
+    self.new chunk.x, chunk.z, chunk.heightmaps, chunk.data, chunk.block_entities, chunk.light_data
+  end
+
   def self.read(io)
     chunk_x = io.read_int
     chunk_z = io.read_int
@@ -56,10 +60,11 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
 
   def callback(client)
     source = Minecraft::IO::Memory.new data
-    chunk = Chunk.new source, client.dimension
+    chunk = Chunk.new chunk_x, chunk_z, source, client.dimension
     chunk.block_entities = block_entities
+    chunk.heightmaps = heightmaps
     chunk.light_data = light_data
-    client.dimension.load_chunk ({chunk_x, chunk_z}), chunk
+    client.dimension.load_chunk chunk
   end
 
   def inspect(io)
