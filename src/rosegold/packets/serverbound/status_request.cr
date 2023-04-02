@@ -2,6 +2,7 @@ require "../packet"
 
 class Rosegold::Serverbound::StatusRequest < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x00_u8
+  protocol_state Rosegold::ProtocolState::STATUS
 
   def self.read(io)
     self.new
@@ -13,5 +14,3 @@ class Rosegold::Serverbound::StatusRequest < Rosegold::Serverbound::Packet
     end.to_slice
   end
 end
-
-Rosegold::ProtocolState::STATUS.register Rosegold::Serverbound::StatusRequest
