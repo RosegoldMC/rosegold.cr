@@ -61,11 +61,6 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Hand" data-name="hand">
-      <a href="../Hand.html">Hand</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Int32" data-name="int32">
       <a href="../Int32.html">Int32</a>
       
@@ -246,6 +241,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Axis" data-name="rosegold::axis">
+      <a href="../Rosegold/Axis.html">Axis</a>
+      
+    </li>
+  
   <li class=" current" data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
       <a href="../Rosegold/Bot.html">Bot</a>
       
@@ -286,8 +286,18 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
       <a href="../Rosegold/Clientbound/AcknowledgePlayerDigging.html">AcknowledgePlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging/Status" data-name="rosegold::clientbound::acknowledgeplayerdigging::status">
+      <a href="../Rosegold/Clientbound/AcknowledgePlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -461,6 +471,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Hand" data-name="rosegold::hand">
+      <a href="../Rosegold/Hand.html">Hand</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
       <a href="../Rosegold/Look.html">Look</a>
       
@@ -556,11 +571,6 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/Axis" data-name="rosegold::raytracing::axis">
-      <a href="../Rosegold/Raytracing/Axis.html">Axis</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Rosegold/Raytracing/Ray" data-name="rosegold::raytracing::ray">
       <a href="../Rosegold/Raytracing/Ray.html">Ray</a>
       
@@ -601,8 +611,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/EntityAction" data-name="rosegold::serverbound::entityaction">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/EntityAction" data-name="rosegold::serverbound::entityaction">
       <a href="../Rosegold/Serverbound/EntityAction.html">EntityAction</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/EntityAction/Type" data-name="rosegold::serverbound::entityaction::type">
+      <a href="../Rosegold/Serverbound/EntityAction/Type.html">Type</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -646,8 +666,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
       <a href="../Rosegold/Serverbound/PlayerDigging.html">PlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging/Status" data-name="rosegold::serverbound::playerdigging::status">
+      <a href="../Rosegold/Serverbound/PlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -783,7 +813,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L11" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L3" target="_blank">
         rosegold/bot.cr
       </a>
     
@@ -826,11 +856,6 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#activate_block%28location%3AVec3d%2Cface%3ABlockFace%2Clook%3Dtrue%29-instance-method" class="signature"><strong>#activate_block</strong>(location : Vec3d, face : BlockFace, look = <span class="n">true</span>)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#cancel_digging-instance-method" class="signature"><strong>#cancel_digging</strong></a>
         
       </li>
@@ -845,10 +870,17 @@
       <li class="entry-summary">
         <a href="#dig%28location%3AVec3d%2Cface%3ABlockFace%2Cticks%3AUInt32%2Clook%3Dtrue%29-instance-method" class="signature"><strong>#dig</strong>(location : Vec3d, face : BlockFace, ticks : UInt32, look = <span class="n">true</span>)</a>
         
+          <div class="summary"><p>waits for completion</p></div>
+        
       </li>
     
       <li class="entry-summary">
-        <a href="#digging_location%3AVec3%7CNil-instance-method" class="signature"><strong>#digging_location</strong> : Vec3 | Nil</a>
+        <a href="#drop_hand_full-instance-method" class="signature"><strong>#drop_hand_full</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#drop_hand_single-instance-method" class="signature"><strong>#drop_hand_single</strong></a>
         
       </li>
     
@@ -926,12 +958,19 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#interact_block%28location%3AVec3d%2Cface%3ABlockFace%2Clook%3Dtrue%29-instance-method" class="signature"><strong>#interact_block</strong>(location : Vec3d, face : BlockFace, look = <span class="n">true</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#inventory-instance-method" class="signature"><strong>#inventory</strong></a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#leave_bed-instance-method" class="signature"><strong>#leave_bed</strong></a>
+        
+          <div class="summary"><p>Use #interact_block to enter a bed.</p></div>
         
       </li>
     
@@ -990,6 +1029,27 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#move_to%28x%3AFloat64%2Cz%3AFloat64%29-instance-method" class="signature"><strong>#move_to</strong>(x : Float64, z : Float64)</a>
+        
+          <div class="summary"><p>Moves straight towards <code>location</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#move_to%28location%3AVec3d%29-instance-method" class="signature"><strong>#move_to</strong>(location : Vec3d)</a>
+        
+          <div class="summary"><p>Moves straight towards <code>location</code>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#move_to%28%26block%3AVec3d-%3EVec3d%29-instance-method" class="signature"><strong>#move_to</strong>(&block : Vec3d -> Vec3d)</a>
+        
+          <div class="summary"><p>Computes the destination location from the current feet location.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#off_hand-instance-method" class="signature"><strong>#off_hand</strong></a>
         
       </li>
@@ -997,7 +1057,7 @@
       <li class="entry-summary">
         <a href="#on%28packet_type%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method" class="signature"><strong>#on</strong>(packet_type : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T</a>
         
-          <div class="summary"><p>add a callback processed upon specified incoming packet</p></div>
+          <div class="summary"><p>Add a callback processed upon specified incoming packet</p></div>
         
       </li>
     
@@ -1050,14 +1110,14 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#stop_using_item-instance-method" class="signature"><strong>#stop_using_item</strong></a>
+        <a href="#stop_moving-instance-method" class="signature"><strong>#stop_moving</strong></a>
+        
+          <div class="summary"><p>Does nothing if there is no current movement target.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#stop_walking-instance-method" class="signature"><strong>#stop_walking</strong></a>
-        
-          <div class="summary"><p>Does nothing if there is no current walk target.</p></div>
+        <a href="#stop_using_item-instance-method" class="signature"><strong>#stop_using_item</strong></a>
         
       </li>
     
@@ -1070,27 +1130,6 @@
         <a href="#wait_ticks%28ticks%3AUInt32%29-instance-method" class="signature"><strong>#wait_ticks</strong>(ticks : UInt32)</a>
         
           <div class="summary"><p>Is adjusted to server TPS.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#walk_to%28x%3AFloat64%2Cz%3AFloat64%29-instance-method" class="signature"><strong>#walk_to</strong>(x : Float64, z : Float64)</a>
-        
-          <div class="summary"><p>Walks straight towards <code>location</code>.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#walk_to%28location%3AVec3d%29-instance-method" class="signature"><strong>#walk_to</strong>(location : Vec3d)</a>
-        
-          <div class="summary"><p>Walks straight towards <code>location</code>.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#walk_to%28%26block%3AVec3d-%3EVec3d%29-instance-method" class="signature"><strong>#walk_to</strong>(&block : Vec3d -> Vec3d)</a>
-        
-          <div class="summary"><p>Computes the destination location from the current feet location.</p></div>
         
       </li>
     
@@ -1145,7 +1184,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1164,22 +1203,6 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="activate_block(location:Vec3d,face:BlockFace,look=true)-instance-method">
-      <div class="signature">
-        
-        def <strong>activate_block</strong>(location : <a href="../Rosegold/Vec3d.html">Vec3d</a>, face : <a href="../BlockFace.html">BlockFace</a>, look = <span class="n">true</span>)
-
-        <a class="method-permalink" href="#activate_block%28location%3AVec3d%2Cface%3ABlockFace%2Clook%3Dtrue%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L114" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="cancel_digging-instance-method">
       <div class="signature">
         
@@ -1191,7 +1214,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L191" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L206" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1212,7 +1235,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1225,26 +1248,47 @@
         <a class="method-permalink" href="#dig%28location%3AVec3d%2Cface%3ABlockFace%2Cticks%3AUInt32%2Clook%3Dtrue%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>waits for completion</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L179" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L194" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="digging_location:Vec3|Nil-instance-method">
+    <div class="entry-detail" id="drop_hand_full-instance-method">
       <div class="signature">
         
-        def <strong>digging_location</strong> : <a href="../Rosegold/Vec3.html">Vec3</a> | Nil
+        def <strong>drop_hand_full</strong>
 
-        <a class="method-permalink" href="#digging_location%3AVec3%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#drop_hand_full-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L175" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L168" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="drop_hand_single-instance-method">
+      <div class="signature">
+        
+        def <strong>drop_hand_single</strong>
+
+        <a class="method-permalink" href="#drop_hand_single-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L162" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1260,7 +1304,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L137" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L137" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1276,13 +1320,13 @@
         <div class="doc">
           
           <p>Location of the player's eyes.
-To change the location, use #walk_to.</p>
+To change the location, use #move_to.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1298,13 +1342,13 @@ To change the location, use #walk_to.</p>
         <div class="doc">
           
           <p>Location of the player's feet.
-To change the location, use #walk_to.</p>
+To change the location, use #move_to.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L71" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1320,7 +1364,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L187" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L202" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1336,7 +1380,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1352,7 +1396,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1368,7 +1412,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1384,7 +1428,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1400,7 +1444,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1416,7 +1460,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1432,7 +1476,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L145" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1453,7 +1497,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L124" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L124" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1474,7 +1518,23 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L129" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L129" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="interact_block(location:Vec3d,face:BlockFace,look=true)-instance-method">
+      <div class="signature">
+        
+        def <strong>interact_block</strong>(location : <a href="../Rosegold/Vec3d.html">Vec3d</a>, face : <a href="../BlockFace.html">BlockFace</a>, look = <span class="n">true</span>)
+
+        <a class="method-permalink" href="#interact_block%28location%3AVec3d%2Cface%3ABlockFace%2Clook%3Dtrue%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L108" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1490,7 +1550,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L141" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L141" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1503,10 +1563,15 @@ To change the location, use #walk_to.</p>
         <a class="method-permalink" href="#leave_bed-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Use #interact_block to enter a bed.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L110" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L103" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1527,7 +1592,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1548,7 +1613,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1569,7 +1634,7 @@ To change the location, use #walk_to.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1591,7 +1656,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1612,7 +1677,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1633,7 +1698,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L60" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L52" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1654,7 +1719,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L65" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1670,7 +1735,74 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L149" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L149" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="move_to(x:Float64,z:Float64)-instance-method">
+      <div class="signature">
+        
+        def <strong>move_to</strong>(x : Float64, z : Float64)
+
+        <a class="method-permalink" href="#move_to%28x%3AFloat64%2Cz%3AFloat64%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Moves straight towards <code>location</code>.
+Waits for arrival.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L81" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="move_to(location:Vec3d)-instance-method">
+      <div class="signature">
+        
+        def <strong>move_to</strong>(location : <a href="../Rosegold/Vec3d.html">Vec3d</a>)
+
+        <a class="method-permalink" href="#move_to%28location%3AVec3d%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Moves straight towards <code>location</code>.
+Waits for arrival.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L75" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="move_to(&amp;block:Vec3d-&gt;Vec3d)-instance-method">
+      <div class="signature">
+        
+        def <strong>move_to</strong>(&block : <a href="../Rosegold/Vec3d.html">Vec3d</a> -> <a href="../Rosegold/Vec3d.html">Vec3d</a>)
+
+        <a class="method-permalink" href="#move_to%28%26block%3AVec3d-%3EVec3d%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Computes the destination location from the current feet location.
+Moves straight towards the destination.
+Waits for arrival.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L88" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1686,7 +1818,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L153" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L153" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1701,7 +1833,7 @@ Waits for the new look to be sent to the server.</p>
       
         <div class="doc">
           
-          <p>add a callback processed upon specified incoming packet</p>
+          <p>Add a callback processed upon specified incoming packet</p>
 <pre><code class="language-crystal">client.on_packet <span class="t">Clientbound</span><span class="t">::</span><span class="t">Chat</span> <span class="k">do</span> <span class="o">|</span>chat<span class="o">|</span>
   puts <span class="s">&quot;Received chat: </span><span class="i">#{</span>chat.message<span class="i">}</span><span class="s">&quot;</span>
 <span class="k">end</span></code></pre>
@@ -1710,7 +1842,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L202" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L217" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1726,13 +1858,13 @@ Waits for the new look to be sent to the server.</p>
         <div class="doc">
           
           <p>Moves the slot to the hotbar and selects it.
-This is faster and less error-prone than doing these steps individually.</p>
+This is faster and less error-prone than moving slots around individually.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L163" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L176" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1753,7 +1885,7 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L119" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L113" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1774,7 +1906,7 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1790,7 +1922,7 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1806,7 +1938,7 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1822,7 +1954,7 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L183" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L198" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1843,7 +1975,7 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L106" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L98" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1859,7 +1991,28 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L167" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L180" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="stop_moving-instance-method">
+      <div class="signature">
+        
+        def <strong>stop_moving</strong>
+
+        <a class="method-permalink" href="#stop_moving-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Does nothing if there is no current movement target.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1875,28 +2028,7 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L171" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="stop_walking-instance-method">
-      <div class="signature">
-        
-        def <strong>stop_walking</strong>
-
-        <a class="method-permalink" href="#stop_walking-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Does nothing if there is no current walk target.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L185" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1912,7 +2044,7 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L157" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L157" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1933,74 +2065,7 @@ This is faster and less error-prone than doing these steps individually.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L29" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="walk_to(x:Float64,z:Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>walk_to</strong>(x : Float64, z : Float64)
-
-        <a class="method-permalink" href="#walk_to%28x%3AFloat64%2Cz%3AFloat64%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Walks straight towards <code>location</code>.
-Waits for arrival.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L89" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="walk_to(location:Vec3d)-instance-method">
-      <div class="signature">
-        
-        def <strong>walk_to</strong>(location : <a href="../Rosegold/Vec3d.html">Vec3d</a>)
-
-        <a class="method-permalink" href="#walk_to%28location%3AVec3d%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Walks straight towards <code>location</code>.
-Waits for arrival.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L83" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="walk_to(&amp;block:Vec3d-&gt;Vec3d)-instance-method">
-      <div class="signature">
-        
-        def <strong>walk_to</strong>(&block : <a href="../Rosegold/Vec3d.html">Vec3d</a> -> <a href="../Rosegold/Vec3d.html">Vec3d</a>)
-
-        <a class="method-permalink" href="#walk_to%28%26block%3AVec3d-%3EVec3d%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Computes the destination location from the current feet location.
-Walks straight towards the destination.
-Waits for arrival.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/bot.cr#L96" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/bot.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>

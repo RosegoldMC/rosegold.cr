@@ -61,11 +61,6 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Hand" data-name="hand">
-      <a href="../../Hand.html">Hand</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Int32" data-name="int32">
       <a href="../../Int32.html">Int32</a>
       
@@ -246,6 +241,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Axis" data-name="rosegold::axis">
+      <a href="../../Rosegold/Axis.html">Axis</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
       <a href="../../Rosegold/Bot.html">Bot</a>
       
@@ -286,8 +286,18 @@
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
+  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
       <a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging.html">AcknowledgePlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging/Status" data-name="rosegold::clientbound::acknowledgeplayerdigging::status">
+      <a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -461,6 +471,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Hand" data-name="rosegold::hand">
+      <a href="../../Rosegold/Hand.html">Hand</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
       <a href="../../Rosegold/Look.html">Look</a>
       
@@ -556,11 +571,6 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/Axis" data-name="rosegold::raytracing::axis">
-      <a href="../../Rosegold/Raytracing/Axis.html">Axis</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Rosegold/Raytracing/Ray" data-name="rosegold::raytracing::ray">
       <a href="../../Rosegold/Raytracing/Ray.html">Ray</a>
       
@@ -601,8 +611,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/EntityAction" data-name="rosegold::serverbound::entityaction">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/EntityAction" data-name="rosegold::serverbound::entityaction">
       <a href="../../Rosegold/Serverbound/EntityAction.html">EntityAction</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/EntityAction/Type" data-name="rosegold::serverbound::entityaction::type">
+      <a href="../../Rosegold/Serverbound/EntityAction/Type.html">Type</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -646,8 +666,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
       <a href="../../Rosegold/Serverbound/PlayerDigging.html">PlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging/Status" data-name="rosegold::serverbound::playerdigging::status">
+      <a href="../../Rosegold/Serverbound/PlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -783,7 +813,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L1" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L3" target="_blank">
         rosegold/packets/clientbound/acknowledge_player_digging.cr
       </a>
     
@@ -805,7 +835,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28location%3ATuple%28Int32%2CInt32%2CInt32%29%2Cblock%3AUInt32%2Cstatus%3AUInt32%2Csuccessful%3ABool%29-class-method" class="signature"><strong>.new</strong>(location : Tuple(Int32, Int32, Int32), block : UInt32, status : UInt32, successful : Bool)</a>
+        <a href="#new%28location%3ARosegold%3A%3AVec3i%2Cblock_id%3AUInt16%2Cstatus%3ARosegold%3A%3AServerbound%3A%3APlayerDigging%3A%3AStatus%2Csuccessful%3ABool%29-class-method" class="signature"><strong>.new</strong>(location : Rosegold::Vec3i, block_id : UInt16, status : Rosegold::Serverbound::PlayerDigging::Status, successful : Bool)</a>
         
       </li>
     
@@ -848,12 +878,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#block%3AUInt32-instance-method" class="signature"><strong>#block</strong> : UInt32</a>
+        <a href="#block_id%3AUInt16-instance-method" class="signature"><strong>#block_id</strong> : UInt16</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#block%3D%28block%3AUInt32%29-instance-method" class="signature"><strong>#block=</strong>(block : UInt32)</a>
+        <a href="#block_id%3D%28block_id%3AUInt16%29-instance-method" class="signature"><strong>#block_id=</strong>(block_id : UInt16)</a>
         
       </li>
     
@@ -863,27 +893,22 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#location%3ATuple%28Int32%2CInt32%2CInt32%29-instance-method" class="signature"><strong>#location</strong> : Tuple(Int32, Int32, Int32)</a>
+        <a href="#location%3AVec3i-instance-method" class="signature"><strong>#location</strong> : Vec3i</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#location%3D%28location%3ATuple%28Int32%2CInt32%2CInt32%29%29-instance-method" class="signature"><strong>#location=</strong>(location : Tuple(Int32, Int32, Int32))</a>
+        <a href="#location%3D%28location%3AVec3i%29-instance-method" class="signature"><strong>#location=</strong>(location : Vec3i)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#location_vec-instance-method" class="signature"><strong>#location_vec</strong></a>
+        <a href="#status%3AStatus-instance-method" class="signature"><strong>#status</strong> : Status</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#status%3AUInt32-instance-method" class="signature"><strong>#status</strong> : UInt32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#status%3D%28status%3AUInt32%29-instance-method" class="signature"><strong>#status=</strong>(status : UInt32)</a>
+        <a href="#status%3D%28status%3AStatus%29-instance-method" class="signature"><strong>#status=</strong>(status : Status)</a>
         
       </li>
     
@@ -980,18 +1005,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(location:Tuple(Int32,Int32,Int32),block:UInt32,status:UInt32,successful:Bool)-class-method">
+    <div class="entry-detail" id="new(location:Rosegold::Vec3i,block_id:UInt16,status:Rosegold::Serverbound::PlayerDigging::Status,successful:Bool)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(location : Tuple(<a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>), block : UInt32, status : UInt32, successful : Bool)
+        def self.<strong>new</strong>(location : <a href="../../Rosegold/Vec3i.html">Rosegold::Vec3i</a>, block_id : UInt16, status : <a href="../../Rosegold/Serverbound/PlayerDigging/Status.html">Rosegold::Serverbound::PlayerDigging::Status</a>, successful : Bool)
 
-        <a class="method-permalink" href="#new%28location%3ATuple%28Int32%2CInt32%2CInt32%29%2Cblock%3AUInt32%2Cstatus%3AUInt32%2Csuccessful%3ABool%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28location%3ARosegold%3A%3AVec3i%2Cblock_id%3AUInt16%2Cstatus%3ARosegold%3A%3AServerbound%3A%3APlayerDigging%3A%3AStatus%2Csuccessful%3ABool%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1019,7 +1044,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1035,7 +1060,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1052,34 +1077,34 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="block:UInt32-instance-method">
+    <div class="entry-detail" id="block_id:UInt16-instance-method">
       <div class="signature">
         
-        def <strong>block</strong> : UInt32
+        def <strong>block_id</strong> : UInt16
 
-        <a class="method-permalink" href="#block%3AUInt32-instance-method">#</a>
+        <a class="method-permalink" href="#block_id%3AUInt16-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="block=(block:UInt32)-instance-method">
+    <div class="entry-detail" id="block_id=(block_id:UInt16)-instance-method">
       <div class="signature">
         
-        def <strong>block=</strong>(block : UInt32)
+        def <strong>block_id=</strong>(block_id : UInt16)
 
-        <a class="method-permalink" href="#block%3D%28block%3AUInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#block_id%3D%28block_id%3AUInt16%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1095,87 +1120,71 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="location:Tuple(Int32,Int32,Int32)-instance-method">
+    <div class="entry-detail" id="location:Vec3i-instance-method">
       <div class="signature">
         
-        def <strong>location</strong> : Tuple(<a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>)
+        def <strong>location</strong> : <a href="../../Rosegold/Vec3i.html">Vec3i</a>
 
-        <a class="method-permalink" href="#location%3ATuple%28Int32%2CInt32%2CInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#location%3AVec3i-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="location=(location:Tuple(Int32,Int32,Int32))-instance-method">
+    <div class="entry-detail" id="location=(location:Vec3i)-instance-method">
       <div class="signature">
         
-        def <strong>location=</strong>(location : Tuple(<a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>, <a href="../../Int32.html">Int32</a>))
+        def <strong>location=</strong>(location : <a href="../../Rosegold/Vec3i.html">Vec3i</a>)
 
-        <a class="method-permalink" href="#location%3D%28location%3ATuple%28Int32%2CInt32%2CInt32%29%29-instance-method">#</a>
+        <a class="method-permalink" href="#location%3D%28location%3AVec3i%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="location_vec-instance-method">
+    <div class="entry-detail" id="status:Status-instance-method">
       <div class="signature">
         
-        def <strong>location_vec</strong>
+        def <strong>status</strong> : <a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging/Status.html">Status</a>
 
-        <a class="method-permalink" href="#location_vec-instance-method">#</a>
+        <a class="method-permalink" href="#status%3AStatus-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="status:UInt32-instance-method">
+    <div class="entry-detail" id="status=(status:Status)-instance-method">
       <div class="signature">
         
-        def <strong>status</strong> : UInt32
+        def <strong>status=</strong>(status : <a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging/Status.html">Status</a>)
 
-        <a class="method-permalink" href="#status%3AUInt32-instance-method">#</a>
+        <a class="method-permalink" href="#status%3D%28status%3AStatus%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L3" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="status=(status:UInt32)-instance-method">
-      <div class="signature">
-        
-        def <strong>status=</strong>(status : UInt32)
-
-        <a class="method-permalink" href="#status%3D%28status%3AUInt32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L3" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1191,7 +1200,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1207,7 +1216,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/acknowledge_player_digging.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>

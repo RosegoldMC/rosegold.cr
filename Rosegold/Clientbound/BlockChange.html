@@ -61,11 +61,6 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Hand" data-name="hand">
-      <a href="../../Hand.html">Hand</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Int32" data-name="int32">
       <a href="../../Int32.html">Int32</a>
       
@@ -246,6 +241,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Axis" data-name="rosegold::axis">
+      <a href="../../Rosegold/Axis.html">Axis</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
       <a href="../../Rosegold/Bot.html">Bot</a>
       
@@ -286,8 +286,18 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
       <a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging.html">AcknowledgePlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging/Status" data-name="rosegold::clientbound::acknowledgeplayerdigging::status">
+      <a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -461,6 +471,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Hand" data-name="rosegold::hand">
+      <a href="../../Rosegold/Hand.html">Hand</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
       <a href="../../Rosegold/Look.html">Look</a>
       
@@ -556,11 +571,6 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/Axis" data-name="rosegold::raytracing::axis">
-      <a href="../../Rosegold/Raytracing/Axis.html">Axis</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Rosegold/Raytracing/Ray" data-name="rosegold::raytracing::ray">
       <a href="../../Rosegold/Raytracing/Ray.html">Ray</a>
       
@@ -601,8 +611,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/EntityAction" data-name="rosegold::serverbound::entityaction">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/EntityAction" data-name="rosegold::serverbound::entityaction">
       <a href="../../Rosegold/Serverbound/EntityAction.html">EntityAction</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/EntityAction/Type" data-name="rosegold::serverbound::entityaction::type">
+      <a href="../../Rosegold/Serverbound/EntityAction/Type.html">Type</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -646,8 +666,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
       <a href="../../Rosegold/Serverbound/PlayerDigging.html">PlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging/Status" data-name="rosegold::serverbound::playerdigging::status">
+      <a href="../../Rosegold/Serverbound/PlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -783,7 +813,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/block_change.cr#L3" target="_blank">
         rosegold/packets/clientbound/block_change.cr
       </a>
     
@@ -805,7 +835,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%2Cblock_state%3AUInt16%29-class-method" class="signature"><strong>.new</strong>(x : Int32, y : Int32, z : Int32, block_state : UInt16)</a>
+        <a href="#new%28location%3ARosegold%3A%3AVec3i%2Cblock_state%3AUInt16%29-class-method" class="signature"><strong>.new</strong>(location : Rosegold::Vec3i, block_state : UInt16)</a>
         
       </li>
     
@@ -863,32 +893,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#x%3AInt32-instance-method" class="signature"><strong>#x</strong> : Int32</a>
+        <a href="#location%3AVec3i-instance-method" class="signature"><strong>#location</strong> : Vec3i</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#x%3D%28x%3AInt32%29-instance-method" class="signature"><strong>#x=</strong>(x : Int32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#y%3AInt32-instance-method" class="signature"><strong>#y</strong> : Int32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#y%3D%28y%3AInt32%29-instance-method" class="signature"><strong>#y=</strong>(y : Int32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#z%3AInt32-instance-method" class="signature"><strong>#z</strong> : Int32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#z%3D%28z%3AInt32%29-instance-method" class="signature"><strong>#z=</strong>(z : Int32)</a>
+        <a href="#location%3D%28location%3AVec3i%29-instance-method" class="signature"><strong>#location=</strong>(location : Vec3i)</a>
         
       </li>
     
@@ -975,18 +985,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(x:Int32,y:Int32,z:Int32,block_state:UInt16)-class-method">
+    <div class="entry-detail" id="new(location:Rosegold::Vec3i,block_state:UInt16)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(x : <a href="../../Int32.html">Int32</a>, y : <a href="../../Int32.html">Int32</a>, z : <a href="../../Int32.html">Int32</a>, block_state : UInt16)
+        def self.<strong>new</strong>(location : <a href="../../Rosegold/Vec3i.html">Rosegold::Vec3i</a>, block_state : UInt16)
 
-        <a class="method-permalink" href="#new%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%2Cblock_state%3AUInt16%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28location%3ARosegold%3A%3AVec3i%2Cblock_state%3AUInt16%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/block_change.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1014,7 +1024,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/block_change.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1030,7 +1040,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/block_change.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1058,7 +1068,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1074,7 +1084,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1090,103 +1100,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/block_change.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x:Int32-instance-method">
+    <div class="entry-detail" id="location:Vec3i-instance-method">
       <div class="signature">
         
-        def <strong>x</strong> : <a href="../../Int32.html">Int32</a>
+        def <strong>location</strong> : <a href="../../Rosegold/Vec3i.html">Vec3i</a>
 
-        <a class="method-permalink" href="#x%3AInt32-instance-method">#</a>
+        <a class="method-permalink" href="#location%3AVec3i-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="x=(x:Int32)-instance-method">
+    <div class="entry-detail" id="location=(location:Vec3i)-instance-method">
       <div class="signature">
         
-        def <strong>x=</strong>(x : <a href="../../Int32.html">Int32</a>)
+        def <strong>location=</strong>(location : <a href="../../Rosegold/Vec3i.html">Vec3i</a>)
 
-        <a class="method-permalink" href="#x%3D%28x%3AInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#location%3D%28location%3AVec3i%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="y:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>y</strong> : <a href="../../Int32.html">Int32</a>
-
-        <a class="method-permalink" href="#y%3AInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="y=(y:Int32)-instance-method">
-      <div class="signature">
-        
-        def <strong>y=</strong>(y : <a href="../../Int32.html">Int32</a>)
-
-        <a class="method-permalink" href="#y%3D%28y%3AInt32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="z:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>z</strong> : <a href="../../Int32.html">Int32</a>
-
-        <a class="method-permalink" href="#z%3AInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="z=(z:Int32)-instance-method">
-      <div class="signature">
-        
-        def <strong>z=</strong>(z : <a href="../../Int32.html">Int32</a>)
-
-        <a class="method-permalink" href="#z%3D%28z%3AInt32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/rosegold/packets/clientbound/block_change.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>

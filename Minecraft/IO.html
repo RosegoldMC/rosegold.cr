@@ -61,11 +61,6 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Hand" data-name="hand">
-      <a href="../Hand.html">Hand</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Int32" data-name="int32">
       <a href="../Int32.html">Int32</a>
       
@@ -246,6 +241,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Axis" data-name="rosegold::axis">
+      <a href="../Rosegold/Axis.html">Axis</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
       <a href="../Rosegold/Bot.html">Bot</a>
       
@@ -286,8 +286,18 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
       <a href="../Rosegold/Clientbound/AcknowledgePlayerDigging.html">AcknowledgePlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging/Status" data-name="rosegold::clientbound::acknowledgeplayerdigging::status">
+      <a href="../Rosegold/Clientbound/AcknowledgePlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -461,6 +471,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Hand" data-name="rosegold::hand">
+      <a href="../Rosegold/Hand.html">Hand</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
       <a href="../Rosegold/Look.html">Look</a>
       
@@ -556,11 +571,6 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/Axis" data-name="rosegold::raytracing::axis">
-      <a href="../Rosegold/Raytracing/Axis.html">Axis</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Rosegold/Raytracing/Ray" data-name="rosegold::raytracing::ray">
       <a href="../Rosegold/Raytracing/Ray.html">Ray</a>
       
@@ -601,8 +611,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/EntityAction" data-name="rosegold::serverbound::entityaction">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/EntityAction" data-name="rosegold::serverbound::entityaction">
       <a href="../Rosegold/Serverbound/EntityAction.html">EntityAction</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/EntityAction/Type" data-name="rosegold::serverbound::entityaction::type">
+      <a href="../Rosegold/Serverbound/EntityAction/Type.html">Type</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -646,8 +666,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
       <a href="../Rosegold/Serverbound/PlayerDigging.html">PlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging/Status" data-name="rosegold::serverbound::playerdigging::status">
+      <a href="../Rosegold/Serverbound/PlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -803,7 +833,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L6" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L7" target="_blank">
         minecraft/io.cr
       </a>
     
@@ -829,7 +859,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#read_bit_position%3ATuple%28Int32%2CInt32%2CInt32%29-instance-method" class="signature"><strong>#read_bit_position</strong> : Tuple(Int32, Int32, Int32)</a>
+        <a href="#read_angle256_deg%3AFloat32-instance-method" class="signature"><strong>#read_angle256_deg</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#read_bit_location%3ARosegold%3A%3AVec3i-instance-method" class="signature"><strong>#read_bit_location</strong> : Rosegold::Vec3i</a>
         
       </li>
     
@@ -924,6 +959,11 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#write%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29-instance-method" class="signature"><strong>#write</strong>(x : Int32, y : Int32, z : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#write%28value%3ABool%29-instance-method" class="signature"><strong>#write</strong>(value : Bool)</a>
         
       </li>
@@ -951,22 +991,22 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#write%28slot%3ARosegold%3A%3ASlot%29-instance-method" class="signature"><strong>#write</strong>(slot : Rosegold::Slot)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#write%28nbt%3ANBT%3A%3ATag%29-instance-method" class="signature"><strong>#write</strong>(nbt : NBT::Tag)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#write_bit_position%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29-instance-method" class="signature"><strong>#write_bit_position</strong>(x : Int32, y : Int32, z : Int32)</a>
+        <a href="#write%28slot%3ARosegold%3A%3ASlot%29-instance-method" class="signature"><strong>#write</strong>(slot : Rosegold::Slot)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#write_bit_position%28position%3ARosegold%3A%3AVec3d%29-instance-method" class="signature"><strong>#write_bit_position</strong>(position : Rosegold::Vec3d)</a>
+        <a href="#write%28location%3ARosegold%3A%3AVec3i%29-instance-method" class="signature"><strong>#write</strong>(location : Rosegold::Vec3i)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#write_angle256_deg%28deg%3AFloat32%7CFloat64%29-instance-method" class="signature"><strong>#write_angle256_deg</strong>(deg : Float32 | Float64)</a>
         
       </li>
     
@@ -1006,18 +1046,34 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="read_bit_position:Tuple(Int32,Int32,Int32)-instance-method">
+    <div class="entry-detail" id="read_angle256_deg:Float32-instance-method">
       <div class="signature">
         
-        def <strong>read_bit_position</strong> : Tuple(<a href="../Int32.html">Int32</a>, <a href="../Int32.html">Int32</a>, <a href="../Int32.html">Int32</a>)
+        def <strong>read_angle256_deg</strong> : Float32
 
-        <a class="method-permalink" href="#read_bit_position%3ATuple%28Int32%2CInt32%2CInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#read_angle256_deg%3AFloat32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L174" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L179" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read_bit_location:Rosegold::Vec3i-instance-method">
+      <div class="signature">
+        
+        def <strong>read_bit_location</strong> : <a href="../Rosegold/Vec3i.html">Rosegold::Vec3i</a>
+
+        <a class="method-permalink" href="#read_bit_location%3ARosegold%3A%3AVec3i-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L183" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1033,7 +1089,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L85" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1049,7 +1105,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L73" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L78" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1065,7 +1121,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L98" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1081,7 +1137,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L89" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L94" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1097,7 +1153,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L105" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1113,7 +1169,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L114" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1129,7 +1185,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L165" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L170" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1145,7 +1201,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L137" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L142" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1161,7 +1217,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L106" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1177,7 +1233,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L79" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L84" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1193,7 +1249,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L169" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L174" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1209,7 +1265,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L97" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L102" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1225,7 +1281,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L160" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L165" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1241,7 +1297,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L153" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L158" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1257,7 +1313,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L118" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1273,7 +1329,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L125" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L130" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1289,7 +1345,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L146" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L151" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1305,7 +1361,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L142" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L147" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="write(x:Int32,y:Int32,z:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>write</strong>(x : <a href="../Int32.html">Int32</a>, y : <a href="../Int32.html">Int32</a>, z : <a href="../Int32.html">Int32</a>)
+
+        <a class="method-permalink" href="#write%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1321,7 +1393,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1337,7 +1409,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1353,7 +1425,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1369,7 +1441,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1390,23 +1462,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L35" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(slot:Rosegold::Slot)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(slot : <a href="../Rosegold/Slot.html">Rosegold::Slot</a>)
-
-        <a class="method-permalink" href="#write%28slot%3ARosegold%3A%3ASlot%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1422,39 +1478,55 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L52" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L53" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="write_bit_position(x:Int32,y:Int32,z:Int32)-instance-method">
+    <div class="entry-detail" id="write(slot:Rosegold::Slot)-instance-method">
       <div class="signature">
         
-        def <strong>write_bit_position</strong>(x : <a href="../Int32.html">Int32</a>, y : <a href="../Int32.html">Int32</a>, z : <a href="../Int32.html">Int32</a>)
+        def <strong>write</strong>(slot : <a href="../Rosegold/Slot.html">Rosegold::Slot</a>)
 
-        <a class="method-permalink" href="#write_bit_position%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#write%28slot%3ARosegold%3A%3ASlot%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="write_bit_position(position:Rosegold::Vec3d)-instance-method">
+    <div class="entry-detail" id="write(location:Rosegold::Vec3i)-instance-method">
       <div class="signature">
         
-        def <strong>write_bit_position</strong>(position : <a href="../Rosegold/Vec3d.html">Rosegold::Vec3d</a>)
+        def <strong>write</strong>(location : <a href="../Rosegold/Vec3i.html">Rosegold::Vec3i</a>)
 
-        <a class="method-permalink" href="#write_bit_position%28position%3ARosegold%3A%3AVec3d%29-instance-method">#</a>
+        <a class="method-permalink" href="#write%28location%3ARosegold%3A%3AVec3i%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L74" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="write_angle256_deg(deg:Float32|Float64)-instance-method">
+      <div class="signature">
+        
+        def <strong>write_angle256_deg</strong>(deg : Float32 | Float64)
+
+        <a class="method-permalink" href="#write_angle256_deg%28deg%3AFloat32%7CFloat64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1475,7 +1547,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1491,7 +1563,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/3cc2264698d8cd78e0c00cbf5553c2d7804e3f4a/src/minecraft/io.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/26aede20e1537346cc3b0319b7cb16b5555e9f03/src/minecraft/io.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
