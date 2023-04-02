@@ -99,17 +99,25 @@ class Rosegold::Bot
     client.physics.jump_queued = true
   end
 
+  # Use #interact_block to enter a bed.
   def leave_bed
-    raise "Not implemented" # TODO send packet
+    client.connection.send_packet Serverbound::EntityAction.new \
+      client.player.entity_id, Serverbound::EntityAction::Type::LeaveBed
   end
 
-  def activate_block(location : Vec3d, face : BlockFace, look = true)
-    raise "Not implemented" # TODO send packet
+  def interact_block(location : Vec3d, face : BlockFace, look = true)
+    place_block_against(location, face, look, 0)
   end
 
   # Raises an error if the hand slot is not updated within `timeout_ticks`.
   def place_block_against(location : Vec3d, face : BlockFace, look = true, timeout_ticks = 0)
-    raise "Not implemented" # TODO send packet
+    cursor = (location - location.floored).to_f32
+    hand = Hand::MainHand # TODO
+    inside_block = false  # TODO
+    client.connection.send_packet Serverbound::PlayerBlockPlacement.new \
+      location.floored_i32, face, cursor, hand, inside_block
+    client.connection.send_packet Serverbound::SwingArm.new hand
+    # TODO raise an error if the hand slot is not updated within `timeout_ticks`
   end
 
   # The active (main hand) hotbar slot number (1-9).
@@ -124,50 +132,65 @@ class Rosegold::Bot
     client.player.hotbar_selection = index - 1
   end
 
-  # All player slots are remembered even when a window is open.
+  # All player slots are remembered but may not be updated while another window is open.
 
   def equipment
-    client.player.equipment
+    # TODO client.inventory_window.equipment
   end
 
   def inventory
-    client.player.inventory
+    # TODO client.inventory_window.inventory
   end
 
   def hotbar
-    client.player.hotbar
+    # TODO client.inventory_window.hotbar
   end
 
   def main_hand
-    client.player.hotbar[hotbar_selection]
+    # TODO client.inventory_window.hotbar[hotbar_selection]
   end
 
   def off_hand
-    client.player.off_hand
+    # TODO client.inventory_window.off_hand
   end
 
   def swap_hands
-    raise "Not implemented" # TODO send packet
+    client.connection.send_packet Serverbound::PlayerDigging.new \
+      Serverbound::PlayerDigging::Status::SwapHands, Vec3i.ORIGIN, 0
+  end
+
+  def drop_hand_single
+    client.connection.send_packet Serverbound::PlayerDigging.new \
+      Serverbound::PlayerDigging::Status::DropHandSingle, Vec3i.ORIGIN, 0
+      client.connection.send_packet Serverbound::SwingArm.new
+  end
+
+  def drop_hand_full
+    client.connection.send_packet Serverbound::PlayerDigging.new \
+      Serverbound::PlayerDigging::Status::DropHandFull, Vec3i.ORIGIN, 0
+      client.connection.send_packet Serverbound::SwingArm.new
   end
 
   # Moves the slot to the hotbar and selects it.
-  # This is faster and less error-prone than doing these steps individually.
+  # This is faster and less error-prone than moving slots around individually.
   def pick_slot(slot_nr : UInt16)
-    raise "Not implemented" # TODO send packet
+    client.connection.send_packet Serverbound::PickItem.new slot_nr
   end
 
   def start_using_item(hand = Hand::MainHand)
-    raise "Not implemented" # TODO send packet
+    client.connection.send_packet Serverbound::UseItem.new hand
+    client.connection.send_packet Serverbound::SwingArm.new
   end
 
   def stop_using_item
-    raise "Not implemented" # TODO send packet
+    client.connection.send_packet Serverbound::PlayerDigging.new \
+      Serverbound::PlayerDigging::Status::FinishUsingHand, Vec3i.ORIGIN, 0
   end
 
-  def digging_location : Vec3?
-    nil # TODO
-  end
+  # not exposed, for rules compliance
+  @digging_location : Vec3d?
 
+  # waits for completion
   def dig(location : Vec3d, face : BlockFace, ticks : UInt32, look = true)
     raise "Not implemented" # TODO
   end
