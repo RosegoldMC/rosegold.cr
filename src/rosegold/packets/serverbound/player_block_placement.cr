@@ -24,7 +24,7 @@ class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packe
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id
       buffer.write hand.value
-      buffer.write_bit_location location
+      buffer.write location
       buffer.write face.value
       buffer.write cursor.x
       buffer.write cursor.y

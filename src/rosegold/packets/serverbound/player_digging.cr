@@ -34,7 +34,7 @@ class Rosegold::Serverbound::PlayerDigging < Rosegold::Serverbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id
       buffer.write status.value
-      buffer.write_bit_location location
+      buffer.write location
       buffer.write face.value
     end.to_slice
   end

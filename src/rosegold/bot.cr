@@ -207,7 +207,7 @@ class Rosegold::Bot
     raise "Not implemented" # TODO
   end
 
-  # add a callback processed upon specified incoming packet
+  # Add a callback processed upon specified incoming packet
   #
   # ```
   # client.on_packet Clientbound::Chat do |chat|
