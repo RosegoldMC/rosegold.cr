@@ -1,11 +1,14 @@
+require "../packet"
+
 class Rosegold::Clientbound::UpdateHealth < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x52_u8
+
   property \
     health : Float32,
     food : UInt32,
     saturation : Float32
 
-  def initialize(@health, @food, @saturation)
-  end
+  def initialize(@health, @food, @saturation); end
 
   def self.read(packet)
     self.new(

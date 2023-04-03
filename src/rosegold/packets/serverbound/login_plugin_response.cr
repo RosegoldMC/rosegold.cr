@@ -1,18 +1,18 @@
+require "../packet"
+
 class Rosegold::Serverbound::LoginPluginResponse < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x02_u8
+  class_getter packet_id = 0x02_u8
+  class_getter state = Rosegold::ProtocolState::LOGIN
 
-  property \
-    message_id : UInt32
+  property message_id : UInt32
 
-  def initialize(
-    @message_id
-  ); end
+  def initialize(@message_id); end
 
-  def to_packet : Minecraft::IO
+  def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write PACKET_ID
+      buffer.write @@packet_id
       buffer.write message_id
       buffer.write false
-    end
+    end.to_slice
   end
 end

@@ -1,8 +1,12 @@
 name: rosegold
 version: 0.1.0
 
+crystalline:
+  main: .crystalline_main.cr
+
 authors:
   - grepsedawk <grepsedawk@users.noreply.github.com>
+  - Gjum <Gjum@users.noreply.github.com>
 
 crystal: 1.4.1
 
@@ -14,7 +18,7 @@ dependencies:
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba
-    version: ~> 1.0
+    version: ~> 1.4.3
   dotenv:
     github: drum445/dotenv
   openssl_ext:

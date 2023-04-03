@@ -1,14 +1,14 @@
-class Rosegold::Clientbound::Ping < Rosegold::Clientbound::Packet
-  property \
-    ping_id : Int32
+require "../packet"
 
-  def initialize(@ping_id)
-  end
+class Rosegold::Clientbound::Ping < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x30_u8
+
+  property ping_id : Int32
+
+  def initialize(@ping_id); end
 
   def self.read(packet)
-    self.new(
-      packet.read_int
-    )
+    self.new(packet.read_int)
   end
 
   def callback(client)

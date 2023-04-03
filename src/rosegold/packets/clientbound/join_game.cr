@@ -1,60 +1,77 @@
 require "../../../minecraft/nbt"
+require "../packet"
 
 class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
-  property \
-    entity_id : Int32,
-    gamemode : UInt8,
-    previous_gamemode : UInt8,
-    world_count : UInt32,
-    dimension_names : Array(String),
-    dimension_codec : Minecraft::NBT::Tag,
-    dimension : Minecraft::NBT::Tag,
-    dimension_name : String,
-    hashed_seed : Int64,
-    max_players : UInt32,
-    view_distance : UInt32,
-    simulation_distance : UInt32,
-    gamemode : UInt8
-  property? \
-    hardcore : Bool,
-    is_debug : Bool,
-    is_flat : Bool,
-    reduced_debug_info : Bool,
-    enable_respawn_screen : Bool
+  class_getter packet_id = 0x26_u8
 
-  def initialize(
-    @entity_id, @hardcore, @gamemode, @previous_gamemode, @world_count, @dimension_names,
-    @dimension_codec, @dimension, @dimension_name, @hashed_seed, @max_players, @view_distance,
-    @simulation_distance, @reduced_debug_info, @enable_respawn_screen, @is_debug, @is_flat
-  )
-  end
+  property entity_id : Int32
+  property? hardcore : Bool
+  property gamemode : Int8
+  property previous_gamemode : Int8
+  property dimension_names : Array(String)
+  property dimension_codec : Minecraft::NBT::Tag
+  property dimension : Minecraft::NBT::Tag
+  property dimension_name : String
+  property hashed_seed : Int64
+  property max_players : UInt32
+  property view_distance : UInt32
+  property simulation_distance : UInt32
+  property? reduced_debug_info : Bool
+  property? enable_respawn_screen : Bool
+  property? is_debug : Bool
+  property? is_flat : Bool
 
-  def self.read(packet)
+  def initialize(@entity_id, @hardcore, @gamemode, @previous_gamemode, @dimension_names, @dimension_codec, @dimension, @dimension_name, @hashed_seed, @max_players, @view_distance, @simulation_distance, @reduced_debug_info, @enable_respawn_screen, @is_debug, @is_flat); end
+
+  def self.read(io)
     self.new(
-      packet.read_int,
-      packet.read_bool,
-      packet.read_byte,
-      packet.read_byte,
-      world_count = packet.read_var_int,
-      Array(String).new(world_count) { packet.read_var_string },
-      packet.read_nbt,
-      packet.read_nbt,
-      packet.read_var_string,
-      packet.read_long,
-      packet.read_var_int,
-      packet.read_var_int,
-      packet.read_var_int,
-      packet.read_bool,
-      packet.read_bool,
-      packet.read_bool,
-      packet.read_bool
+      io.read_int,
+      io.read_bool,
+      io.read_signed_byte,
+      io.read_signed_byte,
+      Array(String).new(io.read_var_int) { io.read_var_string },
+      io.read_nbt,
+      io.read_nbt,
+      io.read_var_string,
+      io.read_long,
+      io.read_var_int,
+      io.read_var_int,
+      io.read_var_int,
+      io.read_bool,
+      io.read_bool,
+      io.read_bool,
+      io.read_bool
     )
   end
 
-  def callback(client)
-    Log.debug { "Ingame. gamemode=#{gamemode} entity_id=#{entity_id}" }
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write_full entity_id
+      buffer.write hardcore?
+      buffer.write gamemode
+      buffer.write previous_gamemode
+      buffer.write dimension_names.size
+      dimension_names.each { |name| buffer.write name }
+      buffer.write dimension_codec
+      buffer.write dimension
+      buffer.write dimension_name
+      buffer.write_full hashed_seed
+      buffer.write max_players
+      buffer.write view_distance
+      buffer.write simulation_distance
+      buffer.write reduced_debug_info?
+      buffer.write enable_respawn_screen?
+      buffer.write is_debug?
+      buffer.write is_flat?
+    end.to_slice
+  end
 
-    client.dimension.min_y = dimension.as(Minecraft::NBT::CompoundTag)["min_y"].as(Minecraft::NBT::IntTag).value
-    client.dimension.height = dimension.as(Minecraft::NBT::CompoundTag)["height"].as(Minecraft::NBT::IntTag).value
+  def callback(client)
+    client.player.entity_id = entity_id
+    client.player.gamemode = gamemode
+    client.dimension = Dimension.new dimension_name, dimension
+
+    Log.debug { "Ingame. #{dimension_name} gamemode=#{gamemode} entity_id=#{entity_id}" }
   end
 end

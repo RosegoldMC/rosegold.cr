@@ -1,4 +1,8 @@
+require "../packet"
+
 class Rosegold::Clientbound::UnloadChunk < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x1d_u8
+
   property \
     chunk_x : Int32,
     chunk_z : Int32

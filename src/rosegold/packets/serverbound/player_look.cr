@@ -1,7 +1,7 @@
-require "./packet"
+require "../packet"
 
 class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x13_u8
+  class_getter packet_id = 0x13_u8
 
   property \
     yaw_deg : Float32,
@@ -11,16 +11,16 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
 
   def initialize(@yaw_deg, @pitch_deg, @on_ground); end
 
-  def self.new(look_deg : LookDeg, on_ground)
-    self.new(look_deg.yaw, look_deg.pitch, on_ground)
+  def self.new(look : Look, on_ground)
+    self.new(look.yaw_deg, look.pitch_deg, on_ground)
   end
 
-  def to_packet : Minecraft::IO
+  def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write PACKET_ID
+      buffer.write @@packet_id
       buffer.write yaw_deg
       buffer.write pitch_deg
       buffer.write on_ground?
-    end
+    end.to_slice
   end
 end

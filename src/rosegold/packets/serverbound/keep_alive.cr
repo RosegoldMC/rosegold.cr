@@ -1,19 +1,16 @@
-require "./packet"
+require "../packet"
 
 class Rosegold::Serverbound::KeepAlive < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x0f_u8
+  class_getter packet_id = 0x0f_u8
 
-  property \
-    keep_alive_id : Int64
+  property keep_alive_id : Int64
 
-  def initialize(
-    @keep_alive_id : Int64
-  ); end
+  def initialize(@keep_alive_id : Int64); end
 
-  def to_packet : Minecraft::IO
+  def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write PACKET_ID
+      buffer.write @@packet_id
       buffer.write_full keep_alive_id
-    end
+    end.to_slice
   end
 end

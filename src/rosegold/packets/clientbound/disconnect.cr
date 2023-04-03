@@ -1,18 +1,17 @@
-class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
-  property \
-    reason : String
+require "../packet"
 
-  def initialize(@reason)
-  end
+class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x1a_u8
+
+  property reason : String
+
+  def initialize(@reason); end
 
   def self.read(packet)
-    self.new(
-      packet.read_var_string
-    )
+    self.new(packet.read_var_string)
   end
 
   def callback(client)
-    Log.info { "Disconnected: #{reason}" }
-    client.state = Rosegold::State::Disconnected.new
+    client.connection.disconnect reason
   end
 end

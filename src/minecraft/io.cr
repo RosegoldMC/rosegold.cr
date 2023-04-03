@@ -1,24 +1,35 @@
 require "io/hexdump"
 require "socket"
 require "uuid"
+require "../rosegold/world/slot"
+require "../rosegold/world/vec3"
 
 module Minecraft::IO
   def write(value : Bool)
     write_byte value ? 1_u8 : 0_u8
   end
 
-  def write(value : String)
-    write value.bytesize.to_u32
-    print value
+  def write(str : String)
+    write str.bytesize.to_u32
+    print str
   end
 
-  def write(value : Float32 | Float64 | UInt8)
+  def write_opt_string(str : String?)
+    write !str.nil?
+    write str unless str.nil?
+  end
+
+  def write(value : Float32 | Float64 | UInt8 | Int8)
     write_bytes value, ::IO::ByteFormat::BigEndian
   end
 
   # writes all bytes even for small magnitudes, not var int
   def write_full(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64 | Float32 | Float64)
     write_bytes value, ::IO::ByteFormat::BigEndian
+  end
+
+  def write(uuid : UUID)
+    write uuid.bytes.to_slice
   end
 
   # writes var int
@@ -39,23 +50,41 @@ module Minecraft::IO
     write a.to_unsafe.to_slice a.size
   end
 
-  def write_position(x : Int32, y : Int32, z : Int32)
+  def write(nbt : NBT::Tag)
+    raise "Not implemented" # TODO
+  end
+
+  def write(slot : Rosegold::Slot)
+    write slot.empty?
+    return if slot.empty?
+    write slot.item_id
+    write slot.count
+    write slot.nbt || 0_u8
+  end
+
+  def write_angle256_deg(deg : Float32 | Float64)
+    write ((deg * 256 / 360) % 256).to_i8!
+  end
+
+  def write(x : Int32, y : Int32, z : Int32)
     x, y, z = x.to_i64, y.to_i64, z.to_i64
     write_full ((x & 0x3FFFFFF) << 38) | ((z & 0x3FFFFFF) << 12) | (y & 0xFFF)
   end
 
-  def write(position : Rosegold::Vec3d)
-    write_position position.x.floor.to_i, position.y.floor.to_i, position.z.floor.to_i
-  end
-
-  def write(position : Tuple(Int32, Int32, Int32))
-    write_position position[0], position[1], position[2]
+  def write(location : Rosegold::Vec3i)
+    write location.x.floor.to_i, location.y.floor.to_i, location.z.floor.to_i
   end
 
   def read_byte
     buf = Bytes.new 1
     read_fully(buf)
     buf[0]
+  end
+
+  def read_signed_byte
+    buf = Bytes.new 1
+    read_fully(buf)
+    buf[0].to_i8!
   end
 
   def read_bool
@@ -110,6 +139,11 @@ module Minecraft::IO
     end
   end
 
+  def read_opt_string : String?
+    return nil unless read_bool
+    read_var_string
+  end
+
   def read_var_string : String
     read_var_string(read_var_int)
   end
@@ -137,13 +171,36 @@ module Minecraft::IO
     NBT::Tag.read_named(self)[1]
   end
 
-  def read_position : Tuple(Int32, Int32, Int32)
+  def read_slot : Rosegold::Slot
+    return Rosegold::Slot.new unless read_bool
+    Rosegold::Slot.new(read_var_int, read_byte, read_nbt)
+  end
+
+  def read_angle256_deg : Float32
+    read_byte.to_f32 * 360 / 256
+  end
+
+  def read_bit_location : Rosegold::Vec3i
     value = read_long
     # here ordered LSB to MSB; use arithmetic shift to preserve sign
     y = ((value << 52) >> 52).to_i32 # 12 bits
     z = ((value << 26) >> 38).to_i32 # 26 bits
     x = (value >> 38).to_i32         # 26 bits
-    {x, y, z}
+    Rosegold::Vec3i.new(x, y, z)
+  end
+end
+
+class Minecraft::IO::Wrap < IO
+  include Minecraft::IO
+
+  def initialize(@io : ::IO); end
+
+  def read(slice : Bytes)
+    @io.read slice
+  end
+
+  def write(slice : Bytes) : Nil
+    @io.write slice
   end
 end
 
@@ -159,7 +216,7 @@ class Minecraft::TCPSocket < TCPSocket
   include Minecraft::IO
 end
 
-class Minecraft::EncryptedTCPSocket
+class Minecraft::EncryptedTCPSocket < IO
   include Minecraft::IO
 
   getter read_cipher : OpenSSL::Cipher
@@ -176,7 +233,7 @@ class Minecraft::EncryptedTCPSocket
     @write_cipher.iv = iv
   end
 
-  def read_fully(slice : Bytes)
+  def read(slice : Bytes)
     upstream_size = @io.read_fully slice
     upstream = slice[0, upstream_size]
     o = @read_cipher.update upstream
@@ -186,9 +243,5 @@ class Minecraft::EncryptedTCPSocket
 
   def write(slice : Bytes) : Nil
     @io.write @write_cipher.update(slice)
-  end
-
-  def flush
-    @io.flush
   end
 end

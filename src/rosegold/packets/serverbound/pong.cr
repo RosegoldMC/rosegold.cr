@@ -1,19 +1,16 @@
-require "./packet"
+require "../packet"
 
 class Rosegold::Serverbound::Pong < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x1d_u8
+  class_getter packet_id = 0x1d_u8
 
-  property \
-    ping_id : Int32
+  property ping_id : Int32
 
-  def initialize(
-    @ping_id : Int32
-  ); end
+  def initialize(@ping_id : Int32); end
 
-  def to_packet : Minecraft::IO
+  def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write PACKET_ID
+      buffer.write @@packet_id
       buffer.write_full ping_id
-    end
+    end.to_slice
   end
 end

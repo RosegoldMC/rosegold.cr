@@ -37,6 +37,66 @@ module Minecraft::NBT
       end
     end
 
+    def as_i8 : Int8
+      raise "Wrong type #{self}" unless self.is_a? ByteTag
+      self.value
+    end
+
+    def as_i16 : Int16
+      raise "Wrong type #{self}" unless self.is_a? ShortTag
+      self.value
+    end
+
+    def as_i32 : Int32
+      raise "Wrong type #{self}" unless self.is_a? IntTag
+      self.value
+    end
+
+    def as_i64 : Int64
+      raise "Wrong type #{self}" unless self.is_a? LongTag
+      self.value
+    end
+
+    def as_f32 : Float32
+      raise "Wrong type #{self}" unless self.is_a? FloatTag
+      self.value
+    end
+
+    def as_f64 : Float64
+      raise "Wrong type #{self}" unless self.is_a? DoubleTag
+      self.value
+    end
+
+    def as_byte_array : Array(Int8)
+      raise "Wrong type #{self}" unless self.is_a? ByteArrayTag
+      self.value
+    end
+
+    def as_str : String
+      raise "Wrong type #{self}" unless self.is_a? StringTag
+      self.value
+    end
+
+    def as_list : Array(Tag)
+      raise "Wrong type #{self}" unless self.is_a? ListTag
+      self.value
+    end
+
+    def as_compound : Hash(String, Tag)
+      raise "Wrong type #{self}" unless self.is_a? CompoundTag
+      self.value
+    end
+
+    def as_i32_array : Array(Int32)
+      raise "Wrong type #{self}" unless self.is_a? IntArrayTag
+      self.value
+    end
+
+    def as_i64_array : Array(Int64)
+      raise "Wrong type #{self}" unless self.is_a? LongArrayTag
+      self.value
+    end
+
     def self.read(io : IO, tag_type = io.read_byte) : Tag
       read(io, tag_type) { }
     end
@@ -45,7 +105,9 @@ module Minecraft::NBT
 
     def self.read_named(io : IO, tag_type = io.read_byte) : NamedTag
       name = ""
-      tag = read(io, tag_type) { name = StringTag.read(io).value }
+      tag = Tag.read(io, tag_type) do
+        name = StringTag.read(io).value unless tag_type == 0
+      end
 
       {name, tag}
     end
@@ -294,11 +356,7 @@ module Minecraft::NBT
       loop do
         name = ""
         tag = Tag.read(io) do |tag_type|
-          name = if tag_type == 0
-                   ""
-                 else
-                   StringTag.read(io).value
-                 end
+          name = StringTag.read(io).value unless tag_type == 0
         end
 
         if tag.is_a? EndTag

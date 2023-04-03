@@ -1,11 +1,15 @@
+require "../packet"
+
 class Rosegold::Clientbound::LoginPluginRequest < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0x04_u8
+  class_getter state = Rosegold::ProtocolState::LOGIN
+
   property \
     message_id : UInt32,
     channel_identifier : String,
     data : Bytes
 
-  def initialize(@message_id, @channel_identifier, @data)
-  end
+  def initialize(@message_id, @channel_identifier, @data); end
 
   def self.read(packet)
     self.new(

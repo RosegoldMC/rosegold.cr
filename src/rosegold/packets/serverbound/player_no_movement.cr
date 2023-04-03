@@ -1,16 +1,16 @@
-require "./packet"
+require "../packet"
 
 class Rosegold::Serverbound::PlayerNoMovement < Rosegold::Serverbound::Packet
-  PACKET_ID = 0x14_u8
+  class_getter packet_id = 0x14_u8
 
   property? on_ground : Bool
 
   def initialize(@on_ground); end
 
-  def to_packet : Minecraft::IO
+  def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write PACKET_ID
+      buffer.write @@packet_id
       buffer.write on_ground?
-    end
+    end.to_slice
   end
 end
