@@ -187,6 +187,10 @@ struct Rosegold::Vec3i
   include Rosegold::Vec3(Int32)
 
   ORIGIN = self.new 0, 0, 0
+
+  def block
+    self
+  end
 end
 
 struct Rosegold::Vec3f
@@ -226,7 +230,7 @@ struct Rosegold::Vec3d
     Vec3f.new x, y, z
   end
 
-  def floored_i32 : Vec3i
+  def block : Vec3i
     Vec3i.new x.floor.to_i32, y.floor.to_i32, z.floor.to_i32
   end
 end

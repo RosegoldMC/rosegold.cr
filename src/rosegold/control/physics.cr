@@ -1,6 +1,6 @@
 require "../client"
 require "./action"
-require "./raytracing"
+require "./raytrace"
 
 struct Int32
   def ticks
@@ -216,7 +216,7 @@ class Rosegold::Physics
     # we can freely move in blocks that we already collide with before the movement
     obstacles = obstacles.reject &.contains? start
 
-    result = Raytracing.raytrace start, velocity, obstacles
+    result = Raytrace.raytrace start, velocity, obstacles
     movement = result.try { |r| r.intercept - start } || velocity
     collided_x = movement.x != velocity.x
     collided_y = movement.y != velocity.y
@@ -227,7 +227,7 @@ class Rosegold::Physics
       step_start = start.plus(0, 0.5, 0)
       # gravity would pull us into the step, preventing stepping
       step_velocity = velocity.with_y 0
-      step_result = Raytracing.raytrace step_start, step_velocity, obstacles
+      step_result = Raytrace.raytrace step_start, step_velocity, obstacles
       step_movement = step_result.try { |r| r.intercept - start } || step_velocity
 
       step_different_x = step_movement.x != movement.x
@@ -236,7 +236,7 @@ class Rosegold::Physics
         # we may have stepped too far up, land on top surface of step block
         step_end = step_result.try(&.intercept) || start + step_velocity
         down_velocity = Vec3d.new(0, -1, 0)
-        down_result = Raytracing.raytrace step_end, down_velocity, obstacles
+        down_result = Raytrace.raytrace step_end, down_velocity, obstacles
         down_end = down_result.try(&.intercept) || step_end + down_velocity
 
         movement = down_end - start
@@ -269,9 +269,9 @@ class Rosegold::Physics
       entity_aabb.offset(start),
       entity_aabb.offset(start + movement))
     # fences are 1.5m tall
-    min_block = bounds.min.down(0.5).floored_i32
+    min_block = bounds.min.down(0.5).block
     # add maximum stepping height (0.5) so we can reuse the obstacles when stepping
-    max_block = bounds.max.up(0.5).floored_i32
+    max_block = bounds.max.up(0.5).block
     blocks_coords = Indexable.cartesian_product({
       (min_block.x..max_block.x).to_a,
       (min_block.y..max_block.y).to_a,

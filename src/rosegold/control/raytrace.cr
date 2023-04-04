@@ -1,24 +1,24 @@
 require "../world/aabb"
 require "../world/vec3"
 
-module Rosegold::Raytracing
+module Rosegold::Raytrace
   struct Ray
     getter start : Vec3d, delta : Vec3d
 
     def initialize(@start : Vec3d, @delta : Vec3d); end
   end
 
-  struct RayTraceResult
+  struct Result
     getter intercept : Vec3d, box_nr : Int32, face : BlockFace
 
     def initialize(@intercept : Vec3d, @box_nr : Int32, @face : BlockFace); end
   end
 
-  def self.raytrace(start : Vec3d, delta : Vec3d, boxes : Array(AABBd))
+  def self.raytrace(start : Vec3d, delta : Vec3d, boxes : Array(AABBd)) : Result?
     raytrace(Ray.new(start, delta), boxes)
   end
 
-  def self.raytrace(ray : Ray, boxes : Array(AABBd)) : RayTraceResult?
+  def self.raytrace(ray : Ray, boxes : Array(AABBd)) : Result?
     min_scalar = 1_f64
     min_result = nil
 
@@ -59,11 +59,11 @@ module Rosegold::Raytracing
   # TODO: rename this helper
   private def self.better(
     ray : Ray, box : AABBd, plane_coord : Float64, face : BlockFace,
-    min_scalar : Float64, min_result : RayTraceResult?, box_nr : Int32
-  ) : Tuple(Float64, RayTraceResult?)
+    min_scalar : Float64, min_result : Result?, box_nr : Int32
+  ) : Tuple(Float64, Result?)
     intersect_plane(ray, box, plane_coord, face).try do |scalar, hit|
       if scalar < min_scalar
-        {scalar, RayTraceResult.new(hit, box_nr, face)}
+        {scalar, Result.new(hit, box_nr, face)}
       else
         {min_scalar, min_result}
       end

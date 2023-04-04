@@ -74,7 +74,7 @@ class Rosegold::Bot
 
   # Waits for the new look to be sent to the server.
   def look_at(location : Vec3d)
-    client.physics.look Look.from_vec location - eyes
+    client.physics.look = Look.from_vec location - eyes
   end
 
   # Waits for the new look to be sent to the server.
@@ -203,10 +203,8 @@ class Rosegold::Bot
   end
 
   # not exposed, for rules compliance
-  @dig_action : Action(Tuple(Vec3d, BlockFace))?
+  @dig_action : Action(Tuple(Vec3i, BlockFace))?
   @dig_hand_swing_countdown = 0_i8
-
-  # TODO select dig location by raytracing; if location is passed, just look there, but interact with whatever may be in the way
 
   # waits for completion, throws error if cancelled
   def dig(ticks : UInt32, look_location : Vec3d)
@@ -217,20 +215,20 @@ class Rosegold::Bot
   end
 
   # cancels any ongoing dig action
-  def start_digging(look_location : Vec3d)
+  def start_digging(look_location : Vec3d = player.look)
     cancel_digging if @dig_action
-    raise "Already digging #{@dig_action.target}" if @dig_action # above cancellation immediately triggered a new dig
+    @dig_action.try { |action| raise "Already digging #{action.target}" }
     look_at look_location if look_location
-    raise "Already digging #{@dig_action.target}" if @dig_action # while looking, a new dig was triggered
+    @dig_action.try { |action| raise "Already digging #{action.target}" }
 
     reached = reach_block_or_entity
     unless reached
-      dig_action = DigAction.new({Vec3d.ORIGIN, 0}).tap &.succeed
+      dig_action = Action.new({Vec3d::ORIGIN, 0}).tap &.succeed
       return dig_action
     end
     _intercept, location, face = reached
 
-    dig_action = @dig_action = DigAction.new({location, face})
+    dig_action = @dig_action = Action.new({location, face})
     client.connection.send_packet Serverbound::PlayerDigging.new \
       Serverbound::PlayerDigging::Status::Start, location, face
     client.connection.send_packet Serverbound::SwingArm.new
@@ -253,7 +251,7 @@ class Rosegold::Bot
     return unless dig_action
     location, face = dig_action.target
     client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::Finish, location, face
+      Serverbound::PlayerDigging::Status::Finish, location.block, face
     @dig_action = nil
     dig_action.fail "Cancelled"
   end
@@ -279,12 +277,12 @@ class Rosegold::Bot
     end
   end
 
-  private def reach_block_or_entity(look_location : Vec3d? = nil) : RaytraceResult?
+  private def reach_block_or_entity(look_location : Vec3d? = nil)
     look_at look_location if look_location
-    reach = look.to_vec3.scale(4)
-    boxes = get_block_hitboxes(head, reach)
-    Raytracing.raytrace(head, reach, boxes).try do |reached|
-      location = boxes[reached.box_nr].min.floored_i32
+    reach = look.to_vec3 * 4
+    boxes = get_block_hitboxes(eyes, reach)
+    Raytrace.raytrace(eyes, reach, boxes).try do |reached|
+      location = boxes[reached.box_nr].min.block
       {reached.intercept, location, reached.face}
     end
   end
@@ -293,8 +291,8 @@ class Rosegold::Bot
   private def get_block_hitboxes(start : Vec3d, reach : Vec3d) : Array(AABBd)
     bounds = AABBd.new(start, start + reach)
     # fences are 1.5m tall
-    min_block = bounds.min.down(0.5).floored_i32
-    max_block = bounds.max.floored_i32
+    min_block = bounds.min.down(0.5).block
+    max_block = bounds.max.block
     blocks_coords = Indexable.cartesian_product({
       (min_block.x..max_block.x).to_a,
       (min_block.y..max_block.y).to_a,
