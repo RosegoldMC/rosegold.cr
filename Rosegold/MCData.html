@@ -321,6 +321,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/CloseWindow" data-name="rosegold::clientbound::closewindow">
+      <a href="../Rosegold/Clientbound/CloseWindow.html">CloseWindow</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Disconnect" data-name="rosegold::clientbound::disconnect">
       <a href="../Rosegold/Clientbound/Disconnect.html">Disconnect</a>
       
@@ -411,6 +416,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SetSlot" data-name="rosegold::clientbound::setslot">
+      <a href="../Rosegold/Clientbound/SetSlot.html">SetSlot</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/StatusPong" data-name="rosegold::clientbound::statuspong">
       <a href="../Rosegold/Clientbound/StatusPong.html">StatusPong</a>
       
@@ -451,6 +461,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Connection/ConnectionClosed" data-name="rosegold::connection::connectionclosed">
+      <a href="../Rosegold/Connection/ConnectionClosed.html">ConnectionClosed</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Connection/Server" data-name="rosegold::connection::server">
       <a href="../Rosegold/Connection/Server.html">Server</a>
       
@@ -478,6 +493,21 @@
   
   <li class=" " data-id="rosegold/Rosegold/Hand" data-name="rosegold::hand">
       <a href="../Rosegold/Hand.html">Hand</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Inventory" data-name="rosegold::inventory">
+      <a href="../Rosegold/Inventory.html">Inventory</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Inventory/ItemNotFoundError" data-name="rosegold::inventory::itemnotfounderror">
+      <a href="../Rosegold/Inventory/ItemNotFoundError.html">ItemNotFoundError</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -829,7 +859,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/06af2e08e1db59daa86d81acf26bd90a02f9fd88/src/rosegold/world/mcdata.cr#L5" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/mcdata.cr#L5" target="_blank">
         rosegold/world/mcdata.cr
       </a>
     
@@ -915,12 +945,17 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#items_array%3AArray%28Item%29-instance-method" class="signature"><strong>#items_array</strong> : Array(Item)</a>
+        <a href="#items%3AArray%28Item%29-instance-method" class="signature"><strong>#items</strong> : Array(Item)</a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#items_by_id%3AHash%28String%2CItem%29-instance-method" class="signature"><strong>#items_by_id</strong> : Hash(String, Item)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#items_by_id_int%3AHash%28UInt32%2CItem%29-instance-method" class="signature"><strong>#items_by_id_int</strong> : Hash(UInt32, Item)</a>
         
       </li>
     
@@ -975,7 +1010,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/06af2e08e1db59daa86d81acf26bd90a02f9fd88/src/rosegold/world/mcdata.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/mcdata.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1011,7 +1046,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/06af2e08e1db59daa86d81acf26bd90a02f9fd88/src/rosegold/world/mcdata.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/mcdata.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1032,7 +1067,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/06af2e08e1db59daa86d81acf26bd90a02f9fd88/src/rosegold/world/mcdata.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/mcdata.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1048,7 +1083,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/06af2e08e1db59daa86d81acf26bd90a02f9fd88/src/rosegold/world/mcdata.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/mcdata.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1064,23 +1099,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/06af2e08e1db59daa86d81acf26bd90a02f9fd88/src/rosegold/world/mcdata.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/mcdata.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="items_array:Array(Item)-instance-method">
+    <div class="entry-detail" id="items:Array(Item)-instance-method">
       <div class="signature">
         
-        def <strong>items_array</strong> : Array(<a href="../Rosegold/MCData/Item.html">Item</a>)
+        def <strong>items</strong> : Array(<a href="../Rosegold/MCData/Item.html">Item</a>)
 
-        <a class="method-permalink" href="#items_array%3AArray%28Item%29-instance-method">#</a>
+        <a class="method-permalink" href="#items%3AArray%28Item%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/06af2e08e1db59daa86d81acf26bd90a02f9fd88/src/rosegold/world/mcdata.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/mcdata.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1096,7 +1131,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/06af2e08e1db59daa86d81acf26bd90a02f9fd88/src/rosegold/world/mcdata.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/mcdata.cr#L11" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="items_by_id_int:Hash(UInt32,Item)-instance-method">
+      <div class="signature">
+        
+        def <strong>items_by_id_int</strong> : Hash(UInt32, <a href="../Rosegold/MCData/Item.html">Item</a>)
+
+        <a class="method-permalink" href="#items_by_id_int%3AHash%28UInt32%2CItem%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/mcdata.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
