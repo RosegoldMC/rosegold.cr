@@ -83,7 +83,8 @@ class Rosegold::Interactions
     send_packet Serverbound::SwingArm.new
   end
 
-  private def finish_digging
+  # TODO decide finish/cancel based on block dig time
+  def finish_digging
     reached = @digging_block
     return unless reached
     @digging_block = nil
@@ -91,7 +92,8 @@ class Rosegold::Interactions
       :finish, reached.block, reached.face
   end
 
-  private def cancel_digging
+  # TODO decide finish/cancel based on block dig time
+  def cancel_digging
     reached = @digging_block
     return unless reached
     @digging_block = nil

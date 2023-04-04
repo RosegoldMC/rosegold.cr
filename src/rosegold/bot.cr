@@ -14,7 +14,7 @@ class Rosegold::Bot
   delegate host, port, connect, connected?, online_players, on, to: client
   delegate feet, eyes, health, food, saturation, gamemode, to: client.player
   # TODO delegate more
-  delegate start_using_hand, stop_using_hand, start_digging, stop_digging, to: @interact
+  delegate start_using_hand, stop_using_hand, start_digging, finish_digging, cancel_digging, to: @interact
 
   def disconnect_reason
     client.connection.try &.close_reason
@@ -201,11 +201,11 @@ class Rosegold::Bot
 
   # Looks at that location, then activates the `attack` button,
   # waits `ticks`, and deactivates it again.
-  # waits for completion, throws error if cancelled
-  def dig(ticks : UInt32, location : Vec3d = nil)
+  # Waits for completion, throws error if cancelled by stop_digging, item change, disconnect, etc.
+  def dig(ticks : UInt32, location : Vec3d? = nil)
     look_at location if location
     start_digging
     wait_ticks ticks
-    stop_digging
+    finish_digging
   end
 end
