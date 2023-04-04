@@ -116,7 +116,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   # a EncryptionResponse has been sent.
   def send_packet!(packet : Serverbound::Packet)
     raise "Not connected" unless connected?
-    Log.trace { "SEND " + inspect_packet(packet) }
+    Log.trace { "SEND #{packet}" }
     connection.send_packet packet
   end
 
@@ -128,7 +128,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     packet = Connection.decode_packet raw_packet, connection.state
     return nil unless packet
-    Log.trace { "RECV " + inspect_packet(packet) }
+    Log.trace { "RECV #{packet}" }
 
     packet.callback(self)
 
@@ -136,9 +136,4 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     packet
   end
-end
-
-private def inspect_packet(packet)
-  packet.pretty_inspect(999, " ", 0).sub(/:0x\S+/, "") \
-    .gsub(/Rosegold::|Clientbound::|Serverbound::/, "")
 end
