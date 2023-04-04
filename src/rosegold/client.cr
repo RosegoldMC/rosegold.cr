@@ -20,8 +20,7 @@ class Rosegold::Client
     player : Player = Player.new,
     dimension : Dimension = Dimension.new,
     physics : Physics,
-    current_window : Window? = nil,
-    inventory_window : Window = Window.new(0_u32, 64_u32, Chat.new "Player Inventory")
+    current_window : Window = Window.player_inventory
 
   getter raw_packet_handlers : Array(Proc(Bytes, Nil)) = Array(Proc(Bytes, Nil)).new
 
@@ -111,7 +110,7 @@ class Rosegold::Client
 
   # Send a packet to the server concurrently.
   def queue_packet(packet : Serverbound::Packet)
-    raise "Not connected" unless connected?
+    raise "Unabled to queue #{packet}; Not connected" unless connected?
     spawn do
       Fiber.yield
       send_packet! packet
