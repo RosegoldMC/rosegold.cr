@@ -40,31 +40,6 @@ struct Rosegold::Look
     with_pitch pitch.to_f32
   end
 
-  def initialize(@yaw_deg : Float32, @pitch_deg : Float32); end
-
-  def self.from_deg(yaw_deg : Float32, pitch_deg : Float32)
-    while yaw_deg < 0
-      yaw_deg += 4*360
-    end
-    self.new(yaw_deg % 360, pitch_deg)
-  end
-
-  def self.from_rad(yaw_rad : Float32, pitch_rad : Float32)
-    self.from_deg (yaw_rad * 360 / Math::TAU).to_f32, (pitch_rad * 360 / Math::TAU).to_f32
-  end
-
-  def self.from_vec(vec : Vec3d | Vec3f)
-    yaw_rad = Math.atan2(-vec.x, vec.z)
-    ground_distance = Math.sqrt(vec.x * vec.x + vec.z * vec.z)
-    pitch_rad = -Math.atan2(vec.y, ground_distance)
-
-    Look.from_rad(yaw_rad.to_f32, pitch_rad.to_f32)
-  end
-
-  def inspect(io)
-    io << "#<Look yaw=" << yaw_deg << "° pitch=" << pitch_deg << "°>"
-  end
-
   def down
     Look.new(yaw, 90)
   end
@@ -94,7 +69,7 @@ struct Rosegold::Look
     ground_distance = Math.sqrt(vec.x * vec.x + vec.z * vec.z)
     pitch_rad = -Math.atan2(vec.y, ground_distance)
 
-    Look.from_rad(yaw_rad.as_f32, pitch_rad.as_f32)
+    Look.from_rad(yaw_rad.to_f32, pitch_rad.to_f32)
   end
 
   def self.from_rad(yaw_rad : Float32, pitch_rad : Float32)
