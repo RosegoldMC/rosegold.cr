@@ -24,13 +24,13 @@ class Rosegold::MCData
     # for arbitrary version support, we would need to parse dataPaths.json
     raise "we only support 1.18 for now" if mc_version != "1.18"
 
-    @items_array = Array(Item).from_json {{read_file "game_assets/items.json"}}
+    @items_array = Array(Item).from_json Rosegold.read_game_asset "items.json"
     @items_by_id = Hash.zip(items_array.map &.id_str, items_array)
 
-    @blocks_array = Array(Block).from_json {{read_file "game_assets/blocks.json"}}
+    @blocks_array = Array(Block).from_json Rosegold.read_game_asset "blocks.json"
     @blocks_by_id = Hash.zip(blocks_array.map &.id_str, blocks_array)
 
-    block_collision_shapes_json = BlockCollisionShapes.from_json {{read_file "game_assets/blockCollisionShapes.json"}}
+    block_collision_shapes_json = BlockCollisionShapes.from_json Rosegold.read_game_asset "blockCollisionShapes.json"
 
     max_block_state = blocks_array.flat_map(&.max_state_id).max
 
