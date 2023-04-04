@@ -11,6 +11,14 @@ struct Int32
   end
 end
 
+abstract class Rosegold::Event; end # defined elsewhere, but otherwise it would be a module
+
+class Rosegold::Event::PhysicsTick < Rosegold::Event
+  getter movement : Vec3d
+
+  def initialize(@movement); end
+end
+
 # Updates the player feet/look/velocity/on_ground by sending movement packets.
 class Rosegold::Physics
   DRAG    = 0.98 # y velocity multiplicator per tick when not on ground
@@ -161,6 +169,8 @@ class Rosegold::Physics
         end
       end
     end
+
+    client.emit_event Event::PhysicsTick.new movement
   end
 
   private def send_movement_packet(feet : Vec3d, look : Look, on_ground : Bool)
