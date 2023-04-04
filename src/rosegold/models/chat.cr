@@ -4,7 +4,7 @@ require "colorize"
 class Rosegold::Chat
   include JSON::Serializable
 
-  TRANSLATIONS = Hash(String, String).from_json {{ read_file "game_assets/language.json" }}
+  TRANSLATIONS = Hash(String, String).from_json Rosegold.read_game_asset "language.json"
 
   property \
     text : String?,

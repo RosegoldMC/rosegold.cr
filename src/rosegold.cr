@@ -13,5 +13,9 @@ module Rosegold
 
   Log.setup_from_env
 
-  # TODO: Put your code here
+  GAME_ASSETS_ROOT = "#{__DIR__}/../game_assets/"
+
+  macro read_game_asset(path)
+    {{read_file GAME_ASSETS_ROOT + path}}
+  end
 end
