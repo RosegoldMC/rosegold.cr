@@ -98,11 +98,10 @@ Spectator.describe Rosegold::Bot do
         bot.chat "/tp 8 -49 8"
         sleep 1 # teleport
 
-        bot.pitch = 90
-        # TODO: finish this test
-        bot.start_digging Rosegold::Vec3d.new(8, -50, 8)
-        sleep 5
-        expect(bot.feet).to eq(Rosegold::Vec3i.new(8, -60, 8))
+        bot.look &.down
+        bot.dig(40)
+        sleep 1 # fall down
+        expect(bot.feet.y).to be_lt -49.5
       end
     end
   end

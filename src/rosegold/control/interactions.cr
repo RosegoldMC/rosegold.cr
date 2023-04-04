@@ -48,7 +48,7 @@ class Rosegold::Interactions
 
   # Deactivates the "attack" button.
   def stop_digging
-    cancel_digging
+    finish_digging
   end
 
   private def on_physics_tick
