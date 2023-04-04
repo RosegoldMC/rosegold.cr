@@ -7,8 +7,9 @@ class Rosegold::MCData
 
   MC118 = Rosegold::MCData.new "1.18"
 
-  getter items_array : Array(Item)
+  getter items : Array(Item)
   getter items_by_id : Hash(String, Item)
+  getter items_by_id_int : Hash(UInt32, Item)
 
   getter blocks_array : Array(Block)
   getter blocks_by_id : Hash(String, Block)
@@ -24,8 +25,12 @@ class Rosegold::MCData
     # for arbitrary version support, we would need to parse dataPaths.json
     raise "we only support 1.18 for now" if mc_version != "1.18"
 
-    @items_array = Array(Item).from_json Rosegold.read_game_asset "items.json"
-    @items_by_id = Hash.zip(items_array.map &.id_str, items_array)
+    @items = Array(Item)
+      .from_json(Rosegold.read_game_asset "items.json")
+      .unshift(Item.new(id: 0, id_str: "air", display_name: "Air", stack_size: 0))
+
+    @items_by_id = Hash.zip(items.map &.id_str, items)
+    @items_by_id_int = Hash.zip(items.map &.id, items)
 
     @blocks_array = Array(Block).from_json Rosegold.read_game_asset "blocks.json"
     @blocks_by_id = Hash.zip(blocks_array.map &.id_str, blocks_array)
@@ -77,7 +82,10 @@ class Rosegold::MCData
   class Item
     include JSON::Serializable
 
-    getter id : UInt16
+    def initialize(@id : UInt32, @id_str : String, @display_name : String, @stack_size : UInt8, @max_durability : UInt16? = nil, @repair_with : Array(String)? = nil, @enchant_categories : Array(String)? = nil)
+    end
+
+    getter id : UInt32
     @[JSON::Field(key: "name")]
     getter id_str : String
     @[JSON::Field(key: "displayName")]
