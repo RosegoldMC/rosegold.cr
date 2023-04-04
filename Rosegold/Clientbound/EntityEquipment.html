@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Clientbound::ChunkData - rosegold main</title>
+  <title>Rosegold::Clientbound::EntityEquipment - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -316,7 +316,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/ChunkData" data-name="rosegold::clientbound::chunkdata">
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChunkData" data-name="rosegold::clientbound::chunkdata">
       <a href="../../Rosegold/Clientbound/ChunkData.html">ChunkData</a>
       
     </li>
@@ -336,7 +336,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityEquipment" data-name="rosegold::clientbound::entityequipment">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/EntityEquipment" data-name="rosegold::clientbound::entityequipment">
       <a href="../../Rosegold/Clientbound/EntityEquipment.html">EntityEquipment</a>
       
     </li>
@@ -830,12 +830,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::Clientbound::ChunkData
+  <span class="kind">class</span> Rosegold::Clientbound::EntityEquipment
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/ChunkData.html">Rosegold::Clientbound::ChunkData</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/EntityEquipment.html">Rosegold::Clientbound::EntityEquipment</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -863,8 +863,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L3" target="_blank">
-        rosegold/packets/clientbound/chunk_data.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L6" target="_blank">
+        rosegold/packets/clientbound/entity_equipment.cr
       </a>
     
     <br/>
@@ -885,7 +885,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AMinecraft%3A%3ANBT%3A%3ATag%2Cdata%3ASlice%28UInt8%29%29-class-method" class="signature"><strong>.new</strong>(chunk_x : Int32, chunk_z : Int32, heightmaps : Minecraft::NBT::Tag, data : Slice(UInt8))</a>
+        <a href="#new%28entity_id%3AInt32%29-class-method" class="signature"><strong>.new</strong>(entity_id : Int32)</a>
         
       </li>
     
@@ -908,11 +908,6 @@
         
       </li>
     
-      <li class="entry-summary">
-        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
-        
-      </li>
-    
   </ul>
 
 
@@ -928,52 +923,72 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
+        <a href="#boots%3ASlot%7CNil-instance-method" class="signature"><strong>#boots</strong> : Slot | Nil</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#chunk_x%3AInt32-instance-method" class="signature"><strong>#chunk_x</strong> : Int32</a>
+        <a href="#boots%3D%28boots%3ASlot%7CNil%29-instance-method" class="signature"><strong>#boots=</strong>(boots : Slot | Nil)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#chunk_x%3D%28chunk_x%3AInt32%29-instance-method" class="signature"><strong>#chunk_x=</strong>(chunk_x : Int32)</a>
+        <a href="#chestplate%3ASlot%7CNil-instance-method" class="signature"><strong>#chestplate</strong> : Slot | Nil</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#chunk_z%3AInt32-instance-method" class="signature"><strong>#chunk_z</strong> : Int32</a>
+        <a href="#chestplate%3D%28chestplate%3ASlot%7CNil%29-instance-method" class="signature"><strong>#chestplate=</strong>(chestplate : Slot | Nil)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#chunk_z%3D%28chunk_z%3AInt32%29-instance-method" class="signature"><strong>#chunk_z=</strong>(chunk_z : Int32)</a>
+        <a href="#entity_id%3AInt32-instance-method" class="signature"><strong>#entity_id</strong> : Int32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#data%3ABytes-instance-method" class="signature"><strong>#data</strong> : Bytes</a>
+        <a href="#entity_id%3D%28entity_id%3AInt32%29-instance-method" class="signature"><strong>#entity_id=</strong>(entity_id : Int32)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#data%3D%28data%3ABytes%29-instance-method" class="signature"><strong>#data=</strong>(data : Bytes)</a>
+        <a href="#helmet%3ASlot%7CNil-instance-method" class="signature"><strong>#helmet</strong> : Slot | Nil</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#heightmaps%3AMinecraft%3A%3ANBT%3A%3ATag-instance-method" class="signature"><strong>#heightmaps</strong> : Minecraft::NBT::Tag</a>
+        <a href="#helmet%3D%28helmet%3ASlot%7CNil%29-instance-method" class="signature"><strong>#helmet=</strong>(helmet : Slot | Nil)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#heightmaps%3D%28heightmaps%3AMinecraft%3A%3ANBT%3A%3ATag%29-instance-method" class="signature"><strong>#heightmaps=</strong>(heightmaps : Minecraft::NBT::Tag)</a>
+        <a href="#leggings%3ASlot%7CNil-instance-method" class="signature"><strong>#leggings</strong> : Slot | Nil</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#inspect%28io%29-instance-method" class="signature"><strong>#inspect</strong>(io)</a>
+        <a href="#leggings%3D%28leggings%3ASlot%7CNil%29-instance-method" class="signature"><strong>#leggings=</strong>(leggings : Slot | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#main_hand%3ASlot%7CNil-instance-method" class="signature"><strong>#main_hand</strong> : Slot | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#main_hand%3D%28main_hand%3ASlot%7CNil%29-instance-method" class="signature"><strong>#main_hand=</strong>(main_hand : Slot | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#off_hand%3ASlot%7CNil-instance-method" class="signature"><strong>#off_hand</strong> : Slot | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#off_hand%3D%28off_hand%3ASlot%7CNil%29-instance-method" class="signature"><strong>#off_hand=</strong>(off_hand : Slot | Nil)</a>
         
       </li>
     
@@ -1065,18 +1080,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(chunk_x:Int32,chunk_z:Int32,heightmaps:Minecraft::NBT::Tag,data:Slice(UInt8))-class-method">
+    <div class="entry-detail" id="new(entity_id:Int32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(chunk_x : <a href="../../Int32.html">Int32</a>, chunk_z : <a href="../../Int32.html">Int32</a>, heightmaps : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>, data : Slice(UInt8))
+        def self.<strong>new</strong>(entity_id : <a href="../../Int32.html">Int32</a>)
 
-        <a class="method-permalink" href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AMinecraft%3A%3ANBT%3A%3ATag%2Cdata%3ASlice%28UInt8%29%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28entity_id%3AInt32%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1104,23 +1119,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L4" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read(packet)-class-method">
-      <div class="signature">
-        
-        def self.<strong>read</strong>(packet)
-
-        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1137,162 +1136,226 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="callback(client)-instance-method">
+    <div class="entry-detail" id="boots:Slot|Nil-instance-method">
       <div class="signature">
         
-        def <strong>callback</strong>(client)
+        def <strong>boots</strong> : <a href="../../Rosegold/Slot.html">Slot</a> | Nil
 
-        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
+        <a class="method-permalink" href="#boots%3ASlot%7CNil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="chunk_x:Int32-instance-method">
+    <div class="entry-detail" id="boots=(boots:Slot|Nil)-instance-method">
       <div class="signature">
         
-        def <strong>chunk_x</strong> : <a href="../../Int32.html">Int32</a>
+        def <strong>boots=</strong>(boots : <a href="../../Rosegold/Slot.html">Slot</a> | Nil)
 
-        <a class="method-permalink" href="#chunk_x%3AInt32-instance-method">#</a>
+        <a class="method-permalink" href="#boots%3D%28boots%3ASlot%7CNil%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="chunk_x=(chunk_x:Int32)-instance-method">
+    <div class="entry-detail" id="chestplate:Slot|Nil-instance-method">
       <div class="signature">
         
-        def <strong>chunk_x=</strong>(chunk_x : <a href="../../Int32.html">Int32</a>)
+        def <strong>chestplate</strong> : <a href="../../Rosegold/Slot.html">Slot</a> | Nil
 
-        <a class="method-permalink" href="#chunk_x%3D%28chunk_x%3AInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#chestplate%3ASlot%7CNil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="chunk_z:Int32-instance-method">
+    <div class="entry-detail" id="chestplate=(chestplate:Slot|Nil)-instance-method">
       <div class="signature">
         
-        def <strong>chunk_z</strong> : <a href="../../Int32.html">Int32</a>
+        def <strong>chestplate=</strong>(chestplate : <a href="../../Rosegold/Slot.html">Slot</a> | Nil)
 
-        <a class="method-permalink" href="#chunk_z%3AInt32-instance-method">#</a>
+        <a class="method-permalink" href="#chestplate%3D%28chestplate%3ASlot%7CNil%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="chunk_z=(chunk_z:Int32)-instance-method">
+    <div class="entry-detail" id="entity_id:Int32-instance-method">
       <div class="signature">
         
-        def <strong>chunk_z=</strong>(chunk_z : <a href="../../Int32.html">Int32</a>)
+        def <strong>entity_id</strong> : <a href="../../Int32.html">Int32</a>
 
-        <a class="method-permalink" href="#chunk_z%3D%28chunk_z%3AInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#entity_id%3AInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="data:Bytes-instance-method">
+    <div class="entry-detail" id="entity_id=(entity_id:Int32)-instance-method">
       <div class="signature">
         
-        def <strong>data</strong> : Bytes
+        def <strong>entity_id=</strong>(entity_id : <a href="../../Int32.html">Int32</a>)
 
-        <a class="method-permalink" href="#data%3ABytes-instance-method">#</a>
+        <a class="method-permalink" href="#entity_id%3D%28entity_id%3AInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="data=(data:Bytes)-instance-method">
+    <div class="entry-detail" id="helmet:Slot|Nil-instance-method">
       <div class="signature">
         
-        def <strong>data=</strong>(data : Bytes)
+        def <strong>helmet</strong> : <a href="../../Rosegold/Slot.html">Slot</a> | Nil
 
-        <a class="method-permalink" href="#data%3D%28data%3ABytes%29-instance-method">#</a>
+        <a class="method-permalink" href="#helmet%3ASlot%7CNil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="heightmaps:Minecraft::NBT::Tag-instance-method">
+    <div class="entry-detail" id="helmet=(helmet:Slot|Nil)-instance-method">
       <div class="signature">
         
-        def <strong>heightmaps</strong> : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>
+        def <strong>helmet=</strong>(helmet : <a href="../../Rosegold/Slot.html">Slot</a> | Nil)
 
-        <a class="method-permalink" href="#heightmaps%3AMinecraft%3A%3ANBT%3A%3ATag-instance-method">#</a>
+        <a class="method-permalink" href="#helmet%3D%28helmet%3ASlot%7CNil%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="heightmaps=(heightmaps:Minecraft::NBT::Tag)-instance-method">
+    <div class="entry-detail" id="leggings:Slot|Nil-instance-method">
       <div class="signature">
         
-        def <strong>heightmaps=</strong>(heightmaps : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>)
+        def <strong>leggings</strong> : <a href="../../Rosegold/Slot.html">Slot</a> | Nil
 
-        <a class="method-permalink" href="#heightmaps%3D%28heightmaps%3AMinecraft%3A%3ANBT%3A%3ATag%29-instance-method">#</a>
+        <a class="method-permalink" href="#leggings%3ASlot%7CNil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="inspect(io)-instance-method">
+    <div class="entry-detail" id="leggings=(leggings:Slot|Nil)-instance-method">
       <div class="signature">
         
-        def <strong>inspect</strong>(io)
+        def <strong>leggings=</strong>(leggings : <a href="../../Rosegold/Slot.html">Slot</a> | Nil)
 
-        <a class="method-permalink" href="#inspect%28io%29-instance-method">#</a>
+        <a class="method-permalink" href="#leggings%3D%28leggings%3ASlot%7CNil%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="main_hand:Slot|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>main_hand</strong> : <a href="../../Rosegold/Slot.html">Slot</a> | Nil
+
+        <a class="method-permalink" href="#main_hand%3ASlot%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="main_hand=(main_hand:Slot|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>main_hand=</strong>(main_hand : <a href="../../Rosegold/Slot.html">Slot</a> | Nil)
+
+        <a class="method-permalink" href="#main_hand%3D%28main_hand%3ASlot%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="off_hand:Slot|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>off_hand</strong> : <a href="../../Rosegold/Slot.html">Slot</a> | Nil
+
+        <a class="method-permalink" href="#off_hand%3ASlot%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="off_hand=(off_hand:Slot|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>off_hand=</strong>(off_hand : <a href="../../Rosegold/Slot.html">Slot</a> | Nil)
+
+        <a class="method-permalink" href="#off_hand%3D%28off_hand%3ASlot%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1308,7 +1371,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/chunk_data.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/clientbound/entity_equipment.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>

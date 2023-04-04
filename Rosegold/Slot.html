@@ -336,6 +336,16 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityEquipment" data-name="rosegold::clientbound::entityequipment">
+      <a href="../Rosegold/Clientbound/EntityEquipment.html">EntityEquipment</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityTeleport" data-name="rosegold::clientbound::entityteleport">
+      <a href="../Rosegold/Clientbound/EntityTeleport.html">EntityTeleport</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/HeldItemChange" data-name="rosegold::clientbound::helditemchange">
       <a href="../Rosegold/Clientbound/HeldItemChange.html">HeldItemChange</a>
       
@@ -418,6 +428,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Clientbound/SetSlot" data-name="rosegold::clientbound::setslot">
       <a href="../Rosegold/Clientbound/SetSlot.html">SetSlot</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SpawnPlayer" data-name="rosegold::clientbound::spawnplayer">
+      <a href="../Rosegold/Clientbound/SpawnPlayer.html">SpawnPlayer</a>
       
     </li>
   
@@ -848,7 +863,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L3" target="_blank">
         rosegold/world/slot.cr
       </a>
     
@@ -870,7 +885,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28item_id_int%3AUInt32%3D0%2Ccount%3AUInt8%3D0%2Cnbt%3AMinecraft%3A%3ANBT%3A%3ATag%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(item_id_int : UInt32 = <span class="n">0</span>, count : UInt8 = <span class="n">0</span>, nbt : Minecraft::NBT::Tag | Nil = <span class="n">nil</span>)</a>
+        <a href="#new%28item_id_int%3AUInt32%3D0%2Ccount%3AUInt8%3D0%2Cnbt%3ANil%7CMinecraft%3A%3ANBT%3A%3ACompoundTag%3Dnil%29-class-method" class="signature"><strong>.new</strong>(item_id_int : UInt32 = <span class="n">0</span>, count : UInt8 = <span class="n">0</span>, nbt : Nil | Minecraft::NBT::CompoundTag = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -889,7 +904,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#read%28io%3AIO%29%3ARosegold%3A%3ASlot-class-method" class="signature"><strong>.read</strong>(io : IO) : Rosegold::Slot</a>
+        <a href="#read%28io%29%3ARosegold%3A%3ASlot-class-method" class="signature"><strong>.read</strong>(io) : Rosegold::Slot</a>
         
       </li>
     
@@ -940,12 +955,22 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#nbt%3AMinecraft%3A%3ANBT%3A%3ATag%7CNil-instance-method" class="signature"><strong>#nbt</strong> : Minecraft::NBT::Tag | Nil</a>
+        <a href="#nbt%3AMinecraft%3A%3ANBT%3A%3ACompoundTag%7CNil-instance-method" class="signature"><strong>#nbt</strong> : Minecraft::NBT::CompoundTag | Nil</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#nbt%3D%28nbt%3AMinecraft%3A%3ANBT%3A%3ATag%7CNil%29-instance-method" class="signature"><strong>#nbt=</strong>(nbt : Minecraft::NBT::Tag | Nil)</a>
+        <a href="#nbt%3D%28nbt%3AMinecraft%3A%3ANBT%3A%3ACompoundTag%7CNil%29-instance-method" class="signature"><strong>#nbt=</strong>(nbt : Minecraft::NBT::CompoundTag | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#present%3F-instance-method" class="signature"><strong>#present?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#write%28io%29-instance-method" class="signature"><strong>#write</strong>(io)</a>
         
       </li>
     
@@ -999,18 +1024,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(item_id_int:UInt32=0,count:UInt8=0,nbt:Minecraft::NBT::Tag|Nil=nil)-class-method">
+    <div class="entry-detail" id="new(item_id_int:UInt32=0,count:UInt8=0,nbt:Nil|Minecraft::NBT::CompoundTag=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(item_id_int : UInt32 = <span class="n">0</span>, count : UInt8 = <span class="n">0</span>, nbt : <a href="../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a> | Nil = <span class="n">nil</span>)
+        def self.<strong>new</strong>(item_id_int : UInt32 = <span class="n">0</span>, count : UInt8 = <span class="n">0</span>, nbt : Nil | <a href="../Minecraft/NBT/CompoundTag.html">Minecraft::NBT::CompoundTag</a> = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28item_id_int%3AUInt32%3D0%2Ccount%3AUInt8%3D0%2Cnbt%3AMinecraft%3A%3ANBT%3A%3ATag%7CNil%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28item_id_int%3AUInt32%3D0%2Ccount%3AUInt8%3D0%2Cnbt%3ANil%7CMinecraft%3A%3ANBT%3A%3ACompoundTag%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1027,18 +1052,18 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="read(io:IO):Rosegold::Slot-class-method">
+    <div class="entry-detail" id="read(io):Rosegold::Slot-class-method">
       <div class="signature">
         
-        def self.<strong>read</strong>(io : IO) : <a href="../Rosegold/Slot.html">Rosegold::Slot</a>
+        def self.<strong>read</strong>(io) : <a href="../Rosegold/Slot.html">Rosegold::Slot</a>
 
-        <a class="method-permalink" href="#read%28io%3AIO%29%3ARosegold%3A%3ASlot-class-method">#</a>
+        <a class="method-permalink" href="#read%28io%29%3ARosegold%3A%3ASlot-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1066,7 +1091,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1082,7 +1107,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1098,7 +1123,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1120,7 +1145,7 @@ To get the legacy int format, use <code><a href="../Rosegold/Slot.html#item_id_i
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L40" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1136,7 +1161,7 @@ To get the legacy int format, use <code><a href="../Rosegold/Slot.html#item_id_i
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1152,39 +1177,71 @@ To get the legacy int format, use <code><a href="../Rosegold/Slot.html#item_id_i
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="nbt:Minecraft::NBT::Tag|Nil-instance-method">
+    <div class="entry-detail" id="nbt:Minecraft::NBT::CompoundTag|Nil-instance-method">
       <div class="signature">
         
-        def <strong>nbt</strong> : <a href="../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a> | Nil
+        def <strong>nbt</strong> : <a href="../Minecraft/NBT/CompoundTag.html">Minecraft::NBT::CompoundTag</a> | Nil
 
-        <a class="method-permalink" href="#nbt%3AMinecraft%3A%3ANBT%3A%3ATag%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#nbt%3AMinecraft%3A%3ANBT%3A%3ACompoundTag%7CNil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="nbt=(nbt:Minecraft::NBT::Tag|Nil)-instance-method">
+    <div class="entry-detail" id="nbt=(nbt:Minecraft::NBT::CompoundTag|Nil)-instance-method">
       <div class="signature">
         
-        def <strong>nbt=</strong>(nbt : <a href="../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a> | Nil)
+        def <strong>nbt=</strong>(nbt : <a href="../Minecraft/NBT/CompoundTag.html">Minecraft::NBT::CompoundTag</a> | Nil)
 
-        <a class="method-permalink" href="#nbt%3D%28nbt%3AMinecraft%3A%3ANBT%3A%3ATag%7CNil%29-instance-method">#</a>
+        <a class="method-permalink" href="#nbt%3D%28nbt%3AMinecraft%3A%3ANBT%3A%3ACompoundTag%7CNil%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/world/slot.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="present?-instance-method">
+      <div class="signature">
+        
+        def <strong>present?</strong>
+
+        <a class="method-permalink" href="#present%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L34" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="write(io)-instance-method">
+      <div class="signature">
+        
+        def <strong>write</strong>(io)
+
+        <a class="method-permalink" href="#write%28io%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/world/slot.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>

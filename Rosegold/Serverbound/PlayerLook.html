@@ -336,6 +336,16 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityEquipment" data-name="rosegold::clientbound::entityequipment">
+      <a href="../../Rosegold/Clientbound/EntityEquipment.html">EntityEquipment</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityTeleport" data-name="rosegold::clientbound::entityteleport">
+      <a href="../../Rosegold/Clientbound/EntityTeleport.html">EntityTeleport</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/HeldItemChange" data-name="rosegold::clientbound::helditemchange">
       <a href="../../Rosegold/Clientbound/HeldItemChange.html">HeldItemChange</a>
       
@@ -418,6 +428,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Clientbound/SetSlot" data-name="rosegold::clientbound::setslot">
       <a href="../../Rosegold/Clientbound/SetSlot.html">SetSlot</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SpawnPlayer" data-name="rosegold::clientbound::spawnplayer">
+      <a href="../../Rosegold/Clientbound/SpawnPlayer.html">SpawnPlayer</a>
       
     </li>
   
@@ -848,7 +863,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L3" target="_blank">
         rosegold/packets/serverbound/player_look.cr
       </a>
     
@@ -870,7 +885,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28yaw_deg%3AFloat32%2Cpitch_deg%3AFloat32%2Con_ground%3ABool%29-class-method" class="signature"><strong>.new</strong>(yaw_deg : Float32, pitch_deg : Float32, on_ground : Bool)</a>
+        <a href="#new%28yaw%3AFloat32%2Cpitch%3AFloat32%2Con_ground%3ABool%29-class-method" class="signature"><strong>.new</strong>(yaw : Float32, pitch : Float32, on_ground : Bool)</a>
         
       </li>
     
@@ -923,12 +938,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#pitch_deg%3AFloat32-instance-method" class="signature"><strong>#pitch_deg</strong> : Float32</a>
+        <a href="#pitch%3AFloat32-instance-method" class="signature"><strong>#pitch</strong> : Float32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#pitch_deg%3D%28pitch_deg%3AFloat32%29-instance-method" class="signature"><strong>#pitch_deg=</strong>(pitch_deg : Float32)</a>
+        <a href="#pitch%3D%28pitch%3AFloat32%29-instance-method" class="signature"><strong>#pitch=</strong>(pitch : Float32)</a>
         
       </li>
     
@@ -938,12 +953,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#yaw_deg%3AFloat32-instance-method" class="signature"><strong>#yaw_deg</strong> : Float32</a>
+        <a href="#yaw%3AFloat32-instance-method" class="signature"><strong>#yaw</strong> : Float32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#yaw_deg%3D%28yaw_deg%3AFloat32%29-instance-method" class="signature"><strong>#yaw_deg=</strong>(yaw_deg : Float32)</a>
+        <a href="#yaw%3D%28yaw%3AFloat32%29-instance-method" class="signature"><strong>#yaw=</strong>(yaw : Float32)</a>
         
       </li>
     
@@ -1021,18 +1036,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(yaw_deg:Float32,pitch_deg:Float32,on_ground:Bool)-class-method">
+    <div class="entry-detail" id="new(yaw:Float32,pitch:Float32,on_ground:Bool)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(yaw_deg : Float32, pitch_deg : Float32, on_ground : Bool)
+        def self.<strong>new</strong>(yaw : Float32, pitch : Float32, on_ground : Bool)
 
-        <a class="method-permalink" href="#new%28yaw_deg%3AFloat32%2Cpitch_deg%3AFloat32%2Con_ground%3ABool%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28yaw%3AFloat32%2Cpitch%3AFloat32%2Con_ground%3ABool%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1048,7 +1063,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1076,7 +1091,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1104,7 +1119,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1120,39 +1135,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="pitch_deg:Float32-instance-method">
+    <div class="entry-detail" id="pitch:Float32-instance-method">
       <div class="signature">
         
-        def <strong>pitch_deg</strong> : Float32
+        def <strong>pitch</strong> : Float32
 
-        <a class="method-permalink" href="#pitch_deg%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#pitch%3AFloat32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="pitch_deg=(pitch_deg:Float32)-instance-method">
+    <div class="entry-detail" id="pitch=(pitch:Float32)-instance-method">
       <div class="signature">
         
-        def <strong>pitch_deg=</strong>(pitch_deg : Float32)
+        def <strong>pitch=</strong>(pitch : Float32)
 
-        <a class="method-permalink" href="#pitch_deg%3D%28pitch_deg%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#pitch%3D%28pitch%3AFloat32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1168,39 +1183,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="yaw_deg:Float32-instance-method">
+    <div class="entry-detail" id="yaw:Float32-instance-method">
       <div class="signature">
         
-        def <strong>yaw_deg</strong> : Float32
+        def <strong>yaw</strong> : Float32
 
-        <a class="method-permalink" href="#yaw_deg%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#yaw%3AFloat32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="yaw_deg=(yaw_deg:Float32)-instance-method">
+    <div class="entry-detail" id="yaw=(yaw:Float32)-instance-method">
       <div class="signature">
         
-        def <strong>yaw_deg=</strong>(yaw_deg : Float32)
+        def <strong>yaw=</strong>(yaw : Float32)
 
-        <a class="method-permalink" href="#yaw_deg%3D%28yaw_deg%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#yaw%3D%28yaw%3AFloat32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/89c0fe01754fa8a0dd6b72a7661604353fc6c9f4/src/rosegold/packets/serverbound/player_look.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/serverbound/player_look.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
