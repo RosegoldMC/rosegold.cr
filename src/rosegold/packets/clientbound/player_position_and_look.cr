@@ -10,8 +10,8 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     x_raw : Float64,
     y_raw : Float64,
     z_raw : Float64,
-    yaw_deg_raw : Float32,
-    pitch_deg_raw : Float32,
+    yaw_raw : Float32,
+    pitch_raw : Float32,
     relative_flags : UInt8,
     teleport_id : UInt32
   property? \
@@ -21,8 +21,8 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     @x_raw,
     @y_raw,
     @z_raw,
-    @yaw_deg_raw,
-    @pitch_deg_raw,
+    @yaw_raw,
+    @pitch_raw,
     @relative_flags,
     @teleport_id,
     @dismount_vehicle
@@ -31,7 +31,7 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
   def self.new(location : Vec3d, look : Look, teleport_id : UInt32, dismount_vehicle = false)
     self.new(
       location.x, location.y, location.z,
-      look.yaw_deg, look.pitch_deg,
+      look.yaw, look.pitch,
       0,
       teleport_id,
       dismount_vehicle,
@@ -57,8 +57,8 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
       buffer.write x_raw
       buffer.write y_raw
       buffer.write z_raw
-      buffer.write yaw_deg_raw
-      buffer.write pitch_deg_raw
+      buffer.write yaw_raw
+      buffer.write pitch_raw
       buffer.write relative_flags
       buffer.write teleport_id
       buffer.write dismount_vehicle?
@@ -73,9 +73,9 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
   end
 
   def look(reference : Look)
-    Look.from_deg(
-      relative_flags.bits_set?(0b1000) ? reference.yaw_deg + yaw_deg_raw : yaw_deg_raw,
-      relative_flags.bits_set?(0b10000) ? reference.pitch_deg + pitch_deg_raw : pitch_deg_raw)
+    Look.new(
+      relative_flags.bits_set?(0b1000) ? reference.yaw + yaw_raw : yaw_raw,
+      relative_flags.bits_set?(0b10000) ? reference.pitch + pitch_raw : pitch_raw)
   end
 
   def callback(client)

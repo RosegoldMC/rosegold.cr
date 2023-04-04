@@ -60,11 +60,11 @@ class Rosegold::Bot
   end
 
   def yaw
-    look.yaw_deg
+    look.yaw
   end
 
   def pitch
-    look.pitch_deg
+    look.pitch
   end
 
   # Waits for the new look to be sent to the server.
