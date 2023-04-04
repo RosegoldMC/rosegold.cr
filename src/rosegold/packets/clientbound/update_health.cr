@@ -18,9 +18,22 @@ class Rosegold::Clientbound::UpdateHealth < Rosegold::Clientbound::Packet
     )
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write health
+      buffer.write food
+      buffer.write saturation
+    end.to_slice
+  end
+
   def callback(client)
     Log.debug { "health=#{health/2}❤ food=#{food*5}% saturation=#{saturation}" }
-    # TODO: update health/food/saturation
+
+    client.player.health = health
+    client.player.food = food
+    client.player.saturation = saturation
+
     # TODO: check death
   end
 end

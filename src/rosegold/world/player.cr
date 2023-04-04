@@ -14,7 +14,7 @@ class Rosegold::Player
     feet : Vec3d = Vec3d::ORIGIN,
     velocity : Vec3d = Vec3d::ORIGIN,
     health : Float32 = 0,
-    food : Float32 = 0,
+    food : UInt32 = 0,
     saturation : Float32 = 0,
     hotbar_selection : UInt8 = 0,
     gamemode : Int8 = 0
