@@ -1,5 +1,5 @@
 require "../rosegold"
-require "./control/action"
+require "./control/*"
 
 class Rosegold::Bot
   private getter client : Client
@@ -8,9 +8,17 @@ class Rosegold::Bot
 
   def initialize(@client)
     @inventory = Inventory.new client
+    @interact = Interactions.new client
   end
 
-  delegate health, food, saturation, gamemode, to: client.player
+  delegate host, port, connect, connected?, online_players, on, to: client
+  delegate feet, eyes, health, food, saturation, gamemode, to: client.player
+  # TODO delegate more
+  delegate start_using_hand, stop_using_hand, start_digging, stop_digging, to: @interact
+
+  def disconnect_reason
+    client.connection.try &.close_reason
+  end
 
   # Revive the player if dead. Does nothing if alive.
   def respawn
@@ -82,24 +90,6 @@ class Rosegold::Bot
     look_at location.with_y eyes.y
   end
 
-  # Location of the player's feet.
-  # To change the location, use #move_to.
-  def feet
-    client.player.feet
-  end
-
-  # Location of the player's eyes.
-  # To change the location, use #move_to.
-  def eyes
-    client.player.eyes
-  end
-
-  # Location of the player's feet.
-  # To change the location, use #move_to.
-  def feet
-    client.player.feet
-  end
-
   # Moves straight towards `location`.
   # Waits for arrival.
   def move_to(location : Vec3d)
@@ -133,28 +123,8 @@ class Rosegold::Bot
 
   # Use #interact_block to enter a bed.
   def leave_bed
-    client.connection.send_packet Serverbound::EntityAction.new \
-      client.player.entity_id, Serverbound::EntityAction::Type::LeaveBed
-  end
-
-  # TODO select interact/placement location/entity by raytracing; if location is passed, just look there, but interact with whatever may be in the way
-
-  def interact_block(look_location : Vec3d? = nil)
-    reached = reach_block_or_entity
-    return unless reached
-    intercept, location, face = reached
-    cursor = (intercept - location).to_f32
-    hand = Hand::MainHand # TODO
-    inside_block = false  # TODO
-    client.connection.send_packet Serverbound::PlayerBlockPlacement.new \
-      location, face, cursor, hand, inside_block
-    client.connection.send_packet Serverbound::SwingArm.new hand
-  end
-
-  # Raises an error if the hand slot is not updated within `timeout_ticks`.
-  def place_block_against(look_location : Vec3d? = nil, timeout_ticks = 0)
-    interact_block(look_location)
-    # TODO raise an error if the hand slot is not updated within `timeout_ticks`
+    client.queue_packet Serverbound::EntityAction.new \
+      client.player.entity_id, :leave_bed
   end
 
   # The active (main hand) hotbar slot number (1-9).
@@ -170,140 +140,72 @@ class Rosegold::Bot
   end
 
   def swap_hands
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::SwapHands, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::PlayerDigging.new \
+      :swap_hands, Vec3i.ORIGIN, 0
   end
 
   def drop_hand_single
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::DropHandSingle, Vec3i.ORIGIN, 0
-    client.connection.send_packet Serverbound::SwingArm.new
+    client.queue_packet Serverbound::PlayerDigging.new \
+      :drop_hand_single, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::SwingArm.new
   end
 
   def drop_hand_full
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::DropHandFull, Vec3i.ORIGIN, 0
-    client.connection.send_packet Serverbound::SwingArm.new
+    client.queue_packet Serverbound::PlayerDigging.new \
+      :drop_hand_full, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::SwingArm.new
   end
 
   # Moves the slot to the hotbar and selects it.
   # This is faster and less error-prone than moving slots around individually.
   def pick_slot(slot_nr : UInt16)
-    client.connection.send_packet Serverbound::PickItem.new slot_nr
+    client.queue_packet Serverbound::PickItem.new slot_nr
   end
 
-  def start_using_item(hand = Hand::MainHand)
-    client.connection.send_packet Serverbound::UseItem.new hand
-    client.connection.send_packet Serverbound::SwingArm.new
+  # Activates and then immediately deactivates the `use` button.
+  def use_hand(hand = :main_hand)
+    start_using_hand hand
+    stop_using_hand
   end
 
-  def stop_using_item
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::FinishUsingHand, Vec3i.ORIGIN, 0
+  # Looks at that location, then activates and immediately deactivates the `use` button.
+  def use_hand(location : Vec3d)
+    look_at location
+    use_hand
   end
 
-  # not exposed, for rules compliance
-  @dig_action : Action(Tuple(Vec3i, BlockFace))?
-  @dig_hand_swing_countdown = 0_i8
+  # Looks in that direction, then activates and immediately deactivates the `use` button.
+  def use_hand(direction : Look)
+    look direction
+    use_hand
+  end
 
+  # Looks at that location, then activates and immediately deactivates the `use` button.
+  # Raises an error if the hand slot is not updated within `ticks`.
+  def place_block_against(location : Vec3d? = nil, ticks = 0)
+    use_hand location
+    # TODO raise an error if the hand slot is not updated within `ticks`
+  end
+
+  # Looks at that location, then activates the `attack` button.
+  def start_digging(location : Vec3d)
+    look_at location
+    start_digging
+  end
+
+  # Looks in that direction, then activates the `attack` button.
+  def start_digging(direction : Look)
+    look direction
+    @interact.start_digging
+  end
+
+  # Looks at that location, then activates the `attack` button,
+  # waits `ticks`, and deactivates it again.
   # waits for completion, throws error if cancelled
-  def dig(ticks : UInt32, look_location : Vec3d)
-    action = start_digging(look_location)
+  def dig(ticks : UInt32, location : Vec3d = nil)
+    look_at location if location
+    start_digging
     wait_ticks ticks
-    finish_digging
-    action.join
-  end
-
-  # cancels any ongoing dig action
-  def start_digging(look_location : Vec3d = player.look)
-    cancel_digging if @dig_action
-    @dig_action.try { |action| raise "Already digging #{action.target}" }
-    look_at look_location if look_location
-    @dig_action.try { |action| raise "Already digging #{action.target}" }
-
-    reached = reach_block_or_entity
-    unless reached
-      dig_action = Action.new({Vec3d::ORIGIN, 0}).tap &.succeed
-      return dig_action
-    end
-    _intercept, location, face = reached
-
-    dig_action = @dig_action = Action.new({location, face})
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::Start, location, face
-    client.connection.send_packet Serverbound::SwingArm.new
-    @dig_hand_swing_countdown = 6
-    dig_action
-  end
-
-  def finish_digging
-    dig_action = @dig_action
-    return unless dig_action
-    location, face = dig_action.target
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::Finish, location, face
-    @dig_action = nil
-    dig_action.succeed
-  end
-
-  def cancel_digging
-    dig_action = @dig_action
-    return unless dig_action
-    location, face = dig_action.target
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::Finish, location.block, face
-    @dig_action = nil
-    dig_action.fail "Cancelled"
-  end
-
-  # Add a callback processed upon specified incoming packet
-  #
-  # ```
-  # client.on_packet Clientbound::Chat do |chat|
-  #   puts "Received chat: #{chat.message}"
-  # end
-  # ```
-  def on(packet_type : T.class, &block : T ->) forall T
-    client.on packet_type, &block
-  end
-
-  private def on_physics_tick
-    if @digging_location
-      @dig_hand_swing_countdown -= 1
-      if @dig_hand_swing_countdown <= 0
-        @dig_hand_swing_countdown = 6
-        client.connection.send_packet Serverbound::SwingArm.new
-      end
-    end
-  end
-
-  private def reach_block_or_entity(look_location : Vec3d? = nil)
-    look_at look_location if look_location
-    reach = look.to_vec3 * 4
-    boxes = get_block_hitboxes(eyes, reach)
-    Raytrace.raytrace(eyes, reach, boxes).try do |reached|
-      location = boxes[reached.box_nr].min.block
-      {reached.intercept, location, reached.face}
-    end
-  end
-
-  # Returns all block collision boxes that may intersect from `start` towards `reach`.
-  private def get_block_hitboxes(start : Vec3d, reach : Vec3d) : Array(AABBd)
-    bounds = AABBd.new(start, start + reach)
-    # fences are 1.5m tall
-    min_block = bounds.min.down(0.5).block
-    max_block = bounds.max.block
-    blocks_coords = Indexable.cartesian_product({
-      (min_block.x..max_block.x).to_a,
-      (min_block.y..max_block.y).to_a,
-      (min_block.z..max_block.z).to_a,
-    })
-    blocks_coords.flat_map do |block_coords|
-      x, y, z = block_coords
-      client.dimension.block_state(x, y, z).try do |block_state|
-        block_shape = MCData::MC118.block_state_collision_shapes[block_state]
-        block_shape.map &.to_f64.offset(x, y, z)
-      end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
-    end
+    stop_digging
   end
 end
