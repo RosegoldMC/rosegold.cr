@@ -14,6 +14,9 @@ license: MIT
 dependencies:
   habitat:
     github: luckyframework/habitat
+  openssl_ext:
+    github: spider-gazelle/openssl_ext
+    version: ~> 2.0
 
 development_dependencies:
   ameba:
@@ -21,9 +24,6 @@ development_dependencies:
     version: ~> 1.4.3
   dotenv:
     github: drum445/dotenv
-  openssl_ext:
-    github: spider-gazelle/openssl_ext
-    version: ~> 2.0
   spectator:
     github: icy-arctic-fox/spectator
     version: ~> 0.10
