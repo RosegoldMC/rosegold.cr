@@ -4,13 +4,23 @@ require "./paletted_container"
 class Rosegold::Chunk
   alias BlockStateNr = UInt16
 
+  getter x : Int32, z : Int32
   getter sections : Array(Section)
+  property block_entities = Array(BlockEntity).new
+  property heightmaps : Minecraft::NBT::Tag = Minecraft::NBT::CompoundTag.new
+  property light_data = Bytes.empty
   private getter min_y : Int32
 
-  def initialize(io, dimension : Dimension)
+  def initialize(@x, @z, io, dimension : Dimension)
     @min_y = dimension.min_y
     section_count = dimension.world_height >> 4
     @sections = Array(Section).new(section_count) { Section.new io }
+  end
+
+  def data : Bytes
+    Minecraft::IO::Memory.new.tap do |io|
+      @sections.each &.write io
+    end.to_slice
   end
 
   # Returns nil if outside world vertically.
@@ -39,12 +49,27 @@ class Rosegold::Chunk
       @biomes = PalettedContainer.new io, 4, 64
     end
 
+    def write(io)
+      io.write @block_count
+      @blocks.write io
+      @biomes.write io
+    end
+
     def block_state(index : UInt32) : BlockStateNr
       @blocks[index]
     end
 
     def set_block_state(index : UInt32, block_state : BlockStateNr)
       @blocks[index] = block_state
+      # TODO update @block_count
     end
+  end
+
+  struct BlockEntity
+    property x : Int32, y : Int32, z : Int32
+    property type : UInt32
+    property nbt : Minecraft::NBT::Tag
+
+    def initialize(@x, @y, @z, @type, @nbt); end
   end
 end

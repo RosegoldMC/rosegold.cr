@@ -4,6 +4,14 @@ require "./packet"
 require "./clientbound/*"
 require "./serverbound/*"
 
+abstract class Rosegold::Event; end # defined elsewhere, but otherwise it would be a module
+
+class Rosegold::Event::Disconnected < Rosegold::Event
+  getter reason : String
+
+  def initialize(@reason); end
+end
+
 # Something that packets can be read from and sent to.
 # Can be used for client and server.
 # Caller of #read_packet must update #state= appropriately.
@@ -14,13 +22,14 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
 
   property io : Minecraft::IO
   getter state : Hash(UInt8, InboundPacket.class)
+  property handler : Rosegold::EventEmitter?
 
   property compression_threshold : UInt32 = 0
   property close_reason : String?
   private getter read_mutex : Mutex = Mutex.new
   private getter write_mutex : Mutex = Mutex.new
 
-  def initialize(@io, @state); end
+  def initialize(@io, @state, @handler = nil); end
 
   def io=(io)
     read_mutex.synchronize do
@@ -38,6 +47,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     Log.info { "Disconnected: #{reason}" }
     @close_reason = reason
     io.close
+    handler.try &.emit_event Event::Disconnected.new reason
   end
 
   private def compress?
@@ -72,8 +82,10 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     packet_bytes
   rescue e : IO::EOFError
     @close_reason = "IO Error: #{e.message}"
-    raise e
+    raise ConnectionClosed.new "IO Error: #{e.message}"
   end
+
+  class ConnectionClosed < Exception; end
 
   def self.decode_packet(
     packet_bytes : Bytes,
@@ -82,6 +94,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
       pkt_id = pkt_io.read_byte || raise "Connection closed"
       pkt_type = state[pkt_id]?
+      Log.trace { "Received packet #{pkt_id.to_u8} (#{pkt_type})" }
       return nil unless pkt_type
       return nil unless pkt_type.responds_to? :read
       pkt_type.read pkt_io
@@ -120,7 +133,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
       end
     end
   rescue e : IO::Error
-    @close_reason = "IO Error: #{e.message}"
+    disconnect "IO Error: #{e.message}"
     raise e
   end
 end

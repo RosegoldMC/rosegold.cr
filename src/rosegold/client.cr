@@ -1,15 +1,22 @@
 require "socket"
 require "../minecraft/io"
 require "./control/*"
-require "./packets/connection"
-require "./packets/packet"
-require "./world/*"
 require "./models/*"
+require "./packets/*"
+require "./world/*"
+
+abstract class Rosegold::Event; end # defined elsewhere, but otherwise it would be a module
+
+class Rosegold::Event::RawPacket < Rosegold::Event
+  getter bytes : Bytes
+
+  def initialize(@bytes); end
+end
 
 # Holds world state (player, chunks, etc.)
 # and control state (physics, open window, etc.).
 # Can be reconnected.
-class Rosegold::Client
+class Rosegold::Client < Rosegold::EventEmitter
   class_getter protocol_version = 758_u32
 
   property host : String, port : UInt16
@@ -20,14 +27,7 @@ class Rosegold::Client
     player : Player = Player.new,
     dimension : Dimension = Dimension.new,
     physics : Physics,
-    current_window : Window? = nil,
-    inventory_window : Window = Window.new(0_u32, 64_u32, Chat.new "Player Inventory")
-
-  getter raw_packet_handlers : Array(Proc(Bytes, Nil)) = Array(Proc(Bytes, Nil)).new
-
-  getter callbacks : Callbacks = Callbacks.new
-
-  private alias Callbacks = Hash(Clientbound::Packet.class, Array(Proc(Clientbound::Packet, Nil)))
+    current_window : Window = Window.player_inventory
 
   def initialize(@host : String, @port : UInt16 = 25565)
     if host.includes? ":"
@@ -65,7 +65,7 @@ class Rosegold::Client
     raise "Already connected" if connected?
 
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
-    connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound
+    connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound, self
     Log.info { "Connected to #{host}:#{port}" }
 
     send_packet! Serverbound::Handshake.new Client.protocol_version, host, port, 2
@@ -102,16 +102,9 @@ class Rosegold::Client
     connection.read_packet || raise "Server responded with unknown packet"
   end
 
-  def on(packet_type : T.class, &block : T ->) forall T
-    callbacks[packet_type] ||= [] of Proc(Clientbound::Packet, Nil)
-    callbacks[packet_type] << Proc(Clientbound::Packet, Nil).new do |packet|
-      block.call(packet.as T)
-    end
-  end
-
   # Send a packet to the server concurrently.
   def queue_packet(packet : Serverbound::Packet)
-    raise "Not connected" unless connected?
+    raise "Unabled to queue #{packet}; Not connected" unless connected?
     spawn do
       Fiber.yield
       send_packet! packet
@@ -123,7 +116,7 @@ class Rosegold::Client
   # a EncryptionResponse has been sent.
   def send_packet!(packet : Serverbound::Packet)
     raise "Not connected" unless connected?
-    Log.trace { "SEND " + inspect_packet(packet) }
+    Log.trace { "SEND #{packet}" }
     connection.send_packet packet
   end
 
@@ -131,21 +124,16 @@ class Rosegold::Client
     raise "Not connected" unless connected?
     raw_packet = connection.read_raw_packet
 
-    raw_packet_handlers.each &.call raw_packet
+    emit_event Event::RawPacket.new raw_packet
 
     packet = Connection.decode_packet raw_packet, connection.state
     return nil unless packet
-    Log.trace { "RECV " + inspect_packet(packet) }
+    Log.trace { "RECV #{packet}" }
 
     packet.callback(self)
 
-    callbacks[packet.class]?.try &.each &.call packet
+    emit_event packet
 
     packet
   end
-end
-
-private def inspect_packet(packet)
-  packet.pretty_inspect(999, " ", 0).sub(/:0x\S+/, "") \
-    .gsub(/Rosegold::|Clientbound::|Serverbound::/, "")
 end

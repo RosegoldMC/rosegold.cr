@@ -22,7 +22,8 @@ class Rosegold::Dimension
     })
   end
 
-  def load_chunk(chunk_pos : ChunkPos, chunk : Chunk)
+  def load_chunk(chunk : Chunk)
+    chunk_pos = {chunk.x, chunk.z}
     @chunks[chunk_pos] = chunk
   end
 
@@ -31,7 +32,7 @@ class Rosegold::Dimension
   end
 
   def block_state(location : Vec3d) : UInt16 | Nil
-    block_state location.floored_i32
+    block_state location.block
   end
 
   def block_state(location : Vec3i) : UInt16 | Nil

@@ -16,7 +16,7 @@ class Rosegold::Player
     health : Float32 = 0,
     food : Float32 = 0,
     saturation : Float32 = 0,
-    hotbar_selection : UInt16 = 0,
+    hotbar_selection : UInt8 = 0,
     gamemode : Int8 = 0
   property? \
     on_ground : Bool = false

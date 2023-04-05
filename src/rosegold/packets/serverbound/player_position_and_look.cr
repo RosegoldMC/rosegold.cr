@@ -19,8 +19,8 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
       buffer.write feet.x
       buffer.write feet.y
       buffer.write feet.z
-      buffer.write look.yaw_deg
-      buffer.write look.pitch_deg
+      buffer.write look.yaw
+      buffer.write look.pitch
       buffer.write on_ground?
     end.to_slice
   end
