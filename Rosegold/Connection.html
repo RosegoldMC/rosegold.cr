@@ -506,6 +506,36 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
+      <a href="../Rosegold/Event.html">Event</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Event/Disconnected" data-name="rosegold::event::disconnected">
+      <a href="../Rosegold/Event/Disconnected.html">Disconnected</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Event/PhysicsTick" data-name="rosegold::event::physicstick">
+      <a href="../Rosegold/Event/PhysicsTick.html">PhysicsTick</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Event/RawPacket" data-name="rosegold::event::rawpacket">
+      <a href="../Rosegold/Event/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/EventEmitter" data-name="rosegold::eventemitter">
+      <a href="../Rosegold/EventEmitter.html">EventEmitter</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Hand" data-name="rosegold::hand">
       <a href="../Rosegold/Hand.html">Hand</a>
       
@@ -877,7 +907,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L11" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L19" target="_blank">
         rosegold/packets/connection.cr
       </a>
     
@@ -899,7 +929,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28io%3AMinecraft%3A%3AIO%2Cstate%3AHash%28UInt8%2CInboundPacket.class%29%29-class-method" class="signature"><strong>.new</strong>(io : Minecraft::IO, state : Hash(UInt8, <span class="t">InboundPacket</span>.<span class="k">class</span>))</a>
+        <a href="#new%28io%3AMinecraft%3A%3AIO%2Cstate%3AHash%28UInt8%2CInboundPacket.class%29%2Chandler%3ARosegold%3A%3AEventEmitter%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(io : Minecraft::IO, state : Hash(UInt8, <span class="t">InboundPacket</span>.<span class="k">class</span>), handler : Rosegold::EventEmitter | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -958,6 +988,16 @@ Useless after disconnect; create a new instance to reconnect.</p>
     
       <li class="entry-summary">
         <a href="#disconnect%28reason%3AString%29-instance-method" class="signature"><strong>#disconnect</strong>(reason : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#handler%3ARosegold%3A%3AEventEmitter%7CNil-instance-method" class="signature"><strong>#handler</strong> : Rosegold::EventEmitter | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#handler%3D%28handler%3ARosegold%3A%3AEventEmitter%7CNil%29-instance-method" class="signature"><strong>#handler=</strong>(handler : Rosegold::EventEmitter | Nil)</a>
         
       </li>
     
@@ -1046,18 +1086,18 @@ Useless after disconnect; create a new instance to reconnect.</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(io:Minecraft::IO,state:Hash(UInt8,InboundPacket.class))-class-method">
+    <div class="entry-detail" id="new(io:Minecraft::IO,state:Hash(UInt8,InboundPacket.class),handler:Rosegold::EventEmitter|Nil=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(io : <a href="../Minecraft/IO.html">Minecraft::IO</a>, state : Hash(UInt8, <span class="t">InboundPacket</span>.<span class="k">class</span>))
+        def self.<strong>new</strong>(io : <a href="../Minecraft/IO.html">Minecraft::IO</a>, state : Hash(UInt8, <span class="t">InboundPacket</span>.<span class="k">class</span>), handler : <a href="../Rosegold/EventEmitter.html">Rosegold::EventEmitter</a> | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28io%3AMinecraft%3A%3AIO%2Cstate%3AHash%28UInt8%2CInboundPacket.class%29%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28io%3AMinecraft%3A%3AIO%2Cstate%3AHash%28UInt8%2CInboundPacket.class%29%2Chandler%3ARosegold%3A%3AEventEmitter%7CNil%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L32" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1085,7 +1125,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L80" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1113,7 +1153,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1129,7 +1169,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1145,7 +1185,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1161,7 +1201,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1177,7 +1217,39 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L46" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="handler:Rosegold::EventEmitter|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>handler</strong> : <a href="../Rosegold/EventEmitter.html">Rosegold::EventEmitter</a> | Nil
+
+        <a class="method-permalink" href="#handler%3ARosegold%3A%3AEventEmitter%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="handler=(handler:Rosegold::EventEmitter|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>handler=</strong>(handler : <a href="../Rosegold/EventEmitter.html">Rosegold::EventEmitter</a> | Nil)
+
+        <a class="method-permalink" href="#handler%3D%28handler%3ARosegold%3A%3AEventEmitter%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1193,7 +1265,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1209,7 +1281,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1225,7 +1297,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1241,7 +1313,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1257,7 +1329,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L51" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L61" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1273,7 +1345,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L98" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L108" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1289,7 +1361,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L104" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1305,7 +1377,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1321,7 +1393,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d616f7af8bf8ab9ea75087fa0e2b1517959be4b5/src/rosegold/packets/connection.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>

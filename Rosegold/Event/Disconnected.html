@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Serverbound::PlayerPosition - rosegold main</title>
+  <title>Rosegold::Event::Disconnected - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -506,12 +506,12 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
+  <li class="parent open current" data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
       <a href="../../Rosegold/Event.html">Event</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Event/Disconnected" data-name="rosegold::event::disconnected">
+  <li class=" current" data-id="rosegold/Rosegold/Event/Disconnected" data-name="rosegold::event::disconnected">
       <a href="../../Rosegold/Event/Disconnected.html">Disconnected</a>
       
     </li>
@@ -666,7 +666,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
       <a href="../../Rosegold/Serverbound.html">Serverbound</a>
       
         <ul>
@@ -771,7 +771,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Serverbound/PlayerPosition" data-name="rosegold::serverbound::playerposition">
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerPosition" data-name="rosegold::serverbound::playerposition">
       <a href="../../Rosegold/Serverbound/PlayerPosition.html">PlayerPosition</a>
       
     </li>
@@ -860,12 +860,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::Serverbound::PlayerPosition
+  <span class="kind">class</span> Rosegold::Event::Disconnected
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Serverbound/PlayerPosition.html">Rosegold::Serverbound::PlayerPosition</a></li><li class="superclass"><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Event/Disconnected.html">Rosegold::Event::Disconnected</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -893,8 +893,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L3" target="_blank">
-        rosegold/packets/serverbound/player_position.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L9" target="_blank">
+        rosegold/packets/connection.cr
       </a>
     
     <br/>
@@ -915,35 +915,13 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28x%3AFloat64%2Cy%3AFloat64%2Cz%3AFloat64%2Con_ground%3ABool%29-class-method" class="signature"><strong>.new</strong>(x : Float64, y : Float64, z : Float64, on_ground : Bool)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#new%28feet%3AVec3d%2Con_ground%29-class-method" class="signature"><strong>.new</strong>(feet : Vec3d, on_ground)</a>
+        <a href="#new%28reason%3AString%29-class-method" class="signature"><strong>.new</strong>(reason : String)</a>
         
       </li>
     
   </ul>
 
 
-
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#packet_id-class-method" class="signature"><strong>.packet_id</strong></a>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -958,47 +936,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#on_ground%3D%28on_ground%3ABool%29-instance-method" class="signature"><strong>#on_ground=</strong>(on_ground : Bool)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#on_ground%3F%3ABool-instance-method" class="signature"><strong>#on_ground?</strong> : Bool</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%3ABytes-instance-method" class="signature"><strong>#write</strong> : Bytes</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#x%3AFloat64-instance-method" class="signature"><strong>#x</strong> : Float64</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#x%3D%28x%3AFloat64%29-instance-method" class="signature"><strong>#x=</strong>(x : Float64)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#y%3AFloat64-instance-method" class="signature"><strong>#y</strong> : Float64</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#y%3D%28y%3AFloat64%29-instance-method" class="signature"><strong>#y=</strong>(y : Float64)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#z%3AFloat64-instance-method" class="signature"><strong>#z</strong> : Float64</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#z%3D%28z%3AFloat64%29-instance-method" class="signature"><strong>#z=</strong>(z : Float64)</a>
+        <a href="#reason%3AString-instance-method" class="signature"><strong>#reason</strong> : String</a>
         
       </li>
     
@@ -1009,40 +947,6 @@
 
 
 <div class="methods-inherited">
-  
-    
-
-
-    
-
-
-    
-
-
-  
-    
-
-  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
-      <span>callback(client_or_server)</span>
-    callback</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
-      <span>write : Bytes</span>
-    write</a>
-    
-  
-
-
-    
-
-
-    
-
-
   
     
 
@@ -1086,66 +990,24 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(x:Float64,y:Float64,z:Float64,on_ground:Bool)-class-method">
+    <div class="entry-detail" id="new(reason:String)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(x : Float64, y : Float64, z : Float64, on_ground : Bool)
+        def self.<strong>new</strong>(reason : String)
 
-        <a class="method-permalink" href="#new%28x%3AFloat64%2Cy%3AFloat64%2Cz%3AFloat64%2Con_ground%3ABool%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28reason%3AString%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L13" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="new(feet:Vec3d,on_ground)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(feet : <a href="../../Rosegold/Vec3d.html">Vec3d</a>, on_ground)
-
-        <a class="method-permalink" href="#new%28feet%3AVec3d%2Con_ground%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
-
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="packet_id-class-method">
-      <div class="signature">
-        
-        def self.<strong>packet_id</strong>
-
-        <a class="method-permalink" href="#packet_id-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L4" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
@@ -1158,146 +1020,18 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="on_ground=(on_ground:Bool)-instance-method">
+    <div class="entry-detail" id="reason:String-instance-method">
       <div class="signature">
         
-        def <strong>on_ground=</strong>(on_ground : Bool)
+        def <strong>reason</strong> : String
 
-        <a class="method-permalink" href="#on_ground%3D%28on_ground%3ABool%29-instance-method">#</a>
+        <a class="method-permalink" href="#reason%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="on_ground?:Bool-instance-method">
-      <div class="signature">
-        
-        def <strong>on_ground?</strong> : Bool
-
-        <a class="method-permalink" href="#on_ground%3F%3ABool-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write:Bytes-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong> : Bytes
-
-        <a class="method-permalink" href="#write%3ABytes-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L19" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="x:Float64-instance-method">
-      <div class="signature">
-        
-        def <strong>x</strong> : Float64
-
-        <a class="method-permalink" href="#x%3AFloat64-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="x=(x:Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>x=</strong>(x : Float64)
-
-        <a class="method-permalink" href="#x%3D%28x%3AFloat64%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="y:Float64-instance-method">
-      <div class="signature">
-        
-        def <strong>y</strong> : Float64
-
-        <a class="method-permalink" href="#y%3AFloat64-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="y=(y:Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>y=</strong>(y : Float64)
-
-        <a class="method-permalink" href="#y%3D%28y%3AFloat64%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="z:Float64-instance-method">
-      <div class="signature">
-        
-        def <strong>z</strong> : Float64
-
-        <a class="method-permalink" href="#z%3AFloat64-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="z=(z:Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>z=</strong>(z : Float64)
-
-        <a class="method-permalink" href="#z%3D%28z%3AFloat64%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/serverbound/player_position.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/connection.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
