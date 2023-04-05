@@ -27,7 +27,7 @@ class Rosegold::Bot
 
   # Send a message or slash command.
   def chat(message : String)
-    client.queue_packet Serverbound::Chat.new message
+    client.queue_packet Serverbound::ChatMessage.new message
   end
 
   # Is adjusted to server TPS.
