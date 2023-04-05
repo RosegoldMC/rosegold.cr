@@ -25,8 +25,8 @@ Spectator.describe Rosegold::Bot do
             bot.chat "/clear"
             sleep 1
 
-            bot.chat "/give #{ENV["MC_NAME"]} minecraft:stone 42"
-            bot.chat "/give #{ENV["MC_NAME"]} minecraft:grass_block 43"
+            bot.chat "/give #{bot.username} minecraft:stone 42"
+            bot.chat "/give #{bot.username} minecraft:grass_block 43"
             sleep 1
 
             expect(bot.inventory.pick("stone")).to eq true
@@ -45,8 +45,8 @@ Spectator.describe Rosegold::Bot do
             bot.chat "/clear"
             sleep 1
 
-            bot.chat "/give #{ENV["MC_NAME"]} minecraft:stone #{64*9}"
-            bot.chat "/give #{ENV["MC_NAME"]} minecraft:grass_block 1"
+            bot.chat "/give #{bot.username} minecraft:stone #{64*9}"
+            bot.chat "/give #{bot.username} minecraft:grass_block 1"
             sleep 1
 
             expect(bot.inventory.pick("grass_block")).to eq true

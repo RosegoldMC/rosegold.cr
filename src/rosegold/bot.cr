@@ -12,7 +12,7 @@ class Rosegold::Bot
   end
 
   delegate host, port, connect, connected?, online_players, on, to: client
-  delegate feet, eyes, health, food, saturation, gamemode, to: client.player
+  delegate uuid, username, feet, eyes, health, food, saturation, gamemode, to: client.player
   # TODO delegate more
   delegate start_using_hand, stop_using_hand, start_digging, stop_digging, to: @interact
 

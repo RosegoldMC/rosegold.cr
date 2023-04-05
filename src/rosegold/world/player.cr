@@ -9,6 +9,8 @@ class Rosegold::Player
   CRAWLING_AABB = AABBf.new -0.3, 0.0, -0.3, 0.3, 0.625, 0.3
 
   property \
+    uuid : UUID?,
+    username : String?, # Note: The server may give us a different name than we used during authentication.
     entity_id : Int32 = 0,
     look : Look = Look::SOUTH,
     feet : Vec3d = Vec3d::ORIGIN,
