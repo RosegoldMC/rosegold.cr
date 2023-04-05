@@ -266,6 +266,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/Chunk/BlockEntity" data-name="rosegold::chunk::blockentity">
+      <a href="../../Rosegold/Chunk/BlockEntity.html">BlockEntity</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Chunk/BlockStateNr" data-name="rosegold::chunk::blockstatenr">
       <a href="../../Rosegold/Chunk/BlockStateNr.html">BlockStateNr</a>
       
@@ -893,7 +898,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L3" target="_blank">
         rosegold/packets/clientbound/chunk_data.cr
       </a>
     
@@ -915,7 +920,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AMinecraft%3A%3ANBT%3A%3ATag%2Cdata%3ASlice%28UInt8%29%29-class-method" class="signature"><strong>.new</strong>(chunk_x : Int32, chunk_z : Int32, heightmaps : Minecraft::NBT::Tag, data : Slice(UInt8))</a>
+        <a href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AMinecraft%3A%3ANBT%3A%3ATag%2Cdata%3ASlice%28UInt8%29%2Cblock_entities%3AArray%28Rosegold%3A%3AChunk%3A%3ABlockEntity%29%2Clight_data%3ASlice%28UInt8%29%29-class-method" class="signature"><strong>.new</strong>(chunk_x : Int32, chunk_z : Int32, heightmaps : Minecraft::NBT::Tag, data : Slice(UInt8), block_entities : Array(Rosegold::Chunk::BlockEntity), light_data : Slice(UInt8))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28chunk%3AChunk%29-class-method" class="signature"><strong>.new</strong>(chunk : Chunk)</a>
         
       </li>
     
@@ -939,7 +949,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
+        <a href="#read%28io%29-class-method" class="signature"><strong>.read</strong>(io)</a>
         
       </li>
     
@@ -956,6 +966,16 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#block_entities%3AArray%28Chunk%3A%3ABlockEntity%29-instance-method" class="signature"><strong>#block_entities</strong> : Array(Chunk::BlockEntity)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#block_entities%3D%28block_entities%3AArray%28Chunk%3A%3ABlockEntity%29%29-instance-method" class="signature"><strong>#block_entities=</strong>(block_entities : Array(Chunk::BlockEntity))</a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
@@ -1004,6 +1024,16 @@
     
       <li class="entry-summary">
         <a href="#inspect%28io%29-instance-method" class="signature"><strong>#inspect</strong>(io)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#light_data%3ABytes-instance-method" class="signature"><strong>#light_data</strong> : Bytes</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#light_data%3D%28light_data%3ABytes%29-instance-method" class="signature"><strong>#light_data=</strong>(light_data : Bytes)</a>
         
       </li>
     
@@ -1105,18 +1135,34 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(chunk_x:Int32,chunk_z:Int32,heightmaps:Minecraft::NBT::Tag,data:Slice(UInt8))-class-method">
+    <div class="entry-detail" id="new(chunk_x:Int32,chunk_z:Int32,heightmaps:Minecraft::NBT::Tag,data:Slice(UInt8),block_entities:Array(Rosegold::Chunk::BlockEntity),light_data:Slice(UInt8))-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(chunk_x : <a href="../../Int32.html">Int32</a>, chunk_z : <a href="../../Int32.html">Int32</a>, heightmaps : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>, data : Slice(UInt8))
+        def self.<strong>new</strong>(chunk_x : <a href="../../Int32.html">Int32</a>, chunk_z : <a href="../../Int32.html">Int32</a>, heightmaps : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>, data : Slice(UInt8), block_entities : Array(<a href="../../Rosegold/Chunk/BlockEntity.html">Rosegold::Chunk::BlockEntity</a>), light_data : Slice(UInt8))
 
-        <a class="method-permalink" href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AMinecraft%3A%3ANBT%3A%3ATag%2Cdata%3ASlice%28UInt8%29%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AMinecraft%3A%3ANBT%3A%3ATag%2Cdata%3ASlice%28UInt8%29%2Cblock_entities%3AArray%28Rosegold%3A%3AChunk%3A%3ABlockEntity%29%2Clight_data%3ASlice%28UInt8%29%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(chunk:Chunk)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(chunk : <a href="../../Rosegold/Chunk.html">Chunk</a>)
+
+        <a class="method-permalink" href="#new%28chunk%3AChunk%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1144,23 +1190,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read(packet)-class-method">
+    <div class="entry-detail" id="read(io)-class-method">
       <div class="signature">
         
-        def self.<strong>read</strong>(packet)
+        def self.<strong>read</strong>(io)
 
-        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
+        <a class="method-permalink" href="#read%28io%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1177,6 +1223,38 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="block_entities:Array(Chunk::BlockEntity)-instance-method">
+      <div class="signature">
+        
+        def <strong>block_entities</strong> : Array(<a href="../../Rosegold/Chunk/BlockEntity.html">Chunk::BlockEntity</a>)
+
+        <a class="method-permalink" href="#block_entities%3AArray%28Chunk%3A%3ABlockEntity%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block_entities=(block_entities:Array(Chunk::BlockEntity))-instance-method">
+      <div class="signature">
+        
+        def <strong>block_entities=</strong>(block_entities : Array(<a href="../../Rosegold/Chunk/BlockEntity.html">Chunk::BlockEntity</a>))
+
+        <a class="method-permalink" href="#block_entities%3D%28block_entities%3AArray%28Chunk%3A%3ABlockEntity%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="callback(client)-instance-method">
       <div class="signature">
         
@@ -1188,7 +1266,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L61" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1204,7 +1282,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1220,7 +1298,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1236,7 +1314,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1252,7 +1330,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1268,7 +1346,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1284,7 +1362,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1300,7 +1378,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1316,7 +1394,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1332,7 +1410,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L70" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="light_data:Bytes-instance-method">
+      <div class="signature">
+        
+        def <strong>light_data</strong> : Bytes
+
+        <a class="method-permalink" href="#light_data%3ABytes-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="light_data=(light_data:Bytes)-instance-method">
+      <div class="signature">
+        
+        def <strong>light_data=</strong>(light_data : Bytes)
+
+        <a class="method-permalink" href="#light_data%3D%28light_data%3ABytes%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1348,7 +1458,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4b67832901f2fe77bf4fb900b86b2b821d16ddc7/src/rosegold/packets/clientbound/chunk_data.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/packets/clientbound/chunk_data.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
