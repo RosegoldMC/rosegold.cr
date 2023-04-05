@@ -35,15 +35,15 @@ Client.new("localhost").join_game do |client|
       puts bot.feet
     when "\\pitch"
       if command.size > 1
-        bot.look &.with_pitch_deg command[1].to_f.to_f32
+        bot.look &.with_pitch command[1].to_f.to_f32
       else
-        puts bot.look.pitch_deg
+        puts bot.look.pitch
       end
     when "\\yaw"
       if command.size > 1
-        bot.look &.with_yaw_deg command[1].to_f.to_f32
+        bot.look &.with_yaw command[1].to_f.to_f32
       else
-        puts bot.look.yaw_deg
+        puts bot.look.yaw
       end
     when "\\move"
       spawn do

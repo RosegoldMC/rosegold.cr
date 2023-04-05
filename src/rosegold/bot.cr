@@ -3,7 +3,11 @@ require "../rosegold"
 class Rosegold::Bot
   private getter client : Client
 
-  def initialize(@client); end
+  getter inventory : Inventory
+
+  def initialize(@client)
+    @inventory = Inventory.new client
+  end
 
   delegate health, food, saturation, gamemode, to: client.player
 
@@ -60,11 +64,11 @@ class Rosegold::Bot
   end
 
   def yaw
-    look.yaw_deg
+    look.yaw
   end
 
   def pitch
-    look.pitch_deg
+    look.pitch
   end
 
   # Waits for the new look to be sent to the server.
@@ -157,28 +161,6 @@ class Rosegold::Bot
     # TODO check range
     client.queue_packet Serverbound::HeldItemChange.new index - 1
     client.player.hotbar_selection = index - 1
-  end
-
-  # All player slots are remembered but may not be updated while another window is open.
-
-  def equipment
-    # TODO client.inventory_window.equipment
-  end
-
-  def inventory
-    # TODO client.inventory_window.inventory
-  end
-
-  def hotbar
-    # TODO client.inventory_window.hotbar
-  end
-
-  def main_hand
-    # TODO client.inventory_window.hotbar[hotbar_selection]
-  end
-
-  def off_hand
-    # TODO client.inventory_window.off_hand
   end
 
   def swap_hands
