@@ -19,7 +19,8 @@ class Rosegold::Player
     hotbar_selection : UInt8 = 0,
     gamemode : Int8 = 0
   property? \
-    on_ground : Bool = false
+    on_ground : Bool = false,
+    in_water : Bool = false
 
   def aabb
     DEFAULT_AABB + feet # TODO depends on sneaking/crawling/swimming

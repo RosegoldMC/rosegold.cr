@@ -11,8 +11,10 @@ class Rosegold::MCData
   getter items_by_id : Hash(String, Item)
   getter items_by_id_int : Hash(UInt32, Item)
 
-  getter blocks_array : Array(Block)
+  getter blocks : Array(Block)
   getter blocks_by_id : Hash(String, Block)
+
+  getter materials : Material
 
   # block state nr -> "oak_slab[type=top, waterlogged=true]"
   getter block_state_names : Array(String)
@@ -32,15 +34,17 @@ class Rosegold::MCData
     @items_by_id = Hash.zip(items.map &.id_str, items)
     @items_by_id_int = Hash.zip(items.map &.id, items)
 
-    @blocks_array = Array(Block).from_json Rosegold.read_game_asset "blocks.json"
-    @blocks_by_id = Hash.zip(blocks_array.map &.id_str, blocks_array)
+    @blocks = Array(Block).from_json Rosegold.read_game_asset "blocks.json"
+    @blocks_by_id = Hash.zip(blocks.map &.id_str, blocks)
+
+    @materials = Material.from_json Rosegold.read_game_asset "materials.json"
 
     block_collision_shapes_json = BlockCollisionShapes.from_json Rosegold.read_game_asset "blockCollisionShapes.json"
 
-    max_block_state = blocks_array.flat_map(&.max_state_id).max
+    max_block_state = blocks.flat_map(&.max_state_id).max
 
     @block_state_names = Array(String).new(max_block_state + 1, "")
-    blocks_array.each do |block|
+    blocks.each do |block|
       if block.states.empty?
         block_state_names[block.min_state_id] = block.id_str
       else
@@ -65,7 +69,7 @@ class Rosegold::MCData
     # all 1.18->1.19 block states stayed the same except leaves (waterlogged) but it still works because all leaves' shapes are the same
     # veryfy by diffing: jq -c '.[]|{name,states:[.states[]|{name,num_values}]}' < 1.18/blocks.json | sort
     @block_state_collision_shapes = Array(Array(AABBf)).new(max_block_state + 1, [] of AABBf)
-    blocks_array.each do |block|
+    blocks.each do |block|
       block_shape_nrs = block_collision_shapes_json.blocks[block.id_str].try do |j|
         j.is_a?(Array) ? j : [j]
       end
@@ -100,27 +104,9 @@ class Rosegold::MCData
     getter enchant_categories : Array(String)?
   end
 
-  # entries of blocks.json
-  class Block
+  class Material
     include JSON::Serializable
-
-    getter id : UInt16
-    @[JSON::Field(key: "name")]
-    getter id_str : String
-    @[JSON::Field(key: "displayName")]
-    getter display_name : String
-    @[JSON::Field(key: "stackSize")]
-    getter stack_size : UInt8
-    @[JSON::Field(key: "minStateId")]
-    getter min_state_id : UInt16
-    @[JSON::Field(key: "maxStateId")]
-    getter max_state_id : UInt16
-    @[JSON::Field(key: "defaultState")]
-    getter default_state : UInt16
-
-    # Not individual block states, but the properties that, in combination, make up each block state.
-    # Empty array if block has only one state.
-    getter states : Array(BlockProperty)
+    include JSON::Serializable::Unmapped
   end
 
   # entries of `states` field in blocks.json
