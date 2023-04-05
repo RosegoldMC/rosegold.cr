@@ -1,3 +1,13 @@
+
+require "./minecraft/auth"
+minecraft_auth = Minecraft::Auth.new
+authentication = minecraft_auth.authenticate
+
+puts "Authenticated as #{authentication["mc_name"]}"
+ENV["ACCESS_TOKEN"] = authentication["access_token"]
+ENV["UUID"] = authentication["uuid"]
+ENV["MC_NAME"] = authentication["mc_name"]
+
 require "./rosegold"
 require "./rosegold/bot"
 
@@ -10,7 +20,7 @@ def show_help
   puts "\\position - Displays the current coordinates of the player"
 end
 
-Client.new("localhost").join_game do |client|
+Client.new(ENV["HOST"]).join_game do |client|
   bot = Rosegold::Bot.new client
 
   show_help

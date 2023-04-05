@@ -25,7 +25,7 @@ module Microsoft::MobileOAuth
           ).body).try do |token|
           next if token["error"]?
 
-          STDERR.puts "Login successful!"
+          STDERR.puts "Microsoft OAuth login successful!"
 
           return token["access_token"].as_s
         end
