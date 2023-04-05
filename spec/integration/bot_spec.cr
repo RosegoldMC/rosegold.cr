@@ -10,7 +10,6 @@ Spectator.describe Rosegold::Bot do
         until client.player.on_ground?
           bot.wait_tick
         end
-        bot.chat "on ground"
         expect(bot.feet).to eq(Rosegold::Vec3d.new(1.5, -60, 1.5))
       end
     end
@@ -79,7 +78,7 @@ Spectator.describe Rosegold::Bot do
     Rosegold::Client.new("localhost", 25565).join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         sleep 2 # load chunks
-        bot.chat "/tp 1 -58 1"
+        bot.chat "/tp 1 -60 1"
         sleep 1 # teleport
 
         bot.hotbar_selection = 4
@@ -87,6 +86,22 @@ Spectator.describe Rosegold::Bot do
 
         bot.hotbar_selection = 7
         expect(bot.hotbar_selection).to eq 7
+      end
+    end
+  end
+
+  it "should be able to dig" do
+    Rosegold::Client.new("localhost", 25565).join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        bot.chat "/fill 8 -60 8 8 -50 8 minecraft:dirt"
+        sleep 2 # load chunks
+        bot.chat "/tp 8 -49 8"
+        sleep 1 # teleport
+
+        bot.look &.down
+        bot.dig(40)
+        sleep 1 # fall down
+        expect(bot.feet.y).to be_lt -49.5
       end
     end
   end

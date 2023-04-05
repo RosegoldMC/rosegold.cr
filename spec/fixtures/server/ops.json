@@ -52,5 +52,11 @@
     "name": "rosegoldtest9",
     "level": 4,
     "bypassesPlayerLimit": false
+  },
+  {
+    "uuid": "4b6a985b-539b-317a-ab96-57dfbf3de621",
+    "name": "rose",
+    "level": 4,
+    "bypassesPlayerLimit": false
   }
 ]

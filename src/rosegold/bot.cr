@@ -1,4 +1,5 @@
 require "../rosegold"
+require "./control/*"
 
 class Rosegold::Bot
   private getter client : Client
@@ -7,9 +8,17 @@ class Rosegold::Bot
 
   def initialize(@client)
     @inventory = Inventory.new client
+    @interact = Interactions.new client
   end
 
-  delegate health, food, saturation, gamemode, to: client.player
+  delegate host, port, connect, connected?, online_players, on, to: client
+  delegate feet, eyes, health, food, saturation, gamemode, to: client.player
+  # TODO delegate more
+  delegate start_using_hand, stop_using_hand, start_digging, finish_digging, cancel_digging, to: @interact
+
+  def disconnect_reason
+    client.connection.try &.close_reason
+  end
 
   # Revive the player if dead. Does nothing if alive.
   def respawn
@@ -73,30 +82,12 @@ class Rosegold::Bot
 
   # Waits for the new look to be sent to the server.
   def look_at(location : Vec3d)
-    client.physics.look Look.from_vec location - eyes
+    client.physics.look = Look.from_vec location - eyes
   end
 
   # Waits for the new look to be sent to the server.
   def look_at_horizontal(location : Vec3d)
     look_at location.with_y eyes.y
-  end
-
-  # Location of the player's feet.
-  # To change the location, use #move_to.
-  def feet
-    client.player.feet
-  end
-
-  # Location of the player's eyes.
-  # To change the location, use #move_to.
-  def eyes
-    client.player.eyes
-  end
-
-  # Location of the player's feet.
-  # To change the location, use #move_to.
-  def feet
-    client.player.feet
   end
 
   # Moves straight towards `location`.
@@ -132,23 +123,8 @@ class Rosegold::Bot
 
   # Use #interact_block to enter a bed.
   def leave_bed
-    client.connection.send_packet Serverbound::EntityAction.new \
-      client.player.entity_id, Serverbound::EntityAction::Type::LeaveBed
-  end
-
-  def interact_block(location : Vec3d, face : BlockFace, look = true)
-    place_block_against(location, face, look, 0)
-  end
-
-  # Raises an error if the hand slot is not updated within `timeout_ticks`.
-  def place_block_against(location : Vec3d, face : BlockFace, look = true, timeout_ticks = 0)
-    cursor = (location - location.floored).to_f32
-    hand = Hand::MainHand # TODO
-    inside_block = false  # TODO
-    client.connection.send_packet Serverbound::PlayerBlockPlacement.new \
-      location.floored_i32, face, cursor, hand, inside_block
-    client.connection.send_packet Serverbound::SwingArm.new hand
-    # TODO raise an error if the hand slot is not updated within `timeout_ticks`
+    client.queue_packet Serverbound::EntityAction.new \
+      client.player.entity_id, :leave_bed
   end
 
   # The active (main hand) hotbar slot number (1-9).
@@ -164,66 +140,72 @@ class Rosegold::Bot
   end
 
   def swap_hands
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::SwapHands, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::PlayerDigging.new \
+      :swap_hands, Vec3i.ORIGIN, 0
   end
 
   def drop_hand_single
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::DropHandSingle, Vec3i.ORIGIN, 0
-    client.connection.send_packet Serverbound::SwingArm.new
+    client.queue_packet Serverbound::PlayerDigging.new \
+      :drop_hand_single, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::SwingArm.new
   end
 
   def drop_hand_full
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::DropHandFull, Vec3i.ORIGIN, 0
-    client.connection.send_packet Serverbound::SwingArm.new
+    client.queue_packet Serverbound::PlayerDigging.new \
+      :drop_hand_full, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::SwingArm.new
   end
 
   # Moves the slot to the hotbar and selects it.
   # This is faster and less error-prone than moving slots around individually.
   def pick_slot(slot_nr : UInt16)
-    client.connection.send_packet Serverbound::PickItem.new slot_nr
+    client.queue_packet Serverbound::PickItem.new slot_nr
   end
 
-  def start_using_item(hand = Hand::MainHand)
-    client.connection.send_packet Serverbound::UseItem.new hand
-    client.connection.send_packet Serverbound::SwingArm.new
+  # Activates and then immediately deactivates the `use` button.
+  def use_hand(hand = :main_hand)
+    start_using_hand hand
+    stop_using_hand
   end
 
-  def stop_using_item
-    client.connection.send_packet Serverbound::PlayerDigging.new \
-      Serverbound::PlayerDigging::Status::FinishUsingHand, Vec3i.ORIGIN, 0
+  # Looks at that location, then activates and immediately deactivates the `use` button.
+  def use_hand(location : Vec3d)
+    look_at location
+    use_hand
   end
 
-  # not exposed, for rules compliance
-  @digging_location : Vec3d?
-
-  # waits for completion
-  def dig(location : Vec3d, face : BlockFace, ticks : UInt32, look = true)
-    raise "Not implemented" # TODO
+  # Looks in that direction, then activates and immediately deactivates the `use` button.
+  def use_hand(direction : Look)
+    look direction
+    use_hand
   end
 
-  def start_digging(location : Vec3d, face : BlockFace, look = true)
-    raise "Not implemented" # TODO
+  # Looks at that location, then activates and immediately deactivates the `use` button.
+  # Raises an error if the hand slot is not updated within `ticks`.
+  def place_block_against(location : Vec3d? = nil, ticks = 0)
+    use_hand location
+    # TODO raise an error if the hand slot is not updated within `ticks`
   end
 
-  def finish_digging
-    raise "Not implemented" # TODO
+  # Looks at that location, then activates the `attack` button.
+  def start_digging(location : Vec3d)
+    look_at location
+    start_digging
   end
 
-  def cancel_digging
-    raise "Not implemented" # TODO
+  # Looks in that direction, then activates the `attack` button.
+  def start_digging(direction : Look)
+    look direction
+    @interact.start_digging
   end
 
-  # Add a callback processed upon specified incoming packet
-  #
-  # ```
-  # client.on_packet Clientbound::Chat do |chat|
-  #   puts "Received chat: #{chat.message}"
-  # end
-  # ```
-  def on(packet_type : T.class, &block : T ->) forall T
-    client.on packet_type, &block
+  # Looks at that location, then activates the `attack` button,
+  # waits `ticks`, and deactivates it again.
+  # Waits for completion, throws error if cancelled by stop_digging, item change, disconnect, etc.
+  def dig(ticks : UInt32, location : Vec3d? = nil)
+    look_at location if location
+    start_digging
+    wait_ticks ticks
+    finish_digging
   end
 end
