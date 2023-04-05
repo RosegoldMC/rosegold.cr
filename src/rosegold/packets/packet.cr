@@ -1,4 +1,4 @@
-abstract class Rosegold::Packet
+abstract class Rosegold::Packet < Rosegold::Event
   def write : Bytes
     raise "Not implemented"
   end
