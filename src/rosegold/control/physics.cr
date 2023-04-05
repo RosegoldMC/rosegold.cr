@@ -1,5 +1,6 @@
 require "../client"
-require "./raytracing"
+require "./action"
+require "./raytrace"
 
 struct Int32
   def ticks
@@ -75,24 +76,6 @@ class Rosegold::Physics
     end
   end
 
-  private struct Action(T)
-    SUCCESS = ""
-
-    # TODO try channel size 1 so #succeed/#fail aren't rendezvous
-    getter channel : Channel(String) = Channel(String).new
-    getter target : T
-
-    def initialize(@target : T); end
-
-    def fail(msg : String)
-      @channel.send(msg)
-    end
-
-    def succeed
-      @channel.send(SUCCESS)
-    end
-  end
-
   # Set the movement target location and wait until it is achieved.
   # If there is already a movement target, it is cancelled, and replaced with this new target.
   # Set `target=nil` to stop moving and cancel any current movement.
@@ -110,8 +93,7 @@ class Rosegold::Physics
       @movement_action.try &.fail "Replaced by movement to #{target}"
       @movement_action = action
     end
-    result = action.channel.receive
-    raise Exception.new(result) if result != Action::SUCCESS
+    action.join
   end
 
   # Set the look target and wait until it is achieved.
@@ -122,8 +104,7 @@ class Rosegold::Physics
       @look_action.try &.fail "Replaced by look of #{target}"
       @look_action = action
     end
-    result = action.channel.receive
-    raise Exception.new(result) if result != Action::SUCCESS
+    action.join
   end
 
   private def player
@@ -235,7 +216,7 @@ class Rosegold::Physics
     # we can freely move in blocks that we already collide with before the movement
     obstacles = obstacles.reject &.contains? start
 
-    result = Raytracing.raytrace start, velocity, obstacles
+    result = Raytrace.raytrace start, velocity, obstacles
     movement = result.try { |r| r.intercept - start } || velocity
     collided_x = movement.x != velocity.x
     collided_y = movement.y != velocity.y
@@ -246,7 +227,7 @@ class Rosegold::Physics
       step_start = start.plus(0, 0.5, 0)
       # gravity would pull us into the step, preventing stepping
       step_velocity = velocity.with_y 0
-      step_result = Raytracing.raytrace step_start, step_velocity, obstacles
+      step_result = Raytrace.raytrace step_start, step_velocity, obstacles
       step_movement = step_result.try { |r| r.intercept - start } || step_velocity
 
       step_different_x = step_movement.x != movement.x
@@ -255,7 +236,7 @@ class Rosegold::Physics
         # we may have stepped too far up, land on top surface of step block
         step_end = step_result.try(&.intercept) || start + step_velocity
         down_velocity = Vec3d.new(0, -1, 0)
-        down_result = Raytracing.raytrace step_end, down_velocity, obstacles
+        down_result = Raytrace.raytrace step_end, down_velocity, obstacles
         down_end = down_result.try(&.intercept) || step_end + down_velocity
 
         movement = down_end - start
@@ -284,17 +265,17 @@ class Rosegold::Physics
     entity_aabb = entity_aabb.to_f64
     grow_aabb = entity_aabb * -1
     # get all blocks that may potentially collide
-    min_hull, max_hull = AABBd.containing_all(
+    bounds = AABBd.containing_all(
       entity_aabb.offset(start),
       entity_aabb.offset(start + movement))
     # fences are 1.5m tall
-    min_hull = min_hull.down(0.5).floored_i32
+    min_block = bounds.min.down(0.5).block
     # add maximum stepping height (0.5) so we can reuse the obstacles when stepping
-    max_hull = max_hull.up(0.5).floored_i32
+    max_block = bounds.max.up(0.5).block
     blocks_coords = Indexable.cartesian_product({
-      (min_hull.x..max_hull.x).to_a,
-      (min_hull.y..max_hull.y).to_a,
-      (min_hull.z..max_hull.z).to_a,
+      (min_block.x..max_block.x).to_a,
+      (min_block.y..max_block.y).to_a,
+      (min_block.z..max_block.z).to_a,
     })
     blocks_coords.flat_map do |block_coords|
       x, y, z = block_coords

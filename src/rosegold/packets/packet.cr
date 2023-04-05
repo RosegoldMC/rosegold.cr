@@ -20,6 +20,11 @@ abstract class Rosegold::Clientbound::Packet < Rosegold::Packet
   macro inherited
         Rosegold::ProtocolState.register {{@type}}
   end
+
+  def to_s(io)
+    io << pretty_inspect(999, " ", 0).sub(/:0x\S+/, "") \
+      .gsub(/Rosegold::|Clientbound::|Serverbound::/, "")
+  end
 end
 
 abstract class Rosegold::Serverbound::Packet < Rosegold::Packet; end

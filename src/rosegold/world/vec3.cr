@@ -162,8 +162,16 @@ module Rosegold::Vec3(T)
     {x, y, z}[i]
   end
 
-  def [](axis : Axis) : T
-    {x, y, z}[axis.value]
+  def axis(face : BlockFace) : T
+    case face
+    when BlockFace::West, BlockFace::East
+      x
+    when BlockFace::Bottom, BlockFace::Top
+      y
+    when BlockFace::North, BlockFace::South
+      z
+    else raise "Invalid BlockFace #{face}"
+    end
   end
 
   def to_s(io)
@@ -179,6 +187,10 @@ struct Rosegold::Vec3i
   include Rosegold::Vec3(Int32)
 
   ORIGIN = self.new 0, 0, 0
+
+  def block
+    self
+  end
 end
 
 struct Rosegold::Vec3f
@@ -218,13 +230,9 @@ struct Rosegold::Vec3d
     Vec3f.new x, y, z
   end
 
-  def floored_i32 : Vec3i
+  def block : Vec3i
     Vec3i.new x.floor.to_i32, y.floor.to_i32, z.floor.to_i32
   end
-end
-
-enum Rosegold::Axis
-  X; Y; Z
 end
 
 enum BlockFace
