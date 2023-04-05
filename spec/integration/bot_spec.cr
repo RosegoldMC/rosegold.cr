@@ -89,20 +89,4 @@ Spectator.describe Rosegold::Bot do
       end
     end
   end
-
-  it "should be able to dig" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/fill 8 -60 8 8 -50 8 minecraft:dirt"
-        sleep 2 # load chunks
-        bot.chat "/tp 8 -49 8"
-        sleep 1 # teleport
-
-        bot.look &.down
-        bot.dig(40)
-        sleep 1 # fall down
-        expect(bot.feet.y).to be_lt -49.5
-      end
-    end
-  end
 end

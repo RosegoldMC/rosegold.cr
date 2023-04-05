@@ -15,6 +15,7 @@ class Rosegold::Interactions
   @dig_hand_swing_countdown = 0_i8
 
   getter client : Client
+  property? digging : Bool = false
 
   def initialize(@client)
     client.on Event::PhysicsTick do
@@ -41,14 +42,29 @@ class Rosegold::Interactions
 
   # Activates the "attack" button.
   def start_digging
-    reached = reach_block_or_entity
-    return unless reached
-    start_digging reached
+    return if digging?
+    self.digging = true
+
+    spawn do
+      while digging?
+        reached = reach_block_or_entity
+        next sleep 1.tick unless reached
+        start_digging reached
+
+        client.dimension.block_state(reached.block).try do |block_state|
+          block = Block.from_block_state_id block_state
+          sleep block.break_time(inventory.main_hand, client.player).ticks
+        end
+
+        finish_digging if digging?
+      end
+    end
   end
 
   # Deactivates the "attack" button.
   def stop_digging
-    finish_digging
+    self.digging = false
+    cancel_digging
   end
 
   private def on_physics_tick
@@ -129,5 +145,9 @@ class Rosegold::Interactions
         block_shape.map &.to_f64.offset(x, y, z)
       end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
     end
+  end
+
+  private def inventory : Inventory
+    @inventory ||= Inventory.new client
   end
 end
