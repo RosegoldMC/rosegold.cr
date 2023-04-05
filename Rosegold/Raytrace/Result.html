@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Raytracing::Ray - rosegold main</title>
+  <title>Rosegold::Raytrace::Result - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -246,8 +246,8 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Axis" data-name="rosegold::axis">
-      <a href="../../Rosegold/Axis.html">Axis</a>
+  <li class=" " data-id="rosegold/Rosegold/Action" data-name="rosegold::action(t)">
+      <a href="../../Rosegold/Action.html">Action</a>
       
     </li>
   
@@ -546,6 +546,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Interactions" data-name="rosegold::interactions">
+      <a href="../../Rosegold/Interactions.html">Interactions</a>
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/Inventory" data-name="rosegold::inventory">
       <a href="../../Rosegold/Inventory.html">Inventory</a>
       
@@ -651,18 +656,18 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Raytracing" data-name="rosegold::raytracing">
-      <a href="../../Rosegold/Raytracing.html">Raytracing</a>
+  <li class="parent open current" data-id="rosegold/Rosegold/Raytrace" data-name="rosegold::raytrace">
+      <a href="../../Rosegold/Raytrace.html">Raytrace</a>
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Rosegold/Raytracing/Ray" data-name="rosegold::raytracing::ray">
-      <a href="../../Rosegold/Raytracing/Ray.html">Ray</a>
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Ray" data-name="rosegold::raytrace::ray">
+      <a href="../../Rosegold/Raytrace/Ray.html">Ray</a>
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/RayTraceResult" data-name="rosegold::raytracing::raytraceresult">
-      <a href="../../Rosegold/Raytracing/RayTraceResult.html">RayTraceResult</a>
+  <li class=" current" data-id="rosegold/Rosegold/Raytrace/Result" data-name="rosegold::raytrace::result">
+      <a href="../../Rosegold/Raytrace/Result.html">Result</a>
       
     </li>
   
@@ -865,12 +870,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">struct</span> Rosegold::Raytracing::Ray
+  <span class="kind">struct</span> Rosegold::Raytrace::Result
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Raytracing/Ray.html">Rosegold::Raytracing::Ray</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Raytrace/Result.html">Rosegold::Raytrace::Result</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
 
 
 
@@ -898,8 +903,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/control/raytracing.cr#L5" target="_blank">
-        rosegold/control/raytracing.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/control/raytrace.cr#L11" target="_blank">
+        rosegold/control/raytrace.cr
       </a>
     
     <br/>
@@ -920,7 +925,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28start%3AVec3d%2Cdelta%3AVec3d%29-class-method" class="signature"><strong>.new</strong>(start : Vec3d, delta : Vec3d)</a>
+        <a href="#new%28intercept%3AVec3d%2Cbox_nr%3AInt32%2Cface%3ABlockFace%29-class-method" class="signature"><strong>.new</strong>(intercept : Vec3d, box_nr : Int32, face : BlockFace)</a>
         
       </li>
     
@@ -941,12 +946,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#delta%3AVec3d-instance-method" class="signature"><strong>#delta</strong> : Vec3d</a>
+        <a href="#box_nr%3AInt32-instance-method" class="signature"><strong>#box_nr</strong> : Int32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#start%3AVec3d-instance-method" class="signature"><strong>#start</strong> : Vec3d</a>
+        <a href="#face%3ABlockFace-instance-method" class="signature"><strong>#face</strong> : BlockFace</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#intercept%3AVec3d-instance-method" class="signature"><strong>#intercept</strong> : Vec3d</a>
         
       </li>
     
@@ -1000,18 +1010,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(start:Vec3d,delta:Vec3d)-class-method">
+    <div class="entry-detail" id="new(intercept:Vec3d,box_nr:Int32,face:BlockFace)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(start : <a href="../../Rosegold/Vec3d.html">Vec3d</a>, delta : <a href="../../Rosegold/Vec3d.html">Vec3d</a>)
+        def self.<strong>new</strong>(intercept : <a href="../../Rosegold/Vec3d.html">Vec3d</a>, box_nr : <a href="../../Int32.html">Int32</a>, face : <a href="../../BlockFace.html">BlockFace</a>)
 
-        <a class="method-permalink" href="#new%28start%3AVec3d%2Cdelta%3AVec3d%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28intercept%3AVec3d%2Cbox_nr%3AInt32%2Cface%3ABlockFace%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/control/raytracing.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/control/raytrace.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1030,34 +1040,50 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="delta:Vec3d-instance-method">
+    <div class="entry-detail" id="box_nr:Int32-instance-method">
       <div class="signature">
         
-        def <strong>delta</strong> : <a href="../../Rosegold/Vec3d.html">Vec3d</a>
+        def <strong>box_nr</strong> : <a href="../../Int32.html">Int32</a>
 
-        <a class="method-permalink" href="#delta%3AVec3d-instance-method">#</a>
+        <a class="method-permalink" href="#box_nr%3AInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/control/raytracing.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/control/raytrace.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="start:Vec3d-instance-method">
+    <div class="entry-detail" id="face:BlockFace-instance-method">
       <div class="signature">
         
-        def <strong>start</strong> : <a href="../../Rosegold/Vec3d.html">Vec3d</a>
+        def <strong>face</strong> : <a href="../../BlockFace.html">BlockFace</a>
 
-        <a class="method-permalink" href="#start%3AVec3d-instance-method">#</a>
+        <a class="method-permalink" href="#face%3ABlockFace-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/control/raytracing.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/control/raytrace.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="intercept:Vec3d-instance-method">
+      <div class="signature">
+        
+        def <strong>intercept</strong> : <a href="../../Rosegold/Vec3d.html">Vec3d</a>
+
+        <a class="method-permalink" href="#intercept%3AVec3d-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/control/raytrace.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>

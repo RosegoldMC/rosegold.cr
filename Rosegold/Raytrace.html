@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Raytracing - rosegold main</title>
+  <title>Rosegold::Raytrace - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -246,8 +246,8 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Axis" data-name="rosegold::axis">
-      <a href="../Rosegold/Axis.html">Axis</a>
+  <li class=" " data-id="rosegold/Rosegold/Action" data-name="rosegold::action(t)">
+      <a href="../Rosegold/Action.html">Action</a>
       
     </li>
   
@@ -546,6 +546,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Interactions" data-name="rosegold::interactions">
+      <a href="../Rosegold/Interactions.html">Interactions</a>
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/Inventory" data-name="rosegold::inventory">
       <a href="../Rosegold/Inventory.html">Inventory</a>
       
@@ -651,18 +656,18 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Raytracing" data-name="rosegold::raytracing">
-      <a href="../Rosegold/Raytracing.html">Raytracing</a>
+  <li class="parent open current" data-id="rosegold/Rosegold/Raytrace" data-name="rosegold::raytrace">
+      <a href="../Rosegold/Raytrace.html">Raytrace</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/Ray" data-name="rosegold::raytracing::ray">
-      <a href="../Rosegold/Raytracing/Ray.html">Ray</a>
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Ray" data-name="rosegold::raytrace::ray">
+      <a href="../Rosegold/Raytrace/Ray.html">Ray</a>
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/RayTraceResult" data-name="rosegold::raytracing::raytraceresult">
-      <a href="../Rosegold/Raytracing/RayTraceResult.html">RayTraceResult</a>
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Result" data-name="rosegold::raytrace::result">
+      <a href="../Rosegold/Raytrace/Result.html">Result</a>
       
     </li>
   
@@ -865,7 +870,7 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">module</span> Rosegold::Raytracing
+  <span class="kind">module</span> Rosegold::Raytrace
 
 </h1>
 
@@ -896,8 +901,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/control/raytracing.cr#L4" target="_blank">
-        rosegold/control/raytracing.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/control/raytrace.cr#L4" target="_blank">
+        rosegold/control/raytrace.cr
       </a>
     
     <br/>
@@ -920,12 +925,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#raytrace%28start%3AVec3d%2Cdelta%3AVec3d%2Cboxes%3AArray%28AABBd%29%29-class-method" class="signature"><strong>.raytrace</strong>(start : Vec3d, delta : Vec3d, boxes : Array(AABBd))</a>
+        <a href="#raytrace%28start%3AVec3d%2Cdelta%3AVec3d%2Cboxes%3AArray%28AABBd%29%29%3AResult%7CNil-class-method" class="signature"><strong>.raytrace</strong>(start : Vec3d, delta : Vec3d, boxes : Array(AABBd)) : Result | Nil</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#raytrace%28ray%3ARay%2Cboxes%3AArray%28AABBd%29%29%3ARayTraceResult%7CNil-class-method" class="signature"><strong>.raytrace</strong>(ray : Ray, boxes : Array(AABBd)) : RayTraceResult | Nil</a>
+        <a href="#raytrace%28ray%3ARay%2Cboxes%3AArray%28AABBd%29%29%3AResult%7CNil-class-method" class="signature"><strong>.raytrace</strong>(ray : Ray, boxes : Array(AABBd)) : Result | Nil</a>
         
       </li>
     
@@ -953,34 +958,34 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="raytrace(start:Vec3d,delta:Vec3d,boxes:Array(AABBd))-class-method">
+    <div class="entry-detail" id="raytrace(start:Vec3d,delta:Vec3d,boxes:Array(AABBd)):Result|Nil-class-method">
       <div class="signature">
         
-        def self.<strong>raytrace</strong>(start : <a href="../Rosegold/Vec3d.html">Vec3d</a>, delta : <a href="../Rosegold/Vec3d.html">Vec3d</a>, boxes : Array(<a href="../Rosegold/AABBd.html">AABBd</a>))
+        def self.<strong>raytrace</strong>(start : <a href="../Rosegold/Vec3d.html">Vec3d</a>, delta : <a href="../Rosegold/Vec3d.html">Vec3d</a>, boxes : Array(<a href="../Rosegold/AABBd.html">AABBd</a>)) : <a href="../Rosegold/Raytrace/Result.html">Result</a> | Nil
 
-        <a class="method-permalink" href="#raytrace%28start%3AVec3d%2Cdelta%3AVec3d%2Cboxes%3AArray%28AABBd%29%29-class-method">#</a>
+        <a class="method-permalink" href="#raytrace%28start%3AVec3d%2Cdelta%3AVec3d%2Cboxes%3AArray%28AABBd%29%29%3AResult%7CNil-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/control/raytracing.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/control/raytrace.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="raytrace(ray:Ray,boxes:Array(AABBd)):RayTraceResult|Nil-class-method">
+    <div class="entry-detail" id="raytrace(ray:Ray,boxes:Array(AABBd)):Result|Nil-class-method">
       <div class="signature">
         
-        def self.<strong>raytrace</strong>(ray : <a href="../Rosegold/Raytracing/Ray.html">Ray</a>, boxes : Array(<a href="../Rosegold/AABBd.html">AABBd</a>)) : <a href="../Rosegold/Raytracing/RayTraceResult.html">RayTraceResult</a> | Nil
+        def self.<strong>raytrace</strong>(ray : <a href="../Rosegold/Raytrace/Ray.html">Ray</a>, boxes : Array(<a href="../Rosegold/AABBd.html">AABBd</a>)) : <a href="../Rosegold/Raytrace/Result.html">Result</a> | Nil
 
-        <a class="method-permalink" href="#raytrace%28ray%3ARay%2Cboxes%3AArray%28AABBd%29%29%3ARayTraceResult%7CNil-class-method">#</a>
+        <a class="method-permalink" href="#raytrace%28ray%3ARay%2Cboxes%3AArray%28AABBd%29%29%3AResult%7CNil-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/control/raytracing.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/control/raytrace.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>

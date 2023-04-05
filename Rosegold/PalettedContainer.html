@@ -246,8 +246,8 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Axis" data-name="rosegold::axis">
-      <a href="../Rosegold/Axis.html">Axis</a>
+  <li class=" " data-id="rosegold/Rosegold/Action" data-name="rosegold::action(t)">
+      <a href="../Rosegold/Action.html">Action</a>
       
     </li>
   
@@ -546,6 +546,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Interactions" data-name="rosegold::interactions">
+      <a href="../Rosegold/Interactions.html">Interactions</a>
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/Inventory" data-name="rosegold::inventory">
       <a href="../Rosegold/Inventory.html">Inventory</a>
       
@@ -651,18 +656,18 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Raytracing" data-name="rosegold::raytracing">
-      <a href="../Rosegold/Raytracing.html">Raytracing</a>
+  <li class="parent " data-id="rosegold/Rosegold/Raytrace" data-name="rosegold::raytrace">
+      <a href="../Rosegold/Raytrace.html">Raytrace</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/Ray" data-name="rosegold::raytracing::ray">
-      <a href="../Rosegold/Raytracing/Ray.html">Ray</a>
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Ray" data-name="rosegold::raytrace::ray">
+      <a href="../Rosegold/Raytrace/Ray.html">Ray</a>
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/RayTraceResult" data-name="rosegold::raytracing::raytraceresult">
-      <a href="../Rosegold/Raytracing/RayTraceResult.html">RayTraceResult</a>
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Result" data-name="rosegold::raytrace::result">
+      <a href="../Rosegold/Raytrace/Result.html">Result</a>
       
     </li>
   
@@ -875,6 +880,20 @@
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Four modes:
+Single state: All entries are the same value. The value is stored as palette[0]. The long_array is empty.
+Encoded: The long_array stores the palette index of each value.
+Direct: The long_array stores values directly. The palette is empty.</p>
+
 
 
 
@@ -898,7 +917,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/paletted_container.cr#L1" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/paletted_container.cr#L5" target="_blank">
         rosegold/world/paletted_container.cr
       </a>
     
@@ -920,7 +939,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28io%3AMinecraft%3A%3AIO%2Cnum_bits_direct%2Cnum_entries%3AUInt32%29-class-method" class="signature"><strong>.new</strong>(io : Minecraft::IO, num_bits_direct, num_entries : UInt32)</a>
+        <a href="#new%28io%3AMinecraft%3A%3AIO%2Cnum_bits_direct%2Csize%3AUInt32%29-class-method" class="signature"><strong>.new</strong>(io : Minecraft::IO, num_bits_direct, size : UInt32)</a>
         
       </li>
     
@@ -947,6 +966,11 @@
     
       <li class="entry-summary">
         <a href="#%5B%5D%3D%28index%3AIndex%2Cvalue%3AEntry%29%3ANil-instance-method" class="signature"><strong>#[]=</strong>(index : Index, value : Entry) : Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#size%3AIndex-instance-method" class="signature"><strong>#size</strong> : Index</a>
         
       </li>
     
@@ -995,18 +1019,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(io:Minecraft::IO,num_bits_direct,num_entries:UInt32)-class-method">
+    <div class="entry-detail" id="new(io:Minecraft::IO,num_bits_direct,size:UInt32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(io : <a href="../Minecraft/IO.html">Minecraft::IO</a>, num_bits_direct, num_entries : UInt32)
+        def self.<strong>new</strong>(io : <a href="../Minecraft/IO.html">Minecraft::IO</a>, num_bits_direct, size : UInt32)
 
-        <a class="method-permalink" href="#new%28io%3AMinecraft%3A%3AIO%2Cnum_bits_direct%2Cnum_entries%3AUInt32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28io%3AMinecraft%3A%3AIO%2Cnum_bits_direct%2Csize%3AUInt32%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/paletted_container.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/paletted_container.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1036,7 +1060,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/paletted_container.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/paletted_container.cr#L61" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1052,7 +1076,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/paletted_container.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/paletted_container.cr#L73" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="size:Index-instance-method">
+      <div class="signature">
+        
+        def <strong>size</strong> : Index
+
+        <a class="method-permalink" href="#size%3AIndex-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/paletted_container.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1068,7 +1108,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/paletted_container.cr#L42" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/paletted_container.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>

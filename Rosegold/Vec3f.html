@@ -246,8 +246,8 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Axis" data-name="rosegold::axis">
-      <a href="../Rosegold/Axis.html">Axis</a>
+  <li class=" " data-id="rosegold/Rosegold/Action" data-name="rosegold::action(t)">
+      <a href="../Rosegold/Action.html">Action</a>
       
     </li>
   
@@ -546,6 +546,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Interactions" data-name="rosegold::interactions">
+      <a href="../Rosegold/Interactions.html">Interactions</a>
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/Inventory" data-name="rosegold::inventory">
       <a href="../Rosegold/Inventory.html">Inventory</a>
       
@@ -651,18 +656,18 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Raytracing" data-name="rosegold::raytracing">
-      <a href="../Rosegold/Raytracing.html">Raytracing</a>
+  <li class="parent " data-id="rosegold/Rosegold/Raytrace" data-name="rosegold::raytrace">
+      <a href="../Rosegold/Raytrace.html">Raytrace</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/Ray" data-name="rosegold::raytracing::ray">
-      <a href="../Rosegold/Raytracing/Ray.html">Ray</a>
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Ray" data-name="rosegold::raytrace::ray">
+      <a href="../Rosegold/Raytrace/Ray.html">Ray</a>
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Raytracing/RayTraceResult" data-name="rosegold::raytracing::raytraceresult">
-      <a href="../Rosegold/Raytracing/RayTraceResult.html">RayTraceResult</a>
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Result" data-name="rosegold::raytrace::result">
+      <a href="../Rosegold/Raytrace/Result.html">Result</a>
       
     </li>
   
@@ -912,7 +917,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/vec3.cr#L184" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/vec3.cr#L196" target="_blank">
         rosegold/world/vec3.cr
       </a>
     
@@ -1025,13 +1030,18 @@
     
   
     <a href="../Rosegold/Vec3.html#%5B%5D%28i%3ANumber%29%3AT-instance-method" class="tooltip">
-      <span>[](i : Number) : T<br/>[](axis : Axis) : T</span>
+      <span>[](i : Number) : T</span>
     []</a>, 
     
   
     <a href="../Rosegold/Vec3.html#almost_eq%28other%3Aself%2Ccloser_than%3D0.01%29%3ABool-instance-method" class="tooltip">
       <span>almost_eq(other : <span class="k">self</span>, closer_than = <span class="n">0.01</span>) : Bool</span>
     almost_eq</a>, 
+    
+  
+    <a href="../Rosegold/Vec3.html#axis%28face%3ABlockFace%29%3AT-instance-method" class="tooltip">
+      <span>axis(face : BlockFace) : T</span>
+    axis</a>, 
     
   
     <a href="../Rosegold/Vec3.html#centered_3d%3Aself-instance-method" class="tooltip">
@@ -1259,7 +1269,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/vec3.cr#L203" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/vec3.cr#L215" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1275,7 +1285,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/vec3.cr#L195" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/vec3.cr#L207" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1291,7 +1301,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/vec3.cr#L199" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/vec3.cr#L211" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1307,7 +1317,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/vec3.cr#L191" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/vec3.cr#L203" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1323,7 +1333,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fb485ce7d4e1b792806a05994f456075f8d3ae66/src/rosegold/world/vec3.cr#L207" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/vec3.cr#L219" target="_blank">View source</a>]
         
       </div>
     </div>
