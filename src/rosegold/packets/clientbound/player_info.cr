@@ -26,13 +26,13 @@ class Rosegold::Clientbound::PlayerInfo < Rosegold::Clientbound::Packet
               io.read_var_string,
               io.read_opt_string)
           end
-          player.gamemode = io.read_var_int
+          player.gamemode = io.read_var_int.to_i8
           player.ping = io.read_var_int
           if io.read_bool
             player.display_name = Rosegold::Chat.from_json io.read_var_string
           end
         when .gamemode?
-          player.gamemode = io.read_var_int
+          player.gamemode = io.read_var_int.to_i8
         when .ping?
           player.ping = io.read_var_int
         when .display_name?
