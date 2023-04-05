@@ -1,4 +1,3 @@
-
 require "./minecraft/auth"
 minecraft_auth = Minecraft::Auth.new
 authentication = minecraft_auth.authenticate

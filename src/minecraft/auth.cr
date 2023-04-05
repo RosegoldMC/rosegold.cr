@@ -2,6 +2,7 @@ require "http"
 require "json"
 require "../microsoft/mobile_oauth"
 require "cache"
+
 class Minecraft::Auth
   @xbox_token : String?
   @uhs : String?
@@ -14,24 +15,22 @@ class Minecraft::Auth
   @found_cache : Bool?
 
   def initialize
- 
     if !Dir.exists?(".cache/profiles/")
       Dir.mkdir_p(".cache/profiles/")
     end
 
     @cache = Cache::FileStore(String, Hash(String, String)).new(expires_in: 24.hours, cache_path: ".cache/profiles/")
     @cache_hash = @cache.read("accessHash_" + ENV["USERNAME"])
-  
-    if @cache_hash
 
+    if @cache_hash
       # already cached this user
       @found_cache = true
       @access_token = @cache_hash.not_nil!["token"]
       @uuid = @cache_hash.not_nil!["id"]
       @mc_name = @cache_hash.not_nil!["name"]
 
-     # {access_token: @access_token, uuid: @uuid, mc_name: @mc_name}
-    else 
+      # {access_token: @access_token, uuid: @uuid, mc_name: @mc_name}
+    else
       @ticket = Microsoft::MobileOAuth.prompt_for_login!
     end
   end
@@ -41,7 +40,7 @@ class Minecraft::Auth
       # do nothing
       puts "readies"
       {access_token: @access_token, uuid: @uuid, mc_name: @mc_name}
-    else 
+    else
       xbox_authenticate
       xsts_authorize
       login_with_xbox
@@ -94,7 +93,6 @@ class Minecraft::Auth
 
     json = JSON.parse(response.body)
     @access_token = json["access_token"].as_s
-
   end
 
   private def get_minecraft_profile
@@ -105,14 +103,13 @@ class Minecraft::Auth
     @uuid = json["id"].as_s
     @mc_name = json["name"].as_s
 
-    @cache_hash = Hash(String, String).new()
+    @cache_hash = Hash(String, String).new
 
     @cache_hash.not_nil!["name"] = json["name"].as_s
     @cache_hash.not_nil!["token"] = @access_token.not_nil!
     @cache_hash.not_nil!["id"] = json["id"].as_s
 
     @cache.write("accessHash_" + ENV["USERNAME"], @cache_hash.not_nil!)
-
 
     {access_token: @access_token, uuid: @uuid, mc_name: @mc_name}
   end
