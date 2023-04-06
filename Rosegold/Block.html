@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Minecraft::IO - rosegold main</title>
+  <title>Rosegold::Block - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -81,7 +81,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Minecraft" data-name="minecraft">
+  <li class="parent " data-id="rosegold/Minecraft" data-name="minecraft">
       <a href="../Minecraft.html">Minecraft</a>
       
         <ul>
@@ -101,7 +101,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Minecraft/IO" data-name="minecraft::io">
+  <li class="parent " data-id="rosegold/Minecraft/IO" data-name="minecraft::io">
       <a href="../Minecraft/IO.html">IO</a>
       
         <ul>
@@ -226,7 +226,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold" data-name="rosegold">
+  <li class="parent open current" data-id="rosegold/Rosegold" data-name="rosegold">
       <a href="../Rosegold.html">Rosegold</a>
       
         <ul>
@@ -251,7 +251,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Block" data-name="rosegold::block">
+  <li class=" current" data-id="rosegold/Rosegold/Block" data-name="rosegold::block">
       <a href="../Rosegold/Block.html">Block</a>
       
     </li>
@@ -875,16 +875,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">module</span> Minecraft::IO
+  <span class="kind">class</span> Rosegold::Block
 
 </h1>
 
 
-
-
-
-
-
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/Block.html">Rosegold::Block</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -894,26 +890,24 @@
 
 
   <h2>
-    <a id="direct-including-types" class="anchor" href="#direct-including-types">
+    <a id="included-modules" class="anchor" href="#included-modules">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Direct including types
+    Included Modules
   </h2>
   <ul class="other-types-list">
     
-      <li class="other-type"><a href="../Minecraft/EncryptedTCPSocket.html">Minecraft::EncryptedTCPSocket</a></li>
-    
-      <li class="other-type"><a href="../Minecraft/IO/Hexdump.html">Minecraft::IO::Hexdump</a></li>
-    
-      <li class="other-type"><a href="../Minecraft/IO/Memory.html">Minecraft::IO::Memory</a></li>
-    
-      <li class="other-type"><a href="../Minecraft/IO/Wrap.html">Minecraft::IO::Wrap</a></li>
-    
-      <li class="other-type"><a href="../Minecraft/TCPSocket.html">Minecraft::TCPSocket</a></li>
+      <li class="other-type">JSON::Serializable</li>
     
   </ul>
+
+
+
+
+
+
 
 
 
@@ -928,8 +922,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L7" target="_blank">
-        minecraft/io.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L3" target="_blank">
+        rosegold/models/block.cr
       </a>
     
     <br/>
@@ -938,6 +932,28 @@
 
 
 
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#from_block_state_id%28state_id%3AUInt16%29%3ABlock-class-method" class="signature"><strong>.from_block_state_id</strong>(state_id : UInt16) : Block</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28pull%3AJSON%3A%3APullParser%29-class-method" class="signature"><strong>.new</strong>(pull : JSON::PullParser)</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -954,166 +970,79 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#read_angle256_deg%3AFloat32-instance-method" class="signature"><strong>#read_angle256_deg</strong> : Float32</a>
+        <a href="#best_tool%3F%28slot%3ASlot%29-instance-method" class="signature"><strong>#best_tool?</strong>(slot : Slot)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_bit_location%3ARosegold%3A%3AVec3i-instance-method" class="signature"><strong>#read_bit_location</strong> : Rosegold::Vec3i</a>
+        <a href="#break_time%28main_hand%3ASlot%2Cplayer%3APlayer%2Ccreative%3ABool%3Dfalse%29%3AInt32-instance-method" class="signature"><strong>#break_time</strong>(main_hand : Slot, player : Player, creative : Bool = <span class="n">false</span>) : Int32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_bool-instance-method" class="signature"><strong>#read_bool</strong></a>
+        <a href="#can_harvest%3F%28slot%3ASlot%29-instance-method" class="signature"><strong>#can_harvest?</strong>(slot : Slot)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_byte-instance-method" class="signature"><strong>#read_byte</strong></a>
+        <a href="#default_state%3AUInt16-instance-method" class="signature"><strong>#default_state</strong> : UInt16</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_double%3AFloat64-instance-method" class="signature"><strong>#read_double</strong> : Float64</a>
+        <a href="#display_name%3AString-instance-method" class="signature"><strong>#display_name</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_float%3AFloat32-instance-method" class="signature"><strong>#read_float</strong> : Float32</a>
+        <a href="#hardness%3AFloat32-instance-method" class="signature"><strong>#hardness</strong> : Float32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_int%3AInt32-instance-method" class="signature"><strong>#read_int</strong> : Int32</a>
+        <a href="#harvest_tools%3AHash%28String%2CBool%29%7CNil-instance-method" class="signature"><strong>#harvest_tools</strong> : Hash(String, Bool) | Nil</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_long%3AInt64-instance-method" class="signature"><strong>#read_long</strong> : Int64</a>
+        <a href="#id%3AUInt16-instance-method" class="signature"><strong>#id</strong> : UInt16</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_nbt%3AMinecraft%3A%3ANBT%3A%3ATag-instance-method" class="signature"><strong>#read_nbt</strong> : Minecraft::NBT::Tag</a>
+        <a href="#id_str%3AString-instance-method" class="signature"><strong>#id_str</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_opt_string%3AString%7CNil-instance-method" class="signature"><strong>#read_opt_string</strong> : String | Nil</a>
+        <a href="#material%3AString-instance-method" class="signature"><strong>#material</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_short%3AInt16-instance-method" class="signature"><strong>#read_short</strong> : Int16</a>
+        <a href="#material_tool_multipliers-instance-method" class="signature"><strong>#material_tool_multipliers</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_signed_byte-instance-method" class="signature"><strong>#read_signed_byte</strong></a>
+        <a href="#max_state_id%3AUInt16-instance-method" class="signature"><strong>#max_state_id</strong> : UInt16</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_slot%3ARosegold%3A%3ASlot-instance-method" class="signature"><strong>#read_slot</strong> : Rosegold::Slot</a>
+        <a href="#min_state_id%3AUInt16-instance-method" class="signature"><strong>#min_state_id</strong> : UInt16</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_ushort%3AUInt16-instance-method" class="signature"><strong>#read_ushort</strong> : UInt16</a>
+        <a href="#stack_size%3AUInt8-instance-method" class="signature"><strong>#stack_size</strong> : UInt8</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#read_uuid%3AUUID-instance-method" class="signature"><strong>#read_uuid</strong> : UUID</a>
+        <a href="#states%3AArray%28MCData%3A%3ABlockProperty%29-instance-method" class="signature"><strong>#states</strong> : Array(MCData::BlockProperty)</a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read_var_bytes%3ABytes-instance-method" class="signature"><strong>#read_var_bytes</strong> : Bytes</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read_var_int%3AUInt32-instance-method" class="signature"><strong>#read_var_int</strong> : UInt32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read_var_long%3AUInt64-instance-method" class="signature"><strong>#read_var_long</strong> : UInt64</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read_var_string%28size%3AUInt32%29%3AString-instance-method" class="signature"><strong>#read_var_string</strong>(size : UInt32) : String</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read_var_string%3AString-instance-method" class="signature"><strong>#read_var_string</strong> : String</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29-instance-method" class="signature"><strong>#write</strong>(x : Int32, y : Int32, z : Int32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28value%3ABool%29-instance-method" class="signature"><strong>#write</strong>(value : Bool)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28str%3AString%29-instance-method" class="signature"><strong>#write</strong>(str : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28value%3AFloat32%7CFloat64%7CUInt8%7CInt8%29-instance-method" class="signature"><strong>#write</strong>(value : Float32 | Float64 | UInt8 | Int8)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28uuid%3AUUID%29-instance-method" class="signature"><strong>#write</strong>(uuid : UUID)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28value%3AUInt16%7CInt16%7CUInt32%7CInt32%7CUInt64%7CInt64%29-instance-method" class="signature"><strong>#write</strong>(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64)</a>
-        
-          <div class="summary"><p>writes var int</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28nbt%3ANBT%3A%3ATag%29-instance-method" class="signature"><strong>#write</strong>(nbt : NBT::Tag)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28slot%3ARosegold%3A%3ASlot%29-instance-method" class="signature"><strong>#write</strong>(slot : Rosegold::Slot)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28location%3ARosegold%3A%3AVec3i%29-instance-method" class="signature"><strong>#write</strong>(location : Rosegold::Vec3i)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write_angle256_deg%28deg%3AFloat32%7CFloat64%29-instance-method" class="signature"><strong>#write_angle256_deg</strong>(deg : Float32 | Float64)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write_full%28value%3AUInt16%7CInt16%7CUInt32%7CInt32%7CUInt64%7CInt64%7CFloat32%7CFloat64%29-instance-method" class="signature"><strong>#write_full</strong>(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64 | Float32 | Float64)</a>
-        
-          <div class="summary"><p>writes all bytes even for small magnitudes, not var int</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write_opt_string%28str%3AString%7CNil%29-instance-method" class="signature"><strong>#write_opt_string</strong>(str : String | Nil)</a>
+          <div class="summary"><p>Not individual block states, but the properties that, in combination, make up each block state.</p></div>
         
       </li>
     
@@ -1125,8 +1054,80 @@
 
 <div class="methods-inherited">
   
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
 </div>
 
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="from_block_state_id(state_id:UInt16):Block-class-method">
+      <div class="signature">
+        
+        def self.<strong>from_block_state_id</strong>(state_id : UInt16) : <a href="../Rosegold/Block.html">Block</a>
+
+        <a class="method-permalink" href="#from_block_state_id%28state_id%3AUInt16%29%3ABlock-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L28" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(pull:JSON::PullParser)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(pull : JSON::PullParser)
+
+        <a class="method-permalink" href="#new%28pull%3AJSON%3A%3APullParser%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 
@@ -1141,524 +1142,248 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="read_angle256_deg:Float32-instance-method">
+    <div class="entry-detail" id="best_tool?(slot:Slot)-instance-method">
       <div class="signature">
         
-        def <strong>read_angle256_deg</strong> : Float32
+        def <strong>best_tool?</strong>(slot : <a href="../Rosegold/Slot.html">Slot</a>)
 
-        <a class="method-permalink" href="#read_angle256_deg%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#best_tool%3F%28slot%3ASlot%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L179" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_bit_location:Rosegold::Vec3i-instance-method">
+    <div class="entry-detail" id="break_time(main_hand:Slot,player:Player,creative:Bool=false):Int32-instance-method">
       <div class="signature">
         
-        def <strong>read_bit_location</strong> : <a href="../Rosegold/Vec3i.html">Rosegold::Vec3i</a>
+        def <strong>break_time</strong>(main_hand : <a href="../Rosegold/Slot.html">Slot</a>, player : <a href="../Rosegold/Player.html">Player</a>, creative : Bool = <span class="n">false</span>) : <a href="../Int32.html">Int32</a>
 
-        <a class="method-permalink" href="#read_bit_location%3ARosegold%3A%3AVec3i-instance-method">#</a>
+        <a class="method-permalink" href="#break_time%28main_hand%3ASlot%2Cplayer%3APlayer%2Ccreative%3ABool%3Dfalse%29%3AInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L183" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_bool-instance-method">
+    <div class="entry-detail" id="can_harvest?(slot:Slot)-instance-method">
       <div class="signature">
         
-        def <strong>read_bool</strong>
+        def <strong>can_harvest?</strong>(slot : <a href="../Rosegold/Slot.html">Slot</a>)
 
-        <a class="method-permalink" href="#read_bool-instance-method">#</a>
+        <a class="method-permalink" href="#can_harvest%3F%28slot%3ASlot%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L90" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_byte-instance-method">
+    <div class="entry-detail" id="default_state:UInt16-instance-method">
       <div class="signature">
         
-        def <strong>read_byte</strong>
+        def <strong>default_state</strong> : UInt16
 
-        <a class="method-permalink" href="#read_byte-instance-method">#</a>
+        <a class="method-permalink" href="#default_state%3AUInt16-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L78" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_double:Float64-instance-method">
+    <div class="entry-detail" id="display_name:String-instance-method">
       <div class="signature">
         
-        def <strong>read_double</strong> : Float64
+        def <strong>display_name</strong> : String
 
-        <a class="method-permalink" href="#read_double%3AFloat64-instance-method">#</a>
+        <a class="method-permalink" href="#display_name%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L98" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_float:Float32-instance-method">
+    <div class="entry-detail" id="hardness:Float32-instance-method">
       <div class="signature">
         
-        def <strong>read_float</strong> : Float32
+        def <strong>hardness</strong> : Float32
 
-        <a class="method-permalink" href="#read_float%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#hardness%3AFloat32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_int:Int32-instance-method">
+    <div class="entry-detail" id="harvest_tools:Hash(String,Bool)|Nil-instance-method">
       <div class="signature">
         
-        def <strong>read_int</strong> : <a href="../Int32.html">Int32</a>
+        def <strong>harvest_tools</strong> : Hash(String, Bool) | Nil
 
-        <a class="method-permalink" href="#read_int%3AInt32-instance-method">#</a>
+        <a class="method-permalink" href="#harvest_tools%3AHash%28String%2CBool%29%7CNil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L110" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_long:Int64-instance-method">
+    <div class="entry-detail" id="id:UInt16-instance-method">
       <div class="signature">
         
-        def <strong>read_long</strong> : Int64
+        def <strong>id</strong> : UInt16
 
-        <a class="method-permalink" href="#read_long%3AInt64-instance-method">#</a>
+        <a class="method-permalink" href="#id%3AUInt16-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L114" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_nbt:Minecraft::NBT::Tag-instance-method">
+    <div class="entry-detail" id="id_str:String-instance-method">
       <div class="signature">
         
-        def <strong>read_nbt</strong> : <a href="../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>
+        def <strong>id_str</strong> : String
 
-        <a class="method-permalink" href="#read_nbt%3AMinecraft%3A%3ANBT%3A%3ATag-instance-method">#</a>
+        <a class="method-permalink" href="#id_str%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L170" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_opt_string:String|Nil-instance-method">
+    <div class="entry-detail" id="material:String-instance-method">
       <div class="signature">
         
-        def <strong>read_opt_string</strong> : String | Nil
+        def <strong>material</strong> : String
 
-        <a class="method-permalink" href="#read_opt_string%3AString%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#material%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L142" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_short:Int16-instance-method">
+    <div class="entry-detail" id="material_tool_multipliers-instance-method">
       <div class="signature">
         
-        def <strong>read_short</strong> : Int16
+        def <strong>material_tool_multipliers</strong>
 
-        <a class="method-permalink" href="#read_short%3AInt16-instance-method">#</a>
+        <a class="method-permalink" href="#material_tool_multipliers-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L106" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_signed_byte-instance-method">
+    <div class="entry-detail" id="max_state_id:UInt16-instance-method">
       <div class="signature">
         
-        def <strong>read_signed_byte</strong>
+        def <strong>max_state_id</strong> : UInt16
 
-        <a class="method-permalink" href="#read_signed_byte-instance-method">#</a>
+        <a class="method-permalink" href="#max_state_id%3AUInt16-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L84" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_slot:Rosegold::Slot-instance-method">
+    <div class="entry-detail" id="min_state_id:UInt16-instance-method">
       <div class="signature">
         
-        def <strong>read_slot</strong> : <a href="../Rosegold/Slot.html">Rosegold::Slot</a>
+        def <strong>min_state_id</strong> : UInt16
 
-        <a class="method-permalink" href="#read_slot%3ARosegold%3A%3ASlot-instance-method">#</a>
+        <a class="method-permalink" href="#min_state_id%3AUInt16-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L174" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_ushort:UInt16-instance-method">
+    <div class="entry-detail" id="stack_size:UInt8-instance-method">
       <div class="signature">
         
-        def <strong>read_ushort</strong> : UInt16
+        def <strong>stack_size</strong> : UInt8
 
-        <a class="method-permalink" href="#read_ushort%3AUInt16-instance-method">#</a>
+        <a class="method-permalink" href="#stack_size%3AUInt8-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L102" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read_uuid:UUID-instance-method">
+    <div class="entry-detail" id="states:Array(MCData::BlockProperty)-instance-method">
       <div class="signature">
         
-        def <strong>read_uuid</strong> : UUID
+        def <strong>states</strong> : Array(<a href="../Rosegold/MCData/BlockProperty.html">MCData::BlockProperty</a>)
 
-        <a class="method-permalink" href="#read_uuid%3AUUID-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L165" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read_var_bytes:Bytes-instance-method">
-      <div class="signature">
-        
-        def <strong>read_var_bytes</strong> : Bytes
-
-        <a class="method-permalink" href="#read_var_bytes%3ABytes-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L158" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read_var_int:UInt32-instance-method">
-      <div class="signature">
-        
-        def <strong>read_var_int</strong> : UInt32
-
-        <a class="method-permalink" href="#read_var_int%3AUInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L118" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read_var_long:UInt64-instance-method">
-      <div class="signature">
-        
-        def <strong>read_var_long</strong> : UInt64
-
-        <a class="method-permalink" href="#read_var_long%3AUInt64-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L130" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read_var_string(size:UInt32):String-instance-method">
-      <div class="signature">
-        
-        def <strong>read_var_string</strong>(size : UInt32) : String
-
-        <a class="method-permalink" href="#read_var_string%28size%3AUInt32%29%3AString-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L151" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read_var_string:String-instance-method">
-      <div class="signature">
-        
-        def <strong>read_var_string</strong> : String
-
-        <a class="method-permalink" href="#read_var_string%3AString-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L147" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(x:Int32,y:Int32,z:Int32)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(x : <a href="../Int32.html">Int32</a>, y : <a href="../Int32.html">Int32</a>, z : <a href="../Int32.html">Int32</a>)
-
-        <a class="method-permalink" href="#write%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L69" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(value:Bool)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(value : Bool)
-
-        <a class="method-permalink" href="#write%28value%3ABool%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L8" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(str:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(str : String)
-
-        <a class="method-permalink" href="#write%28str%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L12" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(value:Float32|Float64|UInt8|Int8)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(value : Float32 | Float64 | UInt8 | Int8)
-
-        <a class="method-permalink" href="#write%28value%3AFloat32%7CFloat64%7CUInt8%7CInt8%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L22" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(uuid:UUID)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(uuid : UUID)
-
-        <a class="method-permalink" href="#write%28uuid%3AUUID%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L31" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(value:UInt16|Int16|UInt32|Int32|UInt64|Int64)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(value : UInt16 | Int16 | UInt32 | <a href="../Int32.html">Int32</a> | UInt64 | Int64)
-
-        <a class="method-permalink" href="#write%28value%3AUInt16%7CInt16%7CUInt32%7CInt32%7CUInt64%7CInt64%29-instance-method">#</a>
+        <a class="method-permalink" href="#states%3AArray%28MCData%3A%3ABlockProperty%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>writes var int</p>
+          <p>Not individual block states, but the properties that, in combination, make up each block state.
+Empty array if block has only one state.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L36" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(nbt:NBT::Tag)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(nbt : <a href="../Minecraft/NBT/Tag.html">NBT::Tag</a>)
-
-        <a class="method-permalink" href="#write%28nbt%3ANBT%3A%3ATag%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L53" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(slot:Rosegold::Slot)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(slot : <a href="../Rosegold/Slot.html">Rosegold::Slot</a>)
-
-        <a class="method-permalink" href="#write%28slot%3ARosegold%3A%3ASlot%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L57" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(location:Rosegold::Vec3i)-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(location : <a href="../Rosegold/Vec3i.html">Rosegold::Vec3i</a>)
-
-        <a class="method-permalink" href="#write%28location%3ARosegold%3A%3AVec3i%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L74" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write_angle256_deg(deg:Float32|Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>write_angle256_deg</strong>(deg : Float32 | Float64)
-
-        <a class="method-permalink" href="#write_angle256_deg%28deg%3AFloat32%7CFloat64%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L65" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write_full(value:UInt16|Int16|UInt32|Int32|UInt64|Int64|Float32|Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>write_full</strong>(value : UInt16 | Int16 | UInt32 | <a href="../Int32.html">Int32</a> | UInt64 | Int64 | Float32 | Float64)
-
-        <a class="method-permalink" href="#write_full%28value%3AUInt16%7CInt16%7CUInt32%7CInt32%7CUInt64%7CInt64%7CFloat32%7CFloat64%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>writes all bytes even for small magnitudes, not var int</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L27" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write_opt_string(str:String|Nil)-instance-method">
-      <div class="signature">
-        
-        def <strong>write_opt_string</strong>(str : String | Nil)
-
-        <a class="method-permalink" href="#write_opt_string%28str%3AString%7CNil%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/minecraft/io.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/models/block.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>

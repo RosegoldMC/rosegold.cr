@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::MCData::Block - rosegold main</title>
+  <title>Rosegold::MCData::Material - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -248,6 +248,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Action" data-name="rosegold::action(t)">
       <a href="../../Rosegold/Action.html">Action</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Block" data-name="rosegold::block">
+      <a href="../../Rosegold/Block.html">Block</a>
       
     </li>
   
@@ -576,11 +581,6 @@
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Rosegold/MCData/Block" data-name="rosegold::mcdata::block">
-      <a href="../../Rosegold/MCData/Block.html">Block</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Rosegold/MCData/BlockCollisionShapes" data-name="rosegold::mcdata::blockcollisionshapes">
       <a href="../../Rosegold/MCData/BlockCollisionShapes.html">BlockCollisionShapes</a>
       
@@ -598,6 +598,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/MCData/Item" data-name="rosegold::mcdata::item">
       <a href="../../Rosegold/MCData/Item.html">Item</a>
+      
+    </li>
+  
+  <li class=" current" data-id="rosegold/Rosegold/MCData/Material" data-name="rosegold::mcdata::material">
+      <a href="../../Rosegold/MCData/Material.html">Material</a>
       
     </li>
   
@@ -870,26 +875,15 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::MCData::Block
+  <span class="kind">class</span> Rosegold::MCData::Material
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/MCData/Block.html">Rosegold::MCData::Block</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/MCData/Material.html">Rosegold::MCData::Material</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>entries of blocks.json</p>
 
 
 
@@ -906,6 +900,8 @@
   <ul class="other-types-list">
     
       <li class="other-type">JSON::Serializable</li>
+    
+      <li class="other-type">JSON::Serializable::Unmapped</li>
     
   </ul>
 
@@ -928,7 +924,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L104" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L107" target="_blank">
         rosegold/world/mcdata.cr
       </a>
     
@@ -960,65 +956,21 @@
 
 
 
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#default_state%3AUInt16-instance-method" class="signature"><strong>#default_state</strong> : UInt16</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#display_name%3AString-instance-method" class="signature"><strong>#display_name</strong> : String</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#id%3AUInt16-instance-method" class="signature"><strong>#id</strong> : UInt16</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#id_str%3AString-instance-method" class="signature"><strong>#id_str</strong> : String</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#max_state_id%3AUInt16-instance-method" class="signature"><strong>#max_state_id</strong> : UInt16</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#min_state_id%3AUInt16-instance-method" class="signature"><strong>#min_state_id</strong> : UInt16</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#stack_size%3AUInt8-instance-method" class="signature"><strong>#stack_size</strong> : UInt8</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#states%3AArray%28BlockProperty%29-instance-method" class="signature"><strong>#states</strong> : Array(BlockProperty)</a>
-        
-          <div class="summary"><p>Not individual block states, but the properties that, in combination, make up each block state.</p></div>
-        
-      </li>
-    
-  </ul>
-
 
 
 
 
 <div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
   
     
 
@@ -1073,7 +1025,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L105" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L108" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1082,150 +1034,6 @@
 
 
 
-
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="default_state:UInt16-instance-method">
-      <div class="signature">
-        
-        def <strong>default_state</strong> : UInt16
-
-        <a class="method-permalink" href="#default_state%3AUInt16-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L119" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="display_name:String-instance-method">
-      <div class="signature">
-        
-        def <strong>display_name</strong> : String
-
-        <a class="method-permalink" href="#display_name%3AString-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L111" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="id:UInt16-instance-method">
-      <div class="signature">
-        
-        def <strong>id</strong> : UInt16
-
-        <a class="method-permalink" href="#id%3AUInt16-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L107" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="id_str:String-instance-method">
-      <div class="signature">
-        
-        def <strong>id_str</strong> : String
-
-        <a class="method-permalink" href="#id_str%3AString-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L109" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="max_state_id:UInt16-instance-method">
-      <div class="signature">
-        
-        def <strong>max_state_id</strong> : UInt16
-
-        <a class="method-permalink" href="#max_state_id%3AUInt16-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L117" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="min_state_id:UInt16-instance-method">
-      <div class="signature">
-        
-        def <strong>min_state_id</strong> : UInt16
-
-        <a class="method-permalink" href="#min_state_id%3AUInt16-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L115" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="stack_size:UInt8-instance-method">
-      <div class="signature">
-        
-        def <strong>stack_size</strong> : UInt8
-
-        <a class="method-permalink" href="#stack_size%3AUInt8-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L113" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="states:Array(BlockProperty)-instance-method">
-      <div class="signature">
-        
-        def <strong>states</strong> : Array(<a href="../../Rosegold/MCData/BlockProperty.html">BlockProperty</a>)
-
-        <a class="method-permalink" href="#states%3AArray%28BlockProperty%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Not individual block states, but the properties that, in combination, make up each block state.
-Empty array if block has only one state.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L123" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 

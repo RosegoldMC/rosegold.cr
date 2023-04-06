@@ -251,6 +251,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Block" data-name="rosegold::block">
+      <a href="../Rosegold/Block.html">Block</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
       <a href="../Rosegold/Bot.html">Bot</a>
       
@@ -576,11 +581,6 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/MCData/Block" data-name="rosegold::mcdata::block">
-      <a href="../Rosegold/MCData/Block.html">Block</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Rosegold/MCData/BlockCollisionShapes" data-name="rosegold::mcdata::blockcollisionshapes">
       <a href="../Rosegold/MCData/BlockCollisionShapes.html">BlockCollisionShapes</a>
       
@@ -598,6 +598,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/MCData/Item" data-name="rosegold::mcdata::item">
       <a href="../Rosegold/MCData/Item.html">Item</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/MCData/Material" data-name="rosegold::mcdata::material">
+      <a href="../Rosegold/MCData/Material.html">Material</a>
       
     </li>
   
@@ -914,7 +919,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L5" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L5" target="_blank">
         rosegold/world/mcdata.cr
       </a>
     
@@ -990,7 +995,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#blocks_array%3AArray%28Block%29-instance-method" class="signature"><strong>#blocks_array</strong> : Array(Block)</a>
+        <a href="#blocks%3AArray%28Block%29-instance-method" class="signature"><strong>#blocks</strong> : Array(Block)</a>
         
       </li>
     
@@ -1011,6 +1016,11 @@
     
       <li class="entry-summary">
         <a href="#items_by_id_int%3AHash%28UInt32%2CItem%29-instance-method" class="signature"><strong>#items_by_id_int</strong> : Hash(UInt32, Item)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#materials%3AMaterial-instance-method" class="signature"><strong>#materials</strong> : Material</a>
         
       </li>
     
@@ -1065,7 +1075,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1101,7 +1111,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1122,23 +1132,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="blocks_array:Array(Block)-instance-method">
+    <div class="entry-detail" id="blocks:Array(Block)-instance-method">
       <div class="signature">
         
-        def <strong>blocks_array</strong> : Array(<a href="../Rosegold/MCData/Block.html">Block</a>)
+        def <strong>blocks</strong> : Array(<a href="../Rosegold/Block.html">Block</a>)
 
-        <a class="method-permalink" href="#blocks_array%3AArray%28Block%29-instance-method">#</a>
+        <a class="method-permalink" href="#blocks%3AArray%28Block%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1146,7 +1156,7 @@
     <div class="entry-detail" id="blocks_by_id:Hash(String,Block)-instance-method">
       <div class="signature">
         
-        def <strong>blocks_by_id</strong> : Hash(String, <a href="../Rosegold/MCData/Block.html">Block</a>)
+        def <strong>blocks_by_id</strong> : Hash(String, <a href="../Rosegold/Block.html">Block</a>)
 
         <a class="method-permalink" href="#blocks_by_id%3AHash%28String%2CBlock%29-instance-method">#</a>
       </div>
@@ -1154,7 +1164,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1170,7 +1180,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1186,7 +1196,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1202,7 +1212,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/086e18bdbf4cbac135845c30744ac258cb0d4fec/src/rosegold/world/mcdata.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="materials:Material-instance-method">
+      <div class="signature">
+        
+        def <strong>materials</strong> : <a href="../Rosegold/MCData/Material.html">Material</a>
+
+        <a class="method-permalink" href="#materials%3AMaterial-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/mcdata.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
