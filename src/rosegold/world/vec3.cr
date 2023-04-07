@@ -186,6 +186,18 @@ module Rosegold::Vec3(T)
     end
   end
 
+  def with_axis(face : BlockFace, value : T) : self
+    case face
+    when BlockFace::West, BlockFace::East
+      self.class.new value, y, z
+    when BlockFace::Bottom, BlockFace::Top
+      self.class.new x, value, z
+    when BlockFace::North, BlockFace::South
+      self.class.new x, y, value
+    else raise "Invalid BlockFace #{face}"
+    end
+  end
+
   def +(face : BlockFace) : Vec3d
     centered_3d + face.to_vec3d(0.5)
   end
