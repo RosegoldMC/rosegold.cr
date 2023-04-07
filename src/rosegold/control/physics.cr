@@ -211,40 +211,36 @@ class Rosegold::Physics
   end
 
   # :ditto:
-  # ameba:disable Metrics/CyclomaticComplexity
   def self.predict_movement_collision(start : Vec3d, velocity : Vec3d, obstacles : Array(AABBd))
     # we can freely move in blocks that we already collide with before the movement
     obstacles = obstacles.reject &.contains? start
 
-    result = Raytrace.raytrace start, velocity, obstacles
-    movement = result.try { |r| r.intercept - start } || velocity
+    movement = slide start, velocity, obstacles
     collided_x = movement.x != velocity.x
     collided_y = movement.y != velocity.y
     collided_z = movement.z != velocity.z
 
     if collided_x || collided_z
-      # try stepping
-      step_start = start.plus(0, 0.5, 0)
+      step_up_movement = slide start, Vec3d.new(0, 0.5, 0), obstacles
+      step_up = start + step_up_movement
       # gravity would pull us into the step, preventing stepping
-      step_velocity = velocity.with_y 0
-      step_result = Raytrace.raytrace step_start, step_velocity, obstacles
-      step_movement = step_result.try { |r| r.intercept - start } || step_velocity
+      over_velocity = velocity.with_y 0
+      step_over_movement = slide step_up, over_velocity, obstacles
+      Log.debug { "Physics tick: start=#{start} velocity=#{velocity} movement=#{movement}" }
+      Log.debug { "Attempting stepping: step_up_movement=#{step_up_movement} step_over_movement=#{step_over_movement}" }
 
-      step_different_x = step_movement.x != movement.x
-      step_different_z = step_movement.z != movement.z
+      step_different_x = step_over_movement.x != movement.x
+      step_different_z = step_over_movement.z != movement.z
       if step_different_x || step_different_z
         # we may have stepped too far up, land on top surface of step block
-        step_end = step_result.try(&.intercept) || start + step_velocity
-        down_velocity = Vec3d.new(0, -1, 0)
-        down_result = Raytrace.raytrace step_end, down_velocity, obstacles
-        down_end = down_result.try(&.intercept) || step_end + down_velocity
-
+        step_over = step_up + step_over_movement
+        down_velocity = Vec3d.new(0, velocity.y - step_up_movement.y, 0)
+        down_end = step_over + slide step_over, down_velocity, obstacles
         movement = down_end - start
-        step_collided_x = step_movement.x != velocity.x
-        step_collided_z = step_movement.z != velocity.z
-        collided_x = step_collided_x
-        collided_z = step_collided_z
+        collided_x = movement.x != velocity.x
         collided_y = true
+        collided_z = movement.z != velocity.z
+        Log.debug { "down_end=#{down_end} movement=#{movement}" }
       end
     end
 
@@ -254,6 +250,18 @@ class Rosegold::Physics
     new_velocity = new_velocity.with_z 0 if collided_z
 
     {movement, new_velocity}
+  end
+
+  # Slide along block faces in three dimensions.
+  private def self.slide(start, velocity, obstacles)
+    (1..3).each do
+      collision = Raytrace.raytrace start, velocity, obstacles
+      return velocity unless collision
+      # slide parallel to this face
+      coord = (collision.intercept - start).axis collision.face
+      velocity = velocity.with_axis collision.face, coord
+    end
+    velocity
   end
 
   # Returns all block collision boxes that may intersect `entity_aabb` during the movement from `start` by `vec`,
