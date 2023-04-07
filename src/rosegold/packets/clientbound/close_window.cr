@@ -18,6 +18,6 @@ class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.current_window = Window.player_inventory
+    client.current_window = Window.player_inventory unless client.current_window.id == 0
   end
 end
