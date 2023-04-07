@@ -22,7 +22,7 @@ Spectator.describe Rosegold::Bot do
     end
   end
 
-  it "should stop digging bot.stop_diging is called" do
+  it "should stop digging when bot.stop_digging is called" do
     Rosegold::Client.new("localhost", 25565).join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/fill 8 -60 8 8 -50 8 minecraft:dirt"

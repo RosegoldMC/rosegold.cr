@@ -4,27 +4,27 @@ module Rosegold::Vec3(T)
   def initialize(@x : T, @y : T, @z : T); end
 
   def west(len : T = 1) : self
-    self.class.new x - 1, y, z
+    self.class.new x - len, y, z
   end
 
   def east(len : T = 1) : self
-    self.class.new x + 1, y, z
+    self.class.new x + len, y, z
   end
 
   def down(len : T = 1) : self
-    self.class.new x, y - 1, z
+    self.class.new x, y - len, z
   end
 
   def up(len : T = 1) : self
-    self.class.new x, y + 1, z
+    self.class.new x, y + len, z
   end
 
   def north(len : T = 1) : self
-    self.class.new x, y, z - 1
+    self.class.new x, y, z - len
   end
 
   def south(len : T = 1) : self
-    self.class.new x, y, z + 1
+    self.class.new x, y, z + len
   end
 
   def with_x(x : T) : self
@@ -191,6 +191,10 @@ struct Rosegold::Vec3i
   def block
     self
   end
+
+  def to_f64 : Vec3d
+    Vec3d.new x, y, z
+  end
 end
 
 struct Rosegold::Vec3f
@@ -227,7 +231,7 @@ struct Rosegold::Vec3d
   ORIGIN = self.new 0, 0, 0
 
   def to_f32 : Vec3f
-    Vec3f.new x, y, z
+    Vec3f.new x.to_f32, y.to_f32, z.to_f32
   end
 
   def block : Vec3i

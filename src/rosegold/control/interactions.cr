@@ -24,7 +24,7 @@ class Rosegold::Interactions
   end
 
   # Activates the "use" button.
-  def start_using_hand(hand = Hand::MainHand)
+  def start_using_hand(hand : Hand = :main_hand)
     reached = reach_block_or_entity
     if reached
       place_block hand, reached
@@ -36,8 +36,7 @@ class Rosegold::Interactions
 
   # Deactivates the "use" button.
   def stop_using_hand
-    send_packet Serverbound::PlayerDigging.new \
-      :finish_using_hand, Vec3i.ORIGIN, 0
+    send_packet Serverbound::PlayerDigging.new :finish_using_hand
   end
 
   # Activates the "attack" button.
@@ -63,6 +62,7 @@ class Rosegold::Interactions
 
   # Deactivates the "attack" button.
   def stop_digging
+    return unless digging?
     self.digging = false
     cancel_digging
   end
@@ -83,10 +83,10 @@ class Rosegold::Interactions
   end
 
   private def place_block(hand : Hand, reached : ReachedBlock)
-    cursor = (reached.intercept - reached.block).to_f32
+    cursor = (reached.intercept - reached.block.to_f64).to_f32
     inside_block = false # TODO
     send_packet Serverbound::PlayerBlockPlacement.new \
-      reached.location, reached.face, cursor, hand, inside_block
+      reached.block, reached.face, cursor, hand, inside_block
     send_packet Serverbound::SwingArm.new hand
   end
 
@@ -118,10 +118,12 @@ class Rosegold::Interactions
   end
 
   private def reach_block_or_entity : ReachedBlock?
+    reach_len = 4.5
+    reach_len = 5.0 if client.player.gamemode == 1
+    reach_vec = client.player.look.to_vec3 * reach_len
     eyes = client.player.eyes
-    reach = client.player.look.to_vec3 * 4
-    boxes = get_block_hitboxes(eyes, reach)
-    Raytrace.raytrace(eyes, reach, boxes).try do |reached|
+    boxes = get_block_hitboxes(eyes, reach_vec)
+    Raytrace.raytrace(eyes, reach_vec, boxes).try do |reached|
       block = boxes[reached.box_nr].min.block
       ReachedBlock.new reached.intercept, block, reached.face
     end

@@ -18,9 +18,25 @@ class Rosegold::Clientbound::UpdateHealth < Rosegold::Clientbound::Packet
     )
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write health
+      buffer.write food
+      buffer.write saturation
+    end.to_slice
+  end
+
   def callback(client)
     Log.debug { "health=#{health/2}❤ food=#{food*5}% saturation=#{saturation}" }
-    # TODO: update health/food/saturation
-    # TODO: check death
+
+    client.player.health = health
+    client.player.food = food
+    client.player.saturation = saturation
+
+    # auto-respawn for now. we could also stay dead if user wishes it
+    if health <= 0
+      client.queue_packet Serverbound::ClientStatus.new :respawn
+    end
   end
 end

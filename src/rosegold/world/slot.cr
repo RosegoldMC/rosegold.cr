@@ -28,7 +28,7 @@ struct Rosegold::Slot
   end
 
   def empty?
-    item_id <= 0 || count <= 0
+    item_id_int <= 0 || count <= 0
   end
 
   def present?

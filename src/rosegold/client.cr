@@ -38,8 +38,15 @@ class Rosegold::Client < Rosegold::EventEmitter
     @physics = Physics.new self
   end
 
+  def connection? : Connection::Client?
+    @connection
+  end
+
   def connection : Connection::Client
-    @connection || raise "Client was never connected"
+    @connection.try do |conn|
+      raise "Disconnected: #{conn.close_reason}" if conn.close_reason
+      conn
+    end || raise "Client was never connected"
   end
 
   def connected?

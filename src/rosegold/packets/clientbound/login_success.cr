@@ -20,5 +20,7 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
   def callback(client)
     client.state = ProtocolState::PLAY.clientbound
     Log.info { "Logged in as #{username} #{uuid}" }
+    client.player.uuid = uuid
+    client.player.username = username
   end
 end
