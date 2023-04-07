@@ -2,7 +2,7 @@ require "../packet"
 
 class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x00_u8
-  protocol_state Rosegold::ProtocolState::HANDSHAKING
+  class_getter state = Rosegold::ProtocolState::HANDSHAKING
 
   property \
     protocol_version : UInt32,

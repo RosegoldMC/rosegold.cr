@@ -1,5 +1,5 @@
 class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
-  packet_id 0x14
+  class_getter packet_id = 0x14_u8
 
   property \
     window_id : UInt8,

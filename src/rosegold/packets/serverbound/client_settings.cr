@@ -2,7 +2,7 @@ require "../packet"
 
 # Respawn: action=0
 class Rosegold::Serverbound::ClientSettings < Rosegold::Serverbound::Packet
-  class_getter packet_id = 0x04_u8
+  class_getter packet_id = 0x05_u8
 
   enum ChatMode
     Enabled; CommandsOnly; Hidden

@@ -1,25 +1,11 @@
 abstract class Rosegold::Packet < Rosegold::Event
+  class_getter state = Rosegold::ProtocolState::PLAY
+
   def write : Bytes
     raise "Not implemented"
   end
 
   def callback(client_or_server); end
-
-  macro packet_id(id)
-    class_getter packet_id = {{id}}_u8
-  end
-
-  macro protocol_state(s)
-    class_getter state = {{s}}
-  end
-end
-
-abstract class Rosegold::Clientbound::Packet < Rosegold::Packet
-  class_getter state = Rosegold::ProtocolState::PLAY
-
-  macro inherited
-        Rosegold::ProtocolState.register {{@type}}
-  end
 
   def to_s(io)
     io << pretty_inspect(999, " ", 0).sub(/:0x\S+/, "") \
@@ -27,7 +13,21 @@ abstract class Rosegold::Clientbound::Packet < Rosegold::Packet
   end
 end
 
-abstract class Rosegold::Serverbound::Packet < Rosegold::Packet; end
+abstract class Rosegold::Clientbound::Packet < Rosegold::Packet
+  class_getter state = Rosegold::ProtocolState::PLAY
+
+  macro inherited
+    Rosegold::ProtocolState.register {{@type}}
+  end
+end
+
+abstract class Rosegold::Serverbound::Packet < Rosegold::Packet
+  class_getter state = Rosegold::ProtocolState::PLAY
+
+  macro inherited
+    Rosegold::ProtocolState.register {{@type}}
+  end
+end
 
 class Rosegold::ProtocolState
   HANDSHAKING = ProtocolState.new "HANDSHAKING"
