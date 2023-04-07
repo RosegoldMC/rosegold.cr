@@ -11,9 +11,19 @@ class Rosegold::Bot
     @interact = Interactions.new client
   end
 
+  # Does not connect immediately.
+  def new(address : String)
+    new Client.new address
+  end
+
+  # Connects to the server and waits for being ingame.
+  def self.join_game(address : String)
+    new Client.new(address).tap &.join_game
+  end
+
   delegate host, port, connect, connected?, online_players, on, to: client
   delegate uuid, username, feet, eyes, health, food, saturation, gamemode, to: client.player
-  delegate stop_using_hand, start_digging, stop_digging, to: @interact
+  delegate stop_using_hand, stop_digging, to: @interact
 
   def disconnect_reason
     client.connection.try &.close_reason
@@ -164,48 +174,38 @@ class Rosegold::Bot
     @interact.start_using_hand hand
   end
 
-  # Activates and then immediately deactivates the `use` button.
-  def use_hand(hand = :main_hand)
+  # Looks in the direction of `target`, then
+  # activates and immediately deactivates the `use` button.
+  def use_hand(target : Vec3d? | Look? = nil, hand : Hand = :main_hand)
+    look_at target if target.is_a? Vec3d
+    look target if target.is_a? Look
     start_using_hand hand
     stop_using_hand
   end
 
-  # Looks at that location, then activates and immediately deactivates the `use` button.
-  def use_hand(location : Vec3d)
-    look_at location
-    use_hand
+  # Looks at that face of that block, then activates and immediately deactivates the `use` button.
+  def place_block_against(block : Vec3i, face : BlockFace)
+    use_hand block + face
   end
 
-  # Looks in that direction, then activates and immediately deactivates the `use` button.
-  def use_hand(direction : Look)
-    look direction
-    use_hand
-  end
-
-  # Looks at that location, then activates and immediately deactivates the `use` button.
-  def place_block_against(location : Vec3d? = nil, ticks = 0)
-    use_hand location
-  end
-
-  # Looks at that location, then activates the `attack` button.
-  def start_digging(location : Vec3d)
-    look_at location
-    start_digging
-  end
-
-  # Looks in that direction, then activates the `attack` button.
-  def start_digging(direction : Look)
-    look direction
+  # Looks at that target, then activates the `attack` button.
+  def start_digging(target : Vec3d? | Look? = nil)
+    look_at target if target.is_a? Vec3d
+    look target if target.is_a? Look
     @interact.start_digging
   end
 
-  # Looks at that location, then activates the `attack` button,
-  # waits `ticks`, and deactivates it again.
-  # Waits for completion, throws error if cancelled by stop_digging, item change, disconnect, etc.
-  def dig(ticks : Int32, location : Vec3d? = nil)
-    look_at location if location
-    start_digging
+  # Looks in the direction of target, then
+  # activates the `attack` button, waits `ticks`, and deactivates it again.
+  def dig(ticks : Int32, target : Vec3d? | Look? = nil)
+    start_digging target
     wait_ticks ticks
     stop_digging
+  end
+
+  # Looks in the direction of target, then
+  # activates and immediately deactivates the `attack` button.
+  def attack(target : Vec3d? | Look? = nil)
+    dig 0, target
   end
 end
