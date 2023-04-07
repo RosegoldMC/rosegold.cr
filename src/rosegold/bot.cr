@@ -31,7 +31,7 @@ class Rosegold::Bot
   end
 
   # Is adjusted to server TPS.
-  def wait_ticks(ticks : UInt32)
+  def wait_ticks(ticks : Int32)
     sleep ticks / 20 # TODO adjust to server TPS, changing over time
   end
 
@@ -202,7 +202,7 @@ class Rosegold::Bot
   # Looks at that location, then activates the `attack` button,
   # waits `ticks`, and deactivates it again.
   # Waits for completion, throws error if cancelled by stop_digging, item change, disconnect, etc.
-  def dig(ticks : UInt32, location : Vec3d? = nil)
+  def dig(ticks : Int32, location : Vec3d? = nil)
     look_at location if location
     start_digging
     wait_ticks ticks
