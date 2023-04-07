@@ -34,6 +34,9 @@ class Rosegold::Clientbound::UpdateHealth < Rosegold::Clientbound::Packet
     client.player.food = food
     client.player.saturation = saturation
 
-    # TODO: check death
+    # auto-respawn for now. we could also stay dead if user wishes it
+    if health <= 0
+      client.queue_packet Serverbound::ClientStatus.new :respawn
+    end
   end
 end
