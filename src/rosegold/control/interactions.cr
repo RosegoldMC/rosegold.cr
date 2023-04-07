@@ -46,16 +46,29 @@ class Rosegold::Interactions
 
     spawn do
       while digging?
+        cancel = false
         reached = reach_block_or_entity
+        sleep 1.tick
         next sleep 1.tick unless reached
+
         start_digging reached
 
         client.dimension.block_state(reached.block).try do |block_state|
           block = Block.from_block_state_id block_state
-          sleep block.break_time(inventory.main_hand, client.player).ticks
+          next sleep 1.tick if block.id_str == "air"
+
+          block.break_time(inventory.main_hand, client.player).to_i.times do
+            sleep 1.tick
+            reached = reach_block_or_entity
+            if reached.try &.block != @digging_block.try &.block
+              cancel_digging
+              cancel = true
+              break
+            end
+          end
         end
 
-        finish_digging if digging?
+        finish_digging if digging? && !cancel
       end
     end
   end
@@ -99,7 +112,6 @@ class Rosegold::Interactions
     send_packet Serverbound::SwingArm.new
   end
 
-  # TODO decide finish/cancel based on block dig time
   def finish_digging
     reached = @digging_block
     return unless reached

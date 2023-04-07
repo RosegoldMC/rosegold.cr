@@ -377,9 +377,7 @@ module Minecraft::NBT
       EndTag.write(io)
     end
 
-    def [](key)
-      value[key]
-    end
+    delegate :[], :[]=, :[]?, to: value
 
     def inspect(io)
       io << @value.inspect

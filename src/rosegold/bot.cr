@@ -23,7 +23,8 @@ class Rosegold::Bot
 
   delegate host, port, connect, connected?, online_players, on, to: client
   delegate uuid, username, feet, eyes, health, food, saturation, gamemode, to: client.player
-  delegate stop_using_hand, stop_digging, to: @interact
+  delegate main_hand, to: inventory
+  delegate stop_using_hand, start_digging, stop_digging, to: @interact
 
   def disconnect_reason
     client.connection.try &.close_reason
