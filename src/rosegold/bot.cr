@@ -140,19 +140,16 @@ class Rosegold::Bot
   end
 
   def swap_hands
-    client.queue_packet Serverbound::PlayerDigging.new \
-      :swap_hands, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::PlayerDigging.new :swap_hands
   end
 
   def drop_hand_single
-    client.queue_packet Serverbound::PlayerDigging.new \
-      :drop_hand_single, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::PlayerDigging.new :drop_hand_single
     client.queue_packet Serverbound::SwingArm.new
   end
 
   def drop_hand_full
-    client.queue_packet Serverbound::PlayerDigging.new \
-      :drop_hand_full, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::PlayerDigging.new :drop_hand_full
     client.queue_packet Serverbound::SwingArm.new
   end
 

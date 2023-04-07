@@ -36,8 +36,7 @@ class Rosegold::Interactions
 
   # Deactivates the "use" button.
   def stop_using_hand
-    send_packet Serverbound::PlayerDigging.new \
-      :finish_using_hand, Vec3i.ORIGIN, 0
+    send_packet Serverbound::PlayerDigging.new :finish_using_hand
   end
 
   # Activates the "attack" button.
