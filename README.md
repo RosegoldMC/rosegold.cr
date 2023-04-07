@@ -2,6 +2,14 @@
 
 Minecraft client written in [Crystal](http://crystal-lang.org/), following the [botting rules](https://civwiki.org/wiki/Botting#Botting_Rules) of [CivMC](https://civwiki.org/wiki/CivMC)
 
+### Rosegold is a custom Minecraft botting client with the following goals:
+
+1. **Efficiency and accessibility**: Rosegold aims to make botting accessible to all Civ users by providing a clean and easy-to-understand DSL for creating bots, while also ensuring that the client remains efficient.
+2. **Headless with a headful feel**: Although Rosegold is a headless client, it seeks to address the limitations of current bots by providing a proxy that allows a standard vanilla Minecraft client to connect, spectate, and control. This approach offers the benefits of headless clients while maintaining a headful user experience.
+3. **Compliance with server-specific botting rules**: Rosegold is designed for use on servers with specific botting rules, such as CivMC, which restrict bots from seeing or hearing. The client makes it challenging to create bots that violate these rules, ensuring a fair gameplay experience.
+4. **Portable and easy-to-distribute**: Leveraging Crystal's ability to compile into portable binaries, Rosegold aims to simplify the distribution process for developers, making it easier to set up and manage bots for their nations.
+
+
 ## Use as a standalone client
 
 1. [Install Crystal](https://crystal-lang.org/install/)
