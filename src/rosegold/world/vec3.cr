@@ -87,17 +87,29 @@ module Rosegold::Vec3(T)
     self.class.new x.round_away, y.round_away, z.round_away
   end
 
-  def floored : self
-    self.class.new x.floor, y.floor, z.floor
+  def to_f32 : Vec3f
+    Vec3f.new x.to_f32, y.to_f32, z.to_f32
+  end
+
+  def to_f64 : Vec3d
+    Vec3d.new x.to_f64, y.to_f64, z.to_f64
+  end
+
+  def block : Vec3i
+    Vec3i.new x.floor.to_i32, y.floor.to_i32, z.floor.to_i32
+  end
+
+  def floored : Vec3d
+    Vec3d.new x.floor, y.floor, z.floor
   end
 
   # Useful for standing centered on a block.
-  def centered_floor : self
+  def centered_floor : Vec3d
     floored.plus 0.5, 0, 0.5
   end
 
   # Useful for getting the center of a block.
-  def centered_3d : self
+  def centered_3d : Vec3d
     floored.plus 0.5, 0.5, 0.5
   end
 
@@ -174,6 +186,10 @@ module Rosegold::Vec3(T)
     end
   end
 
+  def +(face : BlockFace) : Vec3d
+    centered_3d + face.to_vec3d(0.5)
+  end
+
   def to_s(io)
     io << "#{x}, #{y}, #{z}"
   end
@@ -191,10 +207,6 @@ struct Rosegold::Vec3i
   def block
     self
   end
-
-  def to_f64 : Vec3d
-    Vec3d.new x, y, z
-  end
 end
 
 struct Rosegold::Vec3f
@@ -202,26 +214,18 @@ struct Rosegold::Vec3f
 
   ORIGIN = self.new 0, 0, 0
 
+  def to_f32
+    self
+  end
+
   # additional methods that "upgrade" to Vec3d
 
   def -(vec : Vec3d) : Vec3d
     Vec3d.new x - vec.x, y - vec.y, z - vec.z
   end
 
-  def &-(vec : Vec3d) : Vec3d
-    Vec3d.new x - vec.x, y - vec.y, z - vec.z
-  end
-
   def +(vec : Vec3d) : Vec3d
     Vec3d.new x + vec.x, y + vec.y, z + vec.z
-  end
-
-  def &+(vec : Vec3d) : Vec3d
-    Vec3d.new x + vec.x, y + vec.y, z + vec.z
-  end
-
-  def to_f64 : Vec3d
-    Vec3d.new x, y, z
   end
 end
 
@@ -230,16 +234,34 @@ struct Rosegold::Vec3d
 
   ORIGIN = self.new 0, 0, 0
 
-  def to_f32 : Vec3f
-    Vec3f.new x.to_f32, y.to_f32, z.to_f32
-  end
-
-  def block : Vec3i
-    Vec3i.new x.floor.to_i32, y.floor.to_i32, z.floor.to_i32
+  def to_f64
+    self
   end
 end
 
 enum BlockFace
   # order matters for packet serialization
   Bottom; Top; North; South; West; East
+
+  def +(vec : Vec3d | Vec3i) : Vec3d
+    vec.centered_3d + to_vec3d(0.5)
+  end
+
+  def to_vec3d(len : Float64 = 0.5) : Vec3d
+    case self
+    when BlockFace::West
+      Vec3d.new -len, 0, 0
+    when BlockFace::East
+      Vec3d.new len, 0, 0
+    when BlockFace::Bottom
+      Vec3d.new 0, -len, 0
+    when BlockFace::Top
+      Vec3d.new 0, len, 0
+    when BlockFace::North
+      Vec3d.new 0, 0, -len
+    when BlockFace::South
+      Vec3d.new 0, 0, len
+    else raise "Invalid BlockFace #{self}"
+    end
+  end
 end
