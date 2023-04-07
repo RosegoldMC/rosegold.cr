@@ -13,8 +13,7 @@ class Rosegold::Bot
 
   delegate host, port, connect, connected?, online_players, on, to: client
   delegate uuid, username, feet, eyes, health, food, saturation, gamemode, to: client.player
-  # TODO delegate more
-  delegate start_using_hand, stop_using_hand, start_digging, stop_digging, to: @interact
+  delegate stop_using_hand, start_digging, stop_digging, to: @interact
 
   def disconnect_reason
     client.connection.try &.close_reason
@@ -159,6 +158,12 @@ class Rosegold::Bot
     client.queue_packet Serverbound::PickItem.new slot_nr
   end
 
+  # Activates the "use" button.
+  def start_using_hand(hand : Hand = :main_hand)
+    # can't delegate this because it wouldn't pick up the symbol as a Hand value
+    @interact.start_using_hand hand
+  end
+
   # Activates and then immediately deactivates the `use` button.
   def use_hand(hand = :main_hand)
     start_using_hand hand
@@ -178,10 +183,8 @@ class Rosegold::Bot
   end
 
   # Looks at that location, then activates and immediately deactivates the `use` button.
-  # Raises an error if the hand slot is not updated within `ticks`.
   def place_block_against(location : Vec3d? = nil, ticks = 0)
     use_hand location
-    # TODO raise an error if the hand slot is not updated within `ticks`
   end
 
   # Looks at that location, then activates the `attack` button.

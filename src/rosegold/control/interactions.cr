@@ -24,7 +24,7 @@ class Rosegold::Interactions
   end
 
   # Activates the "use" button.
-  def start_using_hand(hand = Hand::MainHand)
+  def start_using_hand(hand : Hand = :main_hand)
     reached = reach_block_or_entity
     if reached
       place_block hand, reached
@@ -62,6 +62,7 @@ class Rosegold::Interactions
 
   # Deactivates the "attack" button.
   def stop_digging
+    return unless digging?
     self.digging = false
     cancel_digging
   end
@@ -82,10 +83,10 @@ class Rosegold::Interactions
   end
 
   private def place_block(hand : Hand, reached : ReachedBlock)
-    cursor = (reached.intercept - reached.block).to_f32
+    cursor = (reached.intercept - reached.block.to_f64).to_f32
     inside_block = false # TODO
     send_packet Serverbound::PlayerBlockPlacement.new \
-      reached.location, reached.face, cursor, hand, inside_block
+      reached.block, reached.face, cursor, hand, inside_block
     send_packet Serverbound::SwingArm.new hand
   end
 

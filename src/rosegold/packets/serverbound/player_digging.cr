@@ -15,7 +15,7 @@ class Rosegold::Serverbound::PlayerDigging < Rosegold::Serverbound::Packet
   def initialize(
     @status : Status,
     @location : Vec3i = Vec3i::ORIGIN,
-    @face : BlockFace = 0
+    @face : BlockFace = :bottom
   ); end
 
   def write : Bytes

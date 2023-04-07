@@ -191,6 +191,10 @@ struct Rosegold::Vec3i
   def block
     self
   end
+
+  def to_f64 : Vec3d
+    Vec3d.new x, y, z
+  end
 end
 
 struct Rosegold::Vec3f
@@ -227,7 +231,7 @@ struct Rosegold::Vec3d
   ORIGIN = self.new 0, 0, 0
 
   def to_f32 : Vec3f
-    Vec3f.new x, y, z
+    Vec3f.new x.to_f32, y.to_f32, z.to_f32
   end
 
   def block : Vec3i
