@@ -321,8 +321,8 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/Chat" data-name="rosegold::clientbound::chat">
-      <a href="../../Rosegold/Clientbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChatMessage" data-name="rosegold::clientbound::chatmessage">
+      <a href="../../Rosegold/Clientbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
@@ -483,11 +483,6 @@
   
   <li class=" " data-id="rosegold/Rosegold/Connection/Client" data-name="rosegold::connection::client">
       <a href="../../Rosegold/Connection/Client.html">Client</a>
-      
-    </li>
-  
-  <li class=" " data-id="rosegold/Rosegold/Connection/ConnectionClosed" data-name="rosegold::connection::connectionclosed">
-      <a href="../../Rosegold/Connection/ConnectionClosed.html">ConnectionClosed</a>
       
     </li>
   
@@ -686,13 +681,48 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/Chat" data-name="rosegold::serverbound::chat">
-      <a href="../../Rosegold/Serverbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
+      <a href="../../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientSettings" data-name="rosegold::serverbound::clientsettings">
+      <a href="../../Rosegold/Serverbound/ClientSettings.html">ClientSettings</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/ChatMode" data-name="rosegold::serverbound::clientsettings::chatmode">
+      <a href="../../Rosegold/Serverbound/ClientSettings/ChatMode.html">ChatMode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/Hand" data-name="rosegold::serverbound::clientsettings::hand">
+      <a href="../../Rosegold/Serverbound/ClientSettings/Hand.html">Hand</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/SkinParts" data-name="rosegold::serverbound::clientsettings::skinparts">
+      <a href="../../Rosegold/Serverbound/ClientSettings/SkinParts.html">SkinParts</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
       <a href="../../Rosegold/Serverbound/ClientStatus.html">ClientStatus</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus/Action" data-name="rosegold::serverbound::clientstatus::action">
+      <a href="../../Rosegold/Serverbound/ClientStatus/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -908,7 +938,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/connection.cr#L9" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/connection.cr#L9" target="_blank">
         rosegold/packets/connection.cr
       </a>
     
@@ -930,7 +960,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28reason%3AString%29-class-method" class="signature"><strong>.new</strong>(reason : String)</a>
+        <a href="#new%28reason%3ARosegold%3A%3AChat%29-class-method" class="signature"><strong>.new</strong>(reason : Rosegold::Chat)</a>
         
       </li>
     
@@ -951,7 +981,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#reason%3AString-instance-method" class="signature"><strong>#reason</strong> : String</a>
+        <a href="#reason%3AChat-instance-method" class="signature"><strong>#reason</strong> : Chat</a>
         
       </li>
     
@@ -1005,18 +1035,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(reason:String)-class-method">
+    <div class="entry-detail" id="new(reason:Rosegold::Chat)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(reason : String)
+        def self.<strong>new</strong>(reason : <a href="../../Rosegold/Chat.html">Rosegold::Chat</a>)
 
-        <a class="method-permalink" href="#new%28reason%3AString%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28reason%3ARosegold%3A%3AChat%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/connection.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/connection.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1035,18 +1065,18 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="reason:String-instance-method">
+    <div class="entry-detail" id="reason:Chat-instance-method">
       <div class="signature">
         
-        def <strong>reason</strong> : String
+        def <strong>reason</strong> : <a href="../../Rosegold/Chat.html">Chat</a>
 
-        <a class="method-permalink" href="#reason%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#reason%3AChat-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/connection.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/connection.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>

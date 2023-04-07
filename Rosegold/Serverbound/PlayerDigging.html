@@ -321,8 +321,8 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/Chat" data-name="rosegold::clientbound::chat">
-      <a href="../../Rosegold/Clientbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChatMessage" data-name="rosegold::clientbound::chatmessage">
+      <a href="../../Rosegold/Clientbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
@@ -483,11 +483,6 @@
   
   <li class=" " data-id="rosegold/Rosegold/Connection/Client" data-name="rosegold::connection::client">
       <a href="../../Rosegold/Connection/Client.html">Client</a>
-      
-    </li>
-  
-  <li class=" " data-id="rosegold/Rosegold/Connection/ConnectionClosed" data-name="rosegold::connection::connectionclosed">
-      <a href="../../Rosegold/Connection/ConnectionClosed.html">ConnectionClosed</a>
       
     </li>
   
@@ -686,13 +681,48 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/Chat" data-name="rosegold::serverbound::chat">
-      <a href="../../Rosegold/Serverbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
+      <a href="../../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientSettings" data-name="rosegold::serverbound::clientsettings">
+      <a href="../../Rosegold/Serverbound/ClientSettings.html">ClientSettings</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/ChatMode" data-name="rosegold::serverbound::clientsettings::chatmode">
+      <a href="../../Rosegold/Serverbound/ClientSettings/ChatMode.html">ChatMode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/Hand" data-name="rosegold::serverbound::clientsettings::hand">
+      <a href="../../Rosegold/Serverbound/ClientSettings/Hand.html">Hand</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/SkinParts" data-name="rosegold::serverbound::clientsettings::skinparts">
+      <a href="../../Rosegold/Serverbound/ClientSettings/SkinParts.html">SkinParts</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
       <a href="../../Rosegold/Serverbound/ClientStatus.html">ClientStatus</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus/Action" data-name="rosegold::serverbound::clientstatus::action">
+      <a href="../../Rosegold/Serverbound/ClientStatus/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -908,7 +938,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L3" target="_blank">
         rosegold/packets/serverbound/player_digging.cr
       </a>
     
@@ -930,7 +960,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28status%3AStatus%2Clocation%3AVec3i%2Cface%3ABlockFace%29-class-method" class="signature"><strong>.new</strong>(status : Status, location : Vec3i, face : BlockFace)</a>
+        <a href="#new%28status%3AStatus%2Clocation%3AVec3i%3DVec3i%3A%3AORIGIN%2Cface%3ABlockFace%3D%3Abottom%29-class-method" class="signature"><strong>.new</strong>(status : Status, location : Vec3i = <span class="t">Vec3i</span><span class="t">::</span><span class="t">ORIGIN</span>, face : BlockFace = <span class="n">:bottom</span>)</a>
         
       </li>
     
@@ -949,22 +979,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#cancel%28location%2Cface%29-class-method" class="signature"><strong>.cancel</strong>(location, face)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#finish%28location%2Cface%29-class-method" class="signature"><strong>.finish</strong>(location, face)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#packet_id-class-method" class="signature"><strong>.packet_id</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#start%28location%2Cface%29-class-method" class="signature"><strong>.start</strong>(location, face)</a>
         
       </li>
     
@@ -1101,18 +1116,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(status:Status,location:Vec3i,face:BlockFace)-class-method">
+    <div class="entry-detail" id="new(status:Status,location:Vec3i=Vec3i::ORIGIN,face:BlockFace=:bottom)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(status : <a href="../../Rosegold/Serverbound/PlayerDigging/Status.html">Status</a>, location : <a href="../../Rosegold/Vec3i.html">Vec3i</a>, face : <a href="../../BlockFace.html">BlockFace</a>)
+        def self.<strong>new</strong>(status : <a href="../../Rosegold/Serverbound/PlayerDigging/Status.html">Status</a>, location : <a href="../../Rosegold/Vec3i.html">Vec3i</a> = <span class="t">Vec3i</span><span class="t">::</span><span class="t">ORIGIN</span>, face : <a href="../../BlockFace.html">BlockFace</a> = <span class="n">:bottom</span>)
 
-        <a class="method-permalink" href="#new%28status%3AStatus%2Clocation%3AVec3i%2Cface%3ABlockFace%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28status%3AStatus%2Clocation%3AVec3i%3DVec3i%3A%3AORIGIN%2Cface%3ABlockFace%3D%3Abottom%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1129,38 +1144,6 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="cancel(location,face)-class-method">
-      <div class="signature">
-        
-        def self.<strong>cancel</strong>(location, face)
-
-        <a class="method-permalink" href="#cancel%28location%2Cface%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L25" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="finish(location,face)-class-method">
-      <div class="signature">
-        
-        def self.<strong>finish</strong>(location, face)
-
-        <a class="method-permalink" href="#finish%28location%2Cface%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L29" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="packet_id-class-method">
       <div class="signature">
         
@@ -1172,23 +1155,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L4" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="start(location,face)-class-method">
-      <div class="signature">
-        
-        def self.<strong>start</strong>(location, face)
-
-        <a class="method-permalink" href="#start%28location%2Cface%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1216,7 +1183,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1232,7 +1199,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1248,7 +1215,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1264,7 +1231,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1280,7 +1247,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1296,7 +1263,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1312,7 +1279,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/player_digging.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>

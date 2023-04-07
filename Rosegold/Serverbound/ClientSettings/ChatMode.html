@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Serverbound::PlayerDigging::Status - rosegold main</title>
+  <title>Rosegold::Serverbound::ClientSettings::ChatMode - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../../";
   </script>
@@ -686,12 +686,12 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientSettings" data-name="rosegold::serverbound::clientsettings">
+  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound/ClientSettings" data-name="rosegold::serverbound::clientsettings">
       <a href="../../../Rosegold/Serverbound/ClientSettings.html">ClientSettings</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/ChatMode" data-name="rosegold::serverbound::clientsettings::chatmode">
+  <li class=" current" data-id="rosegold/Rosegold/Serverbound/ClientSettings/ChatMode" data-name="rosegold::serverbound::clientsettings::chatmode">
       <a href="../../../Rosegold/Serverbound/ClientSettings/ChatMode.html">ChatMode</a>
       
     </li>
@@ -791,12 +791,12 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
       <a href="../../../Rosegold/Serverbound/PlayerDigging.html">PlayerDigging</a>
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Rosegold/Serverbound/PlayerDigging/Status" data-name="rosegold::serverbound::playerdigging::status">
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging/Status" data-name="rosegold::serverbound::playerdigging::status">
       <a href="../../../Rosegold/Serverbound/PlayerDigging/Status.html">Status</a>
       
     </li>
@@ -905,7 +905,7 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">enum</span> Rosegold::Serverbound::PlayerDigging::Status
+  <span class="kind">enum</span> Rosegold::Serverbound::ClientSettings::ChatMode
 
 </h1>
 
@@ -936,8 +936,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L6" target="_blank">
-        rosegold/packets/serverbound/player_digging.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_settings.cr#L7" target="_blank">
+        rosegold/packets/serverbound/client_settings.cr
       </a>
     
     <br/>
@@ -957,38 +957,18 @@
   
   <dl>
     
-      <dt class="entry-const" id="Start">
-        <strong>Start</strong> = <code><span class="n">0</span></code>
+      <dt class="entry-const" id="Enabled">
+        <strong>Enabled</strong> = <code><span class="n">0</span></code>
       </dt>
       
     
-      <dt class="entry-const" id="Cancel">
-        <strong>Cancel</strong> = <code><span class="n">1</span></code>
+      <dt class="entry-const" id="CommandsOnly">
+        <strong>CommandsOnly</strong> = <code><span class="n">1</span></code>
       </dt>
       
     
-      <dt class="entry-const" id="Finish">
-        <strong>Finish</strong> = <code><span class="n">2</span></code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="DropHandFull">
-        <strong>DropHandFull</strong> = <code><span class="n">3</span></code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="DropHandSingle">
-        <strong>DropHandSingle</strong> = <code><span class="n">4</span></code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="FinishUsingHand">
-        <strong>FinishUsingHand</strong> = <code><span class="n">5</span></code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="SwapHands">
-        <strong>SwapHands</strong> = <code><span class="n">6</span></code>
+      <dt class="entry-const" id="Hidden">
+        <strong>Hidden</strong> = <code><span class="n">2</span></code>
       </dt>
       
     
@@ -1011,37 +991,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#cancel%3F-instance-method" class="signature"><strong>#cancel?</strong></a>
+        <a href="#commands_only%3F-instance-method" class="signature"><strong>#commands_only?</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#drop_hand_full%3F-instance-method" class="signature"><strong>#drop_hand_full?</strong></a>
+        <a href="#enabled%3F-instance-method" class="signature"><strong>#enabled?</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#drop_hand_single%3F-instance-method" class="signature"><strong>#drop_hand_single?</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#finish%3F-instance-method" class="signature"><strong>#finish?</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#finish_using_hand%3F-instance-method" class="signature"><strong>#finish_using_hand?</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#start%3F-instance-method" class="signature"><strong>#start?</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#swap_hands%3F-instance-method" class="signature"><strong>#swap_hands?</strong></a>
+        <a href="#hidden%3F-instance-method" class="signature"><strong>#hidden?</strong></a>
         
       </li>
     
@@ -1109,114 +1069,50 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="cancel?-instance-method">
+    <div class="entry-detail" id="commands_only?-instance-method">
       <div class="signature">
         
-        def <strong>cancel?</strong>
+        def <strong>commands_only?</strong>
 
-        <a class="method-permalink" href="#cancel%3F-instance-method">#</a>
+        <a class="method-permalink" href="#commands_only%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_settings.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="drop_hand_full?-instance-method">
+    <div class="entry-detail" id="enabled?-instance-method">
       <div class="signature">
         
-        def <strong>drop_hand_full?</strong>
+        def <strong>enabled?</strong>
 
-        <a class="method-permalink" href="#drop_hand_full%3F-instance-method">#</a>
+        <a class="method-permalink" href="#enabled%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_settings.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="drop_hand_single?-instance-method">
+    <div class="entry-detail" id="hidden?-instance-method">
       <div class="signature">
         
-        def <strong>drop_hand_single?</strong>
+        def <strong>hidden?</strong>
 
-        <a class="method-permalink" href="#drop_hand_single%3F-instance-method">#</a>
+        <a class="method-permalink" href="#hidden%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L7" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="finish?-instance-method">
-      <div class="signature">
-        
-        def <strong>finish?</strong>
-
-        <a class="method-permalink" href="#finish%3F-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L7" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="finish_using_hand?-instance-method">
-      <div class="signature">
-        
-        def <strong>finish_using_hand?</strong>
-
-        <a class="method-permalink" href="#finish_using_hand%3F-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L7" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="start?-instance-method">
-      <div class="signature">
-        
-        def <strong>start?</strong>
-
-        <a class="method-permalink" href="#start%3F-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L7" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="swap_hands?-instance-method">
-      <div class="signature">
-        
-        def <strong>swap_hands?</strong>
-
-        <a class="method-permalink" href="#swap_hands%3F-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/player_digging.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_settings.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>

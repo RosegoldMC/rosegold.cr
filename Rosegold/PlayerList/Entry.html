@@ -321,8 +321,8 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/Chat" data-name="rosegold::clientbound::chat">
-      <a href="../../Rosegold/Clientbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChatMessage" data-name="rosegold::clientbound::chatmessage">
+      <a href="../../Rosegold/Clientbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
@@ -483,11 +483,6 @@
   
   <li class=" " data-id="rosegold/Rosegold/Connection/Client" data-name="rosegold::connection::client">
       <a href="../../Rosegold/Connection/Client.html">Client</a>
-      
-    </li>
-  
-  <li class=" " data-id="rosegold/Rosegold/Connection/ConnectionClosed" data-name="rosegold::connection::connectionclosed">
-      <a href="../../Rosegold/Connection/ConnectionClosed.html">ConnectionClosed</a>
       
     </li>
   
@@ -686,13 +681,48 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/Chat" data-name="rosegold::serverbound::chat">
-      <a href="../../Rosegold/Serverbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
+      <a href="../../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientSettings" data-name="rosegold::serverbound::clientsettings">
+      <a href="../../Rosegold/Serverbound/ClientSettings.html">ClientSettings</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/ChatMode" data-name="rosegold::serverbound::clientsettings::chatmode">
+      <a href="../../Rosegold/Serverbound/ClientSettings/ChatMode.html">ChatMode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/Hand" data-name="rosegold::serverbound::clientsettings::hand">
+      <a href="../../Rosegold/Serverbound/ClientSettings/Hand.html">Hand</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/SkinParts" data-name="rosegold::serverbound::clientsettings::skinparts">
+      <a href="../../Rosegold/Serverbound/ClientSettings/SkinParts.html">SkinParts</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
       <a href="../../Rosegold/Serverbound/ClientStatus.html">ClientStatus</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus/Action" data-name="rosegold::serverbound::clientstatus::action">
+      <a href="../../Rosegold/Serverbound/ClientStatus/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -908,7 +938,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L4" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L4" target="_blank">
         rosegold/world/player_list.cr
       </a>
     
@@ -930,7 +960,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28uuid%3AUUID%2Cname%3ANil%7CString%3Dnil%2Cproperties%3AArray%28Rosegold%3A%3APlayerList%3A%3AProperty%29%3D%5B%5DofProperty%2Cgamemode%3AUInt32%7CNil%3Dnil%2Cping%3AUInt32%7CNil%3Dnil%2Cdisplay_name%3ANil%7CRosegold%3A%3AChat%3Dnil%29-class-method" class="signature"><strong>.new</strong>(uuid : UUID, name : Nil | String = <span class="n">nil</span>, properties : Array(Rosegold::PlayerList::Property) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Property</span>, gamemode : UInt32 | Nil = <span class="n">nil</span>, ping : UInt32 | Nil = <span class="n">nil</span>, display_name : Nil | Rosegold::Chat = <span class="n">nil</span>)</a>
+        <a href="#new%28uuid%3AUUID%2Cname%3ANil%7CString%3Dnil%2Cproperties%3AArray%28Rosegold%3A%3APlayerList%3A%3AProperty%29%3D%5B%5DofProperty%2Cgamemode%3AInt8%7CNil%3Dnil%2Cping%3AUInt32%7CNil%3Dnil%2Cdisplay_name%3ANil%7CRosegold%3A%3AChat%3Dnil%29-class-method" class="signature"><strong>.new</strong>(uuid : UUID, name : Nil | String = <span class="n">nil</span>, properties : Array(Rosegold::PlayerList::Property) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Property</span>, gamemode : Int8 | Nil = <span class="n">nil</span>, ping : UInt32 | Nil = <span class="n">nil</span>, display_name : Nil | Rosegold::Chat = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -961,12 +991,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#gamemode%3AUInt32%7CNil-instance-method" class="signature"><strong>#gamemode</strong> : UInt32 | Nil</a>
+        <a href="#gamemode%3AInt8%7CNil-instance-method" class="signature"><strong>#gamemode</strong> : Int8 | Nil</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#gamemode%3D%28gamemode%3AUInt32%7CNil%29-instance-method" class="signature"><strong>#gamemode=</strong>(gamemode : UInt32 | Nil)</a>
+        <a href="#gamemode%3D%28gamemode%3AInt8%7CNil%29-instance-method" class="signature"><strong>#gamemode=</strong>(gamemode : Int8 | Nil)</a>
         
       </li>
     
@@ -1050,18 +1080,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(uuid:UUID,name:Nil|String=nil,properties:Array(Rosegold::PlayerList::Property)=[]ofProperty,gamemode:UInt32|Nil=nil,ping:UInt32|Nil=nil,display_name:Nil|Rosegold::Chat=nil)-class-method">
+    <div class="entry-detail" id="new(uuid:UUID,name:Nil|String=nil,properties:Array(Rosegold::PlayerList::Property)=[]ofProperty,gamemode:Int8|Nil=nil,ping:UInt32|Nil=nil,display_name:Nil|Rosegold::Chat=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(uuid : UUID, name : Nil | String = <span class="n">nil</span>, properties : Array(<a href="../../Rosegold/PlayerList/Property.html">Rosegold::PlayerList::Property</a>) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Property</span>, gamemode : UInt32 | Nil = <span class="n">nil</span>, ping : UInt32 | Nil = <span class="n">nil</span>, display_name : Nil | <a href="../../Rosegold/Chat.html">Rosegold::Chat</a> = <span class="n">nil</span>)
+        def self.<strong>new</strong>(uuid : UUID, name : Nil | String = <span class="n">nil</span>, properties : Array(<a href="../../Rosegold/PlayerList/Property.html">Rosegold::PlayerList::Property</a>) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Property</span>, gamemode : Int8 | Nil = <span class="n">nil</span>, ping : UInt32 | Nil = <span class="n">nil</span>, display_name : Nil | <a href="../../Rosegold/Chat.html">Rosegold::Chat</a> = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28uuid%3AUUID%2Cname%3ANil%7CString%3Dnil%2Cproperties%3AArray%28Rosegold%3A%3APlayerList%3A%3AProperty%29%3D%5B%5DofProperty%2Cgamemode%3AUInt32%7CNil%3Dnil%2Cping%3AUInt32%7CNil%3Dnil%2Cdisplay_name%3ANil%7CRosegold%3A%3AChat%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28uuid%3AUUID%2Cname%3ANil%7CString%3Dnil%2Cproperties%3AArray%28Rosegold%3A%3APlayerList%3A%3AProperty%29%3D%5B%5DofProperty%2Cgamemode%3AInt8%7CNil%3Dnil%2Cping%3AUInt32%7CNil%3Dnil%2Cdisplay_name%3ANil%7CRosegold%3A%3AChat%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1091,7 +1121,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1107,39 +1137,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="gamemode:UInt32|Nil-instance-method">
+    <div class="entry-detail" id="gamemode:Int8|Nil-instance-method">
       <div class="signature">
         
-        def <strong>gamemode</strong> : UInt32 | Nil
+        def <strong>gamemode</strong> : Int8 | Nil
 
-        <a class="method-permalink" href="#gamemode%3AUInt32%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#gamemode%3AInt8%7CNil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="gamemode=(gamemode:UInt32|Nil)-instance-method">
+    <div class="entry-detail" id="gamemode=(gamemode:Int8|Nil)-instance-method">
       <div class="signature">
         
-        def <strong>gamemode=</strong>(gamemode : UInt32 | Nil)
+        def <strong>gamemode=</strong>(gamemode : Int8 | Nil)
 
-        <a class="method-permalink" href="#gamemode%3D%28gamemode%3AUInt32%7CNil%29-instance-method">#</a>
+        <a class="method-permalink" href="#gamemode%3D%28gamemode%3AInt8%7CNil%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1155,7 +1185,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1171,7 +1201,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1187,7 +1217,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1203,7 +1233,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1219,7 +1249,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1235,7 +1265,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1251,7 +1281,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1267,7 +1297,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player_list.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player_list.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>

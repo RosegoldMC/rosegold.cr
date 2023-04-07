@@ -321,8 +321,8 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/Chat" data-name="rosegold::clientbound::chat">
-      <a href="../../Rosegold/Clientbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChatMessage" data-name="rosegold::clientbound::chatmessage">
+      <a href="../../Rosegold/Clientbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
@@ -483,11 +483,6 @@
   
   <li class=" " data-id="rosegold/Rosegold/Connection/Client" data-name="rosegold::connection::client">
       <a href="../../Rosegold/Connection/Client.html">Client</a>
-      
-    </li>
-  
-  <li class=" " data-id="rosegold/Rosegold/Connection/ConnectionClosed" data-name="rosegold::connection::connectionclosed">
-      <a href="../../Rosegold/Connection/ConnectionClosed.html">ConnectionClosed</a>
       
     </li>
   
@@ -686,13 +681,48 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/Chat" data-name="rosegold::serverbound::chat">
-      <a href="../../Rosegold/Serverbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
+      <a href="../../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientSettings" data-name="rosegold::serverbound::clientsettings">
+      <a href="../../Rosegold/Serverbound/ClientSettings.html">ClientSettings</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/ChatMode" data-name="rosegold::serverbound::clientsettings::chatmode">
+      <a href="../../Rosegold/Serverbound/ClientSettings/ChatMode.html">ChatMode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/Hand" data-name="rosegold::serverbound::clientsettings::hand">
+      <a href="../../Rosegold/Serverbound/ClientSettings/Hand.html">Hand</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/SkinParts" data-name="rosegold::serverbound::clientsettings::skinparts">
+      <a href="../../Rosegold/Serverbound/ClientSettings/SkinParts.html">SkinParts</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
       <a href="../../Rosegold/Serverbound/ClientStatus.html">ClientStatus</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus/Action" data-name="rosegold::serverbound::clientstatus::action">
+      <a href="../../Rosegold/Serverbound/ClientStatus/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -919,7 +949,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/client_status.cr#L4" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_status.cr#L4" target="_blank">
         rosegold/packets/serverbound/client_status.cr
       </a>
     
@@ -941,7 +971,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28action%3AUInt8%3D0%29-class-method" class="signature"><strong>.new</strong>(action : UInt8 = <span class="n">0</span>)</a>
+        <a href="#new%28action%3AAction%3D%3Arespawn%29-class-method" class="signature"><strong>.new</strong>(action : Action = <span class="n">:respawn</span>)</a>
         
       </li>
     
@@ -979,12 +1009,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#action%3AUInt8-instance-method" class="signature"><strong>#action</strong> : UInt8</a>
+        <a href="#action%3AAction-instance-method" class="signature"><strong>#action</strong> : Action</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#action%3D%28action%3AUInt8%29-instance-method" class="signature"><strong>#action=</strong>(action : UInt8)</a>
+        <a href="#action%3D%28action%3AAction%29-instance-method" class="signature"><strong>#action=</strong>(action : Action)</a>
         
       </li>
     
@@ -1077,18 +1107,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(action:UInt8=0)-class-method">
+    <div class="entry-detail" id="new(action:Action=:respawn)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(action : UInt8 = <span class="n">0</span>)
+        def self.<strong>new</strong>(action : <a href="../../Rosegold/Serverbound/ClientStatus/Action.html">Action</a> = <span class="n">:respawn</span>)
 
-        <a class="method-permalink" href="#new%28action%3AUInt8%3D0%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28action%3AAction%3D%3Arespawn%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/client_status.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_status.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1116,7 +1146,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/client_status.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_status.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1133,34 +1163,34 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="action:UInt8-instance-method">
+    <div class="entry-detail" id="action:Action-instance-method">
       <div class="signature">
         
-        def <strong>action</strong> : UInt8
+        def <strong>action</strong> : <a href="../../Rosegold/Serverbound/ClientStatus/Action.html">Action</a>
 
-        <a class="method-permalink" href="#action%3AUInt8-instance-method">#</a>
+        <a class="method-permalink" href="#action%3AAction-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/client_status.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_status.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="action=(action:UInt8)-instance-method">
+    <div class="entry-detail" id="action=(action:Action)-instance-method">
       <div class="signature">
         
-        def <strong>action=</strong>(action : UInt8)
+        def <strong>action=</strong>(action : <a href="../../Rosegold/Serverbound/ClientStatus/Action.html">Action</a>)
 
-        <a class="method-permalink" href="#action%3D%28action%3AUInt8%29-instance-method">#</a>
+        <a class="method-permalink" href="#action%3D%28action%3AAction%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/client_status.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_status.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1176,7 +1206,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/packets/serverbound/client_status.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/packets/serverbound/client_status.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>

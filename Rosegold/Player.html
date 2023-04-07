@@ -321,8 +321,8 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/Chat" data-name="rosegold::clientbound::chat">
-      <a href="../Rosegold/Clientbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChatMessage" data-name="rosegold::clientbound::chatmessage">
+      <a href="../Rosegold/Clientbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
@@ -483,11 +483,6 @@
   
   <li class=" " data-id="rosegold/Rosegold/Connection/Client" data-name="rosegold::connection::client">
       <a href="../Rosegold/Connection/Client.html">Client</a>
-      
-    </li>
-  
-  <li class=" " data-id="rosegold/Rosegold/Connection/ConnectionClosed" data-name="rosegold::connection::connectionclosed">
-      <a href="../Rosegold/Connection/ConnectionClosed.html">ConnectionClosed</a>
       
     </li>
   
@@ -686,13 +681,48 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/Chat" data-name="rosegold::serverbound::chat">
-      <a href="../Rosegold/Serverbound/Chat.html">Chat</a>
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
+      <a href="../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientSettings" data-name="rosegold::serverbound::clientsettings">
+      <a href="../Rosegold/Serverbound/ClientSettings.html">ClientSettings</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/ChatMode" data-name="rosegold::serverbound::clientsettings::chatmode">
+      <a href="../Rosegold/Serverbound/ClientSettings/ChatMode.html">ChatMode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/Hand" data-name="rosegold::serverbound::clientsettings::hand">
+      <a href="../Rosegold/Serverbound/ClientSettings/Hand.html">Hand</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/SkinParts" data-name="rosegold::serverbound::clientsettings::skinparts">
+      <a href="../Rosegold/Serverbound/ClientSettings/SkinParts.html">SkinParts</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
       <a href="../Rosegold/Serverbound/ClientStatus.html">ClientStatus</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus/Action" data-name="rosegold::serverbound::clientstatus::action">
+      <a href="../Rosegold/Serverbound/ClientStatus/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -920,7 +950,7 @@ Only gets updated when reading/writing packets.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L6" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L6" target="_blank">
         rosegold/world/player.cr
       </a>
     
@@ -946,13 +976,28 @@ Only gets updated when reading/writing packets.</p>
       </dt>
       
     
+      <dt class="entry-const" id="CRAWLING_EYE_HEIGHT">
+        <strong>CRAWLING_EYE_HEIGHT</strong> = <code><span class="n">0.40</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CROUCHING_AABB">
+        <strong>CROUCHING_AABB</strong> = <code><span class="t">AABBf</span>.new(<span class="n">-0.3</span>, <span class="n">0.0</span>, <span class="n">-0.3</span>, <span class="n">0.3</span>, <span class="n">1.5</span>, <span class="n">0.3</span>)</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="CROUCHING_EYE_HEIGHT">
+        <strong>CROUCHING_EYE_HEIGHT</strong> = <code><span class="n">1.27</span></code>
+      </dt>
+      
+    
       <dt class="entry-const" id="DEFAULT_AABB">
         <strong>DEFAULT_AABB</strong> = <code><span class="t">AABBf</span>.new(<span class="n">-0.3</span>, <span class="n">0.0</span>, <span class="n">-0.3</span>, <span class="n">0.3</span>, <span class="n">1.8</span>, <span class="n">0.3</span>)</code>
       </dt>
       
     
-      <dt class="entry-const" id="SNEAKING_AABB">
-        <strong>SNEAKING_AABB</strong> = <code><span class="t">AABBf</span>.new(<span class="n">-0.3</span>, <span class="n">0.0</span>, <span class="n">-0.3</span>, <span class="n">0.3</span>, <span class="n">1.5</span>, <span class="n">0.3</span>)</code>
+      <dt class="entry-const" id="DEFAULT_EYE_HEIGHT">
+        <strong>DEFAULT_EYE_HEIGHT</strong> = <code><span class="n">1.62</span></code>
       </dt>
       
     
@@ -1005,12 +1050,12 @@ Only gets updated when reading/writing packets.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#food%3AFloat32-instance-method" class="signature"><strong>#food</strong> : Float32</a>
+        <a href="#food%3AUInt32-instance-method" class="signature"><strong>#food</strong> : UInt32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#food%3D%28food%3AFloat32%29-instance-method" class="signature"><strong>#food=</strong>(food : Float32)</a>
+        <a href="#food%3D%28food%3AUInt32%29-instance-method" class="signature"><strong>#food=</strong>(food : UInt32)</a>
         
       </li>
     
@@ -1085,6 +1130,26 @@ Only gets updated when reading/writing packets.</p>
       </li>
     
       <li class="entry-summary">
+        <a href="#username%3AString%7CNil-instance-method" class="signature"><strong>#username</strong> : String | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#username%3D%28username%3AString%7CNil%29-instance-method" class="signature"><strong>#username=</strong>(username : String | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#uuid%3AUUID%7CNil-instance-method" class="signature"><strong>#uuid</strong> : UUID | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#uuid%3D%28uuid%3AUUID%7CNil%29-instance-method" class="signature"><strong>#uuid=</strong>(uuid : UUID | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#velocity%3AVec3d-instance-method" class="signature"><strong>#velocity</strong> : Vec3d</a>
         
       </li>
@@ -1149,7 +1214,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1165,7 +1230,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1181,7 +1246,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1197,7 +1262,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1213,7 +1278,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1229,39 +1294,39 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="food:Float32-instance-method">
+    <div class="entry-detail" id="food:UInt32-instance-method">
       <div class="signature">
         
-        def <strong>food</strong> : Float32
+        def <strong>food</strong> : UInt32
 
-        <a class="method-permalink" href="#food%3AFloat32-instance-method">#</a>
+        <a class="method-permalink" href="#food%3AUInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="food=(food:Float32)-instance-method">
+    <div class="entry-detail" id="food=(food:UInt32)-instance-method">
       <div class="signature">
         
-        def <strong>food=</strong>(food : Float32)
+        def <strong>food=</strong>(food : UInt32)
 
-        <a class="method-permalink" href="#food%3D%28food%3AFloat32%29-instance-method">#</a>
+        <a class="method-permalink" href="#food%3D%28food%3AUInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1277,7 +1342,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1293,7 +1358,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1309,7 +1374,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1325,7 +1390,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1341,7 +1406,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1357,7 +1422,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1373,7 +1438,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1389,7 +1454,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1405,7 +1470,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1421,7 +1486,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1437,7 +1502,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1453,7 +1518,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1469,7 +1534,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1485,7 +1550,71 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="username:String|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>username</strong> : String | Nil
+
+        <a class="method-permalink" href="#username%3AString%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="username=(username:String|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>username=</strong>(username : String | Nil)
+
+        <a class="method-permalink" href="#username%3D%28username%3AString%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="uuid:UUID|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>uuid</strong> : UUID | Nil
+
+        <a class="method-permalink" href="#uuid%3AUUID%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="uuid=(uuid:UUID|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>uuid=</strong>(uuid : UUID | Nil)
+
+        <a class="method-permalink" href="#uuid%3D%28uuid%3AUUID%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1501,7 +1630,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1517,7 +1646,7 @@ Only gets updated when reading/writing packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9ac7bd1d582ccf9d1d75148be2224d116b2bb3ba/src/rosegold/world/player.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6bd122f69fa41297e7295f2b7aac44381d80f327/src/rosegold/world/player.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
