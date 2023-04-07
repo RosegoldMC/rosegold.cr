@@ -1,5 +1,5 @@
 class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
-  packet_id 0x16
+  class_getter packet_id = 0x16_u8
 
   property \
     window_id : UInt8,

@@ -2,7 +2,7 @@ require "../packet"
 
 class Rosegold::Serverbound::StatusPing < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x01_u8
-  protocol_state Rosegold::ProtocolState::STATUS
+  class_getter state = Rosegold::ProtocolState::STATUS
 
   property ping_id : Int64
 
