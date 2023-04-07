@@ -954,7 +954,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L1" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L1" target="_blank">
         rosegold/world/vec3.cr
       </a>
     
@@ -1012,6 +1012,11 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#%2B%28face%3ABlockFace%29%3AVec3d-instance-method" class="signature"><strong>#+</strong>(face : BlockFace) : Vec3d</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#-%28vec%3Aself%29%3Aself-instance-method" class="signature"><strong>#-</strong>(vec : <span class="k">self</span>) : <span class="k">self</span></a>
         
       </li>
@@ -1047,14 +1052,19 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#centered_3d%3Aself-instance-method" class="signature"><strong>#centered_3d</strong> : <span class="k">self</span></a>
+        <a href="#block%3AVec3i-instance-method" class="signature"><strong>#block</strong> : Vec3i</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#centered_3d%3AVec3d-instance-method" class="signature"><strong>#centered_3d</strong> : Vec3d</a>
         
           <div class="summary"><p>Useful for getting the center of a block.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#centered_floor%3Aself-instance-method" class="signature"><strong>#centered_floor</strong> : <span class="k">self</span></a>
+        <a href="#centered_floor%3AVec3d-instance-method" class="signature"><strong>#centered_floor</strong> : Vec3d</a>
         
           <div class="summary"><p>Useful for standing centered on a block.</p></div>
         
@@ -1081,7 +1091,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#floored%3Aself-instance-method" class="signature"><strong>#floored</strong> : <span class="k">self</span></a>
+        <a href="#floored%3AVec3d-instance-method" class="signature"><strong>#floored</strong> : Vec3d</a>
         
       </li>
     
@@ -1150,6 +1160,16 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#to_f32%3AVec3f-instance-method" class="signature"><strong>#to_f32</strong> : Vec3f</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_f64%3AVec3d-instance-method" class="signature"><strong>#to_f64</strong> : Vec3d</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#to_s%28io%29-instance-method" class="signature"><strong>#to_s</strong>(io)</a>
         
       </li>
@@ -1161,6 +1181,11 @@
     
       <li class="entry-summary">
         <a href="#west%28len%3AT%3D1%29%3Aself-instance-method" class="signature"><strong>#west</strong>(len : T = <span class="n">1</span>) : <span class="k">self</span></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#with_axis%28face%3ABlockFace%2Cvalue%3AT%29%3Aself-instance-method" class="signature"><strong>#with_axis</strong>(face : BlockFace, value : T) : <span class="k">self</span></a>
         
       </li>
     
@@ -1237,7 +1262,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1267,7 +1292,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L66" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L66" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1283,7 +1308,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L62" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L62" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1299,7 +1324,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L54" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="+(face:BlockFace):Vec3d-instance-method">
+      <div class="signature">
+        
+        def <strong>+</strong>(face : <a href="../BlockFace.html">BlockFace</a>) : <a href="../Rosegold/Vec3d.html">Vec3d</a>
+
+        <a class="method-permalink" href="#%2B%28face%3ABlockFace%29%3AVec3d-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L201" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1315,7 +1356,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1331,7 +1372,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L42" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1347,7 +1388,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L70" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1363,7 +1404,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L78" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L78" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1379,7 +1420,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L161" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L173" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1395,7 +1436,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L157" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L169" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1411,17 +1452,33 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L165" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L177" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="centered_3d:self-instance-method">
+    <div class="entry-detail" id="block:Vec3i-instance-method">
       <div class="signature">
         
-        def <strong>centered_3d</strong> : <span class="k">self</span>
+        def <strong>block</strong> : <a href="../Rosegold/Vec3i.html">Vec3i</a>
 
-        <a class="method-permalink" href="#centered_3d%3Aself-instance-method">#</a>
+        <a class="method-permalink" href="#block%3AVec3i-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L98" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="centered_3d:Vec3d-instance-method">
+      <div class="signature">
+        
+        def <strong>centered_3d</strong> : <a href="../Rosegold/Vec3d.html">Vec3d</a>
+
+        <a class="method-permalink" href="#centered_3d%3AVec3d-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1432,17 +1489,17 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L100" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L112" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="centered_floor:self-instance-method">
+    <div class="entry-detail" id="centered_floor:Vec3d-instance-method">
       <div class="signature">
         
-        def <strong>centered_floor</strong> : <span class="k">self</span>
+        def <strong>centered_floor</strong> : <a href="../Rosegold/Vec3d.html">Vec3d</a>
 
-        <a class="method-permalink" href="#centered_floor%3Aself-instance-method">#</a>
+        <a class="method-permalink" href="#centered_floor%3AVec3d-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1453,7 +1510,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L95" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L107" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1469,7 +1526,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L125" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L137" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1485,7 +1542,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L121" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L133" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1501,7 +1558,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1517,23 +1574,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="floored:self-instance-method">
+    <div class="entry-detail" id="floored:Vec3d-instance-method">
       <div class="signature">
         
-        def <strong>floored</strong> : <span class="k">self</span>
+        def <strong>floored</strong> : <a href="../Rosegold/Vec3d.html">Vec3d</a>
 
-        <a class="method-permalink" href="#floored%3Aself-instance-method">#</a>
+        <a class="method-permalink" href="#floored%3AVec3d-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L90" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L102" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1549,7 +1606,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L181" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L209" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1565,7 +1622,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L117" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L129" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1581,7 +1638,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L125" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1597,7 +1654,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L74" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L74" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1613,7 +1670,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1629,7 +1686,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1645,7 +1702,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1661,7 +1718,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L58" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L58" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1683,7 +1740,7 @@ See also <code><a href="../Rosegold/Vec3.html#projected_factor_along_line%28star
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L138" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L150" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1705,7 +1762,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L148" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L160" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1721,7 +1778,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L86" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1737,7 +1794,39 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_f32:Vec3f-instance-method">
+      <div class="signature">
+        
+        def <strong>to_f32</strong> : <a href="../Rosegold/Vec3f.html">Vec3f</a>
+
+        <a class="method-permalink" href="#to_f32%3AVec3f-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L90" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_f64:Vec3d-instance-method">
+      <div class="signature">
+        
+        def <strong>to_f64</strong> : <a href="../Rosegold/Vec3d.html">Vec3d</a>
+
+        <a class="method-permalink" href="#to_f64%3AVec3d-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L94" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1753,7 +1842,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L177" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L205" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1769,7 +1858,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1785,7 +1874,23 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="with_axis(face:BlockFace,value:T):self-instance-method">
+      <div class="signature">
+        
+        def <strong>with_axis</strong>(face : <a href="../BlockFace.html">BlockFace</a>, value : T) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#with_axis%28face%3ABlockFace%2Cvalue%3AT%29%3Aself-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L189" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1801,7 +1906,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L104" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L116" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1817,7 +1922,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1833,7 +1938,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1849,7 +1954,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1865,7 +1970,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1886,7 +1991,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L130" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L142" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1902,7 +2007,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1918,7 +2023,7 @@ See also <code><a href="../Rosegold/Vec3.html#project_onto_line%28start%3Aself%2
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>

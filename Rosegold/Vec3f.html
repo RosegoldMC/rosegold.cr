@@ -952,7 +952,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L200" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L224" target="_blank">
         rosegold/world/vec3.cr
       </a>
     
@@ -997,16 +997,6 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%26%2B%28vec%3AVec3d%29%3AVec3d-instance-method" class="signature"><strong>#&+</strong>(vec : Vec3d) : Vec3d</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#%26-%28vec%3AVec3d%29%3AVec3d-instance-method" class="signature"><strong>#&-</strong>(vec : Vec3d) : Vec3d</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#%2B%28vec%3AVec3d%29%3AVec3d-instance-method" class="signature"><strong>#+</strong>(vec : Vec3d) : Vec3d</a>
         
       </li>
@@ -1017,7 +1007,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#to_f64%3AVec3d-instance-method" class="signature"><strong>#to_f64</strong> : Vec3d</a>
+        <a href="#to_f32-instance-method" class="signature"><strong>#to_f32</strong></a>
         
       </li>
     
@@ -1045,7 +1035,7 @@
     
   
     <a href="../Rosegold/Vec3.html#%2B%28vec%3Aself%29%3Aself-instance-method" class="tooltip">
-      <span>+(vec : <span class="k">self</span>) : <span class="k">self</span></span>
+      <span>+(vec : <span class="k">self</span>) : <span class="k">self</span><br/>+(face : BlockFace) : Vec3d</span>
     +</a>, 
     
   
@@ -1079,13 +1069,18 @@
     axis</a>, 
     
   
-    <a href="../Rosegold/Vec3.html#centered_3d%3Aself-instance-method" class="tooltip">
-      <span>centered_3d : <span class="k">self</span></span>
+    <a href="../Rosegold/Vec3.html#block%3AVec3i-instance-method" class="tooltip">
+      <span>block : Vec3i</span>
+    block</a>, 
+    
+  
+    <a href="../Rosegold/Vec3.html#centered_3d%3AVec3d-instance-method" class="tooltip">
+      <span>centered_3d : Vec3d</span>
     centered_3d</a>, 
     
   
-    <a href="../Rosegold/Vec3.html#centered_floor%3Aself-instance-method" class="tooltip">
-      <span>centered_floor : <span class="k">self</span></span>
+    <a href="../Rosegold/Vec3.html#centered_floor%3AVec3d-instance-method" class="tooltip">
+      <span>centered_floor : Vec3d</span>
     centered_floor</a>, 
     
   
@@ -1109,8 +1104,8 @@
     east</a>, 
     
   
-    <a href="../Rosegold/Vec3.html#floored%3Aself-instance-method" class="tooltip">
-      <span>floored : <span class="k">self</span></span>
+    <a href="../Rosegold/Vec3.html#floored%3AVec3d-instance-method" class="tooltip">
+      <span>floored : Vec3d</span>
     floored</a>, 
     
   
@@ -1174,6 +1169,16 @@
     south</a>, 
     
   
+    <a href="../Rosegold/Vec3.html#to_f32%3AVec3f-instance-method" class="tooltip">
+      <span>to_f32 : Vec3f</span>
+    to_f32</a>, 
+    
+  
+    <a href="../Rosegold/Vec3.html#to_f64%3AVec3d-instance-method" class="tooltip">
+      <span>to_f64 : Vec3d</span>
+    to_f64</a>, 
+    
+  
     <a href="../Rosegold/Vec3.html#to_s%28io%29-instance-method" class="tooltip">
       <span>to_s(io)</span>
     to_s</a>, 
@@ -1187,6 +1192,11 @@
     <a href="../Rosegold/Vec3.html#west%28len%3AT%3D1%29%3Aself-instance-method" class="tooltip">
       <span>west(len : T = <span class="n">1</span>) : <span class="k">self</span></span>
     west</a>, 
+    
+  
+    <a href="../Rosegold/Vec3.html#with_axis%28face%3ABlockFace%2Cvalue%3AT%29%3Aself-instance-method" class="tooltip">
+      <span>with_axis(face : BlockFace, value : T) : <span class="k">self</span></span>
+    with_axis</a>, 
     
   
     <a href="../Rosegold/Vec3.html#with_length%28length%3AT%29%3Aself-instance-method" class="tooltip">
@@ -1293,38 +1303,6 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="&amp;+(vec:Vec3d):Vec3d-instance-method">
-      <div class="signature">
-        
-        def <strong>&+</strong>(vec : <a href="../Rosegold/Vec3d.html">Vec3d</a>) : <a href="../Rosegold/Vec3d.html">Vec3d</a>
-
-        <a class="method-permalink" href="#%26%2B%28vec%3AVec3d%29%3AVec3d-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L219" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="&amp;-(vec:Vec3d):Vec3d-instance-method">
-      <div class="signature">
-        
-        def <strong>&-</strong>(vec : <a href="../Rosegold/Vec3d.html">Vec3d</a>) : <a href="../Rosegold/Vec3d.html">Vec3d</a>
-
-        <a class="method-permalink" href="#%26-%28vec%3AVec3d%29%3AVec3d-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L211" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="+(vec:Vec3d):Vec3d-instance-method">
       <div class="signature">
         
@@ -1336,7 +1314,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L215" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L239" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1352,23 +1330,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L207" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L235" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="to_f64:Vec3d-instance-method">
+    <div class="entry-detail" id="to_f32-instance-method">
       <div class="signature">
         
-        def <strong>to_f64</strong> : <a href="../Rosegold/Vec3d.html">Vec3d</a>
+        def <strong>to_f32</strong>
 
-        <a class="method-permalink" href="#to_f64%3AVec3d-instance-method">#</a>
+        <a class="method-permalink" href="#to_f32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d9447f2d08ee54e880344ec87c6c41e6b637d363/src/rosegold/world/vec3.cr#L223" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c004b0b40bdefce181a1f304c01e3ec7d5f500ff/src/rosegold/world/vec3.cr#L229" target="_blank">View source</a>]
         
       </div>
     </div>
