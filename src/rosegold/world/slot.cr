@@ -35,6 +35,10 @@ struct Rosegold::Slot
     !empty?
   end
 
+  def damage
+    nbt.try &.["Damage"]?.try &.as_i32
+  end
+
   # Use to get the item_id in new-age string format
   # To get the legacy int format, use `item_id_int`
   def item_id : String

@@ -10,7 +10,7 @@ class Rosegold::Window
 
   def self.player_inventory
     new(0, nil, Rosegold::Chat.new("Player Inventory")).tap do |window|
-      window.slots = Array.new(45) { |_| Rosegold::Slot.new(0_u32, 0_u8, nil) }
+      window.slots = Array.new(46) { |_| Rosegold::Slot.new(0_u32, 0_u8, nil) }
     end
   end
 
