@@ -7,7 +7,7 @@ require "./serverbound/*"
 abstract class Rosegold::Event; end # defined elsewhere, but otherwise it would be a module
 
 class Rosegold::Event::Disconnected < Rosegold::Event
-  getter reason : String
+  getter reason : Chat
 
   def initialize(@reason); end
 end
@@ -25,7 +25,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   property handler : Rosegold::EventEmitter?
 
   property compression_threshold : UInt32 = 0
-  property close_reason : String?
+  property close_reason : Chat?
   private getter read_mutex : Mutex = Mutex.new
   private getter write_mutex : Mutex = Mutex.new
 
@@ -43,7 +43,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     @state = state
   end
 
-  def disconnect(reason : String)
+  def disconnect(reason : Chat)
     Log.info { "Disconnected: #{reason}" }
     @close_reason = reason
     io.close
@@ -80,12 +80,10 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
       end
     end
     packet_bytes
-  rescue e : IO::EOFError
-    @close_reason = "IO Error: #{e.message}"
-    raise ConnectionClosed.new "IO Error: #{e.message}"
+  rescue e
+    disconnect Chat.new "IO Error: #{e.message}"
+    raise_without_backtrace e
   end
-
-  class ConnectionClosed < Exception; end
 
   def self.decode_packet(
     packet_bytes : Bytes,
@@ -132,8 +130,8 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
         io.flush
       end
     end
-  rescue e : IO::Error
-    disconnect "IO Error: #{e.message}"
-    raise e
+  rescue e
+    disconnect Chat.new "IO Error: #{e.message}"
+    raise_without_backtrace e
   end
 end

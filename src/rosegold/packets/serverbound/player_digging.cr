@@ -14,21 +14,9 @@ class Rosegold::Serverbound::PlayerDigging < Rosegold::Serverbound::Packet
 
   def initialize(
     @status : Status,
-    @location : Vec3i,
-    @face : BlockFace
+    @location : Vec3i = Vec3i::ORIGIN,
+    @face : BlockFace = :bottom
   ); end
-
-  def self.start(location, face)
-    self.new(Status.Start, location, face)
-  end
-
-  def self.cancel(location, face)
-    self.new(Status.Cancel, location, face)
-  end
-
-  def self.finish(location, face)
-    self.new(Status.Finish, location, face)
-  end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|

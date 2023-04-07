@@ -19,8 +19,8 @@ class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
       buffer.write location.x
       buffer.write location.y
       buffer.write location.z
-      buffer.write_angle256_deg look.yaw_deg
-      buffer.write_angle256_deg look.pitch_deg
+      buffer.write_angle256_deg look.yaw
+      buffer.write_angle256_deg look.pitch
     end.to_slice
   end
 end

@@ -5,7 +5,7 @@ module Rosegold::PlayerList
     getter uuid : UUID
     property name : String?
     property properties = [] of Property
-    property gamemode : UInt32? # TODO allow negative
+    property gamemode : Int8?
     property ping : UInt32?
     property display_name : Rosegold::Chat?
 

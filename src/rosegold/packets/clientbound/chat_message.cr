@@ -1,7 +1,7 @@
 require "../../models/chat"
 require "../packet"
 
-class Rosegold::Clientbound::Chat < Rosegold::Clientbound::Packet
+class Rosegold::Clientbound::ChatMessage < Rosegold::Clientbound::Packet
   Log = ::Log.for(self)
 
   class_getter packet_id = 0x0f_u8

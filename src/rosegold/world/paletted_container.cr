@@ -71,8 +71,6 @@ class Rosegold::PalettedContainer
   end
 
   def []=(index : Index, value : Entry) : Nil
-    palette = self.palette
-    long_array = self.long_array
     if long_array.empty? # single state mode
       if palette[0] == value
         return # nothing to do, value is already set
@@ -107,8 +105,9 @@ class Rosegold::PalettedContainer
     @bits_per_entry = 4_u8
     @entries_per_long = 64_u8 // bits_per_entry
     @entry_mask = (1_u64 << bits_per_entry) - 1
-    @long_array = Array(Long).new(size*4//64, 0_i64)
+    @long_array = Array(Long).new(size*4//64, 0_u64)
     # all values will be 0, and our single value is also at palette index 0
+    Log.debug { "Growing PalettedContainer from single state. Array length: #{@long_array.size}" }
   end
 
   private def grow_palette : Nil
@@ -116,7 +115,7 @@ class Rosegold::PalettedContainer
     new_entries_per_long = 64_u8 // new_bits_per_entry
     new_entry_mask = (1_u64 << new_bits_per_entry) - 1
     new_num_longs = (size / new_entries_per_long).ceil.to_i
-    new_long_array = Array(Long).new(new_num_longs, 0_i64)
+    new_long_array = Array(Long).new(new_num_longs, 0_u64)
 
     (0_u32...size).each do |i|
       # read from old array
@@ -138,5 +137,6 @@ class Rosegold::PalettedContainer
     @entries_per_long = new_entries_per_long
     @entry_mask = new_entry_mask
     @long_array = new_long_array
+    Log.debug { "Growing PalettedContainer. Array length: #{@long_array.size}, Palette length: #{@palette.size}" }
   end
 end

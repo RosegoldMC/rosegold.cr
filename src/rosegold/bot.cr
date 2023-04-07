@@ -12,9 +12,8 @@ class Rosegold::Bot
   end
 
   delegate host, port, connect, connected?, online_players, on, to: client
-  delegate feet, eyes, health, food, saturation, gamemode, to: client.player
-  # TODO delegate more
-  delegate start_using_hand, stop_using_hand, start_digging, stop_digging, to: @interact
+  delegate uuid, username, feet, eyes, health, food, saturation, gamemode, to: client.player
+  delegate stop_using_hand, start_digging, stop_digging, to: @interact
 
   def disconnect_reason
     client.connection.try &.close_reason
@@ -27,11 +26,11 @@ class Rosegold::Bot
 
   # Send a message or slash command.
   def chat(message : String)
-    client.queue_packet Serverbound::Chat.new message
+    client.queue_packet Serverbound::ChatMessage.new message
   end
 
   # Is adjusted to server TPS.
-  def wait_ticks(ticks : UInt32)
+  def wait_ticks(ticks : Int32)
     sleep ticks / 20 # TODO adjust to server TPS, changing over time
   end
 
@@ -140,19 +139,16 @@ class Rosegold::Bot
   end
 
   def swap_hands
-    client.queue_packet Serverbound::PlayerDigging.new \
-      :swap_hands, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::PlayerDigging.new :swap_hands
   end
 
   def drop_hand_single
-    client.queue_packet Serverbound::PlayerDigging.new \
-      :drop_hand_single, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::PlayerDigging.new :drop_hand_single
     client.queue_packet Serverbound::SwingArm.new
   end
 
   def drop_hand_full
-    client.queue_packet Serverbound::PlayerDigging.new \
-      :drop_hand_full, Vec3i.ORIGIN, 0
+    client.queue_packet Serverbound::PlayerDigging.new :drop_hand_full
     client.queue_packet Serverbound::SwingArm.new
   end
 
@@ -160,6 +156,12 @@ class Rosegold::Bot
   # This is faster and less error-prone than moving slots around individually.
   def pick_slot(slot_nr : UInt16)
     client.queue_packet Serverbound::PickItem.new slot_nr
+  end
+
+  # Activates the "use" button.
+  def start_using_hand(hand : Hand = :main_hand)
+    # can't delegate this because it wouldn't pick up the symbol as a Hand value
+    @interact.start_using_hand hand
   end
 
   # Activates and then immediately deactivates the `use` button.
@@ -181,10 +183,8 @@ class Rosegold::Bot
   end
 
   # Looks at that location, then activates and immediately deactivates the `use` button.
-  # Raises an error if the hand slot is not updated within `ticks`.
   def place_block_against(location : Vec3d? = nil, ticks = 0)
     use_hand location
-    # TODO raise an error if the hand slot is not updated within `ticks`
   end
 
   # Looks at that location, then activates the `attack` button.
@@ -202,7 +202,7 @@ class Rosegold::Bot
   # Looks at that location, then activates the `attack` button,
   # waits `ticks`, and deactivates it again.
   # Waits for completion, throws error if cancelled by stop_digging, item change, disconnect, etc.
-  def dig(ticks : UInt32, location : Vec3d? = nil)
+  def dig(ticks : Int32, location : Vec3d? = nil)
     look_at location if location
     start_digging
     wait_ticks ticks
