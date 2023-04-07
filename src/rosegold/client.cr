@@ -68,6 +68,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   def join_game(&)
     join_game
     yield self
+    connection?.try &.disconnect Chat.new "End of script"
   end
 
   def connect
