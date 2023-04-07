@@ -11,6 +11,16 @@ class Rosegold::Bot
     @interact = Interactions.new client
   end
 
+  # Does not connect immediately.
+  def new(address : String)
+    new Client.new address
+  end
+
+  # Connects to the server and waits for being ingame.
+  def self.join_game(address : String)
+    new Client.new(address).tap &.join_game
+  end
+
   delegate host, port, connect, connected?, online_players, on, to: client
   delegate uuid, username, feet, eyes, health, food, saturation, gamemode, to: client.player
   delegate stop_using_hand, stop_digging, to: @interact

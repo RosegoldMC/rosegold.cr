@@ -57,14 +57,16 @@ class Rosegold::Client < Rosegold::EventEmitter
     connection.state = state
   end
 
-  def join_game(&)
+  def join_game
     connect
 
     until connection.state == ProtocolState::PLAY.clientbound
       sleep 0.1
     end
-    Log.info { "Ingame" }
+  end
 
+  def join_game(&)
+    join_game
     yield self
   end
 
