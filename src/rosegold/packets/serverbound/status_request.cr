@@ -2,7 +2,7 @@ require "../packet"
 
 class Rosegold::Serverbound::StatusRequest < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x00_u8
-  protocol_state Rosegold::ProtocolState::STATUS
+  class_getter state = Rosegold::ProtocolState::STATUS
 
   def self.read(io)
     self.new
