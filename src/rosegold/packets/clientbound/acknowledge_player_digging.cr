@@ -1,5 +1,6 @@
 require "../serverbound/player_digging"
 
+# Some servers do not send this.
 class Rosegold::Clientbound::AcknowledgePlayerDigging < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x08_u8
 
@@ -25,6 +26,7 @@ class Rosegold::Clientbound::AcknowledgePlayerDigging < Rosegold::Clientbound::P
   end
 
   def callback(client)
+    Log.debug { "dig ack #{self}" }
     if status == Status::Finish
       client.dimension.set_block_state location, block_id
     end

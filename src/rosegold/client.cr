@@ -144,8 +144,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     emit_event Event::RawPacket.new raw_packet
 
     packet = Connection.decode_packet raw_packet, connection.state
+    Log.trace { "RECV 0x#{raw_packet[0].to_s 16} #{packet}" }
     return nil unless packet
-    Log.trace { "RECV #{packet}" }
 
     packet.callback(self)
 

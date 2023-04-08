@@ -29,13 +29,15 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
 
   def callback(client)
     if window_id == 0
-      Log.debug { "Received window items for player inventory: #{slot_data}" }
+      Log.debug { "Received window items for player inventory." }
+      Log.trace { slot_data }
       client.current_window.slots = slot_data
     elsif client.current_window.nil? || client.current_window.try &.id != window_id
       Log.warn { "Received window items for an unknown or mismatched window. Ignoring." }
       return
     else
       Log.debug { "Received window items for window #{window_id}." }
+      Log.trace { slot_data }
 
       client.current_window.slots = slot_data
     end
