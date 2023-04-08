@@ -1,3 +1,6 @@
+ENV["UUID"] = "00000000-0000-0000-0000-000000000000"
+ENV["ACCESS_TOKEN"] = ""
+
 require "../src/rosegold"
 require "spectator"
 
