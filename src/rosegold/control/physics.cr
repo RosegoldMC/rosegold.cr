@@ -25,8 +25,9 @@ class Rosegold::Physics
   DRAG    = 0.98 # y velocity multiplicator per tick when not on ground
   GRAVITY = 0.08 # m/t/t; subtracted from y velocity each tick when not on ground
 
-  WALK_SPEED = 4.3 / 20   # m/t
-  RUN_SPEED  = 5.612 / 20 # m/t
+  WALK_SPEED   = 4.3 / 20   # m/t
+  SPRINT_SPEED = 5.612 / 20 # m/t
+  SNEAK_SPEED  = 1.31 / 20  # m/t
 
   JUMP_FORCE = 0.42 # m/t; applied to velocity when starting a jump
 
@@ -35,7 +36,6 @@ class Rosegold::Physics
   private getter client : Rosegold::Client
   private property ticker : Fiber?
   property? jump_queued : Bool = false
-  property movement_speed : Float64 = WALK_SPEED
   private getter movement_action : Action(Vec3d)?
   private getter look_action : Action(Look)?
   private getter action_mutex : Mutex = Mutex.new
@@ -105,6 +105,38 @@ class Rosegold::Physics
       @look_action = action
     end
     action.join
+  end
+
+  def sneak(sneaking = true)
+    # send nothing if already in desired state
+    return if player.sneaking? == sneaking
+    if sneaking
+      # can't sprint while sneaking
+      sprint false
+      client.queue_packet Serverbound::EntityAction.new player.entity_id, :start_sneaking
+    else
+      client.queue_packet Serverbound::EntityAction.new player.entity_id, :stop_sneaking
+    end
+    player.sneaking = sneaking
+  end
+
+  def sprint(sprinting = true)
+    # can't sprint while sneaking
+    return if player.sneaking?
+    # send nothing if already in desired state
+    return if player.sprinting? == sprinting
+    if sprinting
+      client.queue_packet Serverbound::EntityAction.new player.entity_id, :start_sprinting
+    else
+      client.queue_packet Serverbound::EntityAction.new player.entity_id, :stop_sprinting
+    end
+    player.sprinting = sprinting
+  end
+
+  def movement_speed : Float64
+    return SNEAK_SPEED if player.sneaking?
+    return SPRINT_SPEED if player.sprinting?
+    WALK_SPEED
   end
 
   private def player
