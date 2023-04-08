@@ -18,8 +18,4 @@ class Rosegold::Serverbound::StatusPing < Rosegold::Serverbound::Packet
       buffer.write_full ping_id
     end.to_slice
   end
-
-  def callback(server)
-    server.send_packet Serverbound::StatusPong.new ping_id
-  end
 end
