@@ -4,10 +4,10 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
   property \
     window_id : UInt8,
     state_id : UInt32,
-    slot : UInt16,
+    slot_nr : UInt16,
     slot_data : Rosegold::Slot
 
-  def initialize(@window_id, @state_id, @slot, @slot_data)
+  def initialize(@window_id, @state_id, @slot_nr, @slot_data)
   end
 
   def self.read(packet)
@@ -20,16 +20,16 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
 
   def callback(client)
     if window_id == 0
-      Log.debug { "Received set slot for player inventory: #{slot_data}" }
-      client.current_window.slots[slot] = slot_data
+      Log.debug { "Received set slot for player inventory, slot #{slot_nr}: #{slot_data}" }
+      client.current_window.slots[slot_nr] = slot_data
     elsif client.current_window.nil? || client.current_window.try &.id != window_id
       Log.warn { "Received set slot for an unknown or mismatched window. Ignoring." }
       return
     else
-      Log.debug { "Received set slot for window #{window_id}, slot #{slot}." }
+      Log.debug { "Received set slot for window #{window_id}, slot #{slot_nr}: #{slot_data}" }
 
       client.current_window.try do |window|
-        window.slots[slot] = slot_data
+        window.slots[slot_nr] = slot_data
       end
     end
   end

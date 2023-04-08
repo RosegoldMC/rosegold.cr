@@ -17,6 +17,7 @@ class Rosegold::Clientbound::BlockChange < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    Log.debug { "block change #{self}" }
     client.dimension.set_block_state location, block_state
   end
 end
