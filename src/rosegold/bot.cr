@@ -56,18 +56,23 @@ class Rosegold::Bot
 
   # Waits for the new look to be sent to the server.
   def look=(look : Look)
-    client.physics.look = look
+    client.physics.look look
   end
 
   # Waits for the new look to be sent to the server.
   def look=(vec : Vec3d)
-    client.physics.look = vec
+    look_at vec
+  end
+
+  # Waits for the new look to be sent to the server.
+  def look(look : Look)
+    client.physics.look look
   end
 
   # Computes the new look from the current look.
   # Waits for the new look to be sent to the server.
   def look(&block : Look -> Look)
-    client.physics.look = block.call look
+    client.physics.look block.call look
   end
 
   # Sets the yaw of the look
@@ -92,9 +97,10 @@ class Rosegold::Bot
 
   # Waits for the new look to be sent to the server.
   def look_at(location : Vec3d)
-    client.physics.look = Look.from_vec location - eyes
+    client.physics.look Look.from_vec location - eyes
   end
 
+  # Ignores y coordinate; useful for looking straight while moving.
   # Waits for the new look to be sent to the server.
   def look_at_horizontal(location : Vec3d)
     look_at location.with_y eyes.y
