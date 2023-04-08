@@ -113,12 +113,12 @@ module Rosegold::Vec3(T)
     floored.plus 0.5, 0.5, 0.5
   end
 
-  def with_length(length : T) : self
-    my_length = this.len
+  def with_length(length : Float64) : Vec3d
+    my_length = self.len
     if my_length === 0
-      self * 0
+      self.to_f64 * 0
     else
-      self * (length / my_length)
+      self.to_f64 * (length / my_length)
     end
   end
 
@@ -126,7 +126,7 @@ module Rosegold::Vec3(T)
     x*x + y*y + z*z
   end
 
-  def len : T
+  def len : Float64
     Math.sqrt len_sq
   end
 
