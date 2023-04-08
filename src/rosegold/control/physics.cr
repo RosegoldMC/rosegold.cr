@@ -249,8 +249,6 @@ class Rosegold::Physics
       # gravity would pull us into the step, preventing stepping
       over_velocity = velocity.with_y 0
       step_over_movement = slide step_up, over_velocity, obstacles
-      Log.debug { "Physics tick: start=#{start} velocity=#{velocity} movement=#{movement}" }
-      Log.debug { "Attempting stepping: step_up_movement=#{step_up_movement} step_over_movement=#{step_over_movement}" }
 
       step_different_x = step_over_movement.x != movement.x
       step_different_z = step_over_movement.z != movement.z
@@ -263,7 +261,6 @@ class Rosegold::Physics
         collided_x = movement.x != velocity.x
         collided_y = true
         collided_z = movement.z != velocity.z
-        Log.debug { "down_end=#{down_end} movement=#{movement}" }
       end
     end
 
