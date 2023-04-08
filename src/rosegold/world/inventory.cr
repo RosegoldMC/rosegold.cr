@@ -42,7 +42,7 @@ class Rosegold::Inventory
 
     hotbar.each_with_index do |slot, index|
       if slot.item_id == item_id
-        client.queue_packet Serverbound::HeldItemChange.new index.to_u8
+        client.send_packet! Serverbound::HeldItemChange.new index.to_u8
         client.player.hotbar_selection = index.to_u8
         return true
       end
@@ -50,7 +50,7 @@ class Rosegold::Inventory
 
     slots.each_with_index do |slot, index|
       if slot.item_id == item_id
-        client.queue_packet Serverbound::PickItem.new index.to_u16
+        client.send_packet! Serverbound::PickItem.new index.to_u16
         return true
       end
     end
