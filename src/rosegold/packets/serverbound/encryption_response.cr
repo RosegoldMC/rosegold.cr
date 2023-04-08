@@ -29,7 +29,8 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
   end
 
   def send_join_request!
-    raise "Join Request Failed" unless send_join_request
+    response = send_join_request
+    raise "Join Request Failed: #{response.inspect}" unless response.status_code == 204
   end
 
   private def send_join_request
@@ -43,7 +44,7 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
         "selectedProfile": UUID,
         "serverId":        digest,
       }.to_json
-    ).status_code == 204
+    )
   end
 
   def write : Bytes
