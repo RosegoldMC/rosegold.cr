@@ -44,6 +44,7 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    client.physics.pause
     client.player.gamemode = gamemode
     client.dimension = Dimension.new dimension_name, dimension
 
