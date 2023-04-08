@@ -44,9 +44,16 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   def connection : Connection::Client
     @connection.try do |conn|
-      raise "Disconnected: #{conn.close_reason}" if conn.close_reason
+      if closed?
+        Log.warn { "Disconnected: #{conn.close_reason}" }
+      end
+
       conn
     end || raise "Client was never connected"
+  end
+
+  def closed? : Bool
+    !!(@connection.nil? || @connection.try &.close_reason)
   end
 
   def connected?
@@ -88,7 +95,6 @@ class Rosegold::Client < Rosegold::EventEmitter
     spawn do
       loop do
         if connection.close_reason
-          Fiber.yield
           Log.info { "Stopping reader: #{connection.close_reason}" }
           break
         end
@@ -114,10 +120,11 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   # Send a packet to the server concurrently.
   def queue_packet(packet : Serverbound::Packet)
-    raise "Unabled to queue #{packet}; Not connected" unless connected?
     spawn do
       Fiber.yield
       send_packet! packet
+    rescue e : NotConnected
+      Log.warn { "Not connected, not sending #{packet}" }
     end
   end
 
@@ -125,13 +132,13 @@ class Rosegold::Client < Rosegold::EventEmitter
   # EncryptionRequest, because it must change the IO socket only AFTER
   # a EncryptionResponse has been sent.
   def send_packet!(packet : Serverbound::Packet)
-    raise "Not connected" unless connected?
+    raise NotConnected.new unless connected?
     Log.trace { "SEND #{packet}" }
     connection.send_packet packet
   end
 
   private def read_packet
-    raise "Not connected" unless connected?
+    raise NotConnected.new unless connected?
     raw_packet = connection.read_raw_packet
 
     emit_event Event::RawPacket.new raw_packet
@@ -146,4 +153,6 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     packet
   end
+
+  class NotConnected < Exception; end
 end
