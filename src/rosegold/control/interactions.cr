@@ -11,6 +11,7 @@ class Rosegold::Interactions
   end
 
   # not exposed, for rules compliance
+  @using_hand = false
   @digging_block : ReachedBlock?
   @dig_hand_swing_countdown = 0_i8
 
@@ -29,6 +30,7 @@ class Rosegold::Interactions
     if reached
       place_block hand, reached
     else
+      @using_hand = true
       send_packet Serverbound::UseItem.new hand
       send_packet Serverbound::SwingArm.new
     end
@@ -36,6 +38,8 @@ class Rosegold::Interactions
 
   # Deactivates the "use" button.
   def stop_using_hand
+    return unless @using_hand
+    @using_hand = false
     send_packet Serverbound::PlayerDigging.new :finish_using_hand
   end
 
