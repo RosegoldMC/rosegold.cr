@@ -92,6 +92,10 @@ class Rosegold::Clientbound::PlayerInfo < Rosegold::Clientbound::Packet
       else
         client.online_players[player.uuid]?.try &.update player
       end
+
+      if player.gamemode && player.uuid == client.player.uuid
+        client.player.gamemode = player.gamemode.not_nil! # ameba:disable Lint/NotNil
+      end
     end
   end
 end
