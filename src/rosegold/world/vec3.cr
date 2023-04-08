@@ -202,8 +202,12 @@ module Rosegold::Vec3(T)
     centered_3d + face.to_vec3d(0.5)
   end
 
-  def to_s(io)
-    io << "#{x}, #{y}, #{z}"
+  def to_s(io, sep = ", ")
+    io << x << sep << y << sep << z
+  end
+
+  def join(sep = ", ")
+    "#{x}#{sep}#{y}#{sep}#{z}"
   end
 
   def inspect(io)
