@@ -40,20 +40,12 @@ struct Rosegold::Look
     with_pitch pitch.to_f32
   end
 
-  def down
-    Look.new(yaw, 90)
+  def down(angle : Float32 = 90)
+    Look.new(yaw, angle)
   end
 
-  def up
-    Look.new(yaw, -90)
-  end
-
-  def with_yaw(yaw : Float32)
-    Look.new(yaw, pitch)
-  end
-
-  def with_pitch(pitch : Float32)
-    Look.new(yaw, pitch)
+  def up(angle : Float32 = 90)
+    Look.new(yaw, -angle)
   end
 
   def to_vec3
