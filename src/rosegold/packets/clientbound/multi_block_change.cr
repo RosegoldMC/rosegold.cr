@@ -39,6 +39,7 @@ class Rosegold::Clientbound::MultiBlockChange < Rosegold::Clientbound::Packet
 
   def callback(client)
     block_states.each do |x, y, z, block_state|
+      Log.debug { "multi block change at #{x}, #{y}, #{z} state: #{block_state}" }
       client.dimension.set_block_state x, y, z, block_state
     end
   end

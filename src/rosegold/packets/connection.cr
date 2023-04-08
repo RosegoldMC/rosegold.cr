@@ -94,7 +94,6 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
       pkt_id = pkt_io.read_byte || raise "Connection closed"
       pkt_type = state[pkt_id]?
-      Log.trace { "Received packet #{pkt_id.to_u8} (#{pkt_type})" }
       return nil unless pkt_type
       return nil unless pkt_type.responds_to? :read
       pkt_type.read pkt_io
