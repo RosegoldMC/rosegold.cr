@@ -19,6 +19,10 @@ abstract class Rosegold::Clientbound::Packet < Rosegold::Packet
   macro inherited
     Rosegold::ProtocolState.register {{@type}}
   end
+
+  def self.new_raw(bytes)
+    Rosegold::Clientbound::RawPacket.new bytes
+  end
 end
 
 abstract class Rosegold::Serverbound::Packet < Rosegold::Packet
@@ -27,6 +31,39 @@ abstract class Rosegold::Serverbound::Packet < Rosegold::Packet
   macro inherited
     Rosegold::ProtocolState.register {{@type}}
   end
+
+  def self.new_raw(bytes)
+    Rosegold::Serverbound::RawPacket.new bytes
+  end
+end
+
+# not decoded eg. because unknown packet_id
+module Rosegold::RawPacket
+  getter bytes : Bytes
+
+  def packet_id
+    bytes[0]
+  end
+
+  def write : Bytes
+    bytes
+  end
+end
+
+# not decoded eg. because unknown packet_id
+class Rosegold::Clientbound::RawPacket < Rosegold::Clientbound::Packet
+  class_getter packet_id = 0xff_u8
+  include Rosegold::RawPacket
+
+  def initialize(@bytes); end
+end
+
+# not decoded eg. because unknown packet_id
+class Rosegold::Serverbound::RawPacket < Rosegold::Serverbound::Packet
+  class_getter packet_id = 0xff_u8
+  include Rosegold::RawPacket
+
+  def initialize(@bytes); end
 end
 
 class Rosegold::ProtocolState

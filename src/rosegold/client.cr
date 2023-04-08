@@ -115,7 +115,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     connection.state = ProtocolState::STATUS.clientbound
 
     connection.send_packet Serverbound::StatusRequest.new
-    connection.read_packet || raise "Server responded with unknown packet"
+    connection.read_packet
   end
 
   # Send a packet to the server concurrently.
@@ -143,9 +143,8 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     emit_event Event::RawPacket.new raw_packet
 
-    packet = Connection.decode_packet raw_packet, connection.state
+    packet = Connection::Client.decode_packet raw_packet, connection.state
     Log.trace { "RECV 0x#{raw_packet[0].to_s 16} #{packet}" }
-    return nil unless packet
 
     packet.callback(self)
 

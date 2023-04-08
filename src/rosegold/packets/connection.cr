@@ -56,7 +56,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     compression_threshold.positive?
   end
 
-  def read_packet : InboundPacket?
+  def read_packet : InboundPacket
     Connection.decode_packet read_raw_packet, state
   end
 
@@ -90,12 +90,13 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   def self.decode_packet(
     packet_bytes : Bytes,
     state : Hash(UInt8, InboundPacket.class)
-  ) : InboundPacket?
+  ) : InboundPacket
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
       pkt_id = pkt_io.read_byte || raise "Connection closed"
       pkt_type = state[pkt_id]?
-      return nil unless pkt_type
-      return nil unless pkt_type.responds_to? :read
+      unless pkt_type && pkt_type.responds_to? :read
+        return InboundPacket.new_raw(packet_bytes).as InboundPacket
+      end
       pkt_type.read pkt_io
     end
   end
