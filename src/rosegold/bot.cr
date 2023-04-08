@@ -22,9 +22,10 @@ class Rosegold::Bot
   end
 
   delegate host, port, connect, connected?, online_players, on, to: client
-  delegate uuid, username, feet, eyes, health, food, saturation, gamemode, to: client.player
+  delegate uuid, username, feet, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
+  delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory
-  delegate stop_using_hand, start_digging, stop_digging, to: @interact
+  delegate stop_using_hand, stop_digging, to: @interact
 
   def disconnect_reason
     client.connection.try &.close_reason
@@ -135,6 +136,14 @@ class Rosegold::Bot
   # Jumps the next time the player is on the ground.
   def start_jump
     client.physics.jump_queued = true
+  end
+
+  def unsneak
+    sneak false
+  end
+
+  def unsprint
+    sprint false
   end
 
   # Use #interact_block to enter a bed.
