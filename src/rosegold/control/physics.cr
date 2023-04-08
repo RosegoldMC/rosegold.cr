@@ -52,15 +52,6 @@ class Rosegold::Physics
   end
 
   def reset
-    @jump_queued = false
-
-    action_mutex.synchronize do
-      @movement_action.try &.fail("Physics reset")
-      @movement_action = nil
-
-      @look_action.try &.fail("Physics reset")
-      @look_action = nil
-    end
   end
 
   def start
