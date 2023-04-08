@@ -49,9 +49,16 @@ class Rosegold::Physics
   end
 
   def initialize(@client : Rosegold::Client)
+    @paused = true
+  end
+
+  def pause
+    @paused = true
   end
 
   def reset
+    @paused = false
+    player.velocity = Vec3d::ORIGIN
   end
 
   def start
@@ -61,7 +68,7 @@ class Rosegold::Physics
 
     self.ticker = spawn do
       while client.connected?
-        tick
+        tick unless @paused
         sleep 1.tick
       end
     end
