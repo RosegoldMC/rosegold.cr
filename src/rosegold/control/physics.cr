@@ -113,9 +113,9 @@ class Rosegold::Physics
     if sneaking
       # can't sprint while sneaking
       sprint false
-      client.queue_packet Serverbound::EntityAction.new player.entity_id, :start_sneaking
+      client.send_packet! Serverbound::EntityAction.new player.entity_id, :start_sneaking
     else
-      client.queue_packet Serverbound::EntityAction.new player.entity_id, :stop_sneaking
+      client.send_packet! Serverbound::EntityAction.new player.entity_id, :stop_sneaking
     end
     player.sneaking = sneaking
   end
@@ -126,9 +126,9 @@ class Rosegold::Physics
     # send nothing if already in desired state
     return if player.sprinting? == sprinting
     if sprinting
-      client.queue_packet Serverbound::EntityAction.new player.entity_id, :start_sprinting
+      client.send_packet! Serverbound::EntityAction.new player.entity_id, :start_sprinting
     else
-      client.queue_packet Serverbound::EntityAction.new player.entity_id, :stop_sprinting
+      client.send_packet! Serverbound::EntityAction.new player.entity_id, :stop_sprinting
     end
     player.sprinting = sprinting
   end
@@ -190,16 +190,16 @@ class Rosegold::Physics
     # anticheat requires sending these different packets
     if feet != player.feet
       if look != player.look
-        client.queue_packet Serverbound::PlayerPositionAndLook.new(
+        client.send_packet! Serverbound::PlayerPositionAndLook.new(
           feet, look, on_ground)
       else
-        client.queue_packet Serverbound::PlayerPosition.new feet, on_ground
+        client.send_packet! Serverbound::PlayerPosition.new feet, on_ground
       end
     else
       if look != player.look
-        client.queue_packet Serverbound::PlayerLook.new look, on_ground
+        client.send_packet! Serverbound::PlayerLook.new look, on_ground
       else
-        client.queue_packet Serverbound::PlayerNoMovement.new on_ground
+        client.send_packet! Serverbound::PlayerNoMovement.new on_ground
       end
     end
     player.feet = feet
