@@ -8,6 +8,10 @@ class Rosegold::Serverbound::LoginStart < Rosegold::Serverbound::Packet
 
   def initialize(@username : String); end
 
+  def self.read(packet)
+    self.new packet.read_var_string
+  end
+
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id

@@ -11,6 +11,13 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
     self.new Chat.from_json(packet.read_var_string)
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write reason.to_json
+    end.to_slice
+  end
+
   def callback(client)
     client.connection.disconnect reason
   end
