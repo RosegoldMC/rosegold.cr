@@ -16,7 +16,7 @@ class Rosegold::Clientbound::StatusResponse < Rosegold::Clientbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id
-      buffer.write json_response.to_s
+      buffer.write json_response.to_json
     end.to_slice
   end
 end
