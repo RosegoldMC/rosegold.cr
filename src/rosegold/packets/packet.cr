@@ -1,6 +1,4 @@
 abstract class Rosegold::Packet < Rosegold::Event
-  class_getter state = Rosegold::ProtocolState::PLAY
-
   def write : Bytes
     raise "Not implemented"
   end
