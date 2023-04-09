@@ -195,6 +195,8 @@ class Minecraft::IO::Wrap < IO
 
   def initialize(@io : ::IO); end
 
+  delegate close, closed?, flush, peek, to: @io
+
   def read(slice : Bytes)
     @io.read slice
   end
@@ -232,6 +234,8 @@ class Minecraft::EncryptedTCPSocket < IO
     @write_cipher.key = key
     @write_cipher.iv = iv
   end
+
+  delegate close, closed?, flush, to: @io
 
   def read(slice : Bytes)
     upstream_size = @io.read_fully slice
