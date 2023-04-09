@@ -92,7 +92,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     state : Hash(UInt8, InboundPacket.class)
   ) : InboundPacket
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
-      pkt_id = pkt_io.read_byte || raise "Connection closed"
+      pkt_id = pkt_io.read_byte || raise "Empty packet"
       pkt_type = state[pkt_id]?
       unless pkt_type && pkt_type.responds_to? :read
         return InboundPacket.new_raw(packet_bytes).as InboundPacket
