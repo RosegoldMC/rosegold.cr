@@ -112,7 +112,7 @@ module Minecraft::NBT
       {name, tag}
     end
 
-    def write_named(io : Minecraft::IO, name : String)
+    def write_named(io : Minecraft::IO, name : String = "")
       io.write_byte tag_type
       StringTag.new(name).write io
       write io

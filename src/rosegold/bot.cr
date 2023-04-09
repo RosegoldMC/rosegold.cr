@@ -33,7 +33,7 @@ class Rosegold::Bot
 
   # Revive the player if dead. Does nothing if alive.
   def respawn
-    raise "Not implemented" # TODO send packet
+    client.queue_packet Serverbound::ClientStatus.new :respawn
   end
 
   # Send a message or slash command.

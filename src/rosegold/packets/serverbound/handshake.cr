@@ -17,6 +17,15 @@ class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
     @next_state : UInt32
   ); end
 
+  def self.read(packet)
+    self.new(
+      packet.read_var_int,
+      packet.read_var_string,
+      packet.read_ushort,
+      packet.read_var_int
+    )
+  end
+
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id

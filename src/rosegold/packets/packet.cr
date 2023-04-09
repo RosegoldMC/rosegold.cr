@@ -1,13 +1,12 @@
 abstract class Rosegold::Packet < Rosegold::Event
   def write : Bytes
-    raise "Not implemented"
+    raise "Not implemented: write #{self}"
   end
 
   def callback(client_or_server); end
 
   def to_s(io)
-    io << pretty_inspect(999, " ", 0).sub(/:0x\S+/, "") \
-      .gsub(/Rosegold::|Clientbound::|Serverbound::/, "")
+    io << pretty_inspect(999, " ", 0).sub(/:0x\S+/, "").gsub(/Rosegold::/, "")
   end
 end
 

@@ -49,7 +49,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
       io.write data
       io.write block_entities.size
       block_entities.each do |be|
-        io.write (((be.x & 0xf) << 4) + (be.z & 0xf)).to_u8
+        io.write (((be.x & 0xf) << 4) | (be.z & 0xf)).to_u8
         io.write_full be.y.to_i16
         io.write be.type
         io.write be.nbt
