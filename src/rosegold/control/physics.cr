@@ -165,6 +165,8 @@ class Rosegold::Physics
     # TODO: this only works with gravity on
     on_ground = movement.y > input_velocity.y
 
+    @movement_action.try &.fail "Stuck at #{feet}" unless feet != player.feet
+
     send_movement_packet feet, look, on_ground
     player.velocity = next_velocity
 
