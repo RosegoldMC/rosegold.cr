@@ -51,15 +51,11 @@ module Minecraft::IO
   end
 
   def write(nbt : NBT::Tag)
-    raise "Not implemented" # TODO
+    nbt.write_named self
   end
 
   def write(slot : Rosegold::Slot)
-    write slot.empty?
-    return if slot.empty?
-    write slot.item_id
-    write slot.count
-    write slot.nbt || 0_u8
+    slot.write self
   end
 
   def write_angle256_deg(deg : Float32 | Float64)
@@ -169,11 +165,6 @@ module Minecraft::IO
 
   def read_nbt : Minecraft::NBT::Tag
     NBT::Tag.read_named(self)[1]
-  end
-
-  def read_slot : Rosegold::Slot
-    return Rosegold::Slot.new unless read_bool
-    Rosegold::Slot.new(read_var_int, read_byte, read_nbt)
   end
 
   def read_angle256_deg : Float32

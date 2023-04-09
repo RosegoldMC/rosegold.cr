@@ -12,6 +12,13 @@ class Rosegold::Clientbound::HeldItemChange < Rosegold::Clientbound::Packet
     self.new(packet.read_byte)
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write hotbar_nr
+    end.to_slice
+  end
+
   def callback(client)
     client.player.hotbar_selection = hotbar_nr
   end

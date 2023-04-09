@@ -8,6 +8,10 @@ class Rosegold::Serverbound::HeldItemChange < Rosegold::Serverbound::Packet
   # `hotbar_nr` ranges from 0 to 8
   def initialize(@hotbar_nr : UInt8); end
 
+  def self.read(packet)
+    self.new(packet.read_short.to_u8)
+  end
+
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id

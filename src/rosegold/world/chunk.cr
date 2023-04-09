@@ -50,7 +50,7 @@ class Rosegold::Chunk
     end
 
     def write(io)
-      io.write @block_count
+      io.write_full @block_count
       @blocks.write io
       @biomes.write io
     end

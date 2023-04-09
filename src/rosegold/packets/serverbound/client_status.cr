@@ -1,6 +1,5 @@
 require "../packet"
 
-# Respawn: action=0
 class Rosegold::Serverbound::ClientStatus < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x04_u8
 

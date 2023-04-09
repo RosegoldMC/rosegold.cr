@@ -17,6 +17,14 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
     )
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write uuid
+      buffer.write username
+    end.to_slice
+  end
+
   def callback(client)
     client.state = ProtocolState::PLAY.clientbound
     Log.info { "Logged in as #{username} #{uuid}" }
