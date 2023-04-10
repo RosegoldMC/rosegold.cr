@@ -114,6 +114,7 @@ module Minecraft::NBT
 
     def write_named(io : Minecraft::IO, name : String = "")
       io.write_byte tag_type
+      return if self.is_a? EndTag
       StringTag.new(name).write io
       write io
     end
@@ -141,7 +142,7 @@ module Minecraft::NBT
     end
 
     def write(io)
-      raise NotImplementedError.new "#write(io) not implemented for EndTag, please use EndTag.write(io) instead."
+      EndTag.write io
     end
   end
 
