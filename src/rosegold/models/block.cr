@@ -52,10 +52,10 @@ class Rosegold::Block
     speed_multiplier = 1.0
     if best_tool?(main_hand)
       speed_multiplier = material_tool_multipliers[main_hand.item_id_int.to_s].as_f
+      speed_multiplier += main_hand.efficiency ** 2 + 1 if main_hand.efficiency > 0
     end
 
     # TODO: Implement calculations for the following factors:
-    # - efficiency enchantment
     # - haste
     # - mining fatigue
     # - in_water without aqua affinity

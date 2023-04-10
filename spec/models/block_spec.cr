@@ -43,6 +43,28 @@ Spectator.describe Rosegold::Block do
           expect(Rosegold::Block.from_block_state_id(1).break_time(main_hand, player)).to eq 6   # stone
           expect(Rosegold::Block.from_block_state_id(10).break_time(main_hand, player)).to eq 15 # dirt
         end
+
+        context "with efficiency 4 enchantment" do
+          let(:main_hand) {
+            Rosegold::Slot.new(
+              item_id_int: 721,
+              nbt: Minecraft::NBT::CompoundTag.new(Hash(String, Minecraft::NBT::Tag).new.tap { |h|
+                h["Enchantments"] = Minecraft::NBT::ListTag.new(Array(Minecraft::NBT::Tag).new.tap { |a|
+                  a << Minecraft::NBT::CompoundTag.new(Hash(String, Minecraft::NBT::Tag).new.tap { |e|
+                    e["id"] = Minecraft::NBT::StringTag.new("minecraft:efficiency")
+                    e["lvl"] = Minecraft::NBT::ShortTag.new(4)
+                  })
+                })
+              })
+            )
+          }
+
+          it "calculates the break time properly with proper tool" do
+            expect(Rosegold::Block.from_block_state_id(1490).break_time(main_hand, player)).to eq 60 # obsidian
+            expect(Rosegold::Block.from_block_state_id(1).break_time(main_hand, player)).to eq 2     # stone
+            expect(Rosegold::Block.from_block_state_id(10).break_time(main_hand, player)).to eq 15   # dirt
+          end
+        end
       end
     end
   end

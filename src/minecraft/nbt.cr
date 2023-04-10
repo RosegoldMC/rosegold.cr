@@ -72,7 +72,7 @@ module Minecraft::NBT
       self.value
     end
 
-    def as_str : String
+    def as_s : String
       raise "Wrong type #{self}" unless self.is_a? StringTag
       self.value
     end
