@@ -4,8 +4,8 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
   property \
     window_id : UInt8,
     state_id : UInt32,
-    slots : Array(Slot),
-    cursor : Slot
+    slots : Array(WindowSlot),
+    cursor : WindowSlot
 
   def initialize(@window_id, @state_id, @slots, @cursor)
   end
@@ -14,11 +14,12 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
     window_id = packet.read_byte.to_u8
     state_id = packet.read_var_int
 
-    slots = Array(Slot).new(packet.read_var_int) do
-      Slot.read(packet)
+    num_slots = packet.read_var_int
+    slots = Array(WindowSlot).new(num_slots) do |slot_nr|
+      WindowSlot.new(slot_nr, Slot.read(packet))
     end
 
-    cursor = Slot.read(packet)
+    cursor = WindowSlot.new -1, Slot.read(packet)
 
     self.new(window_id, state_id, slots, cursor)
   end
