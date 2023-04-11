@@ -6,11 +6,11 @@ class Rosegold::Inventory
 
   forward_missing_to @client.window
 
-  # Picks the item with the given id, if it exists in the inventory
-  # Returns true if the item was picked, false otherwise
+  # Picks the item with the given id, if it exists in the inventory.
+  # Returns true if the item was picked, false otherwise.
   #
   # Example:
-  #   inventory.pick "minecraft:diamond_pickaxe" # => true
+  #   inventory.pick "diamond_pickaxe" # => true
   def pick(item_id)
     return true if main_hand.item_id == item_id
 
@@ -22,9 +22,9 @@ class Rosegold::Inventory
       end
     end
 
-    slots.each_with_index do |slot, index|
+    slots.each do |slot|
       if slot.item_id == item_id
-        client.send_packet! Serverbound::PickItem.new index.to_u16
+        client.send_packet! Serverbound::PickItem.new slot.slot_nr.to_u16
         return true
       end
     end

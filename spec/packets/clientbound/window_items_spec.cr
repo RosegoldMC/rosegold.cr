@@ -1,6 +1,6 @@
 require "../../spec_helper"
 
-Spectator.describe Rosegold::Clientboard::WindowItems do
+Spectator.describe Rosegold::Clientbound::WindowItems do
   let(:io) { Minecraft::IO::Memory.new(File.read(file)) }
   let(:file) { File.expand_path("../../../fixtures/packets/clientbound/window_items.mcpacket", __FILE__) }
 
