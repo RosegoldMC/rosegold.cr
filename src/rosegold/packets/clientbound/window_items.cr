@@ -25,6 +25,7 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    Log.debug { "Received #{slots.size} window items for window #{window_id} state #{state_id}" }
     if window_id == 0
       client.inventory.state_id = state_id
       client.inventory.slots = slots
