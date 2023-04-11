@@ -23,5 +23,6 @@ class Rosegold::Clientbound::OpenWindow < Rosegold::Clientbound::Packet
     client.window.close
     client.window = Window.new \
       client, window_id, window_title, window_type
+    Log.debug { "Server opened window #{client.window}" }
   end
 end
