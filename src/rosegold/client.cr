@@ -48,21 +48,15 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def connection : Connection::Client
-    @connection.try do |conn|
-      if closed?
-        Log.warn { "Disconnected: #{conn.close_reason}" }
-      end
-
-      conn
-    end || raise "Client was never connected"
-  end
-
-  def closed? : Bool
-    !!(@connection.nil? || @connection.try &.close_reason)
+    conn = @connection
+    raise "Client was never connected" unless conn
+    raise "Disconnected: #{conn.close_reason}" if conn.close_reason
+    conn
   end
 
   def connected?
-    !@connection.nil? && !connection.close_reason
+    conn = @connection || return false
+    !conn.close_reason
   end
 
   def state=(state)
@@ -100,11 +94,14 @@ class Rosegold::Client < Rosegold::EventEmitter
     spawn do
       loop do
         if connection.close_reason
-          Log.info { "Stopping reader: #{connection.close_reason}" }
+          Log.debug { "Stopping reader: #{connection.close_reason}" }
           break
         end
         read_packet
       end
+    rescue e
+      raise_without_backtrace e unless connection.close_reason
+      Log.debug { "Stopping reader: #{connection.close_reason}" }
     end
   end
 
