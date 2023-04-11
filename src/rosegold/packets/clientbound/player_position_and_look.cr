@@ -88,10 +88,6 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
 
     Log.debug { "Position reset: #{player.feet} #{player.look} dismount=#{dismount_vehicle?} flags=#{relative_flags}" }
 
-    client.physics.reset
-
-    client.physics.start
-
-    # TODO: close the “Downloading Terrain” screen when joining/respawning
+    client.physics.handle_reset
   end
 end

@@ -35,6 +35,7 @@ class Rosegold::Physics
 
   private getter client : Rosegold::Client
   private property ticker : Fiber?
+  property? paused : Bool = true
   property? jump_queued : Bool = false
   private getter movement_action : Action(Vec3d)?
   private getter look_action : Action(Look)?
@@ -48,28 +49,23 @@ class Rosegold::Physics
     look_action.try &.target
   end
 
-  def initialize(@client : Rosegold::Client)
-    @paused = true
-  end
+  def initialize(@client : Rosegold::Client); end
 
   def pause
     @paused = true
   end
 
-  def reset
+  def handle_reset
     @paused = false
     player.velocity = Vec3d::ORIGIN
-  end
 
-  def start
     ticker.try do |t|
-      return ticker unless t.dead?
+      return unless t.dead?
     end
-
     self.ticker = spawn do
       while client.connected?
-        tick unless @paused
-        sleep 1.tick
+        tick
+        sleep 1/20
       end
     end
   end
@@ -145,7 +141,10 @@ class Rosegold::Physics
     client.dimension
   end
 
-  private def tick
+  def tick
+    return if paused?
+    return unless client.connected?
+
     input_velocity = velocity_for_inputs
 
     movement, next_velocity = Physics.predict_movement_collision(
