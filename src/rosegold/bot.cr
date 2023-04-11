@@ -149,6 +149,32 @@ class Rosegold::Bot
     client.physics.jump_queued = true
   end
 
+  # Jumps and waits until the bot is `height` above the ground.
+  # Fails if the bot lands before reaching this height.
+  def jump_by_height(height = 1, timeout_ticks = 20)
+    target_y = feet.y + height
+    prev_y = feet.y
+    client.physics.jump_queued = true
+    timeout_ticks.times do
+      wait_tick
+      break if feet.y >= target_y
+      raise "Cannot jump up #{height}m at #{feet}" if prev_y == feet.y
+      prev_y = feet.y
+    end
+  end
+
+  # Waits until the bot's y level stops changing.
+  def land_on_ground(timeout_ticks = 120)
+    prev_y = feet.y
+    ticks_remaining = timeout_ticks
+    loop do
+      wait_tick
+      break if prev_y == feet.y
+      ticks_remaining -= 1
+      raise "Still falling after #{timeout_ticks} ticks" if ticks_remaining <= 0
+    end
+  end
+
   def unsneak
     sneak false
   end
