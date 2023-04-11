@@ -1,7 +1,7 @@
 require "../packet"
 
 class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x12_u8
+  class_getter packet_id = 0x13_u8
 
   property \
     window_id : UInt32
@@ -16,11 +16,13 @@ class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    if client.window.id == 0
-      Log.warn { "Server closed the inventory window" }
-      return
+    if window_id == client.window.id
+      Log.debug { "Server closed window #{client.window}" }
+      client.window.handle_closed
+      client.window = client.inventory
+    else
+      Log.warn { "Server closed the wrong window: #{window_id}. Ignoring." }
+      Log.debug { self }
     end
-    client.window.close
-    client.window = client.inventory
   end
 end

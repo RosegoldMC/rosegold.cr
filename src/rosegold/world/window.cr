@@ -29,8 +29,13 @@ class Rosegold::Window
 
   def close
     return if closed?
-    closed = true
     @client.send_packet! Serverbound::CloseWindow.new id.to_u16
+    handle_closed
+  end
+
+  def handle_closed
+    return if closed?
+    closed = true
     # TODO emit Closed event
   end
 
@@ -50,6 +55,8 @@ class Rosegold::Window
     @cursor = cursor
     # TODO emit Ready event if ready? && !was_ready
   end
+
+  # TODO consider having `slots` wait for ready, and `slots!` to return/throw instantly
 
   def slots : Array(WindowSlot)
     @slots || raise "Window is not ready"
@@ -75,6 +82,82 @@ class Rosegold::Window
   def main_hand : WindowSlot
     hotbar[@client.player.hotbar_selection]
   end
+
+  # Hotbar starts at 0.
+  def swap_hotbar(hotbar_nr, slot_nr)
+    # TODO do nothing if slot_nr is hotbar_selection already
+    # TODO change hotbar_selection if slot_nr in hotbar
+    send_click ClickWindow.swap_hotbar self, hotbar_nr, slot_nr
+    hotbar[hotbar_nr].swap_with slots[slot_nr]
+  end
+
+  # Hotbar starts at 0.
+  def swap_hotbar(hotbar_nr, slot : WindowSlot)
+    swap_hotbar hotbar_nr, slot.slot_nr
+  end
+
+  def swap_off_hand(slot_nr)
+    send_click ClickWindow.swap_off_hand self, slot_nr
+    @client.inventory.off_hand.swap_with slots[slot_nr]
+  end
+
+  def swap_off_hand(slot : WindowSlot)
+    swap_off_hand slot.slot_nr
+  end
+
+  def drop(slot_nr, stack_mode : StackMode)
+    slot = slots[slot_nr]
+    if slot.slot_nr < 0
+      slot = cursor
+      send_click ClickWindow.drop_cursor self, stack_mode
+    else
+      # TODO check that cursor is empty
+      send_click ClickWindow.drop self, slot_nr, stack_mode
+    end
+    case stack_mode
+    when :single; slot.decrement
+    when :full  ; slot.make_empty
+    end
+  end
+
+  def drop(slot : WindowSlot, stack_mode : StackMode)
+    drop slot.slot_nr, stack_mode
+  end
+
+  def drop_cursor(stack_mode : StackMode)
+    send_click ClickWindow.drop_cursor self, stack_mode
+    case stack_mode
+    when :single; cursor.decrement
+    when :full  ; cursor.make_empty
+    end
+  end
+
+  def click(slot_nr, right = false, shift = false, double = false)
+    send_click ClickWindow.click self, slot_nr, right, shift, double
+    force_reset_hack # TODO update slots
+  end
+
+  def click(slot : WindowSlot, right = false, shift = false, double = false)
+    click slot.slot_nr, right, shift, double
+  end
+
+  private def send_click(packet)
+    @client.send_packet! packet
+  end
+
+  # send invalid click to force server to reset window
+  private def force_reset_hack
+    invalid_state_id = 0
+    changed_slots = [] of WindowSlot
+    @client.send_packet! ClickWindow.new :swap, 0, hotbar[0].slot_nr, changed_slots, self.id, invalid_state_id, cursor
+    @slots = nil
+    while !ready?
+      sleep 0.1
+    end
+  end
+
+  alias StackMode = Serverbound::ClickWindow::StackMode
+  alias ClickWindow = Serverbound::ClickWindow
 end
 
 class Rosegold::PlayerWindow < Rosegold::Window
@@ -111,13 +194,5 @@ class Rosegold::PlayerWindow < Rosegold::Window
 
   def off_hand : WindowSlot
     slots[45]
-  end
-end
-
-class Rosegold::WindowSlot < Rosegold::Slot
-  getter slot_nr : Int32
-
-  def initialize(@slot_nr, slot)
-    super slot.item_id_int, slot.count, slot.nbt
   end
 end
