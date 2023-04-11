@@ -17,11 +17,11 @@ class Rosegold::Bot
   end
 
   # Connects to the server and waits for being ingame.
-  def self.join_game(address : String)
-    new Client.new(address).tap &.join_game
+  def self.join_game(address : String, timeout_ticks = 1200)
+    new Client.new(address).tap &.join_game(timeout_ticks)
   end
 
-  delegate host, port, connect, connected?, online_players, on, to: client
+  delegate host, port, connect, connected?, join_game, spawned?, online_players, on, to: client
   delegate uuid, username, feet, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory
@@ -31,9 +31,20 @@ class Rosegold::Bot
     client.connection.try &.close_reason
   end
 
+  def dead?
+    client.player.health <= 0
+  end
+
   # Revive the player if dead. Does nothing if alive.
-  def respawn
+  def respawn(timeout_ticks = 1200)
+    return unless dead?
     client.queue_packet Serverbound::ClientStatus.new :respawn
+    ticks_remaining = timeout_ticks
+    until spawned?
+      wait_tick
+      ticks_remaining -= 1
+      raise "Still respawning after #{timeout_ticks} ticks" if ticks_remaining <= 0
+    end
   end
 
   # Send a message or slash command.

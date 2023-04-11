@@ -63,11 +63,18 @@ class Rosegold::Client < Rosegold::EventEmitter
     connection.state = state
   end
 
-  def join_game
-    connect
+  def spawned?
+    inventory.ready? && !physics.paused? && connected?
+  end
 
-    until connection.state == ProtocolState::PLAY.clientbound
-      sleep 0.1
+  # Waits for the client to be fully spawned, ie. physics and inventory being ready.
+  def join_game(timeout_ticks = 1200)
+    connect
+    until spawned?
+      sleep 1/20
+      timeout_ticks -= 1
+      raise "Disconnected while joining game: #{connection.close_reason}" if connection.try &.close_reason
+      raise "Took too long to join the game" if timeout_ticks <= 0
     end
   end
 
