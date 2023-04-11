@@ -28,7 +28,7 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
       client.window.slots[slot.slot_nr] = slot
     else
       Log.warn { "Received slot update for an unknown or mismatched window. Ignoring." }
-      Log.trace { self }
+      Log.debug { self }
     end
   end
 end
