@@ -1,8 +1,6 @@
 require "../../models/chat"
 
 class Rosegold::Clientbound::OpenWindow < Rosegold::Clientbound::Packet
-  Log = ::Log.for(self)
-
   class_getter packet_id = 0x2E_u8
 
   property \
@@ -22,6 +20,8 @@ class Rosegold::Clientbound::OpenWindow < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.current_window = Window.new self
+    client.window.close
+    client.window = Window.new \
+      client, window_id, window_title, window_type
   end
 end
