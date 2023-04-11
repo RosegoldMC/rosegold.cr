@@ -192,6 +192,18 @@ class Rosegold::PlayerWindow < Rosegold::Window
     slots[8]
   end
 
+  def inventory : Array(WindowSlot)
+    # inventory isn't updated by server while other window is open
+    return @client.window.inventory if @client.window != self
+    slots[9..35]
+  end
+
+  def hotbar : Array(WindowSlot)
+    # inventory isn't updated by server while other window is open
+    return @client.window.hotbar if @client.window != self
+    slots[36..44]
+  end
+
   def off_hand : WindowSlot
     slots[45]
   end
