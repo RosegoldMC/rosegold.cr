@@ -27,7 +27,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     player : Player = Player.new,
     dimension : Dimension = Dimension.new,
     physics : Physics,
-    current_window : Window = Window.player_inventory
+    inventory : PlayerWindow,
+    window : Window
 
   def initialize(@host : String, @port : UInt16 = 25565)
     if host.includes? ":"
@@ -35,7 +36,11 @@ class Rosegold::Client < Rosegold::EventEmitter
       @port = port_str.to_u16
     end
     @physics = uninitialized Physics
+    @inventory = uninitialized PlayerWindow
+    @window = uninitialized Window
     @physics = Physics.new self
+    @inventory = PlayerWindow.new self
+    @window = @inventory
   end
 
   def connection? : Connection::Client?

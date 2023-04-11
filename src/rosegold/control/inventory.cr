@@ -1,36 +1,10 @@
+# Utility methods for interacting with the open window.
 class Rosegold::Inventory
-  property client : Rosegold::Client
+  property client : Client
 
-  def initialize(@client)
-  end
+  def initialize(@client); end
 
-  def slots
-    client.current_window.slots
-  end
-
-  def main_hand : Slot
-    hotbar[client.player.hotbar_selection]
-  end
-
-  def off_hand : Slot
-    slots[45]
-  end
-
-  def equipment : Array(Slot)
-    slots[5..8]
-  end
-
-  def hotbar : Array(Slot)
-    slots[36..44]
-  end
-
-  def crafting_input : Array(Slot)
-    slots[1..4]
-  end
-
-  def crafting_result : Slot
-    slots[0]
-  end
+  forward_missing_to @client.window
 
   # Picks the item with the given id, if it exists in the inventory
   # Returns true if the item was picked, false otherwise

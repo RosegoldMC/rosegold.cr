@@ -4,42 +4,37 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
   property \
     window_id : UInt8,
     state_id : UInt32,
-    count : UInt32,
-    slot_data : Array(Rosegold::Slot),
-    carried_item : Rosegold::Slot
+    slots : Array(Slot),
+    cursor : Slot
 
-  def initialize(@window_id, @state_id, @count, @slot_data, @carried_item)
+  def initialize(@window_id, @state_id, @slots, @cursor)
   end
 
   def self.read(packet)
     window_id = packet.read_byte.to_u8
     state_id = packet.read_var_int
 
-    count = packet.read_var_int
-    slot_data = Array(Rosegold::Slot).new(count)
-
-    count.times do
-      slot_data << Rosegold::Slot.read(packet)
+    slots = Array(Slot).new(packet.read_var_int) do
+      Slot.read(packet)
     end
 
-    carried_item = Rosegold::Slot.read(packet)
+    cursor = Slot.read(packet)
 
-    self.new(window_id, state_id, count, slot_data, carried_item)
+    self.new(window_id, state_id, slots, cursor)
   end
 
   def callback(client)
     if window_id == 0
-      Log.debug { "Received window items for player inventory." }
-      Log.trace { slot_data }
-      client.current_window.slots = slot_data
-    elsif client.current_window.nil? || client.current_window.try &.id != window_id
-      Log.warn { "Received window items for an unknown or mismatched window. Ignoring." }
-      return
+      client.inventory.state_id = state_id
+      client.inventory.slots = slots
+      client.inventory.cursor = cursor
+    elsif client.window.id == window_id
+      client.window.state_id = state_id
+      client.window.slots = slots
+      client.window.cursor = cursor
     else
-      Log.debug { "Received window items for window #{window_id}." }
-      Log.trace { slot_data }
-
-      client.current_window.slots = slot_data
+      Log.warn { "Received window items for an unknown or mismatched window. Ignoring." }
+      Log.trace { self }
     end
   end
 end
