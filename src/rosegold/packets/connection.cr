@@ -46,8 +46,6 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   def disconnect(reason : Chat)
     Log.info { "Disconnected: #{reason}" }
     @close_reason = reason
-    # write a bad packet to force disconnection
-    3.times { io.write 0xFF_u8 }
     io.close
     handler.try &.emit_event Event::Disconnected.new reason
   end
