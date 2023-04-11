@@ -1,8 +1,6 @@
 require "../packet"
 
 class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
-  Log = ::Log.for(self)
-
   class_getter packet_id = 0x12_u8
 
   property \
@@ -18,6 +16,11 @@ class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.current_window = Window.player_inventory unless client.current_window.id == 0
+    if client.window.id == 0
+      Log.warn { "Server closed the inventory window" }
+      return
+    end
+    client.window.close
+    client.window = client.inventory
   end
 end
