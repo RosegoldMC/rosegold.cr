@@ -1,6 +1,6 @@
 require "../../minecraft/nbt"
 
-struct Rosegold::Slot
+class Rosegold::Slot
   property item_id_int : UInt32
   property count : UInt8
   property nbt : Minecraft::NBT::CompoundTag?
