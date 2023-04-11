@@ -36,7 +36,7 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
       client.window.cursor = cursor
     else
       Log.warn { "Received window items for an unknown or mismatched window. Ignoring." }
-      Log.trace { self }
+      Log.debug { self }
     end
   end
 end
