@@ -44,17 +44,17 @@ class Rosegold::Slot
   end
 
   def efficiency
-    enchantments.find { |e| e[:id] == "minecraft:efficiency" }.try &.[:lvl] || 0
+    enchantments["efficiency"]? || 0
   end
 
   def enchantments
-    nbt.try &.["Enchantments"]?.try &.as_list.try &.map do |e|
+    enchantments = Hash(String, Int16).new
+    nbt.try &.["Enchantments"]?.try &.as_list.try &.each do |e|
       e = e.as_compound
-      {
-        id:  e["id"]?.try &.as_s,
-        lvl: e["lvl"]?.try &.as_i16,
-      }
-    end || [] of Hash(String, Int32)
+      id = e["id"].as_s.sub("minecraft:", "")
+      enchantments[id] = e["lvl"].as_i16
+    end
+    enchantments
   end
 
   # Use to get the item_id in new-age string format
