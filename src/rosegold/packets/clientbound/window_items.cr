@@ -24,6 +24,17 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
     self.new(window_id, state_id, slots, cursor)
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write window_id
+      buffer.write state_id
+      buffer.write slots.size
+      slots.each &.write buffer
+      buffer.write cursor
+    end.to_slice
+  end
+
   def callback(client)
     Log.debug { "Received #{slots.size} window items for window #{window_id} state #{state_id}" }
     if window_id == 0
