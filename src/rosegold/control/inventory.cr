@@ -41,8 +41,7 @@ class Rosegold::Inventory
 
     slots.each do |slot|
       if slot.matches? spec
-        client.send_packet! Serverbound::PickItem.new slot.slot_nr.to_u16
-        sleep 1 # TODO wait for server to finish updating slot and hotbar_index
+        swap_hotbar client.player.hotbar_selection, slot
         return true
       end
     end
