@@ -43,6 +43,14 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     @state = state
   end
 
+  def open?
+    !close_reason
+  end
+
+  def closed?
+    !!close_reason
+  end
+
   def disconnect(reason : Chat)
     Log.info { "Disconnected: #{reason}" }
     @close_reason = reason
