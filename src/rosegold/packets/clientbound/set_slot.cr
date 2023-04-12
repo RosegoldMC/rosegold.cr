@@ -18,6 +18,16 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
         Slot.read(packet)
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write window_id
+      buffer.write state_id
+      buffer.write_full slot.slot_nr.to_i16
+      buffer.write slot
+    end.to_slice
+  end
+
   def callback(client)
     Log.debug { "Server set slot #{slot}" }
     if window_id == -1 && slot.slot_nr == -1

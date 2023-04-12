@@ -22,7 +22,7 @@ class Rosegold::Slot
   def write(io)
     io.write present?
     return unless present?
-    io.write item_id
+    io.write item_id_int
     io.write_byte count
     io.write nbt || Minecraft::NBT::EndTag.new
   end

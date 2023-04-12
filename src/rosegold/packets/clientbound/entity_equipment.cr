@@ -17,17 +17,25 @@ class Rosegold::Clientbound::EntityEquipment < Rosegold::Clientbound::Packet
 
   def initialize(@entity_id); end
 
+  def valid?
+    slots = [main_hand, off_hand, boots, leggings, chestplate, helmet]
+      .select &.try &.present?
+    !slots.empty?
+  end
+
   def write : Bytes
+    slots = [main_hand, off_hand, boots, leggings, chestplate, helmet]
+      .map_with_index { |slot, i| {slot, i.to_u8} }
+      .select { |slot, _| slot && slot.present? }
+    raise "Cannot write empty EntityEquipment" if slots.empty?
+    _, last_i = slots.last
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id
       buffer.write entity_id
-      array = [main_hand, off_hand, boots, leggings, chestplate, helmet]
-      array.each_with_index do |slot, i|
-        next unless slot && slot.present?
-        i = i.to_u8
-        i |= 0x80 unless i == 5
+      slots.each do |slot, i|
+        i |= 0x80 unless i == last_i
         buffer.write i
-        slot.write buffer
+        buffer.write slot.not_nil! # ameba:disable Lint/NotNil
       end
     end.to_slice
   end
