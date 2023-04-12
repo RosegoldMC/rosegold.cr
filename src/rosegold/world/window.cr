@@ -3,12 +3,12 @@
 class Rosegold::Window
   @client : Client
 
-  getter id : UInt32
+  getter id : UInt8
 
   getter title : Chat
 
-  # `nil` for PlayerWindow
-  getter type_id : UInt32?
+  # PlayerWindow reuses id 0
+  getter type_id : UInt32
 
   # Inventory and hotbar are at the end of `slots` in all windows except the player inventory.
   @inventory_start : Int32 = -36
@@ -164,7 +164,7 @@ class Rosegold::PlayerWindow < Rosegold::Window
   def initialize(@client)
     @id = 0
     @title = Chat.new "Player Inventory"
-    @type_id = nil
+    @type_id = 0
     @inventory_start = 9
   end
 

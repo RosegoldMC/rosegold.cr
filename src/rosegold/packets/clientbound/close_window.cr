@@ -15,6 +15,13 @@ class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
     )
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write @@packet_id
+      buffer.write window_id
+    end.to_slice
+  end
+
   def callback(client)
     if window_id == client.window.id
       Log.debug { "Server closed window #{client.window}" }
