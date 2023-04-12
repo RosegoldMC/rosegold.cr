@@ -35,6 +35,10 @@ class Rosegold::Slot
     !empty?
   end
 
+  def full?
+    count >= max_stack_size
+  end
+
   def damage
     nbt.try &.["Damage"]?.try &.as_i32 || 0
   end
@@ -45,6 +49,10 @@ class Rosegold::Slot
 
   def max_durability
     MCData::MC118.items_by_id_int[item_id_int].max_durability || 0_u16
+  end
+
+  def max_stack_size
+    MCData::MC118.items_by_id_int[item_id_int].stack_size
   end
 
   def efficiency
