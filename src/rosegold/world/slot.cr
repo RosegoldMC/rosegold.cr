@@ -36,11 +36,15 @@ class Rosegold::Slot
   end
 
   def damage
-    nbt.try &.["Damage"]?.try &.as_i32
+    nbt.try &.["Damage"]?.try &.as_i32 || 0
   end
 
   def durability
-    max_damage - damage
+    max_durability - damage
+  end
+
+  def max_durability
+    MCData::MC118.items_by_id_int[item_id_int].max_durability || 0_u16
   end
 
   def efficiency
@@ -61,10 +65,6 @@ class Rosegold::Slot
   # To get the legacy int format, use `item_id_int`
   def item_id : String
     MCData::MC118.items_by_id_int[item_id_int]?.try &.id_str || raise "Unknown item_id_int: #{item_id_int}"
-  end
-
-  def max_damage : Int32
-    MCData::MC118.items_by_id_int[item_id_int]?.try &.max_damage || 0
   end
 
   def decrement
