@@ -55,8 +55,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def connected?
-    conn = @connection || return false
-    !conn.close_reason
+    @connection.try &.open?
   end
 
   def state=(state)
@@ -73,7 +72,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     until spawned?
       sleep 1/20
       timeout_ticks -= 1
-      raise "Disconnected while joining game: #{connection.close_reason}" if connection.try &.close_reason
+      raise "Disconnected while joining game: #{connection.close_reason}" unless connected?
       raise "Took too long to join the game" if timeout_ticks <= 0
     end
   end
@@ -99,16 +98,11 @@ class Rosegold::Client < Rosegold::EventEmitter
     @online_players = Hash(UUID, PlayerList::Entry).new
 
     spawn do
-      loop do
-        if connection.close_reason
-          Log.debug { "Stopping reader: #{connection.close_reason}" }
-          break
-        end
+      while connected?
         read_packet
       end
-    rescue e
-      raise_without_backtrace e unless connection.close_reason
-      Log.debug { "Stopping reader: #{connection.close_reason}" }
+    rescue e : IO::Error
+      Log.debug { "Stopping reader: #{e}" }
     end
   end
 
