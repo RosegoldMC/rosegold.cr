@@ -13,12 +13,24 @@ class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packe
   property? inside_block : Bool
 
   def initialize(
+    @hand : Hand,
     @location : Vec3i,
     @face : BlockFace,
     @cursor : Vec3f = Vec3f.new(0.5, 0.5, 0.5),
-    @hand : Hand = Hand::MainHand,
     @inside_block : Bool = false
   ); end
+
+  def self.read(io)
+    self.new \
+      Hand.new(io.read_byte),
+      io.read_bit_location,
+      BlockFace.new(io.read_byte),
+      Vec3f.new(
+        io.read_float,
+        io.read_float,
+        io.read_float),
+      io.read_bool
+  end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
