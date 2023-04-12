@@ -103,7 +103,7 @@ class Rosegold::Interactions
     cursor = (reached.intercept - reached.block.to_f64).to_f32
     inside_block = false # TODO
     send_packet Serverbound::PlayerBlockPlacement.new \
-      reached.block, reached.face, cursor, hand, inside_block
+      hand, reached.block, reached.face, cursor, inside_block
     send_packet Serverbound::SwingArm.new hand
   end
 
