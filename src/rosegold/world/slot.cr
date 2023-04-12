@@ -75,6 +75,22 @@ class Rosegold::Slot
     MCData::MC118.items_by_id_int[item_id_int]?.try &.id_str || raise "Unknown item_id_int: #{item_id_int}"
   end
 
+  def matches?(item_id_int : UInt32)
+    self.item_id_int == item_id_int
+  end
+
+  def matches?(item_id : String)
+    self.item_id == item_id
+  end
+
+  def matches?(spec : Rosegold::WindowSlot -> _)
+    spec.call self
+  end
+
+  def matches?(&)
+    yield self
+  end
+
   def decrement
     return if count <= 0
     @count -= 1
