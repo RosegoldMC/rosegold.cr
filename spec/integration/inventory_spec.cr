@@ -23,8 +23,6 @@ Spectator.describe Rosegold::Bot do
         Rosegold::Client.new("localhost", 25565).join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             bot.chat "/clear"
-            sleep 1
-
             bot.chat "/give #{bot.username} minecraft:stone 42"
             bot.chat "/give #{bot.username} minecraft:grass_block 43"
             sleep 1
@@ -43,14 +41,11 @@ Spectator.describe Rosegold::Bot do
         Rosegold::Client.new("localhost", 25565).join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             bot.chat "/clear"
-            sleep 1
-
             bot.chat "/give #{bot.username} minecraft:stone #{64*9}"
             bot.chat "/give #{bot.username} minecraft:grass_block 1"
             sleep 1
 
             expect(bot.inventory.pick("grass_block")).to eq true
-            sleep 1
             expect(bot.inventory.main_hand.item_id).to eq "grass_block"
           end
         end
