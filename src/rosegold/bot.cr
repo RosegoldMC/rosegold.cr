@@ -236,6 +236,26 @@ class Rosegold::Bot
     use_hand block + face
   end
 
+  def eat!
+    return if food >= 15 && full_health?
+    return if food >= 18 # above healing threshold
+
+    inventory.pick("baked_potato") ||
+      inventory.pick("bread") ||
+      inventory.pick("carrot") ||
+      raise "Bot food not found"
+
+    client.send_packet! Serverbound::UseItem.new :main_hand
+    until food >= 20
+      wait_tick
+    end
+    client.send_packet! Serverbound::PlayerDigging.new :finish_using_hand
+  end
+
+  def full_health?
+    health >= 20
+  end
+
   # Looks at that target, then activates the `attack` button.
   def start_digging(target : Vec3d? | Look? = nil)
     look_at target if target.is_a? Vec3d

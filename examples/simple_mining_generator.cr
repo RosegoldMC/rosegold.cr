@@ -11,8 +11,9 @@ sleep 3
 
 while bot.connected?
   bot.pitch = 0
-  bot.yaw = -90
+  bot.yaw = 180
 
+  bot.eat!
   bot.inventory.pick! "diamond_pickaxe"
   bot.start_digging
   sleep 1
