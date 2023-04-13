@@ -49,8 +49,8 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   def connection : Connection::Client
     conn = @connection
-    raise "Client was never connected" unless conn
-    raise "Disconnected: #{conn.close_reason}" if conn.close_reason
+    raise NotConnected.new "Client was never connected" unless conn
+    raise NotConnected.new "Disconnected: #{conn.close_reason}" if conn.close_reason
     conn
   end
 
@@ -72,8 +72,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     until spawned?
       sleep 1/20
       timeout_ticks -= 1
-      raise "Disconnected while joining game: #{connection.close_reason}" unless connected?
-      raise "Took too long to join the game" if timeout_ticks <= 0
+      raise NotConnected.new "Disconnected while joining game: #{connection.close_reason}" unless connected?
+      raise NotConnected.new "Took too long to join the game" if timeout_ticks <= 0
     end
   end
 
@@ -84,7 +84,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def connect
-    raise "Already connected" if connected?
+    raise NotConnected.new "Already connected" if connected?
 
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound, self
