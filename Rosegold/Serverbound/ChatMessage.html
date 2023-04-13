@@ -436,6 +436,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+      <a href="../../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Respawn" data-name="rosegold::clientbound::respawn">
       <a href="../../Rosegold/Clientbound/Respawn.html">Respawn</a>
       
@@ -661,8 +666,18 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/PlayerWindow" data-name="rosegold::playerwindow">
+      <a href="../../Rosegold/PlayerWindow.html">PlayerWindow</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ProtocolState" data-name="rosegold::protocolstate">
       <a href="../../Rosegold/ProtocolState.html">ProtocolState</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/RawPacket" data-name="rosegold::rawpacket">
+      <a href="../../Rosegold/RawPacket.html">RawPacket</a>
       
     </li>
   
@@ -693,6 +708,26 @@
   
   <li class=" current" data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
       <a href="../../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClickWindow" data-name="rosegold::serverbound::clickwindow">
+      <a href="../../Rosegold/Serverbound/ClickWindow.html">ClickWindow</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/Mode" data-name="rosegold::serverbound::clickwindow::mode">
+      <a href="../../Rosegold/Serverbound/ClickWindow/Mode.html">Mode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/StackMode" data-name="rosegold::serverbound::clickwindow::stackmode">
+      <a href="../../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -841,6 +876,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
+      <a href="../../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/StatusPing" data-name="rosegold::serverbound::statusping">
       <a href="../../Rosegold/Serverbound/StatusPing.html">StatusPing</a>
       
@@ -896,8 +936,28 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
+  <li class="parent " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
       <a href="../../Rosegold/Window.html">Window</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/ClickWindow" data-name="rosegold::window::clickwindow">
+      <a href="../../Rosegold/Window/ClickWindow.html">ClickWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/StackMode" data-name="rosegold::window::stackmode">
+      <a href="../../Rosegold/Window/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/WindowSlot" data-name="rosegold::windowslot">
+      <a href="../../Rosegold/WindowSlot.html">WindowSlot</a>
       
     </li>
   
@@ -948,7 +1008,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/chat_message.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/chat_message.cr#L3" target="_blank">
         rosegold/packets/serverbound/chat_message.cr
       </a>
     
@@ -1043,6 +1103,20 @@
 
     
 
+  <h3>Class methods inherited from class <code><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Serverbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
+      <span>new_raw(bytes)</span>
+    new_raw</a>, 
+    
+  
+    <a href="../../Rosegold/Serverbound/Packet.html#state-class-method" class="tooltip">
+      <span>state</span>
+    state</a>
+    
+  
+
 
   
     
@@ -1053,6 +1127,11 @@
     <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
       <span>callback(client_or_server)</span>
     callback</a>, 
+    
+  
+    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
+      <span>to_s(io)</span>
+    to_s</a>, 
     
   
     <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
@@ -1122,7 +1201,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/chat_message.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/chat_message.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1150,7 +1229,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/chat_message.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/chat_message.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1166,7 +1245,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/chat_message.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/chat_message.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1194,7 +1273,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/chat_message.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/chat_message.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1210,7 +1289,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/chat_message.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/chat_message.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1226,7 +1305,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/chat_message.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/chat_message.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>

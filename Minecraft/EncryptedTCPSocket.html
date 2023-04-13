@@ -436,6 +436,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+      <a href="../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Respawn" data-name="rosegold::clientbound::respawn">
       <a href="../Rosegold/Clientbound/Respawn.html">Respawn</a>
       
@@ -661,8 +666,18 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/PlayerWindow" data-name="rosegold::playerwindow">
+      <a href="../Rosegold/PlayerWindow.html">PlayerWindow</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ProtocolState" data-name="rosegold::protocolstate">
       <a href="../Rosegold/ProtocolState.html">ProtocolState</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/RawPacket" data-name="rosegold::rawpacket">
+      <a href="../Rosegold/RawPacket.html">RawPacket</a>
       
     </li>
   
@@ -693,6 +708,26 @@
   
   <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
       <a href="../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClickWindow" data-name="rosegold::serverbound::clickwindow">
+      <a href="../Rosegold/Serverbound/ClickWindow.html">ClickWindow</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/Mode" data-name="rosegold::serverbound::clickwindow::mode">
+      <a href="../Rosegold/Serverbound/ClickWindow/Mode.html">Mode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/StackMode" data-name="rosegold::serverbound::clickwindow::stackmode">
+      <a href="../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -841,6 +876,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
+      <a href="../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/StatusPing" data-name="rosegold::serverbound::statusping">
       <a href="../Rosegold/Serverbound/StatusPing.html">StatusPing</a>
       
@@ -896,8 +936,28 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
+  <li class="parent " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
       <a href="../Rosegold/Window.html">Window</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/ClickWindow" data-name="rosegold::window::clickwindow">
+      <a href="../Rosegold/Window/ClickWindow.html">ClickWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/StackMode" data-name="rosegold::window::stackmode">
+      <a href="../Rosegold/Window/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/WindowSlot" data-name="rosegold::windowslot">
+      <a href="../Rosegold/WindowSlot.html">WindowSlot</a>
       
     </li>
   
@@ -962,7 +1022,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/minecraft/io.cr#L219" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L212" target="_blank">
         minecraft/io.cr
       </a>
     
@@ -1003,6 +1063,36 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#close%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#close</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#close%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#close</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#closed%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#closed?</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#closed%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#closed?</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#flush%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#flush</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#flush%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#flush</strong>(*args, **options, &)</a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#read%28slice%3ABytes%29-instance-method" class="signature"><strong>#read</strong>(slice : Bytes)</a>
@@ -1099,11 +1189,6 @@
     <a href="../Minecraft/IO.html#read_signed_byte-instance-method" class="tooltip">
       <span>read_signed_byte</span>
     read_signed_byte</a>, 
-    
-  
-    <a href="../Minecraft/IO.html#read_slot%3ARosegold%3A%3ASlot-instance-method" class="tooltip">
-      <span>read_slot : Rosegold::Slot</span>
-    read_slot</a>, 
     
   
     <a href="../Minecraft/IO.html#read_ushort%3AUInt16-instance-method" class="tooltip">
@@ -1218,7 +1303,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/minecraft/io.cr#L225" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L218" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1236,6 +1321,102 @@
 </a>
     Instance Method Detail
   </h2>
+  
+    <div class="entry-detail" id="close(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>close</strong>(*args, **options)
+
+        <a class="method-permalink" href="#close%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L229" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="close(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>close</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#close%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L229" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="closed?(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>closed?</strong>(*args, **options)
+
+        <a class="method-permalink" href="#closed%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L229" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="closed?(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>closed?</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#closed%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L229" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="flush(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>flush</strong>(*args, **options)
+
+        <a class="method-permalink" href="#flush%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L229" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="flush(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>flush</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#flush%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L229" target="_blank">View source</a>]
+        
+      </div>
+    </div>
   
     <div class="entry-detail" id="read(slice:Bytes)-instance-method">
       <div class="signature">
@@ -1266,7 +1447,7 @@ io.read(slice) <span class="c"># =&gt; 0</span></code></pre>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/minecraft/io.cr#L236" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L231" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1282,7 +1463,7 @@ io.read(slice) <span class="c"># =&gt; 0</span></code></pre>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/minecraft/io.cr#L222" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L215" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1311,7 +1492,7 @@ io.to_s <span class="c"># =&gt; &quot;abcd&quot;</span></code></pre>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/minecraft/io.cr#L244" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L239" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1327,7 +1508,7 @@ io.to_s <span class="c"># =&gt; &quot;abcd&quot;</span></code></pre>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/minecraft/io.cr#L223" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/minecraft/io.cr#L216" target="_blank">View source</a>]
         
       </div>
     </div>

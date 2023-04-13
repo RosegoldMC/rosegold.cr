@@ -436,6 +436,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+      <a href="../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Respawn" data-name="rosegold::clientbound::respawn">
       <a href="../Rosegold/Clientbound/Respawn.html">Respawn</a>
       
@@ -661,8 +666,18 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/PlayerWindow" data-name="rosegold::playerwindow">
+      <a href="../Rosegold/PlayerWindow.html">PlayerWindow</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ProtocolState" data-name="rosegold::protocolstate">
       <a href="../Rosegold/ProtocolState.html">ProtocolState</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/RawPacket" data-name="rosegold::rawpacket">
+      <a href="../Rosegold/RawPacket.html">RawPacket</a>
       
     </li>
   
@@ -693,6 +708,26 @@
   
   <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
       <a href="../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClickWindow" data-name="rosegold::serverbound::clickwindow">
+      <a href="../Rosegold/Serverbound/ClickWindow.html">ClickWindow</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/Mode" data-name="rosegold::serverbound::clickwindow::mode">
+      <a href="../Rosegold/Serverbound/ClickWindow/Mode.html">Mode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/StackMode" data-name="rosegold::serverbound::clickwindow::stackmode">
+      <a href="../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -841,6 +876,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
+      <a href="../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/StatusPing" data-name="rosegold::serverbound::statusping">
       <a href="../Rosegold/Serverbound/StatusPing.html">StatusPing</a>
       
@@ -896,8 +936,28 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
+  <li class="parent " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
       <a href="../Rosegold/Window.html">Window</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/ClickWindow" data-name="rosegold::window::clickwindow">
+      <a href="../Rosegold/Window/ClickWindow.html">ClickWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/StackMode" data-name="rosegold::window::stackmode">
+      <a href="../Rosegold/Window/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/WindowSlot" data-name="rosegold::windowslot">
+      <a href="../Rosegold/WindowSlot.html">WindowSlot</a>
       
     </li>
   
@@ -961,7 +1021,7 @@ Can be reconnected.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L19" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L19" target="_blank">
         rosegold/client.cr
       </a>
     
@@ -1026,11 +1086,6 @@ Can be reconnected.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#closed%3F%3ABool-instance-method" class="signature"><strong>#closed?</strong> : Bool</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#connect-instance-method" class="signature"><strong>#connect</strong></a>
         
       </li>
@@ -1051,22 +1106,22 @@ Can be reconnected.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#current_window%3AWindow-instance-method" class="signature"><strong>#current_window</strong> : Window</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#current_window%3D%28current_window%3AWindow%29-instance-method" class="signature"><strong>#current_window=</strong>(current_window : Window)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#dimension%3ADimension-instance-method" class="signature"><strong>#dimension</strong> : Dimension</a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#dimension%3D%28dimension%3ADimension%29-instance-method" class="signature"><strong>#dimension=</strong>(dimension : Dimension)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#disconnect%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#disconnect</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#disconnect%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#disconnect</strong>(*args, **options, &)</a>
         
       </li>
     
@@ -1081,7 +1136,19 @@ Can be reconnected.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#join_game-instance-method" class="signature"><strong>#join_game</strong></a>
+        <a href="#inventory%3APlayerWindow-instance-method" class="signature"><strong>#inventory</strong> : PlayerWindow</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#inventory%3D%28inventory%3APlayerWindow%29-instance-method" class="signature"><strong>#inventory=</strong>(inventory : PlayerWindow)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#join_game%28timeout_ticks%3D1200%29-instance-method" class="signature"><strong>#join_game</strong>(timeout_ticks = <span class="n">1200</span>)</a>
+        
+          <div class="summary"><p>Waits for the client to be fully spawned, ie.</p></div>
         
       </li>
     
@@ -1145,12 +1212,27 @@ Can be reconnected.</p>
       </li>
     
       <li class="entry-summary">
+        <a href="#spawned%3F-instance-method" class="signature"><strong>#spawned?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#state%3D%28state%29-instance-method" class="signature"><strong>#state=</strong>(state)</a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#status-instance-method" class="signature"><strong>#status</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#window%3AWindow-instance-method" class="signature"><strong>#window</strong> : Window</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#window%3D%28window%3AWindow%29-instance-method" class="signature"><strong>#window=</strong>(window : Window)</a>
         
       </li>
     
@@ -1234,7 +1316,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1262,7 +1344,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1278,7 +1360,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L110" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L115" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1295,22 +1377,6 @@ Can be reconnected.</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="closed?:Bool-instance-method">
-      <div class="signature">
-        
-        def <strong>closed?</strong> : Bool
-
-        <a class="method-permalink" href="#closed%3F%3ABool-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L55" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="connect-instance-method">
       <div class="signature">
         
@@ -1322,7 +1388,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1338,7 +1404,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1354,7 +1420,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1370,39 +1436,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L41" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="current_window:Window-instance-method">
-      <div class="signature">
-        
-        def <strong>current_window</strong> : <a href="../Rosegold/Window.html">Window</a>
-
-        <a class="method-permalink" href="#current_window%3AWindow-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="current_window=(current_window:Window)-instance-method">
-      <div class="signature">
-        
-        def <strong>current_window=</strong>(current_window : <a href="../Rosegold/Window.html">Window</a>)
-
-        <a class="method-permalink" href="#current_window%3D%28current_window%3AWindow%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1418,7 +1452,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1434,7 +1468,39 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="disconnect(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>disconnect</strong>(*args, **options)
+
+        <a class="method-permalink" href="#disconnect%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L109" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="disconnect(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>disconnect</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#disconnect%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L109" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1450,7 +1516,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1466,23 +1532,60 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="join_game-instance-method">
+    <div class="entry-detail" id="inventory:PlayerWindow-instance-method">
       <div class="signature">
         
-        def <strong>join_game</strong>
+        def <strong>inventory</strong> : <a href="../Rosegold/PlayerWindow.html">PlayerWindow</a>
 
-        <a class="method-permalink" href="#join_game-instance-method">#</a>
+        <a class="method-permalink" href="#inventory%3APlayerWindow-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="inventory=(inventory:PlayerWindow)-instance-method">
+      <div class="signature">
+        
+        def <strong>inventory=</strong>(inventory : <a href="../Rosegold/PlayerWindow.html">PlayerWindow</a>)
+
+        <a class="method-permalink" href="#inventory%3D%28inventory%3APlayerWindow%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="join_game(timeout_ticks=1200)-instance-method">
+      <div class="signature">
+        
+        def <strong>join_game</strong>(timeout_ticks = <span class="n">1200</span>)
+
+        <a class="method-permalink" href="#join_game%28timeout_ticks%3D1200%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Waits for the client to be fully spawned, ie. physics and inventory being ready.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1498,7 +1601,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L75" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L80" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1514,7 +1617,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1530,7 +1633,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1546,7 +1649,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1562,7 +1665,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1578,7 +1681,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1594,7 +1697,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1610,7 +1713,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1626,7 +1729,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1647,7 +1750,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L122" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L127" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1670,7 +1773,23 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L134" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L139" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="spawned?-instance-method">
+      <div class="signature">
+        
+        def <strong>spawned?</strong>
+
+        <a class="method-permalink" href="#spawned%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1686,7 +1805,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L63" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L61" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1702,7 +1821,39 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/client.cr#L106" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L111" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="window:Window-instance-method">
+      <div class="signature">
+        
+        def <strong>window</strong> : <a href="../Rosegold/Window.html">Window</a>
+
+        <a class="method-permalink" href="#window%3AWindow-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="window=(window:Window)-instance-method">
+      <div class="signature">
+        
+        def <strong>window=</strong>(window : <a href="../Rosegold/Window.html">Window</a>)
+
+        <a class="method-permalink" href="#window%3D%28window%3AWindow%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/client.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -436,6 +436,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+      <a href="../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Respawn" data-name="rosegold::clientbound::respawn">
       <a href="../Rosegold/Clientbound/Respawn.html">Respawn</a>
       
@@ -661,8 +666,18 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/PlayerWindow" data-name="rosegold::playerwindow">
+      <a href="../Rosegold/PlayerWindow.html">PlayerWindow</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ProtocolState" data-name="rosegold::protocolstate">
       <a href="../Rosegold/ProtocolState.html">ProtocolState</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/RawPacket" data-name="rosegold::rawpacket">
+      <a href="../Rosegold/RawPacket.html">RawPacket</a>
       
     </li>
   
@@ -693,6 +708,26 @@
   
   <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
       <a href="../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClickWindow" data-name="rosegold::serverbound::clickwindow">
+      <a href="../Rosegold/Serverbound/ClickWindow.html">ClickWindow</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/Mode" data-name="rosegold::serverbound::clickwindow::mode">
+      <a href="../Rosegold/Serverbound/ClickWindow/Mode.html">Mode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/StackMode" data-name="rosegold::serverbound::clickwindow::stackmode">
+      <a href="../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -841,6 +876,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
+      <a href="../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/StatusPing" data-name="rosegold::serverbound::statusping">
       <a href="../Rosegold/Serverbound/StatusPing.html">StatusPing</a>
       
@@ -896,8 +936,28 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
+  <li class="parent " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
       <a href="../Rosegold/Window.html">Window</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/ClickWindow" data-name="rosegold::window::clickwindow">
+      <a href="../Rosegold/Window/ClickWindow.html">ClickWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/StackMode" data-name="rosegold::window::stackmode">
+      <a href="../Rosegold/Window/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/WindowSlot" data-name="rosegold::windowslot">
+      <a href="../Rosegold/WindowSlot.html">WindowSlot</a>
       
     </li>
   
@@ -925,6 +985,17 @@
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Utility methods for interacting with the open window.</p>
+
 
 
 
@@ -948,8 +1019,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L1" target="_blank">
-        rosegold/world/inventory.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L2" target="_blank">
+        rosegold/control/inventory.cr
       </a>
     
     <br/>
@@ -991,65 +1062,73 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#client%3ARosegold%3A%3AClient-instance-method" class="signature"><strong>#client</strong> : Rosegold::Client</a>
+        <a href="#count%28spec%2Cslots%3Dslots%29-instance-method" class="signature"><strong>#count</strong>(spec, slots = slots)</a>
+        
+          <div class="summary"><p>Returns the number of matching items in the entire window, or in the given slots range.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#client%3D%28client%3ARosegold%3A%3AClient%29-instance-method" class="signature"><strong>#client=</strong>(client : Rosegold::Client)</a>
+        <a href="#count%28%26spec%3AWindowSlot-%3E_%29-instance-method" class="signature"><strong>#count</strong>(&spec : WindowSlot -> _)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#crafting_input%3AArray%28Slot%29-instance-method" class="signature"><strong>#crafting_input</strong> : Array(Slot)</a>
+        <a href="#deposit_at_least%28count%2Cspec%2Csource%3AArray%28WindowSlot%29%3Dinventory%2Bhotbar%29-instance-method" class="signature"><strong>#deposit_at_least</strong>(count, spec, source : Array(WindowSlot) = inventory <span class="o">+</span> hotbar)</a>
+        
+          <div class="summary"><p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> matching items from the container to the player inventory, using shift-clicking.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#crafting_result%3ASlot-instance-method" class="signature"><strong>#crafting_result</strong> : Slot</a>
+        <a href="#deposit_at_least%28count%2C%26spec%3AWindowSlot-%3E_%29-instance-method" class="signature"><strong>#deposit_at_least</strong>(count, &spec : WindowSlot -> _)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#equipment%3AArray%28Slot%29-instance-method" class="signature"><strong>#equipment</strong> : Array(Slot)</a>
+        <a href="#pick%28spec%29-instance-method" class="signature"><strong>#pick</strong>(spec)</a>
+        
+          <div class="summary"><p>Picks a matching slot, if it exists in the inventory.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hotbar%3AArray%28Slot%29-instance-method" class="signature"><strong>#hotbar</strong> : Array(Slot)</a>
+        <a href="#pick%21%28spec%29-instance-method" class="signature"><strong>#pick!</strong>(spec)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#main_hand%3ASlot-instance-method" class="signature"><strong>#main_hand</strong> : Slot</a>
+        <a href="#withdraw_at_least%28count%2Cspec%2Csource%3AArray%28WindowSlot%29%3Dcontent%29-instance-method" class="signature"><strong>#withdraw_at_least</strong>(count, spec, source : Array(WindowSlot) = content)</a>
+        
+          <div class="summary"><p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> matching items from the player inventory to the container, using shift-clicking.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#off_hand%3ASlot-instance-method" class="signature"><strong>#off_hand</strong> : Slot</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#pick%28item_id%29-instance-method" class="signature"><strong>#pick</strong>(item_id)</a>
-        
-          <div class="summary"><p>Picks the item with the given id, if it exists in the inventory Returns true if the item was picked, false otherwise</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#pick%21%28item_id%29-instance-method" class="signature"><strong>#pick!</strong>(item_id)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#slots-instance-method" class="signature"><strong>#slots</strong></a>
+        <a href="#withdraw_at_least%28count%2C%26spec%3AWindowSlot-%3E_%29-instance-method" class="signature"><strong>#withdraw_at_least</strong>(count, &spec : WindowSlot -> _)</a>
         
       </li>
     
   </ul>
 
 
+
+  <h2>
+    <a id="macro-summary" class="anchor" href="#macro-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#method_missing%28call%29-macro" class="signature"><strong>method_missing</strong>(call)</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -1098,7 +1177,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1117,192 +1196,202 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="client:Rosegold::Client-instance-method">
+    <div class="entry-detail" id="count(spec,slots=slots)-instance-method">
       <div class="signature">
         
-        def <strong>client</strong> : <a href="../Rosegold/Client.html">Rosegold::Client</a>
+        def <strong>count</strong>(spec, slots = slots)
 
-        <a class="method-permalink" href="#client%3ARosegold%3A%3AClient-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L2" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="client=(client:Rosegold::Client)-instance-method">
-      <div class="signature">
-        
-        def <strong>client=</strong>(client : <a href="../Rosegold/Client.html">Rosegold::Client</a>)
-
-        <a class="method-permalink" href="#client%3D%28client%3ARosegold%3A%3AClient%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L2" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="crafting_input:Array(Slot)-instance-method">
-      <div class="signature">
-        
-        def <strong>crafting_input</strong> : Array(<a href="../Rosegold/Slot.html">Slot</a>)
-
-        <a class="method-permalink" href="#crafting_input%3AArray%28Slot%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L27" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="crafting_result:Slot-instance-method">
-      <div class="signature">
-        
-        def <strong>crafting_result</strong> : <a href="../Rosegold/Slot.html">Slot</a>
-
-        <a class="method-permalink" href="#crafting_result%3ASlot-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L31" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="equipment:Array(Slot)-instance-method">
-      <div class="signature">
-        
-        def <strong>equipment</strong> : Array(<a href="../Rosegold/Slot.html">Slot</a>)
-
-        <a class="method-permalink" href="#equipment%3AArray%28Slot%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L19" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="hotbar:Array(Slot)-instance-method">
-      <div class="signature">
-        
-        def <strong>hotbar</strong> : Array(<a href="../Rosegold/Slot.html">Slot</a>)
-
-        <a class="method-permalink" href="#hotbar%3AArray%28Slot%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L23" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="main_hand:Slot-instance-method">
-      <div class="signature">
-        
-        def <strong>main_hand</strong> : <a href="../Rosegold/Slot.html">Slot</a>
-
-        <a class="method-permalink" href="#main_hand%3ASlot-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L11" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="off_hand:Slot-instance-method">
-      <div class="signature">
-        
-        def <strong>off_hand</strong> : <a href="../Rosegold/Slot.html">Slot</a>
-
-        <a class="method-permalink" href="#off_hand%3ASlot-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L15" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="pick(item_id)-instance-method">
-      <div class="signature">
-        
-        def <strong>pick</strong>(item_id)
-
-        <a class="method-permalink" href="#pick%28item_id%29-instance-method">#</a>
+        <a class="method-permalink" href="#count%28spec%2Cslots%3Dslots%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Picks the item with the given id, if it exists in the inventory
-Returns true if the item was picked, false otherwise</p>
+          <p>Returns the number of matching items in the entire window, or in the given slots range.</p>
 <p>Example:
-inventory.pick &quot;minecraft:diamond_pickaxe&quot; # =&gt; true</p>
+inventory.count &quot;diamond_pickaxe&quot; # =&gt; 2
+inventory.count &amp;.empty? # =&gt; 2
+inventory.count { |slot| slot.item_id == &quot;diamond_pickaxe&quot; &amp;&amp; slot.efficiency &gt;= 4 } # =&gt; 1
+inventory.count &amp;.empty?, hotbar # =&gt; 1</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="pick!(item_id)-instance-method">
+    <div class="entry-detail" id="count(&amp;spec:WindowSlot-&gt;_)-instance-method">
       <div class="signature">
         
-        def <strong>pick!</strong>(item_id)
+        def <strong>count</strong>(&spec : <a href="../Rosegold/WindowSlot.html">WindowSlot</a> -> _)
 
-        <a class="method-permalink" href="#pick%21%28item_id%29-instance-method">#</a>
+        <a class="method-permalink" href="#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="slots-instance-method">
+    <div class="entry-detail" id="deposit_at_least(count,spec,source:Array(WindowSlot)=inventory+hotbar)-instance-method">
       <div class="signature">
         
-        def <strong>slots</strong>
+        def <strong>deposit_at_least</strong>(count, spec, source : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>) = inventory <span class="o">+</span> hotbar)
 
-        <a class="method-permalink" href="#slots-instance-method">#</a>
+        <a class="method-permalink" href="#deposit_at_least%28count%2Cspec%2Csource%3AArray%28WindowSlot%29%3Dinventory%2Bhotbar%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> matching items from the container to the player inventory, using shift-clicking.
+Returns the number of actually transferred items.</p>
+<p>Example:
+inventory.deposit_at_least 5, &quot;diamond_pickaxe&quot; # =&gt; 3
+inventory.deposit_at_least 5, &amp;.empty?, hotbar # =&gt; 1
+inventory.deposit_at_least 5, { |slot| slot.item_id == &quot;diamond_pickaxe&quot; &amp;&amp; slot.efficiency &gt;= 4 } # =&gt; 2</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L78" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="deposit_at_least(count,&amp;spec:WindowSlot-&gt;_)-instance-method">
+      <div class="signature">
+        
+        def <strong>deposit_at_least</strong>(count, &spec : <a href="../Rosegold/WindowSlot.html">WindowSlot</a> -> _)
+
+        <a class="method-permalink" href="#deposit_at_least%28count%2C%26spec%3AWindowSlot-%3E_%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/world/inventory.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L82" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pick(spec)-instance-method">
+      <div class="signature">
+        
+        def <strong>pick</strong>(spec)
+
+        <a class="method-permalink" href="#pick%28spec%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Picks a matching slot, if it exists in the inventory.
+Returns true if the item was picked, false otherwise.</p>
+<p>Example:
+inventory.pick &quot;diamond_pickaxe&quot; # =&gt; true
+inventory.pick &amp;.empty? # =&gt; true
+inventory.pick { |slot| slot.item_id == &quot;diamond_pickaxe&quot; &amp;&amp; slot.efficiency &gt;= 4 } # =&gt; false</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L31" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pick!(spec)-instance-method">
+      <div class="signature">
+        
+        def <strong>pick!</strong>(spec)
+
+        <a class="method-permalink" href="#pick%21%28spec%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L52" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="withdraw_at_least(count,spec,source:Array(WindowSlot)=content)-instance-method">
+      <div class="signature">
+        
+        def <strong>withdraw_at_least</strong>(count, spec, source : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>) = content)
+
+        <a class="method-permalink" href="#withdraw_at_least%28count%2Cspec%2Csource%3AArray%28WindowSlot%29%3Dcontent%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> matching items from the player inventory to the container, using shift-clicking.
+Returns the number of actually transferred items.</p>
+<p>Example:
+inventory.withdraw_at_least 5, &quot;diamond_pickaxe&quot; # =&gt; 3
+inventory.withdraw_at_least 5, &amp;.empty?, hotbar # =&gt; 1
+inventory.withdraw_at_least 5, { |slot| slot.item_id == &quot;diamond_pickaxe&quot; &amp;&amp; slot.efficiency &gt;= 4 } # =&gt; 2</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L63" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="withdraw_at_least(count,&amp;spec:WindowSlot-&gt;_)-instance-method">
+      <div class="signature">
+        
+        def <strong>withdraw_at_least</strong>(count, &spec : <a href="../Rosegold/WindowSlot.html">WindowSlot</a> -> _)
+
+        <a class="method-permalink" href="#withdraw_at_least%28count%2C%26spec%3AWindowSlot-%3E_%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
+
+  <h2>
+    <a id="macro-detail" class="anchor" href="#macro-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Macro Detail
+  </h2>
+  
+    <div class="entry-detail" id="method_missing(call)-macro">
+      <div class="signature">
+        
+        macro <strong>method_missing</strong>(call)
+
+        <a class="method-permalink" href="#method_missing%28call%29-macro">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/inventory.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 </div>

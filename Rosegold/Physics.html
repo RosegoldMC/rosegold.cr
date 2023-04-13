@@ -436,6 +436,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+      <a href="../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Respawn" data-name="rosegold::clientbound::respawn">
       <a href="../Rosegold/Clientbound/Respawn.html">Respawn</a>
       
@@ -661,8 +666,18 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/PlayerWindow" data-name="rosegold::playerwindow">
+      <a href="../Rosegold/PlayerWindow.html">PlayerWindow</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ProtocolState" data-name="rosegold::protocolstate">
       <a href="../Rosegold/ProtocolState.html">ProtocolState</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/RawPacket" data-name="rosegold::rawpacket">
+      <a href="../Rosegold/RawPacket.html">RawPacket</a>
       
     </li>
   
@@ -693,6 +708,26 @@
   
   <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
       <a href="../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClickWindow" data-name="rosegold::serverbound::clickwindow">
+      <a href="../Rosegold/Serverbound/ClickWindow.html">ClickWindow</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/Mode" data-name="rosegold::serverbound::clickwindow::mode">
+      <a href="../Rosegold/Serverbound/ClickWindow/Mode.html">Mode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/StackMode" data-name="rosegold::serverbound::clickwindow::stackmode">
+      <a href="../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -841,6 +876,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
+      <a href="../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/StatusPing" data-name="rosegold::serverbound::statusping">
       <a href="../Rosegold/Serverbound/StatusPing.html">StatusPing</a>
       
@@ -896,8 +936,28 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
+  <li class="parent " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
       <a href="../Rosegold/Window.html">Window</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/ClickWindow" data-name="rosegold::window::clickwindow">
+      <a href="../Rosegold/Window/ClickWindow.html">ClickWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/StackMode" data-name="rosegold::window::stackmode">
+      <a href="../Rosegold/Window/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/WindowSlot" data-name="rosegold::windowslot">
+      <a href="../Rosegold/WindowSlot.html">WindowSlot</a>
       
     </li>
   
@@ -959,7 +1019,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L24" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L24" target="_blank">
         rosegold/control/physics.cr
       </a>
     
@@ -995,8 +1055,13 @@
       </dt>
       
     
-      <dt class="entry-const" id="RUN_SPEED">
-        <strong>RUN_SPEED</strong> = <code><span class="n">5.612</span> <span class="o">/</span> <span class="n">20</span></code>
+      <dt class="entry-const" id="SNEAK_SPEED">
+        <strong>SNEAK_SPEED</strong> = <code><span class="n">1.31</span> <span class="o">/</span> <span class="n">20</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="SPRINT_SPEED">
+        <strong>SPRINT_SPEED</strong> = <code><span class="n">5.612</span> <span class="o">/</span> <span class="n">20</span></code>
       </dt>
       
     
@@ -1046,7 +1111,7 @@
       <li class="entry-summary">
         <a href="#get_grown_obstacles%28start%3AVec3d%2Cmovement%3AVec3d%2Centity_aabb%3AAABBf%2Cdimension%3ADimension%29%3AArray%28AABBd%29-class-method" class="signature"><strong>.get_grown_obstacles</strong>(start : Vec3d, movement : Vec3d, entity_aabb : AABBf, dimension : Dimension) : Array(AABBd)</a>
         
-          <div class="summary"><p>Returns all block collision boxes that may intersect <code>entity_aabb</code> during the movement from <code><a href="../Rosegold/Physics.html#start-instance-method">#start</a></code> by <code>vec</code>, including boxes 0.5m higher for stepping.</p></div>
+          <div class="summary"><p>Returns all block collision boxes that may intersect <code>entity_aabb</code> during the movement from <code>start</code> by <code>vec</code>, including boxes 0.5m higher for stepping.</p></div>
         
       </li>
     
@@ -1077,6 +1142,11 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#handle_reset-instance-method" class="signature"><strong>#handle_reset</strong></a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#jump_queued%3D%28jump_queued%3ABool%29-instance-method" class="signature"><strong>#jump_queued=</strong>(jump_queued : Bool)</a>
@@ -1113,22 +1183,37 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#movement_speed%3D%28movement_speed%3AFloat64%29-instance-method" class="signature"><strong>#movement_speed=</strong>(movement_speed : Float64)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#movement_target-instance-method" class="signature"><strong>#movement_target</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#reset-instance-method" class="signature"><strong>#reset</strong></a>
+        <a href="#pause-instance-method" class="signature"><strong>#pause</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#start-instance-method" class="signature"><strong>#start</strong></a>
+        <a href="#paused%3D%28paused%3ABool%29-instance-method" class="signature"><strong>#paused=</strong>(paused : Bool)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#paused%3F%3ABool-instance-method" class="signature"><strong>#paused?</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#sneak%28sneaking%3Dtrue%29-instance-method" class="signature"><strong>#sneak</strong>(sneaking = <span class="n">true</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#sprint%28sprinting%3Dtrue%29-instance-method" class="signature"><strong>#sprint</strong>(sprinting = <span class="n">true</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#tick-instance-method" class="signature"><strong>#tick</strong></a>
         
       </li>
     
@@ -1183,7 +1268,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L51" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L52" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1210,7 +1295,7 @@
       
         <div class="doc">
           
-          <p>Returns all block collision boxes that may intersect <code>entity_aabb</code> during the movement from <code><a href="../Rosegold/Physics.html#start-instance-method">#start</a></code> by <code>vec</code>,
+          <p>Returns all block collision boxes that may intersect <code>entity_aabb</code> during the movement from <code>start</code> by <code>vec</code>,
 including boxes 0.5m higher for stepping.
 <code>entity_aabb</code> is at 0,0,0; the returned AABBs are grown by <code>entity_aabb</code> so collision checks are just raytracing.</p>
         </div>
@@ -1218,7 +1303,7 @@ including boxes 0.5m higher for stepping.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L270" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L298" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1240,7 +1325,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L208" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L239" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1262,7 +1347,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L214" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L245" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1279,6 +1364,22 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="handle_reset-instance-method">
+      <div class="signature">
+        
+        def <strong>handle_reset</strong>
+
+        <a class="method-permalink" href="#handle_reset-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L58" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="jump_queued=(jump_queued:Bool)-instance-method">
       <div class="signature">
         
@@ -1290,7 +1391,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1306,7 +1407,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1328,7 +1429,7 @@ If there is already a look target, it is cancelled, and replaced with this new t
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L95" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1344,7 +1445,7 @@ If there is already a look target, it is cancelled, and replaced with this new t
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1367,7 +1468,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L76" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1383,23 +1484,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L38" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="movement_speed=(movement_speed:Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>movement_speed=</strong>(movement_speed : Float64)
-
-        <a class="method-permalink" href="#movement_speed%3D%28movement_speed%3AFloat64%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L130" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1415,39 +1500,103 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="reset-instance-method">
+    <div class="entry-detail" id="pause-instance-method">
       <div class="signature">
         
-        def <strong>reset</strong>
+        def <strong>pause</strong>
 
-        <a class="method-permalink" href="#reset-instance-method">#</a>
+        <a class="method-permalink" href="#pause-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="start-instance-method">
+    <div class="entry-detail" id="paused=(paused:Bool)-instance-method">
       <div class="signature">
         
-        def <strong>start</strong>
+        def <strong>paused=</strong>(paused : Bool)
 
-        <a class="method-permalink" href="#start-instance-method">#</a>
+        <a class="method-permalink" href="#paused%3D%28paused%3ABool%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/control/physics.cr#L66" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L38" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="paused?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>paused?</strong> : Bool
+
+        <a class="method-permalink" href="#paused%3F%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L38" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="sneak(sneaking=true)-instance-method">
+      <div class="signature">
+        
+        def <strong>sneak</strong>(sneaking = <span class="n">true</span>)
+
+        <a class="method-permalink" href="#sneak%28sneaking%3Dtrue%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L104" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="sprint(sprinting=true)-instance-method">
+      <div class="signature">
+        
+        def <strong>sprint</strong>(sprinting = <span class="n">true</span>)
+
+        <a class="method-permalink" href="#sprint%28sprinting%3Dtrue%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L117" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="tick-instance-method">
+      <div class="signature">
+        
+        def <strong>tick</strong>
+
+        <a class="method-permalink" href="#tick-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/control/physics.cr#L144" target="_blank">View source</a>]
         
       </div>
     </div>

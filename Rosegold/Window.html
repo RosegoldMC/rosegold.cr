@@ -436,6 +436,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+      <a href="../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Respawn" data-name="rosegold::clientbound::respawn">
       <a href="../Rosegold/Clientbound/Respawn.html">Respawn</a>
       
@@ -661,8 +666,18 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/PlayerWindow" data-name="rosegold::playerwindow">
+      <a href="../Rosegold/PlayerWindow.html">PlayerWindow</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ProtocolState" data-name="rosegold::protocolstate">
       <a href="../Rosegold/ProtocolState.html">ProtocolState</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/RawPacket" data-name="rosegold::rawpacket">
+      <a href="../Rosegold/RawPacket.html">RawPacket</a>
       
     </li>
   
@@ -693,6 +708,26 @@
   
   <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
       <a href="../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClickWindow" data-name="rosegold::serverbound::clickwindow">
+      <a href="../Rosegold/Serverbound/ClickWindow.html">ClickWindow</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/Mode" data-name="rosegold::serverbound::clickwindow::mode">
+      <a href="../Rosegold/Serverbound/ClickWindow/Mode.html">Mode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/StackMode" data-name="rosegold::serverbound::clickwindow::stackmode">
+      <a href="../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -841,6 +876,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
+      <a href="../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/StatusPing" data-name="rosegold::serverbound::statusping">
       <a href="../Rosegold/Serverbound/StatusPing.html">StatusPing</a>
       
@@ -896,8 +936,28 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
+  <li class="parent open current" data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
       <a href="../Rosegold/Window.html">Window</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/ClickWindow" data-name="rosegold::window::clickwindow">
+      <a href="../Rosegold/Window/ClickWindow.html">ClickWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/StackMode" data-name="rosegold::window::stackmode">
+      <a href="../Rosegold/Window/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/WindowSlot" data-name="rosegold::windowslot">
+      <a href="../Rosegold/WindowSlot.html">WindowSlot</a>
       
     </li>
   
@@ -925,6 +985,17 @@
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Slot accessor methods raise an error if the window is not ready.
+Note that slots are still available even after the window has been closed.</p>
 
 
 
@@ -932,6 +1003,21 @@
 
 
 
+
+
+  <h2>
+    <a id="direct-known-subclasses" class="anchor" href="#direct-known-subclasses">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Direct Known Subclasses
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../Rosegold/PlayerWindow.html">Rosegold::PlayerWindow</a></li>
+    
+  </ul>
 
 
 
@@ -948,8 +1034,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L1" target="_blank">
-        rosegold/models/window.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L3" target="_blank">
+        rosegold/world/window.cr
       </a>
     
     <br/>
@@ -970,35 +1056,13 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28id%3AUInt32%2Ctype%3AUInt32%7CNil%2Ctitle%3ARosegold%3A%3AChat%29-class-method" class="signature"><strong>.new</strong>(id : UInt32, type : UInt32 | Nil, title : Rosegold::Chat)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#new%28open_window%3ARosegold%3A%3AClientbound%3A%3AOpenWindow%29-class-method" class="signature"><strong>.new</strong>(open_window : Rosegold::Clientbound::OpenWindow)</a>
+        <a href="#new%28client%3ARosegold%3A%3AClient%2Cid%3AUInt8%2Ctitle%3ARosegold%3A%3AChat%2Ctype_id%3AUInt32%29-class-method" class="signature"><strong>.new</strong>(client : Rosegold::Client, id : UInt8, title : Rosegold::Chat, type_id : UInt32)</a>
         
       </li>
     
   </ul>
 
 
-
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#player_inventory-class-method" class="signature"><strong>.player_inventory</strong></a>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -1013,42 +1077,155 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#id%3AUInt32-instance-method" class="signature"><strong>#id</strong> : UInt32</a>
+        <a href="#click%28slot%3AWindowSlot%2Cright%3Dfalse%2Cshift%3Dfalse%2Cdouble%3Dfalse%29-instance-method" class="signature"><strong>#click</strong>(slot : WindowSlot, right = <span class="n">false</span>, shift = <span class="n">false</span>, double = <span class="n">false</span>)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#id%3D%28id%3AUInt32%29-instance-method" class="signature"><strong>#id=</strong>(id : UInt32)</a>
+        <a href="#click%28slot_nr%2Cright%3Dfalse%2Cshift%3Dfalse%2Cdouble%3Dfalse%29-instance-method" class="signature"><strong>#click</strong>(slot_nr, right = <span class="n">false</span>, shift = <span class="n">false</span>, double = <span class="n">false</span>)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#slots%3AArray%28Rosegold%3A%3ASlot%29-instance-method" class="signature"><strong>#slots</strong> : Array(Rosegold::Slot)</a>
+        <a href="#close-instance-method" class="signature"><strong>#close</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#slots%3D%28slots%3AArray%28Rosegold%3A%3ASlot%29%29-instance-method" class="signature"><strong>#slots=</strong>(slots : Array(Rosegold::Slot))</a>
+        <a href="#closed%3D%28closed%3ABool%29-instance-method" class="signature"><strong>#closed=</strong>(closed : Bool)</a>
+        
+          <div class="summary"><p>If true, this window will never become ready in the future.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#title%3ARosegold%3A%3AChat-instance-method" class="signature"><strong>#title</strong> : Rosegold::Chat</a>
+        <a href="#closed%3F%3ABool-instance-method" class="signature"><strong>#closed?</strong> : Bool</a>
+        
+          <div class="summary"><p>If true, this window will never become ready in the future.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#title%3D%28title%3ARosegold%3A%3AChat%29-instance-method" class="signature"><strong>#title=</strong>(title : Rosegold::Chat)</a>
+        <a href="#content%3AArray%28WindowSlot%29-instance-method" class="signature"><strong>#content</strong> : Array(WindowSlot)</a>
+        
+          <div class="summary"><p>Slots specific to the window, ie.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#type%3AUInt32%7CNil-instance-method" class="signature"><strong>#type</strong> : UInt32 | Nil</a>
+        <a href="#cursor%3AWindowSlot-instance-method" class="signature"><strong>#cursor</strong> : WindowSlot</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#type%3D%28type%3AUInt32%7CNil%29-instance-method" class="signature"><strong>#type=</strong>(type : UInt32 | Nil)</a>
+        <a href="#cursor%3D%28cursor%3AWindowSlot%29-instance-method" class="signature"><strong>#cursor=</strong>(cursor : WindowSlot)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#drop%28slot%3AWindowSlot%2Cstack_mode%3AStackMode%29-instance-method" class="signature"><strong>#drop</strong>(slot : WindowSlot, stack_mode : StackMode)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#drop%28slot_nr%2Cstack_mode%3AStackMode%29-instance-method" class="signature"><strong>#drop</strong>(slot_nr, stack_mode : StackMode)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#drop_cursor%28stack_mode%3AStackMode%29-instance-method" class="signature"><strong>#drop_cursor</strong>(stack_mode : StackMode)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#handle_closed-instance-method" class="signature"><strong>#handle_closed</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#hotbar%3AArray%28WindowSlot%29-instance-method" class="signature"><strong>#hotbar</strong> : Array(WindowSlot)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id%3AUInt8-instance-method" class="signature"><strong>#id</strong> : UInt8</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#inventory%3AArray%28WindowSlot%29-instance-method" class="signature"><strong>#inventory</strong> : Array(WindowSlot)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#main_hand%3AWindowSlot-instance-method" class="signature"><strong>#main_hand</strong> : WindowSlot</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ready%3F-instance-method" class="signature"><strong>#ready?</strong></a>
+        
+          <div class="summary"><p>If true, this window is in sync with the server.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#slots%3AArray%28WindowSlot%29-instance-method" class="signature"><strong>#slots</strong> : Array(WindowSlot)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#slots%3D%28slots%3AArray%28WindowSlot%29%29-instance-method" class="signature"><strong>#slots=</strong>(slots : Array(WindowSlot))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#state_id%3AUInt32-instance-method" class="signature"><strong>#state_id</strong> : UInt32</a>
+        
+          <div class="summary"><p>Used for tracking synchronization with the server.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#state_id%3D%28state_id%3AUInt32%29-instance-method" class="signature"><strong>#state_id=</strong>(state_id : UInt32)</a>
+        
+          <div class="summary"><p>Used for tracking synchronization with the server.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#swap_hotbar%28hotbar_nr%2Cslot%3AWindowSlot%29-instance-method" class="signature"><strong>#swap_hotbar</strong>(hotbar_nr, slot : WindowSlot)</a>
+        
+          <div class="summary"><p>Hotbar starts at 0.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#swap_hotbar%28hotbar_nr%2Cslot_nr%29-instance-method" class="signature"><strong>#swap_hotbar</strong>(hotbar_nr, slot_nr)</a>
+        
+          <div class="summary"><p>Hotbar starts at 0.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#swap_off_hand%28slot%3AWindowSlot%29-instance-method" class="signature"><strong>#swap_off_hand</strong>(slot : WindowSlot)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#swap_off_hand%28slot_nr%29-instance-method" class="signature"><strong>#swap_off_hand</strong>(slot_nr)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#title%3AChat-instance-method" class="signature"><strong>#title</strong> : Chat</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#type_id%3AUInt32-instance-method" class="signature"><strong>#type_id</strong> : UInt32</a>
+        
+          <div class="summary"><p>PlayerWindow reuses id 0</p></div>
         
       </li>
     
@@ -1092,66 +1269,24 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(id:UInt32,type:UInt32|Nil,title:Rosegold::Chat)-class-method">
+    <div class="entry-detail" id="new(client:Rosegold::Client,id:UInt8,title:Rosegold::Chat,type_id:UInt32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(id : UInt32, type : UInt32 | Nil, title : <a href="../Rosegold/Chat.html">Rosegold::Chat</a>)
+        def self.<strong>new</strong>(client : <a href="../Rosegold/Client.html">Rosegold::Client</a>, id : UInt8, title : <a href="../Rosegold/Chat.html">Rosegold::Chat</a>, type_id : UInt32)
 
-        <a class="method-permalink" href="#new%28id%3AUInt32%2Ctype%3AUInt32%7CNil%2Ctitle%3ARosegold%3A%3AChat%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28client%3ARosegold%3A%3AClient%2Cid%3AUInt8%2Ctitle%3ARosegold%3A%3AChat%2Ctype_id%3AUInt32%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L8" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="new(open_window:Rosegold::Clientbound::OpenWindow)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(open_window : <a href="../Rosegold/Clientbound/OpenWindow.html">Rosegold::Clientbound::OpenWindow</a>)
-
-        <a class="method-permalink" href="#new%28open_window%3ARosegold%3A%3AClientbound%3A%3AOpenWindow%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
-
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="player_inventory-class-method">
-      <div class="signature">
-        
-        def self.<strong>player_inventory</strong>
-
-        <a class="method-permalink" href="#player_inventory-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L11" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
@@ -1164,130 +1299,479 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="id:UInt32-instance-method">
+    <div class="entry-detail" id="click(slot:WindowSlot,right=false,shift=false,double=false)-instance-method">
       <div class="signature">
         
-        def <strong>id</strong> : UInt32
+        def <strong>click</strong>(slot : <a href="../Rosegold/WindowSlot.html">WindowSlot</a>, right = <span class="n">false</span>, shift = <span class="n">false</span>, double = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#id%3AUInt32-instance-method">#</a>
+        <a class="method-permalink" href="#click%28slot%3AWindowSlot%2Cright%3Dfalse%2Cshift%3Dfalse%2Cdouble%3Dfalse%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L140" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="id=(id:UInt32)-instance-method">
+    <div class="entry-detail" id="click(slot_nr,right=false,shift=false,double=false)-instance-method">
       <div class="signature">
         
-        def <strong>id=</strong>(id : UInt32)
+        def <strong>click</strong>(slot_nr, right = <span class="n">false</span>, shift = <span class="n">false</span>, double = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#id%3D%28id%3AUInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#click%28slot_nr%2Cright%3Dfalse%2Cshift%3Dfalse%2Cdouble%3Dfalse%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L135" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="slots:Array(Rosegold::Slot)-instance-method">
+    <div class="entry-detail" id="close-instance-method">
       <div class="signature">
         
-        def <strong>slots</strong> : Array(<a href="../Rosegold/Slot.html">Rosegold::Slot</a>)
+        def <strong>close</strong>
 
-        <a class="method-permalink" href="#slots%3AArray%28Rosegold%3A%3ASlot%29-instance-method">#</a>
+        <a class="method-permalink" href="#close-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="slots=(slots:Array(Rosegold::Slot))-instance-method">
+    <div class="entry-detail" id="closed=(closed:Bool)-instance-method">
       <div class="signature">
         
-        def <strong>slots=</strong>(slots : Array(<a href="../Rosegold/Slot.html">Rosegold::Slot</a>))
+        def <strong>closed=</strong>(closed : Bool)
 
-        <a class="method-permalink" href="#slots%3D%28slots%3AArray%28Rosegold%3A%3ASlot%29%29-instance-method">#</a>
+        <a class="method-permalink" href="#closed%3D%28closed%3ABool%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>If true, this window will never become ready in the future.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="title:Rosegold::Chat-instance-method">
+    <div class="entry-detail" id="closed?:Bool-instance-method">
       <div class="signature">
         
-        def <strong>title</strong> : <a href="../Rosegold/Chat.html">Rosegold::Chat</a>
+        def <strong>closed?</strong> : Bool
 
-        <a class="method-permalink" href="#title%3ARosegold%3A%3AChat-instance-method">#</a>
+        <a class="method-permalink" href="#closed%3F%3ABool-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>If true, this window will never become ready in the future.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="title=(title:Rosegold::Chat)-instance-method">
+    <div class="entry-detail" id="content:Array(WindowSlot)-instance-method">
       <div class="signature">
         
-        def <strong>title=</strong>(title : <a href="../Rosegold/Chat.html">Rosegold::Chat</a>)
+        def <strong>content</strong> : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>)
 
-        <a class="method-permalink" href="#title%3D%28title%3ARosegold%3A%3AChat%29-instance-method">#</a>
+        <a class="method-permalink" href="#content%3AArray%28WindowSlot%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Slots specific to the window, ie. excluding inventory and hotbar.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="type:UInt32|Nil-instance-method">
+    <div class="entry-detail" id="cursor:WindowSlot-instance-method">
       <div class="signature">
         
-        def <strong>type</strong> : UInt32 | Nil
+        def <strong>cursor</strong> : <a href="../Rosegold/WindowSlot.html">WindowSlot</a>
 
-        <a class="method-permalink" href="#type%3AUInt32%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#cursor%3AWindowSlot-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="type=(type:UInt32|Nil)-instance-method">
+    <div class="entry-detail" id="cursor=(cursor:WindowSlot)-instance-method">
       <div class="signature">
         
-        def <strong>type=</strong>(type : UInt32 | Nil)
+        def <strong>cursor=</strong>(cursor : <a href="../Rosegold/WindowSlot.html">WindowSlot</a>)
 
-        <a class="method-permalink" href="#type%3D%28type%3AUInt32%7CNil%29-instance-method">#</a>
+        <a class="method-permalink" href="#cursor%3D%28cursor%3AWindowSlot%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/models/window.cr#L2" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L53" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="drop(slot:WindowSlot,stack_mode:StackMode)-instance-method">
+      <div class="signature">
+        
+        def <strong>drop</strong>(slot : <a href="../Rosegold/WindowSlot.html">WindowSlot</a>, stack_mode : <a href="../Rosegold/Window/StackMode.html">StackMode</a>)
+
+        <a class="method-permalink" href="#drop%28slot%3AWindowSlot%2Cstack_mode%3AStackMode%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L123" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="drop(slot_nr,stack_mode:StackMode)-instance-method">
+      <div class="signature">
+        
+        def <strong>drop</strong>(slot_nr, stack_mode : <a href="../Rosegold/Window/StackMode.html">StackMode</a>)
+
+        <a class="method-permalink" href="#drop%28slot_nr%2Cstack_mode%3AStackMode%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L108" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="drop_cursor(stack_mode:StackMode)-instance-method">
+      <div class="signature">
+        
+        def <strong>drop_cursor</strong>(stack_mode : <a href="../Rosegold/Window/StackMode.html">StackMode</a>)
+
+        <a class="method-permalink" href="#drop_cursor%28stack_mode%3AStackMode%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L127" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="handle_closed-instance-method">
+      <div class="signature">
+        
+        def <strong>handle_closed</strong>
+
+        <a class="method-permalink" href="#handle_closed-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L36" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="hotbar:Array(WindowSlot)-instance-method">
+      <div class="signature">
+        
+        def <strong>hotbar</strong> : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>)
+
+        <a class="method-permalink" href="#hotbar%3AArray%28WindowSlot%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L78" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id:UInt8-instance-method">
+      <div class="signature">
+        
+        def <strong>id</strong> : UInt8
+
+        <a class="method-permalink" href="#id%3AUInt8-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="inventory:Array(WindowSlot)-instance-method">
+      <div class="signature">
+        
+        def <strong>inventory</strong> : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>)
+
+        <a class="method-permalink" href="#inventory%3AArray%28WindowSlot%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L74" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="main_hand:WindowSlot-instance-method">
+      <div class="signature">
+        
+        def <strong>main_hand</strong> : <a href="../Rosegold/WindowSlot.html">WindowSlot</a>
+
+        <a class="method-permalink" href="#main_hand%3AWindowSlot-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L82" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ready?-instance-method">
+      <div class="signature">
+        
+        def <strong>ready?</strong>
+
+        <a class="method-permalink" href="#ready%3F-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>If true, this window is in sync with the server.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L43" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="slots:Array(WindowSlot)-instance-method">
+      <div class="signature">
+        
+        def <strong>slots</strong> : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>)
+
+        <a class="method-permalink" href="#slots%3AArray%28WindowSlot%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L61" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="slots=(slots:Array(WindowSlot))-instance-method">
+      <div class="signature">
+        
+        def <strong>slots=</strong>(slots : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>))
+
+        <a class="method-permalink" href="#slots%3D%28slots%3AArray%28WindowSlot%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L47" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="state_id:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>state_id</strong> : UInt32
+
+        <a class="method-permalink" href="#state_id%3AUInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used for tracking synchronization with the server.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="state_id=(state_id:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>state_id=</strong>(state_id : UInt32)
+
+        <a class="method-permalink" href="#state_id%3D%28state_id%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Used for tracking synchronization with the server.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="swap_hotbar(hotbar_nr,slot:WindowSlot)-instance-method">
+      <div class="signature">
+        
+        def <strong>swap_hotbar</strong>(hotbar_nr, slot : <a href="../Rosegold/WindowSlot.html">WindowSlot</a>)
+
+        <a class="method-permalink" href="#swap_hotbar%28hotbar_nr%2Cslot%3AWindowSlot%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Hotbar starts at 0.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L95" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="swap_hotbar(hotbar_nr,slot_nr)-instance-method">
+      <div class="signature">
+        
+        def <strong>swap_hotbar</strong>(hotbar_nr, slot_nr)
+
+        <a class="method-permalink" href="#swap_hotbar%28hotbar_nr%2Cslot_nr%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Hotbar starts at 0.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L87" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="swap_off_hand(slot:WindowSlot)-instance-method">
+      <div class="signature">
+        
+        def <strong>swap_off_hand</strong>(slot : <a href="../Rosegold/WindowSlot.html">WindowSlot</a>)
+
+        <a class="method-permalink" href="#swap_off_hand%28slot%3AWindowSlot%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L104" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="swap_off_hand(slot_nr)-instance-method">
+      <div class="signature">
+        
+        def <strong>swap_off_hand</strong>(slot_nr)
+
+        <a class="method-permalink" href="#swap_off_hand%28slot_nr%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L99" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="title:Chat-instance-method">
+      <div class="signature">
+        
+        def <strong>title</strong> : <a href="../Rosegold/Chat.html">Chat</a>
+
+        <a class="method-permalink" href="#title%3AChat-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="type_id:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>type_id</strong> : UInt32
+
+        <a class="method-permalink" href="#type_id%3AUInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>PlayerWindow reuses id 0</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/world/window.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>

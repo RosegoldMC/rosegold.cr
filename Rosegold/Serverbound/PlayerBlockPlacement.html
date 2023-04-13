@@ -436,6 +436,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+      <a href="../../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Respawn" data-name="rosegold::clientbound::respawn">
       <a href="../../Rosegold/Clientbound/Respawn.html">Respawn</a>
       
@@ -661,8 +666,18 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/PlayerWindow" data-name="rosegold::playerwindow">
+      <a href="../../Rosegold/PlayerWindow.html">PlayerWindow</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ProtocolState" data-name="rosegold::protocolstate">
       <a href="../../Rosegold/ProtocolState.html">ProtocolState</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/RawPacket" data-name="rosegold::rawpacket">
+      <a href="../../Rosegold/RawPacket.html">RawPacket</a>
       
     </li>
   
@@ -693,6 +708,26 @@
   
   <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
       <a href="../../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClickWindow" data-name="rosegold::serverbound::clickwindow">
+      <a href="../../Rosegold/Serverbound/ClickWindow.html">ClickWindow</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/Mode" data-name="rosegold::serverbound::clickwindow::mode">
+      <a href="../../Rosegold/Serverbound/ClickWindow/Mode.html">Mode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/StackMode" data-name="rosegold::serverbound::clickwindow::stackmode">
+      <a href="../../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -841,6 +876,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
+      <a href="../../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/StatusPing" data-name="rosegold::serverbound::statusping">
       <a href="../../Rosegold/Serverbound/StatusPing.html">StatusPing</a>
       
@@ -896,8 +936,28 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
+  <li class="parent " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
       <a href="../../Rosegold/Window.html">Window</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/ClickWindow" data-name="rosegold::window::clickwindow">
+      <a href="../../Rosegold/Window/ClickWindow.html">ClickWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/StackMode" data-name="rosegold::window::stackmode">
+      <a href="../../Rosegold/Window/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/WindowSlot" data-name="rosegold::windowslot">
+      <a href="../../Rosegold/WindowSlot.html">WindowSlot</a>
       
     </li>
   
@@ -960,7 +1020,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L5" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L5" target="_blank">
         rosegold/packets/serverbound/player_block_placement.cr
       </a>
     
@@ -982,7 +1042,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28location%3AVec3i%2Cface%3ABlockFace%2Ccursor%3AVec3f%3DVec3f.new%280.5%2C0.5%2C0.5%29%2Chand%3AHand%3DHand%3A%3AMainHand%2Cinside_block%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(location : Vec3i, face : BlockFace, cursor : Vec3f = <span class="t">Vec3f</span>.new(<span class="n">0.5</span>, <span class="n">0.5</span>, <span class="n">0.5</span>), hand : Hand = <span class="t">Hand</span><span class="t">::</span><span class="t">MainHand</span>, inside_block : Bool = <span class="n">false</span>)</a>
+        <a href="#new%28hand%3AHand%2Clocation%3AVec3i%2Cface%3ABlockFace%2Ccursor%3AVec3f%3DVec3f.new%280.5%2C0.5%2C0.5%29%2Cinside_block%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(hand : Hand, location : Vec3i, face : BlockFace, cursor : Vec3f = <span class="t">Vec3f</span>.new(<span class="n">0.5</span>, <span class="n">0.5</span>, <span class="n">0.5</span>), inside_block : Bool = <span class="n">false</span>)</a>
         
       </li>
     
@@ -1002,6 +1062,11 @@ and determines e.g. top/bottom slab or left/right door.</p>
     
       <li class="entry-summary">
         <a href="#packet_id-class-method" class="signature"><strong>.packet_id</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#read%28io%29-class-method" class="signature"><strong>.read</strong>(io)</a>
         
       </li>
     
@@ -1090,6 +1155,20 @@ and determines e.g. top/bottom slab or left/right door.</p>
 
     
 
+  <h3>Class methods inherited from class <code><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Serverbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
+      <span>new_raw(bytes)</span>
+    new_raw</a>, 
+    
+  
+    <a href="../../Rosegold/Serverbound/Packet.html#state-class-method" class="tooltip">
+      <span>state</span>
+    state</a>
+    
+  
+
 
   
     
@@ -1100,6 +1179,11 @@ and determines e.g. top/bottom slab or left/right door.</p>
     <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
       <span>callback(client_or_server)</span>
     callback</a>, 
+    
+  
+    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
+      <span>to_s(io)</span>
+    to_s</a>, 
     
   
     <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
@@ -1158,18 +1242,18 @@ and determines e.g. top/bottom slab or left/right door.</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(location:Vec3i,face:BlockFace,cursor:Vec3f=Vec3f.new(0.5,0.5,0.5),hand:Hand=Hand::MainHand,inside_block:Bool=false)-class-method">
+    <div class="entry-detail" id="new(hand:Hand,location:Vec3i,face:BlockFace,cursor:Vec3f=Vec3f.new(0.5,0.5,0.5),inside_block:Bool=false)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(location : <a href="../../Rosegold/Vec3i.html">Vec3i</a>, face : <a href="../../BlockFace.html">BlockFace</a>, cursor : <a href="../../Rosegold/Vec3f.html">Vec3f</a> = <span class="t">Vec3f</span>.new(<span class="n">0.5</span>, <span class="n">0.5</span>, <span class="n">0.5</span>), hand : <a href="../../Rosegold/Hand.html">Hand</a> = <span class="t">Hand</span><span class="t">::</span><span class="t">MainHand</span>, inside_block : Bool = <span class="n">false</span>)
+        def self.<strong>new</strong>(hand : <a href="../../Rosegold/Hand.html">Hand</a>, location : <a href="../../Rosegold/Vec3i.html">Vec3i</a>, face : <a href="../../BlockFace.html">BlockFace</a>, cursor : <a href="../../Rosegold/Vec3f.html">Vec3f</a> = <span class="t">Vec3f</span>.new(<span class="n">0.5</span>, <span class="n">0.5</span>, <span class="n">0.5</span>), inside_block : Bool = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#new%28location%3AVec3i%2Cface%3ABlockFace%2Ccursor%3AVec3f%3DVec3f.new%280.5%2C0.5%2C0.5%29%2Chand%3AHand%3DHand%3A%3AMainHand%2Cinside_block%3ABool%3Dfalse%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28hand%3AHand%2Clocation%3AVec3i%2Cface%3ABlockFace%2Ccursor%3AVec3f%3DVec3f.new%280.5%2C0.5%2C0.5%29%2Cinside_block%3ABool%3Dfalse%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1197,7 +1281,23 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(io)-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(io)
+
+        <a class="method-permalink" href="#read%28io%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1225,7 +1325,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1241,7 +1341,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1257,7 +1357,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1273,7 +1373,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1289,7 +1389,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1305,7 +1405,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1321,7 +1421,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1337,7 +1437,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1353,7 +1453,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1369,7 +1469,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1385,7 +1485,7 @@ and determines e.g. top/bottom slab or left/right door.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/728bc670de7da0545e508dba4ce87afd9ca6259d/src/rosegold/packets/serverbound/player_block_placement.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7174444260bfede6ddd2b0799a852c021aa2b728/src/rosegold/packets/serverbound/player_block_placement.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
