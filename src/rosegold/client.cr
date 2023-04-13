@@ -106,6 +106,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
   end
 
+  delegate disconnect, to: connection
+
   def status
     self.class.status host, port
   end
@@ -127,7 +129,7 @@ class Rosegold::Client < Rosegold::EventEmitter
       Fiber.yield
       send_packet! packet
     rescue e : NotConnected
-      Log.warn { "Not connected, not sending #{packet}" }
+      Log.warn { "Not connected, not sending queued #{packet}" }
     end
   end
 
