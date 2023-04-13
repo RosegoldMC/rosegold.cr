@@ -101,6 +101,11 @@ class Rosegold::Physics
     action.join
   end
 
+  # compatibility
+  def look=(target : Look)
+    look target
+  end
+
   def sneak(sneaking = true)
     # send nothing if already in desired state
     return if player.sneaking? == sneaking
