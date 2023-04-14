@@ -69,6 +69,24 @@ class Rosegold::Slot
     enchantments
   end
 
+  def enchanted? : Bool
+    !enchantments.empty?
+  end
+
+  def needs_repair? : Bool
+    worth_repairing? && durability < 12
+  end
+
+  def worth_repairing? : Bool
+    return false unless item_id.includes?("diamond") || item_id.includes?("netherite")
+
+    enchanted? && repair_cost <= 31
+  end
+
+  def repair_cost : Int32
+    nbt.try &.["RepairCost"]?.try &.as_i32 || 0
+  end
+
   # Use to get the item_id in new-age string format
   # To get the legacy int format, use `item_id_int`
   def item_id : String
