@@ -60,11 +60,11 @@ class Rosegold::Slot
   end
 
   def enchantments
-    enchantments = Hash(String, Int16).new
+    enchantments = Hash(String, Int8 | Int16 | Int32 | Int64 | UInt8).new
     nbt.try &.["Enchantments"]?.try &.as_list.try &.each do |e|
       e = e.as_compound
       id = e["id"].as_s.sub("minecraft:", "")
-      enchantments[id] = e["lvl"].as_i16
+      enchantments[id] = e["lvl"].as_i
     end
     enchantments
   end
