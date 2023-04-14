@@ -29,10 +29,10 @@ class Rosegold::Inventory
   #   inventory.pick &.empty? # => true
   #   inventory.pick { |slot| slot.item_id == "diamond_pickaxe" && slot.efficiency >= 4 } # => false
   def pick(spec)
-    return true if main_hand.matches? spec
+    return true if main_hand.matches?(spec) && !main_hand.needs_repair?
 
     hotbar.each_with_index do |slot, index|
-      if slot.matches? spec
+      if slot.matches?(spec) && !slot.needs_repair?
         client.send_packet! Serverbound::HeldItemChange.new index.to_u8
         client.player.hotbar_selection = index.to_u8
         return true
@@ -40,7 +40,7 @@ class Rosegold::Inventory
     end
 
     slots.each do |slot|
-      if slot.matches? spec
+      if slot.matches?(spec) && !slot.needs_repair?
         swap_hotbar client.player.hotbar_selection, slot
         return true
       end
