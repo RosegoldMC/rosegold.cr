@@ -65,5 +65,17 @@ Spectator.describe Rosegold::Bot do
         end
       end
     end
+
+    context "when the only pickable ite is in need of repair (diamond/netherite and enchanted, with <=12 dura left)" do
+      it "raises exception" do
+        Rosegold::Client.new("localhost", 25565).join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/clear"
+            bot.chat "/give #{bot.username} minecraft:diamond_pickaxe{Damage:1550,Enchantments:[{id:efficiency,lvl:1}]} 1"
+            expect { bot.inventory.pick!("diamond_pickaxe") }.to raise_error(Rosegold::Inventory::ItemNotFoundError)
+          end
+        end
+      end
+    end
   end
 end

@@ -37,6 +37,21 @@ module Minecraft::NBT
       end
     end
 
+    def as_i : Int8 | Int16 | Int32 | Int64 | UInt8
+      case self
+      when ByteTag
+        self.value
+      when ShortTag
+        self.value
+      when IntTag
+        self.value
+      when LongTag
+        self.value
+      else
+        raise "Wrong type #{self}"
+      end
+    end
+
     def as_i8 : Int8
       raise "Wrong type #{self}" unless self.is_a? ByteTag
       self.value
