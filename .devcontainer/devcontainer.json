@@ -1,0 +1,22 @@
+{
+  "name": "Rosegold",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "extensions": [
+    "crystal-lang-tools.crystal-ide",
+    "faustinoaq.crystalformatter",
+    "mkenney.vscode-ameba"
+  ],
+
+  "forwardPorts": [
+    25565
+  ],
+
+  "settings": {
+    "files.exclude": {
+      "**/.cache": true
+    }
+  },
+  "postCreateCommand": "script/setup"
+}
