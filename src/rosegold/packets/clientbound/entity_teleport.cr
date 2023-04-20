@@ -40,4 +40,19 @@ class Rosegold::Clientbound::EntityTeleport < Rosegold::Clientbound::Packet
       buffer.write on_ground?
     end.to_slice
   end
+
+  def callback(client)
+    entity = client.dimension.entities[entity_id]?
+
+    if entity.nil?
+      Log.warn { "Received entity teleport packet for unknown entity ID #{entity_id}" }
+      return
+    end
+
+    entity.position = location
+    entity.yaw = look.yaw
+    entity.pitch = look.pitch
+
+    entity.update_passengers client
+  end
 end

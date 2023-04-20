@@ -1,4 +1,5 @@
 require "./chunk"
+require "./entity"
 
 class Rosegold::Dimension
   alias ChunkPos = {Int32, Int32}
@@ -9,6 +10,8 @@ class Rosegold::Dimension
   getter nbt : Minecraft::NBT::Tag
   getter min_y = -64
   getter world_height = 256 + 64 + 64
+
+  property entities : Hash(UInt32, Entity) = Hash(UInt32, Entity).new
 
   def initialize(@name, @nbt)
     @min_y = @nbt["min_y"].as_i32
@@ -52,5 +55,25 @@ class Rosegold::Dimension
   def set_block_state(x : Int32, y : Int32, z : Int32, block_state : UInt16)
     chunk_pos = {x >> 4, z >> 4}
     @chunks[chunk_pos]?.try &.set_block_state(x, y, z, block_state)
+  end
+
+  def raycast_entity(start : Vec3d, look : Vec3d, max_distance : Float64) : Entity?
+    closest_entity = nil
+    closest_distance = Float64::INFINITY
+
+    ray_end = start + look * max_distance
+
+    entities.each_value do |entity|
+      bounding_box = entity.bounding_box
+      distance = bounding_box.ray_intersection(start, ray_end)
+      next if distance.nil?
+
+      if distance < closest_distance
+        closest_entity = entity
+        closest_distance = distance
+      end
+    end
+
+    closest_entity
   end
 end

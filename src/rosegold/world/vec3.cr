@@ -80,7 +80,7 @@ module Rosegold::Vec3(T)
   end
 
   def normed : self
-    self / len
+    self / length
   end
 
   def rounded : self
@@ -126,7 +126,7 @@ module Rosegold::Vec3(T)
     x*x + y*y + z*z
   end
 
-  def len : Float64
+  def length : Float64
     Math.sqrt len_sq
   end
 
@@ -135,7 +135,7 @@ module Rosegold::Vec3(T)
   end
 
   def dist(other : self) : T
-    (self - other).len
+    (self - other).length
   end
 
   # Ignores y difference.

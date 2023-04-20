@@ -54,6 +54,29 @@ module Rosegold::AABB(T, V)
       other.min.z < self.max.z
   end
 
+  def ray_intersection(start : V, end_ : V) : Float64?
+    direction = end_ - start
+    t_min = Vec3d.new((self.min.x - start.x) / direction.x,
+      (self.min.y - start.y) / direction.y,
+      (self.min.z - start.z) / direction.z)
+
+    t_max = Vec3d.new((self.max.x - start.x) / direction.x,
+      (self.max.y - start.y) / direction.y,
+      (self.max.z - start.z) / direction.z)
+
+    t_min_x, t_max_x = [t_min.x, t_max.x].min, [t_min.x, t_max.x].max
+    t_min_y, t_max_y = [t_min.y, t_max.y].min, [t_min.y, t_max.y].max
+    t_min_z, t_max_z = [t_min.z, t_max.z].min, [t_min.z, t_max.z].max
+
+    t_near = [t_min_x, t_min_y, t_min_z].max
+    t_far = [t_max_x, t_max_y, t_max_z].min
+
+    return nil if t_near > t_far
+    return nil if t_far < 0
+
+    t_near
+  end
+
   def [](i) : V
     {min, max}[i]
   end

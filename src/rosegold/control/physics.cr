@@ -175,7 +175,7 @@ class Rosegold::Physics
       @movement_action.try do |movement_action|
         # movement_action.target only influences x,z; rely on stepping/falling to change y
         target_diff = (movement_action.target - player.feet).with_y(0)
-        if target_diff.len < VERY_CLOSE
+        if target_diff.length < VERY_CLOSE
           movement_action.succeed
           @movement_action = nil
         end
@@ -211,7 +211,7 @@ class Rosegold::Physics
     if curr_movement
       # curr_movement.target only influences x,z; rely on stepping/falling to change y
       move_horiz_vec = (curr_movement.target - player.feet).with_y(0)
-      move_horiz_vec_len = move_horiz_vec.len
+      move_horiz_vec_len = move_horiz_vec.length
       if move_horiz_vec_len < VERY_CLOSE
         move_horiz_vec = Vec3d::ORIGIN
       elsif move_horiz_vec_len > movement_speed
