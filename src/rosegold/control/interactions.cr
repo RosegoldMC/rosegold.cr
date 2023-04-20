@@ -48,32 +48,48 @@ class Rosegold::Interactions
     return if digging?
     self.digging = true
 
+    attack
+
     spawn do
       while digging?
         cancel = false
         reached = reach_block_or_entity
         sleep 1.tick
-        next sleep 1.tick unless reached
+        next sleep 1.tick if !reached
 
-        start_digging reached
+        case reached
+        when ReachedBlock
+          start_digging reached
 
-        client.dimension.block_state(reached.block).try do |block_state|
-          block = Block.from_block_state_id block_state
-          next sleep 1.tick if block.id_str == "air"
+          client.dimension.block_state(reached.block).try do |block_state|
+            block = Block.from_block_state_id block_state
+            next sleep 1.tick if block.id_str == "air"
 
-          block.break_time(inventory.main_hand, client.player).to_i.times do
-            sleep 1.tick
-            reached = reach_block_or_entity
-            if reached.try &.block != @digging_block.try &.block
-              cancel_digging
-              cancel = true
-              break
+            block.break_time(inventory.main_hand, client.player).to_i.times do
+              sleep 1.tick
+              reached = reach_block_or_entity
+              if reached.is_a?(Entity) || reached.try &.block != @digging_block.try &.block
+                cancel_digging
+                cancel = true
+                break
+              end
             end
           end
-        end
 
-        finish_digging if digging? && !cancel
+          finish_digging if digging? && !cancel
+        else
+          next sleep 1.tick
+        end
       end
+    end
+  end
+
+  private def attack
+    if reached = reach_block_or_entity
+      return if reached.is_a? ReachedBlock
+
+      send_packet Serverbound::InteractEntity.new reached.entity_id, :attack
+      send_packet Serverbound::SwingArm.new
     end
   end
 
@@ -133,16 +149,29 @@ class Rosegold::Interactions
       :cancel, reached.block, reached.face
   end
 
-  private def reach_block_or_entity : ReachedBlock?
-    reach_len = 4.5
-    reach_len = 5.0 if client.player.gamemode == 1
-    reach_vec = client.player.look.to_vec3 * reach_len
+  private def reach_block_or_entity : ReachedBlock? | Rosegold::Entity?
+    reach_entity || reach_block
+  end
+
+  def reach_block : ReachedBlock?
     eyes = client.player.eyes
     boxes = get_block_hitboxes(eyes, reach_vec)
     Raytrace.raytrace(eyes, reach_vec, boxes).try do |reached|
       block = boxes[reached.box_nr].min.block
       ReachedBlock.new reached.intercept, block, reached.face
     end
+  end
+
+  private def reach_entity : Rosegold::Entity?
+    client.dimension.raycast_entity client.player.eyes, reach_vec, reach_length
+  end
+
+  private def reach_length
+    client.player.gamemode == 1 ? 5.0 : 4.5
+  end
+
+  private def reach_vec
+    client.player.look.to_vec3 * reach_length
   end
 
   # Returns all block collision boxes that may intersect from `start` towards `reach`.
