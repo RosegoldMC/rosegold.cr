@@ -346,6 +346,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/DestroyEntities" data-name="rosegold::clientbound::destroyentities">
+      <a href="../Rosegold/Clientbound/DestroyEntities.html">DestroyEntities</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Disconnect" data-name="rosegold::clientbound::disconnect">
       <a href="../Rosegold/Clientbound/Disconnect.html">Disconnect</a>
       
@@ -358,6 +363,21 @@
   
   <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityEquipment" data-name="rosegold::clientbound::entityequipment">
       <a href="../Rosegold/Clientbound/EntityEquipment.html">EntityEquipment</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityPosition" data-name="rosegold::clientbound::entityposition">
+      <a href="../Rosegold/Clientbound/EntityPosition.html">EntityPosition</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityPositionAndRotation" data-name="rosegold::clientbound::entitypositionandrotation">
+      <a href="../Rosegold/Clientbound/EntityPositionAndRotation.html">EntityPositionAndRotation</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityRotation" data-name="rosegold::clientbound::entityrotation">
+      <a href="../Rosegold/Clientbound/EntityRotation.html">EntityRotation</a>
       
     </li>
   
@@ -451,8 +471,23 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SetPassengers" data-name="rosegold::clientbound::setpassengers">
+      <a href="../Rosegold/Clientbound/SetPassengers.html">SetPassengers</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/SetSlot" data-name="rosegold::clientbound::setslot">
       <a href="../Rosegold/Clientbound/SetSlot.html">SetSlot</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SpawnEntity" data-name="rosegold::clientbound::spawnentity">
+      <a href="../Rosegold/Clientbound/SpawnEntity.html">SpawnEntity</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SpawnLivingEntity" data-name="rosegold::clientbound::spawnlivingentity">
+      <a href="../Rosegold/Clientbound/SpawnLivingEntity.html">SpawnLivingEntity</a>
       
     </li>
   
@@ -518,6 +553,21 @@
   
   <li class=" " data-id="rosegold/Rosegold/Dimension/ChunkPos" data-name="rosegold::dimension::chunkpos">
       <a href="../Rosegold/Dimension/ChunkPos.html">ChunkPos</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Entity" data-name="rosegold::entity">
+      <a href="../Rosegold/Entity.html">Entity</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Entity/Metadata" data-name="rosegold::entity::metadata">
+      <a href="../Rosegold/Entity/Metadata.html">Metadata</a>
       
     </li>
   
@@ -806,6 +856,21 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/InteractEntity" data-name="rosegold::serverbound::interactentity">
+      <a href="../Rosegold/Serverbound/InteractEntity.html">InteractEntity</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/InteractEntity/Action" data-name="rosegold::serverbound::interactentity::action">
+      <a href="../Rosegold/Serverbound/InteractEntity/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/KeepAlive" data-name="rosegold::serverbound::keepalive">
       <a href="../Rosegold/Serverbound/KeepAlive.html">KeepAlive</a>
       
@@ -1008,7 +1073,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L4" target="_blank">
         rosegold/world/dimension.cr
       </a>
     
@@ -1076,6 +1141,16 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#entities%3AHash%28UInt32%2CEntity%29-instance-method" class="signature"><strong>#entities</strong> : Hash(UInt32, Entity)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#entities%3D%28entities%3AHash%28UInt32%2CEntity%29%29-instance-method" class="signature"><strong>#entities=</strong>(entities : Hash(UInt32, Entity))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#load_chunk%28chunk%3AChunk%29-instance-method" class="signature"><strong>#load_chunk</strong>(chunk : Chunk)</a>
         
       </li>
@@ -1092,6 +1167,11 @@
     
       <li class="entry-summary">
         <a href="#nbt%3AMinecraft%3A%3ANBT%3A%3ATag-instance-method" class="signature"><strong>#nbt</strong> : Minecraft::NBT::Tag</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#raycast_entity%28start%3AVec3d%2Clook%3AVec3d%2Cmax_distance%3AFloat64%29%3AEntity%7CNil-instance-method" class="signature"><strong>#raycast_entity</strong>(start : Vec3d, look : Vec3d, max_distance : Float64) : Entity | Nil</a>
         
       </li>
     
@@ -1166,7 +1246,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1182,7 +1262,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1212,7 +1292,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1228,7 +1308,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1244,7 +1324,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L41" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1260,7 +1340,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entities:Hash(UInt32,Entity)-instance-method">
+      <div class="signature">
+        
+        def <strong>entities</strong> : Hash(UInt32, <a href="../Rosegold/Entity.html">Entity</a>)
+
+        <a class="method-permalink" href="#entities%3AHash%28UInt32%2CEntity%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entities=(entities:Hash(UInt32,Entity))-instance-method">
+      <div class="signature">
+        
+        def <strong>entities=</strong>(entities : Hash(UInt32, <a href="../Rosegold/Entity.html">Entity</a>))
+
+        <a class="method-permalink" href="#entities%3D%28entities%3AHash%28UInt32%2CEntity%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1276,7 +1388,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1292,7 +1404,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1308,7 +1420,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1324,7 +1436,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L10" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="raycast_entity(start:Vec3d,look:Vec3d,max_distance:Float64):Entity|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>raycast_entity</strong>(start : <a href="../Rosegold/Vec3d.html">Vec3d</a>, look : <a href="../Rosegold/Vec3d.html">Vec3d</a>, max_distance : Float64) : <a href="../Rosegold/Entity.html">Entity</a> | Nil
+
+        <a class="method-permalink" href="#raycast_entity%28start%3AVec3d%2Clook%3AVec3d%2Cmax_distance%3AFloat64%29%3AEntity%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L60" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1340,7 +1468,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L52" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1356,7 +1484,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L51" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1372,7 +1500,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1388,7 +1516,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5884ec3354b425338725023f0998d121389ff2ff/src/rosegold/world/dimension.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/world/dimension.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>

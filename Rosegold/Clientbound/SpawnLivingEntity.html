@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 1.7.3">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="rosegold">
+
+
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/doc.js"></script>
+
+  <meta name="repository-name" content="rosegold">
+  <title>Rosegold::Clientbound::SpawnLivingEntity - rosegold main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../../index.html">
+          rosegold
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" " data-id="rosegold/toplevel" data-name="top level namespace">
+      <a href="../../toplevel.html">Top Level Namespace</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/BlockFace" data-name="blockface">
+      <a href="../../BlockFace.html">BlockFace</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Int32" data-name="int32">
+      <a href="../../Int32.html">Int32</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Microsoft" data-name="microsoft">
+      <a href="../../Microsoft.html">Microsoft</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Microsoft/MobileOAuth" data-name="microsoft::mobileoauth">
+      <a href="../../Microsoft/MobileOAuth.html">MobileOAuth</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Minecraft" data-name="minecraft">
+      <a href="../../Minecraft.html">Minecraft</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Minecraft/Auth" data-name="minecraft::auth">
+      <a href="../../Minecraft/Auth.html">Auth</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/Digest" data-name="minecraft::digest">
+      <a href="../../Minecraft/Digest.html">Digest</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/EncryptedTCPSocket" data-name="minecraft::encryptedtcpsocket">
+      <a href="../../Minecraft/EncryptedTCPSocket.html">EncryptedTCPSocket</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Minecraft/IO" data-name="minecraft::io">
+      <a href="../../Minecraft/IO.html">IO</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Minecraft/IO/Hexdump" data-name="minecraft::io::hexdump">
+      <a href="../../Minecraft/IO/Hexdump.html">Hexdump</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/IO/Memory" data-name="minecraft::io::memory">
+      <a href="../../Minecraft/IO/Memory.html">Memory</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/IO/Wrap" data-name="minecraft::io::wrap">
+      <a href="../../Minecraft/IO/Wrap.html">Wrap</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Minecraft/NBT" data-name="minecraft::nbt">
+      <a href="../../Minecraft/NBT.html">NBT</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/ByteArrayTag" data-name="minecraft::nbt::bytearraytag">
+      <a href="../../Minecraft/NBT/ByteArrayTag.html">ByteArrayTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/ByteTag" data-name="minecraft::nbt::bytetag">
+      <a href="../../Minecraft/NBT/ByteTag.html">ByteTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/CompoundTag" data-name="minecraft::nbt::compoundtag">
+      <a href="../../Minecraft/NBT/CompoundTag.html">CompoundTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/DoubleTag" data-name="minecraft::nbt::doubletag">
+      <a href="../../Minecraft/NBT/DoubleTag.html">DoubleTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/EndTag" data-name="minecraft::nbt::endtag">
+      <a href="../../Minecraft/NBT/EndTag.html">EndTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/FloatTag" data-name="minecraft::nbt::floattag">
+      <a href="../../Minecraft/NBT/FloatTag.html">FloatTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/IntArrayTag" data-name="minecraft::nbt::intarraytag">
+      <a href="../../Minecraft/NBT/IntArrayTag.html">IntArrayTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/IntTag" data-name="minecraft::nbt::inttag">
+      <a href="../../Minecraft/NBT/IntTag.html">IntTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/ListTag" data-name="minecraft::nbt::listtag">
+      <a href="../../Minecraft/NBT/ListTag.html">ListTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/LongArrayTag" data-name="minecraft::nbt::longarraytag">
+      <a href="../../Minecraft/NBT/LongArrayTag.html">LongArrayTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/LongTag" data-name="minecraft::nbt::longtag">
+      <a href="../../Minecraft/NBT/LongTag.html">LongTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/ShortTag" data-name="minecraft::nbt::shorttag">
+      <a href="../../Minecraft/NBT/ShortTag.html">ShortTag</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/StringTag" data-name="minecraft::nbt::stringtag">
+      <a href="../../Minecraft/NBT/StringTag.html">StringTag</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Minecraft/NBT/Tag" data-name="minecraft::nbt::tag">
+      <a href="../../Minecraft/NBT/Tag.html">Tag</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Minecraft/NBT/Tag/NamedTag" data-name="minecraft::nbt::tag::namedtag">
+      <a href="../../Minecraft/NBT/Tag/NamedTag.html">NamedTag</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Minecraft/TCPSocket" data-name="minecraft::tcpsocket">
+      <a href="../../Minecraft/TCPSocket.html">TCPSocket</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="rosegold/Rosegold" data-name="rosegold">
+      <a href="../../Rosegold.html">Rosegold</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/AABB" data-name="rosegold::aabb(t, v)">
+      <a href="../../Rosegold/AABB.html">AABB</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/AABBd" data-name="rosegold::aabbd">
+      <a href="../../Rosegold/AABBd.html">AABBd</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/AABBf" data-name="rosegold::aabbf">
+      <a href="../../Rosegold/AABBf.html">AABBf</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Action" data-name="rosegold::action(t)">
+      <a href="../../Rosegold/Action.html">Action</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Block" data-name="rosegold::block">
+      <a href="../../Rosegold/Block.html">Block</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
+      <a href="../../Rosegold/Bot.html">Bot</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Chat" data-name="rosegold::chat">
+      <a href="../../Rosegold/Chat.html">Chat</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Chunk" data-name="rosegold::chunk">
+      <a href="../../Rosegold/Chunk.html">Chunk</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Chunk/BlockEntity" data-name="rosegold::chunk::blockentity">
+      <a href="../../Rosegold/Chunk/BlockEntity.html">BlockEntity</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Chunk/BlockStateNr" data-name="rosegold::chunk::blockstatenr">
+      <a href="../../Rosegold/Chunk/BlockStateNr.html">BlockStateNr</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Chunk/Section" data-name="rosegold::chunk::section">
+      <a href="../../Rosegold/Chunk/Section.html">Section</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Client" data-name="rosegold::client">
+      <a href="../../Rosegold/Client.html">Client</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Client/NotConnected" data-name="rosegold::client::notconnected">
+      <a href="../../Rosegold/Client/NotConnected.html">NotConnected</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+      <a href="../../Rosegold/Clientbound.html">Clientbound</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging" data-name="rosegold::clientbound::acknowledgeplayerdigging">
+      <a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging.html">AcknowledgePlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/AcknowledgePlayerDigging/Status" data-name="rosegold::clientbound::acknowledgeplayerdigging::status">
+      <a href="../../Rosegold/Clientbound/AcknowledgePlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/BlockChange" data-name="rosegold::clientbound::blockchange">
+      <a href="../../Rosegold/Clientbound/BlockChange.html">BlockChange</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChatMessage" data-name="rosegold::clientbound::chatmessage">
+      <a href="../../Rosegold/Clientbound/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChunkData" data-name="rosegold::clientbound::chunkdata">
+      <a href="../../Rosegold/Clientbound/ChunkData.html">ChunkData</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/CloseWindow" data-name="rosegold::clientbound::closewindow">
+      <a href="../../Rosegold/Clientbound/CloseWindow.html">CloseWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/DestroyEntities" data-name="rosegold::clientbound::destroyentities">
+      <a href="../../Rosegold/Clientbound/DestroyEntities.html">DestroyEntities</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/Disconnect" data-name="rosegold::clientbound::disconnect">
+      <a href="../../Rosegold/Clientbound/Disconnect.html">Disconnect</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EncryptionRequest" data-name="rosegold::clientbound::encryptionrequest">
+      <a href="../../Rosegold/Clientbound/EncryptionRequest.html">EncryptionRequest</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityEquipment" data-name="rosegold::clientbound::entityequipment">
+      <a href="../../Rosegold/Clientbound/EntityEquipment.html">EntityEquipment</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityPosition" data-name="rosegold::clientbound::entityposition">
+      <a href="../../Rosegold/Clientbound/EntityPosition.html">EntityPosition</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityPositionAndRotation" data-name="rosegold::clientbound::entitypositionandrotation">
+      <a href="../../Rosegold/Clientbound/EntityPositionAndRotation.html">EntityPositionAndRotation</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityRotation" data-name="rosegold::clientbound::entityrotation">
+      <a href="../../Rosegold/Clientbound/EntityRotation.html">EntityRotation</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityTeleport" data-name="rosegold::clientbound::entityteleport">
+      <a href="../../Rosegold/Clientbound/EntityTeleport.html">EntityTeleport</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/HeldItemChange" data-name="rosegold::clientbound::helditemchange">
+      <a href="../../Rosegold/Clientbound/HeldItemChange.html">HeldItemChange</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/JoinGame" data-name="rosegold::clientbound::joingame">
+      <a href="../../Rosegold/Clientbound/JoinGame.html">JoinGame</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/KeepAlive" data-name="rosegold::clientbound::keepalive">
+      <a href="../../Rosegold/Clientbound/KeepAlive.html">KeepAlive</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/LoginDisconnect" data-name="rosegold::clientbound::logindisconnect">
+      <a href="../../Rosegold/Clientbound/LoginDisconnect.html">LoginDisconnect</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/LoginPluginRequest" data-name="rosegold::clientbound::loginpluginrequest">
+      <a href="../../Rosegold/Clientbound/LoginPluginRequest.html">LoginPluginRequest</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/LoginSuccess" data-name="rosegold::clientbound::loginsuccess">
+      <a href="../../Rosegold/Clientbound/LoginSuccess.html">LoginSuccess</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/MultiBlockChange" data-name="rosegold::clientbound::multiblockchange">
+      <a href="../../Rosegold/Clientbound/MultiBlockChange.html">MultiBlockChange</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/OpenWindow" data-name="rosegold::clientbound::openwindow">
+      <a href="../../Rosegold/Clientbound/OpenWindow.html">OpenWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/Packet" data-name="rosegold::clientbound::packet">
+      <a href="../../Rosegold/Clientbound/Packet.html">Packet</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/Ping" data-name="rosegold::clientbound::ping">
+      <a href="../../Rosegold/Clientbound/Ping.html">Ping</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound/PlayerInfo" data-name="rosegold::clientbound::playerinfo">
+      <a href="../../Rosegold/Clientbound/PlayerInfo.html">PlayerInfo</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/PlayerInfo/Action" data-name="rosegold::clientbound::playerinfo::action">
+      <a href="../../Rosegold/Clientbound/PlayerInfo/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/PlayerPositionAndLook" data-name="rosegold::clientbound::playerpositionandlook">
+      <a href="../../Rosegold/Clientbound/PlayerPositionAndLook.html">PlayerPositionAndLook</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+      <a href="../../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/Respawn" data-name="rosegold::clientbound::respawn">
+      <a href="../../Rosegold/Clientbound/Respawn.html">Respawn</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SetCompression" data-name="rosegold::clientbound::setcompression">
+      <a href="../../Rosegold/Clientbound/SetCompression.html">SetCompression</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SetPassengers" data-name="rosegold::clientbound::setpassengers">
+      <a href="../../Rosegold/Clientbound/SetPassengers.html">SetPassengers</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SetSlot" data-name="rosegold::clientbound::setslot">
+      <a href="../../Rosegold/Clientbound/SetSlot.html">SetSlot</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SpawnEntity" data-name="rosegold::clientbound::spawnentity">
+      <a href="../../Rosegold/Clientbound/SpawnEntity.html">SpawnEntity</a>
+      
+    </li>
+  
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/SpawnLivingEntity" data-name="rosegold::clientbound::spawnlivingentity">
+      <a href="../../Rosegold/Clientbound/SpawnLivingEntity.html">SpawnLivingEntity</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SpawnPlayer" data-name="rosegold::clientbound::spawnplayer">
+      <a href="../../Rosegold/Clientbound/SpawnPlayer.html">SpawnPlayer</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/StatusPong" data-name="rosegold::clientbound::statuspong">
+      <a href="../../Rosegold/Clientbound/StatusPong.html">StatusPong</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/StatusResponse" data-name="rosegold::clientbound::statusresponse">
+      <a href="../../Rosegold/Clientbound/StatusResponse.html">StatusResponse</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/UnloadChunk" data-name="rosegold::clientbound::unloadchunk">
+      <a href="../../Rosegold/Clientbound/UnloadChunk.html">UnloadChunk</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/UpdateHealth" data-name="rosegold::clientbound::updatehealth">
+      <a href="../../Rosegold/Clientbound/UpdateHealth.html">UpdateHealth</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/WindowItems" data-name="rosegold::clientbound::windowitems">
+      <a href="../../Rosegold/Clientbound/WindowItems.html">WindowItems</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Connection" data-name="rosegold::connection(inboundpacket, outboundpacket)">
+      <a href="../../Rosegold/Connection.html">Connection</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Connection/Client" data-name="rosegold::connection::client">
+      <a href="../../Rosegold/Connection/Client.html">Client</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Connection/Server" data-name="rosegold::connection::server">
+      <a href="../../Rosegold/Connection/Server.html">Server</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Dimension" data-name="rosegold::dimension">
+      <a href="../../Rosegold/Dimension.html">Dimension</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Dimension/ChunkPos" data-name="rosegold::dimension::chunkpos">
+      <a href="../../Rosegold/Dimension/ChunkPos.html">ChunkPos</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Entity" data-name="rosegold::entity">
+      <a href="../../Rosegold/Entity.html">Entity</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Entity/Metadata" data-name="rosegold::entity::metadata">
+      <a href="../../Rosegold/Entity/Metadata.html">Metadata</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
+      <a href="../../Rosegold/Event.html">Event</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Event/Disconnected" data-name="rosegold::event::disconnected">
+      <a href="../../Rosegold/Event/Disconnected.html">Disconnected</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Event/PhysicsTick" data-name="rosegold::event::physicstick">
+      <a href="../../Rosegold/Event/PhysicsTick.html">PhysicsTick</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Event/RawPacket" data-name="rosegold::event::rawpacket">
+      <a href="../../Rosegold/Event/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/EventEmitter" data-name="rosegold::eventemitter">
+      <a href="../../Rosegold/EventEmitter.html">EventEmitter</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Hand" data-name="rosegold::hand">
+      <a href="../../Rosegold/Hand.html">Hand</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Interactions" data-name="rosegold::interactions">
+      <a href="../../Rosegold/Interactions.html">Interactions</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Inventory" data-name="rosegold::inventory">
+      <a href="../../Rosegold/Inventory.html">Inventory</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Inventory/ItemNotFoundError" data-name="rosegold::inventory::itemnotfounderror">
+      <a href="../../Rosegold/Inventory/ItemNotFoundError.html">ItemNotFoundError</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
+      <a href="../../Rosegold/Look.html">Look</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/MCData" data-name="rosegold::mcdata">
+      <a href="../../Rosegold/MCData.html">MCData</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/MCData/BlockCollisionShapes" data-name="rosegold::mcdata::blockcollisionshapes">
+      <a href="../../Rosegold/MCData/BlockCollisionShapes.html">BlockCollisionShapes</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/MCData/BlockProperty" data-name="rosegold::mcdata::blockproperty">
+      <a href="../../Rosegold/MCData/BlockProperty.html">BlockProperty</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/MCData/BlockPropertyType" data-name="rosegold::mcdata::blockpropertytype">
+      <a href="../../Rosegold/MCData/BlockPropertyType.html">BlockPropertyType</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/MCData/Item" data-name="rosegold::mcdata::item">
+      <a href="../../Rosegold/MCData/Item.html">Item</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/MCData/Material" data-name="rosegold::mcdata::material">
+      <a href="../../Rosegold/MCData/Material.html">Material</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/MCData/Shape" data-name="rosegold::mcdata::shape">
+      <a href="../../Rosegold/MCData/Shape.html">Shape</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Packet" data-name="rosegold::packet">
+      <a href="../../Rosegold/Packet.html">Packet</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/PalettedContainer" data-name="rosegold::palettedcontainer">
+      <a href="../../Rosegold/PalettedContainer.html">PalettedContainer</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
+      <a href="../../Rosegold/Physics.html">Physics</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Player" data-name="rosegold::player">
+      <a href="../../Rosegold/Player.html">Player</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/PlayerList" data-name="rosegold::playerlist">
+      <a href="../../Rosegold/PlayerList.html">PlayerList</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/PlayerList/Entry" data-name="rosegold::playerlist::entry">
+      <a href="../../Rosegold/PlayerList/Entry.html">Entry</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/PlayerList/Property" data-name="rosegold::playerlist::property">
+      <a href="../../Rosegold/PlayerList/Property.html">Property</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/PlayerWindow" data-name="rosegold::playerwindow">
+      <a href="../../Rosegold/PlayerWindow.html">PlayerWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ProtocolState" data-name="rosegold::protocolstate">
+      <a href="../../Rosegold/ProtocolState.html">ProtocolState</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/RawPacket" data-name="rosegold::rawpacket">
+      <a href="../../Rosegold/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Raytrace" data-name="rosegold::raytrace">
+      <a href="../../Rosegold/Raytrace.html">Raytrace</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Ray" data-name="rosegold::raytrace::ray">
+      <a href="../../Rosegold/Raytrace/Ray.html">Ray</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Result" data-name="rosegold::raytrace::result">
+      <a href="../../Rosegold/Raytrace/Result.html">Result</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
+      <a href="../../Rosegold/Serverbound.html">Serverbound</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatMessage" data-name="rosegold::serverbound::chatmessage">
+      <a href="../../Rosegold/Serverbound/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClickWindow" data-name="rosegold::serverbound::clickwindow">
+      <a href="../../Rosegold/Serverbound/ClickWindow.html">ClickWindow</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/Mode" data-name="rosegold::serverbound::clickwindow::mode">
+      <a href="../../Rosegold/Serverbound/ClickWindow/Mode.html">Mode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClickWindow/StackMode" data-name="rosegold::serverbound::clickwindow::stackmode">
+      <a href="../../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientSettings" data-name="rosegold::serverbound::clientsettings">
+      <a href="../../Rosegold/Serverbound/ClientSettings.html">ClientSettings</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/ChatMode" data-name="rosegold::serverbound::clientsettings::chatmode">
+      <a href="../../Rosegold/Serverbound/ClientSettings/ChatMode.html">ChatMode</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/Hand" data-name="rosegold::serverbound::clientsettings::hand">
+      <a href="../../Rosegold/Serverbound/ClientSettings/Hand.html">Hand</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientSettings/SkinParts" data-name="rosegold::serverbound::clientsettings::skinparts">
+      <a href="../../Rosegold/Serverbound/ClientSettings/SkinParts.html">SkinParts</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ClientStatus" data-name="rosegold::serverbound::clientstatus">
+      <a href="../../Rosegold/Serverbound/ClientStatus.html">ClientStatus</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ClientStatus/Action" data-name="rosegold::serverbound::clientstatus::action">
+      <a href="../../Rosegold/Serverbound/ClientStatus/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/CloseWindow" data-name="rosegold::serverbound::closewindow">
+      <a href="../../Rosegold/Serverbound/CloseWindow.html">CloseWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/EncryptionResponse" data-name="rosegold::serverbound::encryptionresponse">
+      <a href="../../Rosegold/Serverbound/EncryptionResponse.html">EncryptionResponse</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/EntityAction" data-name="rosegold::serverbound::entityaction">
+      <a href="../../Rosegold/Serverbound/EntityAction.html">EntityAction</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/EntityAction/Type" data-name="rosegold::serverbound::entityaction::type">
+      <a href="../../Rosegold/Serverbound/EntityAction/Type.html">Type</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/Handshake" data-name="rosegold::serverbound::handshake">
+      <a href="../../Rosegold/Serverbound/Handshake.html">Handshake</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/HeldItemChange" data-name="rosegold::serverbound::helditemchange">
+      <a href="../../Rosegold/Serverbound/HeldItemChange.html">HeldItemChange</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/InteractEntity" data-name="rosegold::serverbound::interactentity">
+      <a href="../../Rosegold/Serverbound/InteractEntity.html">InteractEntity</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/InteractEntity/Action" data-name="rosegold::serverbound::interactentity::action">
+      <a href="../../Rosegold/Serverbound/InteractEntity/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/KeepAlive" data-name="rosegold::serverbound::keepalive">
+      <a href="../../Rosegold/Serverbound/KeepAlive.html">KeepAlive</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/LoginPluginResponse" data-name="rosegold::serverbound::loginpluginresponse">
+      <a href="../../Rosegold/Serverbound/LoginPluginResponse.html">LoginPluginResponse</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/LoginStart" data-name="rosegold::serverbound::loginstart">
+      <a href="../../Rosegold/Serverbound/LoginStart.html">LoginStart</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/Packet" data-name="rosegold::serverbound::packet">
+      <a href="../../Rosegold/Serverbound/Packet.html">Packet</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PickItem" data-name="rosegold::serverbound::pickitem">
+      <a href="../../Rosegold/Serverbound/PickItem.html">PickItem</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerBlockPlacement" data-name="rosegold::serverbound::playerblockplacement">
+      <a href="../../Rosegold/Serverbound/PlayerBlockPlacement.html">PlayerBlockPlacement</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/PlayerDigging" data-name="rosegold::serverbound::playerdigging">
+      <a href="../../Rosegold/Serverbound/PlayerDigging.html">PlayerDigging</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerDigging/Status" data-name="rosegold::serverbound::playerdigging::status">
+      <a href="../../Rosegold/Serverbound/PlayerDigging/Status.html">Status</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerLook" data-name="rosegold::serverbound::playerlook">
+      <a href="../../Rosegold/Serverbound/PlayerLook.html">PlayerLook</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerNoMovement" data-name="rosegold::serverbound::playernomovement">
+      <a href="../../Rosegold/Serverbound/PlayerNoMovement.html">PlayerNoMovement</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerPosition" data-name="rosegold::serverbound::playerposition">
+      <a href="../../Rosegold/Serverbound/PlayerPosition.html">PlayerPosition</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/PlayerPositionAndLook" data-name="rosegold::serverbound::playerpositionandlook">
+      <a href="../../Rosegold/Serverbound/PlayerPositionAndLook.html">PlayerPositionAndLook</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/Pong" data-name="rosegold::serverbound::pong">
+      <a href="../../Rosegold/Serverbound/Pong.html">Pong</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
+      <a href="../../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/StatusPing" data-name="rosegold::serverbound::statusping">
+      <a href="../../Rosegold/Serverbound/StatusPing.html">StatusPing</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/StatusRequest" data-name="rosegold::serverbound::statusrequest">
+      <a href="../../Rosegold/Serverbound/StatusRequest.html">StatusRequest</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/SwingArm" data-name="rosegold::serverbound::swingarm">
+      <a href="../../Rosegold/Serverbound/SwingArm.html">SwingArm</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/TeleportConfirm" data-name="rosegold::serverbound::teleportconfirm">
+      <a href="../../Rosegold/Serverbound/TeleportConfirm.html">TeleportConfirm</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/UseItem" data-name="rosegold::serverbound::useitem">
+      <a href="../../Rosegold/Serverbound/UseItem.html">UseItem</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Slot" data-name="rosegold::slot">
+      <a href="../../Rosegold/Slot.html">Slot</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Vec3" data-name="rosegold::vec3(t)">
+      <a href="../../Rosegold/Vec3.html">Vec3</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Vec3d" data-name="rosegold::vec3d">
+      <a href="../../Rosegold/Vec3d.html">Vec3d</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Vec3f" data-name="rosegold::vec3f">
+      <a href="../../Rosegold/Vec3f.html">Vec3f</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Vec3i" data-name="rosegold::vec3i">
+      <a href="../../Rosegold/Vec3i.html">Vec3i</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Window" data-name="rosegold::window">
+      <a href="../../Rosegold/Window.html">Window</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/ClickWindow" data-name="rosegold::window::clickwindow">
+      <a href="../../Rosegold/Window/ClickWindow.html">ClickWindow</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Window/StackMode" data-name="rosegold::window::stackmode">
+      <a href="../../Rosegold/Window/StackMode.html">StackMode</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/WindowSlot" data-name="rosegold::windowslot">
+      <a href="../../Rosegold/WindowSlot.html">WindowSlot</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Rosegold::Clientbound::SpawnLivingEntity
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/SpawnLivingEntity.html">Rosegold::Clientbound::SpawnLivingEntity</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L1" target="_blank">
+        rosegold/packets/clientbound/spawn_living_entity.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28entity_id%3AUInt32%2Cuuid%3AUUID%2Centity_type%3AUInt32%2Cx%3AFloat64%2Cy%3AFloat64%2Cz%3AFloat64%2Cpitch%3AFloat32%2Cyaw%3AFloat32%2Chead_yaw%3AFloat32%2Cvelocity_x%3AInt16%2Cvelocity_y%3AInt16%2Cvelocity_z%3AInt16%29-class-method" class="signature"><strong>.new</strong>(entity_id : UInt32, uuid : UUID, entity_type : UInt32, x : Float64, y : Float64, z : Float64, pitch : Float32, yaw : Float32, head_yaw : Float32, velocity_x : Int16, velocity_y : Int16, velocity_z : Int16)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#packet_id-class-method" class="signature"><strong>.packet_id</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#state-class-method" class="signature"><strong>.state</strong></a>
+        
+      </li>
+    
+  </ul>
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#entity_id%3AUInt32-instance-method" class="signature"><strong>#entity_id</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#entity_id%3D%28entity_id%3AUInt32%29-instance-method" class="signature"><strong>#entity_id=</strong>(entity_id : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#entity_type%3AUInt32-instance-method" class="signature"><strong>#entity_type</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#entity_type%3D%28entity_type%3AUInt32%29-instance-method" class="signature"><strong>#entity_type=</strong>(entity_type : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#head_yaw%3AFloat32-instance-method" class="signature"><strong>#head_yaw</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#head_yaw%3D%28head_yaw%3AFloat32%29-instance-method" class="signature"><strong>#head_yaw=</strong>(head_yaw : Float32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pitch%3AFloat32-instance-method" class="signature"><strong>#pitch</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pitch%3D%28pitch%3AFloat32%29-instance-method" class="signature"><strong>#pitch=</strong>(pitch : Float32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#uuid%3AUUID-instance-method" class="signature"><strong>#uuid</strong> : UUID</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#uuid%3D%28uuid%3AUUID%29-instance-method" class="signature"><strong>#uuid=</strong>(uuid : UUID)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#velocity_x%3AInt16-instance-method" class="signature"><strong>#velocity_x</strong> : Int16</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#velocity_x%3D%28velocity_x%3AInt16%29-instance-method" class="signature"><strong>#velocity_x=</strong>(velocity_x : Int16)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#velocity_y%3AInt16-instance-method" class="signature"><strong>#velocity_y</strong> : Int16</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#velocity_y%3D%28velocity_y%3AInt16%29-instance-method" class="signature"><strong>#velocity_y=</strong>(velocity_y : Int16)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#velocity_z%3AInt16-instance-method" class="signature"><strong>#velocity_z</strong> : Int16</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#velocity_z%3D%28velocity_z%3AInt16%29-instance-method" class="signature"><strong>#velocity_z=</strong>(velocity_z : Int16)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#write%3ABytes-instance-method" class="signature"><strong>#write</strong> : Bytes</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#x%3AFloat64-instance-method" class="signature"><strong>#x</strong> : Float64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#x%3D%28x%3AFloat64%29-instance-method" class="signature"><strong>#x=</strong>(x : Float64)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#y%3AFloat64-instance-method" class="signature"><strong>#y</strong> : Float64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#y%3D%28y%3AFloat64%29-instance-method" class="signature"><strong>#y=</strong>(y : Float64)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#yaw%3AFloat32-instance-method" class="signature"><strong>#yaw</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#yaw%3D%28yaw%3AFloat32%29-instance-method" class="signature"><strong>#yaw=</strong>(yaw : Float32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#z%3AFloat64-instance-method" class="signature"><strong>#z</strong> : Float64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#z%3D%28z%3AFloat64%29-instance-method" class="signature"><strong>#z=</strong>(z : Float64)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+  <h3>Class methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
+      <span>new_raw(bytes)</span>
+    new_raw</a>, 
+    
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#state-class-method" class="tooltip">
+      <span>state</span>
+    state</a>
+    
+  
+
+
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
+      <span>callback(client_or_server)</span>
+    callback</a>, 
+    
+  
+    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
+      <span>to_s(io)</span>
+    to_s</a>, 
+    
+  
+    <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
+      <span>write : Bytes</span>
+    write</a>
+    
+  
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(entity_id:UInt32,uuid:UUID,entity_type:UInt32,x:Float64,y:Float64,z:Float64,pitch:Float32,yaw:Float32,head_yaw:Float32,velocity_x:Int16,velocity_y:Int16,velocity_z:Int16)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(entity_id : UInt32, uuid : UUID, entity_type : UInt32, x : Float64, y : Float64, z : Float64, pitch : Float32, yaw : Float32, head_yaw : Float32, velocity_x : Int16, velocity_y : Int16, velocity_z : Int16)
+
+        <a class="method-permalink" href="#new%28entity_id%3AUInt32%2Cuuid%3AUUID%2Centity_type%3AUInt32%2Cx%3AFloat64%2Cy%3AFloat64%2Cz%3AFloat64%2Cpitch%3AFloat32%2Cyaw%3AFloat32%2Chead_yaw%3AFloat32%2Cvelocity_x%3AInt16%2Cvelocity_y%3AInt16%2Cvelocity_z%3AInt16%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L19" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="packet_id-class-method">
+      <div class="signature">
+        
+        def self.<strong>packet_id</strong>
+
+        <a class="method-permalink" href="#packet_id-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L2" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(packet)-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(packet)
+
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L22" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="state-class-method">
+      <div class="signature">
+        
+        def self.<strong>state</strong>
+
+        <a class="method-permalink" href="#state-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="callback(client)-instance-method">
+      <div class="signature">
+        
+        def <strong>callback</strong>(client)
+
+        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L53" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entity_id:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>entity_id</strong> : UInt32
+
+        <a class="method-permalink" href="#entity_id%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entity_id=(entity_id:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>entity_id=</strong>(entity_id : UInt32)
+
+        <a class="method-permalink" href="#entity_id%3D%28entity_id%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entity_type:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>entity_type</strong> : UInt32
+
+        <a class="method-permalink" href="#entity_type%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entity_type=(entity_type:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>entity_type=</strong>(entity_type : UInt32)
+
+        <a class="method-permalink" href="#entity_type%3D%28entity_type%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="head_yaw:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>head_yaw</strong> : Float32
+
+        <a class="method-permalink" href="#head_yaw%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="head_yaw=(head_yaw:Float32)-instance-method">
+      <div class="signature">
+        
+        def <strong>head_yaw=</strong>(head_yaw : Float32)
+
+        <a class="method-permalink" href="#head_yaw%3D%28head_yaw%3AFloat32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pitch:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>pitch</strong> : Float32
+
+        <a class="method-permalink" href="#pitch%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pitch=(pitch:Float32)-instance-method">
+      <div class="signature">
+        
+        def <strong>pitch=</strong>(pitch : Float32)
+
+        <a class="method-permalink" href="#pitch%3D%28pitch%3AFloat32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="uuid:UUID-instance-method">
+      <div class="signature">
+        
+        def <strong>uuid</strong> : UUID
+
+        <a class="method-permalink" href="#uuid%3AUUID-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="uuid=(uuid:UUID)-instance-method">
+      <div class="signature">
+        
+        def <strong>uuid=</strong>(uuid : UUID)
+
+        <a class="method-permalink" href="#uuid%3D%28uuid%3AUUID%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="velocity_x:Int16-instance-method">
+      <div class="signature">
+        
+        def <strong>velocity_x</strong> : Int16
+
+        <a class="method-permalink" href="#velocity_x%3AInt16-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="velocity_x=(velocity_x:Int16)-instance-method">
+      <div class="signature">
+        
+        def <strong>velocity_x=</strong>(velocity_x : Int16)
+
+        <a class="method-permalink" href="#velocity_x%3D%28velocity_x%3AInt16%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="velocity_y:Int16-instance-method">
+      <div class="signature">
+        
+        def <strong>velocity_y</strong> : Int16
+
+        <a class="method-permalink" href="#velocity_y%3AInt16-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="velocity_y=(velocity_y:Int16)-instance-method">
+      <div class="signature">
+        
+        def <strong>velocity_y=</strong>(velocity_y : Int16)
+
+        <a class="method-permalink" href="#velocity_y%3D%28velocity_y%3AInt16%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="velocity_z:Int16-instance-method">
+      <div class="signature">
+        
+        def <strong>velocity_z</strong> : Int16
+
+        <a class="method-permalink" href="#velocity_z%3AInt16-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="velocity_z=(velocity_z:Int16)-instance-method">
+      <div class="signature">
+        
+        def <strong>velocity_z=</strong>(velocity_z : Int16)
+
+        <a class="method-permalink" href="#velocity_z%3D%28velocity_z%3AInt16%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="write:Bytes-instance-method">
+      <div class="signature">
+        
+        def <strong>write</strong> : Bytes
+
+        <a class="method-permalink" href="#write%3ABytes-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L39" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="x:Float64-instance-method">
+      <div class="signature">
+        
+        def <strong>x</strong> : Float64
+
+        <a class="method-permalink" href="#x%3AFloat64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="x=(x:Float64)-instance-method">
+      <div class="signature">
+        
+        def <strong>x=</strong>(x : Float64)
+
+        <a class="method-permalink" href="#x%3D%28x%3AFloat64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="y:Float64-instance-method">
+      <div class="signature">
+        
+        def <strong>y</strong> : Float64
+
+        <a class="method-permalink" href="#y%3AFloat64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="y=(y:Float64)-instance-method">
+      <div class="signature">
+        
+        def <strong>y=</strong>(y : Float64)
+
+        <a class="method-permalink" href="#y%3D%28y%3AFloat64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="yaw:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>yaw</strong> : Float32
+
+        <a class="method-permalink" href="#yaw%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="yaw=(yaw:Float32)-instance-method">
+      <div class="signature">
+        
+        def <strong>yaw=</strong>(yaw : Float32)
+
+        <a class="method-permalink" href="#yaw%3D%28yaw%3AFloat32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="z:Float64-instance-method">
+      <div class="signature">
+        
+        def <strong>z</strong> : Float64
+
+        <a class="method-permalink" href="#z%3AFloat64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="z=(z:Float64)-instance-method">
+      <div class="signature">
+        
+        def <strong>z=</strong>(z : Float64)
+
+        <a class="method-permalink" href="#z%3D%28z%3AFloat64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/clientbound/spawn_living_entity.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
