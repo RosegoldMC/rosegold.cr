@@ -9,9 +9,11 @@ class Minecraft::Auth
   @access_token : String?
   @uuid : String?
   @mc_name : String?
+  @microsoft_token : String
 
   def initialize
-    @ticket = Microsoft::MobileOAuth.prompt_for_login!
+    token = Microsoft::MobileOAuth.login!
+    @microsoft_token = token.access_token
   end
 
   def authenticate
@@ -28,7 +30,7 @@ class Minecraft::Auth
         "Properties" => {
           "AuthMethod" => "RPS",
           "SiteName"   => "user.auth.xboxlive.com",
-          "RpsTicket"  => "d=#{@ticket}",
+          "RpsTicket"  => "d=#{@microsoft_token}",
         },
         "RelyingParty" => "http://auth.xboxlive.com",
         "TokenType"    => "JWT",

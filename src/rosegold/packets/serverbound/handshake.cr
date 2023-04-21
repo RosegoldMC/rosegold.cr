@@ -7,14 +7,14 @@ class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
   property \
     protocol_version : UInt32,
     server_address : String,
-    server_port : UInt16,
-    next_state : UInt32
+    server_port : Int32,
+    next_state : Int32
 
   def initialize(
     @protocol_version : UInt32,
     @server_address : String,
-    @server_port : UInt16,
-    @next_state : UInt32
+    @server_port : Int32,
+    @next_state : Int32
   ); end
 
   def self.read(packet)
@@ -31,7 +31,7 @@ class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
       buffer.write @@packet_id
       buffer.write protocol_version
       buffer.write server_address
-      buffer.write_full server_port
+      buffer.write_full server_port.to_u16
       buffer.write next_state
     end.to_slice
   end

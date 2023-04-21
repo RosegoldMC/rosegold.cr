@@ -2,7 +2,7 @@ require "../spec_helper"
 
 Spectator.describe Rosegold::Bot do
   after_each do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/kill @e[type=!minecraft:player]"
         bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
@@ -12,7 +12,7 @@ Spectator.describe Rosegold::Bot do
   end
 
   it "should be able to attack" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/tp @p -9 -60 9"
         bot.chat "/time set 13000"
@@ -38,7 +38,7 @@ Spectator.describe Rosegold::Bot do
   end
 
   it "should be able to attack even if the target is moving" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/tp @p -9 -60 9"
         bot.chat "/time set 13000"

@@ -2,7 +2,7 @@ require "../spec_helper"
 
 Spectator.describe Rosegold::Bot do
   it "should be able to dig" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/fill 8 -60 8 8 -57 8 minecraft:dirt"
         sleep 2 # load chunks
@@ -23,7 +23,7 @@ Spectator.describe Rosegold::Bot do
   end
 
   it "should stop digging when bot.stop_digging is called" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/fill 8 -60 8 8 -57 8 minecraft:dirt"
         sleep 2 # load chunks
