@@ -8,7 +8,7 @@ class Rosegold::Serverbound::InteractEntity < Rosegold::Serverbound::Packet
   end
 
   property \
-    entity_id : UInt32,
+    entity_id : UInt64,
     action : Action,
     target_x : Float32? = nil,
     target_y : Float32? = nil,
@@ -18,7 +18,7 @@ class Rosegold::Serverbound::InteractEntity < Rosegold::Serverbound::Packet
     sneaking : Bool = false
 
   def initialize(
-    @entity_id : UInt32,
+    @entity_id : UInt64,
     @action : Action,
     @target_x : Float32? = nil,
     @target_y : Float32? = nil,

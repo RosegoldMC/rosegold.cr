@@ -11,7 +11,7 @@ class Rosegold::Dimension
   getter min_y = -64
   getter world_height = 256 + 64 + 64
 
-  property entities : Hash(UInt32, Entity) = Hash(UInt32, Entity).new
+  property entities : Hash(UInt64, Entity) = Hash(UInt64, Entity).new
 
   def initialize(@name, @nbt)
     @min_y = @nbt["min_y"].as_i32

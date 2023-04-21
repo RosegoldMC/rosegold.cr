@@ -3,7 +3,7 @@ class Rosegold::Clientbound::SpawnLivingEntity < Rosegold::Clientbound::Packet
   class_getter state = Rosegold::ProtocolState::PLAY
 
   property \
-    entity_id : UInt32,
+    entity_id : UInt64,
     uuid : UUID,
     entity_type : UInt32,
     x : Float64,
@@ -20,7 +20,7 @@ class Rosegold::Clientbound::SpawnLivingEntity < Rosegold::Clientbound::Packet
   end
 
   def self.read(packet)
-    entity_id = packet.read_var_int
+    entity_id = packet.read_var_long
     uuid = packet.read_uuid
     entity_type = packet.read_var_int
     x = packet.read_double

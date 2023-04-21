@@ -14,7 +14,7 @@ class Rosegold::Serverbound::EntityAction < Rosegold::Serverbound::Packet
   end
 
   property \
-    entity_id : Int32,
+    entity_id : UInt64,
     action : Type,
     jump_boost : UInt8
 

@@ -2,7 +2,7 @@ class Rosegold::Clientbound::EntityPositionAndRotation < Rosegold::Clientbound::
   class_getter packet_id = 0x2A_u8
 
   property \
-    entity_id : UInt32,
+    entity_id : UInt64,
     delta_x : Int16,
     delta_y : Int16,
     delta_z : Int16,
@@ -16,7 +16,7 @@ class Rosegold::Clientbound::EntityPositionAndRotation < Rosegold::Clientbound::
   end
 
   def self.read(packet)
-    entity_id = packet.read_var_int
+    entity_id = packet.read_var_long
     delta_x = packet.read_short
     delta_y = packet.read_short
     delta_z = packet.read_short
