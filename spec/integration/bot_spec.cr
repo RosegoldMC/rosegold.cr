@@ -2,7 +2,7 @@ require "../spec_helper"
 
 Spectator.describe Rosegold::Bot do
   it "should fall due to gravity" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         sleep 2 # load chunks
         bot.chat "/tp 1 -58 1"
@@ -16,7 +16,7 @@ Spectator.describe Rosegold::Bot do
   end
 
   it "can move to location successfully" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         sleep 2 # load chunks
         bot.chat "/tp 1 -60 1"
@@ -32,7 +32,7 @@ Spectator.describe Rosegold::Bot do
   end
 
   it "should change yaw and pitch" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         sleep 2 # load chunks
         bot.chat "/tp 1 -60 1"
@@ -52,7 +52,7 @@ Spectator.describe Rosegold::Bot do
   end
 
   it "should jump and fall" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         sleep 2 # load chunks
         bot.chat "/tp 1 -60 1"
@@ -75,7 +75,7 @@ Spectator.describe Rosegold::Bot do
   end
 
   it "should select a different hotbar slot" do
-    Rosegold::Client.new("localhost", 25565).join_game do |client|
+    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         sleep 2 # load chunks
         bot.chat "/tp 1 -60 1"

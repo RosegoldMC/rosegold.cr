@@ -4,7 +4,7 @@ Spectator.describe Rosegold::Bot do
   describe "#pick" do
     context "when the item is not in the inventory" do
       it "returns false" do
-        Rosegold::Client.new("localhost", 25565).join_game do |client|
+        client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             bot.chat "/clear"
 
@@ -20,7 +20,7 @@ Spectator.describe Rosegold::Bot do
 
     context "when the item is in the hotbar" do
       it "returns true" do
-        Rosegold::Client.new("localhost", 25565).join_game do |client|
+        client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             bot.chat "/clear"
             bot.chat "/give #{bot.username} minecraft:stone 42"
@@ -38,7 +38,7 @@ Spectator.describe Rosegold::Bot do
 
     context "when the item is in the inventory but not the hotbar" do
       it "returns true" do
-        Rosegold::Client.new("localhost", 25565).join_game do |client|
+        client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             bot.chat "/clear"
             bot.chat "/give #{bot.username} minecraft:stone #{64*9}"
@@ -56,7 +56,7 @@ Spectator.describe Rosegold::Bot do
   describe "#pick!" do
     context "when the item is not in the inventory" do
       it "raises exception" do
-        Rosegold::Client.new("localhost", 25565).join_game do |client|
+        client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             bot.chat "/clear"
             sleep 1
@@ -68,7 +68,7 @@ Spectator.describe Rosegold::Bot do
 
     context "when the only pickable ite is in need of repair (diamond/netherite and enchanted, with <=12 dura left)" do
       it "raises exception" do
-        Rosegold::Client.new("localhost", 25565).join_game do |client|
+        client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             bot.chat "/clear"
             bot.chat "/give #{bot.username} minecraft:diamond_pickaxe{Damage:1550,Enchantments:[{id:efficiency,lvl:1}]} 1"
