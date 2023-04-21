@@ -2,7 +2,7 @@ class Rosegold::Clientbound::EntityRotation < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x2B_u8
 
   property \
-    entity_id : UInt32,
+    entity_id : UInt64,
     yaw : Float32,
     pitch : Float32
 
@@ -13,7 +13,7 @@ class Rosegold::Clientbound::EntityRotation < Rosegold::Clientbound::Packet
   end
 
   def self.read(packet)
-    entity_id = packet.read_var_int
+    entity_id = packet.read_var_long
     yaw = packet.read_angle256_deg
     pitch = packet.read_angle256_deg
     on_ground = packet.read_bool

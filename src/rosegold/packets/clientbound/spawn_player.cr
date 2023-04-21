@@ -4,7 +4,7 @@ class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x04_u8
 
   property \
-    entity_id : UInt32,
+    entity_id : UInt64,
     uuid : UUID,
     location : Vec3d,
     look : Look
@@ -12,7 +12,7 @@ class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
   def initialize(@entity_id, @uuid, @location, @look); end
 
   def self.read(packet)
-    entity_id = packet.read_var_int
+    entity_id = packet.read_var_long
     uuid = packet.read_uuid
     location = Vec3d.new(packet.read_double, packet.read_double, packet.read_double)
     look = Look.new(yaw: packet.read_angle256_deg, pitch: packet.read_angle256_deg)
