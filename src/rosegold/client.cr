@@ -1,5 +1,6 @@
 require "socket"
 require "../minecraft/io"
+require "../minecraft/auth"
 require "./control/*"
 require "./models/*"
 require "./packets/*"
@@ -19,21 +20,23 @@ end
 class Rosegold::Client < Rosegold::EventEmitter
   class_getter protocol_version = 758_u32
 
-  property host : String, port : UInt16
-  @connection : Connection::Client?
+  property host : String, port : Int32
+  property connection : Connection::Client?
 
   property \
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
     player : Player = Player.new,
+    access_token : String = "",
     dimension : Dimension = Dimension.new,
     physics : Physics,
     inventory : PlayerWindow,
-    window : Window
+    window : Window,
+    offline : NamedTuple(uuid: String, username: String)? = nil
 
-  def initialize(@host : String, @port : UInt16 = 25565)
+  def initialize(@host : String, @port : Int32 = 25565, @offline : NamedTuple(uuid: String, username: String)? = nil)
     if host.includes? ":"
       @host, port_str = host.split ":"
-      @port = port_str.to_u16
+      @port = port_str.to_i
     end
     @physics = uninitialized Physics
     @inventory = uninitialized PlayerWindow
@@ -77,14 +80,16 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
   end
 
-  def join_game(&)
-    join_game
+  def join_game(*args, &)
+    join_game(*args)
     yield self
     connection?.try &.disconnect Chat.new "End of script"
   end
 
   def connect
     raise NotConnected.new "Already connected" if connected?
+
+    authenticate!
 
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound, self
@@ -93,7 +98,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     send_packet! Serverbound::Handshake.new Client.protocol_version, host, port, 2
     connection.state = ProtocolState::LOGIN.clientbound
 
-    queue_packet Serverbound::LoginStart.new ENV["MC_NAME"]
+    queue_packet Serverbound::LoginStart.new player.username.not_nil! # ameba:disable Lint/NotNil
 
     @online_players = Hash(UUID, PlayerList::Entry).new
 
@@ -103,6 +108,20 @@ class Rosegold::Client < Rosegold::EventEmitter
       end
     rescue e : IO::Error
       Log.debug { "Stopping reader: #{e}" }
+    end
+  end
+
+  private def authenticate!
+    offline.try do |offline|
+      player.uuid = UUID.new offline[:uuid]
+      player.username = offline[:username]
+      return
+    end
+
+    Minecraft::Auth.new.authenticate.try do |auth|
+      player.uuid = UUID.new auth["uuid"] || "00000000-0000-0000-0000-000000000000"
+      player.username = auth["mc_name"] || "Player"
+      self.access_token = auth["access_token"] || ""
     end
   end
 

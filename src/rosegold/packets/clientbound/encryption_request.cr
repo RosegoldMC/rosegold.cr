@@ -20,7 +20,7 @@ class Rosegold::Clientbound::EncryptionRequest < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    encryption_response = Serverbound::EncryptionResponse.new self
+    encryption_response = Serverbound::EncryptionResponse.new self, client.player.uuid.to_s, client.access_token
 
     client.send_packet! encryption_response
 

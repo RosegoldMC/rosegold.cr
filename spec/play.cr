@@ -1,5 +1,4 @@
-require "./rosegold"
-require "./rosegold/bot"
+require "../src/rosegold"
 
 include Rosegold
 

@@ -7,15 +7,16 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
   class_getter packet_id = 0x01_u8
   class_getter state = Rosegold::ProtocolState::LOGIN
 
-  UUID         = ENV["UUID"]
-  ACCESS_TOKEN = ENV["ACCESS_TOKEN"]?
-
   property \
     encryption_request : Rosegold::Clientbound::EncryptionRequest,
-    shared_secret : Bytes
+    shared_secret : Bytes,
+    uuid : String,
+    access_token : String
 
   def initialize(
-    @encryption_request : Rosegold::Clientbound::EncryptionRequest
+    @encryption_request : Rosegold::Clientbound::EncryptionRequest,
+    @uuid : String,
+    @access_token : String
   )
     @shared_secret = Random::Secure.random_bytes(16)
   end
@@ -40,8 +41,8 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
         "Content-Type" => "application/json",
       },
       body: {
-        "accessToken":     ACCESS_TOKEN,
-        "selectedProfile": UUID,
+        "accessToken":     access_token,
+        "selectedProfile": uuid,
         "serverId":        digest,
       }.to_json
     )
