@@ -51,11 +51,6 @@
   <div class="types-list">
     <ul>
   
-  <li class=" " data-id="rosegold/toplevel" data-name="top level namespace">
-      <a href="../../toplevel.html">Top Level Namespace</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/BlockFace" data-name="blockface">
       <a href="../../BlockFace.html">BlockFace</a>
       
@@ -71,8 +66,18 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Microsoft/MobileOAuth" data-name="microsoft::mobileoauth">
+  <li class="parent " data-id="rosegold/Microsoft/MobileOAuth" data-name="microsoft::mobileoauth">
       <a href="../../Microsoft/MobileOAuth.html">MobileOAuth</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Microsoft/MobileOAuth/Token" data-name="microsoft::mobileoauth::token">
+      <a href="../../Microsoft/MobileOAuth/Token.html">Token</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -523,6 +528,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Config" data-name="rosegold::config">
+      <a href="../../Rosegold/Config.html">Config</a>
       
     </li>
   
@@ -1073,7 +1083,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L6" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L6" target="_blank">
         rosegold/packets/serverbound/encryption_response.cr
       </a>
     
@@ -1081,30 +1091,6 @@
   
 
 
-
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-      Constant Summary
-    </h2>
-  
-  <dl>
-    
-      <dt class="entry-const" id="ACCESS_TOKEN">
-        <strong>ACCESS_TOKEN</strong> = <code><span class="t">ENV</span>[<span class="s">&quot;ACCESS_TOKEN&quot;</span>]?</code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="UUID">
-        <strong>UUID</strong> = <code><span class="t">ENV</span>[<span class="s">&quot;UUID&quot;</span>]</code>
-      </dt>
-      
-    
-  </dl>
 
 
 
@@ -1119,7 +1105,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28encryption_request%3ARosegold%3A%3AClientbound%3A%3AEncryptionRequest%29-class-method" class="signature"><strong>.new</strong>(encryption_request : Rosegold::Clientbound::EncryptionRequest)</a>
+        <a href="#new%28encryption_request%3ARosegold%3A%3AClientbound%3A%3AEncryptionRequest%2Cuuid%3AString%2Caccess_token%3AString%29-class-method" class="signature"><strong>.new</strong>(encryption_request : Rosegold::Clientbound::EncryptionRequest, uuid : String, access_token : String)</a>
         
       </li>
     
@@ -1162,6 +1148,16 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#access_token%3AString-instance-method" class="signature"><strong>#access_token</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#access_token%3D%28access_token%3AString%29-instance-method" class="signature"><strong>#access_token=</strong>(access_token : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#digest-instance-method" class="signature"><strong>#digest</strong></a>
         
       </li>
@@ -1188,6 +1184,16 @@
     
       <li class="entry-summary">
         <a href="#shared_secret%3D%28shared_secret%3ABytes%29-instance-method" class="signature"><strong>#shared_secret=</strong>(shared_secret : Bytes)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#uuid%3AString-instance-method" class="signature"><strong>#uuid</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#uuid%3D%28uuid%3AString%29-instance-method" class="signature"><strong>#uuid=</strong>(uuid : String)</a>
         
       </li>
     
@@ -1299,18 +1305,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(encryption_request:Rosegold::Clientbound::EncryptionRequest)-class-method">
+    <div class="entry-detail" id="new(encryption_request:Rosegold::Clientbound::EncryptionRequest,uuid:String,access_token:String)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(encryption_request : <a href="../../Rosegold/Clientbound/EncryptionRequest.html">Rosegold::Clientbound::EncryptionRequest</a>)
+        def self.<strong>new</strong>(encryption_request : <a href="../../Rosegold/Clientbound/EncryptionRequest.html">Rosegold::Clientbound::EncryptionRequest</a>, uuid : String, access_token : String)
 
-        <a class="method-permalink" href="#new%28encryption_request%3ARosegold%3A%3AClientbound%3A%3AEncryptionRequest%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28encryption_request%3ARosegold%3A%3AClientbound%3A%3AEncryptionRequest%2Cuuid%3AString%2Caccess_token%3AString%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1338,7 +1344,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1354,7 +1360,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1371,6 +1377,38 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="access_token:String-instance-method">
+      <div class="signature">
+        
+        def <strong>access_token</strong> : String
+
+        <a class="method-permalink" href="#access_token%3AString-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L10" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="access_token=(access_token:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>access_token=</strong>(access_token : String)
+
+        <a class="method-permalink" href="#access_token%3D%28access_token%3AString%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L10" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="digest-instance-method">
       <div class="signature">
         
@@ -1382,7 +1420,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1398,7 +1436,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1414,7 +1452,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1430,7 +1468,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L32" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1446,7 +1484,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1462,7 +1500,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L10" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="uuid:String-instance-method">
+      <div class="signature">
+        
+        def <strong>uuid</strong> : String
+
+        <a class="method-permalink" href="#uuid%3AString-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L10" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="uuid=(uuid:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>uuid=</strong>(uuid : String)
+
+        <a class="method-permalink" href="#uuid%3D%28uuid%3AString%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1478,7 +1548,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/packets/serverbound/encryption_response.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/packets/serverbound/encryption_response.cr#L51" target="_blank">View source</a>]
         
       </div>
     </div>

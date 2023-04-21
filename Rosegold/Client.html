@@ -51,11 +51,6 @@
   <div class="types-list">
     <ul>
   
-  <li class=" " data-id="rosegold/toplevel" data-name="top level namespace">
-      <a href="../toplevel.html">Top Level Namespace</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/BlockFace" data-name="blockface">
       <a href="../BlockFace.html">BlockFace</a>
       
@@ -71,8 +66,18 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Microsoft/MobileOAuth" data-name="microsoft::mobileoauth">
+  <li class="parent " data-id="rosegold/Microsoft/MobileOAuth" data-name="microsoft::mobileoauth">
       <a href="../Microsoft/MobileOAuth.html">MobileOAuth</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Microsoft/MobileOAuth/Token" data-name="microsoft::mobileoauth::token">
+      <a href="../Microsoft/MobileOAuth/Token.html">Token</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -523,6 +528,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Config" data-name="rosegold::config">
+      <a href="../Rosegold/Config.html">Config</a>
       
     </li>
   
@@ -1086,7 +1096,7 @@ Can be reconnected.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L19" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L20" target="_blank">
         rosegold/client.cr
       </a>
     
@@ -1108,7 +1118,7 @@ Can be reconnected.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28host%3AString%2Cport%3AUInt16%3D25565%29-class-method" class="signature"><strong>.new</strong>(host : String, port : UInt16 = <span class="n">25565</span>)</a>
+        <a href="#new%28host%3AString%2Cport%3AInt32%3D25565%2Coffline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(host : String, port : Int32 = <span class="n">25565</span>, offline : NamedTuple(uuid: String, username: String) | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -1151,6 +1161,16 @@ Can be reconnected.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#access_token%3AString-instance-method" class="signature"><strong>#access_token</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#access_token%3D%28access_token%3AString%29-instance-method" class="signature"><strong>#access_token=</strong>(access_token : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#connect-instance-method" class="signature"><strong>#connect</strong></a>
         
       </li>
@@ -1162,6 +1182,11 @@ Can be reconnected.</p>
     
       <li class="entry-summary">
         <a href="#connection%3AConnection%3A%3AClient-instance-method" class="signature"><strong>#connection</strong> : Connection::Client</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#connection%3D%28connection%3AConnection%3A%3AClient%7CNil%29-instance-method" class="signature"><strong>#connection=</strong>(connection : Connection::Client | Nil)</a>
         
       </li>
     
@@ -1218,7 +1243,17 @@ Can be reconnected.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#join_game%28%26%29-instance-method" class="signature"><strong>#join_game</strong>(&)</a>
+        <a href="#join_game%28%2Aargs%2C%26%29-instance-method" class="signature"><strong>#join_game</strong>(*args, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#offline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil-instance-method" class="signature"><strong>#offline</strong> : NamedTuple(uuid: String, username: String) | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#offline%3D%28offline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil%29-instance-method" class="signature"><strong>#offline=</strong>(offline : NamedTuple(uuid: String, username: String) | Nil)</a>
         
       </li>
     
@@ -1253,12 +1288,12 @@ Can be reconnected.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#port%3AUInt16-instance-method" class="signature"><strong>#port</strong> : UInt16</a>
+        <a href="#port%3AInt32-instance-method" class="signature"><strong>#port</strong> : Int32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#port%3D%28port%3AUInt16%29-instance-method" class="signature"><strong>#port=</strong>(port : UInt16)</a>
+        <a href="#port%3D%28port%3AInt32%29-instance-method" class="signature"><strong>#port=</strong>(port : Int32)</a>
         
       </li>
     
@@ -1370,18 +1405,18 @@ Can be reconnected.</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(host:String,port:UInt16=25565)-class-method">
+    <div class="entry-detail" id="new(host:String,port:Int32=25565,offline:NamedTuple(uuid:String,username:String)|Nil=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(host : String, port : UInt16 = <span class="n">25565</span>)
+        def self.<strong>new</strong>(host : String, port : <a href="../Int32.html">Int32</a> = <span class="n">25565</span>, offline : NamedTuple(uuid: String, username: String) | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28host%3AString%2Cport%3AUInt16%3D25565%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28host%3AString%2Cport%3AInt32%3D25565%2Coffline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1409,7 +1444,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1425,7 +1460,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L115" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L134" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1442,6 +1477,38 @@ Can be reconnected.</p>
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="access_token:String-instance-method">
+      <div class="signature">
+        
+        def <strong>access_token</strong> : String
+
+        <a class="method-permalink" href="#access_token%3AString-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="access_token=(access_token:String)-instance-method">
+      <div class="signature">
+        
+        def <strong>access_token=</strong>(access_token : String)
+
+        <a class="method-permalink" href="#access_token%3D%28access_token%3AString%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="connect-instance-method">
       <div class="signature">
         
@@ -1453,7 +1520,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L86" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L89" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1469,7 +1536,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L60" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1485,7 +1552,23 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L53" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="connection=(connection:Connection::Client|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>connection=</strong>(connection : <a href="../Rosegold/Connection/Client.html">Connection::Client</a> | Nil)
+
+        <a class="method-permalink" href="#connection%3D%28connection%3AConnection%3A%3AClient%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1501,7 +1584,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1517,7 +1600,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1533,7 +1616,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1549,7 +1632,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L128" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1565,7 +1648,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L128" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1581,7 +1664,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1597,7 +1680,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1613,7 +1696,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1629,7 +1712,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1650,23 +1733,55 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L70" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L73" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="join_game(&amp;)-instance-method">
+    <div class="entry-detail" id="join_game(*args,&amp;)-instance-method">
       <div class="signature">
         
-        def <strong>join_game</strong>(&)
+        def <strong>join_game</strong>(*args, &)
 
-        <a class="method-permalink" href="#join_game%28%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#join_game%28%2Aargs%2C%26%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L80" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L83" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="offline:NamedTuple(uuid:String,username:String)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>offline</strong> : NamedTuple(uuid: String, username: String) | Nil
+
+        <a class="method-permalink" href="#offline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="offline=(offline:NamedTuple(uuid:String,username:String)|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>offline=</strong>(offline : NamedTuple(uuid: String, username: String) | Nil)
+
+        <a class="method-permalink" href="#offline%3D%28offline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1682,7 +1797,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1698,7 +1813,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1714,7 +1829,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1730,7 +1845,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1746,7 +1861,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1762,39 +1877,39 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="port:UInt16-instance-method">
+    <div class="entry-detail" id="port:Int32-instance-method">
       <div class="signature">
         
-        def <strong>port</strong> : UInt16
+        def <strong>port</strong> : <a href="../Int32.html">Int32</a>
 
-        <a class="method-permalink" href="#port%3AUInt16-instance-method">#</a>
+        <a class="method-permalink" href="#port%3AInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="port=(port:UInt16)-instance-method">
+    <div class="entry-detail" id="port=(port:Int32)-instance-method">
       <div class="signature">
         
-        def <strong>port=</strong>(port : UInt16)
+        def <strong>port=</strong>(port : <a href="../Int32.html">Int32</a>)
 
-        <a class="method-permalink" href="#port%3D%28port%3AUInt16%29-instance-method">#</a>
+        <a class="method-permalink" href="#port%3D%28port%3AInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1815,7 +1930,7 @@ Can be reconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L127" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L146" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1838,7 +1953,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L139" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L158" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1854,7 +1969,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L65" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L68" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1870,7 +1985,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L64" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1886,7 +2001,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L111" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L130" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1902,7 +2017,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1918,7 +2033,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d80cdcc603e83af0fce61bd864747739c5210c88/src/rosegold/client.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/2cc0a651d6fd0d861b24ea586b778b87d40dce37/src/rosegold/client.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
