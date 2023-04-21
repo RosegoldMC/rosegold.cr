@@ -6,7 +6,7 @@ class Rosegold::Clientbound::EntityTeleport < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x62_u8
 
   property \
-    entity_id : Int32,
+    entity_id : UInt64,
     location : Vec3d,
     look : Look
   property? \
@@ -16,7 +16,7 @@ class Rosegold::Clientbound::EntityTeleport < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     self.new(
-      packet.read_var_int.to_i32,
+      packet.read_var_long,
       Vec3d.new(
         packet.read_double,
         packet.read_double,
