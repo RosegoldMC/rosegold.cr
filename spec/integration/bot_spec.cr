@@ -34,9 +34,7 @@ Spectator.describe Rosegold::Bot do
   it "should change yaw and pitch" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        sleep 2 # load chunks
         bot.chat "/tp 1 -60 1"
-        sleep 1 # teleport
 
         bot.yaw = 45
         bot.pitch = 45
@@ -77,9 +75,7 @@ Spectator.describe Rosegold::Bot do
   it "should select a different hotbar slot" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        sleep 2 # load chunks
         bot.chat "/tp 1 -60 1"
-        sleep 1 # teleport
 
         bot.hotbar_selection = 4
         expect(bot.hotbar_selection).to eq 4
