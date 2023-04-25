@@ -240,16 +240,21 @@ class Rosegold::Bot
     return if food >= 15 && full_health?
     return if food >= 18 # above healing threshold
 
+    Log.debug { "Eating because food is #{food} and health is #{health}" }
+
     inventory.pick("baked_potato") ||
       inventory.pick("bread") ||
       inventory.pick("carrot") ||
       raise "Bot food not found"
 
-    client.send_packet! Serverbound::UseItem.new :main_hand
-    until food >= 20
-      wait_tick
+    10.times do
+      client.send_packet! Serverbound::UseItem.new :main_hand
+      wait_ticks 33
+      client.send_packet! Serverbound::PlayerDigging.new :finish_using_hand
+      break if food >= 18
     end
-    client.send_packet! Serverbound::PlayerDigging.new :finish_using_hand
+
+    Log.debug { "Eating finished, food is #{food} and health is #{health}" }
   end
 
   def full_health?
