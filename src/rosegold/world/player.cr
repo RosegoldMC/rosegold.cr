@@ -23,7 +23,8 @@ class Rosegold::Player
     food : UInt32 = 0,
     saturation : Float32 = 0,
     hotbar_selection : UInt8 = 0,
-    gamemode : Int8 = 0
+    gamemode : Int8 = 0,
+    time : MCTime = MCTime::UNKNOWN
   property? \
     on_ground : Bool = false,
     sneaking : Bool = false,

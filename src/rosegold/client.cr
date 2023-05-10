@@ -33,6 +33,11 @@ class Rosegold::Client < Rosegold::EventEmitter
     window : Window,
     offline : NamedTuple(uuid: String, username: String)? = nil
 
+  property \
+    world_age : Int64 = 0,
+    last_time : Int64 = 0,
+    tps : Float64 = 20
+
   def initialize(@host : String, @port : Int32 = 25565, @offline : NamedTuple(uuid: String, username: String)? = nil)
     if host.includes? ":"
       @host, port_str = host.split ":"

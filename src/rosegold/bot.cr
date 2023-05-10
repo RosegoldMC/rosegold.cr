@@ -21,8 +21,8 @@ class Rosegold::Bot
     new Client.new(address).tap &.join_game(timeout_ticks)
   end
 
-  delegate host, port, connect, connected?, disconnect, join_game, spawned?, online_players, on, to: client
-  delegate uuid, username, feet, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
+  delegate host, port, connect, connected?, disconnect, join_game, spawned?, online_players, on, last_time, world_age, tps, to: client
+  delegate uuid, username, feet, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, time, to: client.player
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory
   delegate stop_using_hand, stop_digging, to: @interact
@@ -54,7 +54,7 @@ class Rosegold::Bot
 
   # Is adjusted to server TPS.
   def wait_ticks(ticks : Int32)
-    sleep ticks / 20 # TODO adjust to server TPS, changing over time
+    sleep ticks / client.tps
   end
 
   def wait_tick
