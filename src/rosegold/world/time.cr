@@ -3,10 +3,6 @@ class Rosegold::MCTime
 
   UNKNOWN = self.new 0
 
-  enum Part
-    Sunrise; Noon; Sunset; Midnight
-  end
-
   def initialize(@ticks); end
 
   def set(value)
