@@ -45,13 +45,5 @@ class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
       look.yaw,
       0_u8,
       Vec3d.new(0, 0, 0))
-
-      player_info_packet = client.last_packet(PlayerInfo)
-      player = player_info_packet&.players&.find { |p| p.uuid == uuid }
-
-      if player
-        Log.info { "[RADAR] #{player.display_name} appeared at [#{location.x}, #{location.z}]" }
-      else
-        Log.warn { "Could not find player with UUID #{uuid}" }
   end
 end
