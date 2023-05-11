@@ -1,61 +1,7 @@
 [
   {
-    "uuid": "24a197d7-11cb-3344-897d-1b0ee4f1a6f0",
-    "name": "rosegoldtest6",
-    "level": 4,
-    "bypassesPlayerLimit": false
-  },
-  {
-    "uuid": "f559674c-6d97-330f-b110-249f20a90fd3",
-    "name": "rosegoldtest7",
-    "level": 4,
-    "bypassesPlayerLimit": false
-  },
-  {
-    "uuid": "db2df91e-45be-3e54-b69d-bf262c2b1b5c",
-    "name": "rosegoldtest3",
-    "level": 4,
-    "bypassesPlayerLimit": false
-  },
-  {
-    "uuid": "95dd440a-23f2-3ff7-8e58-e4f83c7659cf",
-    "name": "rosegoldtest2",
-    "level": 4,
-    "bypassesPlayerLimit": false
-  },
-  {
-    "uuid": "a81fa99e-7a89-3a91-8709-5da8dda5556c",
-    "name": "rosegoldtest1",
-    "level": 4,
-    "bypassesPlayerLimit": false
-  },
-  {
-    "uuid": "87a567c1-ebdc-362c-b0b2-8cc285bb6266",
-    "name": "rosegoldtest5",
-    "level": 4,
-    "bypassesPlayerLimit": false
-  },
-  {
-    "uuid": "d42557fb-957a-3243-960c-90d87cda08d9",
-    "name": "rosegoldtest8",
-    "level": 4,
-    "bypassesPlayerLimit": false
-  },
-  {
-    "uuid": "771dff2e-2f5e-3823-a305-6970d7afdcc8",
-    "name": "rosegoldtest4",
-    "level": 4,
-    "bypassesPlayerLimit": false
-  },
-  {
-    "uuid": "c5b15a82-df4c-3305-b99e-054ba4fd122d",
-    "name": "rosegoldtest9",
-    "level": 4,
-    "bypassesPlayerLimit": false
-  },
-  {
-    "uuid": "4b6a985b-539b-317a-ab96-57dfbf3de621",
-    "name": "rose",
+    "uuid": "0c53611f-eab6-379e-92dc-171dc5524e6d",
+    "name": "rosegoldtest",
     "level": 4,
     "bypassesPlayerLimit": false
   }
