@@ -14,15 +14,18 @@ module Microsoft::MobileOAuth
       expires_in : Int32,
       ext_expires_in : Int32,
       access_token : String,
-      refresh_token : String
-
+      refresh_token : String,
+      expires_at : Int64 = 0
+    
     def refresh
       HTTP::Client.post(
         "https://login.microsoftonline.com/consumers/oauth2/v2.0/token",
         form: "client_id=#{CLIENT_ID}&scope=XboxLive.signin offline_access&refresh_token=#{refresh_token}&grant_type=refresh_token"
       ).body
         .try do |json|
-          Token.from_json(json)
+          token = Token.from_json(json)
+          token.expires_at = Time.local.to_unix_ms + token.expires_in
+          token
         end
     end
 
@@ -39,9 +42,10 @@ module Microsoft::MobileOAuth
     if File.exists?(Rosegold::Config.directory_for("auth") + "/microsoft_token.json")
       token = Token.load
 
-      # TODO: only refresh if the token is expired
-      token = token.refresh
-      token.save
+      if Time.local.to_unix_ms < token.expires_at
+        token = token.refresh
+        token.save
+      end
 
       token
     else
@@ -72,6 +76,7 @@ module Microsoft::MobileOAuth
           next if JSON.parse(token_string)["error"]?
 
           token = Token.from_json(token_string)
+          token.expires_at = Time.local.to_unix_ms + token.expires_in
 
           STDERR.puts "Login successful!"
 
