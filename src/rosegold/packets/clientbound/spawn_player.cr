@@ -1,3 +1,4 @@
+require "../../world/player_list"
 require "../packet"
 
 class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
@@ -9,7 +10,9 @@ class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
     location : Vec3d,
     look : Look
 
-  def initialize(@entity_id, @uuid, @location, @look); end
+  property players : Array(PlayerList::Entry)
+
+  def initialize(@entity_id, @uuid, @location, @look, @players = Array(PlayerList::Entry).new); end
 
   def self.read(packet)
     entity_id = packet.read_var_long
@@ -33,6 +36,15 @@ class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
     end.to_slice
   end
 
+  def get_name_by_uuid(uuid)
+    players.each do |player|
+      if player.name && player.uuid == uuid
+        return player.name
+      end
+    end
+    nil
+  end  
+
   def callback(client)
     Log.debug { "Received spawn player packet for entity ID #{entity_id}, UUID #{uuid}" }
 
@@ -45,12 +57,6 @@ class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
       look.yaw,
       0_u8,
       Vec3d.new(0, 0, 0))
-
-      display_name = client.player_list.display_name(uuid)
-
-      if player
-        Log.info { "[RADAR] #{display_name} appeared at [#{location.x}, #{location.z}]" }
-      else
-        Log.warn { "Could not find player with UUID #{uuid}" }
+      Log.info { "[RADAR] #{get_name_by_uuid(uuid)} appeared at [#{location.x}, #{location.z}]" }
   end
 end
