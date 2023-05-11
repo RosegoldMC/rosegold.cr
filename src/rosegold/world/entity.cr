@@ -25,7 +25,8 @@ class Rosegold::Entity
     yaw : Float32,
     head_yaw : Float32,
     velocity : Vec3d,
-    passenger_ids : Array(UInt64) = [] of UInt64
+    passenger_ids : Array(UInt64) = [] of UInt64,
+    effects : Array(Rosegold::Effect) = [] of Rosegold::Effect
 
   property? \
     on_ground : Bool = true
