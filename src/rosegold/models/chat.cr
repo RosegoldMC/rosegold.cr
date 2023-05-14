@@ -25,10 +25,6 @@ class Rosegold::Chat
   property click_event : JSON::Any?
   @[JSON::Field(key: "hoverEvent")]
   property hover_event : JSON::Any?
-
-  def color=(color : String?)
-    @color = color
-  end
   
   def to_s(io : IO) : Nil
     if translate
