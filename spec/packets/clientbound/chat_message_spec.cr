@@ -3,6 +3,8 @@ require "../../spec_helper"
 Spectator.describe Rosegold::Clientbound::ChatMessage do
   let(:io) { Minecraft::IO::Memory.new(File.read(file)) }
   let(:file) { File.expand_path("../../../fixtures/packets/clientbound/chat_message.mcpacket", __FILE__) }
+  let(:file_slice) { File.read(file).to_slice }
+
   it "parses the packet" do
     io.read_byte
     packet = Rosegold::Clientbound::ChatMessage.read(io)
@@ -17,15 +19,7 @@ Spectator.describe Rosegold::Clientbound::ChatMessage do
 
   it "writes packet the same after parsing" do
     io.read_byte
-    packet = Rosegold::Clientbound::ChatMessage.read(io)
-  
-    new_packet = Rosegold::Clientbound::ChatMessage.new(
-      packet.message,
-      packet.position,
-      packet.sender
-    )
 
-    actual = new_packet.write
-    expect(actual).to eq(File.read(file).to_slice)
+    expect(Rosegold::Clientbound::ChatMessage.read(io).write).to eq file_slice
   end
 end
