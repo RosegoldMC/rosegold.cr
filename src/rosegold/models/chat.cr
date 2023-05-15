@@ -7,15 +7,15 @@ class Rosegold::Chat
   TRANSLATIONS = Hash(String, String).from_json Rosegold.read_game_asset "language.json"
 
   property \
-    text : String?,
-    color : String?,
     bold : Bool?,
     italic : Bool?,
     underlined : Bool?,
     strikethrough : Bool?,
     obfuscated : Bool?,
-    insertion : String?,
+    color : String?,
     extra : Array(Rosegold::Chat)?,
+    text : String?,
+    insertion : String?,
     translate : String?,
     with : Array(Chat | String)?
 
