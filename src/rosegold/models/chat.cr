@@ -30,8 +30,8 @@ class Rosegold::Chat
     if translate
       io << TRANSLATIONS[translate] % self.with.try &.map(&.to_s)
     else
+      io << text
       io << extra_text
-#      io << text
     end
   end
 
