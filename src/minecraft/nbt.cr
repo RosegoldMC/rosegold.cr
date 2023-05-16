@@ -398,6 +398,10 @@ module Minecraft::NBT
     def inspect(io)
       io << @value.inspect
     end
+
+    def ==(other)
+      other.is_a?(CompoundTag) && self.value == other.value
+    end
   end
 
   class IntArrayTag < Tag
@@ -509,6 +513,10 @@ module Minecraft::NBT
 
     def inspect(io)
       io << "NBT[#{values.inspect} : LongArray]"
+    end
+
+    def ==(other)
+      other.is_a?(LongArrayTag) && self.values == other.values
     end
   end
 end
