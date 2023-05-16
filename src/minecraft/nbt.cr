@@ -518,6 +518,5 @@ module Minecraft::NBT
     def ==(other)
       other.is_a?(LongArrayTag) && self.values == other.values
     end
-
   end
 end
