@@ -56,10 +56,8 @@ class Rosegold::Window
     # TODO emit Ready event if ready? && !was_ready
   end
 
-  # TODO consider having `slots` wait for ready, and `slots!` to return/throw instantly
-
   def slots : Array(WindowSlot)
-    @slots || raise "Window is not ready"
+    @slots || Array.new(36) { |i| WindowSlot.new i, Slot.new }
   end
 
   def cursor : WindowSlot
