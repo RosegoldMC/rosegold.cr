@@ -57,7 +57,7 @@ class Rosegold::Window
   end
 
   def slots : Array(WindowSlot)
-    @slots || Array.new(36) { |i| WindowSlot.new i, Slot.new }
+    @slots ||= Array.new(46) { |i| WindowSlot.new i, Slot.new }
   end
 
   def cursor : WindowSlot
