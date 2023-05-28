@@ -4,6 +4,7 @@ Spectator.describe Rosegold::Bot do
   it "should fall due to gravity" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
+        sleep 50
         sleep 2 # load chunks
         bot.chat "/tp 1 -58 1"
         sleep 1 # teleport
