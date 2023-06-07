@@ -21,8 +21,8 @@ class Rosegold::Clientbound::RemoveEntityEffect < Rosegold::Clientbound::Packet
     effect = Rosegold::Effect.from_value effect_id
 
     if client.player.entity_id == entity_id
-        client.player.effects.delete effect
-        return
+      client.player.effects.delete effect
+      return
     end
 
     if entity.nil?

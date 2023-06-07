@@ -27,9 +27,9 @@ class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
     effect = Rosegold::Effect.from_value effect_id
 
     if client.player.entity_id == entity_id
-        return if client.player.effects.find { |active_effect| active_effect == effect }
-        client.player.effects << effect
-        return
+      return if client.player.effects.find { |active_effect| active_effect == effect }
+      client.player.effects << effect
+      return
     end
 
     if entity.nil?
