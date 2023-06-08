@@ -22,6 +22,8 @@ Minecraft client written in [Crystal](http://crystal-lang.org/), following the [
 
 ## Use as a library
 
+A full example can be found [here](https://github.com/Gjum/rosegold-example).
+
 1. Add the dependency to your `shard.yml`:
 
    ```yaml
