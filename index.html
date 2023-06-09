@@ -1060,23 +1060,9 @@
 </a>Rosegold is a custom Minecraft botting client with the following goals:</h3>
 <ol>
 <li><strong>Efficiency and accessibility</strong>: Rosegold aims to make botting accessible to all Civ users by providing a clean and easy-to-understand DSL for creating bots, while also ensuring that the client remains efficient.</li>
-<li><strong>Headless with a headful feel</strong>: Although Rosegold is a headless client, it seeks to address the limitations of current bots by providing a proxy that allows a standard vanilla Minecraft client to connect, spectate, and control. This approach offers the benefits of headless clients while maintaining a headful user experience.</li>
+<li><strong>Headless with a headful feel (coming soon)</strong>: Although Rosegold is a headless client, it seeks to address the limitations of current bots by providing a proxy that allows a standard vanilla Minecraft client to connect, spectate, and control. This approach offers the benefits of headless clients while maintaining a headful user experience.</li>
 <li><strong>Compliance with server-specific botting rules</strong>: Rosegold is designed for use on servers with specific botting rules, such as CivMC, which restrict bots from seeing or hearing. The client makes it challenging to create bots that violate these rules, ensuring a fair gameplay experience.</li>
 <li><strong>Portable and easy-to-distribute</strong>: Leveraging Crystal's ability to compile into portable binaries, Rosegold aims to simplify the distribution process for developers, making it easier to set up and manage bots for their nations.</li>
-</ol>
-<h2><a id="use-as-a-standalone-client" class="anchor" href="#use-as-a-standalone-client">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Use as a standalone client</h2>
-<ol>
-<li><a href="https://crystal-lang.org/install/">Install Crystal</a></li>
-<li><a href="https://github.com/crystal-lang/shards#install">Install the Shards dependency manager</a></li>
-<li>Download the code: <code>git clone git@github.com:grepsedawk/rosegold.cr.git</code></li>
-<li>Install the dependencies: <code>shards install</code></li>
-<li>Build the executable: <code>crystal build src/rosegold.cr</code></li>
-<li>Launch the client: <code>./rosegold</code></li>
-<li>Follow the instructions to log into your Minecraft account</li>
 </ol>
 <h2><a id="use-as-a-library" class="anchor" href="#use-as-a-library">
   <svg class="octicon-link" aria-hidden="true">
@@ -1088,14 +1074,28 @@
 <p>Add the dependency to your <code>shard.yml</code>:</p>
 <pre><code class="language-yaml">dependencies:
   rosegold:
-    github: grepsedawk/rosegold.cr</code></pre>
+    github: grepsedawk/rosegold.cr
+    version: ~&gt; 0.1</code></pre>
 </li>
 <li>
 <p>Run <code>shards install</code></p>
 </li>
 <li>
-<p>Import the module:</p>
-<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;rosegold&quot;</span></code></pre>
+<p>Start with a basic example:</p>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;rosegold&quot;</span>
+bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.join_game(<span class="s">&quot;play.civmc.net&quot;</span>)
+sleep <span class="n">3</span>
+
+<span class="k">while</span> bot.connected?
+bot.eat!
+bot.yaw <span class="o">=</span> <span class="n">-90</span>
+bot.pitch <span class="o">=</span> <span class="n">-10</span>
+bot.inventory.pick! <span class="s">&quot;diamond_sword&quot;</span>
+bot.attack
+bot.wait_ticks <span class="n">20</span>
+puts bot.feet
+puts <span class="s">&quot;Tool durability: </span><span class="i">#{</span>bot.main_hand.durability<span class="i">}</span><span class="s"> / </span><span class="i">#{</span>bot.main_hand.max_durability<span class="i">}</span><span class="s">&quot;</span>
+<span class="k">end</span></code></pre>
 </li>
 </ol>
 <h2><a id="contributing" class="anchor" href="#contributing">
