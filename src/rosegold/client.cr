@@ -22,6 +22,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   property host : String, port : Int32
   property connection : Connection::Client?
+  property proxy : TCPServer?
 
   property \
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
@@ -44,6 +45,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     @physics = Physics.new self
     @inventory = PlayerWindow.new self
     @window = @inventory
+    start_proxy
   end
 
   def connection? : Connection::Client?
@@ -55,6 +57,20 @@ class Rosegold::Client < Rosegold::EventEmitter
     raise NotConnected.new "Client was never connected" unless conn
     raise NotConnected.new "Disconnected: #{conn.close_reason}" if conn.close_reason
     conn
+  end
+
+  def start_proxy : TCPServer
+    proxy = @proxy ||= TCPServer.new "localhost", 1234
+    spawn do
+      while socket = proxy.accept?
+        puts "WHOA"
+        spawn do
+          server = Connection::Server.new Minecraft::IO::Wrap.new(socket), ProtocolState::LOGIN.serverbound
+          server.state = ProtocolState::LOGIN.serverbound
+          server.send_packet Clientbound::LoginStart.new player.username.not_nil! # ameba:disable Lint/NotNil
+        end
+      end
+    end
   end
 
   def connected?
@@ -72,6 +88,8 @@ class Rosegold::Client < Rosegold::EventEmitter
   # Waits for the client to be fully spawned, ie. physics and inventory being ready.
   def join_game(timeout_ticks = 1200)
     connect
+    start_proxy
+    Log.info { "Connect to localhost:1234 to spectate Rosegold bot" }
     until spawned?
       sleep 1/20
       timeout_ticks -= 1
