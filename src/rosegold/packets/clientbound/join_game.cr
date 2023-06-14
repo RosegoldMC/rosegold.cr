@@ -4,7 +4,7 @@ require "../packet"
 class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   class_getter packet_id = 0x26_u8
 
-  property entity_id : Int32
+  property entity_id : UInt64
   property? hardcore : Bool
   property gamemode : Int8
   property previous_gamemode : Int8
@@ -25,7 +25,7 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
 
   def self.read(io)
     self.new(
-      io.read_int,
+      io.read_int.to_u64,
       io.read_bool,
       io.read_signed_byte,
       io.read_signed_byte,

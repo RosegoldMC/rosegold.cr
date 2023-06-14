@@ -107,9 +107,9 @@ class Rosegold::Physics
     if sneaking
       # can't sprint while sneaking
       sprint false
-      client.send_packet! Serverbound::EntityAction.new player.entity_id, :start_sneaking
+      client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StartSneaking
     else
-      client.send_packet! Serverbound::EntityAction.new player.entity_id, :stop_sneaking
+      client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StopSneaking
     end
     player.sneaking = sneaking
   end
@@ -120,9 +120,9 @@ class Rosegold::Physics
     # send nothing if already in desired state
     return if player.sprinting? == sprinting
     if sprinting
-      client.send_packet! Serverbound::EntityAction.new player.entity_id, :start_sprinting
+      client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StartSprinting
     else
-      client.send_packet! Serverbound::EntityAction.new player.entity_id, :stop_sprinting
+      client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StopSprinting
     end
     player.sprinting = sprinting
   end
