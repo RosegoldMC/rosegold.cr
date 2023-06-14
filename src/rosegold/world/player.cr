@@ -15,7 +15,7 @@ class Rosegold::Player
   property \
     uuid : UUID?,
     username : String?, # Note: The server may give us a different name than we used during authentication.
-    entity_id : Int32 = 0,
+    entity_id : UInt64 = 0,
     look : Look = Look::SOUTH,
     feet : Vec3d = Vec3d::ORIGIN,
     velocity : Vec3d = Vec3d::ORIGIN,
