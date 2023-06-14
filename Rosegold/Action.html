@@ -696,8 +696,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
+  <li class="parent " data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
       <a href="../Rosegold/Physics.html">Physics</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Physics/MovementStuck" data-name="rosegold::physics::movementstuck">
+      <a href="../Rosegold/Physics/MovementStuck.html">MovementStuck</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -1083,7 +1093,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d94f35c28a0d98921fcff79803e58c4f22156cdb/src/rosegold/control/action.cr#L1" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/control/action.cr#L1" target="_blank">
         rosegold/control/action.cr
       </a>
     
@@ -1091,25 +1101,6 @@
   
 
 
-
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-      Constant Summary
-    </h2>
-  
-  <dl>
-    
-      <dt class="entry-const" id="SUCCESS">
-        <strong>SUCCESS</strong> = <code><span class="s">&quot;&quot;</span></code>
-      </dt>
-      
-    
-  </dl>
 
 
 
@@ -1145,14 +1136,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#channel%3AChannel%28String%29-instance-method" class="signature"><strong>#channel</strong> : Channel(String)</a>
-        
-          <div class="summary"><p><span class="flag orange">TODO</span>  try channel size 1 so #succeed/#fail aren't rendezvous</p></div>
+        <a href="#channel%3AChannel%28Exception%7CNil%29-instance-method" class="signature"><strong>#channel</strong> : Channel(Exception | Nil)</a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#fail%28msg%3AString%29-instance-method" class="signature"><strong>#fail</strong>(msg : String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#fail%28exception%3AException%29-instance-method" class="signature"><strong>#fail</strong>(exception : Exception)</a>
         
       </li>
     
@@ -1224,7 +1218,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d94f35c28a0d98921fcff79803e58c4f22156cdb/src/rosegold/control/action.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/control/action.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1243,23 +1237,18 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="channel:Channel(String)-instance-method">
+    <div class="entry-detail" id="channel:Channel(Exception|Nil)-instance-method">
       <div class="signature">
         
-        def <strong>channel</strong> : Channel(String)
+        def <strong>channel</strong> : Channel(Exception | Nil)
 
-        <a class="method-permalink" href="#channel%3AChannel%28String%29-instance-method">#</a>
+        <a class="method-permalink" href="#channel%3AChannel%28Exception%7CNil%29-instance-method">#</a>
       </div>
-      
-        <div class="doc">
-          
-          <p><span class="flag orange">TODO</span>  try channel size 1 so #succeed/#fail aren't rendezvous</p>
-        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d94f35c28a0d98921fcff79803e58c4f22156cdb/src/rosegold/control/action.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/control/action.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1275,7 +1264,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d94f35c28a0d98921fcff79803e58c4f22156cdb/src/rosegold/control/action.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/control/action.cr#L11" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="fail(exception:Exception)-instance-method">
+      <div class="signature">
+        
+        def <strong>fail</strong>(exception : Exception)
+
+        <a class="method-permalink" href="#fail%28exception%3AException%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/control/action.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1296,7 +1301,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d94f35c28a0d98921fcff79803e58c4f22156cdb/src/rosegold/control/action.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/control/action.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1312,7 +1317,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d94f35c28a0d98921fcff79803e58c4f22156cdb/src/rosegold/control/action.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/control/action.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1328,7 +1333,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d94f35c28a0d98921fcff79803e58c4f22156cdb/src/rosegold/control/action.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/control/action.cr#L3" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Serverbound::RawPacket - rosegold main</title>
+  <title>Rosegold::Physics::MovementStuck - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -696,12 +696,12 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
+  <li class="parent open current" data-id="rosegold/Rosegold/Physics" data-name="rosegold::physics">
       <a href="../../Rosegold/Physics.html">Physics</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Physics/MovementStuck" data-name="rosegold::physics::movementstuck">
+  <li class=" current" data-id="rosegold/Rosegold/Physics/MovementStuck" data-name="rosegold::physics::movementstuck">
       <a href="../../Rosegold/Physics/MovementStuck.html">MovementStuck</a>
       
     </li>
@@ -771,7 +771,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
       <a href="../../Rosegold/Serverbound.html">Serverbound</a>
       
         <ul>
@@ -961,7 +961,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
       <a href="../../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
       
     </li>
@@ -1060,44 +1060,19 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Rosegold::Serverbound::RawPacket
+  <span class="kind">class</span> Rosegold::Physics::MovementStuck
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Serverbound/RawPacket.html">Rosegold::Serverbound::RawPacket</a></li><li class="superclass"><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
-
-
-
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>not decoded eg. because unknown packet_id</p>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Physics/MovementStuck.html">Rosegold::Physics::MovementStuck</a></li><li class="superclass">Exception</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
 
 
-  <h2>
-    <a id="included-modules" class="anchor" href="#included-modules">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Included Modules
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../../Rosegold/RawPacket.html">Rosegold::RawPacket</a></li>
-    
-  </ul>
+
+
 
 
 
@@ -1118,8 +1093,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/packets/packet.cr#L59" target="_blank">
-        rosegold/packets/packet.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/control/physics.cr#L191" target="_blank">
+        rosegold/control/physics.cr
       </a>
     
     <br/>
@@ -1129,41 +1104,7 @@
 
 
 
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28bytes%3ASlice%28UInt8%29%29-class-method" class="signature"><strong>.new</strong>(bytes : Slice(UInt8))</a>
-        
-      </li>
-    
-  </ul>
 
-
-
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#packet_id-class-method" class="signature"><strong>.packet_id</strong></a>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -1172,88 +1113,6 @@
 
 
 <div class="methods-inherited">
-  
-    
-
-  <h3>Instance methods inherited from module <code><a href="../../Rosegold/RawPacket.html">Rosegold::RawPacket</a></code></h3>
-  
-  
-    <a href="../../Rosegold/RawPacket.html#bytes%3ABytes-instance-method" class="tooltip">
-      <span>bytes : Bytes</span>
-    bytes</a>, 
-    
-  
-    <a href="../../Rosegold/RawPacket.html#packet_id-instance-method" class="tooltip">
-      <span>packet_id</span>
-    packet_id</a>, 
-    
-  
-    <a href="../../Rosegold/RawPacket.html#write%3ABytes-instance-method" class="tooltip">
-      <span>write : Bytes</span>
-    write</a>
-    
-  
-
-
-    
-
-
-    
-
-
-  
-    
-
-
-    
-
-
-    
-
-  <h3>Class methods inherited from class <code><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Serverbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
-      <span>new_raw(bytes)</span>
-    new_raw</a>, 
-    
-  
-    <a href="../../Rosegold/Serverbound/Packet.html#state-class-method" class="tooltip">
-      <span>state</span>
-    state</a>
-    
-  
-
-
-  
-    
-
-  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
-      <span>callback(client_or_server)</span>
-    callback</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
-      <span>to_s(io)</span>
-    to_s</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
-      <span>write : Bytes</span>
-    write</a>
-    
-  
-
-
-    
-
-
-    
-
-
   
     
 
@@ -1288,59 +1147,7 @@
 </div>
 
 
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(bytes:Slice(UInt8))-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(bytes : Slice(UInt8))
 
-        <a class="method-permalink" href="#new%28bytes%3ASlice%28UInt8%29%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/packets/packet.cr#L63" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
-
-
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="packet_id-class-method">
-      <div class="signature">
-        
-        def self.<strong>packet_id</strong>
-
-        <a class="method-permalink" href="#packet_id-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9a205f6e7bf56de08d9f211a475dd2c9b268585f/src/rosegold/packets/packet.cr#L60" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
