@@ -72,16 +72,24 @@ Spectator.describe Rosegold::Bot do
     end
   end
 
-  it "should select a different hotbar slot" do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 1 -60 1"
+  describe "#move_to" do
+    context "when movement is stuck" do
+      it "throws Physics::MovementStuck" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            sleep 2 # load chunks
+            bot.chat "/fill 1 -60 2 1 -60 2 minecraft:stone"
+            bot.chat "/tp 1 -60 1"
+            sleep 1 # teleport
 
-        bot.hotbar_selection = 4
-        expect(bot.hotbar_selection).to eq 4
+            expect {
+              bot.move_to 1, 2
+            }.to raise_error(Rosegold::Physics::MovementStuck)
 
-        bot.hotbar_selection = 7
-        expect(bot.hotbar_selection).to eq 7
+            bot.chat "/fill 1 -60 2 1 -60 2 minecraft:air"
+            sleep 1
+          end
+        end
       end
     end
   end
