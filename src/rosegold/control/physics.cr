@@ -164,7 +164,10 @@ class Rosegold::Physics
     # TODO: this only works with gravity on
     on_ground = movement.y > input_velocity.y
 
-    @movement_action.try &.fail "Stuck at #{feet}" unless feet != player.feet
+    unless feet != player.feet
+      @movement_action.try &.fail MovementStuck.new "Stuck at #{feet}"
+      @movement_action = nil
+    end
 
     send_movement_packet feet, look, on_ground
     player.velocity = next_velocity
@@ -184,6 +187,8 @@ class Rosegold::Physics
 
     client.emit_event Event::PhysicsTick.new movement
   end
+
+  class MovementStuck < Exception; end
 
   private def send_movement_packet(feet : Vec3d, look : Look, on_ground : Bool)
     # anticheat requires sending these different packets
