@@ -121,8 +121,12 @@ class Rosegold::Bot
 
   # Moves straight towards `location`.
   # Waits for arrival.
-  def move_to(x : Float64, z : Float64)
+  def move_to(x : Float, z : Float)
     client.physics.move Vec3d.new x, feet.y, z
+  end
+
+  def move_to(x : Int, y : Int)
+    move_to x + 0.5, y + 0.5
   end
 
   # Computes the destination location from the current feet location.
