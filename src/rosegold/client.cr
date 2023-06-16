@@ -78,12 +78,16 @@ class Rosegold::Client < Rosegold::EventEmitter
       raise NotConnected.new "Disconnected while joining game: #{connection.close_reason}" unless connected?
       raise NotConnected.new "Took too long to join the game" if timeout_ticks <= 0
     end
+
+    self
   end
 
   def join_game(*args, &)
     join_game(*args)
     yield self
     connection?.try &.disconnect Chat.new "End of script"
+
+    self
   end
 
   def connect
