@@ -27,7 +27,7 @@ class Rosegold::Interactions
   # Activates the "use" button.
   def start_using_hand(hand : Hand = :main_hand)
     reached = reach_block_or_entity
-    if reached
+    if reached.is_a? ReachedBlock
       place_block hand, reached
     else
       @using_hand = true
