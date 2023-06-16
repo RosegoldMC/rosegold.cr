@@ -23,10 +23,10 @@ Spectator.describe Rosegold::Bot do
         sleep 1 # teleport
 
         bot.move_to 2, 2
-        expect(bot.feet).to eq(Rosegold::Vec3d.new(2, -60, 2))
+        expect(bot.feet).to eq(Rosegold::Vec3d.new(2.5, -60, 2.5))
 
         bot.move_to -1, -1
-        expect(bot.feet).to eq(Rosegold::Vec3d.new(-1, -60, -1))
+        expect(bot.feet).to eq(Rosegold::Vec3d.new(-0.5, -60, -0.5))
       end
     end
   end
