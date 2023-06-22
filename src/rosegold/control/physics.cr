@@ -74,6 +74,14 @@ class Rosegold::Physics
   # If there is already a movement target, it is cancelled, and replaced with this new target.
   # Set `target=nil` to stop moving and cancel any current movement.
   def move(target : Vec3d?)
+    if very_close_to? target
+      action_mutex.synchronize do
+        @movement_action.try &.fail "Replaced by movement to #{target}"
+        @movement_action = nil
+      end
+      return
+    end
+
     if target == nil
       action_mutex.synchronize do
         @movement_action.try &.fail "Movement stopped"
@@ -176,9 +184,7 @@ class Rosegold::Physics
       look_action.try &.succeed
 
       @movement_action.try do |movement_action|
-        # movement_action.target only influences x,z; rely on stepping/falling to change y
-        target_diff = (movement_action.target - player.feet).with_y(0)
-        if target_diff.length < VERY_CLOSE
+        if very_close_to? movement_action.target
           movement_action.succeed
           @movement_action = nil
         end
@@ -186,6 +192,10 @@ class Rosegold::Physics
     end
 
     client.emit_event Event::PhysicsTick.new movement
+  end
+
+  def very_close_to?(target : Vec3d)
+    (target - player.feet).with_y(0).length < VERY_CLOSE
   end
 
   class MovementStuck < Exception; end
