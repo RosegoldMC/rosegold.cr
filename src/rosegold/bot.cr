@@ -1,7 +1,7 @@
 require "../rosegold"
 require "./control/*"
 
-class Rosegold::Bot
+class Rosegold::Bot < Rosegold::EventEmitter
   private getter client : Client
 
   getter inventory : Inventory
@@ -9,6 +9,9 @@ class Rosegold::Bot
   def initialize(@client)
     @inventory = Inventory.new client
     @interact = Interactions.new client
+    client.on(Rosegold::Clientbound::ChatMessage) do |packet|
+      emit_event packet
+    end
   end
 
   # Does not connect immediately.
@@ -18,10 +21,10 @@ class Rosegold::Bot
 
   # Connects to the server and waits for being ingame.
   def self.join_game(address : String, timeout_ticks = 1200)
-    new Client.new(address).tap &.join_game(timeout_ticks)
+    new Client.new(address).join_game(timeout_ticks)
   end
 
-  delegate host, port, connect, connected?, disconnect, join_game, spawned?, online_players, on, to: client
+  delegate host, port, connect, connected?, disconnect, join_game, spawned?, online_players, to: client
   delegate uuid, username, feet, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory
