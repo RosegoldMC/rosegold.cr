@@ -26,6 +26,7 @@ class Rosegold::Bot
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory
   delegate stop_using_hand, stop_digging, to: @interact
+  delegate x, y, z, to: feet
 
   def disconnect_reason
     client.connection?.try &.close_reason
