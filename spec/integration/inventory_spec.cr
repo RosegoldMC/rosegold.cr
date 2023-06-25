@@ -111,6 +111,8 @@ Spectator.describe Rosegold::Bot do
           bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
           sleep 1
           bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[]}"
+          bot.chat "/clear"
+          sleep 1
           bot.chat "/give #{bot.username} minecraft:diamond_sword 1"
           sleep 1
           
