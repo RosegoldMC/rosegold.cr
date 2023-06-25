@@ -74,7 +74,7 @@ class Rosegold::Window
   end
 
   def hotbar : Array(WindowSlot)
-    slots[@inventory_start + 27...@inventory_start + 36]
+    slots[@inventory_start + 27...]
   end
 
   def main_hand : WindowSlot
@@ -132,7 +132,6 @@ class Rosegold::Window
 
   def click(slot_nr, right = false, shift = false, double = false)
     send_click ClickWindow.click self, slot_nr, right, shift, double
-    force_reset_hack # TODO update slots
   end
 
   def click(slot : WindowSlot, right = false, shift = false, double = false)
@@ -141,17 +140,6 @@ class Rosegold::Window
 
   private def send_click(packet)
     @client.send_packet! packet
-  end
-
-  # send invalid click to force server to reset window
-  private def force_reset_hack
-    invalid_state_id = 0
-    changed_slots = [] of WindowSlot
-    @client.send_packet! ClickWindow.new :swap, 0, hotbar[0].slot_nr, changed_slots, self.id, invalid_state_id, cursor
-    @slots = nil
-    while !ready?
-      sleep 0.1
-    end
   end
 
   alias StackMode = Serverbound::ClickWindow::StackMode
