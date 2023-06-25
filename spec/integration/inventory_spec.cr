@@ -78,4 +78,59 @@ Spectator.describe Rosegold::Bot do
       end
     end
   end
+
+  describe "#withdraw_at_least" do
+    it "withdraws the item without failing" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          sleep 1
+          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",Count:1b}]}"
+          bot.chat "/clear"
+          sleep 1
+
+          bot.pitch = 90
+          bot.use_hand
+          sleep 1
+          expect(bot.inventory.withdraw_at_least(1, "diamond_sword")).to eq 1
+          sleep 1
+          bot.use_hand
+          sleep 1
+          
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to contain "diamond_sword"
+          expect(bot.inventory.content).not_to contain "diamond_sword"
+        end
+      end
+    end
+  end
+
+  describe "#deposit_at_least" do
+    it "deposits the item without failing" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          sleep 1
+          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[]}"
+          bot.chat "/give #{bot.username} minecraft:diamond_sword 1"
+          sleep 1
+          
+          bot.pitch = 90
+          bot.use_hand
+          sleep 1
+
+          expect(bot.inventory.deposit_at_least(1, "diamond_sword")).to eq 1
+          sleep 1
+          bot.use_hand
+          sleep 1
+
+          puts bot.inventory.slots
+
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).not_to contain "diamond_sword"
+          expect(bot.inventory.content).to contain "diamond_sword"
+      
+        end
+
+      end
+    end
+  end
 end
