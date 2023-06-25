@@ -8,9 +8,9 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
   end
 
   property window_id : UInt8
-  property state_id : UInt32
-  property slot_nr : UInt16
-  property button : UInt8
+  property state_id : Int32
+  property slot_nr : Int16
+  property button : Int8
   property mode : Mode
   property changed_slots : Array(WindowSlot)
   property cursor : Slot
@@ -27,7 +27,7 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
       buffer.write mode.value
       buffer.write changed_slots.size
       changed_slots.each do |slot|
-        buffer.write_full slot.slot_nr.to_u16
+        buffer.write_full slot.slot_nr.to_i16
         buffer.write slot
       end
       buffer.write cursor
