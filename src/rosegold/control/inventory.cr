@@ -85,9 +85,10 @@ class Rosegold::Inventory
       
       # Find empty slot in target container
       target_slot = nil
-      target.each_with_index do |slot, index|
-        if slot.matches?("air")
+      target.each do |slot|
+        if slot.empty?
           target_slot = slot
+          break
         end
       end
 
@@ -101,9 +102,11 @@ class Rosegold::Inventory
       slot.slot_nr = swap_slot
 
       changed_slots = [
+        slot,
         target_slot,
-        slot
       ] of WindowSlot
+
+      sleep 1
 
       client.send_packet! Serverbound::ClickWindow.new :shift, 0_i8, original_slot.to_i16, changed_slots, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
 
