@@ -146,8 +146,4 @@ class Rosegold::WindowSlot < Rosegold::Slot
   def initialize(@slot_nr, slot)
     super slot.item_id_int, slot.count, slot.nbt
   end
-
-  def slot_nr=(new_slot_nr)
-    @slot_nr = new_slot_nr
-  end
 end
