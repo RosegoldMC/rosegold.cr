@@ -98,7 +98,7 @@ Spectator.describe Rosegold::Bot do
           sleep 1
           
           expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to contain "diamond_sword"
-          expect(bot.inventory.content).not_to contain "diamond_sword"
+          expect(bot.inventory.content.map(&.item_id)).not_to contain "diamond_sword"
         end
       end
     end
@@ -121,15 +121,13 @@ Spectator.describe Rosegold::Bot do
           sleep 1
 
           expect(bot.inventory.deposit_at_least(1, "diamond_sword")).to eq 1
+
           sleep 1
           bot.use_hand
           sleep 1
 
-          puts bot.inventory.slots
-
           expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).not_to contain "diamond_sword"
-          expect(bot.inventory.content).to contain "diamond_sword"
-      
+          expect(bot.inventory.content.map(&.item_id)).to contain "diamond_sword"
         end
 
       end
