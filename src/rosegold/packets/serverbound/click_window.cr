@@ -82,7 +82,7 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
 
   private def self.new(mode : Mode, button, slot_nr, window)
     changed_slots = [] of WindowSlot # TODO
-    self.new mode, button.to_u8, slot_nr.to_u16,
-      changed_slots, window.id.to_u8, window.state_id, window.cursor
+    self.new mode, button.to_i8, slot_nr.to_i16,
+      changed_slots, window.id.to_u8, window.state_id.to_i16, window.cursor
   end
 end
