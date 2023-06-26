@@ -101,7 +101,7 @@ class Rosegold::Inventory
     
     # prefer large stacks for minimum clicks
     # for equal stacks, preserve order
-    source.sort_by { |s| s.count }.each do |slot|
+    source.sort_by { |s| -s.count.to_i8 }.each do |slot|
       next unless slot.matches? spec
       
       # Find first empty slot in target container
