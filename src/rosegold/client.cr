@@ -79,6 +79,9 @@ class Rosegold::Client < Rosegold::EventEmitter
       raise NotConnected.new "Took too long to join the game" if timeout_ticks <= 0
     end
 
+    # TODO: Ugly hack to not send close packet on first inventory open.
+    inventory.closed = true
+
     self
   end
 
