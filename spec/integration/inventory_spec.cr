@@ -96,7 +96,7 @@ Spectator.describe Rosegold::Bot do
           sleep 1
           bot.use_hand
           sleep 1
-          
+
           expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to contain "diamond_sword"
           expect(bot.inventory.content.map(&.item_id)).not_to contain "diamond_sword"
         end
@@ -115,7 +115,7 @@ Spectator.describe Rosegold::Bot do
           sleep 1
           bot.chat "/give #{bot.username} minecraft:diamond_sword 1"
           sleep 1
-          
+
           bot.pitch = 90
           bot.use_hand
           sleep 1
@@ -129,7 +129,6 @@ Spectator.describe Rosegold::Bot do
           expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).not_to contain "diamond_sword"
           expect(bot.inventory.content.map(&.item_id)).to contain "diamond_sword"
         end
-
       end
     end
   end

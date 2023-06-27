@@ -83,9 +83,9 @@ class Rosegold::Inventory
     deposit_at_least(count, spec)
   end
 
-  private def find_empty_slot(source) 
+  private def find_empty_slot(source)
     empty_slot = nil
-    
+
     source.each do |slot|
       if slot.empty?
         empty_slot = slot
@@ -93,17 +93,17 @@ class Rosegold::Inventory
       end
     end
 
-    return empty_slot
+    empty_slot
   end
 
   private def shift_click_at_least(count, spec, source : Array(WindowSlot), target : Array(WindowSlot))
     transferred = 0
-    
+
     # prefer large stacks for minimum clicks
     # for equal stacks, preserve order
     source.sort_by { |s| -s.count.to_i8 }.each do |slot|
       next unless slot.matches? spec
-      
+
       # Find first empty slot in target container
       target_slot = find_empty_slot target
 
@@ -113,8 +113,8 @@ class Rosegold::Inventory
       # Swap slots
       changed_slots = [
         Rosegold::WindowSlot.new(target_slot.slot_nr, slot),
-        Rosegold::WindowSlot.new(slot.slot_nr, target_slot)
-      ] 
+        Rosegold::WindowSlot.new(slot.slot_nr, target_slot),
+      ]
 
       client.send_packet! Serverbound::ClickWindow.new :shift, 0_i8, slot.slot_nr.to_i16, changed_slots, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
 
