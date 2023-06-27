@@ -79,10 +79,6 @@ class Rosegold::Client < Rosegold::EventEmitter
       raise NotConnected.new "Took too long to join the game" if timeout_ticks <= 0
     end
 
-    # First window opened on login is never closed by the server; 
-    # Set it to closed so we never send a close window packet that confuses the server.
-    inventory.closed = true
-
     self
   end
 
