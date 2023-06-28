@@ -141,9 +141,13 @@ class Rosegold::Slot
 end
 
 class Rosegold::WindowSlot < Rosegold::Slot
-  getter slot_nr : Int32
+  property slot_number : Int32
 
-  def initialize(@slot_nr, slot)
+  def initialize(@slot_number, slot)
     super slot.item_id_int, slot.count, slot.nbt
+  end
+
+  def ==(other : Rosegold::WindowSlot)
+    other.slot_number == slot_number && other.item_id_int == item_id_int && other.count == count && other.nbt == nbt
   end
 end

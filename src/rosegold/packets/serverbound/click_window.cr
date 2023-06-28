@@ -8,26 +8,26 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
   end
 
   property window_id : UInt8
-  property state_id : UInt32
-  property slot_nr : UInt16
-  property button : UInt8
+  property state_id : Int32
+  property slot_number : Int16
+  property button : Int8
   property mode : Mode
   property changed_slots : Array(WindowSlot)
   property cursor : Slot
 
-  def initialize(@mode, @button, @slot_nr, @changed_slots, @window_id, @state_id, @cursor); end
+  def initialize(@mode, @button, @slot_number, @changed_slots, @window_id, @state_id, @cursor); end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id
       buffer.write window_id
       buffer.write state_id
-      buffer.write_full slot_nr
+      buffer.write_full slot_number
       buffer.write button
       buffer.write mode.value
       buffer.write changed_slots.size
       changed_slots.each do |slot|
-        buffer.write_full slot.slot_nr.to_u16
+        buffer.write_full slot.slot_number.to_i16
         buffer.write slot
       end
       buffer.write cursor
@@ -35,31 +35,31 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
   end
 
   # Hotbar starts at 0.
-  def self.swap_hotbar(window, hotbar_nr, slot_nr)
-    self.new Mode::Swap, hotbar_nr, slot_nr, window
+  def self.swap_hotbar(window, hotbar_nr, slot_number)
+    self.new Mode::Swap, hotbar_nr, slot_number, window
   end
 
-  def self.swap_off_hand(window, slot_nr)
-    self.new :swap, 40, slot_nr, window
+  def self.swap_off_hand(window, slot_number)
+    self.new :swap, 40, slot_number, window
   end
 
-  def self.click(window, slot_nr, right = false, shift = false, double = false)
+  def self.click(window, slot_number, right = false, shift = false, double = false)
     right_nr = right ? 1_u8 : 0_u8
     if double
-      self.new :double, 0, slot_nr, window
+      self.new :double, 0, slot_number, window
     elsif shift
-      self.new :shift, right_nr, slot_nr, window
+      self.new :shift, right_nr, slot_number, window
     else
-      self.new :click, right_nr, slot_nr, window
+      self.new :click, right_nr, slot_number, window
     end
   end
 
-  def self.drop(window, slot_nr, stack_mode : StackMode)
+  def self.drop(window, slot_number, stack_mode : StackMode)
     case stack_mode
     when :single
-      self.new :drop, 0, slot_nr, window
+      self.new :drop, 0, slot_number, window
     when :full
-      self.new :drop, 1, slot_nr, window
+      self.new :drop, 1, slot_number, window
     else
       raise "Invalid stack mode: #{stack_mode}"
     end
@@ -80,9 +80,9 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
     Single; Full
   end
 
-  private def self.new(mode : Mode, button, slot_nr, window)
+  private def self.new(mode : Mode, button, slot_number, window)
     changed_slots = [] of WindowSlot # TODO
-    self.new mode, button.to_u8, slot_nr.to_u16,
-      changed_slots, window.id.to_u8, window.state_id, window.cursor
+    self.new mode, button.to_i8, slot_number.to_i16,
+      changed_slots, window.id.to_u8, window.state_id.to_i16, window.cursor
   end
 end

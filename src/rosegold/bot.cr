@@ -217,8 +217,8 @@ class Rosegold::Bot
 
   # Moves the slot to the hotbar and selects it.
   # This is faster and less error-prone than moving slots around individually.
-  def pick_slot(slot_nr : UInt16)
-    client.queue_packet Serverbound::PickItem.new slot_nr
+  def pick_slot(slot_number : UInt16)
+    client.queue_packet Serverbound::PickItem.new slot_number
   end
 
   # Activates the "use" button.

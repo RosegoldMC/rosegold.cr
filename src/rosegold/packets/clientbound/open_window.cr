@@ -29,7 +29,6 @@ class Rosegold::Clientbound::OpenWindow < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    client.window.close
     client.window = Window.new \
       client, window_id.to_u8, window_title, window_type
     Log.debug { "Server opened window id=#{window_id} type=#{window_type} title: #{window_title}" }

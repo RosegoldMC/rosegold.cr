@@ -78,4 +78,79 @@ Spectator.describe Rosegold::Bot do
       end
     end
   end
+
+  describe "#withdraw_at_least" do
+    it "updates the inventory locally to be the same as externally" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          sleep 1
+          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",Count:1b}]}"
+          bot.chat "/clear"
+          sleep 1
+
+          bot.pitch = 90
+          bot.use_hand
+          sleep 1
+          expect(bot.inventory.withdraw_at_least(1, "diamond_sword")).to eq 1
+
+          sleep 1
+
+          local_inventory = bot.inventory.inventory + bot.inventory.hotbar
+          local_content = bot.inventory.content
+
+          expect(local_inventory.map(&.item_id)).to contain "diamond_sword"
+          expect(local_content.map(&.item_id)).not_to contain "diamond_sword"
+
+          sleep 1
+          bot.use_hand
+          sleep 1
+
+          expect(local_inventory.first).to eq bot.inventory.inventory.first
+
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to match_array local_inventory.map(&.item_id)
+          expect((bot.inventory.content).map(&.item_id)).to match_array local_content.map(&.item_id)
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.slot_number)).to match_array local_inventory.map(&.slot_number)
+          expect((bot.inventory.content).map(&.slot_number)).to match_array local_content.map(&.slot_number)
+        end
+      end
+    end
+  end
+
+  describe "#deposit_at_least" do
+    it "updates the inventory locally to be the same as externally" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          sleep 1
+          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[]}"
+          bot.chat "/clear"
+          sleep 1
+          bot.chat "/give #{bot.username} minecraft:diamond_sword 1"
+          sleep 1
+
+          bot.pitch = 90
+          bot.use_hand
+          sleep 1
+
+          expect(bot.inventory.deposit_at_least(1, "diamond_sword")).to eq 1
+
+          local_inventory = bot.inventory.inventory + bot.inventory.hotbar
+          local_content = bot.inventory.content
+
+          expect(local_inventory.map(&.item_id)).not_to contain "diamond_sword"
+          expect(local_content.map(&.item_id)).to contain "diamond_sword"
+
+          sleep 1
+          bot.use_hand
+          sleep 1
+
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to match_array local_inventory.map(&.item_id)
+          expect((bot.inventory.content).map(&.item_id)).to match_array local_content.map(&.item_id)
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.slot_number)).to match_array local_inventory.map(&.slot_number)
+          expect((bot.inventory.content).map(&.slot_number)).to match_array local_content.map(&.slot_number)
+        end
+      end
+    end
+  end
 end

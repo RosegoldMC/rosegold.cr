@@ -74,7 +74,7 @@ class Rosegold::Window
   end
 
   def hotbar : Array(WindowSlot)
-    slots[@inventory_start + 27...@inventory_start + 36]
+    slots[@inventory_start + 27...]
   end
 
   def main_hand : WindowSlot
@@ -82,35 +82,35 @@ class Rosegold::Window
   end
 
   # Hotbar starts at 0.
-  def swap_hotbar(hotbar_nr, slot_nr)
-    # TODO do nothing if slot_nr is hotbar_selection already
-    # TODO change hotbar_selection if slot_nr in hotbar
-    send_click ClickWindow.swap_hotbar self, hotbar_nr, slot_nr
-    hotbar[hotbar_nr].swap_with slots[slot_nr]
+  def swap_hotbar(hotbar_nr, slot_number)
+    # TODO do nothing if slot_number is hotbar_selection already
+    # TODO change hotbar_selection if slot_number in hotbar
+    send_click ClickWindow.swap_hotbar self, hotbar_nr, slot_number
+    hotbar[hotbar_nr].swap_with slots[slot_number]
   end
 
   # Hotbar starts at 0.
   def swap_hotbar(hotbar_nr, slot : WindowSlot)
-    swap_hotbar hotbar_nr, slot.slot_nr
+    swap_hotbar hotbar_nr, slot.slot_number
   end
 
-  def swap_off_hand(slot_nr)
-    send_click ClickWindow.swap_off_hand self, slot_nr
-    @client.inventory.off_hand.swap_with slots[slot_nr]
+  def swap_off_hand(slot_number)
+    send_click ClickWindow.swap_off_hand self, slot_number
+    @client.inventory.off_hand.swap_with slots[slot_number]
   end
 
   def swap_off_hand(slot : WindowSlot)
-    swap_off_hand slot.slot_nr
+    swap_off_hand slot.slot_number
   end
 
-  def drop(slot_nr, stack_mode : StackMode)
-    slot = slots[slot_nr]
-    if slot.slot_nr < 0
+  def drop(slot_number, stack_mode : StackMode)
+    slot = slots[slot_number]
+    if slot.slot_number < 0
       slot = cursor
       send_click ClickWindow.drop_cursor self, stack_mode
     else
       # TODO check that cursor is empty
-      send_click ClickWindow.drop self, slot_nr, stack_mode
+      send_click ClickWindow.drop self, slot_number, stack_mode
     end
     case stack_mode
     when :single; slot.decrement
@@ -119,7 +119,7 @@ class Rosegold::Window
   end
 
   def drop(slot : WindowSlot, stack_mode : StackMode)
-    drop slot.slot_nr, stack_mode
+    drop slot.slot_number, stack_mode
   end
 
   def drop_cursor(stack_mode : StackMode)
@@ -130,28 +130,16 @@ class Rosegold::Window
     end
   end
 
-  def click(slot_nr, right = false, shift = false, double = false)
-    send_click ClickWindow.click self, slot_nr, right, shift, double
-    force_reset_hack # TODO update slots
+  def click(slot_number, right = false, shift = false, double = false)
+    send_click ClickWindow.click self, slot_number, right, shift, double
   end
 
   def click(slot : WindowSlot, right = false, shift = false, double = false)
-    click slot.slot_nr, right, shift, double
+    click slot.slot_number, right, shift, double
   end
 
   private def send_click(packet)
     @client.send_packet! packet
-  end
-
-  # send invalid click to force server to reset window
-  private def force_reset_hack
-    invalid_state_id = 0
-    changed_slots = [] of WindowSlot
-    @client.send_packet! ClickWindow.new :swap, 0, hotbar[0].slot_nr, changed_slots, self.id, invalid_state_id, cursor
-    @slots = nil
-    while !ready?
-      sleep 0.1
-    end
   end
 
   alias StackMode = Serverbound::ClickWindow::StackMode

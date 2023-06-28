@@ -23,19 +23,19 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
       buffer.write @@packet_id
       buffer.write window_id
       buffer.write state_id
-      buffer.write_full slot.slot_nr.to_i16
+      buffer.write_full slot.slot_number.to_i16
       buffer.write slot
     end.to_slice
   end
 
   def callback(client)
     Log.debug { "Server set slot #{slot}" }
-    if window_id == -1 && slot.slot_nr == -1
+    if window_id == -1 && slot.slot_number == -1
       client.window.cursor = slot
     elsif window_id == 0
-      client.inventory.slots[slot.slot_nr] = slot
+      client.inventory.slots[slot.slot_number] = slot
     elsif client.window.id == window_id
-      client.window.slots[slot.slot_nr] = slot
+      client.window.slots[slot.slot_number] = slot
     else
       Log.warn { "Received slot update for an unknown or mismatched window. Ignoring." }
       Log.debug { self }
