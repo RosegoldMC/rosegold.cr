@@ -1083,7 +1083,7 @@
 The server selects an empty slot, swaps the items, and then sends 3 packets:</p>
 <ul>
 <li>SetSlot for server selected slot</li>
-<li>SetSlot for requested slot_nr</li>
+<li>SetSlot for requested slot_number</li>
 <li>HeldItemChange for server selected slot</li>
 </ul>
 
@@ -1110,7 +1110,7 @@ The server selects an empty slot, swaps the items, and then sends 3 packets:</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/pick_item.cr#L8" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/pick_item.cr#L8" target="_blank">
         rosegold/packets/serverbound/pick_item.cr
       </a>
     
@@ -1132,7 +1132,7 @@ The server selects an empty slot, swaps the items, and then sends 3 packets:</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28slot_nr%3AUInt16%29-class-method" class="signature"><strong>.new</strong>(slot_nr : UInt16)</a>
+        <a href="#new%28slot_number%3AUInt16%29-class-method" class="signature"><strong>.new</strong>(slot_number : UInt16)</a>
         
       </li>
     
@@ -1170,12 +1170,12 @@ The server selects an empty slot, swaps the items, and then sends 3 packets:</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#slot_nr%3AUInt16-instance-method" class="signature"><strong>#slot_nr</strong> : UInt16</a>
+        <a href="#slot_number%3AUInt16-instance-method" class="signature"><strong>#slot_number</strong> : UInt16</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#slot_nr%3D%28slot_nr%3AUInt16%29-instance-method" class="signature"><strong>#slot_nr=</strong>(slot_nr : UInt16)</a>
+        <a href="#slot_number%3D%28slot_number%3AUInt16%29-instance-method" class="signature"><strong>#slot_number=</strong>(slot_number : UInt16)</a>
         
       </li>
     
@@ -1287,18 +1287,18 @@ The server selects an empty slot, swaps the items, and then sends 3 packets:</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(slot_nr:UInt16)-class-method">
+    <div class="entry-detail" id="new(slot_number:UInt16)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(slot_nr : UInt16)
+        def self.<strong>new</strong>(slot_number : UInt16)
 
-        <a class="method-permalink" href="#new%28slot_nr%3AUInt16%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28slot_number%3AUInt16%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/pick_item.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/pick_item.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1326,7 +1326,7 @@ The server selects an empty slot, swaps the items, and then sends 3 packets:</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/pick_item.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/pick_item.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1343,34 +1343,34 @@ The server selects an empty slot, swaps the items, and then sends 3 packets:</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="slot_nr:UInt16-instance-method">
+    <div class="entry-detail" id="slot_number:UInt16-instance-method">
       <div class="signature">
         
-        def <strong>slot_nr</strong> : UInt16
+        def <strong>slot_number</strong> : UInt16
 
-        <a class="method-permalink" href="#slot_nr%3AUInt16-instance-method">#</a>
+        <a class="method-permalink" href="#slot_number%3AUInt16-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/pick_item.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/pick_item.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="slot_nr=(slot_nr:UInt16)-instance-method">
+    <div class="entry-detail" id="slot_number=(slot_number:UInt16)-instance-method">
       <div class="signature">
         
-        def <strong>slot_nr=</strong>(slot_nr : UInt16)
+        def <strong>slot_number=</strong>(slot_number : UInt16)
 
-        <a class="method-permalink" href="#slot_nr%3D%28slot_nr%3AUInt16%29-instance-method">#</a>
+        <a class="method-permalink" href="#slot_number%3D%28slot_number%3AUInt16%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/pick_item.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/pick_item.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1386,7 +1386,7 @@ The server selects an empty slot, swaps the items, and then sends 3 packets:</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/pick_item.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/pick_item.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>

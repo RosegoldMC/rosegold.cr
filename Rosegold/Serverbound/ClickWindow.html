@@ -1093,7 +1093,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L3" target="_blank">
         rosegold/packets/serverbound/click_window.cr
       </a>
     
@@ -1115,7 +1115,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28mode%3ARosegold%3A%3AServerbound%3A%3AClickWindow%3A%3AMode%2Cbutton%3AUInt8%2Cslot_nr%3AUInt16%2Cchanged_slots%3AArray%28Rosegold%3A%3AWindowSlot%29%2Cwindow_id%3AUInt8%2Cstate_id%3AUInt32%2Ccursor%3ARosegold%3A%3ASlot%29-class-method" class="signature"><strong>.new</strong>(mode : Rosegold::Serverbound::ClickWindow::Mode, button : UInt8, slot_nr : UInt16, changed_slots : Array(Rosegold::WindowSlot), window_id : UInt8, state_id : UInt32, cursor : Rosegold::Slot)</a>
+        <a href="#new%28mode%3ARosegold%3A%3AServerbound%3A%3AClickWindow%3A%3AMode%2Cbutton%3AInt8%2Cslot_number%3AInt16%2Cchanged_slots%3AArray%28Rosegold%3A%3AWindowSlot%29%2Cwindow_id%3AUInt8%2Cstate_id%3AInt32%2Ccursor%3ARosegold%3A%3ASlot%29-class-method" class="signature"><strong>.new</strong>(mode : Rosegold::Serverbound::ClickWindow::Mode, button : Int8, slot_number : Int16, changed_slots : Array(Rosegold::WindowSlot), window_id : UInt8, state_id : Int32, cursor : Rosegold::Slot)</a>
         
       </li>
     
@@ -1134,12 +1134,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#click%28window%2Cslot_nr%2Cright%3Dfalse%2Cshift%3Dfalse%2Cdouble%3Dfalse%29-class-method" class="signature"><strong>.click</strong>(window, slot_nr, right = <span class="n">false</span>, shift = <span class="n">false</span>, double = <span class="n">false</span>)</a>
+        <a href="#click%28window%2Cslot_number%2Cright%3Dfalse%2Cshift%3Dfalse%2Cdouble%3Dfalse%29-class-method" class="signature"><strong>.click</strong>(window, slot_number, right = <span class="n">false</span>, shift = <span class="n">false</span>, double = <span class="n">false</span>)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#drop%28window%2Cslot_nr%2Cstack_mode%3AStackMode%29-class-method" class="signature"><strong>.drop</strong>(window, slot_nr, stack_mode : StackMode)</a>
+        <a href="#drop%28window%2Cslot_number%2Cstack_mode%3AStackMode%29-class-method" class="signature"><strong>.drop</strong>(window, slot_number, stack_mode : StackMode)</a>
         
       </li>
     
@@ -1154,14 +1154,14 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#swap_hotbar%28window%2Chotbar_nr%2Cslot_nr%29-class-method" class="signature"><strong>.swap_hotbar</strong>(window, hotbar_nr, slot_nr)</a>
+        <a href="#swap_hotbar%28window%2Chotbar_nr%2Cslot_number%29-class-method" class="signature"><strong>.swap_hotbar</strong>(window, hotbar_nr, slot_number)</a>
         
           <div class="summary"><p>Hotbar starts at 0.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#swap_off_hand%28window%2Cslot_nr%29-class-method" class="signature"><strong>.swap_off_hand</strong>(window, slot_nr)</a>
+        <a href="#swap_off_hand%28window%2Cslot_number%29-class-method" class="signature"><strong>.swap_off_hand</strong>(window, slot_number)</a>
         
       </li>
     
@@ -1180,12 +1180,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#button%3AUInt8-instance-method" class="signature"><strong>#button</strong> : UInt8</a>
+        <a href="#button%3AInt8-instance-method" class="signature"><strong>#button</strong> : Int8</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#button%3D%28button%3AUInt8%29-instance-method" class="signature"><strong>#button=</strong>(button : UInt8)</a>
+        <a href="#button%3D%28button%3AInt8%29-instance-method" class="signature"><strong>#button=</strong>(button : Int8)</a>
         
       </li>
     
@@ -1220,22 +1220,22 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#slot_nr%3AUInt16-instance-method" class="signature"><strong>#slot_nr</strong> : UInt16</a>
+        <a href="#slot_number%3AInt16-instance-method" class="signature"><strong>#slot_number</strong> : Int16</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#slot_nr%3D%28slot_nr%3AUInt16%29-instance-method" class="signature"><strong>#slot_nr=</strong>(slot_nr : UInt16)</a>
+        <a href="#slot_number%3D%28slot_number%3AInt16%29-instance-method" class="signature"><strong>#slot_number=</strong>(slot_number : Int16)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#state_id%3AUInt32-instance-method" class="signature"><strong>#state_id</strong> : UInt32</a>
+        <a href="#state_id%3AInt32-instance-method" class="signature"><strong>#state_id</strong> : Int32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#state_id%3D%28state_id%3AUInt32%29-instance-method" class="signature"><strong>#state_id=</strong>(state_id : UInt32)</a>
+        <a href="#state_id%3D%28state_id%3AInt32%29-instance-method" class="signature"><strong>#state_id=</strong>(state_id : Int32)</a>
         
       </li>
     
@@ -1357,18 +1357,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(mode:Rosegold::Serverbound::ClickWindow::Mode,button:UInt8,slot_nr:UInt16,changed_slots:Array(Rosegold::WindowSlot),window_id:UInt8,state_id:UInt32,cursor:Rosegold::Slot)-class-method">
+    <div class="entry-detail" id="new(mode:Rosegold::Serverbound::ClickWindow::Mode,button:Int8,slot_number:Int16,changed_slots:Array(Rosegold::WindowSlot),window_id:UInt8,state_id:Int32,cursor:Rosegold::Slot)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(mode : <a href="../../Rosegold/Serverbound/ClickWindow/Mode.html">Rosegold::Serverbound::ClickWindow::Mode</a>, button : UInt8, slot_nr : UInt16, changed_slots : Array(<a href="../../Rosegold/WindowSlot.html">Rosegold::WindowSlot</a>), window_id : UInt8, state_id : UInt32, cursor : <a href="../../Rosegold/Slot.html">Rosegold::Slot</a>)
+        def self.<strong>new</strong>(mode : <a href="../../Rosegold/Serverbound/ClickWindow/Mode.html">Rosegold::Serverbound::ClickWindow::Mode</a>, button : Int8, slot_number : Int16, changed_slots : Array(<a href="../../Rosegold/WindowSlot.html">Rosegold::WindowSlot</a>), window_id : UInt8, state_id : <a href="../../Int32.html">Int32</a>, cursor : <a href="../../Rosegold/Slot.html">Rosegold::Slot</a>)
 
-        <a class="method-permalink" href="#new%28mode%3ARosegold%3A%3AServerbound%3A%3AClickWindow%3A%3AMode%2Cbutton%3AUInt8%2Cslot_nr%3AUInt16%2Cchanged_slots%3AArray%28Rosegold%3A%3AWindowSlot%29%2Cwindow_id%3AUInt8%2Cstate_id%3AUInt32%2Ccursor%3ARosegold%3A%3ASlot%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28mode%3ARosegold%3A%3AServerbound%3A%3AClickWindow%3A%3AMode%2Cbutton%3AInt8%2Cslot_number%3AInt16%2Cchanged_slots%3AArray%28Rosegold%3A%3AWindowSlot%29%2Cwindow_id%3AUInt8%2Cstate_id%3AInt32%2Ccursor%3ARosegold%3A%3ASlot%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1385,34 +1385,34 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="click(window,slot_nr,right=false,shift=false,double=false)-class-method">
+    <div class="entry-detail" id="click(window,slot_number,right=false,shift=false,double=false)-class-method">
       <div class="signature">
         
-        def self.<strong>click</strong>(window, slot_nr, right = <span class="n">false</span>, shift = <span class="n">false</span>, double = <span class="n">false</span>)
+        def self.<strong>click</strong>(window, slot_number, right = <span class="n">false</span>, shift = <span class="n">false</span>, double = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#click%28window%2Cslot_nr%2Cright%3Dfalse%2Cshift%3Dfalse%2Cdouble%3Dfalse%29-class-method">#</a>
+        <a class="method-permalink" href="#click%28window%2Cslot_number%2Cright%3Dfalse%2Cshift%3Dfalse%2Cdouble%3Dfalse%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="drop(window,slot_nr,stack_mode:StackMode)-class-method">
+    <div class="entry-detail" id="drop(window,slot_number,stack_mode:StackMode)-class-method">
       <div class="signature">
         
-        def self.<strong>drop</strong>(window, slot_nr, stack_mode : <a href="../../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>)
+        def self.<strong>drop</strong>(window, slot_number, stack_mode : <a href="../../Rosegold/Serverbound/ClickWindow/StackMode.html">StackMode</a>)
 
-        <a class="method-permalink" href="#drop%28window%2Cslot_nr%2Cstack_mode%3AStackMode%29-class-method">#</a>
+        <a class="method-permalink" href="#drop%28window%2Cslot_number%2Cstack_mode%3AStackMode%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1428,7 +1428,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L68" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L68" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1444,17 +1444,17 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="swap_hotbar(window,hotbar_nr,slot_nr)-class-method">
+    <div class="entry-detail" id="swap_hotbar(window,hotbar_nr,slot_number)-class-method">
       <div class="signature">
         
-        def self.<strong>swap_hotbar</strong>(window, hotbar_nr, slot_nr)
+        def self.<strong>swap_hotbar</strong>(window, hotbar_nr, slot_number)
 
-        <a class="method-permalink" href="#swap_hotbar%28window%2Chotbar_nr%2Cslot_nr%29-class-method">#</a>
+        <a class="method-permalink" href="#swap_hotbar%28window%2Chotbar_nr%2Cslot_number%29-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -1465,23 +1465,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="swap_off_hand(window,slot_nr)-class-method">
+    <div class="entry-detail" id="swap_off_hand(window,slot_number)-class-method">
       <div class="signature">
         
-        def self.<strong>swap_off_hand</strong>(window, slot_nr)
+        def self.<strong>swap_off_hand</strong>(window, slot_number)
 
-        <a class="method-permalink" href="#swap_off_hand%28window%2Cslot_nr%29-class-method">#</a>
+        <a class="method-permalink" href="#swap_off_hand%28window%2Cslot_number%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L42" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1498,34 +1498,34 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="button:UInt8-instance-method">
+    <div class="entry-detail" id="button:Int8-instance-method">
       <div class="signature">
         
-        def <strong>button</strong> : UInt8
+        def <strong>button</strong> : Int8
 
-        <a class="method-permalink" href="#button%3AUInt8-instance-method">#</a>
+        <a class="method-permalink" href="#button%3AInt8-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="button=(button:UInt8)-instance-method">
+    <div class="entry-detail" id="button=(button:Int8)-instance-method">
       <div class="signature">
         
-        def <strong>button=</strong>(button : UInt8)
+        def <strong>button=</strong>(button : Int8)
 
-        <a class="method-permalink" href="#button%3D%28button%3AUInt8%29-instance-method">#</a>
+        <a class="method-permalink" href="#button%3D%28button%3AInt8%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1541,7 +1541,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1557,7 +1557,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1573,7 +1573,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1589,7 +1589,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1605,7 +1605,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1621,71 +1621,71 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="slot_nr:UInt16-instance-method">
+    <div class="entry-detail" id="slot_number:Int16-instance-method">
       <div class="signature">
         
-        def <strong>slot_nr</strong> : UInt16
+        def <strong>slot_number</strong> : Int16
 
-        <a class="method-permalink" href="#slot_nr%3AUInt16-instance-method">#</a>
+        <a class="method-permalink" href="#slot_number%3AInt16-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="slot_nr=(slot_nr:UInt16)-instance-method">
+    <div class="entry-detail" id="slot_number=(slot_number:Int16)-instance-method">
       <div class="signature">
         
-        def <strong>slot_nr=</strong>(slot_nr : UInt16)
+        def <strong>slot_number=</strong>(slot_number : Int16)
 
-        <a class="method-permalink" href="#slot_nr%3D%28slot_nr%3AUInt16%29-instance-method">#</a>
+        <a class="method-permalink" href="#slot_number%3D%28slot_number%3AInt16%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="state_id:UInt32-instance-method">
+    <div class="entry-detail" id="state_id:Int32-instance-method">
       <div class="signature">
         
-        def <strong>state_id</strong> : UInt32
+        def <strong>state_id</strong> : <a href="../../Int32.html">Int32</a>
 
-        <a class="method-permalink" href="#state_id%3AUInt32-instance-method">#</a>
+        <a class="method-permalink" href="#state_id%3AInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="state_id=(state_id:UInt32)-instance-method">
+    <div class="entry-detail" id="state_id=(state_id:Int32)-instance-method">
       <div class="signature">
         
-        def <strong>state_id=</strong>(state_id : UInt32)
+        def <strong>state_id=</strong>(state_id : <a href="../../Int32.html">Int32</a>)
 
-        <a class="method-permalink" href="#state_id%3D%28state_id%3AUInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#state_id%3D%28state_id%3AInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1701,7 +1701,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1717,7 +1717,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1733,7 +1733,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/packets/serverbound/click_window.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/packets/serverbound/click_window.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>

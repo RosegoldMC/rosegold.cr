@@ -1093,7 +1093,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/world/slot.cr#L143" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/world/slot.cr#L143" target="_blank">
         rosegold/world/slot.cr
       </a>
     
@@ -1115,7 +1115,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28slot_nr%3AInt32%2Cslot%29-class-method" class="signature"><strong>.new</strong>(slot_nr : Int32, slot)</a>
+        <a href="#new%28slot_number%3AInt32%2Cslot%29-class-method" class="signature"><strong>.new</strong>(slot_number : Int32, slot)</a>
         
       </li>
     
@@ -1136,7 +1136,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#slot_nr%3AInt32-instance-method" class="signature"><strong>#slot_nr</strong> : Int32</a>
+        <a href="#%3D%3D%28other%3ARosegold%3A%3AWindowSlot%29-instance-method" class="signature"><strong>#==</strong>(other : Rosegold::WindowSlot)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#slot_number%3AInt32-instance-method" class="signature"><strong>#slot_number</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#slot_number%3D%28slot_number%3AInt32%29-instance-method" class="signature"><strong>#slot_number=</strong>(slot_number : Int32)</a>
         
       </li>
     
@@ -1342,18 +1352,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(slot_nr:Int32,slot)-class-method">
+    <div class="entry-detail" id="new(slot_number:Int32,slot)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(slot_nr : <a href="../Int32.html">Int32</a>, slot)
+        def self.<strong>new</strong>(slot_number : <a href="../Int32.html">Int32</a>, slot)
 
-        <a class="method-permalink" href="#new%28slot_nr%3AInt32%2Cslot%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28slot_number%3AInt32%2Cslot%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/world/slot.cr#L146" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/world/slot.cr#L146" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1372,18 +1382,50 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="slot_nr:Int32-instance-method">
+    <div class="entry-detail" id="==(other:Rosegold::WindowSlot)-instance-method">
       <div class="signature">
         
-        def <strong>slot_nr</strong> : <a href="../Int32.html">Int32</a>
+        def <strong>==</strong>(other : <a href="../Rosegold/WindowSlot.html">Rosegold::WindowSlot</a>)
 
-        <a class="method-permalink" href="#slot_nr%3AInt32-instance-method">#</a>
+        <a class="method-permalink" href="#%3D%3D%28other%3ARosegold%3A%3AWindowSlot%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/1ca92cc4e123489eb7294129f6738ff3746b1654/src/rosegold/world/slot.cr#L144" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/world/slot.cr#L150" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="slot_number:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>slot_number</strong> : <a href="../Int32.html">Int32</a>
+
+        <a class="method-permalink" href="#slot_number%3AInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/world/slot.cr#L144" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="slot_number=(slot_number:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>slot_number=</strong>(slot_number : <a href="../Int32.html">Int32</a>)
+
+        <a class="method-permalink" href="#slot_number%3D%28slot_number%3AInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e2bcc502046953ef441c90e0037f7b486f0ef933/src/rosegold/world/slot.cr#L144" target="_blank">View source</a>]
         
       </div>
     </div>
