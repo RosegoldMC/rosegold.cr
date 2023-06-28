@@ -112,11 +112,15 @@ class Rosegold::Inventory
 
       # Swap slots
       changed_slots = [
-        Rosegold::WindowSlot.new(target_slot.slot_nr, slot),
-        Rosegold::WindowSlot.new(slot.slot_nr, target_slot),
+        Rosegold::WindowSlot.new(target_slot.slot_number, slot),
+        Rosegold::WindowSlot.new(slot.slot_number, target_slot),
       ]
 
-      client.send_packet! Serverbound::ClickWindow.new :shift, 0_i8, slot.slot_nr.to_i16, changed_slots, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
+      client.send_packet! Serverbound::ClickWindow.new :shift, 0_i8, slot.slot_number.to_i16, changed_slots, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
+
+      slot.slot_number, target_slot.slot_number = target_slot.slot_number, slot.slot_number
+
+      self.slots = slots.sort_by &.slot_number
 
       transferred += slot.count
 

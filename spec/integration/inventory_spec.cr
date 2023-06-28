@@ -80,7 +80,7 @@ Spectator.describe Rosegold::Bot do
   end
 
   describe "#withdraw_at_least" do
-    it "withdraws the item without failing" do
+    it "updates the inventory locally to be the same as externally" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
@@ -93,19 +93,32 @@ Spectator.describe Rosegold::Bot do
           bot.use_hand
           sleep 1
           expect(bot.inventory.withdraw_at_least(1, "diamond_sword")).to eq 1
+
+          sleep 1
+
+          local_inventory = bot.inventory.inventory + bot.inventory.hotbar
+          local_content = bot.inventory.content
+
+          expect(local_inventory.map(&.item_id)).to contain "diamond_sword"
+          expect(local_content.map(&.item_id)).not_to contain "diamond_sword"
+
           sleep 1
           bot.use_hand
           sleep 1
 
-          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to contain "diamond_sword"
-          expect(bot.inventory.content.map(&.item_id)).not_to contain "diamond_sword"
+          expect(local_inventory.first).to eq bot.inventory.inventory.first
+
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to match_array local_inventory.map(&.item_id)
+          expect((bot.inventory.content).map(&.item_id)).to match_array local_content.map(&.item_id)
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.slot_number)).to match_array local_inventory.map(&.slot_number)
+          expect((bot.inventory.content).map(&.slot_number)).to match_array local_content.map(&.slot_number)
         end
       end
     end
   end
 
   describe "#deposit_at_least" do
-    it "deposits the item without failing" do
+    it "updates the inventory locally to be the same as externally" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
@@ -122,12 +135,20 @@ Spectator.describe Rosegold::Bot do
 
           expect(bot.inventory.deposit_at_least(1, "diamond_sword")).to eq 1
 
+          local_inventory = bot.inventory.inventory + bot.inventory.hotbar
+          local_content = bot.inventory.content
+
+          expect(local_inventory.map(&.item_id)).not_to contain "diamond_sword"
+          expect(local_content.map(&.item_id)).to contain "diamond_sword"
+
           sleep 1
           bot.use_hand
           sleep 1
 
-          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).not_to contain "diamond_sword"
-          expect(bot.inventory.content.map(&.item_id)).to contain "diamond_sword"
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to match_array local_inventory.map(&.item_id)
+          expect((bot.inventory.content).map(&.item_id)).to match_array local_content.map(&.item_id)
+          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.slot_number)).to match_array local_inventory.map(&.slot_number)
+          expect((bot.inventory.content).map(&.slot_number)).to match_array local_content.map(&.slot_number)
         end
       end
     end

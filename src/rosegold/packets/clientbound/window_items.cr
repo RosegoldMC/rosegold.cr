@@ -15,8 +15,8 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
     state_id = packet.read_var_int
 
     num_slots = packet.read_var_int
-    slots = Array(WindowSlot).new(num_slots) do |slot_nr|
-      WindowSlot.new(slot_nr, Slot.read(packet))
+    slots = Array(WindowSlot).new(num_slots) do |slot_number|
+      WindowSlot.new(slot_number, Slot.read(packet))
     end
 
     cursor = WindowSlot.new -1, Slot.read(packet)
