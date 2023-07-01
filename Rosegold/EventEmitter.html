@@ -611,8 +611,18 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/EventEmitter" data-name="rosegold::eventemitter">
+  <li class="parent open current" data-id="rosegold/Rosegold/EventEmitter" data-name="rosegold::eventemitter">
       <a href="../Rosegold/EventEmitter.html">EventEmitter</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/EventEmitter/Handler" data-name="rosegold::eventemitter::handler">
+      <a href="../Rosegold/EventEmitter/Handler.html">Handler</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -1109,7 +1119,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7e40a588ce58e99886c717168b13b71a7b0ec0a5/src/rosegold/models/event_emitter.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b149af3cc23acf42df4275f0a860d40bd49d35fc/src/rosegold/models/event_emitter.cr#L5" target="_blank">
         rosegold/models/event_emitter.cr
       </a>
     
@@ -1145,7 +1155,24 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#on%28event_type%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method" class="signature"><strong>#on</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T</a>
+        <a href="#off%28event_type%3AT.class%2Cid%3AUUID%29forallT-instance-method" class="signature"><strong>#off</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, id : UUID) forall T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#on%28event_type%3AT.class%2Cid%3AUUID%3DUUID.random%2C%26block%3AT-%3E%29forallT-instance-method" class="signature"><strong>#on</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, id : UUID = <span class="t">UUID</span>.random, &block : T -> ) forall T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#once%28event_type%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method" class="signature"><strong>#once</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wait_for%28event_type%3AT.class%2Ctimeout%3ATime%3A%3ASpan%7CNil%3Dnil%29forallT-instance-method" class="signature"><strong>#wait_for</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, timeout : Time::Span | Nil = <span class="n">nil</span>) forall T</a>
+        
+          <div class="summary"><p>Waits for an event, if timeout is given, it will return nil if the timeout is reached before the event is emitted.</p></div>
         
       </li>
     
@@ -1204,7 +1231,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7e40a588ce58e99886c717168b13b71a7b0ec0a5/src/rosegold/models/event_emitter.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b149af3cc23acf42df4275f0a860d40bd49d35fc/src/rosegold/models/event_emitter.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1220,23 +1247,77 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7e40a588ce58e99886c717168b13b71a7b0ec0a5/src/rosegold/models/event_emitter.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b149af3cc23acf42df4275f0a860d40bd49d35fc/src/rosegold/models/event_emitter.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="on(event_type:T.class,&amp;block:T-&gt;)forallT-instance-method">
+    <div class="entry-detail" id="off(event_type:T.class,id:UUID)forallT-instance-method">
       <div class="signature">
         
-        def <strong>on</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T
+        def <strong>off</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, id : UUID) forall T
 
-        <a class="method-permalink" href="#on%28event_type%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method">#</a>
+        <a class="method-permalink" href="#off%28event_type%3AT.class%2Cid%3AUUID%29forallT-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7e40a588ce58e99886c717168b13b71a7b0ec0a5/src/rosegold/models/event_emitter.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b149af3cc23acf42df4275f0a860d40bd49d35fc/src/rosegold/models/event_emitter.cr#L24" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="on(event_type:T.class,id:UUID=UUID.random,&amp;block:T-&gt;)forallT-instance-method">
+      <div class="signature">
+        
+        def <strong>on</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, id : UUID = <span class="t">UUID</span>.random, &block : T -> ) forall T
+
+        <a class="method-permalink" href="#on%28event_type%3AT.class%2Cid%3AUUID%3DUUID.random%2C%26block%3AT-%3E%29forallT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b149af3cc23acf42df4275f0a860d40bd49d35fc/src/rosegold/models/event_emitter.cr#L10" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="once(event_type:T.class,&amp;block:T-&gt;)forallT-instance-method">
+      <div class="signature">
+        
+        def <strong>once</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T
+
+        <a class="method-permalink" href="#once%28event_type%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b149af3cc23acf42df4275f0a860d40bd49d35fc/src/rosegold/models/event_emitter.cr#L31" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wait_for(event_type:T.class,timeout:Time::Span|Nil=nil)forallT-instance-method">
+      <div class="signature">
+        
+        def <strong>wait_for</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, timeout : Time::Span | Nil = <span class="n">nil</span>) forall T
+
+        <a class="method-permalink" href="#wait_for%28event_type%3AT.class%2Ctimeout%3ATime%3A%3ASpan%7CNil%3Dnil%29forallT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Waits for an event, if timeout is given, it will return nil
+if the timeout is reached before the event is emitted.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b149af3cc23acf42df4275f0a860d40bd49d35fc/src/rosegold/models/event_emitter.cr#L41" target="_blank">View source</a>]
         
       </div>
     </div>
