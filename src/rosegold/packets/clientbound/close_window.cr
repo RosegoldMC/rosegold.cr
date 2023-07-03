@@ -26,7 +26,6 @@ class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
     if window_id == client.window.id
       Log.debug { "Server closed window #{client.window}" }
       client.window.handle_closed
-      client.window = client.inventory
     else
       Log.warn { "Server closed the wrong window: #{window_id}. Ignoring." }
       Log.debug { self }

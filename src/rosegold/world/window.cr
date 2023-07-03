@@ -36,7 +36,12 @@ class Rosegold::Window
   def handle_closed
     return if closed?
     closed = true
-    # TODO emit Closed event
+
+    if @client.window == self
+      @client.window = @client.inventory
+      @client.inventory.slots = @client.inventory.slots[0..8] + inventory + hotbar + @client.inventory.slots[45..45]
+      @client.inventory.slots.each_with_index { |slot, i| slot.slot_number = i }
+    end
   end
 
   # If true, this window is in sync with the server.
@@ -144,6 +149,10 @@ class Rosegold::Window
 
   alias StackMode = Serverbound::ClickWindow::StackMode
   alias ClickWindow = Serverbound::ClickWindow
+
+  def to_s(io)
+    io.print "Window[#{id}: #{title}]"
+  end
 end
 
 class Rosegold::PlayerWindow < Rosegold::Window
