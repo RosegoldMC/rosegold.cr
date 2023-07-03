@@ -96,22 +96,25 @@ Spectator.describe Rosegold::Bot do
 
           sleep 1
 
-          local_inventory = bot.inventory.inventory + bot.inventory.hotbar
-          local_content = bot.inventory.content
+          puts bot.inventory.inventory.first.slot_number
 
-          expect(local_inventory.map(&.item_id)).to contain "diamond_sword"
+          local_inventory = bot.inventory.inventory.map &.dup
+          local_hotbar = bot.inventory.hotbar.map &.dup
+          local_content = bot.inventory.content.map &.dup
+
+          expect((local_inventory + local_hotbar).map(&.item_id)).to contain "diamond_sword"
           expect(local_content.map(&.item_id)).not_to contain "diamond_sword"
 
           sleep 1
           bot.use_hand
           sleep 1
 
-          expect(local_inventory.first).to eq bot.inventory.inventory.first
-
-          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to match_array local_inventory.map(&.item_id)
-          expect((bot.inventory.content).map(&.item_id)).to match_array local_content.map(&.item_id)
-          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.slot_number)).to match_array local_inventory.map(&.slot_number)
-          expect((bot.inventory.content).map(&.slot_number)).to match_array local_content.map(&.slot_number)
+          expect(local_inventory.map(&.item_id)).to match_array bot.inventory.inventory.map(&.item_id)
+          expect(local_hotbar.map(&.item_id)).to match_array bot.inventory.hotbar.map(&.item_id)
+          expect(local_content.map(&.item_id)).to match_array bot.inventory.content.map(&.item_id)
+          expect(local_inventory.map(&.slot_number)).to match_array bot.inventory.inventory.map(&.slot_number)
+          expect(local_hotbar.map(&.slot_number)).to match_array bot.inventory.hotbar.map(&.slot_number)
+          expect(local_content.map(&.slot_number)).to match_array bot.inventory.content.map(&.slot_number)
         end
       end
     end
@@ -135,21 +138,63 @@ Spectator.describe Rosegold::Bot do
 
           expect(bot.inventory.deposit_at_least(1, "diamond_sword")).to eq 1
 
-          local_inventory = bot.inventory.inventory + bot.inventory.hotbar
-          local_content = bot.inventory.content
+          local_inventory = bot.inventory.inventory.map &.dup
+          local_hotbar = bot.inventory.hotbar.map &.dup
+          local_content = bot.inventory.content.map &.dup
 
-          expect(local_inventory.map(&.item_id)).not_to contain "diamond_sword"
+          expect((local_inventory + local_hotbar).map(&.item_id)).not_to contain "diamond_sword"
           expect(local_content.map(&.item_id)).to contain "diamond_sword"
 
           sleep 1
           bot.use_hand
           sleep 1
 
-          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to match_array local_inventory.map(&.item_id)
-          expect((bot.inventory.content).map(&.item_id)).to match_array local_content.map(&.item_id)
-          expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.slot_number)).to match_array local_inventory.map(&.slot_number)
-          expect((bot.inventory.content).map(&.slot_number)).to match_array local_content.map(&.slot_number)
+          expect(local_inventory.map(&.item_id)).to match_array bot.inventory.inventory.map(&.item_id)
+          expect(local_hotbar.map(&.item_id)).to match_array bot.inventory.hotbar.map(&.item_id)
+          expect(local_content.map(&.item_id)).to match_array bot.inventory.content.map(&.item_id)
+          expect(local_inventory.map(&.slot_number)).to match_array bot.inventory.inventory.map(&.slot_number)
+          expect(local_hotbar.map(&.slot_number)).to match_array bot.inventory.hotbar.map(&.slot_number)
+          expect(local_content.map(&.slot_number)).to match_array bot.inventory.content.map(&.slot_number)
         end
+      end
+    end
+  end
+
+  it "updates the player inventory upon container window closure" do
+    slots_before_reload = nil
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        bot.chat "/tp #{bot.username} -10 -60 -10"
+        bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+        sleep 1
+        bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",Count:1b}]}"
+        bot.chat "/clear"
+        sleep 1
+
+        bot.pitch = 90
+        bot.use_hand
+        sleep 1
+        bot.inventory.withdraw_at_least(1, "diamond_sword")
+
+        sleep 1
+
+        bot.inventory.close
+
+        sleep 1
+
+        slots_before_reload = bot.inventory.slots
+
+        expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to contain "diamond_sword"
+      end
+    end
+
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        slots_after_reload = bot.inventory.slots
+
+        expect(slots_before_reload.try &.size).to eq slots_after_reload.try &.size
+        expect(slots_before_reload.try &.map(&.item_id)).to eq slots_after_reload.try &.map(&.item_id)
+        expect(slots_before_reload.try &.map(&.slot_number)).to eq slots_after_reload.try &.map(&.slot_number)
       end
     end
   end
