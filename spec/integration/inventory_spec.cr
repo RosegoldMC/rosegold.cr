@@ -96,8 +96,6 @@ Spectator.describe Rosegold::Bot do
 
           sleep 1
 
-          puts bot.inventory.inventory.first.slot_number
-
           local_inventory = bot.inventory.inventory.map &.dup
           local_hotbar = bot.inventory.hotbar.map &.dup
           local_content = bot.inventory.content.map &.dup
