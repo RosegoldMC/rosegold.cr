@@ -70,6 +70,15 @@ class Rosegold::Physics
     end
   end
 
+  def handle_disconnect
+    action_mutex.synchronize do
+      @movement_action.try &.fail "Disconnected"
+      @movement_action = nil
+      @look_action.try &.fail "Disconnected"
+      @look_action = nil
+    end
+  end
+
   # Set the movement target location and wait until it is achieved.
   # If there is already a movement target, it is cancelled, and replaced with this new target.
   # Set `target=nil` to stop moving and cancel any current movement.

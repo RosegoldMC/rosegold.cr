@@ -129,7 +129,10 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
   end
 
-  delegate disconnect, to: connection
+  def disconnect(reason = Chat.new("Disconnected"))
+    physics.handle_disconnect
+    connection.disconnect reason
+  end
 
   def status
     self.class.status host, port
