@@ -70,10 +70,23 @@ class Rosegold::Physics
     end
   end
 
+  def handle_disconnect
+    @paused = true
+    @movement_action.try &.fail "Disconnected"
+    @movement_action = nil
+    @look_action.try &.fail "Disconnected"
+    @look_action = nil
+  end
+
   # Set the movement target location and wait until it is achieved.
   # If there is already a movement target, it is cancelled, and replaced with this new target.
   # Set `target=nil` to stop moving and cancel any current movement.
   def move(target : Vec3d?)
+    if paused?
+      Log.warn { "Ignoring movement to #{target} because physics is paused" }
+      return
+    end
+
     if very_close_to? target
       action_mutex.synchronize do
         @movement_action.try &.fail "Replaced by movement to #{target}"
@@ -101,6 +114,11 @@ class Rosegold::Physics
   # Set the look target and wait until it is achieved.
   # If there is already a look target, it is cancelled, and replaced with this new target.
   def look=(target : Look)
+    if paused?
+      Log.warn { "Ignoring look of #{target} because physics is paused" }
+      return
+    end
+
     action = Action.new(target)
     action_mutex.synchronize do
       @look_action.try &.fail "Replaced by look of #{target}"
