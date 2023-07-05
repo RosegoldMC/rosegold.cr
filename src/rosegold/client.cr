@@ -97,6 +97,9 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound, self
+    connection.handler.try &.on Event::Disconnected do |_event|
+      physics.handle_disconnect
+    end
     Log.info { "Connected to #{host}:#{port}" }
 
     send_packet! Serverbound::Handshake.new Client.protocol_version, host, port, 2
@@ -128,8 +131,6 @@ class Rosegold::Client < Rosegold::EventEmitter
       self.access_token = auth["access_token"] || ""
     end
   end
-
-  delegate disconnect, to: connection
 
   def status
     self.class.status host, port
