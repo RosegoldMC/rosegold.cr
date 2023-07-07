@@ -1,6 +1,55 @@
 require "../spec_helper"
 
 Spectator.describe Rosegold::Bot do
+  describe "#count" do
+    context "when the item is not in the inventory" do
+      it "returns 0" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/clear"
+            sleep 1
+
+            expect(bot.inventory.count("bucket")).to eq 0
+          end
+        end
+      end
+    end
+
+    context "when there are several stacks of items in the inventory" do
+      it "returns the sum of their counts" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/clear"
+            sleep 1
+
+            bot.chat "/give #{bot.username} minecraft:bucket 16"
+            bot.chat "/give #{bot.username} minecraft:bucket 1"
+            bot.chat "/give #{bot.username} minecraft:bucket 5"
+            sleep 1
+
+            expect(bot.inventory.count("bucket")).to eq 16 + 1 + 5
+          end
+        end
+      end
+    end
+
+    context "when there are a lot of items in the inventory" do
+      it "doesn't overflow" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/clear"
+            sleep 1
+
+            bot.chat "/give #{bot.username} minecraft:bucket 513"
+            sleep 1
+
+            expect(bot.inventory.count("bucket")).to eq 513
+          end
+        end
+      end
+    end
+  end
+
   describe "#pick" do
     context "when the item is not in the inventory" do
       it "returns false" do
