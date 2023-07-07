@@ -14,7 +14,7 @@ class Rosegold::Inventory
   #   inventory.count { |slot| slot.item_id == "diamond_pickaxe" && slot.efficiency >= 4 } # => 1
   #   inventory.count &.empty?, hotbar # => 1
   def count(spec, slots = slots)
-    slots.select(&.matches? spec).sum(&.count)
+    slots.select(&.matches? spec).sum(&.count.to_i32)
   end
 
   def count(&spec : WindowSlot -> _)
