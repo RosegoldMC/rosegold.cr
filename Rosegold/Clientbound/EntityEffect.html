@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Raytrace::Result - rosegold main</title>
+  <title>Rosegold::Clientbound::EntityEffect - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -311,7 +311,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
@@ -366,7 +366,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/EntityEffect" data-name="rosegold::clientbound::entityeffect">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/EntityEffect" data-name="rosegold::clientbound::entityeffect">
       <a href="../../Rosegold/Clientbound/EntityEffect.html">EntityEffect</a>
       
     </li>
@@ -786,7 +786,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Raytrace" data-name="rosegold::raytrace">
+  <li class="parent " data-id="rosegold/Rosegold/Raytrace" data-name="rosegold::raytrace">
       <a href="../../Rosegold/Raytrace.html">Raytrace</a>
       
         <ul>
@@ -796,7 +796,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Raytrace/Result" data-name="rosegold::raytrace::result">
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Result" data-name="rosegold::raytrace::result">
       <a href="../../Rosegold/Raytrace/Result.html">Result</a>
       
     </li>
@@ -1095,12 +1095,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">struct</span> Rosegold::Raytrace::Result
+  <span class="kind">class</span> Rosegold::Clientbound::EntityEffect
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Raytrace/Result.html">Rosegold::Raytrace::Result</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/EntityEffect.html">Rosegold::Clientbound::EntityEffect</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -1128,8 +1128,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L11" target="_blank">
-        rosegold/control/raytrace.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L3" target="_blank">
+        rosegold/packets/clientbound/entity_effect.cr
       </a>
     
     <br/>
@@ -1150,13 +1150,35 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28intercept%3AVec3d%2Cbox_nr%3AInt32%2Cface%3ABlockFace%29-class-method" class="signature"><strong>.new</strong>(intercept : Vec3d, box_nr : Int32, face : BlockFace)</a>
+        <a href="#new%28entity_id%3AUInt64%2Ceffect_id%3AUInt32%2Camplifier%3AUInt8%2Cduration%3AUInt32%2Cflags%3AUInt8%29-class-method" class="signature"><strong>.new</strong>(entity_id : UInt64, effect_id : UInt32, amplifier : UInt8, duration : UInt32, flags : UInt8)</a>
         
       </li>
     
   </ul>
 
 
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#packet_id-class-method" class="signature"><strong>.packet_id</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -1171,17 +1193,57 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#box_nr%3AInt32-instance-method" class="signature"><strong>#box_nr</strong> : Int32</a>
+        <a href="#amplifier%3AUInt8-instance-method" class="signature"><strong>#amplifier</strong> : UInt8</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#face%3ABlockFace-instance-method" class="signature"><strong>#face</strong> : BlockFace</a>
+        <a href="#amplifier%3D%28amplifier%3AUInt8%29-instance-method" class="signature"><strong>#amplifier=</strong>(amplifier : UInt8)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#intercept%3AVec3d-instance-method" class="signature"><strong>#intercept</strong> : Vec3d</a>
+        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#duration%3AUInt32-instance-method" class="signature"><strong>#duration</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#duration%3D%28duration%3AUInt32%29-instance-method" class="signature"><strong>#duration=</strong>(duration : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#effect_id%3AUInt32-instance-method" class="signature"><strong>#effect_id</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#effect_id%3D%28effect_id%3AUInt32%29-instance-method" class="signature"><strong>#effect_id=</strong>(effect_id : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#entity_id%3AUInt64-instance-method" class="signature"><strong>#entity_id</strong> : UInt64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#entity_id%3D%28entity_id%3AUInt64%29-instance-method" class="signature"><strong>#entity_id=</strong>(entity_id : UInt64)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#flags%3AUInt8-instance-method" class="signature"><strong>#flags</strong> : UInt8</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#flags%3D%28flags%3AUInt8%29-instance-method" class="signature"><strong>#flags=</strong>(flags : UInt8)</a>
         
       </li>
     
@@ -1192,6 +1254,59 @@
 
 
 <div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+  <h3>Class methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
+      <span>new_raw(bytes)</span>
+    new_raw</a>, 
+    
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#state-class-method" class="tooltip">
+      <span>state</span>
+    state</a>
+    
+  
+
+
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
+      <span>callback(client_or_server)</span>
+    callback</a>, 
+    
+  
+    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
+      <span>to_s(io)</span>
+    to_s</a>, 
+    
+  
+    <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
+      <span>write : Bytes</span>
+    write</a>
+    
+  
+
+
+    
+
+
+    
+
+
   
     
 
@@ -1235,24 +1350,66 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(intercept:Vec3d,box_nr:Int32,face:BlockFace)-class-method">
+    <div class="entry-detail" id="new(entity_id:UInt64,effect_id:UInt32,amplifier:UInt8,duration:UInt32,flags:UInt8)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(intercept : <a href="../../Rosegold/Vec3d.html">Vec3d</a>, box_nr : <a href="../../Int32.html">Int32</a>, face : <a href="../../BlockFace.html">BlockFace</a>)
+        def self.<strong>new</strong>(entity_id : UInt64, effect_id : UInt32, amplifier : UInt8, duration : UInt32, flags : UInt8)
 
-        <a class="method-permalink" href="#new%28intercept%3AVec3d%2Cbox_nr%3AInt32%2Cface%3ABlockFace%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28entity_id%3AUInt64%2Ceffect_id%3AUInt32%2Camplifier%3AUInt8%2Cduration%3AUInt32%2Cflags%3AUInt8%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="packet_id-class-method">
+      <div class="signature">
+        
+        def self.<strong>packet_id</strong>
+
+        <a class="method-permalink" href="#packet_id-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(packet)-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(packet)
+
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 
@@ -1265,50 +1422,178 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="box_nr:Int32-instance-method">
+    <div class="entry-detail" id="amplifier:UInt8-instance-method">
       <div class="signature">
         
-        def <strong>box_nr</strong> : <a href="../../Int32.html">Int32</a>
+        def <strong>amplifier</strong> : UInt8
 
-        <a class="method-permalink" href="#box_nr%3AInt32-instance-method">#</a>
+        <a class="method-permalink" href="#amplifier%3AUInt8-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="face:BlockFace-instance-method">
+    <div class="entry-detail" id="amplifier=(amplifier:UInt8)-instance-method">
       <div class="signature">
         
-        def <strong>face</strong> : <a href="../../BlockFace.html">BlockFace</a>
+        def <strong>amplifier=</strong>(amplifier : UInt8)
 
-        <a class="method-permalink" href="#face%3ABlockFace-instance-method">#</a>
+        <a class="method-permalink" href="#amplifier%3D%28amplifier%3AUInt8%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="intercept:Vec3d-instance-method">
+    <div class="entry-detail" id="callback(client)-instance-method">
       <div class="signature">
         
-        def <strong>intercept</strong> : <a href="../../Rosegold/Vec3d.html">Vec3d</a>
+        def <strong>callback</strong>(client)
 
-        <a class="method-permalink" href="#intercept%3AVec3d-instance-method">#</a>
+        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="duration:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>duration</strong> : UInt32
+
+        <a class="method-permalink" href="#duration%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="duration=(duration:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>duration=</strong>(duration : UInt32)
+
+        <a class="method-permalink" href="#duration%3D%28duration%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="effect_id:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>effect_id</strong> : UInt32
+
+        <a class="method-permalink" href="#effect_id%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="effect_id=(effect_id:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>effect_id=</strong>(effect_id : UInt32)
+
+        <a class="method-permalink" href="#effect_id%3D%28effect_id%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entity_id:UInt64-instance-method">
+      <div class="signature">
+        
+        def <strong>entity_id</strong> : UInt64
+
+        <a class="method-permalink" href="#entity_id%3AUInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="entity_id=(entity_id:UInt64)-instance-method">
+      <div class="signature">
+        
+        def <strong>entity_id=</strong>(entity_id : UInt64)
+
+        <a class="method-permalink" href="#entity_id%3D%28entity_id%3AUInt64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="flags:UInt8-instance-method">
+      <div class="signature">
+        
+        def <strong>flags</strong> : UInt8
+
+        <a class="method-permalink" href="#flags%3AUInt8-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="flags=(flags:UInt8)-instance-method">
+      <div class="signature">
+        
+        def <strong>flags=</strong>(flags : UInt8)
+
+        <a class="method-permalink" href="#flags%3D%28flags%3AUInt8%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/packets/clientbound/entity_effect.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>

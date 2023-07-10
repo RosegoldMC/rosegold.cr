@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Raytrace::Result - rosegold main</title>
+  <title>Rosegold::EntityEffect::Effect - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -596,12 +596,12 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/EntityEffect" data-name="rosegold::entityeffect">
+  <li class="parent open current" data-id="rosegold/Rosegold/EntityEffect" data-name="rosegold::entityeffect">
       <a href="../../Rosegold/EntityEffect.html">EntityEffect</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/EntityEffect/Effect" data-name="rosegold::entityeffect::effect">
+  <li class=" current" data-id="rosegold/Rosegold/EntityEffect/Effect" data-name="rosegold::entityeffect::effect">
       <a href="../../Rosegold/EntityEffect/Effect.html">Effect</a>
       
     </li>
@@ -786,7 +786,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Raytrace" data-name="rosegold::raytrace">
+  <li class="parent " data-id="rosegold/Rosegold/Raytrace" data-name="rosegold::raytrace">
       <a href="../../Rosegold/Raytrace.html">Raytrace</a>
       
         <ul>
@@ -796,7 +796,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Raytrace/Result" data-name="rosegold::raytrace::result">
+  <li class=" " data-id="rosegold/Rosegold/Raytrace/Result" data-name="rosegold::raytrace::result">
       <a href="../../Rosegold/Raytrace/Result.html">Result</a>
       
     </li>
@@ -1095,12 +1095,10 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">struct</span> Rosegold::Raytrace::Result
+  <span class="kind">enum</span> Rosegold::EntityEffect::Effect
 
 </h1>
 
-
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Raytrace/Result.html">Rosegold::Raytrace::Result</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
 
 
 
@@ -1128,8 +1126,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L11" target="_blank">
-        rosegold/control/raytrace.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L2" target="_blank">
+        rosegold/models/entity_effect.cr
       </a>
     
     <br/>
@@ -1137,24 +1135,191 @@
 
 
 
-
-
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
+  
+    <h2>
+      <a id="enum-members" class="anchor" href="#enum-members">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
+      Enum Members
+    </h2>
+  
+  <dl>
     
-      <li class="entry-summary">
-        <a href="#new%28intercept%3AVec3d%2Cbox_nr%3AInt32%2Cface%3ABlockFace%29-class-method" class="signature"><strong>.new</strong>(intercept : Vec3d, box_nr : Int32, face : BlockFace)</a>
-        
-      </li>
+      <dt class="entry-const" id="Unused">
+        <strong>Unused</strong> = <code><span class="n">0</span></code>
+      </dt>
+      
     
-  </ul>
+      <dt class="entry-const" id="Speed">
+        <strong>Speed</strong> = <code><span class="n">1</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Slowness">
+        <strong>Slowness</strong> = <code><span class="n">2</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Haste">
+        <strong>Haste</strong> = <code><span class="n">3</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="MiningFatigue">
+        <strong>MiningFatigue</strong> = <code><span class="n">4</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Strength">
+        <strong>Strength</strong> = <code><span class="n">5</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="InstantHealth">
+        <strong>InstantHealth</strong> = <code><span class="n">6</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="InstantDamage">
+        <strong>InstantDamage</strong> = <code><span class="n">7</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="JumpBoost">
+        <strong>JumpBoost</strong> = <code><span class="n">8</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Nausea">
+        <strong>Nausea</strong> = <code><span class="n">9</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Regeneration">
+        <strong>Regeneration</strong> = <code><span class="n">10</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Resistance">
+        <strong>Resistance</strong> = <code><span class="n">11</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="FireResistance">
+        <strong>FireResistance</strong> = <code><span class="n">12</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="WaterBreathing">
+        <strong>WaterBreathing</strong> = <code><span class="n">13</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Invisibility">
+        <strong>Invisibility</strong> = <code><span class="n">14</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Blindness">
+        <strong>Blindness</strong> = <code><span class="n">15</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="NightVision">
+        <strong>NightVision</strong> = <code><span class="n">16</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Hunger">
+        <strong>Hunger</strong> = <code><span class="n">17</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Weakness">
+        <strong>Weakness</strong> = <code><span class="n">18</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Poison">
+        <strong>Poison</strong> = <code><span class="n">19</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Wither">
+        <strong>Wither</strong> = <code><span class="n">20</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="HealthBoost">
+        <strong>HealthBoost</strong> = <code><span class="n">21</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Absorption">
+        <strong>Absorption</strong> = <code><span class="n">22</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Saturation">
+        <strong>Saturation</strong> = <code><span class="n">23</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Glowing">
+        <strong>Glowing</strong> = <code><span class="n">24</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Levitation">
+        <strong>Levitation</strong> = <code><span class="n">25</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Luck">
+        <strong>Luck</strong> = <code><span class="n">26</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Unluck">
+        <strong>Unluck</strong> = <code><span class="n">27</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="SlowFalling">
+        <strong>SlowFalling</strong> = <code><span class="n">28</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="ConduitPower">
+        <strong>ConduitPower</strong> = <code><span class="n">29</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="DolphinsGrace">
+        <strong>DolphinsGrace</strong> = <code><span class="n">30</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="BadOmen">
+        <strong>BadOmen</strong> = <code><span class="n">31</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="HeroOfTheVillage">
+        <strong>HeroOfTheVillage</strong> = <code><span class="n">32</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Darkness">
+        <strong>Darkness</strong> = <code><span class="n">33</span></code>
+      </dt>
+      
+    
+  </dl>
+
+
 
 
 
@@ -1171,17 +1336,182 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#box_nr%3AInt32-instance-method" class="signature"><strong>#box_nr</strong> : Int32</a>
+        <a href="#absorption%3F-instance-method" class="signature"><strong>#absorption?</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#face%3ABlockFace-instance-method" class="signature"><strong>#face</strong> : BlockFace</a>
+        <a href="#bad_omen%3F-instance-method" class="signature"><strong>#bad_omen?</strong></a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#intercept%3AVec3d-instance-method" class="signature"><strong>#intercept</strong> : Vec3d</a>
+        <a href="#blindness%3F-instance-method" class="signature"><strong>#blindness?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#conduit_power%3F-instance-method" class="signature"><strong>#conduit_power?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#darkness%3F-instance-method" class="signature"><strong>#darkness?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#display_name-instance-method" class="signature"><strong>#display_name</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#dolphins_grace%3F-instance-method" class="signature"><strong>#dolphins_grace?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#fire_resistance%3F-instance-method" class="signature"><strong>#fire_resistance?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#glowing%3F-instance-method" class="signature"><strong>#glowing?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#haste%3F-instance-method" class="signature"><strong>#haste?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#health_boost%3F-instance-method" class="signature"><strong>#health_boost?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#hero_of_the_village%3F-instance-method" class="signature"><strong>#hero_of_the_village?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#hunger%3F-instance-method" class="signature"><strong>#hunger?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#instant_damage%3F-instance-method" class="signature"><strong>#instant_damage?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#instant_health%3F-instance-method" class="signature"><strong>#instant_health?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#invisibility%3F-instance-method" class="signature"><strong>#invisibility?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#jump_boost%3F-instance-method" class="signature"><strong>#jump_boost?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#levitation%3F-instance-method" class="signature"><strong>#levitation?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#luck%3F-instance-method" class="signature"><strong>#luck?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#mining_fatigue%3F-instance-method" class="signature"><strong>#mining_fatigue?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#name-instance-method" class="signature"><strong>#name</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#nausea%3F-instance-method" class="signature"><strong>#nausea?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#night_vision%3F-instance-method" class="signature"><strong>#night_vision?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#poison%3F-instance-method" class="signature"><strong>#poison?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#regeneration%3F-instance-method" class="signature"><strong>#regeneration?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#resistance%3F-instance-method" class="signature"><strong>#resistance?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#saturation%3F-instance-method" class="signature"><strong>#saturation?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#slow_falling%3F-instance-method" class="signature"><strong>#slow_falling?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#slowness%3F-instance-method" class="signature"><strong>#slowness?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#speed%3F-instance-method" class="signature"><strong>#speed?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#strength%3F-instance-method" class="signature"><strong>#strength?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unluck%3F-instance-method" class="signature"><strong>#unluck?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unused%3F-instance-method" class="signature"><strong>#unused?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#water_breathing%3F-instance-method" class="signature"><strong>#water_breathing?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#weakness%3F-instance-method" class="signature"><strong>#weakness?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#wither%3F-instance-method" class="signature"><strong>#wither?</strong></a>
         
       </li>
     
@@ -1223,34 +1553,18 @@
 
 
   
+    
+
+
+    
+
+
+    
+
+
+  
 </div>
 
-
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(intercept:Vec3d,box_nr:Int32,face:BlockFace)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(intercept : <a href="../../Rosegold/Vec3d.html">Vec3d</a>, box_nr : <a href="../../Int32.html">Int32</a>, face : <a href="../../BlockFace.html">BlockFace</a>)
-
-        <a class="method-permalink" href="#new%28intercept%3AVec3d%2Cbox_nr%3AInt32%2Cface%3ABlockFace%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L14" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
@@ -1265,50 +1579,578 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="box_nr:Int32-instance-method">
+    <div class="entry-detail" id="absorption?-instance-method">
       <div class="signature">
         
-        def <strong>box_nr</strong> : <a href="../../Int32.html">Int32</a>
+        def <strong>absorption?</strong>
 
-        <a class="method-permalink" href="#box_nr%3AInt32-instance-method">#</a>
+        <a class="method-permalink" href="#absorption%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="face:BlockFace-instance-method">
+    <div class="entry-detail" id="bad_omen?-instance-method">
       <div class="signature">
         
-        def <strong>face</strong> : <a href="../../BlockFace.html">BlockFace</a>
+        def <strong>bad_omen?</strong>
 
-        <a class="method-permalink" href="#face%3ABlockFace-instance-method">#</a>
+        <a class="method-permalink" href="#bad_omen%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="intercept:Vec3d-instance-method">
+    <div class="entry-detail" id="blindness?-instance-method">
       <div class="signature">
         
-        def <strong>intercept</strong> : <a href="../../Rosegold/Vec3d.html">Vec3d</a>
+        def <strong>blindness?</strong>
 
-        <a class="method-permalink" href="#intercept%3AVec3d-instance-method">#</a>
+        <a class="method-permalink" href="#blindness%3F-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/raytrace.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L18" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="conduit_power?-instance-method">
+      <div class="signature">
+        
+        def <strong>conduit_power?</strong>
+
+        <a class="method-permalink" href="#conduit_power%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L32" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="darkness?-instance-method">
+      <div class="signature">
+        
+        def <strong>darkness?</strong>
+
+        <a class="method-permalink" href="#darkness%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L36" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="display_name-instance-method">
+      <div class="signature">
+        
+        def <strong>display_name</strong>
+
+        <a class="method-permalink" href="#display_name-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L38" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="dolphins_grace?-instance-method">
+      <div class="signature">
+        
+        def <strong>dolphins_grace?</strong>
+
+        <a class="method-permalink" href="#dolphins_grace%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L33" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="fire_resistance?-instance-method">
+      <div class="signature">
+        
+        def <strong>fire_resistance?</strong>
+
+        <a class="method-permalink" href="#fire_resistance%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="glowing?-instance-method">
+      <div class="signature">
+        
+        def <strong>glowing?</strong>
+
+        <a class="method-permalink" href="#glowing%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L27" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="haste?-instance-method">
+      <div class="signature">
+        
+        def <strong>haste?</strong>
+
+        <a class="method-permalink" href="#haste%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="health_boost?-instance-method">
+      <div class="signature">
+        
+        def <strong>health_boost?</strong>
+
+        <a class="method-permalink" href="#health_boost%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L24" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="hero_of_the_village?-instance-method">
+      <div class="signature">
+        
+        def <strong>hero_of_the_village?</strong>
+
+        <a class="method-permalink" href="#hero_of_the_village%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L35" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="hunger?-instance-method">
+      <div class="signature">
+        
+        def <strong>hunger?</strong>
+
+        <a class="method-permalink" href="#hunger%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L20" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="instant_damage?-instance-method">
+      <div class="signature">
+        
+        def <strong>instant_damage?</strong>
+
+        <a class="method-permalink" href="#instant_damage%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L10" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="instant_health?-instance-method">
+      <div class="signature">
+        
+        def <strong>instant_health?</strong>
+
+        <a class="method-permalink" href="#instant_health%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="invisibility?-instance-method">
+      <div class="signature">
+        
+        def <strong>invisibility?</strong>
+
+        <a class="method-permalink" href="#invisibility%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L17" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="jump_boost?-instance-method">
+      <div class="signature">
+        
+        def <strong>jump_boost?</strong>
+
+        <a class="method-permalink" href="#jump_boost%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L11" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="levitation?-instance-method">
+      <div class="signature">
+        
+        def <strong>levitation?</strong>
+
+        <a class="method-permalink" href="#levitation%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L28" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="luck?-instance-method">
+      <div class="signature">
+        
+        def <strong>luck?</strong>
+
+        <a class="method-permalink" href="#luck%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L29" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="mining_fatigue?-instance-method">
+      <div class="signature">
+        
+        def <strong>mining_fatigue?</strong>
+
+        <a class="method-permalink" href="#mining_fatigue%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="name-instance-method">
+      <div class="signature">
+        
+        def <strong>name</strong>
+
+        <a class="method-permalink" href="#name-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L44" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="nausea?-instance-method">
+      <div class="signature">
+        
+        def <strong>nausea?</strong>
+
+        <a class="method-permalink" href="#nausea%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="night_vision?-instance-method">
+      <div class="signature">
+        
+        def <strong>night_vision?</strong>
+
+        <a class="method-permalink" href="#night_vision%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L19" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="poison?-instance-method">
+      <div class="signature">
+        
+        def <strong>poison?</strong>
+
+        <a class="method-permalink" href="#poison%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L22" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="regeneration?-instance-method">
+      <div class="signature">
+        
+        def <strong>regeneration?</strong>
+
+        <a class="method-permalink" href="#regeneration%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="resistance?-instance-method">
+      <div class="signature">
+        
+        def <strong>resistance?</strong>
+
+        <a class="method-permalink" href="#resistance%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="saturation?-instance-method">
+      <div class="signature">
+        
+        def <strong>saturation?</strong>
+
+        <a class="method-permalink" href="#saturation%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="slow_falling?-instance-method">
+      <div class="signature">
+        
+        def <strong>slow_falling?</strong>
+
+        <a class="method-permalink" href="#slow_falling%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L31" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="slowness?-instance-method">
+      <div class="signature">
+        
+        def <strong>slowness?</strong>
+
+        <a class="method-permalink" href="#slowness%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="speed?-instance-method">
+      <div class="signature">
+        
+        def <strong>speed?</strong>
+
+        <a class="method-permalink" href="#speed%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="strength?-instance-method">
+      <div class="signature">
+        
+        def <strong>strength?</strong>
+
+        <a class="method-permalink" href="#strength%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unluck?-instance-method">
+      <div class="signature">
+        
+        def <strong>unluck?</strong>
+
+        <a class="method-permalink" href="#unluck%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L30" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unused?-instance-method">
+      <div class="signature">
+        
+        def <strong>unused?</strong>
+
+        <a class="method-permalink" href="#unused%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="water_breathing?-instance-method">
+      <div class="signature">
+        
+        def <strong>water_breathing?</strong>
+
+        <a class="method-permalink" href="#water_breathing%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L16" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="weakness?-instance-method">
+      <div class="signature">
+        
+        def <strong>weakness?</strong>
+
+        <a class="method-permalink" href="#weakness%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L21" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="wither?-instance-method">
+      <div class="signature">
+        
+        def <strong>wither?</strong>
+
+        <a class="method-permalink" href="#wither%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/models/entity_effect.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
