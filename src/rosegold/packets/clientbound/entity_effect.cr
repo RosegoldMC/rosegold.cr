@@ -24,12 +24,17 @@ class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
 
   def callback(client)
     entity = client.dimension.entities[entity_id]?
-    effect = Rosegold::Effect.from_value effect_id
+    effect = Rosegold::EntityEffect.new(effect_id, amplifier, duration, flags)
 
     if client.player.entity_id == entity_id
-      return if client.player.effects.find { |active_effect| active_effect == effect }
+      if existing_effect = client.player.effects.find { |active_effect| active_effect.effect == effect.effect }
+        existing_effect.amplifier = amplifier
+        existing_effect.duration = duration
+        existing_effect.flags = flags
+        return
+      end
+
       client.player.effects << effect
-      return
     end
 
     if entity.nil?
@@ -37,7 +42,13 @@ class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
       return
     end
 
-    return if entity.effects.find { |active_effect| active_effect == effect }
+    if existing_effect = entity.effects.find { |active_effect| active_effect.effect == effect.effect }
+      existing_effect.amplifier = amplifier
+      existing_effect.duration = duration
+      existing_effect.flags = flags
+      return
+    end
+
     entity.effects << effect
   end
 end
