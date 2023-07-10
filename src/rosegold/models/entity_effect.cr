@@ -1,4 +1,4 @@
-module Rosegold
+class Rosegold::EntityEffect
   enum Effect
     Unused
     Speed
@@ -47,5 +47,20 @@ module Rosegold
         .split(/(?=[A-Z])/)
         .map(&.downcase).join('_')
     end
+  end
+
+  property \
+    effect : Effect,
+    amplifier : UInt8,
+    duration : UInt32,
+    flags : UInt8
+
+  def initialize(id, @amplifier, @duration, @flags)
+    @effect = Effect[id.to_i32]
+    @expires_at = Time.utc + @duration.seconds / 20
+  end
+
+  def id
+    @effect.value
   end
 end

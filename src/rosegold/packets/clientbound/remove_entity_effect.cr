@@ -18,18 +18,17 @@ class Rosegold::Clientbound::RemoveEntityEffect < Rosegold::Clientbound::Packet
 
   def callback(client)
     entity = client.dimension.entities[entity_id]?
-    effect = Rosegold::Effect.from_value effect_id
 
     if client.player.entity_id == entity_id
-      client.player.effects.delete effect
+      client.player.effects = client.player.effects.reject { |effect| effect.id == effect_id }
       return
     end
 
     if entity.nil?
-      Log.warn { "Received entity effect packet for unknown entity ID #{entity_id}" }
+      Log.warn { "Received RemoveEntityEffect packet for unknown entity ID #{entity_id}" }
       return
     end
 
-    entity.effects.delete effect
+    entity.effects = entity.effects.reject { |effect| effect.id == effect_id }
   end
 end
