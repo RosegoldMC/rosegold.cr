@@ -56,9 +56,12 @@ class Rosegold::Block
     end
 
     # TODO: Implement calculations for the following factors:
-    # - haste
     # - mining fatigue
     # - in_water without aqua affinity
+
+    if haste = player.effect_by_name("haste")
+      speed_multiplier *= 1.0 + 0.2 * (haste.amplifier + 1)
+    end
 
     speed_multiplier /= 5 if !player.on_ground?
 

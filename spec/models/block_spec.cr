@@ -64,6 +64,26 @@ Spectator.describe Rosegold::Block do
             expect(Rosegold::Block.from_block_state_id(1).break_time(main_hand, player)).to eq 2     # stone
             expect(Rosegold::Block.from_block_state_id(10).break_time(main_hand, player)).to eq 15   # dirt
           end
+
+          context "with haste 2" do
+            let(:player) {
+              Rosegold::Player.new.tap do |player|
+                player.on_ground = true
+                player.effects << Rosegold::EntityEffect.new(
+                  id: 3,
+                  amplifier: 1,
+                  duration: 1000000,
+                  flags: 0
+                )
+              end
+            }
+
+            it "calculates the break time properly with proper tool" do
+              expect(Rosegold::Block.from_block_state_id(1490).break_time(main_hand, player)).to eq 43 # obsidian
+              expect(Rosegold::Block.from_block_state_id(1).break_time(main_hand, player)).to eq 2     # stone
+              expect(Rosegold::Block.from_block_state_id(10).break_time(main_hand, player)).to eq 11   # dirt
+            end
+          end
         end
       end
     end

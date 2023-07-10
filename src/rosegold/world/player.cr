@@ -24,7 +24,7 @@ class Rosegold::Player
     saturation : Float32 = 0,
     hotbar_selection : UInt8 = 0,
     gamemode : Int8 = 0,
-    effects : Array(Rosegold::Effect) = [] of Rosegold::Effect
+    effects : Array(EntityEffect) = [] of EntityEffect
   property? \
     on_ground : Bool = false,
     sneaking : Bool = false,
@@ -41,6 +41,10 @@ class Rosegold::Player
     # TODO crawling
     return feet.up SNEAKING_EYE_HEIGHT if sneaking?
     feet.up DEFAULT_EYE_HEIGHT
+  end
+
+  def effect_by_name(name)
+    effects.find { |effect| effect.effect.name == name.downcase.gsub(' ', '_') }
   end
 end
 
