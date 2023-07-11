@@ -100,6 +100,42 @@ Spectator.describe Rosegold::Bot do
         end
       end
     end
+
+    context "when the item is air and there are no empty hotbar slots" do
+      it "returns true" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/clear"
+            sleep 1
+
+            bot.chat "/give #{bot.username} minecraft:diamond_pickaxe 9"
+            sleep 1
+
+            expect(bot.inventory.main_hand.item_id).to eq "diamond_pickaxe"
+            expect(bot.inventory.pick("air")).to eq true
+            expect(bot.inventory.main_hand.item_id).to eq "air"
+          end
+        end
+      end
+    end
+
+    context "when the item is air and there are no empty inventory slots" do
+      it "returns false" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/clear"
+            sleep 1
+
+            bot.chat "/give #{bot.username} minecraft:diamond_pickaxe 36"
+            sleep 1
+
+            expect(bot.inventory.main_hand.item_id).to eq "diamond_pickaxe"
+            expect(bot.inventory.pick("air")).to eq false
+            expect(bot.inventory.main_hand.item_id).to eq "diamond_pickaxe"
+          end
+        end
+      end
+    end
   end
 
   describe "#pick!" do
