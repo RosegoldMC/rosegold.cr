@@ -72,9 +72,9 @@ class Rosegold::Physics
 
   def handle_disconnect
     @paused = true
-    @movement_action.try &.fail "Disconnected"
+    @movement_action.try &.fail Client::NotConnected.new "Disconnected from server"
     @movement_action = nil
-    @look_action.try &.fail "Disconnected"
+    @look_action.try &.fail Rosegold::Client::NotConnected.new "Disconnected from server"
     @look_action = nil
   end
 
