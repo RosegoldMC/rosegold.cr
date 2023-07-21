@@ -51,13 +51,10 @@ class Rosegold::Interactions
     attack
 
     spawn do
-      while digging?
+      while digging? && client.connected?
         cancel = false
-        reached = reach_block_or_entity
-        sleep 1.tick
-        next sleep 1.tick if !reached
 
-        case reached
+        case reached = wait_for_reached_block
         when ReachedBlock
           start_digging reached
 
@@ -82,6 +79,14 @@ class Rosegold::Interactions
         end
       end
     end
+  end
+
+  def wait_for_reached_block
+    until reached = reach_block_or_entity
+      sleep 1.tick
+    end
+
+    reached
   end
 
   private def attack
