@@ -112,7 +112,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def send_packet(packet_bytes : Bytes)
-    raise "Disconnected: #{close_reason}" if close_reason
+    raise Rosegold::Client::NotConnected.new if close_reason
 
     if compress?
       Minecraft::IO::Memory.new.tap do |buffer|
