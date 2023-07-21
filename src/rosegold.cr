@@ -6,7 +6,7 @@ require "./rosegold/bot"
 
 # TODO: Write documentation for `Rosegold`
 module Rosegold
-  VERSION = "0.1.0"
+  VERSION = "0.4.1"
 
   Log.setup_from_env
 

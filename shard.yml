@@ -1,5 +1,5 @@
 name: rosegold
-version: 0.1.0
+version: 0.4.1
 
 crystalline:
   main: .crystalline_main.cr
