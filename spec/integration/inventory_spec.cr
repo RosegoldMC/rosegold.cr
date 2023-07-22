@@ -245,4 +245,27 @@ Spectator.describe Rosegold::Bot do
       end
     end
   end
+
+  describe "#throw_all_of" do
+    it "throws all of the specified item" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          bot.chat "/clear"
+          bot.chat "/give #{bot.username} minecraft:diamond_sword 4"
+          bot.chat "/give #{bot.username} minecraft:stone 200"
+          sleep 1
+
+          expect(bot.inventory.throw_all_of "diamond_sword").to eq 4
+          expect(bot.inventory.throw_all_of "stone").to eq 200
+
+          sleep 1
+
+          expect(bot.inventory.inventory.map(&.item_id)).not_to contain "diamond_sword"
+          expect(bot.inventory.hotbar.map(&.item_id)).not_to contain "diamond_sword"
+          expect(bot.inventory.inventory.map(&.item_id)).not_to contain "stone"
+          expect(bot.inventory.hotbar.map(&.item_id)).not_to contain "stone"
+        end
+      end
+    end
+  end
 end
