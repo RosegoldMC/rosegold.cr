@@ -97,11 +97,15 @@ class Rosegold::Inventory
   end
 
   def throw_all_of(item_id)
+    quantity = 0
     slots.each do |slot|
       next unless slot.item_id == item_id
+      quantity += slot.count
 
-      client.send_packet! Serverbound::ClickWindow.new :drop, 0_i8, slot.slot_number.to_i16, [] of WindowSlot, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
+      client.send_packet! Serverbound::ClickWindow.new :drop, 1_i8, slot.slot_number.to_i16, [] of WindowSlot, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
     end
+
+    quantity
   end
 
   private def shift_click_at_least(count, spec, source : Array(WindowSlot), target : Array(WindowSlot))
