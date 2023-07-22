@@ -75,6 +75,8 @@ module Rosegold::AABB(T, V)
     return nil if t_far < 0
 
     t_near
+  rescue e : ArgumentError
+    nil
   end
 
   def [](i) : V
