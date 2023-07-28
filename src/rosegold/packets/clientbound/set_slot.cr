@@ -29,7 +29,6 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    Log.debug { "Server set slot #{slot}" }
     if window_id == -1 && slot.slot_number == -1
       client.window.cursor = slot
     elsif window_id == 0

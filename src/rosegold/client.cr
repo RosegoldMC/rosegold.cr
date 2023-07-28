@@ -4,9 +4,8 @@ require "../minecraft/auth"
 require "./control/*"
 require "./models/*"
 require "./packets/*"
+require "./events/*"
 require "./world/*"
-
-abstract class Rosegold::Event; end # defined elsewhere, but otherwise it would be a module
 
 class Rosegold::Event::RawPacket < Rosegold::Event
   getter bytes : Bytes
@@ -29,6 +28,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     access_token : String = "",
     dimension : Dimension = Dimension.new,
     physics : Physics,
+    interactions : Interactions,
     inventory : PlayerWindow,
     window : Window,
     offline : NamedTuple(uuid: String, username: String)? = nil
@@ -39,9 +39,11 @@ class Rosegold::Client < Rosegold::EventEmitter
       @port = port_str.to_i
     end
     @physics = uninitialized Physics
+    @interactions = uninitialized Interactions
     @inventory = uninitialized PlayerWindow
     @window = uninitialized Window
     @physics = Physics.new self
+    @interactions = Interactions.new self
     @inventory = PlayerWindow.new self
     @window = @inventory
   end
@@ -79,6 +81,8 @@ class Rosegold::Client < Rosegold::EventEmitter
       raise NotConnected.new "Took too long to join the game" if timeout_ticks <= 0
     end
 
+    start_ticker
+
     self
   end
 
@@ -88,6 +92,22 @@ class Rosegold::Client < Rosegold::EventEmitter
     connection?.try &.disconnect Chat.new "End of script"
 
     self
+  end
+
+  def start_ticker
+    spawn do
+      loop do
+        sleep 1.tick
+
+        break unless connected?
+
+        spawn do
+          interactions.tick
+          physics.tick
+          emit_event Event::Tick.new
+        end
+      end
+    end
   end
 
   def connect

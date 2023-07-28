@@ -29,9 +29,10 @@ class Rosegold::Entity
     effects : Array(EntityEffect) = [] of EntityEffect
 
   property? \
-    on_ground : Bool = true
+    on_ground : Bool = true,
+    living : Bool = false
 
-  def initialize(@entity_id, @uuid, @entity_type, @position, @pitch, @yaw, @head_yaw, @velocity, @on_ground = true)
+  def initialize(@entity_id, @uuid, @entity_type, @position, @pitch, @yaw, @head_yaw, @velocity, @on_ground = true, @living = false)
   end
 
   def metadata

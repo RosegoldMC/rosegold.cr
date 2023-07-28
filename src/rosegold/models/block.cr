@@ -46,8 +46,8 @@ class Rosegold::Block
     best_tool?(slot) || harvest_tools.try &.keys.includes? slot.item_id_int.to_s
   end
 
-  def break_time(main_hand : Slot, player : Player, creative : Bool = false) : Int32
-    return 0 if creative
+  def break_damage(main_hand : Slot, player : Player, creative : Bool = false) : Float64
+    return 0_f64 if creative
 
     speed_multiplier = 1.0
     if best_tool?(main_hand)
@@ -68,8 +68,16 @@ class Rosegold::Block
     damage = speed_multiplier / hardness
     damage /= can_harvest?(main_hand) ? 30 : 100
 
-    return 0 if damage > 1
+    return 0_f64 if damage > 1
 
-    (1.0 / damage).ceil.to_i
+    damage
+  end
+
+  def break_time(main_hand : Slot, player : Player, creative : Bool = false) : Int32
+    break_damage = break_damage(main_hand, player, creative)
+
+    return 0 if break_damage.zero?
+
+    (1.0 / break_damage).ceil.to_i
   end
 end

@@ -135,6 +135,19 @@ class Rosegold::Slot
     other.nbt = tmp
   end
 
+  def edible? : Bool
+    [
+      "apple", "baked_potato", "beef", "beetroot", "beetroot_soup", "bread", "carrot",
+      "chicken", "chorus_fruit", "cod", "cooked_beef", "cooked_chicken", "cooked_cod",
+      "cooked_mutton", "cooked_porkchop", "cooked_rabbit", "cooked_salmon", "cookie",
+      "dried_kelp", "enchanted_golden_apple", "golden_apple", "golden_carrot",
+      "honey_bottle", "melon_slice", "mushroom_stew", "mutton", "poisonous_potato",
+      "porkchop", "potato", "pufferfish", "pumpkin_pie", "rabbit", "rabbit_stew",
+      "rotten_flesh", "salmon", "spider_eye", "suspicious_stew", "sweet_berries",
+      "glow_berries", "tropical_fish",
+    ].includes? item_id
+  end
+
   def to_s(io)
     inspect io
   end

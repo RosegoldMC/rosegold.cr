@@ -54,7 +54,6 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    Log.debug { "Received spawn entity packet for entity ID #{entity_id}, UUID #{uuid}, type #{entity_type}" }
     client.dimension.entities[entity_id] = Rosegold::Entity.new \
       entity_id,
       uuid,
