@@ -1,12 +1,22 @@
 require "../spec_helper"
 
 Spectator.describe Rosegold::Bot do
+  before_all do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        bot.chat "/kill @e[type=!minecraft:player]"
+        bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
+        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
+        bot.wait_tick
+      end
+    end
+  end
+
   it "should fall due to gravity" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        sleep 2 # load chunks
         bot.chat "/tp 1 -58 1"
-        sleep 1 # teleport
+        bot.wait_tick
         until client.player.on_ground?
           bot.wait_tick
         end
@@ -18,9 +28,8 @@ Spectator.describe Rosegold::Bot do
   it "can move to location successfully" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        sleep 2 # load chunks
         bot.chat "/tp 1 -60 1"
-        sleep 1 # teleport
+        bot.wait_tick
 
         bot.move_to 2, 2
         expect(bot.feet).to eq(Rosegold::Vec3d.new(2.5, -60, 2.5))
@@ -52,9 +61,8 @@ Spectator.describe Rosegold::Bot do
   it "should jump and fall" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        sleep 2 # load chunks
         bot.chat "/tp 1 -60 1"
-        sleep 1 # teleport
+        bot.wait_tick
 
         initial_feet = bot.feet
 
@@ -77,17 +85,16 @@ Spectator.describe Rosegold::Bot do
       it "throws Physics::MovementStuck" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
-            sleep 2 # load chunks
             bot.chat "/fill 1 -60 2 1 -60 2 minecraft:stone"
             bot.chat "/tp 1 -60 1"
-            sleep 1 # teleport
+            bot.wait_tick
 
             expect {
               bot.move_to 1, 2
             }.to raise_error(Rosegold::Physics::MovementStuck)
 
             bot.chat "/fill 1 -60 2 1 -60 2 minecraft:air"
-            sleep 1
+            bot.wait_tick
           end
         end
       end

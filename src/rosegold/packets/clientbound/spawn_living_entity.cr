@@ -60,6 +60,7 @@ class Rosegold::Clientbound::SpawnLivingEntity < Rosegold::Clientbound::Packet
       pitch,
       yaw,
       head_yaw,
-      Vec3d.new(velocity_x, velocity_y, velocity_z)
+      Vec3d.new(velocity_x, velocity_y, velocity_z),
+      living: true
   end
 end

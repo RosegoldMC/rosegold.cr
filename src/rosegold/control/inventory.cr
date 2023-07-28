@@ -33,7 +33,6 @@ class Rosegold::Inventory
 
     hotbar.each_with_index do |slot, index|
       if slot.matches?(spec) && !slot.needs_repair?
-        client.send_packet! Serverbound::HeldItemChange.new index.to_u8
         client.player.hotbar_selection = index.to_u8
         return true
       end
@@ -83,10 +82,15 @@ class Rosegold::Inventory
     deposit_at_least(count, spec)
   end
 
+  # Finds an empty slot in the source
+  # In order to match vanilla:
+  # When source is the container, prioritize first empty #container slot
+  # When source is the player inventory, prioritize rightmost empty #hotbar slot
+  # then rightmost empty #inventory slot
   private def find_empty_slot(source)
     empty_slot = nil
 
-    source.each do |slot|
+    source.sort { |a, b| b.slot_number <=> a.slot_number }.each do |slot|
       if slot.empty?
         empty_slot = slot
         break

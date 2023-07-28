@@ -1,5 +1,3 @@
-abstract class Rosegold::Event; end
-
 require "uuid"
 
 class Rosegold::EventEmitter

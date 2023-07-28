@@ -1,18 +1,7 @@
 require "../client"
 require "./action"
 require "./raytrace"
-
-struct Int32
-  def ticks
-    self / 20
-  end
-
-  def tick
-    ticks
-  end
-end
-
-abstract class Rosegold::Event; end # defined elsewhere, but otherwise it would be a module
+require "../events/**"
 
 class Rosegold::Event::PhysicsTick < Rosegold::Event
   getter movement : Vec3d
@@ -34,7 +23,6 @@ class Rosegold::Physics
   VERY_CLOSE = 0.00001 # consider arrived at target if squared distance is closer than this
 
   private getter client : Rosegold::Client
-  private property ticker : Fiber?
   property? paused : Bool = true
   property? jump_queued : Bool = false
   private getter movement_action : Action(Vec3d)?
@@ -58,16 +46,6 @@ class Rosegold::Physics
   def handle_reset
     @paused = false
     player.velocity = Vec3d::ORIGIN
-
-    ticker.try do |t|
-      return unless t.dead?
-    end
-    self.ticker = spawn do
-      while client.connected?
-        tick
-        sleep 1/20
-      end
-    end
   end
 
   def handle_disconnect
