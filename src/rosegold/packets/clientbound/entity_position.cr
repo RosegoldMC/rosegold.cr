@@ -35,7 +35,6 @@ class Rosegold::Clientbound::EntityPosition < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    Log.debug { "Received entity position packet for entity ID #{entity_id}, delta X #{delta_x}, delta Y #{delta_y}, delta Z #{delta_z}" }
     entity = client.dimension.entities[entity_id]?
 
     if entity.nil?

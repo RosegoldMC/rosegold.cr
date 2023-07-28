@@ -23,7 +23,6 @@ class Rosegold::Clientbound::DestroyEntities < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    Log.debug { "Received destroy entities packet for #{entity_ids.size} entities" }
     entity_ids.each { |entity_id| client.dimension.entities.delete(entity_id) }
   end
 end

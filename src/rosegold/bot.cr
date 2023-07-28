@@ -8,8 +8,15 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   def initialize(@client)
     @inventory = Inventory.new client
-    @interact = Interactions.new client
-    client.on(Rosegold::Clientbound::ChatMessage) do |packet|
+
+    subscribe Rosegold::Clientbound::ChatMessage
+    subscribe Event::Tick
+    subscribe Rosegold::Clientbound::WindowItems
+    subscribe Rosegold::Clientbound::SetSlot
+  end
+
+  def subscribe(event_class : Class)
+    client.on event_class do |packet|
       emit_event packet
     end
   end
@@ -28,7 +35,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   delegate uuid, username, feet, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory
-  delegate stop_using_hand, stop_digging, to: @interact
+  delegate stop_using_hand, stop_digging, to: client.interactions
   delegate x, y, z, to: feet
 
   def disconnect_reason
@@ -56,13 +63,14 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.queue_packet Serverbound::ChatMessage.new message
   end
 
-  # Is adjusted to server TPS.
   def wait_ticks(ticks : Int32)
-    sleep ticks / 20 # TODO adjust to server TPS, changing over time
+    ticks.times do
+      wait_tick
+    end
   end
 
   def wait_tick
-    wait_ticks 1
+    wait_for Event::Tick, timeout: 1.second
   end
 
   # Direction the player is looking.
@@ -200,7 +208,6 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Selects the active (main hand) hotbar slot number (1-9).
   def hotbar_selection=(index : UInt8)
     # TODO check range
-    client.queue_packet Serverbound::HeldItemChange.new index - 1
     client.player.hotbar_selection = index - 1
   end
 
@@ -227,7 +234,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Activates the "use" button.
   def start_using_hand(hand : Hand = :main_hand)
     # can't delegate this because it wouldn't pick up the symbol as a Hand value
-    @interact.start_using_hand hand
+    client.interactions.start_using_hand hand
   end
 
   # Looks in the direction of `target`, then
@@ -248,21 +255,23 @@ class Rosegold::Bot < Rosegold::EventEmitter
     return if food >= 15 && full_health?
     return if food >= 18 # above healing threshold
 
-    Log.debug { "Eating because food is #{food} and health is #{health}" }
+    Log.info { "Eating because food is #{food} and health is #{health}" }
 
-    inventory.pick("baked_potato") ||
+    inventory.pick("apple") ||
+      inventory.pick("baked_potato") ||
       inventory.pick("bread") ||
       inventory.pick("carrot") ||
       raise "Bot food not found"
 
-    10.times do
-      client.send_packet! Serverbound::UseItem.new :main_hand
+    start_using_hand
+
+    until food >= 18
       wait_ticks 33
-      client.send_packet! Serverbound::PlayerDigging.new :finish_using_hand
-      break if food >= 18
     end
 
-    Log.debug { "Eating finished, food is #{food} and health is #{health}" }
+    stop_using_hand
+
+    Log.info { "Eating finished, food is #{food} and health is #{health}" }
   end
 
   def full_health?
@@ -273,7 +282,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   def start_digging(target : Vec3d? | Look? = nil)
     look_at target if target.is_a? Vec3d
     look target if target.is_a? Look
-    @interact.start_digging
+    client.interactions.start_digging
   end
 
   # Looks in the direction of target, then

@@ -64,6 +64,8 @@ class Rosegold::Dimension
     ray_end = start + look * max_distance
 
     entities.each_value do |entity|
+      next unless entity.living?
+
       bounding_box = entity.bounding_box
       distance = bounding_box.ray_intersection(start, ray_end)
       next if distance.nil?
