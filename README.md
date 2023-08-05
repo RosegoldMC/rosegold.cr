@@ -48,8 +48,3 @@ Minecraft client written in [Crystal](http://crystal-lang.org/), following the [
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
-
-## Contributors
-
-- [grepsedawk](https://github.com/grepsedawk) - creator and maintainer
-- [Gjum](https://github.com/Gjum) - contributor
