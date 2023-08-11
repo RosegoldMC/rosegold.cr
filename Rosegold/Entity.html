@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.7.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.8.2">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="rosegold">
 
@@ -25,6 +26,11 @@
     <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
   </symbol>
 </svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="search-box">
@@ -631,6 +637,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Event/Tick" data-name="rosegold::event::tick">
+      <a href="../Rosegold/Event/Tick.html">Tick</a>
+      
+    </li>
+  
 </ul>
 
       
@@ -1128,7 +1139,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L1" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L1" target="_blank">
         rosegold/world/entity.cr
       </a>
     
@@ -1169,7 +1180,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28entity_id%3AUInt64%2Cuuid%3AUUID%2Centity_type%3AUInt32%2Cposition%3ARosegold%3A%3AVec3d%2Cpitch%3AFloat32%2Cyaw%3AFloat32%2Chead_yaw%3AFloat32%2Cvelocity%3ARosegold%3A%3AVec3d%2Con_ground%3ABool%3Dtrue%29-class-method" class="signature"><strong>.new</strong>(entity_id : UInt64, uuid : UUID, entity_type : UInt32, position : Rosegold::Vec3d, pitch : Float32, yaw : Float32, head_yaw : Float32, velocity : Rosegold::Vec3d, on_ground : Bool = <span class="n">true</span>)</a>
+        <a href="#new%28entity_id%3AUInt64%2Cuuid%3AUUID%2Centity_type%3AUInt32%2Cposition%3ARosegold%3A%3AVec3d%2Cpitch%3AFloat32%2Cyaw%3AFloat32%2Chead_yaw%3AFloat32%2Cvelocity%3ARosegold%3A%3AVec3d%2Con_ground%3ABool%3Dtrue%2Cliving%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(entity_id : UInt64, uuid : UUID, entity_type : UInt32, position : Rosegold::Vec3d, pitch : Float32, yaw : Float32, head_yaw : Float32, velocity : Rosegold::Vec3d, on_ground : Bool = <span class="n">true</span>, living : Bool = <span class="n">false</span>)</a>
         
       </li>
     
@@ -1231,6 +1242,16 @@
     
       <li class="entry-summary">
         <a href="#head_yaw%3D%28head_yaw%3AFloat32%29-instance-method" class="signature"><strong>#head_yaw=</strong>(head_yaw : Float32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#living%3D%28living%3ABool%29-instance-method" class="signature"><strong>#living=</strong>(living : Bool)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#living%3F%3ABool-instance-method" class="signature"><strong>#living?</strong> : Bool</a>
         
       </li>
     
@@ -1354,18 +1375,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(entity_id:UInt64,uuid:UUID,entity_type:UInt32,position:Rosegold::Vec3d,pitch:Float32,yaw:Float32,head_yaw:Float32,velocity:Rosegold::Vec3d,on_ground:Bool=true)-class-method">
+    <div class="entry-detail" id="new(entity_id:UInt64,uuid:UUID,entity_type:UInt32,position:Rosegold::Vec3d,pitch:Float32,yaw:Float32,head_yaw:Float32,velocity:Rosegold::Vec3d,on_ground:Bool=true,living:Bool=false)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(entity_id : UInt64, uuid : UUID, entity_type : UInt32, position : <a href="../Rosegold/Vec3d.html">Rosegold::Vec3d</a>, pitch : Float32, yaw : Float32, head_yaw : Float32, velocity : <a href="../Rosegold/Vec3d.html">Rosegold::Vec3d</a>, on_ground : Bool = <span class="n">true</span>)
+        def self.<strong>new</strong>(entity_id : UInt64, uuid : UUID, entity_type : UInt32, position : <a href="../Rosegold/Vec3d.html">Rosegold::Vec3d</a>, pitch : Float32, yaw : Float32, head_yaw : Float32, velocity : <a href="../Rosegold/Vec3d.html">Rosegold::Vec3d</a>, on_ground : Bool = <span class="n">true</span>, living : Bool = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#new%28entity_id%3AUInt64%2Cuuid%3AUUID%2Centity_type%3AUInt32%2Cposition%3ARosegold%3A%3AVec3d%2Cpitch%3AFloat32%2Cyaw%3AFloat32%2Chead_yaw%3AFloat32%2Cvelocity%3ARosegold%3A%3AVec3d%2Con_ground%3ABool%3Dtrue%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28entity_id%3AUInt64%2Cuuid%3AUUID%2Centity_type%3AUInt32%2Cposition%3ARosegold%3A%3AVec3d%2Cpitch%3AFloat32%2Cyaw%3AFloat32%2Chead_yaw%3AFloat32%2Cvelocity%3ARosegold%3A%3AVec3d%2Con_ground%3ABool%3Dtrue%2Cliving%3ABool%3Dfalse%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1395,7 +1416,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1411,7 +1432,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1427,7 +1448,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1443,7 +1464,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1459,7 +1480,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1475,7 +1496,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1491,7 +1512,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1507,7 +1528,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1523,7 +1544,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="living=(living:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>living=</strong>(living : Bool)
+
+        <a class="method-permalink" href="#living%3D%28living%3ABool%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L31" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="living?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>living?</strong> : Bool
+
+        <a class="method-permalink" href="#living%3F%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1539,7 +1592,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1555,7 +1608,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1571,7 +1624,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1587,7 +1640,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1603,7 +1656,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1619,7 +1672,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1635,7 +1688,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1651,7 +1704,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1667,7 +1720,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1683,7 +1736,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L60" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1699,7 +1752,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1715,7 +1768,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1731,7 +1784,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1747,7 +1800,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1763,7 +1816,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1779,7 +1832,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/world/entity.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.7.3">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.8.2">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="rosegold">
 
@@ -25,6 +26,11 @@
     <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
   </symbol>
 </svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="search-box">
@@ -631,6 +637,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Event/Tick" data-name="rosegold::event::tick">
+      <a href="../Rosegold/Event/Tick.html">Tick</a>
+      
+    </li>
+  
 </ul>
 
       
@@ -1128,7 +1139,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L6" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L6" target="_blank">
         rosegold/control/interactions.cr
       </a>
     
@@ -1171,13 +1182,6 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#cancel_digging-instance-method" class="signature"><strong>#cancel_digging</strong></a>
-        
-          <div class="summary"><p><span class="flag orange">TODO</span>  decide finish/cancel based on block dig time</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#client%3AClient-instance-method" class="signature"><strong>#client</strong> : Client</a>
         
       </li>
@@ -1189,11 +1193,6 @@
     
       <li class="entry-summary">
         <a href="#digging%3F%3ABool-instance-method" class="signature"><strong>#digging?</strong> : Bool</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#finish_digging-instance-method" class="signature"><strong>#finish_digging</strong></a>
         
       </li>
     
@@ -1227,6 +1226,16 @@
         <a href="#stop_using_hand-instance-method" class="signature"><strong>#stop_using_hand</strong></a>
         
           <div class="summary"><p>Deactivates the &quot;use&quot; button.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#tick-instance-method" class="signature"><strong>#tick</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#using_hand_delay_for%28slot%29-instance-method" class="signature"><strong>#using_hand_delay_for</strong>(slot)</a>
         
       </li>
     
@@ -1281,7 +1290,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1300,27 +1309,6 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="cancel_digging-instance-method">
-      <div class="signature">
-        
-        def <strong>cancel_digging</strong>
-
-        <a class="method-permalink" href="#cancel_digging-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p><span class="flag orange">TODO</span>  decide finish/cancel based on block dig time</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L144" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="client:Client-instance-method">
       <div class="signature">
         
@@ -1332,7 +1320,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1348,7 +1336,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1364,23 +1352,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L19" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="finish_digging-instance-method">
-      <div class="signature">
-        
-        def <strong>finish_digging</strong>
-
-        <a class="method-permalink" href="#finish_digging-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L135" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1396,7 +1368,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L156" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L217" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1417,7 +1389,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1438,7 +1410,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1459,7 +1431,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L97" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1480,7 +1452,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e70cbfb8db09e12a699d971f49edb774a854318e/src/rosegold/control/interactions.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L37" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="tick-instance-method">
+      <div class="signature">
+        
+        def <strong>tick</strong>
+
+        <a class="method-permalink" href="#tick-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L61" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="using_hand_delay_for(slot)-instance-method">
+      <div class="signature">
+        
+        def <strong>using_hand_delay_for</strong>(slot)
+
+        <a class="method-permalink" href="#using_hand_delay_for%28slot%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0f669d273580d76fbb479ecf6bf299604ded6b1b/src/rosegold/control/interactions.cr#L167" target="_blank">View source</a>]
         
       </div>
     </div>
