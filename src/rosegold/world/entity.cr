@@ -63,8 +63,6 @@ class Rosegold::Entity
         client.player.feet = position
       elsif entity = client.dimension.entities[passenger_id]?
         entity.position = position
-      else
-        Log.warn { "Trying to update passenger #{passenger_id} but it doesn't exist in client.dimensions.entities" }
       end
     end
   end
