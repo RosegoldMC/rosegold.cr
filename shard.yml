@@ -8,7 +8,7 @@ authors:
   - grepsedawk <grepsedawk@users.noreply.github.com>
   - Gjum <Gjum@users.noreply.github.com>
 
-crystal: 1.4.1
+crystal: 1.17.0
 
 license: MIT
 dependencies:
