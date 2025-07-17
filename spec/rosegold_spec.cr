@@ -5,8 +5,16 @@ Spectator.describe Rosegold do
     expect(Rosegold::VERSION).to be_a(String)
   end
 
-  it "should support latest Minecraft version (1.21)" do
+  it "should support configurable protocol version" do
+    # Default is 1.18 for now
+    expect(Rosegold::Client.protocol_version).to eq(758_u32)
+    
+    # Can be changed to 1.21
+    Rosegold::Client.protocol_version = 767_u32
     expect(Rosegold::Client.protocol_version).to eq(767_u32)
+    
+    # Reset to default
+    Rosegold::Client.protocol_version = 758_u32
   end
 
   it "should support both 1.18 and 1.21 MCData" do

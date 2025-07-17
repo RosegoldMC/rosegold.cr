@@ -17,7 +17,11 @@ end
 # and control state (physics, open window, etc.).
 # Can be reconnected.
 class Rosegold::Client < Rosegold::EventEmitter
-  class_getter protocol_version = 767_u32
+  class_getter protocol_version = 758_u32  # Default to 1.18 for now until 1.21 packet format is fixed
+
+  def self.protocol_version=(version : UInt32)
+    @@protocol_version = version
+  end
 
   property host : String, port : Int32
   property connection : Connection::Client?
