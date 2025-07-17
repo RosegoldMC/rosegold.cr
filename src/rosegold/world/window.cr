@@ -35,7 +35,7 @@ class Rosegold::Window
 
   def handle_closed
     return if closed?
-    closed = true
+    self.closed = true
 
     if @client.window == self
       @client.window = @client.inventory

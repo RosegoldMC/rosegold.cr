@@ -38,8 +38,8 @@ class Rosegold::Clientbound::MultiBlockChange < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    block_states.each do |x, y, z, block_state|
-      client.dimension.set_block_state x, y, z, block_state
+    block_states.each do |coord_x, coord_y, coord_z, block_state_value|
+      client.dimension.set_block_state coord_x, coord_y, coord_z, block_state_value
     end
   end
 end

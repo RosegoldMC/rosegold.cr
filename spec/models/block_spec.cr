@@ -48,11 +48,11 @@ Spectator.describe Rosegold::Block do
           let(:main_hand) {
             Rosegold::Slot.new(
               item_id_int: 721,
-              nbt: Minecraft::NBT::CompoundTag.new(Hash(String, Minecraft::NBT::Tag).new.tap { |h|
-                h["Enchantments"] = Minecraft::NBT::ListTag.new(Array(Minecraft::NBT::Tag).new.tap { |a|
-                  a << Minecraft::NBT::CompoundTag.new(Hash(String, Minecraft::NBT::Tag).new.tap { |e|
-                    e["id"] = Minecraft::NBT::StringTag.new("minecraft:efficiency")
-                    e["lvl"] = Minecraft::NBT::ShortTag.new(4)
+              nbt: Minecraft::NBT::CompoundTag.new(Hash(String, Minecraft::NBT::Tag).new.tap { |hash|
+                hash["Enchantments"] = Minecraft::NBT::ListTag.new(Array(Minecraft::NBT::Tag).new.tap { |array|
+                  array << Minecraft::NBT::CompoundTag.new(Hash(String, Minecraft::NBT::Tag).new.tap { |enchantment|
+                    enchantment["id"] = Minecraft::NBT::StringTag.new("minecraft:efficiency")
+                    enchantment["lvl"] = Minecraft::NBT::ShortTag.new(4)
                   })
                 })
               })

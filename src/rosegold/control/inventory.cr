@@ -90,7 +90,7 @@ class Rosegold::Inventory
   private def find_empty_slot(source)
     empty_slot = nil
 
-    source.sort { |a, b| b.slot_number <=> a.slot_number }.each do |slot|
+    source.sort { |slot_a, slot_b| slot_b.slot_number <=> slot_a.slot_number }.each do |slot|
       if slot.empty?
         empty_slot = slot
         break
@@ -117,7 +117,7 @@ class Rosegold::Inventory
 
     # prefer large stacks for minimum clicks
     # for equal stacks, preserve order
-    source.sort_by { |s| -s.count.to_i8 }.each do |slot|
+    source.sort_by { |slot| -slot.count.to_i8 }.each do |slot|
       next unless slot.matches? spec
 
       # Find first empty slot in target container

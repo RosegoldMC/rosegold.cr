@@ -95,7 +95,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
 
   def self.decode_packet(
     packet_bytes : Bytes,
-    state : Hash(UInt8, InboundPacket.class)
+    state : Hash(UInt8, InboundPacket.class),
   ) : InboundPacket
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
       pkt_id = pkt_io.read_byte || raise "Empty packet"

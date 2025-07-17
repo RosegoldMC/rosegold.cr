@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-Spectator.describe Rosegold::Bot do
+Spectator.describe "Rosegold::Bot inventory" do
   describe "#count" do
     context "when the item is not in the inventory" do
       it "returns 0" do

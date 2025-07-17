@@ -16,7 +16,7 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
   def initialize(
     @encryption_request : Rosegold::Clientbound::EncryptionRequest,
     @uuid : String,
-    @access_token : String
+    @access_token : String,
   )
     @shared_secret = Random::Secure.random_bytes(16)
   end

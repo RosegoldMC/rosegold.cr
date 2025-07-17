@@ -28,9 +28,7 @@ jobs:
             ~/.cache/crystal
             bin/ameba
             lib
-          key: ${{ runner.os }}-crystal-${{ hashFiles('**/shard.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-crystal-
+          key: ${{ runner.os }}-crystal-${{ matrix.crystal_version }}-${{ hashFiles('**/shard.yml') }}
 
       - name: Install shards
         if: steps.crystal-cache.outputs.cache-hit != 'true'
@@ -47,7 +45,7 @@ jobs:
       fail-fast: true
       matrix:
         crystal_version:
-          - 1.8.2
+          - 1.17.0
           - latest
         experimental:
           - false
@@ -73,8 +71,6 @@ jobs:
             bin/ameba
             lib
           key: ${{ runner.os }}-crystal-${{ matrix.crystal_version }}-${{ hashFiles('**/shard.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-crystal-
 
       - name: Install shards
         if: steps.crystal-cache.outputs.cache-hit != 'true'

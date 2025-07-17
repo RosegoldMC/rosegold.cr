@@ -17,7 +17,7 @@ class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packe
     @location : Vec3i,
     @face : BlockFace,
     @cursor : Vec3f = Vec3f.new(0.5, 0.5, 0.5),
-    @inside_block : Bool = false
+    @inside_block : Bool = false,
   ); end
 
   def self.read(io)
