@@ -25,6 +25,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   property host : String, port : Int32
   property connection : Connection::Client?
+  property detected_protocol_version : UInt32?
 
   property \
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
@@ -36,6 +37,10 @@ class Rosegold::Client < Rosegold::EventEmitter
     inventory : PlayerWindow,
     window : Window,
     offline : NamedTuple(uuid: String, username: String)? = nil
+
+  def protocol_version
+    detected_protocol_version || Client.protocol_version
+  end
 
   def initialize(@host : String, @port : Int32 = 25565, @offline : NamedTuple(uuid: String, username: String)? = nil)
     if host.includes? ":"
@@ -119,6 +124,9 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     authenticate!
 
+    # Auto-detect server protocol version before connecting
+    detect_and_set_protocol_version
+
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound, self
     connection.handler.try &.on Event::Disconnected do |_event|
@@ -126,10 +134,10 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
     Log.info { "Connected to #{host}:#{port}" }
 
-    send_packet! Serverbound::Handshake.new Client.protocol_version, host, port, 2
+    send_packet! Serverbound::Handshake.new protocol_version, host, port, 2
     connection.state = ProtocolState::LOGIN.clientbound
 
-    queue_packet Serverbound::LoginStart.new player.username.not_nil! # ameba:disable Lint/NotNil
+    queue_packet Serverbound::LoginStart.new player.username.not_nil!, player.uuid, protocol_version # ameba:disable Lint/NotNil
 
     @online_players = Hash(UUID, PlayerList::Entry).new
 
@@ -156,8 +164,28 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
   end
 
+  private def detect_and_set_protocol_version
+    begin
+      # Ping the server to get its protocol version
+      # We'll try with a commonly supported protocol first, then adjust
+      status_response = status
+      if protocol_info = status_response.json_response["version"]?
+        if server_protocol = protocol_info["protocol"]?.try(&.as_i?)
+          Log.info { "Detected server protocol version: #{server_protocol}" }
+          @detected_protocol_version = server_protocol.to_u32
+        else
+          Log.warn { "Could not parse protocol version from server status, using default" }
+        end
+      else
+        Log.warn { "Server status response missing version info, using default" }
+      end
+    rescue e
+      Log.warn { "Failed to detect server protocol version: #{e}, using default" }
+    end
+  end
+
   def status
-    self.class.status host, port
+    self.class.status host, port.to_u16
   end
 
   def self.status(host : String, port : UInt16 = 25565)
@@ -168,7 +196,14 @@ class Rosegold::Client < Rosegold::EventEmitter
     connection.state = ProtocolState::STATUS.clientbound
 
     connection.send_packet Serverbound::StatusRequest.new
-    connection.read_packet
+    packet = connection.read_packet
+    
+    # Return the StatusResponse if it's the right type
+    if packet.is_a?(Clientbound::StatusResponse)
+      packet
+    else
+      raise "Unexpected packet type: #{packet.class}"
+    end
   end
 
   # Send a packet to the server concurrently.
