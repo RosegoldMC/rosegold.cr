@@ -43,40 +43,40 @@ module Rosegold::Vec3(T)
     self.class.new -x, -y, -z
   end
 
-  def -(vec : self) : self
-    self.class.new x - vec.x, y - vec.y, z - vec.z
+  def -(other : self) : self
+    self.class.new x - other.x, y - other.y, z - other.z
   end
 
   def minus(dx : T, dy : T, dz : T) : self
     self.class.new x - dx, y - dy, z - dz
   end
 
-  def +(vec : self) : self
-    self.class.new x + vec.x, y + vec.y, z + vec.z
+  def +(other : self) : self
+    self.class.new x + other.x, y + other.y, z + other.z
   end
 
   def plus(dx : T, dy : T, dz : T) : self
     self.class.new x + dx, y + dy, z + dz
   end
 
-  def *(scalar : T) : self
-    self.class.new x * scalar, y * scalar, z * scalar
+  def *(other : T) : self
+    self.class.new x * other, y * other, z * other
   end
 
-  def &*(scalar : T) : self
-    self.class.new x * scalar, y * scalar, z * scalar
+  def &*(other : T) : self
+    self.class.new x * other, y * other, z * other
   end
 
-  def /(scalar : T) : self
-    self.class.new x / scalar, y / scalar, z / scalar
+  def /(other : T) : self
+    self.class.new x / other, y / other, z / other
   end
 
   def map(block : T -> T) : self
     self.class.new block.call(x), block.call(y), block.call(z)
   end
 
-  def ==(vec : Vec3(T)) : Bool
-    x.round(4) == vec.x.round(4) && y.round(4) == vec.y.round(4) && z.round(4) == vec.z.round(4)
+  def ==(other : Vec3(T)) : Bool
+    x.round(4) == other.x.round(4) && y.round(4) == other.y.round(4) && z.round(4) == other.z.round(4)
   end
 
   def normed : self
@@ -198,8 +198,8 @@ module Rosegold::Vec3(T)
     end
   end
 
-  def +(face : BlockFace) : Vec3d
-    centered_3d + face.to_vec3d(0.5)
+  def +(other : BlockFace) : Vec3d
+    centered_3d + other.to_vec3d(0.5)
   end
 
   def to_s(io, sep = ", ")
@@ -236,12 +236,12 @@ struct Rosegold::Vec3f
 
   # additional methods that "upgrade" to Vec3d
 
-  def -(vec : Vec3d) : Vec3d
-    Vec3d.new x - vec.x, y - vec.y, z - vec.z
+  def -(other : Vec3d) : Vec3d
+    Vec3d.new x - other.x, y - other.y, z - other.z
   end
 
-  def +(vec : Vec3d) : Vec3d
-    Vec3d.new x + vec.x, y + vec.y, z + vec.z
+  def +(other : Vec3d) : Vec3d
+    Vec3d.new x + other.x, y + other.y, z + other.z
   end
 end
 
@@ -259,8 +259,8 @@ enum BlockFace
   # order matters for packet serialization
   Bottom; Top; North; South; West; East
 
-  def +(vec : Vec3d | Vec3i) : Vec3d
-    vec.centered_3d + to_vec3d(0.5)
+  def +(other : Vec3d | Vec3i) : Vec3d
+    other.centered_3d + to_vec3d(0.5)
   end
 
   def to_vec3d(len : Float64 = 0.5) : Vec3d

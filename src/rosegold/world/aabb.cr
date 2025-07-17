@@ -35,8 +35,8 @@ module Rosegold::AABB(T, V)
     self.class.new min + aabb.min, max + aabb.max
   end
 
-  def *(scalar : T) : self
-    self.class.new min * scalar, max * scalar
+  def *(other : T) : self
+    self.class.new min * other, max * other
   end
 
   def contains?(vec : V) : Bool
@@ -96,8 +96,8 @@ struct Rosegold::AABBf
 
   # additional methods that "upgrade" to AABBd
 
-  def +(vec : Vec3d) : AABBd
-    AABBd.new min + vec, max + vec
+  def +(other : Vec3d) : AABBd
+    AABBd.new min + other, max + other
   end
 
   def offset(vec : Vec3d) : AABBd
