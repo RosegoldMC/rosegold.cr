@@ -5,3 +5,6 @@ Lint/ShadowingOuterLocalVar:
   - src/retrieve_token.cr
   Enabled: true
   Severity: Warning
+
+Documentation/DocumentationAdmonition:
+  Enabled: false
