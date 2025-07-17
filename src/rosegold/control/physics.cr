@@ -327,7 +327,7 @@ class Rosegold::Physics
     blocks_coords.flat_map do |block_coords|
       x, y, z = block_coords
       dimension.block_state(x, y, z).try do |block_state|
-        block_shape = MCData::MC118.block_state_collision_shapes[block_state]
+        block_shape = MCData::DEFAULT.block_state_collision_shapes[block_state]
         block_shape.map &.to_f64.offset(x, y, z).grow(grow_aabb)
       end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
     end

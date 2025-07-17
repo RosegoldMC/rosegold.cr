@@ -26,12 +26,12 @@ class Rosegold::Block
   getter states : Array(MCData::BlockProperty)
 
   def self.from_block_state_id(state_id : UInt16) : Block
-    MCData::MC118.blocks.find { |block| block.min_state_id <= state_id && block.max_state_id >= state_id } || \
+    MCData::DEFAULT.blocks.find { |block| block.min_state_id <= state_id && block.max_state_id >= state_id } || \
        raise "Invalid block state id #{state_id}"
   end
 
   def material_tool_multipliers
-    MCData::MC118.materials.json_unmapped[material]
+    MCData::DEFAULT.materials.json_unmapped[material]
   end
 
   def best_tool?(slot : Slot)

@@ -48,11 +48,11 @@ class Rosegold::Slot
   end
 
   def max_durability
-    MCData::MC118.items_by_id_int[item_id_int].max_durability || 0_u16
+    MCData::DEFAULT.items_by_id_int[item_id_int].max_durability || 0_u16
   end
 
   def max_stack_size
-    MCData::MC118.items_by_id_int[item_id_int].stack_size
+    MCData::DEFAULT.items_by_id_int[item_id_int].stack_size
   end
 
   def efficiency
@@ -90,7 +90,7 @@ class Rosegold::Slot
   # Use to get the item_id in new-age string format
   # To get the legacy int format, use `item_id_int`
   def item_id : String
-    MCData::MC118.items_by_id_int[item_id_int]?.try &.id_str || raise "Unknown item_id_int: #{item_id_int}"
+    MCData::DEFAULT.items_by_id_int[item_id_int]?.try &.id_str || raise "Unknown item_id_int: #{item_id_int}"
   end
 
   def matches?(item_id_int : UInt32)

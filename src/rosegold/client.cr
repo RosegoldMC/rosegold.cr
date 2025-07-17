@@ -17,7 +17,7 @@ end
 # and control state (physics, open window, etc.).
 # Can be reconnected.
 class Rosegold::Client < Rosegold::EventEmitter
-  class_getter protocol_version = 758_u32
+  class_getter protocol_version = 767_u32
 
   property host : String, port : Int32
   property connection : Connection::Client?
