@@ -16,3 +16,6 @@
 # whole entire minecraft server for specs
 spec/fixtures/server/*
 !spec/fixtures/server/ops.json
+
+# Crystal installation files
+share/
