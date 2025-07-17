@@ -10,10 +10,10 @@ end
 # Test client that allows overriding the status method
 class TestableClient < Rosegold::Client
   property status_response : MockStatusResponse?
-  property should_raise_error : Bool = false
+  property? should_raise_error : Bool = false
 
   def status
-    if should_raise_error
+    if should_raise_error?
       raise IO::Error.new("Connection failed")
     end
 
