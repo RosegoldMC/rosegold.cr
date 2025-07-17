@@ -25,7 +25,7 @@ class Rosegold::Serverbound::LoginStart < Rosegold::Serverbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write @@packet_id
       buffer.write username
-      
+
       # For protocol 767+ (MC 1.21), also include UUID
       if protocol_version >= 767
         # Use provided UUID or generate a default one

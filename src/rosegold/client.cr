@@ -17,7 +17,7 @@ end
 # and control state (physics, open window, etc.).
 # Can be reconnected.
 class Rosegold::Client < Rosegold::EventEmitter
-  class_getter protocol_version = 767_u32  # Default to 1.21 (protocol 767)
+  class_getter protocol_version = 767_u32 # Default to 1.21 (protocol 767)
 
   def self.protocol_version=(version : UInt32)
     @@protocol_version = version
@@ -165,23 +165,21 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   private def detect_and_set_protocol_version
-    begin
-      # Ping the server to get its protocol version
-      # We'll try with a commonly supported protocol first, then adjust
-      status_response = status
-      if protocol_info = status_response.json_response["version"]?
-        if server_protocol = protocol_info["protocol"]?.try(&.as_i?)
-          Log.info { "Detected server protocol version: #{server_protocol}" }
-          @detected_protocol_version = server_protocol.to_u32
-        else
-          Log.warn { "Could not parse protocol version from server status, using default" }
-        end
+    # Ping the server to get its protocol version
+    # We'll try with a commonly supported protocol first, then adjust
+    status_response = status
+    if protocol_info = status_response.json_response["version"]?
+      if server_protocol = protocol_info["protocol"]?.try(&.as_i?)
+        Log.info { "Detected server protocol version: #{server_protocol}" }
+        @detected_protocol_version = server_protocol.to_u32
       else
-        Log.warn { "Server status response missing version info, using default" }
+        Log.warn { "Could not parse protocol version from server status, using default" }
       end
-    rescue e
-      Log.warn { "Failed to detect server protocol version: #{e}, using default" }
+    else
+      Log.warn { "Server status response missing version info, using default" }
     end
+  rescue e
+    Log.warn { "Failed to detect server protocol version: #{e}, using default" }
   end
 
   def status
@@ -197,7 +195,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     connection.send_packet Serverbound::StatusRequest.new
     packet = connection.read_packet
-    
+
     # Return the StatusResponse if it's the right type
     if packet.is_a?(Clientbound::StatusResponse)
       packet
