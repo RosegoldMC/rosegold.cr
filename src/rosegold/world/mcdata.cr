@@ -7,7 +7,7 @@ class Rosegold::MCData
 
   MC118 = Rosegold::MCData.new "1.18"
   MC121 = Rosegold::MCData.new "1.21"
-  
+
   # Default to latest supported version
   DEFAULT = MC121
 
