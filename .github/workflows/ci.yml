@@ -28,7 +28,9 @@ jobs:
             ~/.cache/crystal
             bin/ameba
             lib
-          key: ${{ runner.os }}-crystal-${{ matrix.crystal_version }}-${{ hashFiles('**/shard.yml') }}
+          key: ${{ runner.os }}-crystal-${{ hashFiles('**/shard.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-crystal-
 
       - name: Install shards
         if: steps.crystal-cache.outputs.cache-hit != 'true'
@@ -45,8 +47,11 @@ jobs:
       fail-fast: true
       matrix:
         crystal_version:
-          - 1.17.0
+          - 1.8.2
           - latest
+        minecraft_version:
+          - "1.18.2"
+          - "1.21"
         experimental:
           - false
 
@@ -55,7 +60,11 @@ jobs:
 
       - run: |
           cd spec
-          docker compose up -d
+          if [ "${{ matrix.minecraft_version }}" = "1.18.2" ]; then
+            docker compose -f docker-compose.1.18.yml up -d
+          else
+            docker compose -f docker-compose.1.21.yml up -d
+          fi
           sleep 30 # TODO: Wait for the container to be ready
 
       - uses: oprypin/install-crystal@v1
@@ -71,6 +80,8 @@ jobs:
             bin/ameba
             lib
           key: ${{ runner.os }}-crystal-${{ matrix.crystal_version }}-${{ hashFiles('**/shard.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-crystal-
 
       - name: Install shards
         if: steps.crystal-cache.outputs.cache-hit != 'true'

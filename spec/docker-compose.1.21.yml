@@ -1,15 +1,6 @@
-version: '3'
+version: "3"
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ..:/workspace:cached
-    command: sleep infinity
-    network_mode: host
-
   mc:
     image: itzg/minecraft-server
     ports:
@@ -20,8 +11,9 @@ services:
       ONLINE_MODE: "FALSE"
       MAX_WORLD_SIZE: 10
       LEVEL_TYPE: flat
+
     tty: true
     stdin_open: true
     restart: unless-stopped
     volumes:
-      - ../spec/fixtures/server:/data
+      - ./fixtures/server:/data
