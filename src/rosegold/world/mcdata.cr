@@ -5,11 +5,12 @@ require "./aabb"
 class Rosegold::MCData
   private MCD_ROOT = "minecraft-data/data/pc"
 
-  MC118 = Rosegold::MCData.new "1.18"
-  MC121 = Rosegold::MCData.new "1.21"
+  MC118  = Rosegold::MCData.new "1.18"
+  MC121  = Rosegold::MCData.new "1.21"
+  MC1216 = Rosegold::MCData.new "1.21.6"
 
   # Default to latest supported version
-  DEFAULT = MC121
+  DEFAULT = MC1216
 
   getter items : Array(Item)
   getter items_by_id : Hash(String, Item)
@@ -29,7 +30,7 @@ class Rosegold::MCData
 
   def initialize(mc_version : String)
     # for arbitrary version support, we would need to parse dataPaths.json
-    raise "we only support 1.18 and 1.21 for now" if mc_version != "1.18" && mc_version != "1.21"
+    raise "we only support 1.18, 1.21, and 1.21.6 for now" if mc_version != "1.18" && mc_version != "1.21" && mc_version != "1.21.6"
 
     @items = Array(Item)
       .from_json(Rosegold.read_game_asset "items.json")

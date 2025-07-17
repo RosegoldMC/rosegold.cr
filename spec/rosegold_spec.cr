@@ -6,28 +6,29 @@ Spectator.describe Rosegold do
   end
 
   it "should support configurable protocol version" do
-    # Default is now 1.21 (protocol 767)
-    expect(Rosegold::Client.protocol_version).to eq(767_u32)
+    # Default is now 1.21.6 (protocol 771)
+    expect(Rosegold::Client.protocol_version).to eq(771_u32)
 
     # Can be changed to 1.18
     Rosegold::Client.protocol_version = 758_u32
     expect(Rosegold::Client.protocol_version).to eq(758_u32)
 
-    # Reset to default (1.21)
-    Rosegold::Client.protocol_version = 767_u32
+    # Reset to default (1.21.6)
+    Rosegold::Client.protocol_version = 771_u32
   end
 
-  it "should support both 1.18 and 1.21 MCData" do
+  it "should support 1.18, 1.21, and 1.21.6 MCData" do
     expect { Rosegold::MCData.new("1.18") }.not_to raise_error
     expect { Rosegold::MCData.new("1.21") }.not_to raise_error
+    expect { Rosegold::MCData.new("1.21.6") }.not_to raise_error
   end
 
   it "should reject unsupported versions" do
-    expect { Rosegold::MCData.new("1.17") }.to raise_error(/we only support 1.18 and 1.21/)
-    expect { Rosegold::MCData.new("1.22") }.to raise_error(/we only support 1.18 and 1.21/)
+    expect { Rosegold::MCData.new("1.17") }.to raise_error(/we only support 1.18, 1.21, and 1.21.6/)
+    expect { Rosegold::MCData.new("1.22") }.to raise_error(/we only support 1.18, 1.21, and 1.21.6/)
   end
 
-  it "should default to 1.21 MCData" do
-    expect(Rosegold::MCData::DEFAULT).to eq(Rosegold::MCData::MC121)
+  it "should default to 1.21.6 MCData" do
+    expect(Rosegold::MCData::DEFAULT).to eq(Rosegold::MCData::MC1216)
   end
 end
