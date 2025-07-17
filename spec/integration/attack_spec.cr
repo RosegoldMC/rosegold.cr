@@ -1,6 +1,6 @@
 require "../spec_helper"
 
-Spectator.describe Rosegold::Bot do
+Spectator.describe "Rosegold::Bot attack" do
   after_each do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|

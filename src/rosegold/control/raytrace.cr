@@ -59,7 +59,7 @@ module Rosegold::Raytrace
   # TODO: rename this helper
   private def self.better(
     ray : Ray, box : AABBd, plane_coord : Float64, face : BlockFace,
-    min_scalar : Float64, min_result : Result?, box_nr : Int32
+    min_scalar : Float64, min_result : Result?, box_nr : Int32,
   ) : Tuple(Float64, Result?)
     intersect_plane(ray, box, plane_coord, face).try do |scalar, hit|
       if scalar < min_scalar
@@ -72,7 +72,7 @@ module Rosegold::Raytrace
 
   # ameba:disable Metrics/CyclomaticComplexity
   private def self.intersect_plane(
-    ray : Ray, box : AABBd, plane_coord : Float64, face : BlockFace
+    ray : Ray, box : AABBd, plane_coord : Float64, face : BlockFace,
   ) : Tuple(Float64, Vec3d)?
     delta_coord = ray.delta.axis(face)
     start_coord = ray.start.axis(face)

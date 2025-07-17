@@ -64,7 +64,11 @@ Spectator.describe "Rosegold::Bot event emitter" do
 
           expect(ran_event).to be nil
           bot.chat "Hello, world!"
-          bot.wait_tick
+          ticks = 0
+          until ran_event || ticks > 100
+            bot.wait_tick
+            ticks += 1
+          end
           expect(ran_event).to be_a Rosegold::Clientbound::ChatMessage
         end
       end
@@ -81,7 +85,12 @@ Spectator.describe "Rosegold::Bot event emitter" do
 
             expect(ran_event).to be nil
             bot.chat "Hello, world!"
-            bot.wait_tick
+            # until ran event or 5 seconds
+            ticks = 0
+            until ran_event || ticks > 100
+              bot.wait_tick
+              ticks += 1
+            end
             expect(ran_event).to be_a Rosegold::Clientbound::ChatMessage
           end
         end
