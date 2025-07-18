@@ -24,4 +24,11 @@ class Rosegold::Serverbound::LoginAcknowledged < Rosegold::Serverbound::Packet
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
     end.to_slice
   end
+
+  def callback(client)
+    # After sending LoginAcknowledged, we're now in CONFIGURATION state
+    # Send ClientInformation packet to configure the client
+    client.send_packet! Rosegold::Serverbound::ClientInformation.new
+    Log.debug { "Sent ClientInformation during configuration phase" }
+  end
 end

@@ -66,10 +66,11 @@ class Rosegold::Serverbound::RawPacket < Rosegold::Serverbound::Packet
 end
 
 class Rosegold::ProtocolState
-  HANDSHAKING = ProtocolState.new "HANDSHAKING"
-  STATUS      = ProtocolState.new "STATUS"
-  LOGIN       = ProtocolState.new "LOGIN"
-  PLAY        = ProtocolState.new "PLAY"
+  HANDSHAKING   = ProtocolState.new "HANDSHAKING"
+  STATUS        = ProtocolState.new "STATUS"
+  LOGIN         = ProtocolState.new "LOGIN"
+  CONFIGURATION = ProtocolState.new "CONFIGURATION"
+  PLAY          = ProtocolState.new "PLAY"
 
   getter name : String
   getter clientbound = Hash({UInt8, UInt32}, Clientbound::Packet.class).new
