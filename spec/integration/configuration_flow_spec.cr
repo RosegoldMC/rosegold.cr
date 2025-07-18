@@ -171,7 +171,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       config_state = Rosegold::ProtocolState::CONFIGURATION
       
       # Check clientbound packets
-      expect(config_state.get_clientbound_packet(0x02_u8, 767_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
+      expect(config_state.get_clientbound_packet(0x03_u8, 767_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
       expect(config_state.get_clientbound_packet(0x05_u8, 767_u32)).to eq(Rosegold::Clientbound::RegistryData)
       expect(config_state.get_clientbound_packet(0x08_u8, 767_u32)).to eq(Rosegold::Clientbound::UpdateTags)
       
@@ -180,7 +180,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       expect(config_state.get_serverbound_packet(0x02_u8, 767_u32)).to eq(Rosegold::Serverbound::FinishConfiguration)
       
       # Verify same for protocol 771
-      expect(config_state.get_clientbound_packet(0x02_u8, 771_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
+      expect(config_state.get_clientbound_packet(0x03_u8, 771_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
       expect(config_state.get_serverbound_packet(0x00_u8, 771_u32)).to eq(Rosegold::Serverbound::ClientInformation)
     end
   end

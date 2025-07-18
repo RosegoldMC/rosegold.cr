@@ -11,7 +11,7 @@ Spectator.describe "CONFIGURATION state implementation" do
       config_state = Rosegold::ProtocolState::CONFIGURATION
       
       # Check that FinishConfiguration is registered for protocol 767
-      finish_config_767 = config_state.get_clientbound_packet(0x02_u8, 767_u32)
+      finish_config_767 = config_state.get_clientbound_packet(0x03_u8, 767_u32)
       expect(finish_config_767).to eq(Rosegold::Clientbound::FinishConfiguration)
       
       # Check that FinishConfiguration serverbound is registered for protocol 767
@@ -27,11 +27,11 @@ Spectator.describe "CONFIGURATION state implementation" do
   describe "Configuration packets" do
     describe "Rosegold::Clientbound::FinishConfiguration" do
       it "has correct packet ID for protocol 767" do
-        expect(Rosegold::Clientbound::FinishConfiguration[767_u32]).to eq(0x02_u8)
+        expect(Rosegold::Clientbound::FinishConfiguration[767_u32]).to eq(0x03_u8)
       end
 
       it "has correct packet ID for protocol 771" do
-        expect(Rosegold::Clientbound::FinishConfiguration[771_u32]).to eq(0x02_u8)
+        expect(Rosegold::Clientbound::FinishConfiguration[771_u32]).to eq(0x03_u8)
       end
 
       it "does not support protocol 758" do
