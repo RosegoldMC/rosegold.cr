@@ -2,7 +2,14 @@ require "../../../minecraft/nbt"
 require "../packet"
 
 class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x26_u8
+  include Rosegold::Packets::ProtocolMapping
+  
+  # Define protocol-specific packet IDs
+  packet_ids({
+    758_u32 => 0x26_u8, # MC 1.18
+    767_u32 => 0x29_u8, # MC 1.21
+    771_u32 => 0x29_u8, # MC 1.21.6
+  })
 
   property entity_id : UInt64
   property? hardcore : Bool
@@ -46,7 +53,7 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write_full entity_id
       buffer.write hardcore?
       buffer.write gamemode

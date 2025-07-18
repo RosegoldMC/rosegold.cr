@@ -5,6 +5,16 @@ Spectator.describe Rosegold::Clientbound::PlayerPositionAndLook do
   let(:file) { File.expand_path("../../../fixtures/packets/clientbound/player_position_and_look.mcpacket", __FILE__) }
   let(:file_slice) { File.read(file).to_slice }
 
+  # Set protocol to 758 to match the fixture file
+  before_each do
+    Rosegold::Client.protocol_version = 758_u32
+  end
+
+  after_each do
+    # Reset to default 
+    Rosegold::Client.protocol_version = 771_u32
+  end
+
   it "parses the packet" do
     io.read_byte
     packet = Rosegold::Clientbound::PlayerPositionAndLook.read(io)
