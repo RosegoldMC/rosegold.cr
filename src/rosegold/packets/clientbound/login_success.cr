@@ -29,19 +29,19 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
   def self.read(packet)
     uuid = packet.read_uuid
     username = packet.read_var_string
-    
+
     # For protocol 767+ (MC 1.21+), also read properties array
     properties = if Client.protocol_version >= 767
-      Array(Property).new(packet.read_var_int) do
-        Property.new(
-          packet.read_var_string, # name
-          packet.read_var_string, # value
-          packet.read_bool ? packet.read_var_string : nil # signature (optional)
-        )
-      end
-    else
-      [] of Property
-    end
+                   Array(Property).new(packet.read_var_int) do
+                     Property.new(
+                       packet.read_var_string,                         # name
+                       packet.read_var_string,                         # value
+                       packet.read_bool ? packet.read_var_string : nil # signature (optional)
+                     )
+                   end
+                 else
+                   [] of Property
+                 end
 
     self.new(uuid, username, properties)
   end
