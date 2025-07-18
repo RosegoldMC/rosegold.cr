@@ -5,8 +5,8 @@ class Rosegold::Serverbound::ClientSettings < Rosegold::Serverbound::Packet
   # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x05_u8, # MC 1.18
-    767_u32 => 0x05_u8, # MC 1.21
-    771_u32 => 0x05_u8, # MC 1.21.6
+    767_u32 => 0x0D_u8, # MC 1.21
+    771_u32 => 0x0D_u8, # MC 1.21.6
   })
 
   enum ChatMode
@@ -22,6 +22,7 @@ class Rosegold::Serverbound::ClientSettings < Rosegold::Serverbound::Packet
     Cape; Jacket; LeftSleeve; RightSleeve; LeftLeg; RightLeg; Hat
   end
 
+  # TODO: Add new properties for 1.19+
   property locale : String = "en_US"
   property view_distance : UInt8 = 1 # Chunks. Only needed for physics
   property chat_mode : ChatMode = :enabled

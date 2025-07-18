@@ -2,8 +2,6 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
     758_u32 => 0x00_u8, # MC 1.18
-    767_u32 => 0x01_u8, # MC 1.21
-    771_u32 => 0x01_u8, # MC 1.21.6
   })
 
   property \
