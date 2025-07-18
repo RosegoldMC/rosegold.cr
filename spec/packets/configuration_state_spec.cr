@@ -21,6 +21,13 @@ Spectator.describe "CONFIGURATION state implementation" do
       # Check ClientInformation is registered
       client_info_767 = config_state.get_serverbound_packet(0x00_u8, 767_u32)
       expect(client_info_767).to eq(Rosegold::Serverbound::ClientInformation)
+      
+      # Check KnownPacks packets are registered for protocol 767
+      known_packs_cb_767 = config_state.get_clientbound_packet(0x0E_u8, 767_u32)
+      expect(known_packs_cb_767).to eq(Rosegold::Clientbound::KnownPacks)
+      
+      known_packs_sb_767 = config_state.get_serverbound_packet(0x07_u8, 767_u32)
+      expect(known_packs_sb_767).to eq(Rosegold::Serverbound::KnownPacks)
     end
   end
 
@@ -103,6 +110,123 @@ Spectator.describe "CONFIGURATION state implementation" do
 
       it "is a CONFIGURATION state packet" do
         expect(Rosegold::Serverbound::ClientInformation.state).to eq(Rosegold::ProtocolState::CONFIGURATION)
+      end
+    end
+
+    describe "Rosegold::Clientbound::KnownPacks" do
+      it "has correct packet ID for protocol 767" do
+        expect(Rosegold::Clientbound::KnownPacks[767_u32]).to eq(0x0E_u8)
+      end
+
+      it "has correct packet ID for protocol 771" do
+        expect(Rosegold::Clientbound::KnownPacks[771_u32]).to eq(0x0E_u8)
+      end
+
+      it "does not support protocol 758" do
+        expect(Rosegold::Clientbound::KnownPacks.supports_protocol?(758_u32)).to be_false
+      end
+
+      it "is a CONFIGURATION state packet" do
+        expect(Rosegold::Clientbound::KnownPacks.state).to eq(Rosegold::ProtocolState::CONFIGURATION)
+      end
+
+      it "creates packet with empty known packs" do
+        packet = Rosegold::Clientbound::KnownPacks.new
+        expect(packet.known_packs).to be_empty
+      end
+
+      it "creates packet with known packs data" do
+        packs = [
+          {namespace: "minecraft", id: "core", version: "1.21"},
+          {namespace: "modpack", id: "extra", version: "2.0.1"}
+        ]
+        packet = Rosegold::Clientbound::KnownPacks.new(packs)
+        expect(packet.known_packs.size).to eq(2)
+        expect(packet.known_packs[0][:namespace]).to eq("minecraft")
+        expect(packet.known_packs[0][:id]).to eq("core")
+        expect(packet.known_packs[0][:version]).to eq("1.21")
+      end
+
+      it "writes and reads packet correctly" do
+        packs = [
+          {namespace: "minecraft", id: "core", version: "1.21"},
+          {namespace: "test", id: "addon", version: "1.0.0"}
+        ]
+        original = Rosegold::Clientbound::KnownPacks.new(packs)
+        
+        bytes = original.write
+        expect(bytes[0]).to eq(0x0E_u8)  # packet ID
+        
+        # Read back the packet (skipping packet ID)
+        io = Minecraft::IO::Memory.new(bytes[1..])
+        parsed = Rosegold::Clientbound::KnownPacks.read(io)
+        
+        expect(parsed.known_packs.size).to eq(2)
+        expect(parsed.known_packs[0][:namespace]).to eq("minecraft")
+        expect(parsed.known_packs[0][:id]).to eq("core")
+        expect(parsed.known_packs[0][:version]).to eq("1.21")
+        expect(parsed.known_packs[1][:namespace]).to eq("test")
+        expect(parsed.known_packs[1][:id]).to eq("addon")
+        expect(parsed.known_packs[1][:version]).to eq("1.0.0")
+      end
+
+      it "handles empty known packs list" do
+        original = Rosegold::Clientbound::KnownPacks.new
+        
+        bytes = original.write
+        expect(bytes[0]).to eq(0x0E_u8)  # packet ID
+        
+        # Read back the packet (skipping packet ID)
+        io = Minecraft::IO::Memory.new(bytes[1..])
+        parsed = Rosegold::Clientbound::KnownPacks.read(io)
+        
+        expect(parsed.known_packs).to be_empty
+      end
+    end
+
+    describe "Rosegold::Serverbound::KnownPacks" do
+      it "has correct packet ID for protocol 767" do
+        expect(Rosegold::Serverbound::KnownPacks[767_u32]).to eq(0x07_u8)
+      end
+
+      it "has correct packet ID for protocol 771" do
+        expect(Rosegold::Serverbound::KnownPacks[771_u32]).to eq(0x07_u8)
+      end
+
+      it "does not support protocol 758" do
+        expect(Rosegold::Serverbound::KnownPacks.supports_protocol?(758_u32)).to be_false
+      end
+
+      it "is a CONFIGURATION state packet" do
+        expect(Rosegold::Serverbound::KnownPacks.state).to eq(Rosegold::ProtocolState::CONFIGURATION)
+      end
+
+      it "creates packet with empty known packs" do
+        packet = Rosegold::Serverbound::KnownPacks.new
+        expect(packet.known_packs).to be_empty
+      end
+
+      it "writes and reads packet correctly" do
+        packs = [
+          {namespace: "minecraft", id: "core", version: "1.21"},
+          {namespace: "custom", id: "pack", version: "3.1.4"}
+        ]
+        original = Rosegold::Serverbound::KnownPacks.new(packs)
+        
+        bytes = original.write
+        expect(bytes[0]).to eq(0x07_u8)  # packet ID
+        
+        # Read back the packet (skipping packet ID)
+        io = Minecraft::IO::Memory.new(bytes[1..])
+        parsed = Rosegold::Serverbound::KnownPacks.read(io)
+        
+        expect(parsed.known_packs.size).to eq(2)
+        expect(parsed.known_packs[0][:namespace]).to eq("minecraft")
+        expect(parsed.known_packs[0][:id]).to eq("core")
+        expect(parsed.known_packs[0][:version]).to eq("1.21")
+        expect(parsed.known_packs[1][:namespace]).to eq("custom")
+        expect(parsed.known_packs[1][:id]).to eq("pack")
+        expect(parsed.known_packs[1][:version]).to eq("3.1.4")
       end
     end
   end
