@@ -238,16 +238,16 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     emit_event Event::RawPacket.new raw_packet
 
-    Log.trace { "RECV 0x#{raw_packet[0].to_s 16}" }
-    
+    Log.trace { "[#{current_protocol_state.name}] RECV 0x#{raw_packet[0].to_s 16}" }
+
     # Use protocol-aware decoding
     packet = Connection::Client.decode_clientbound_packet(
       raw_packet,
       current_protocol_state,
       protocol_version
     )
-    
-    Log.trace { "DECODE 0x#{raw_packet[0].to_s 16} #{packet}" }
+
+    Log.trace { "[#{current_protocol_state.name}] DCDE 0x#{raw_packet[0].to_s 16} #{packet}" }
 
     packet.callback(self)
 

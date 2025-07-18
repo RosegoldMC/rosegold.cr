@@ -6,7 +6,7 @@ class Rosegold::Clientbound::SpawnLivingEntity < Rosegold::Clientbound::Packet
     767_u32 => 0x01_u8, # MC 1.21
     771_u32 => 0x01_u8, # MC 1.21.6
   })
-  class_getter state = Rosegold::ProtocolState::PLAY
+  class_getter state = ProtocolState::PLAY
 
   property \
     entity_id : UInt64,
