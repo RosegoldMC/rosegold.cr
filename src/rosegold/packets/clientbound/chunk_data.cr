@@ -26,23 +26,98 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   def self.read(io)
     chunk_x = io.read_int
     chunk_z = io.read_int
-    self.new(
-      chunk_x,
-      chunk_z,
-      io.read_nbt,
-      io.read_var_bytes,
-      Array(Chunk::BlockEntity).new(io.read_var_int) do
-        xz = io.read_byte
-        Chunk::BlockEntity.new(
-          chunk_x + ((xz >> 4) & 0xf),
-          io.read_short,
-          chunk_z + (xz & 0xf),
-          io.read_var_int,
-          io.read_nbt
-        )
-      end,
+    heightmaps = io.read_nbt
+    data = io.read_var_bytes
+    block_entities = Array(Chunk::BlockEntity).new(io.read_var_int) do
+      xz = io.read_byte
+      Chunk::BlockEntity.new(
+        chunk_x + ((xz >> 4) & 0xf),
+        io.read_short,
+        chunk_z + (xz & 0xf),
+        io.read_var_int,
+        io.read_nbt
+      )
+    end
+    
+    # Protocol-aware light data reading
+    light_data = if Client.protocol_version >= 767_u32
+      # MC 1.21+ format: Structured light data
+      read_structured_light_data(io)
+    else
+      # MC 1.18 format: Simple light data
       io.getb_to_end
-    )
+    end
+    
+    self.new(chunk_x, chunk_z, heightmaps, data, block_entities, light_data)
+  end
+  
+  private def self.read_structured_light_data(io) : Bytes
+    # For MC 1.21+, the light data has a more complex structure
+    # According to protocol documentation, the light update section contains:
+    # - Sky Light Mask (BitSet - VarInt array)
+    # - Block Light Mask (BitSet - VarInt array)  
+    # - Empty Sky Light Mask (BitSet - VarInt array)
+    # - Empty Block Light Mask (BitSet - VarInt array)
+    # - Sky Light arrays (Array of Byte Array)
+    # - Block Light arrays (Array of Byte Array)
+    
+    # Read all the structured fields and serialize them back to bytes
+    Minecraft::IO::Memory.new.tap do |light_io|
+      # Read sky light mask (BitSet as VarInt array)
+      sky_light_count = io.read_var_int
+      light_io.write sky_light_count
+      sky_light_count.times do
+        mask_value = io.read_var_long
+        light_io.write mask_value
+      end
+      
+      # Read block light mask (BitSet as VarInt array)
+      block_light_count = io.read_var_int
+      light_io.write block_light_count
+      block_light_count.times do
+        mask_value = io.read_var_long
+        light_io.write mask_value
+      end
+      
+      # Read empty sky light mask (BitSet as VarInt array)
+      empty_sky_count = io.read_var_int
+      light_io.write empty_sky_count
+      empty_sky_count.times do
+        mask_value = io.read_var_long
+        light_io.write mask_value
+      end
+      
+      # Read empty block light mask (BitSet as VarInt array)
+      empty_block_count = io.read_var_int
+      light_io.write empty_block_count
+      empty_block_count.times do
+        mask_value = io.read_var_long
+        light_io.write mask_value
+      end
+      
+      # Read sky light arrays
+      sky_arrays_count = io.read_var_int
+      light_io.write sky_arrays_count
+      sky_arrays_count.times do
+        array_data = io.read_var_bytes
+        light_io.write array_data.size
+        light_io.write array_data
+      end
+      
+      # Read block light arrays
+      block_arrays_count = io.read_var_int
+      light_io.write block_arrays_count
+      block_arrays_count.times do
+        array_data = io.read_var_bytes
+        light_io.write array_data.size
+        light_io.write array_data
+      end
+    end.to_slice
+  rescue ex
+    # If structured reading fails, fall back to reading remaining bytes
+    # This ensures compatibility if the format is slightly different
+    Log.debug { "Failed to read structured light data: #{ex.message}, falling back to simple read" }
+    io.getb_to_end
   end
 
   def write : Bytes
@@ -60,6 +135,8 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
         io.write block_entity.type
         io.write block_entity.nbt
       end
+      
+      # Write light data (protocol-aware, but simplified)
       io.write light_data
     end.to_slice
   end

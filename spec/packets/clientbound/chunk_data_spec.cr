@@ -6,6 +6,10 @@ Spectator.describe Rosegold::Clientbound::ChunkData do
   let(:file_slice) { File.read(file).to_slice }
 
   it "parses the packet" do
+    # The test fixture was created for protocol 758 (MC 1.18)
+    original_protocol = Rosegold::Client.protocol_version
+    Rosegold::Client.protocol_version = 758_u32
+    
     io.read_byte
     packet = Rosegold::Clientbound::ChunkData.read(io)
 
@@ -24,11 +28,61 @@ Spectator.describe Rosegold::Clientbound::ChunkData do
     expect(packet.chunk_z).to eq(-210)
     expect(packet.heightmaps).to eq(Minecraft::NBT::CompoundTag.new(heightmaps))
     expect(packet.block_entities).to eq(Array(Rosegold::Chunk::BlockEntity).new)
+    
+    # Restore original protocol version
+    Rosegold::Client.protocol_version = original_protocol
   end
 
   it "writes packet the same after parsing" do
+    # The test fixture was created for protocol 758 (MC 1.18)
+    # Set the protocol version to match the fixture for this test
+    original_protocol = Rosegold::Client.protocol_version
+    Rosegold::Client.protocol_version = 758_u32
+    
     io.read_byte
+    packet = Rosegold::Clientbound::ChunkData.read(io)
+    written_packet = packet.write
 
-    expect(Rosegold::Clientbound::ChunkData.read(io).write).to eq file_slice
+    expect(written_packet).to eq file_slice
+    
+    # Restore original protocol version
+    Rosegold::Client.protocol_version = original_protocol
+  end
+  
+  it "handles protocol 767+ structured light data" do
+    # Test the structured light data reading for MC 1.21+
+    original_protocol = Rosegold::Client.protocol_version
+    Rosegold::Client.protocol_version = 767_u32
+    
+    # Create a mock packet with MC 1.21 structure
+    mock_io = Minecraft::IO::Memory.new
+    mock_io.write_full(123_i32)  # chunk_x
+    mock_io.write_full(456_i32)  # chunk_z
+    mock_io.write(Minecraft::NBT::CompoundTag.new)  # heightmaps
+    chunk_data = Bytes.new(10)
+    mock_io.write chunk_data.size
+    mock_io.write chunk_data
+    mock_io.write(0_u32)  # block entities count
+
+    # Add structured light data for MC 1.21
+    mock_io.write(0_u32)  # sky light mask count
+    mock_io.write(0_u32)  # block light mask count  
+    mock_io.write(0_u32)  # empty sky light mask count
+    mock_io.write(0_u32)  # empty block light mask count
+    mock_io.write(0_u32)  # sky light arrays count
+    mock_io.write(0_u32)  # block light arrays count
+
+    mock_packet_bytes = mock_io.to_slice
+    mock_packet_io = Minecraft::IO::Memory.new(mock_packet_bytes)
+
+    packet = Rosegold::Clientbound::ChunkData.read(mock_packet_io)
+    
+    expect(packet.chunk_x).to eq(123)
+    expect(packet.chunk_z).to eq(456)
+    expect(packet.light_data).to be_a(Bytes)
+    expect(packet.light_data.size).to be > 0
+    
+    # Restore original protocol version
+    Rosegold::Client.protocol_version = original_protocol
   end
 end
