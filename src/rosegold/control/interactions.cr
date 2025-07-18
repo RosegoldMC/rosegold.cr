@@ -211,7 +211,7 @@ class Rosegold::Interactions
   end
 
   private def reach_block_or_entity : ReachedBlock? | Rosegold::Entity?
-    reach_entity || reach_block
+    reach_block_or_entity_unified
   end
 
   def reach_block : ReachedBlock?
@@ -225,6 +225,51 @@ class Rosegold::Interactions
 
   private def reach_entity : Rosegold::Entity?
     client.dimension.raycast_entity client.player.eyes, reach_vec, reach_length
+  end
+
+  # Unified raytracing that properly handles both entities and blocks
+  # ensuring entities cannot be hit through blocks
+  private def reach_block_or_entity_unified : ReachedBlock? | Rosegold::Entity?
+    eyes = client.player.eyes
+    reach_vector = reach_vec
+
+    # Get all block collision boxes
+    block_boxes = get_block_hitboxes(eyes, reach_vector)
+
+    # Get all entity bounding boxes for living entities within reach
+    entity_boxes = [] of AABBd
+    entity_map = [] of Rosegold::Entity
+
+    reach_aabb = AABBd.new(eyes, eyes + reach_vector)
+    client.dimension.entities.each_value do |entity|
+      next unless entity.living?
+
+      entity_bounding_box = entity.bounding_box
+      # Only include entities that could potentially be hit
+      if reach_aabb.intersects?(entity_bounding_box)
+        entity_boxes << entity_bounding_box
+        entity_map << entity
+      end
+    end
+
+    # Combine all boxes for unified raytracing
+    all_boxes = block_boxes + entity_boxes
+    block_count = block_boxes.size
+
+    # Perform unified raytracing
+    result = Raytrace.raytrace(eyes, reach_vector, all_boxes)
+    return nil unless result
+
+    # Determine if we hit a block or entity based on box index
+    if result.box_nr < block_count
+      # Hit a block
+      block = block_boxes[result.box_nr].min.block
+      ReachedBlock.new result.intercept, block, result.face
+    else
+      # Hit an entity
+      entity_index = result.box_nr - block_count
+      entity_map[entity_index]
+    end
   end
 
   private def reach_length
