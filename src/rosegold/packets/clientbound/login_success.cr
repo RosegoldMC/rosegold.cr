@@ -71,6 +71,11 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    # For protocol 767+ (MC 1.21+), send LoginAcknowledged packet before transitioning to PLAY state
+    if client.protocol_version >= 767
+      client.send_packet! Rosegold::Serverbound::LoginAcknowledged.new
+    end
+    
     client.state = ProtocolState::PLAY.clientbound
     Log.info { "Logged in as #{username} #{uuid}" }
     client.player.uuid = uuid
