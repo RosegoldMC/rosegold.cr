@@ -21,7 +21,8 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   alias Server = Connection(Serverbound::Packet, Clientbound::Packet)
 
   property io : Minecraft::IO
-  getter state : Hash(UInt8, InboundPacket.class)
+  getter protocol_state : ProtocolState
+  getter protocol_version : UInt32
   property handler : Rosegold::EventEmitter?
 
   property compression_threshold : UInt32 = 0
@@ -29,7 +30,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   private getter read_mutex : Mutex = Mutex.new
   private getter write_mutex : Mutex = Mutex.new
 
-  def initialize(@io, @state, @handler = nil); end
+  def initialize(@io, @protocol_state, @protocol_version, @handler = nil); end
 
   def io=(io)
     read_mutex.synchronize do
@@ -39,8 +40,8 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     end
   end
 
-  def state=(state)
-    @state = state
+  def protocol_state=(state)
+    @protocol_state = state
   end
 
   def open?
@@ -63,11 +64,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def read_packet : InboundPacket
-    Connection.decode_packet read_raw_packet, state
-  end
-
-  def read_packet(protocol_state : ProtocolState, protocol_version : UInt32, direction : Symbol = :clientbound) : InboundPacket
-    Connection.decode_packet read_raw_packet, protocol_state, protocol_version, direction
+    Connection.decode_clientbound_packet(read_raw_packet, protocol_state, protocol_version).as(InboundPacket)
   end
 
   def read_raw_packet : Bytes
@@ -97,48 +94,37 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     raise_without_backtrace e
   end
 
-  def self.decode_packet(
+  # Protocol-aware packet decoding for clientbound packets
+  def self.decode_clientbound_packet(
     packet_bytes : Bytes,
-    state : Hash(UInt8, InboundPacket.class),
-  ) : InboundPacket
+    protocol_state : ProtocolState,
+    protocol_version : UInt32
+  ) : Clientbound::Packet
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
       pkt_id = pkt_io.read_byte || raise "Empty packet"
-      pkt_type = state[pkt_id]?
+      
+      pkt_type = protocol_state.get_clientbound_packet(pkt_id, protocol_version)
+      
       unless pkt_type && pkt_type.responds_to? :read
-        return InboundPacket.new_raw(packet_bytes).as InboundPacket
+        return Clientbound::RawPacket.new(packet_bytes)
       end
       pkt_type.read pkt_io
     end
   end
 
-  # Protocol-aware packet decoding
-  def self.decode_packet(
+  # Protocol-aware packet decoding for serverbound packets  
+  def self.decode_serverbound_packet(
     packet_bytes : Bytes,
     protocol_state : ProtocolState,
-    protocol_version : UInt32,
-    direction : Symbol = :clientbound
-  )
+    protocol_version : UInt32
+  ) : Serverbound::Packet
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
       pkt_id = pkt_io.read_byte || raise "Empty packet"
       
-      pkt_type = case direction
-                 when :clientbound
-                   protocol_state.get_clientbound_packet(pkt_id, protocol_version)
-                 when :serverbound
-                   protocol_state.get_serverbound_packet(pkt_id, protocol_version)
-                 else
-                   nil
-                 end
+      pkt_type = protocol_state.get_serverbound_packet(pkt_id, protocol_version)
       
       unless pkt_type && pkt_type.responds_to? :read
-        return case direction
-               when :clientbound
-                 Clientbound::RawPacket.new(packet_bytes)
-               when :serverbound
-                 Serverbound::RawPacket.new(packet_bytes)
-               else
-                 raise "Invalid direction: #{direction}"
-               end
+        return Serverbound::RawPacket.new(packet_bytes)
       end
       pkt_type.read pkt_io
     end

@@ -87,18 +87,16 @@ Spectator.describe "Protocol-aware ProtocolState system" do
       packet_bytes_767 = Bytes[0x04_u8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01] # ID + 8-byte long
       
       # Test protocol-aware decoding
-      decoded_758 = Rosegold::Connection::Client.decode_packet(
+      decoded_758 = Rosegold::Connection::Client.decode_clientbound_packet(
         packet_bytes_758,
         Rosegold::ProtocolState::PLAY,
-        758_u32,
-        :clientbound
+        758_u32
       )
       
-      decoded_767 = Rosegold::Connection::Client.decode_packet(
+      decoded_767 = Rosegold::Connection::Client.decode_clientbound_packet(
         packet_bytes_767,
         Rosegold::ProtocolState::PLAY,
-        767_u32,
-        :clientbound
+        767_u32
       )
       
       # Both should decode to KeepAlive packets
@@ -120,11 +118,10 @@ Spectator.describe "Protocol-aware ProtocolState system" do
       unknown_packet_bytes = Bytes[0xFF_u8, 0x01, 0x02, 0x03]
       
       # Should decode to RawPacket since 0xFF is not a known packet ID
-      decoded = Rosegold::Connection::Client.decode_packet(
+      decoded = Rosegold::Connection::Client.decode_clientbound_packet(
         unknown_packet_bytes,
         Rosegold::ProtocolState::PLAY,
-        758_u32,
-        :clientbound
+        758_u32
       )
       
       expect(decoded).to be_a(Rosegold::Clientbound::RawPacket)

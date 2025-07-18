@@ -73,13 +73,15 @@ class Rosegold::Client < Rosegold::EventEmitter
     @connection.try &.open?
   end
 
+  # Legacy method - deprecated, use set_protocol_state instead
   def state=(state)
-    connection.state = state
+    # No longer supported - protocol state changes should use set_protocol_state
+    raise "state= is deprecated, use set_protocol_state instead"
   end
 
   def set_protocol_state(protocol_state : ProtocolState)
     @current_protocol_state = protocol_state
-    connection.state = protocol_state.clientbound_for_protocol(protocol_version)
+    connection.protocol_state = protocol_state
   end
 
   def spawned?
@@ -134,7 +136,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     detect_and_set_protocol_version
 
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
-    connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound_for_protocol(protocol_version), self
+    connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING, protocol_version, self
     @current_protocol_state = ProtocolState::HANDSHAKING
     connection.handler.try &.on Event::Disconnected do |_event|
       physics.handle_disconnect
@@ -195,10 +197,10 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   def self.status(host : String, port : UInt16 = 25565)
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
-    connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound_for_protocol(Client.protocol_version)
+    connection = Connection::Client.new io, ProtocolState::HANDSHAKING, Client.protocol_version
 
     connection.send_packet Serverbound::Handshake.new Client.protocol_version, host, port, 1
-    connection.state = ProtocolState::STATUS.clientbound_for_protocol(Client.protocol_version)
+    connection.protocol_state = ProtocolState::STATUS
 
     connection.send_packet Serverbound::StatusRequest.new
     packet = connection.read_packet
@@ -239,12 +241,11 @@ class Rosegold::Client < Rosegold::EventEmitter
     Log.trace { "RECV 0x#{raw_packet[0].to_s 16}" }
     
     # Use protocol-aware decoding
-    packet = Connection::Client.decode_packet(
+    packet = Connection::Client.decode_clientbound_packet(
       raw_packet,
       current_protocol_state,
-      protocol_version,
-      :clientbound
-    ).as(Clientbound::Packet)
+      protocol_version
+    )
     
     Log.trace { "DECODE 0x#{raw_packet[0].to_s 16} #{packet}" }
 
