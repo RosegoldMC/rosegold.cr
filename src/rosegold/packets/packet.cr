@@ -1,5 +1,4 @@
 require "./protocol_mapping"
-require "./protocol_data"
 
 abstract class Rosegold::Packet < Rosegold::Event
   def write : Bytes
@@ -73,8 +72,8 @@ class Rosegold::ProtocolState
   PLAY        = ProtocolState.new "PLAY"
 
   getter name : String
-  getter clientbound = Hash(UInt8, Clientbound::Packet.class).new
-  getter serverbound = Hash(UInt8, Serverbound::Packet.class).new
+  getter clientbound = Hash({UInt8, UInt32}, Clientbound::Packet.class).new
+  getter serverbound = Hash({UInt8, UInt32}, Serverbound::Packet.class).new
 
   def initialize(@name)
   end
@@ -84,12 +83,68 @@ class Rosegold::ProtocolState
   end
 
   def register(packet : Clientbound::Packet.class)
-    raise "Clientbound packet #{packet.packet_id} already registered to #{name}, cannot register #{packet}" if clientbound[packet.packet_id]?
-    clientbound[packet.packet_id] = packet
+    register_packet_for_protocols(packet, clientbound)
   end
 
   def register(packet : Serverbound::Packet.class)
-    raise "Serverbound packet #{packet.packet_id} already registered to #{name}, cannot register #{packet}" if serverbound[packet.packet_id]?
-    serverbound[packet.packet_id] = packet
+    register_packet_for_protocols(packet, serverbound)
+  end
+
+  # Register a packet for all its supported protocols
+  private def register_packet_for_protocols(packet, registry)
+    # Skip RawPacket classes - they are special and shouldn't be registered
+    return if packet.name.includes?("RawPacket")
+    
+    # Check if packet uses protocol-aware system
+    if packet.responds_to?(:supported_protocols)
+      # Register for each supported protocol
+      packet.supported_protocols.each do |protocol|
+        packet_id = packet[protocol]
+        key = {packet_id, protocol}
+        if existing = registry[key]?
+          raise "Packet {#{packet_id}, #{protocol}} already registered to #{name}, cannot register #{packet} (existing: #{existing})"
+        end
+        registry[key] = packet
+      end
+    else
+      # Fallback for packets that don't use protocol-aware system yet
+      # Register with a default protocol (758 = MC 1.18)
+      packet_id = packet.packet_id
+      key = {packet_id, 758_u32}
+      if existing = registry[key]?
+        raise "Packet {#{packet_id}, 758} already registered to #{name}, cannot register #{packet} (existing: #{existing})"
+      end
+      registry[key] = packet
+    end
+  end
+
+  # Get packet class for specific packet ID and protocol version
+  def get_clientbound_packet(packet_id : UInt8, protocol : UInt32)
+    clientbound[{packet_id, protocol}]?
+  end
+
+  def get_serverbound_packet(packet_id : UInt8, protocol : UInt32)
+    serverbound[{packet_id, protocol}]?
+  end
+
+  # Legacy methods for backward compatibility
+  def clientbound_for_protocol(protocol : UInt32) : Hash(UInt8, Clientbound::Packet.class)
+    result = Hash(UInt8, Clientbound::Packet.class).new
+    clientbound.each do |(packet_id, proto), packet_class|
+      if proto == protocol
+        result[packet_id] = packet_class
+      end
+    end
+    result
+  end
+
+  def serverbound_for_protocol(protocol : UInt32) : Hash(UInt8, Serverbound::Packet.class)
+    result = Hash(UInt8, Serverbound::Packet.class).new
+    serverbound.each do |(packet_id, proto), packet_class|
+      if proto == protocol
+        result[packet_id] = packet_class
+      end
+    end
+    result
   end
 end

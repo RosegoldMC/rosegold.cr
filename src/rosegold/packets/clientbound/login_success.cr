@@ -76,7 +76,7 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
       client.send_packet! Rosegold::Serverbound::LoginAcknowledged.new
     end
     
-    client.state = ProtocolState::PLAY.clientbound
+    client.set_protocol_state(ProtocolState::PLAY)
     Log.info { "Logged in as #{username} #{uuid}" }
     client.player.uuid = uuid
     client.player.username = username

@@ -66,6 +66,10 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     Connection.decode_packet read_raw_packet, state
   end
 
+  def read_packet(protocol_state : ProtocolState, protocol_version : UInt32, direction : Symbol = :clientbound) : InboundPacket
+    Connection.decode_packet read_raw_packet, protocol_state, protocol_version, direction
+  end
+
   def read_raw_packet : Bytes
     raise Rosegold::Client::NotConnected.new if close_reason
 
@@ -102,6 +106,39 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
       pkt_type = state[pkt_id]?
       unless pkt_type && pkt_type.responds_to? :read
         return InboundPacket.new_raw(packet_bytes).as InboundPacket
+      end
+      pkt_type.read pkt_io
+    end
+  end
+
+  # Protocol-aware packet decoding
+  def self.decode_packet(
+    packet_bytes : Bytes,
+    protocol_state : ProtocolState,
+    protocol_version : UInt32,
+    direction : Symbol = :clientbound
+  )
+    Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
+      pkt_id = pkt_io.read_byte || raise "Empty packet"
+      
+      pkt_type = case direction
+                 when :clientbound
+                   protocol_state.get_clientbound_packet(pkt_id, protocol_version)
+                 when :serverbound
+                   protocol_state.get_serverbound_packet(pkt_id, protocol_version)
+                 else
+                   nil
+                 end
+      
+      unless pkt_type && pkt_type.responds_to? :read
+        return case direction
+               when :clientbound
+                 Clientbound::RawPacket.new(packet_bytes)
+               when :serverbound
+                 Serverbound::RawPacket.new(packet_bytes)
+               else
+                 raise "Invalid direction: #{direction}"
+               end
       end
       pkt_type.read pkt_io
     end

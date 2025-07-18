@@ -29,8 +29,8 @@ class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
     self.new(
       packet.read_var_int,
       packet.read_var_string,
-      packet.read_ushort,
-      packet.read_var_int
+      packet.read_ushort.to_i32,
+      packet.read_var_int.to_i32
     )
   end
 

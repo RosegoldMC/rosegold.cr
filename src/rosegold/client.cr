@@ -26,6 +26,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   property host : String, port : Int32
   property connection : Connection::Client?
   property detected_protocol_version : UInt32?
+  property current_protocol_state : ProtocolState = ProtocolState::HANDSHAKING
 
   property \
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
@@ -74,6 +75,11 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   def state=(state)
     connection.state = state
+  end
+
+  def set_protocol_state(protocol_state : ProtocolState)
+    @current_protocol_state = protocol_state
+    connection.state = protocol_state.clientbound_for_protocol(protocol_version)
   end
 
   def spawned?
@@ -128,14 +134,15 @@ class Rosegold::Client < Rosegold::EventEmitter
     detect_and_set_protocol_version
 
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
-    connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound, self
+    connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound_for_protocol(protocol_version), self
+    @current_protocol_state = ProtocolState::HANDSHAKING
     connection.handler.try &.on Event::Disconnected do |_event|
       physics.handle_disconnect
     end
     Log.info { "Connected to #{host}:#{port}" }
 
     send_packet! Serverbound::Handshake.new protocol_version, host, port, 2
-    connection.state = ProtocolState::LOGIN.clientbound
+    set_protocol_state(ProtocolState::LOGIN)
 
     queue_packet Serverbound::LoginStart.new player.username.not_nil!, player.uuid, protocol_version # ameba:disable Lint/NotNil
 
@@ -188,10 +195,10 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   def self.status(host : String, port : UInt16 = 25565)
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
-    connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound
+    connection = Connection::Client.new io, ProtocolState::HANDSHAKING.clientbound_for_protocol(Client.protocol_version)
 
     connection.send_packet Serverbound::Handshake.new Client.protocol_version, host, port, 1
-    connection.state = ProtocolState::STATUS.clientbound
+    connection.state = ProtocolState::STATUS.clientbound_for_protocol(Client.protocol_version)
 
     connection.send_packet Serverbound::StatusRequest.new
     packet = connection.read_packet
@@ -230,7 +237,15 @@ class Rosegold::Client < Rosegold::EventEmitter
     emit_event Event::RawPacket.new raw_packet
 
     Log.trace { "RECV 0x#{raw_packet[0].to_s 16}" }
-    packet = Connection::Client.decode_packet raw_packet, connection.state
+    
+    # Use protocol-aware decoding
+    packet = Connection::Client.decode_packet(
+      raw_packet,
+      current_protocol_state,
+      protocol_version,
+      :clientbound
+    ).as(Clientbound::Packet)
+    
     Log.trace { "DECODE 0x#{raw_packet[0].to_s 16} #{packet}" }
 
     packet.callback(self)
