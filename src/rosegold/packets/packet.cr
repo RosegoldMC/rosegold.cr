@@ -1,3 +1,6 @@
+require "./protocol_mapping"
+require "./protocol_data"
+
 abstract class Rosegold::Packet < Rosegold::Event
   def write : Bytes
     raise "Not implemented: write #{self}"

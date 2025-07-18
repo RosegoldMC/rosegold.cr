@@ -1,7 +1,15 @@
 require "../packet"
 
 class Rosegold::Serverbound::LoginStart < Rosegold::Serverbound::Packet
-  class_getter packet_id = 0x00_u8
+  include Rosegold::Packets::ProtocolMapping
+
+  # Define protocol-specific packet IDs
+  packet_ids({
+    758_u32 => 0x00_u8, # MC 1.18
+    767_u32 => 0x00_u8, # MC 1.21
+    771_u32 => 0x00_u8, # MC 1.21.6
+  })
+
   class_getter state = Rosegold::ProtocolState::LOGIN
 
   property username : String
@@ -23,7 +31,8 @@ class Rosegold::Serverbound::LoginStart < Rosegold::Serverbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      # Use protocol-aware packet ID
+      buffer.write self.class.packet_id_for_protocol(protocol_version)
       buffer.write username
 
       # For protocol 767+ (MC 1.21), also include UUID
