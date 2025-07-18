@@ -6,9 +6,9 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
 
   # Define protocol-specific packet IDs
   packet_ids({
-    758_u32 => 0x25_u8, # MC 1.18
-    767_u32 => 0x2B_u8, # MC 1.21
-    771_u32 => 0x2B_u8, # MC 1.21.6
+    758_u32 => 0x26_u8, # MC 1.18
+    767_u32 => 0x29_u8, # MC 1.21
+    771_u32 => 0x29_u8, # MC 1.21.6
   })
 
   property entity_id : UInt64

@@ -2,7 +2,14 @@ require "../serverbound/player_digging"
 
 # Some servers do not send this.
 class Rosegold::Clientbound::AcknowledgePlayerDigging < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x08_u8
+  include Rosegold::Packets::ProtocolMapping
+
+  # Define protocol-specific packet IDs
+  packet_ids({
+    758_u32 => 0x08_u8, # MC 1.18
+    767_u32 => 0x08_u8, # MC 1.21
+    771_u32 => 0x08_u8, # MC 1.21.6
+  })
 
   alias Status = Rosegold::Serverbound::PlayerDigging::Status
 

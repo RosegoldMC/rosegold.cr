@@ -10,12 +10,12 @@ module Rosegold::Packets::ProtocolMapping
     
     # Generate the [](protocol_version) method for elegant access
     def self.[](protocol_version : UInt32) : UInt8
-      PROTOCOL_PACKET_IDS[protocol_version]? || default_packet_id
+      PROTOCOL_PACKET_IDS[protocol_version]?.try(&.to_u8) || default_packet_id
     end
     
     # Provide backward compatibility with existing packet_id class getter
     # Use the first protocol's packet ID for registration compatibility
-    class_getter packet_id : UInt8 = {{mappings.values.first}}
+    class_getter packet_id : UInt8 = {{mappings.values.first}}.to_u8
     
     # Get packet ID for specific protocol version  
     def self.packet_id_for_protocol(protocol_version : UInt32) : UInt8
@@ -26,12 +26,12 @@ module Rosegold::Packets::ProtocolMapping
     def self.default_packet_id : UInt8
       # Use the first defined packet ID as default
       {% first_id = mappings.values.first %}
-      {{first_id}}
+      {{first_id}}.to_u8
     end
     
     # Helper method to get all supported protocols
     def self.supported_protocols : Array(UInt32)
-      {{mappings.keys}}
+      [{{mappings.keys.splat}}].map(&.to_u32)
     end
     
     # Helper method to check if a protocol is supported

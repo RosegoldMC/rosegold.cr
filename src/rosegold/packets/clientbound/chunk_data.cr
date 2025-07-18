@@ -1,7 +1,13 @@
 require "../packet"
 
 class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x22_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    758_u32 => 0x22_u8, # MC 1.18
+    767_u32 => 0x22_u8, # MC 1.21
+    771_u32 => 0x22_u8, # MC 1.21.6
+  })
 
   property \
     chunk_x : Int32,
@@ -41,7 +47,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |io|
-      io.write @@packet_id
+      io.write self.class.packet_id_for_protocol(Client.protocol_version)
       io.write_full chunk_x
       io.write_full chunk_z
       io.write heightmaps

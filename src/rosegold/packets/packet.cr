@@ -95,24 +95,17 @@ class Rosegold::ProtocolState
     # Skip RawPacket classes - they are special and shouldn't be registered
     return if packet.name.includes?("RawPacket")
     
-    # Check if packet uses protocol-aware system
-    if packet.responds_to?(:supported_protocols)
-      # Register for each supported protocol
-      packet.supported_protocols.each do |protocol|
-        packet_id = packet[protocol]
-        key = {packet_id, protocol}
-        if existing = registry[key]?
-          raise "Packet {#{packet_id}, #{protocol}} already registered to #{name}, cannot register #{packet} (existing: #{existing})"
-        end
-        registry[key] = packet
-      end
-    else
-      # Fallback for packets that don't use protocol-aware system yet
-      # Register with a default protocol (758 = MC 1.18)
-      packet_id = packet.packet_id
-      key = {packet_id, 758_u32}
+    # All packets should now use protocol-aware system
+    unless packet.responds_to?(:supported_protocols)
+      raise "Packet #{packet} must use packet_ids macro for protocol-aware support"
+    end
+    
+    # Register for each supported protocol
+    packet.supported_protocols.each do |protocol|
+      packet_id = packet[protocol]
+      key = {packet_id, protocol}
       if existing = registry[key]?
-        raise "Packet {#{packet_id}, 758} already registered to #{name}, cannot register #{packet} (existing: #{existing})"
+        raise "Packet {#{packet_id}, #{protocol}} already registered to #{name}, cannot register #{packet} (existing: #{existing})"
       end
       registry[key] = packet
     end

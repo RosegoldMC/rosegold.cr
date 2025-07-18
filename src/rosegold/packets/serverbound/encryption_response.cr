@@ -4,7 +4,15 @@ require "../../../minecraft/digest"
 require "../packet"
 
 class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
-  class_getter packet_id = 0x01_u8
+  include Rosegold::Packets::ProtocolMapping
+
+  # Define protocol-specific packet IDs (same across all versions)
+  packet_ids({
+    758_u32 => 0x01_u8, # MC 1.18
+    767_u32 => 0x01_u8, # MC 1.21
+    771_u32 => 0x01_u8, # MC 1.21.6
+  })
+
   class_getter state = Rosegold::ProtocolState::LOGIN
 
   property \
@@ -53,7 +61,7 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
 
     OpenSSL::PKey::RSA.new(IO::Memory.new("-----BEGIN PUBLIC KEY-----\n" + Base64.encode(encryption_request.public_key) + "-----END PUBLIC KEY-----\n")).try do |key|
       Minecraft::IO::Memory.new.tap do |buffer|
-        buffer.write @@packet_id
+        buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
 
         key.public_encrypt(shared_secret).try do |encrypted_secret|
           buffer.write encrypted_secret.size.to_u32
