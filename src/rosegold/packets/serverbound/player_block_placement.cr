@@ -3,7 +3,13 @@ require "../packet"
 # `cursor` (in-block coordinates) ranges from 0.0 to 1.0
 # and determines e.g. top/bottom slab or left/right door.
 class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packet
-  class_getter packet_id = 0x2E_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    758_u32 => 0x2E_u8, # MC 1.18
+    767_u32 => 0x2E_u8, # MC 1.21
+    771_u32 => 0x2E_u8, # MC 1.21.6
+  })
 
   property \
     hand : Hand,
@@ -34,7 +40,7 @@ class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packe
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write hand.value
       buffer.write location
       buffer.write face.value

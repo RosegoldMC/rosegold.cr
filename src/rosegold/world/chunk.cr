@@ -14,7 +14,15 @@ class Rosegold::Chunk
   def initialize(@x, @z, io, dimension : Dimension)
     @min_y = dimension.min_y
     section_count = dimension.world_height >> 4
-    @sections = Array(Section).new(section_count) { Section.new io }
+    
+    # Check if data stream is empty (happens when no sections are sent)
+    if io.responds_to?(:size) && io.responds_to?(:pos) && io.size <= io.pos
+      # Create empty sections when no data is available
+      @sections = Array(Section).new(section_count) { Section.empty }
+    else
+      # Normal case: read sections from data stream
+      @sections = Array(Section).new(section_count) { Section.new io }
+    end
   end
 
   def data : Bytes
@@ -47,6 +55,17 @@ class Rosegold::Chunk
       @block_count = io.read_short
       @blocks = PalettedContainer.new io, 9, 4096
       @biomes = PalettedContainer.new io, 4, 64
+    end
+
+    # Creates an empty section (for when no section data is sent)
+    def self.empty
+      new(empty: true)
+    end
+
+    def initialize(empty : Bool)
+      @block_count = 0_i16
+      @blocks = PalettedContainer.air_filled(4096)
+      @biomes = PalettedContainer.air_filled(64)
     end
 
     def write(io)

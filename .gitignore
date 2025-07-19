@@ -16,3 +16,4 @@
 # whole entire minecraft server for specs
 spec/fixtures/server/*
 !spec/fixtures/server/ops.json
+crystal.tar.gz

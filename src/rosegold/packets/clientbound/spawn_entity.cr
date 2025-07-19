@@ -1,5 +1,8 @@
 class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x00_u8
+  include Rosegold::Packets::ProtocolMapping
+  packet_ids({
+    758_u32 => 0x00_u8, # MC 1.18
+  })
 
   property \
     entity_id : UInt64,

@@ -1,7 +1,13 @@
 require "../packet"
 
 class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x22_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    758_u32 => 0x22_u8, # MC 1.18
+    767_u32 => 0x27_u8, # MC 1.21
+    771_u32 => 0x27_u8, # MC 1.21.6
+  })
 
   property \
     chunk_x : Int32,
@@ -20,28 +26,53 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   def self.read(io)
     chunk_x = io.read_int
     chunk_z = io.read_int
-    self.new(
-      chunk_x,
-      chunk_z,
-      io.read_nbt,
-      io.read_var_bytes,
-      Array(Chunk::BlockEntity).new(io.read_var_int) do
-        xz = io.read_byte
-        Chunk::BlockEntity.new(
-          chunk_x + ((xz >> 4) & 0xf),
-          io.read_short,
-          chunk_z + (xz & 0xf),
-          io.read_var_int,
-          io.read_nbt
-        )
-      end,
-      io.getb_to_end
-    )
+    heightmaps = io.read_nbt
+    data = io.read_var_bytes
+    # Protocol-aware block entities reading
+    block_entities_count = io.read_var_int
+    block_entities = if Client.protocol_version >= 767_u32
+                       # MC 1.21+ format: Different block entity structure
+                       Array(Chunk::BlockEntity).new(block_entities_count) do
+                         Chunk::BlockEntity.new(
+                           io.read_byte,    # x (relative to chunk)
+                           io.read_short,   # y
+                           io.read_byte,    # z (relative to chunk)
+                           io.read_var_int, # type
+                           io.read_nbt      # nbt
+                         )
+                       end
+                     else
+                       # MC 1.18 format: Original structure
+                       Array(Chunk::BlockEntity).new(block_entities_count) do
+                         xz = io.read_byte
+                         Chunk::BlockEntity.new(
+                           chunk_x + ((xz >> 4) & 0xf),
+                           io.read_short,
+                           chunk_z + (xz & 0xf),
+                           io.read_var_int,
+                           io.read_nbt
+                         )
+                       end
+                     end
+
+    # Protocol-aware light data reading
+    light_data = if Client.protocol_version >= 767_u32
+                   # MC 1.21+ format: No light data in ChunkData packet (sent separately)
+                   Bytes.empty
+                 else
+                   # MC 1.18 format: Light data is remaining bytes
+                   remaining_size = io.size - io.pos
+                   remaining_bytes = Bytes.new(remaining_size)
+                   io.read(remaining_bytes)
+                   remaining_bytes
+                 end
+
+    self.new(chunk_x, chunk_z, heightmaps, data, block_entities, light_data)
   end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |io|
-      io.write @@packet_id
+      io.write self.class.packet_id_for_protocol(Client.protocol_version)
       io.write_full chunk_x
       io.write_full chunk_z
       io.write heightmaps
@@ -54,6 +85,8 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
         io.write block_entity.type
         io.write block_entity.nbt
       end
+
+      # Write light data (protocol-aware, but simplified)
       io.write light_data
     end.to_slice
   end

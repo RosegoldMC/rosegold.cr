@@ -1,7 +1,13 @@
 require "../packet"
 
 class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x3d_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    758_u32 => 0x3d_u8, # MC 1.18
+    767_u32 => 0x3d_u8, # MC 1.21
+    771_u32 => 0x3d_u8, # MC 1.21.6
+  })
 
   property \
     dimension : Minecraft::NBT::Tag,
@@ -31,7 +37,7 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write dimension
       buffer.write dimension_name
       buffer.write_full hashed_seed

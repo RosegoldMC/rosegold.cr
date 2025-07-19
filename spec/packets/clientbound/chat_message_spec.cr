@@ -5,6 +5,16 @@ Spectator.describe Rosegold::Clientbound::ChatMessage do
   let(:file) { File.expand_path("../../../fixtures/packets/clientbound/chat_message.mcpacket", __FILE__) }
   let(:file_slice) { File.read(file).to_slice }
 
+  # Set protocol to 758 to match the fixture file
+  before_each do
+    Rosegold::Client.protocol_version = 758_u32
+  end
+
+  after_each do
+    # Reset to default 
+    Rosegold::Client.protocol_version = 771_u32
+  end
+
   it "parses the packet" do
     io.read_byte
     packet = Rosegold::Clientbound::ChatMessage.read(io)
@@ -21,5 +31,11 @@ Spectator.describe Rosegold::Clientbound::ChatMessage do
     io.read_byte
 
     expect(Rosegold::Clientbound::ChatMessage.read(io).write).to eq file_slice
+  end
+
+  it "uses correct packet IDs for different protocol versions" do
+    expect(Rosegold::Clientbound::ChatMessage[758_u32]).to eq(0x0F_u8)
+    expect(Rosegold::Clientbound::ChatMessage[767_u32]).to eq(0x68_u8)
+    expect(Rosegold::Clientbound::ChatMessage[771_u32]).to eq(0x68_u8)
   end
 end

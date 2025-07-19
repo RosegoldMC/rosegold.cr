@@ -16,6 +16,20 @@ class Rosegold::PalettedContainer
 
   # TODO read+write lock
 
+  # Creates a container filled with air/default values (ID 0)
+  def self.air_filled(size : Index) : PalettedContainer
+    new(size: size, empty: true)
+  end
+
+  def initialize(size : Index, empty : Bool)
+    @size = size
+    @bits_per_entry = 0_u8 # single state mode
+    @palette = [0_u16] # air block/biome (ID 0)
+    @entries_per_long = 0_u8
+    @entry_mask = 0_u64
+    @long_array = [] of Long
+  end
+
   def initialize(io : Minecraft::IO, num_bits_direct, @size)
     @bits_per_entry = io.read_byte
     if bits_per_entry == 0 # single state mode

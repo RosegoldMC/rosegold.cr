@@ -2,7 +2,13 @@ require "../../world/player_list"
 require "../packet"
 
 class Rosegold::Clientbound::PlayerInfo < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x36_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    758_u32 => 0x36_u8, # MC 1.18
+    767_u32 => 0x36_u8, # MC 1.21
+    771_u32 => 0x36_u8, # MC 1.21.6
+  })
 
   enum Action
     Add; Gamemode; Ping; DisplayName; Remove
@@ -51,7 +57,7 @@ class Rosegold::Clientbound::PlayerInfo < Rosegold::Clientbound::Packet
   # TODO rewrite without .not_nil! checks
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write action.value
       buffer.write players.size
       players.each do |player|
