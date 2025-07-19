@@ -60,7 +60,13 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Send a message or slash command.
   def chat(message : String)
-    client.queue_packet Serverbound::ChatMessage.new message
+    if message.starts_with?('/') && client.protocol_version >= 767_u32
+      # MC 1.21+ uses ChatCommand packet for commands
+      client.queue_packet Serverbound::ChatCommand.new message
+    else
+      # Regular chat message or older protocol versions
+      client.queue_packet Serverbound::ChatMessage.new message
+    end
   end
 
   def wait_ticks(ticks : Int32)
