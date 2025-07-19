@@ -24,18 +24,12 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   end
 
   def self.read(io)
-    Log.trace { "ChunkData: Starting read, io.pos=#{io.pos}, io.size=#{io.size}" }
     chunk_x = io.read_int
-    Log.trace { "ChunkData: Read chunk_x=#{chunk_x}, io.pos=#{io.pos}" }
     chunk_z = io.read_int
-    Log.trace { "ChunkData: Read chunk_z=#{chunk_z}, io.pos=#{io.pos}" }
     heightmaps = io.read_nbt
-    Log.trace { "ChunkData: Read heightmaps, io.pos=#{io.pos}" }
     data = io.read_var_bytes
-    Log.trace { "ChunkData: Read data size=#{data.size}, io.pos=#{io.pos}" }
     # Protocol-aware block entities reading
     block_entities_count = io.read_var_int
-    Log.trace { "ChunkData: Read block_entities_count=#{block_entities_count}, io.pos=#{io.pos}" }
     block_entities = if Client.protocol_version >= 767_u32
                        # MC 1.21+ format: Different block entity structure
                        Array(Chunk::BlockEntity).new(block_entities_count) do
@@ -60,9 +54,6 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
                          )
                        end
                      end
-    Log.trace { "block_entities: #{block_entities.inspect}" }
-    Log.trace { "ChunkData: Read #{block_entities.size} block entities, io.pos=#{io.pos}" }
-    Log.trace { "Right before reading light data for chunk #{chunk_x},#{chunk_z}" }
 
     # Protocol-aware light data reading
     light_data = if Client.protocol_version >= 767_u32
@@ -75,8 +66,6 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
                    io.read(remaining_bytes)
                    remaining_bytes
                  end
-
-    Log.trace { "Read light data for chunk #{chunk_x},#{chunk_z} of size #{light_data.size}" }
 
     self.new(chunk_x, chunk_z, heightmaps, data, block_entities, light_data)
   end

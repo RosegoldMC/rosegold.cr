@@ -95,12 +95,12 @@ class Rosegold::ProtocolState
   private def register_packet_for_protocols(packet, registry)
     # Skip RawPacket classes - they are special and shouldn't be registered
     return if packet.name.includes?("RawPacket")
-    
+
     # All packets should now use protocol-aware system
     unless packet.responds_to?(:supported_protocols)
       raise "Packet #{packet} must use packet_ids macro for protocol-aware support"
     end
-    
+
     # Register for each supported protocol
     packet.supported_protocols.each do |protocol|
       packet_id = packet[protocol]
