@@ -5,12 +5,11 @@ require "../packet"
 # relative_flags: x/y/z/yaw/pitch. If a flag is set, its value is relative to the current player position/look.
 class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
-  
-  # Define protocol-specific packet IDs
+
+  # Define protocol-specific packet IDs (only for older protocols)
   packet_ids({
     758_u32 => 0x38_u8, # MC 1.18
-    767_u32 => 0x3C_u8, # MC 1.21
-    771_u32 => 0x3C_u8, # MC 1.21.6
+    # MC 1.21+ uses SynchronizePlayerPosition instead
   })
 
   property \
