@@ -17,7 +17,7 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
     if Client.protocol_version >= 767_u32
       # MC 1.21+ uses NBT text component format
       begin
-        reason_nbt = packet.read_nbt
+        reason_nbt = packet.read_nbt_unamed
         chat = nbt_to_chat(reason_nbt)
         self.new chat
       rescue

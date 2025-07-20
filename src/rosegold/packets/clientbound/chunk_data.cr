@@ -26,7 +26,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   def self.read(io)
     chunk_x = io.read_int
     chunk_z = io.read_int
-    heightmaps = io.read_nbt
+    heightmaps = io.read_nbt_unamed
     data = io.read_var_bytes
     # Protocol-aware block entities reading
     block_entities_count = io.read_var_int

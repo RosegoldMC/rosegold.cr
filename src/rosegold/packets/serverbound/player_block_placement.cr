@@ -15,7 +15,8 @@ class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packe
     hand : Hand,
     location : Vec3i,
     face : BlockFace,
-    cursor : Vec3f
+    cursor : Vec3f,
+    sequence : Int32
   property? inside_block : Bool
 
   def initialize(
@@ -24,6 +25,7 @@ class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packe
     @face : BlockFace,
     @cursor : Vec3f = Vec3f.new(0.5, 0.5, 0.5),
     @inside_block : Bool = false,
+    @sequence : Int32 = 0,
   ); end
 
   def self.read(io)
@@ -48,6 +50,11 @@ class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packe
       buffer.write cursor.y
       buffer.write cursor.z
       buffer.write inside_block?
+      
+      # MC 1.21+ adds sequence number
+      if Client.protocol_version >= 767_u32
+        buffer.write sequence
+      end
     end.to_slice
   end
 end

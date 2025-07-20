@@ -17,12 +17,14 @@ class Rosegold::Serverbound::PlayerDigging < Rosegold::Serverbound::Packet
   property \
     status : Status,
     location : Vec3i,
-    face : BlockFace
+    face : BlockFace,
+    sequence : Int32
 
   def initialize(
     @status : Status,
     @location : Vec3i = Vec3i::ORIGIN,
     @face : BlockFace = :bottom,
+    @sequence : Int32 = 0,
   ); end
 
   def write : Bytes
@@ -31,6 +33,11 @@ class Rosegold::Serverbound::PlayerDigging < Rosegold::Serverbound::Packet
       buffer.write status.value
       buffer.write location
       buffer.write face.value
+      
+      # MC 1.21+ adds sequence number
+      if Client.protocol_version >= 767_u32
+        buffer.write sequence
+      end
     end.to_slice
   end
 end
