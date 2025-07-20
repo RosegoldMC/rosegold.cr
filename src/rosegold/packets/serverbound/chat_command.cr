@@ -4,8 +4,8 @@ class Rosegold::Serverbound::ChatCommand < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    767_u32 => 0x04_u8, # MC 1.21 - Chat Command
-    771_u32 => 0x04_u8, # MC 1.21.6
+    767_u32 => 0x06_u8, # MC 1.21 - Chat Command
+    771_u32 => 0x06_u8, # MC 1.21.6
   })
 
   property command : String
