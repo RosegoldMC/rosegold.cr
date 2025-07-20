@@ -194,7 +194,6 @@ class Rosegold::Physics
                         ticks_since_last_packet >= MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL
     
     if should_send_packet
-      Log.debug { "Sending movement packet (ticks since last: #{ticks_since_last_packet})" }
       send_movement_packet feet, look, on_ground
       @ticks_since_last_packet = 0
     else

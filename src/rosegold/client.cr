@@ -7,6 +7,15 @@ require "./packets/*"
 require "./events/*"
 require "./world/*"
 
+struct Rosegold::BlockOperation
+  property location : Vec3i
+  property operation_type : Symbol
+  property timestamp : Time
+
+  def initialize(@location : Vec3i, @operation_type : Symbol, @timestamp : Time = Time.utc)
+  end
+end
+
 class Rosegold::Event::RawPacket < Rosegold::Event
   getter bytes : Bytes
 
@@ -37,10 +46,16 @@ class Rosegold::Client < Rosegold::EventEmitter
     interactions : Interactions,
     inventory : PlayerWindow,
     window : Window,
-    offline : NamedTuple(uuid: String, username: String)? = nil
+    offline : NamedTuple(uuid: String, username: String)? = nil,
+    sequence_counter : Int32 = 0,
+    pending_block_operations : Hash(Int32, BlockOperation) = Hash(Int32, BlockOperation).new
 
   def protocol_version
     detected_protocol_version || Client.protocol_version
+  end
+
+  def next_sequence : Int32
+    @sequence_counter += 1
   end
 
   def initialize(@host : String, @port : Int32 = 25565, @offline : NamedTuple(uuid: String, username: String)? = nil)

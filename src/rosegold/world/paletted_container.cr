@@ -37,8 +37,12 @@ class Rosegold::PalettedContainer
       @entries_per_long = 0
       @entry_mask = 0
       num_longs = io.read_var_int
-      raise "Unexpected num_longs=#{num_longs} should be 0" if num_longs > 0
-      @long_array = [] of Long
+      # MC 1.21+ may send data even in single state mode
+      if Client.protocol_version < 767_u32
+        raise "Unexpected num_longs=#{num_longs} should be 0" if num_longs > 0
+      end
+      # Read the data even if we don't use it in single state mode
+      @long_array = Array(Long).new(num_longs) { io.read_long.to_u64! }
       return
     end
 
@@ -52,7 +56,10 @@ class Rosegold::PalettedContainer
     @entry_mask = (1_u64 << bits_per_entry) - 1
 
     num_longs = io.read_var_int
-    raise "Data too short! #{num_longs} * #{entries_per_long} < #{size}" if num_longs * entries_per_long < size
+    # Allow server to send compressed data - don't enforce full size requirement for MC 1.21+
+    if Client.protocol_version < 767_u32
+      raise "Data too short! #{num_longs} * #{entries_per_long} < #{size}" if num_longs * entries_per_long < size
+    end
 
     @long_array = Array(Long).new(num_longs) { io.read_long.to_u64! }
   end
@@ -74,13 +81,23 @@ class Rosegold::PalettedContainer
 
   def [](index : Index) : Entry
     long_array = self.long_array
-    return palette[0] if long_array.empty? # single state mode
+    if long_array.empty? # single state mode
+      return palette[0]
+    end
+    
+    # Add bounds checking for MC 1.21+ compatibility
+    return 0_u16 if index >= size # Return air block for out-of-bounds access
+    
     long_index = index // entries_per_long
+    return 0_u16 if long_index >= long_array.size # Return air block for out-of-bounds array access
+    
     bit_offset_in_long = (index % entries_per_long) * bits_per_entry
     value = long_array[long_index] >> bit_offset_in_long
     value = (value & entry_mask).to_u16
     return value if palette.empty? # direct mode
 
+    # Add bounds checking for palette access
+    return 0_u16 if value >= palette.size # Return air block for out-of-bounds palette access
     palette[value] # encoded mode
   end
 

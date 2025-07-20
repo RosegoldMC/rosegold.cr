@@ -34,7 +34,8 @@ class Rosegold::Chunk
   # Returns nil if outside world vertically.
   def block_state(x : Int32, y : Int32, z : Int32) : BlockStateNr | Nil
     x, z = x & 15, z & 15
-    section = sections[(y - min_y) >> 4]? || return nil
+    section_index = (y - min_y) >> 4
+    section = sections[section_index]? || return nil
     index = (((y - min_y) & 15) << 8) | (z << 4) | x
     section.block_state index.to_u32
   end
