@@ -4,6 +4,7 @@
 
 ## Development Notes
 - Generally, whenever you want to run integration specs you should add some sort of timeout to the command. Otherwise, you might lock yourself src/minecraft/auth.cr
+- Never ever change packet ID's. If packet ID's need to be changed please tell the user.
 
 ## Server Logs
 - Server logs are located at spec/fixtures/server/logs/latest.log
