@@ -1,5 +1,11 @@
 [
   {
+    "uuid": "c555378d-8e31-3329-b84c-e4a45faaf611",
+    "name": "offlinegreps",
+    "level": 4,
+    "bypassesPlayerLimit": false
+  },
+  {
     "uuid": "0c53611f-eab6-379e-92dc-171dc5524e6d",
     "name": "rosegoldtest",
     "level": 4,
