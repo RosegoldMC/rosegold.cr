@@ -135,7 +135,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   def join_game(timeout_ticks = 1200)
     connect
     until spawned?
-      sleep 1/20
+      sleep (1.0/20).seconds
       timeout_ticks -= 1
       raise NotConnected.new "Disconnected while joining game: #{connection.close_reason}" unless connected?
       raise NotConnected.new "Took too long to join the game" if timeout_ticks <= 0
