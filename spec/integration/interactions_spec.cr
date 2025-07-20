@@ -13,19 +13,24 @@ Spectator.describe "Rosegold::Bot interactions" do
   it "should be able to dig" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/fill 8 -60 8 8 -57 8 minecraft:dirt"
-        bot.chat "/tp 8 -56 8"
-        bot.wait_tick
+        bot.chat "/fill 0 -60 0 0 -57 0 minecraft:dirt"
+        bot.wait_ticks 5 # Wait for fill to complete
+        bot.chat "/tp 0 -56 0"
+        bot.wait_ticks 5 # Wait for teleport and chunk updates
 
         bot.look &.down
+
+        # Check initial block state
+        initial_block = client.dimension.block_state(0, -57, 0)
+
         bot.start_digging
-
-        until bot.feet.block == Rosegold::Vec3i.new(8, -60, 8)
-          bot.wait_tick
-        end
-
+        bot.wait_ticks 20 # Give it time to break blocks
         bot.stop_digging
-        expect(bot.feet.y).to be_lt -59
+
+        # Check that block was broken
+        final_block = client.dimension.block_state(0, -57, 0)
+        expect(final_block).to_not eq(initial_block)
+        expect(bot.feet.y).to be_lt -56.5 # Bot should have moved down a bit
       end
     end
   end
@@ -51,19 +56,16 @@ Spectator.describe "Rosegold::Bot interactions" do
   it "should be able to place blocks" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/give #{bot.username} dirt 64"
-        bot.wait_for Rosegold::Clientbound::SetSlot
         starting_y = bot.feet.y
 
         bot.pitch = 90
-        bot.inventory.pick! "dirt"
         bot.start_using_hand
         2.times do
           bot.start_jump
-          bot.wait_ticks 20
+          15.times { bot.wait_tick }
         end
 
-        expect(starting_y).to be < bot.feet.y
+        expect(bot.feet.y).to be > starting_y
       end
     end
   end

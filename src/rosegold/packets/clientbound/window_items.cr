@@ -3,8 +3,6 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
   # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x14_u8, # MC 1.18
-    767_u32 => 0x14_u8, # MC 1.21
-    771_u32 => 0x14_u8, # MC 1.21.6
   })
 
   property \

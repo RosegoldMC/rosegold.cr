@@ -177,7 +177,7 @@ class Rosegold::Interactions
           client.pending_block_operations[sequence] = operation
         end
         
-        send_packet Serverbound::UseItem.new using_hand, sequence
+        send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
       else
         # Generate sequence number for MC 1.21+ 
         sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
@@ -188,7 +188,7 @@ class Rosegold::Interactions
           client.pending_block_operations[sequence] = operation
         end
         
-        send_packet Serverbound::UseItem.new using_hand, sequence
+        send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
       end
     end
   end
@@ -244,7 +244,10 @@ class Rosegold::Interactions
   private def finish_digging
     reached = @digging_block
     return unless reached
+    
+    # Reset digging state
     @digging_block = nil
+    self.digging = false
     
     # Generate sequence number for MC 1.21+ 
     sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0

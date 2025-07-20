@@ -12,7 +12,12 @@ class Rosegold::Serverbound::HeldItemChange < Rosegold::Serverbound::Packet
   property hotbar_nr : UInt8
 
   # `hotbar_nr` ranges from 0 to 8
-  def initialize(@hotbar_nr : UInt8); end
+  def initialize(@hotbar_nr : UInt8)
+    if @hotbar_nr > 8
+      Log.warn { "Invalid hotbar selection #{@hotbar_nr}, clamping to 0" }
+      @hotbar_nr = 0_u8
+    end
+  end
 
   def self.read(packet)
     self.new(packet.read_short.to_u8)

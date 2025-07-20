@@ -68,7 +68,7 @@ class Rosegold::Block
     damage = speed_multiplier / hardness
     damage /= can_harvest?(main_hand) ? 30 : 100
 
-    return 0_f64 if damage > 1
+    return 1_f64 if damage > 1
 
     damage
   end
