@@ -67,7 +67,7 @@ Spectator.describe "Rosegold::Bot movement" do
         initial_feet = bot.feet
 
         bot.start_jump
-        sleep 0.5 # allow time for the jump
+        sleep 0.5.seconds # allow time for the jump
 
         expect(bot.feet.y).to be > initial_feet.y
 
