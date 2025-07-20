@@ -16,6 +16,15 @@ struct Rosegold::BlockOperation
   end
 end
 
+struct Rosegold::ChunkBatchSample
+  property millis_per_chunk : Float64
+  property batch_size : Int32
+  property timestamp : Time
+
+  def initialize(@millis_per_chunk : Float64, @batch_size : Int32, @timestamp : Time = Time.utc)
+  end
+end
+
 class Rosegold::Event::RawPacket < Rosegold::Event
   getter bytes : Bytes
 
@@ -48,7 +57,9 @@ class Rosegold::Client < Rosegold::EventEmitter
     window : Window,
     offline : NamedTuple(uuid: String, username: String)? = nil,
     sequence_counter : Int32 = 0,
-    pending_block_operations : Hash(Int32, BlockOperation) = Hash(Int32, BlockOperation).new
+    pending_block_operations : Hash(Int32, BlockOperation) = Hash(Int32, BlockOperation).new,
+    chunk_batch_start_time : Time? = nil,
+    chunk_batch_samples : Array(ChunkBatchSample) = Array(ChunkBatchSample).new
 
   def protocol_version
     detected_protocol_version || Client.protocol_version
@@ -56,6 +67,23 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   def next_sequence : Int32
     @sequence_counter += 1
+  end
+
+  def add_chunk_batch_sample(millis_per_chunk : Float64, batch_size : Int32)
+    # Add new sample
+    @chunk_batch_samples << ChunkBatchSample.new(millis_per_chunk, batch_size)
+    
+    # Keep only the latest 15 samples (as per Notchian client)
+    if @chunk_batch_samples.size > 15
+      @chunk_batch_samples.shift
+    end
+  end
+
+  def average_millis_per_chunk : Float64
+    return 0.0 if @chunk_batch_samples.empty?
+    
+    total = @chunk_batch_samples.sum(&.millis_per_chunk)
+    total / @chunk_batch_samples.size
   end
 
   def initialize(@host : String, @port : Int32 = 25565, @offline : NamedTuple(uuid: String, username: String)? = nil)

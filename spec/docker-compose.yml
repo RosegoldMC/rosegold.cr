@@ -9,7 +9,6 @@ services:
       EULA: "TRUE"
       VERSION: 1.21
       ONLINE_MODE: "FALSE"
-      MAX_WORLD_SIZE: 10
       LEVEL_TYPE: flat
 
     tty: true
