@@ -9,8 +9,8 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
 
   # Define protocol-specific packet IDs (MC 1.21+ replacement for PlayerPositionAndLook)
   packet_ids({
-    767_u32 => 0x40_u8, # MC 1.21
-    771_u32 => 0x40_u8, # MC 1.21.6
+    767_u32 => 0x41_u8, # MC 1.21
+    771_u32 => 0x41_u8, # MC 1.21.6
   })
 
   property \

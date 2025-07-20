@@ -53,6 +53,10 @@ class Rosegold::Physics
     @paused = true
   end
 
+  def running?
+    !paused?
+  end
+
   def handle_reset
     @paused = false
     player.velocity = Vec3d::ORIGIN
