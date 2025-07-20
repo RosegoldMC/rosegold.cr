@@ -9,14 +9,19 @@ class Rosegold::Serverbound::UseItem < Rosegold::Serverbound::Packet
     771_u32 => 0x39_u8, # MC 1.21.6
   })
 
-  property hand : Hand
+  property hand : Hand, sequence : Int32
 
-  def initialize(@hand : Hand = Hand::MainHand); end
+  def initialize(@hand : Hand = Hand::MainHand, @sequence : Int32 = 0); end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write hand.value
+      
+      # MC 1.21+ adds sequence number
+      if Client.protocol_version >= 767_u32
+        buffer.write sequence
+      end
     end.to_slice
   end
 end
