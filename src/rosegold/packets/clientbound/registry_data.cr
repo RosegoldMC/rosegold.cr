@@ -20,7 +20,7 @@ class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     registry_id = packet.read_var_string
-    
+
     # Read entries array
     entry_count = packet.read_var_int
     entries = Array(NamedTuple(id: String, data: Bytes?)).new(entry_count) do

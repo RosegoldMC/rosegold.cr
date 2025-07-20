@@ -11,7 +11,7 @@ Spectator.describe Rosegold::Clientbound::ChatMessage do
   end
 
   after_each do
-    # Reset to default 
+    # Reset to default
     Rosegold::Client.protocol_version = 771_u32
   end
 

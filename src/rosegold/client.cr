@@ -72,7 +72,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   def add_chunk_batch_sample(millis_per_chunk : Float64, batch_size : Int32)
     # Add new sample
     @chunk_batch_samples << ChunkBatchSample.new(millis_per_chunk, batch_size)
-    
+
     # Keep only the latest 15 samples (as per Notchian client)
     if @chunk_batch_samples.size > 15
       @chunk_batch_samples.shift
@@ -81,7 +81,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   def average_millis_per_chunk : Float64
     return 0.0 if @chunk_batch_samples.empty?
-    
+
     total = @chunk_batch_samples.sum(&.millis_per_chunk)
     total / @chunk_batch_samples.size
   end

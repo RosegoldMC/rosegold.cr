@@ -104,7 +104,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
       pkt_id = pkt_io.read_byte || raise "Empty packet"
 
       pkt_type = protocol_state.get_clientbound_packet(pkt_id, protocol_version)
-      
+
       unless pkt_type && pkt_type.responds_to? :read
         return Clientbound::RawPacket.new(packet_bytes)
       end
@@ -112,17 +112,17 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     end
   end
 
-  # Protocol-aware packet decoding for serverbound packets  
+  # Protocol-aware packet decoding for serverbound packets
   def self.decode_serverbound_packet(
     packet_bytes : Bytes,
     protocol_state : ProtocolState,
-    protocol_version : UInt32
+    protocol_version : UInt32,
   ) : Serverbound::Packet
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
       pkt_id = pkt_io.read_byte || raise "Empty packet"
-      
+
       pkt_type = protocol_state.get_serverbound_packet(pkt_id, protocol_version)
-      
+
       unless pkt_type && pkt_type.responds_to? :read
         return Serverbound::RawPacket.new(packet_bytes)
       end

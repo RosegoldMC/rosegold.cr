@@ -24,7 +24,7 @@ class Rosegold::PalettedContainer
   def initialize(size : Index, empty : Bool)
     @size = size
     @bits_per_entry = 0_u8 # single state mode
-    @palette = [0_u16] # air block/biome (ID 0)
+    @palette = [0_u16]     # air block/biome (ID 0)
     @entries_per_long = 0_u8
     @entry_mask = 0_u64
     @long_array = [] of Long
@@ -84,13 +84,13 @@ class Rosegold::PalettedContainer
     if long_array.empty? # single state mode
       return palette[0]
     end
-    
+
     # Add bounds checking for MC 1.21+ compatibility
     return 0_u16 if index >= size # Return air block for out-of-bounds access
-    
+
     long_index = index // entries_per_long
     return 0_u16 if long_index >= long_array.size # Return air block for out-of-bounds array access
-    
+
     bit_offset_in_long = (index % entries_per_long) * bits_per_entry
     value = long_array[long_index] >> bit_offset_in_long
     value = (value & entry_mask).to_u16
@@ -98,7 +98,7 @@ class Rosegold::PalettedContainer
 
     # Add bounds checking for palette access
     return 0_u16 if value >= palette.size # Return air block for out-of-bounds palette access
-    palette[value] # encoded mode
+    palette[value]                        # encoded mode
   end
 
   def []=(index : Index, value : Entry) : Nil

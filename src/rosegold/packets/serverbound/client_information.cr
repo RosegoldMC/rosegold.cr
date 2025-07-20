@@ -21,7 +21,7 @@ class Rosegold::Serverbound::ClientInformation < Rosegold::Serverbound::Packet
     enable_text_filtering : Bool,
     allow_server_listings : Bool
 
-  def initialize(@locale = "en_US", @view_distance = 10_u8, @chat_mode = 0_u8, 
+  def initialize(@locale = "en_US", @view_distance = 10_u8, @chat_mode = 0_u8,
                  @chat_colors = true, @displayed_skin_parts = 0x7F_u8, @main_hand = 1_u8,
                  @enable_text_filtering = false, @allow_server_listings = true)
   end
@@ -36,8 +36,8 @@ class Rosegold::Serverbound::ClientInformation < Rosegold::Serverbound::Packet
     enable_text_filtering = packet.read_bool
     allow_server_listings = packet.read_bool
 
-    self.new(locale, view_distance, chat_mode, chat_colors, displayed_skin_parts, 
-             main_hand, enable_text_filtering, allow_server_listings)
+    self.new(locale, view_distance, chat_mode, chat_colors, displayed_skin_parts,
+      main_hand, enable_text_filtering, allow_server_listings)
   end
 
   def write : Bytes

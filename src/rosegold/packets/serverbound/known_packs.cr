@@ -19,7 +19,7 @@ class Rosegold::Serverbound::KnownPacks < Rosegold::Serverbound::Packet
   def self.read(packet)
     # Read number of known packs
     pack_count = packet.read_var_int
-    
+
     # Read each known pack
     known_packs = Array(NamedTuple(namespace: String, id: String, version: String)).new(pack_count) do
       namespace = packet.read_var_string

@@ -17,7 +17,7 @@ class Rosegold::Serverbound::UseItem < Rosegold::Serverbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write hand.value
-      
+
       # MC 1.21+ adds sequence number, yaw, and pitch
       if Client.protocol_version >= 767_u32
         buffer.write sequence

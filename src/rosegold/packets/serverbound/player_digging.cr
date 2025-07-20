@@ -33,7 +33,7 @@ class Rosegold::Serverbound::PlayerDigging < Rosegold::Serverbound::Packet
       buffer.write status.value
       buffer.write location
       buffer.write face.value
-      
+
       # MC 1.21+ adds sequence number
       if Client.protocol_version >= 767_u32
         buffer.write sequence

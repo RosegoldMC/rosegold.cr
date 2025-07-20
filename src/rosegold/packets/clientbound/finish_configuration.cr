@@ -5,7 +5,7 @@ class Rosegold::Clientbound::FinishConfiguration < Rosegold::Clientbound::Packet
 
   # Define protocol-specific packet IDs for FinishConfiguration
   packet_ids({
-    767_u32 => 0x03_u8, # MC 1.21 
+    767_u32 => 0x03_u8, # MC 1.21
     771_u32 => 0x03_u8, # MC 1.21.6
   })
 

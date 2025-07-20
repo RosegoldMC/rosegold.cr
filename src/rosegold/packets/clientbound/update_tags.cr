@@ -23,21 +23,21 @@ class Rosegold::Clientbound::UpdateTags < Rosegold::Clientbound::Packet
     type_count = packet.read_var_int
     tag_types = Array(TagType).new(type_count) do
       type_name = packet.read_var_string
-      
+
       # Read tags for this type
       tag_count = packet.read_var_int
       tags = Array(NamedTuple(name: String, entries: Array(UInt32))).new(tag_count) do
         tag_name = packet.read_var_string
-        
+
         # Read entries for this tag
         entry_count = packet.read_var_int
         entries = Array(UInt32).new(entry_count) do
           packet.read_var_int
         end
-        
+
         {name: tag_name, entries: entries}
       end
-      
+
       {type: type_name, tags: tags}
     end
 

@@ -47,7 +47,7 @@ Spectator.describe Rosegold::Clientbound::LoginSuccess do
       test_username = "TestPlayer"
       test_properties = [
         Rosegold::Clientbound::LoginSuccess::Property.new("textures", "eyJ0aW1lc3RhbXAiOjE1...", "signature123"),
-        Rosegold::Clientbound::LoginSuccess::Property.new("locale", "en_US", nil)
+        Rosegold::Clientbound::LoginSuccess::Property.new("locale", "en_US", nil),
       ]
 
       packet = Rosegold::Clientbound::LoginSuccess.new(test_uuid, test_username, test_properties)

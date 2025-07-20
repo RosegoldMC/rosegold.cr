@@ -86,7 +86,7 @@ class Rosegold::Window
     selection = @client.player.hotbar_selection
     # Clamp to valid hotbar range (0-8)
     selection = 0_u8 if selection > 8
-    
+
     if selection < hotbar.size
       hotbar[selection]
     else

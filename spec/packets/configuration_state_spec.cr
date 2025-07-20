@@ -9,23 +9,23 @@ Spectator.describe "CONFIGURATION state implementation" do
 
     it "registers configuration packets properly" do
       config_state = Rosegold::ProtocolState::CONFIGURATION
-      
+
       # Check that FinishConfiguration is registered for protocol 767
       finish_config_767 = config_state.get_clientbound_packet(0x03_u8, 767_u32)
       expect(finish_config_767).to eq(Rosegold::Clientbound::FinishConfiguration)
-      
+
       # Check that FinishConfiguration serverbound is registered for protocol 767
       finish_config_sb_767 = config_state.get_serverbound_packet(0x02_u8, 767_u32)
       expect(finish_config_sb_767).to eq(Rosegold::Serverbound::FinishConfiguration)
-      
+
       # Check ClientInformation is registered
       client_info_767 = config_state.get_serverbound_packet(0x00_u8, 767_u32)
       expect(client_info_767).to eq(Rosegold::Serverbound::ClientInformation)
-      
+
       # Check KnownPacks packets are registered for protocol 767
       known_packs_cb_767 = config_state.get_clientbound_packet(0x0E_u8, 767_u32)
       expect(known_packs_cb_767).to eq(Rosegold::Clientbound::KnownPacks)
-      
+
       known_packs_sb_767 = config_state.get_serverbound_packet(0x07_u8, 767_u32)
       expect(known_packs_sb_767).to eq(Rosegold::Serverbound::KnownPacks)
     end
@@ -90,14 +90,14 @@ Spectator.describe "CONFIGURATION state implementation" do
           enable_text_filtering: true,
           allow_server_listings: false
         )
-        
+
         bytes = original.write
-        expect(bytes[0]).to eq(0x00_u8)  # packet ID
-        
+        expect(bytes[0]).to eq(0x00_u8) # packet ID
+
         # Read back the packet (skipping packet ID)
         io = Minecraft::IO::Memory.new(bytes[1..])
         parsed = Rosegold::Serverbound::ClientInformation.read(io)
-        
+
         expect(parsed.locale).to eq("en_GB")
         expect(parsed.view_distance).to eq(12_u8)
         expect(parsed.chat_mode).to eq(1_u8)
@@ -138,7 +138,7 @@ Spectator.describe "CONFIGURATION state implementation" do
       it "creates packet with known packs data" do
         packs = [
           {namespace: "minecraft", id: "core", version: "1.21"},
-          {namespace: "modpack", id: "extra", version: "2.0.1"}
+          {namespace: "modpack", id: "extra", version: "2.0.1"},
         ]
         packet = Rosegold::Clientbound::KnownPacks.new(packs)
         expect(packet.known_packs.size).to eq(2)
@@ -150,17 +150,17 @@ Spectator.describe "CONFIGURATION state implementation" do
       it "writes and reads packet correctly" do
         packs = [
           {namespace: "minecraft", id: "core", version: "1.21"},
-          {namespace: "test", id: "addon", version: "1.0.0"}
+          {namespace: "test", id: "addon", version: "1.0.0"},
         ]
         original = Rosegold::Clientbound::KnownPacks.new(packs)
-        
+
         bytes = original.write
-        expect(bytes[0]).to eq(0x0E_u8)  # packet ID
-        
+        expect(bytes[0]).to eq(0x0E_u8) # packet ID
+
         # Read back the packet (skipping packet ID)
         io = Minecraft::IO::Memory.new(bytes[1..])
         parsed = Rosegold::Clientbound::KnownPacks.read(io)
-        
+
         expect(parsed.known_packs.size).to eq(2)
         expect(parsed.known_packs[0][:namespace]).to eq("minecraft")
         expect(parsed.known_packs[0][:id]).to eq("core")
@@ -172,14 +172,14 @@ Spectator.describe "CONFIGURATION state implementation" do
 
       it "handles empty known packs list" do
         original = Rosegold::Clientbound::KnownPacks.new
-        
+
         bytes = original.write
-        expect(bytes[0]).to eq(0x0E_u8)  # packet ID
-        
+        expect(bytes[0]).to eq(0x0E_u8) # packet ID
+
         # Read back the packet (skipping packet ID)
         io = Minecraft::IO::Memory.new(bytes[1..])
         parsed = Rosegold::Clientbound::KnownPacks.read(io)
-        
+
         expect(parsed.known_packs).to be_empty
       end
     end
@@ -209,17 +209,17 @@ Spectator.describe "CONFIGURATION state implementation" do
       it "writes and reads packet correctly" do
         packs = [
           {namespace: "minecraft", id: "core", version: "1.21"},
-          {namespace: "custom", id: "pack", version: "3.1.4"}
+          {namespace: "custom", id: "pack", version: "3.1.4"},
         ]
         original = Rosegold::Serverbound::KnownPacks.new(packs)
-        
+
         bytes = original.write
-        expect(bytes[0]).to eq(0x07_u8)  # packet ID
-        
+        expect(bytes[0]).to eq(0x07_u8) # packet ID
+
         # Read back the packet (skipping packet ID)
         io = Minecraft::IO::Memory.new(bytes[1..])
         parsed = Rosegold::Serverbound::KnownPacks.read(io)
-        
+
         expect(parsed.known_packs.size).to eq(2)
         expect(parsed.known_packs[0][:namespace]).to eq("minecraft")
         expect(parsed.known_packs[0][:id]).to eq("core")

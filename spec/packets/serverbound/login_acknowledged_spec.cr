@@ -31,33 +31,33 @@ Spectator.describe Rosegold::Serverbound::LoginAcknowledged do
     end
 
     it "writes only packet ID for protocol 767" do
-      # Mock protocol version 
+      # Mock protocol version
       original_protocol = Rosegold::Client.protocol_version
       Rosegold::Client.protocol_version = 767_u32
-      
+
       packet = Rosegold::Serverbound::LoginAcknowledged.new
       bytes = packet.write
-      
+
       # Should contain only the packet ID (0x03)
       expect(bytes.size).to eq(1)
       expect(bytes[0]).to eq(0x03_u8)
-      
+
       # Restore original protocol
       Rosegold::Client.protocol_version = original_protocol
     end
 
     it "writes only packet ID for protocol 771" do
-      # Mock protocol version 
+      # Mock protocol version
       original_protocol = Rosegold::Client.protocol_version
       Rosegold::Client.protocol_version = 771_u32
-      
+
       packet = Rosegold::Serverbound::LoginAcknowledged.new
       bytes = packet.write
-      
+
       # Should contain only the packet ID (0x03)
       expect(bytes.size).to eq(1)
       expect(bytes[0]).to eq(0x03_u8)
-      
+
       # Restore original protocol
       Rosegold::Client.protocol_version = original_protocol
     end

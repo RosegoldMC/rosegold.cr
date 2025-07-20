@@ -19,11 +19,11 @@ class Rosegold::Clientbound::KnownPacks < Rosegold::Clientbound::Packet
   def self.read(packet)
     # Read number of known packs
     pack_count = packet.read_var_int
-    
+
     # Read each known pack
     known_packs = Array(NamedTuple(namespace: String, id: String, version: String)).new(pack_count) do
       namespace = packet.read_var_string
-      id = packet.read_var_string  
+      id = packet.read_var_string
       version = packet.read_var_string
       {namespace: namespace, id: id, version: version}
     end
@@ -45,7 +45,7 @@ class Rosegold::Clientbound::KnownPacks < Rosegold::Clientbound::Packet
 
   def callback(client)
     Log.debug { "Received known packs from server: #{known_packs.size} packs" }
-    
+
     # Respond with our known packs (for now, we acknowledge all server packs)
     response = Rosegold::Serverbound::KnownPacks.new(known_packs)
     client.send_packet! response

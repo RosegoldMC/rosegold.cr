@@ -14,7 +14,7 @@ class Rosegold::Chunk
   def initialize(@x, @z, io, dimension : Dimension)
     @min_y = dimension.min_y
     section_count = dimension.world_height >> 4
-    
+
     # Check if data stream is empty (happens when no sections are sent)
     if io.responds_to?(:size) && io.responds_to?(:pos) && io.size <= io.pos
       # Create empty sections when no data is available
