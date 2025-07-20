@@ -9,7 +9,7 @@ Spectator.describe "Chunk Batch Timing Integration" do
         bot.wait_tick
 
         # Wait a bit for chunk batches to be processed
-        sleep 2
+        sleep 2.seconds
 
         # Check that chunk batch samples were collected
         expect(client.chunk_batch_samples.size).to be > 0

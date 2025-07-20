@@ -25,7 +25,7 @@ Spectator.describe "Rosegold::Bot inventory" do
             bot.chat "/give #{bot.username} minecraft:bucket 16"
             bot.chat "/give #{bot.username} minecraft:bucket 1"
             bot.chat "/give #{bot.username} minecraft:bucket 5"
-            sleep 1
+            sleep 1.second
 
             expect(bot.inventory.count("bucket")).to eq 16 + 1 + 5
           end

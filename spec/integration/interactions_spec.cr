@@ -46,7 +46,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.start_digging
         bot.stop_digging
 
-        sleep 1 # long enough to dig 1 block, if it didn't stop
+        sleep 1.second # long enough to dig 1 block, if it didn't stop
 
         expect(bot.feet.y).to be >= -56
       end
