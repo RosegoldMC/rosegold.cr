@@ -6,8 +6,8 @@ class Rosegold::Clientbound::KeepAlive < Rosegold::Clientbound::Packet
   # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x12_u8, # MC 1.18
-    767_u32 => 0x6A_u8, # MC 1.21
-    771_u32 => 0x6A_u8, # MC 1.21.6
+    767_u32 => 0x26_u8, # MC 1.21
+    771_u32 => 0x26_u8, # MC 1.21.6
   })
 
   property keep_alive_id : Int64

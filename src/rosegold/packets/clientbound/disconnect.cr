@@ -5,8 +5,8 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
   # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x1a_u8, # MC 1.18
-    767_u32 => 0x1d_u8, # MC 1.21 - Disconnect (play)
-    771_u32 => 0x1d_u8, # MC 1.21.6
+    767_u32 => 0x1c_u8, # MC 1.21 - Disconnect (play)
+    771_u32 => 0x1c_u8, # MC 1.21.6
   })
 
   property reason : Chat
