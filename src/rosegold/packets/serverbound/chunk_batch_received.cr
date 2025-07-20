@@ -4,8 +4,8 @@ class Rosegold::Serverbound::ChunkBatchReceived < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
   # Define protocol-specific packet IDs
   packet_ids({
-    767_u32 => 0x08_u8, # MC 1.21
-    771_u32 => 0x08_u8, # MC 1.21.6
+    767_u32 => 0x0A_u8, # MC 1.21
+    771_u32 => 0x0A_u8, # MC 1.21.6
   })
 
   property chunks_per_tick : Float32

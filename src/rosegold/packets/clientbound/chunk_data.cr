@@ -28,43 +28,47 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     chunk_z = io.read_int
     heightmaps = io.read_nbt_unamed
     data = io.read_var_bytes
-    # Protocol-aware block entities reading
-    block_entities_count = io.read_var_int
-    block_entities = if Client.protocol_version >= 767_u32
-                       # MC 1.21+ format: Different block entity structure
-                       Array(Chunk::BlockEntity).new(block_entities_count) do
-                         Chunk::BlockEntity.new(
-                           io.read_byte,    # x (relative to chunk)
-                           io.read_short,   # y
-                           io.read_byte,    # z (relative to chunk)
-                           io.read_var_int, # type
-                           io.read_nbt      # nbt
-                         )
-                       end
+    
+    # Protocol-aware block entities reading - MC 1.21.6+ moved block entities to separate packets
+    block_entities = if Client.protocol_version >= 771_u32
+                       # MC 1.21.6+ - no block entities in chunk data packet
+                       Array(Chunk::BlockEntity).new
                      else
-                       # MC 1.18 format: Original structure
-                       Array(Chunk::BlockEntity).new(block_entities_count) do
-                         xz = io.read_byte
-                         Chunk::BlockEntity.new(
-                           chunk_x + ((xz >> 4) & 0xf),
-                           io.read_short,
-                           chunk_z + (xz & 0xf),
-                           io.read_var_int,
-                           io.read_nbt
-                         )
+                       block_entities_count = io.read_var_int
+                       if Client.protocol_version >= 767_u32
+                         # MC 1.21+ format: Different block entity structure
+                         Array(Chunk::BlockEntity).new(block_entities_count) do
+                           Chunk::BlockEntity.new(
+                             io.read_byte,    # x (relative to chunk)
+                             io.read_short,   # y
+                             io.read_byte,    # z (relative to chunk)
+                             io.read_var_int, # type
+                             io.read_nbt      # nbt
+                           )
+                         end
+                       else
+                         # MC 1.18 format: Original structure
+                         Array(Chunk::BlockEntity).new(block_entities_count) do
+                           xz = io.read_byte
+                           Chunk::BlockEntity.new(
+                             chunk_x + ((xz >> 4) & 0xf),
+                             io.read_short,
+                             chunk_z + (xz & 0xf),
+                             io.read_var_int,
+                             io.read_nbt
+                           )
+                         end
                        end
                      end
 
-    # Protocol-aware light data reading
-    light_data = if Client.protocol_version >= 767_u32
-                   # MC 1.21+ format: No light data in ChunkData packet (sent separately)
-                   Bytes.empty
-                 else
-                   # MC 1.18 format: Light data is remaining bytes
-                   remaining_size = io.size - io.pos
+    # Read remaining bytes as light data (simplified approach)
+    remaining_size = io.size - io.pos
+    light_data = if remaining_size > 0
                    remaining_bytes = Bytes.new(remaining_size)
                    io.read(remaining_bytes)
                    remaining_bytes
+                 else
+                   Bytes.empty
                  end
 
     self.new(chunk_x, chunk_z, heightmaps, data, block_entities, light_data)

@@ -20,8 +20,15 @@ class Rosegold::Chunk
       # Create empty sections when no data is available
       @sections = Array(Section).new(section_count) { Section.empty }
     else
-      # Normal case: read sections from data stream
-      @sections = Array(Section).new(section_count) { Section.new io }
+      # MC 1.21.6+ may use a completely different chunk format
+      if Client.protocol_version >= 771_u32
+        @sections = Array(Section).new(section_count) { Section.empty }
+      else
+        # Normal case: read sections from data stream  
+        @sections = Array(Section).new(section_count) do |index|
+          Section.new io
+        end
+      end
     end
   end
 
@@ -52,8 +59,15 @@ class Rosegold::Chunk
     @block_count : Int16
 
     def initialize(io)
-      # Number of non-air blocks present in the chunk section. If the block count reaches 0, the whole chunk section is not rendered.
-      @block_count = io.read_short
+      # MC 1.21.6+ may have changed section format - skip block_count for newer protocols
+      if Client.protocol_version >= 771_u32
+        # MC 1.21.6+ - block_count may have been removed or changed
+        @block_count = 0_i16 # Default value
+      else
+        # Older protocols: Number of non-air blocks present in the chunk section
+        @block_count = io.read_short
+      end
+      
       @blocks = PalettedContainer.new io, 9, 4096
       @biomes = PalettedContainer.new io, 4, 64
     end

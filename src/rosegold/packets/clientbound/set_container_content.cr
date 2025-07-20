@@ -4,8 +4,8 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
 
   # Define protocol-specific packet IDs (MC 1.21+ replacement for WindowItems)
   packet_ids({
-    767_u32 => 0x13_u8, # MC 1.21
-    771_u32 => 0x13_u8, # MC 1.21.6
+    767_u32 => 0x12_u8, # MC 1.21
+    771_u32 => 0x12_u8, # MC 1.21.6
   })
 
   property \
