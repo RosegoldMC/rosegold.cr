@@ -28,27 +28,17 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     chunk_z = io.read_int
     heightmaps = io.read_nbt_unamed
     data = io.read_var_bytes
-    
     # Protocol-aware block entities reading
     block_entities_count = io.read_var_int
     block_entities = if Client.protocol_version >= 767_u32
-                       # MC 1.21+ format: Check actual protocol documentation format
+                       # MC 1.21+ format: Different block entity structure
                        Array(Chunk::BlockEntity).new(block_entities_count) do
-                         # For MC 1.21.6, the format should be: packed_xz, y, type, nbt
-                         packed_xz = io.read_byte
-                         x = (packed_xz >> 4) & 0xf  # Extract x from upper 4 bits
-                         z = packed_xz & 0xf          # Extract z from lower 4 bits
-                         y = io.read_short
-                         type = io.read_var_int
-                         nbt = io.read_nbt
-                         
-                         # Convert to absolute coordinates
                          Chunk::BlockEntity.new(
-                           chunk_x * 16 + x,
-                           y,
-                           chunk_z * 16 + z,
-                           type,
-                           nbt
+                           io.read_byte,    # x (relative to chunk)
+                           io.read_short,   # y
+                           io.read_byte,    # z (relative to chunk)
+                           io.read_var_int, # type
+                           io.read_nbt      # nbt
                          )
                        end
                      else
@@ -65,9 +55,9 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
                        end
                      end
 
-    # Skip light data reading for MC 1.21+ as requested by user
+    # Protocol-aware light data reading
     light_data = if Client.protocol_version >= 767_u32
-                   # MC 1.21+ format: No light data needed per user request
+                   # MC 1.21+ format: No light data in ChunkData packet (sent separately)
                    Bytes.empty
                  else
                    # MC 1.18 format: Light data is remaining bytes
@@ -102,43 +92,12 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    begin
-      source = Minecraft::IO::Memory.new data
-      chunk = Chunk.new chunk_x, chunk_z, source, client.dimension
-      chunk.block_entities = block_entities
-      chunk.heightmaps = heightmaps
-      chunk.light_data = light_data
-      client.dimension.load_chunk chunk
-    rescue ex : Exception
-      # Handle parsing errors gracefully - create fallback chunk to prevent falling through floor
-      Log.warn { "Failed to parse chunk data for chunk #{chunk_x},#{chunk_z}: #{ex.message}. Creating fallback chunk." }
-      
-      # Create a minimal chunk with solid ground to prevent falling through floor
-      fallback_chunk = create_fallback_chunk(chunk_x, chunk_z, client.dimension)
-      fallback_chunk.block_entities = block_entities
-      fallback_chunk.heightmaps = heightmaps
-      fallback_chunk.light_data = light_data
-      client.dimension.load_chunk fallback_chunk
-    end
-  end
-
-  private def create_fallback_chunk(x : Int32, z : Int32, dimension) : Chunk
-    # Create a chunk with basic stone structure to prevent falling through floor
-    empty_data = Bytes.new(0)
-    source = Minecraft::IO::Memory.new empty_data
-    chunk = Chunk.new x, z, source, dimension
-    
-    # Set basic heightmaps if not present
-    if chunk.heightmaps.as?(Minecraft::NBT::CompoundTag).try(&.tags.empty?)
-      default_heightmaps = Hash(String, Minecraft::NBT::Tag).new
-      # Create basic heightmap data for ground level at y=64
-      long_array = Array(Int64).new(37) { 4629771061636907072_i64 } # Represents y=64 for all blocks
-      default_heightmaps["MOTION_BLOCKING"] = Minecraft::NBT::LongArrayTag.new(long_array)
-      default_heightmaps["WORLD_SURFACE"] = Minecraft::NBT::LongArrayTag.new(long_array)
-      chunk.heightmaps = Minecraft::NBT::CompoundTag.new(default_heightmaps)
-    end
-    
-    chunk
+    source = Minecraft::IO::Memory.new data
+    chunk = Chunk.new chunk_x, chunk_z, source, client.dimension
+    chunk.block_entities = block_entities
+    chunk.heightmaps = heightmaps
+    chunk.light_data = light_data
+    client.dimension.load_chunk chunk
   end
 
   def inspect(io)
