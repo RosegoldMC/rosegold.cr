@@ -20,7 +20,7 @@
       "Bash(timeout 30s crystal spec *)",
       "Bash(timeout 60s crystal spec *)",
       "Bash(timeout 120s crystal spec *)",
-      "Bash(ls:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }
