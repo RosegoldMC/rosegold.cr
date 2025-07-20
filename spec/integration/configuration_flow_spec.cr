@@ -38,7 +38,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       expect(mock_client.player.username).to eq("testuser")
 
       # Should not send LoginAcknowledged for MC 1.18
-      login_ack_packets = mock_client.sent_packets.select { |p| p.is_a?(Rosegold::Serverbound::LoginAcknowledged) }
+      login_ack_packets = mock_client.sent_packets.select(Rosegold::Serverbound::LoginAcknowledged)
       expect(login_ack_packets.size).to eq(0)
     end
 
@@ -58,7 +58,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       expect(mock_client.player.username).to eq("testuser")
 
       # Should send LoginAcknowledged for MC 1.21+
-      login_ack_packets = mock_client.sent_packets.select { |p| p.is_a?(Rosegold::Serverbound::LoginAcknowledged) }
+      login_ack_packets = mock_client.sent_packets.select(Rosegold::Serverbound::LoginAcknowledged)
       expect(login_ack_packets.size).to eq(1)
     end
 
@@ -77,7 +77,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       expect(mock_client.current_protocol_state).to eq(Rosegold::ProtocolState::CONFIGURATION)
 
       # Should send LoginAcknowledged for MC 1.21.6
-      login_ack_packets = mock_client.sent_packets.select { |p| p.is_a?(Rosegold::Serverbound::LoginAcknowledged) }
+      login_ack_packets = mock_client.sent_packets.select(Rosegold::Serverbound::LoginAcknowledged)
       expect(login_ack_packets.size).to eq(1)
     end
   end
@@ -91,7 +91,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       login_ack.callback(mock_client)
 
       # Should send ClientInformation packet
-      client_info_packets = mock_client.sent_packets.select { |p| p.is_a?(Rosegold::Serverbound::ClientInformation) }
+      client_info_packets = mock_client.sent_packets.select(Rosegold::Serverbound::ClientInformation)
       expect(client_info_packets.size).to eq(1)
     end
   end
@@ -105,7 +105,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       finish_config.callback(mock_client)
 
       # Should send FinishConfiguration serverbound response
-      finish_config_packets = mock_client.sent_packets.select { |p| p.is_a?(Rosegold::Serverbound::FinishConfiguration) }
+      finish_config_packets = mock_client.sent_packets.select(Rosegold::Serverbound::FinishConfiguration)
       expect(finish_config_packets.size).to eq(1)
 
       # Should transition to PLAY state
@@ -125,14 +125,14 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       login_success.callback(mock_client)
 
       expect(mock_client.current_protocol_state).to eq(Rosegold::ProtocolState::CONFIGURATION)
-      login_ack_packets = mock_client.sent_packets.select { |p| p.is_a?(Rosegold::Serverbound::LoginAcknowledged) }
+      login_ack_packets = mock_client.sent_packets.select(Rosegold::Serverbound::LoginAcknowledged)
       expect(login_ack_packets.size).to eq(1)
 
       # Step 2: LoginAcknowledged callback sends ClientInformation
       login_ack = login_ack_packets.first.as(Rosegold::Serverbound::LoginAcknowledged)
       login_ack.callback(mock_client)
 
-      client_info_packets = mock_client.sent_packets.select { |p| p.is_a?(Rosegold::Serverbound::ClientInformation) }
+      client_info_packets = mock_client.sent_packets.select(Rosegold::Serverbound::ClientInformation)
       expect(client_info_packets.size).to eq(1)
       expect(mock_client.current_protocol_state).to eq(Rosegold::ProtocolState::CONFIGURATION)
 
@@ -151,7 +151,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       finish_config.callback(mock_client)
 
       # Should send response and transition to PLAY
-      finish_config_packets = mock_client.sent_packets.select { |p| p.is_a?(Rosegold::Serverbound::FinishConfiguration) }
+      finish_config_packets = mock_client.sent_packets.select(Rosegold::Serverbound::FinishConfiguration)
       expect(finish_config_packets.size).to eq(1)
       expect(mock_client.current_protocol_state).to eq(Rosegold::ProtocolState::PLAY)
 
