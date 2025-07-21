@@ -12,7 +12,7 @@ Spectator.describe "Rosegold::Bot movement" do
     end
   end
 
-  it "should fall due to gravity" do
+  it "should fall due to gravity (and get held up by the ground)" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/tp 1 -58 1"
