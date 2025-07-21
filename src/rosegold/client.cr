@@ -59,7 +59,10 @@ class Rosegold::Client < Rosegold::EventEmitter
     sequence_counter : Int32 = 0,
     pending_block_operations : Hash(Int32, BlockOperation) = Hash(Int32, BlockOperation).new,
     chunk_batch_start_time : Time? = nil,
-    chunk_batch_samples : Array(ChunkBatchSample) = Array(ChunkBatchSample).new
+    chunk_batch_samples : Array(ChunkBatchSample) = Array(ChunkBatchSample).new,
+    tick_rate : Float32 = 20.0_f32,
+    ticking_frozen : Bool = false,
+    pending_tick_steps : UInt32 = 0_u32
 
   def protocol_version
     detected_protocol_version || Client.protocol_version
@@ -77,6 +80,33 @@ class Rosegold::Client < Rosegold::EventEmitter
     if @chunk_batch_samples.size > 15
       @chunk_batch_samples.shift
     end
+  end
+
+  # Update client ticking state from server
+  def update_ticking_state(new_tick_rate : Float32, frozen : Bool)
+    old_rate = @tick_rate
+    old_frozen = @ticking_frozen
+    
+    @tick_rate = new_tick_rate
+    @ticking_frozen = frozen
+    
+    Log.debug { "Ticking state updated: rate #{old_rate} -> #{new_tick_rate}, frozen #{old_frozen} -> #{frozen}" }
+  end
+
+  # Add tick steps when ticking is frozen
+  def add_tick_steps(steps : UInt32)
+    return unless @ticking_frozen
+    
+    @pending_tick_steps += steps
+    Log.debug { "Added #{steps} tick steps, total pending: #{@pending_tick_steps}" }
+  end
+
+  # Calculate tick interval based on current tick rate
+  def tick_interval : Time::Span
+    # Convert TPS to milliseconds per tick
+    # 20 TPS = 50ms per tick, so: 1000ms / tick_rate
+    millis_per_tick = (1000.0 / @tick_rate).to_i
+    millis_per_tick.milliseconds
   end
 
   def average_millis_per_chunk : Float64
@@ -157,14 +187,28 @@ class Rosegold::Client < Rosegold::EventEmitter
   def start_ticker
     spawn do
       loop do
-        sleep 1.tick
+        sleep tick_interval
 
         break unless connected?
 
-        spawn do
-          interactions.tick
-          physics.tick
-          emit_event Event::Tick.new
+        # Only tick if not frozen, or if we have pending steps when frozen
+        should_tick = if @ticking_frozen
+                        if @pending_tick_steps > 0
+                          @pending_tick_steps -= 1
+                          true
+                        else
+                          false
+                        end
+                      else
+                        true
+                      end
+
+        if should_tick
+          spawn do
+            interactions.tick
+            physics.tick
+            emit_event Event::Tick.new
+          end
         end
       end
     end

@@ -15,9 +15,10 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
     feet : Vec3d,
     look : Look
   property? \
-    on_ground : Bool
+    on_ground : Bool,
+    pushing_against_wall : Bool = false
 
-  def initialize(feet : Vec3d, look : Look, @on_ground : Bool)
+  def initialize(feet : Vec3d, look : Look, @on_ground : Bool, @pushing_against_wall : Bool = false)
     # Validate and sanitize coordinates
     @feet = Vec3d.new(
       sanitize_coordinate(feet.x, -30_000_000.0, 30_000_000.0),
@@ -40,7 +41,17 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
       buffer.write feet.z
       buffer.write look.yaw
       buffer.write look.pitch
-      buffer.write on_ground?
+      
+      if Client.protocol_version >= 771_u32
+        # MC 1.21.6+ format: Use bit field (0x01: on ground, 0x02: pushing against wall)
+        flags = 0_u8
+        flags |= 0x01_u8 if on_ground?
+        flags |= 0x02_u8 if pushing_against_wall?
+        buffer.write flags
+      else
+        # Older formats: Just boolean on_ground
+        buffer.write on_ground?
+      end
     end.to_slice
   end
   
