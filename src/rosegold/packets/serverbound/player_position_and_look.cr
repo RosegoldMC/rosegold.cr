@@ -17,7 +17,20 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
   property? \
     on_ground : Bool
 
-  def initialize(@feet, @look, @on_ground); end
+  def initialize(feet : Vec3d, look : Look, @on_ground : Bool)
+    # Validate and sanitize coordinates
+    @feet = Vec3d.new(
+      sanitize_coordinate(feet.x, -30_000_000.0, 30_000_000.0),
+      sanitize_coordinate(feet.y, -20_000_000.0, 20_000_000.0),
+      sanitize_coordinate(feet.z, -30_000_000.0, 30_000_000.0)
+    )
+    
+    # Validate and sanitize look angles
+    @look = Look.new(
+      sanitize_angle(look.yaw),
+      sanitize_angle(look.pitch)
+    )
+  end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
@@ -29,5 +42,31 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
       buffer.write look.pitch
       buffer.write on_ground?
     end.to_slice
+  end
+  
+  private def sanitize_coordinate(value : Float64, min : Float64, max : Float64) : Float64
+    # Check for NaN or infinite values - replace with 0
+    return 0.0 if value.nan? || value.infinite?
+    
+    # Check for extremely small values that might be corrupted (near-zero scientific notation)
+    return 0.0 if value.abs < 1e-100
+    
+    # Clamp to valid ranges as per protocol specification
+    value.clamp(min, max)
+  end
+  
+  private def sanitize_angle(value : Float32) : Float32
+    # Check for NaN or infinite values - replace with 0
+    return 0.0_f32 if value.nan? || value.infinite?
+    
+    # Normalize angle to valid range (-180 to 180)
+    while value > 180.0_f32
+      value -= 360.0_f32
+    end
+    while value < -180.0_f32
+      value += 360.0_f32
+    end
+    
+    value
   end
 end

@@ -5,8 +5,8 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
   # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x13_u8, # MC 1.18
-    767_u32 => 0x1C_u8, # MC 1.21 (Set Player Rotation)
-    771_u32 => 0x1C_u8, # MC 1.21.6
+    767_u32 => 0x1F_u8, # MC 1.21 (Set Player Rotation)
+    771_u32 => 0x1F_u8, # MC 1.21.6
   })
 
   property \
@@ -15,10 +15,28 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
   property? \
     on_ground : Bool
 
-  def initialize(@yaw, @pitch, @on_ground); end
+  def initialize(yaw : Float32, pitch : Float32, @on_ground : Bool)
+    @yaw = sanitize_angle(yaw)
+    @pitch = sanitize_angle(pitch)
+  end
 
   def self.new(look : Look, on_ground)
     self.new(look.yaw, look.pitch, on_ground)
+  end
+
+  private def sanitize_angle(value : Float32) : Float32
+    # Check for NaN or infinite values - replace with 0
+    return 0.0_f32 if value.nan? || value.infinite?
+
+    # Normalize angle to valid range (-180 to 180)
+    while value > 180.0_f32
+      value -= 360.0_f32
+    end
+    while value < -180.0_f32
+      value += 360.0_f32
+    end
+
+    value
   end
 
   def write : Bytes

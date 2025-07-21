@@ -9,7 +9,7 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
 
   # Define protocol-specific packet IDs (MC 1.21+ replacement for PlayerPositionAndLook)
   packet_ids({
-    767_u32 => 0x41_u8, # MC 1.21
+    767_u32 => 0x40_u8, # MC 1.21
     771_u32 => 0x41_u8, # MC 1.21.6
   })
 
@@ -22,19 +22,44 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     relative_flags : UInt8,
     teleport_id : UInt32
 
-  def initialize(@x_raw, @y_raw, @z_raw, @yaw_raw, @pitch_raw, @relative_flags, @teleport_id, @dismount_vehicle = false)
+  # MC 1.21.6+ additional velocity fields
+  property \
+    velocity_x : Float64 = 0.0,
+    velocity_y : Float64 = 0.0,
+    velocity_z : Float64 = 0.0
+
+  property? dismount_vehicle : Bool = false
+  
+  def initialize(@x_raw, @y_raw, @z_raw, @yaw_raw, @pitch_raw, @relative_flags, @teleport_id, @dismount_vehicle = false, @velocity_x = 0.0, @velocity_y = 0.0, @velocity_z = 0.0)
   end
 
   def self.read(packet)
-    x = packet.read_double
-    y = packet.read_double
-    z = packet.read_double
-    yaw = packet.read_float
-    pitch = packet.read_float
-    relative_flags = packet.read_byte
-    teleport_id = packet.read_var_int
+    if Client.protocol_version >= 771_u32
+      # MC 1.21.6+ format: Teleport ID first, then coordinates, velocities, angles, flags
+      teleport_id = packet.read_var_int
+      x = packet.read_double
+      y = packet.read_double
+      z = packet.read_double
+      velocity_x = packet.read_double
+      velocity_y = packet.read_double
+      velocity_z = packet.read_double
+      yaw = packet.read_float
+      pitch = packet.read_float
+      relative_flags = packet.read_byte
+      
+      self.new(x, y, z, yaw, pitch, relative_flags, teleport_id, false, velocity_x, velocity_y, velocity_z)
+    else
+      # MC 1.21 format: Original format
+      x = packet.read_double
+      y = packet.read_double
+      z = packet.read_double
+      yaw = packet.read_float
+      pitch = packet.read_float
+      relative_flags = packet.read_byte
+      teleport_id = packet.read_var_int
 
-    self.new(x, y, z, yaw, pitch, relative_flags, teleport_id)
+      self.new(x, y, z, yaw, pitch, relative_flags, teleport_id)
+    end
   end
 
   def write : Bytes
@@ -51,9 +76,9 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
   end
 
   def feet(previous_feet : Vec3d) : Vec3d
-    x = x_raw
-    y = y_raw
-    z = z_raw
+    x = sanitize_coordinate(x_raw, -30_000_000.0, 30_000_000.0)
+    y = sanitize_coordinate(y_raw, -20_000_000.0, 20_000_000.0)
+    z = sanitize_coordinate(z_raw, -30_000_000.0, 30_000_000.0)
 
     if relative_flags & 0x01 != 0
       x += previous_feet.x
@@ -66,6 +91,17 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     end
 
     Vec3d.new x, y, z
+  end
+  
+  private def sanitize_coordinate(value : Float64, min : Float64, max : Float64) : Float64
+    # Check for NaN or infinite values - replace with 0
+    return 0.0 if value.nan? || value.infinite?
+    
+    # Check for extremely small values that might be corrupted (near-zero scientific notation)
+    return 0.0 if value.abs < 1e-100
+    
+    # Clamp to valid ranges as per protocol specification
+    value.clamp(min, max)
   end
 
   def look(previous_look : Look) : Look
@@ -86,7 +122,13 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     player = client.player
     player.feet = feet player.feet
     player.look = look player.look
-    player.velocity = Vec3d::ORIGIN
+    
+    # Set velocity from packet for MC 1.21.6+, otherwise reset to origin
+    if Client.protocol_version >= 771_u32
+      player.velocity = Vec3d.new(velocity_x, velocity_y, velocity_z)
+    else
+      player.velocity = Vec3d::ORIGIN
+    end
 
     client.queue_packet Serverbound::TeleportConfirm.new teleport_id
 

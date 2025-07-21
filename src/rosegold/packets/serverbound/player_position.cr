@@ -17,10 +17,26 @@ class Rosegold::Serverbound::PlayerPosition < Rosegold::Serverbound::Packet
   property? \
     on_ground : Bool
 
-  def initialize(@x, @y, @z, @on_ground); end
+  def initialize(x : Float64, y : Float64, z : Float64, @on_ground : Bool)
+    # Validate and clamp coordinates according to protocol specification
+    @x = sanitize_coordinate(x, -30_000_000.0, 30_000_000.0)
+    @y = sanitize_coordinate(y, -20_000_000.0, 20_000_000.0)  
+    @z = sanitize_coordinate(z, -30_000_000.0, 30_000_000.0)
+  end
 
   def self.new(feet : Vec3d, on_ground)
     self.new(feet.x, feet.y, feet.z, on_ground)
+  end
+  
+  private def sanitize_coordinate(value : Float64, min : Float64, max : Float64) : Float64
+    # Check for NaN or infinite values - replace with 0
+    return 0.0 if value.nan? || value.infinite?
+    
+    # Check for extremely small values that might be corrupted (near-zero scientific notation)
+    return 0.0 if value.abs < 1e-100
+    
+    # Clamp to valid ranges as per protocol specification
+    value.clamp(min, max)
   end
 
   def write : Bytes
