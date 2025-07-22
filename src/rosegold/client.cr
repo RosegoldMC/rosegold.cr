@@ -158,7 +158,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def spawned?
-    pp!(inventory.ready?) && pp!(physics.running?) && pp!(connected?)
+    inventory.ready? && physics.running? && connected?
   end
 
   # Waits for the client to be fully spawned, ie. physics and inventory being ready.
