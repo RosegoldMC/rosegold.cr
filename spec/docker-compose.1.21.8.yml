@@ -10,6 +10,7 @@ services:
       VERSION: 1.21.8
       ONLINE_MODE: "FALSE"
       LEVEL_TYPE: flat
+      SPAWN_PROTECTION: 0
 
     tty: true
     stdin_open: true
