@@ -33,8 +33,7 @@ class Rosegold::PalettedContainer
   def initialize(io : Minecraft::IO, num_bits_direct, @size)
     @bits_per_entry = io.read_byte
     if bits_per_entry == 0 # single state mode
-      palette_value = io.read_var_int
-      @palette = [palette_value.to_u16]
+      @palette = [io.read_var_int.to_u16]
       @entries_per_long = 0
       @entry_mask = 0
       num_longs = io.read_var_int
@@ -50,16 +49,7 @@ class Rosegold::PalettedContainer
     if bits_per_entry >= num_bits_direct # direct mode
       @palette = [] of Entry
     else # encoded mode
-      palette_size = io.read_var_int
-      if palette_size == 0
-        # MC 1.21.6+ behavior: empty palette means single state (air/default)
-        @palette = [0_u16] # Default to air/empty
-        @entries_per_long = 0
-        @entry_mask = 0
-        @long_array = [] of Long
-        return
-      end
-      @palette = Array(Entry).new(palette_size) { io.read_var_int.to_u16 }
+      @palette = Array(Entry).new(io.read_var_int) { io.read_var_int.to_u16 }
     end
 
     @entries_per_long = 64_u8 // bits_per_entry
@@ -148,6 +138,7 @@ class Rosegold::PalettedContainer
     @entry_mask = (1_u64 << bits_per_entry) - 1
     @long_array = Array(Long).new(size*4//64, 0_u64)
     # all values will be 0, and our single value is also at palette index 0
+    Log.debug { "Growing PalettedContainer from single state. Array length: #{@long_array.size}" }
   end
 
   private def grow_palette : Nil
@@ -177,5 +168,6 @@ class Rosegold::PalettedContainer
     @entries_per_long = new_entries_per_long
     @entry_mask = new_entry_mask
     @long_array = new_long_array
+    Log.debug { "Growing PalettedContainer. Array length: #{@long_array.size}, Palette length: #{@palette.size}" }
   end
 end
