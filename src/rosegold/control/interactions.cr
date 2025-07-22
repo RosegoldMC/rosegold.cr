@@ -50,7 +50,7 @@ class Rosegold::Interactions
       client.pending_block_operations[sequence] = operation
     end
 
-    send_packet Serverbound::PlayerDigging.new :finish_using_hand, Vec3i::ORIGIN, :bottom, sequence
+    send_packet Serverbound::PlayerAction.new :finish_using_hand, Vec3i::ORIGIN, :bottom, sequence
   end
 
   # Activates the "attack" button.
@@ -236,7 +236,7 @@ class Rosegold::Interactions
       client.pending_block_operations[sequence] = operation
     end
 
-    send_packet Serverbound::PlayerDigging.new \
+    send_packet Serverbound::PlayerAction.new \
       :start, reached.block, reached.face, sequence
     send_packet Serverbound::SwingArm.new
   end
@@ -258,7 +258,7 @@ class Rosegold::Interactions
       client.pending_block_operations[sequence] = operation
     end
 
-    send_packet Serverbound::PlayerDigging.new \
+    send_packet Serverbound::PlayerAction.new \
       :finish, reached.block, reached.face, sequence
   end
 
@@ -277,7 +277,7 @@ class Rosegold::Interactions
       client.pending_block_operations[sequence] = operation
     end
 
-    send_packet Serverbound::PlayerDigging.new \
+    send_packet Serverbound::PlayerAction.new \
       :cancel, reached.block, reached.face, sequence
   end
 

@@ -1,58 +1,53 @@
-require "../packet"
+require "../serverbound/player_action"
 
+# Some servers do not send this.
 class Rosegold::Clientbound::AcknowledgeBlockChange < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
-  # Define protocol-specific packet IDs (MC 1.21+ only)
+  # Define protocol-specific packet IDs
   packet_ids({
-    767_u32 => 0x05_u8, # MC 1.21
-    771_u32 => 0x05_u8, # MC 1.21.6
-    772_u32 => 0x05_u8, # MC 1.21.8
+    758_u32 => 0x08_u8, # MC 1.18
   })
 
-  property sequence_id : Int32
+  alias Status = Rosegold::Serverbound::PlayerAction::Status
 
-  def initialize(@sequence_id : Int32)
+  property \
+    location : Vec3i,
+    block_id : UInt16,
+    status : Status,
+    sequence : Int32
+  property? \
+    successful : Bool
+
+  def initialize(@location, @block_id, @status, @successful, @sequence = 0)
   end
 
   def self.read(packet)
-    pp!(sequence_id = packet.read_var_int.to_i32)
-    self.new(sequence_id)
-  end
+    location = packet.read_bit_location
+    block_id = packet.read_var_int.to_u16
+    status = Status.new(packet.read_var_int.to_i32)
+    successful = packet.read_bool
 
-  def write : Bytes
-    Minecraft::IO::Memory.new.tap do |io|
-      io.write self.class.packet_id_for_protocol(Client.protocol_version)
-      io.write sequence_id
-    end.to_slice
+    # MC 1.21+ includes sequence number
+    sequence = if Client.protocol_version >= 767_u32
+                 packet.read_var_int.to_i32
+               else
+                 0
+               end
+
+    self.new(location, block_id, status, successful, sequence)
   end
 
   def callback(client)
-    # This packet acknowledges that a block change initiated by the client has been processed
-    # The client can now display the server's authoritative block state instead of the predicted one
-    Log.debug { "Acknowledged block change for sequence #{sequence_id}" }
+    Log.debug { "dig ack #{self}" }
 
-    # Look up the pending block operation for this sequence
-    if operation = client.pending_block_operations.delete(sequence_id)
-      case operation.operation_type
-      when :dig
-        # For digging operations, set the block to air (block state 0)
-        client.dimension.set_block_state operation.location, 0_u16
-        Log.debug { "Removed block at #{operation.location} for sequence #{sequence_id}" }
-      when :place
-        # For placement operations, the server will send the actual block state separately
-        # Just remove from pending operations
-        Log.debug { "Acknowledged block placement at #{operation.location} for sequence #{sequence_id}" }
-      when :use
-        # For use operations, block state changes are handled by other packets
-        Log.debug { "Acknowledged item use for sequence #{sequence_id}" }
-      end
-    else
-      Log.warn { "No pending operation found for sequence #{sequence_id}" }
+    # Remove pending operation if sequence number is provided (MC 1.21+)
+    if sequence > 0 && client.protocol_version >= 767_u32
+      client.pending_block_operations.delete(sequence)
     end
-  end
 
-  def inspect(io)
-    io << "#<Clientbound::AcknowledgeBlockChange sequence_id=#{sequence_id}>"
+    if status == Status::Finish && successful?
+      client.dimension.set_block_state location, block_id
+    end
   end
 end

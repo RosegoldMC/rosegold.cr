@@ -218,16 +218,16 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   def swap_hands
-    client.queue_packet Serverbound::PlayerDigging.new :swap_hands
+    client.queue_packet Serverbound::PlayerAction.new :swap_hands
   end
 
   def drop_hand_single
-    client.queue_packet Serverbound::PlayerDigging.new :drop_hand_single
+    client.queue_packet Serverbound::PlayerAction.new :drop_hand_single
     client.queue_packet Serverbound::SwingArm.new
   end
 
   def drop_hand_full
-    client.queue_packet Serverbound::PlayerDigging.new :drop_hand_full
+    client.queue_packet Serverbound::PlayerAction.new :drop_hand_full
     client.queue_packet Serverbound::SwingArm.new
   end
 

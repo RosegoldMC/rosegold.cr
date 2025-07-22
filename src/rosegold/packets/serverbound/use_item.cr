@@ -8,7 +8,7 @@ class Rosegold::Serverbound::UseItem < Rosegold::Serverbound::Packet
     767_u32 => 0x3D_u8, # MC 1.21
     769_u32 => 0x3D_u8, # MC 1.21.4,
     771_u32 => 0x39_u8, # MC 1.21.6,
-    772_u32 => 0x39_u8, # MC 1.21.8,
+    772_u32 => 0x40_u8, # MC 1.21.8,
   })
 
   property hand : Hand, sequence : Int32, yaw : Float32, pitch : Float32
