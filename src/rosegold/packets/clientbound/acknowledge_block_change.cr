@@ -7,6 +7,7 @@ class Rosegold::Clientbound::AcknowledgeBlockChange < Rosegold::Clientbound::Pac
   packet_ids({
     767_u32 => 0x05_u8, # MC 1.21
     771_u32 => 0x05_u8, # MC 1.21.6
+    772_u32 => 0x05_u8, # MC 1.21.8
   })
 
   property sequence_id : Int32

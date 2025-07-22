@@ -8,6 +8,7 @@ class Rosegold::Clientbound::BlockChange < Rosegold::Clientbound::Packet
     767_u32 => 0x09_u8, # MC 1.21
     769_u32 => 0x09_u8, # MC 1.21.4,
     771_u32 => 0x08_u8, # MC 1.21.6,
+    772_u32 => 0x08_u8, # MC 1.21.8,
   })
 
   property \

@@ -7,6 +7,7 @@ class Rosegold::Serverbound::ChunkBatchReceived < Rosegold::Serverbound::Packet
     767_u32 => 0x09_u8, # MC 1.21
     769_u32 => 0x09_u8, # MC 1.21.4
     771_u32 => 0x0A_u8, # MC 1.21.6,
+    772_u32 => 0x0A_u8, # MC 1.21.8,
   })
 
   property chunks_per_tick : Float32

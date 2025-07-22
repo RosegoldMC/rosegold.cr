@@ -9,6 +9,7 @@ class Rosegold::Serverbound::EntityAction < Rosegold::Serverbound::Packet
     767_u32 => 0x29_u8, # MC 1.21 (Player Command)
     769_u32 => 0x29_u8, # MC 1.21.4 (Player Command),
     771_u32 => 0x29_u8, # MC 1.21.6 (Player Command),
+    772_u32 => 0x29_u8, # MC 1.21.8 (Player Command),
   })
 
   enum Type

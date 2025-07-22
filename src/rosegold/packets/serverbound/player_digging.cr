@@ -9,6 +9,7 @@ class Rosegold::Serverbound::PlayerDigging < Rosegold::Serverbound::Packet
     767_u32 => 0x27_u8, # MC 1.21
     769_u32 => 0x27_u8, # MC 1.21.4,
     771_u32 => 0x24_u8, # MC 1.21.6,
+    772_u32 => 0x24_u8, # MC 1.21.8,
   })
 
   enum Status

@@ -10,6 +10,7 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
     767_u32 => 0x29_u8, # MC 1.21
     769_u32 => 0x29_u8, # MC 1.21.4,
     771_u32 => 0x29_u8, # MC 1.21.6,
+    772_u32 => 0x29_u8, # MC 1.21.8,
   })
 
   property entity_id : UInt64
