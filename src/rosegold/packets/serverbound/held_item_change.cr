@@ -6,7 +6,8 @@ class Rosegold::Serverbound::HeldItemChange < Rosegold::Serverbound::Packet
   packet_ids({
     758_u32 => 0x25_u8, # MC 1.18
     767_u32 => 0x34_u8, # MC 1.21
-    771_u32 => 0x34_u8, # MC 1.21.6
+    769_u32 => 0x34_u8, # MC 1.21.4,
+    771_u32 => 0x34_u8, # MC 1.21.6,
   })
 
   property hotbar_nr : UInt8

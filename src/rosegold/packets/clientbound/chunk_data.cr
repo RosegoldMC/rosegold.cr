@@ -5,8 +5,9 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x22_u8, # MC 1.18
-    767_u32 => 0x27_u8, # MC 1.21
-    771_u32 => 0x27_u8, # MC 1.21.6
+    767_u32 => 0x28_u8, # MC 1.21
+    769_u32 => 0x28_u8, # MC 1.21.4,
+    771_u32 => 0x27_u8, # MC 1.21.6,
   })
 
   property \
@@ -28,19 +29,11 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     chunk_z = io.read_int
     heightmaps = io.read_nbt_unamed
     data = io.read_var_bytes
-    # Protocol-aware block entities reading
-    block_entities_count = io.read_var_int
-    block_entities = if Client.protocol_version >= 767_u32
-                       # MC 1.21+ format: Different block entity structure
-                       Array(Chunk::BlockEntity).new(block_entities_count) do
-                         Chunk::BlockEntity.new(
-                           io.read_byte,    # x (relative to chunk)
-                           io.read_short,   # y
-                           io.read_byte,    # z (relative to chunk)
-                           io.read_var_int, # type
-                           io.read_nbt      # nbt
-                         )
-                       end
+
+    # Protocol-aware block entities reading - MC 1.21.6+ moved block entities to separate packets
+    block_entities = if Client.protocol_version >= 771_u32
+                       # MC 1.21.6+ - no block entities in chunk data packet
+                       Array(Chunk::BlockEntity).new
                      else
                        # MC 1.18 format: Original structure
                        Array(Chunk::BlockEntity).new(block_entities_count) do

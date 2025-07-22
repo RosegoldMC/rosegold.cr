@@ -35,7 +35,7 @@ end
 # and control state (physics, open window, etc.).
 # Can be reconnected.
 class Rosegold::Client < Rosegold::EventEmitter
-  class_getter protocol_version = 771_u32 # Default to 1.21.6 (protocol 771)
+  class_getter protocol_version = 769_u32 # Default to 1.21.6 (protocol 771)
 
   def self.protocol_version=(version : UInt32)
     @@protocol_version = version
@@ -86,17 +86,17 @@ class Rosegold::Client < Rosegold::EventEmitter
   def update_ticking_state(new_tick_rate : Float32, frozen : Bool)
     old_rate = @tick_rate
     old_frozen = @ticking_frozen
-    
+
     @tick_rate = new_tick_rate
     @ticking_frozen = frozen
-    
+
     Log.debug { "Ticking state updated: rate #{old_rate} -> #{new_tick_rate}, frozen #{old_frozen} -> #{frozen}" }
   end
 
   # Add tick steps when ticking is frozen
   def add_tick_steps(steps : UInt32)
     return unless @ticking_frozen
-    
+
     @pending_tick_steps += steps
     Log.debug { "Added #{steps} tick steps, total pending: #{@pending_tick_steps}" }
   end
@@ -158,7 +158,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def spawned?
-    inventory.ready? && physics.running? && connected?
+    pp!(inventory.ready?) && pp!(physics.running?) && pp!(connected?)
   end
 
   # Waits for the client to be fully spawned, ie. physics and inventory being ready.

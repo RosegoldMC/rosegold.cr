@@ -6,8 +6,9 @@ class Rosegold::Serverbound::KeepAlive < Rosegold::Serverbound::Packet
   # Define protocol-specific packet IDs (these actually change between versions!)
   packet_ids({
     758_u32 => 0x0F_u8, # MC 1.18
-    767_u32 => 0x1B_u8, # MC 1.21 - CHANGED!
-    771_u32 => 0x1B_u8, # MC 1.21.6
+    767_u32 => 0x1A_u8, # MC 1.21 - CHANGED!
+    769_u32 => 0x1A_u8, # MC 1.21.4,
+    771_u32 => 0x1B_u8, # MC 1.21.6,
   })
 
   property keep_alive_id : Int64
@@ -19,6 +20,7 @@ class Rosegold::Serverbound::KeepAlive < Rosegold::Serverbound::Packet
   end
 
   def write : Bytes
+    puts Client.protocol_version
     Minecraft::IO::Memory.new.tap do |buffer|
       # Use protocol-aware packet ID
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)

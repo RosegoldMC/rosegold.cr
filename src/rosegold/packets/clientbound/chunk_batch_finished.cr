@@ -4,8 +4,9 @@ class Rosegold::Clientbound::ChunkBatchFinished < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   # Define protocol-specific packet IDs
   packet_ids({
-    767_u32 => 0x0B_u8, # MC 1.21
-    771_u32 => 0x0B_u8, # MC 1.21.6
+    767_u32 => 0x0C_u8, # MC 1.21
+    769_u32 => 0x0C_u8, # MC 1.21.4,
+    771_u32 => 0x0B_u8, # MC 1.21.6,
   })
 
   property batch_size : Int32

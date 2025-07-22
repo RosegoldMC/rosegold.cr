@@ -11,7 +11,8 @@ class Rosegold::Serverbound::PickItem < Rosegold::Serverbound::Packet
   packet_ids({
     758_u32 => 0x17_u8, # MC 1.18
     767_u32 => 0x17_u8, # MC 1.21
-    771_u32 => 0x17_u8, # MC 1.21.6
+    769_u32 => 0x17_u8, # MC 1.21.4,
+    771_u32 => 0x17_u8, # MC 1.21.6,
   })
 
   property slot_number : UInt16

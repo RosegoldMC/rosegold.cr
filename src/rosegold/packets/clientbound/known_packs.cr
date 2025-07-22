@@ -6,7 +6,8 @@ class Rosegold::Clientbound::KnownPacks < Rosegold::Clientbound::Packet
   # Define protocol-specific packet IDs for KnownPacks
   packet_ids({
     767_u32 => 0x0E_u8, # MC 1.21
-    771_u32 => 0x0E_u8, # MC 1.21.6
+    769_u32 => 0x0E_u8, # MC 1.21.4,
+    771_u32 => 0x0E_u8, # MC 1.21.6,
   })
 
   class_getter state = ProtocolState::CONFIGURATION

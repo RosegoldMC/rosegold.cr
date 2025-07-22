@@ -6,7 +6,8 @@ class Rosegold::Serverbound::ConfigurationKeepAlive < Rosegold::Serverbound::Pac
   class_getter state = ProtocolState::CONFIGURATION
   packet_ids({
     767_u32 => 0x04_u8, # MC 1.21
-    771_u32 => 0x04_u8, # MC 1.21.6
+    769_u32 => 0x04_u8, # MC 1.21.4,
+    771_u32 => 0x04_u8, # MC 1.21.6,
   })
 
   property keep_alive_id : Int64

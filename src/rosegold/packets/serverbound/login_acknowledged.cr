@@ -7,7 +7,8 @@ class Rosegold::Serverbound::LoginAcknowledged < Rosegold::Serverbound::Packet
   # LoginAcknowledged is only required for protocol 767+ (MC 1.21+)
   packet_ids({
     767_u32 => 0x03_u8, # MC 1.21
-    771_u32 => 0x03_u8, # MC 1.21.6
+    769_u32 => 0x03_u8, # MC 1.21.4,
+    771_u32 => 0x03_u8, # MC 1.21.6,
   })
 
   class_getter state = Rosegold::ProtocolState::LOGIN
