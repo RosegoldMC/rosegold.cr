@@ -15,7 +15,7 @@ class Rosegold::Clientbound::AcknowledgeBlockChange < Rosegold::Clientbound::Pac
   end
 
   def self.read(packet)
-    sequence_id = packet.read_var_int.to_i32
+    pp!(sequence_id = packet.read_var_int.to_i32)
     self.new(sequence_id)
   end
 
@@ -30,7 +30,7 @@ class Rosegold::Clientbound::AcknowledgeBlockChange < Rosegold::Clientbound::Pac
     # This packet acknowledges that a block change initiated by the client has been processed
     # The client can now display the server's authoritative block state instead of the predicted one
     Log.debug { "Acknowledged block change for sequence #{sequence_id}" }
-    
+
     # Look up the pending block operation for this sequence
     if operation = client.pending_block_operations.delete(sequence_id)
       case operation.operation_type
