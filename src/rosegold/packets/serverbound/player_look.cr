@@ -5,8 +5,8 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
   # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x13_u8, # MC 1.18
-    767_u32 => 0x1F_u8, # MC 1.21 (Set Player Rotation)
-    769_u32 => 0x1F_u8, # MC 1.21.4,
+    767_u32 => 0x1E_u8, # MC 1.21 (Set Player Rotation)
+    769_u32 => 0x1E_u8, # MC 1.21.4,
     771_u32 => 0x1F_u8, # MC 1.21.6,
   })
 
@@ -46,7 +46,7 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write yaw
       buffer.write pitch
-      
+
       if Client.protocol_version >= 771_u32
         # MC 1.21.6+ format: Use bit field (0x01: on ground, 0x02: pushing against wall)
         flags = 0_u8

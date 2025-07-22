@@ -7,8 +7,8 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
   # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x38_u8, # MC 1.18
-    767_u32 => 0x1E_u8, # MC 1.21
-    769_u32 => 0x1E_u8, # MC 1.21.4,
+    767_u32 => 0x1D_u8, # MC 1.21
+    769_u32 => 0x1D_u8, # MC 1.21.4,
     771_u32 => 0x1E_u8, # MC 1.21.6,
   })
 
@@ -26,7 +26,7 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
       sanitize_coordinate(feet.y, -20_000_000.0, 20_000_000.0),
       sanitize_coordinate(feet.z, -30_000_000.0, 30_000_000.0)
     )
-    
+
     # Validate and sanitize look angles
     @look = Look.new(
       sanitize_angle(look.yaw),
@@ -42,7 +42,7 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
       buffer.write feet.z
       buffer.write look.yaw
       buffer.write look.pitch
-      
+
       if Client.protocol_version >= 771_u32
         # MC 1.21.6+ format: Use bit field (0x01: on ground, 0x02: pushing against wall)
         flags = 0_u8
@@ -55,22 +55,22 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
       end
     end.to_slice
   end
-  
+
   private def sanitize_coordinate(value : Float64, min : Float64, max : Float64) : Float64
     # Check for NaN or infinite values - replace with 0
     return 0.0 if value.nan? || value.infinite?
-    
+
     # Check for extremely small values that might be corrupted (near-zero scientific notation)
     return 0.0 if value.abs < 1e-100
-    
+
     # Clamp to valid ranges as per protocol specification
     value.clamp(min, max)
   end
-  
+
   private def sanitize_angle(value : Float32) : Float32
     # Check for NaN or infinite values - replace with 0
     return 0.0_f32 if value.nan? || value.infinite?
-    
+
     # Normalize angle to valid range (-180 to 180)
     while value > 180.0_f32
       value -= 360.0_f32
@@ -78,7 +78,7 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
     while value < -180.0_f32
       value += 360.0_f32
     end
-    
+
     value
   end
 end

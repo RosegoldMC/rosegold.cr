@@ -5,8 +5,8 @@ class Rosegold::Serverbound::PlayerNoMovement < Rosegold::Serverbound::Packet
   # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x14_u8, # MC 1.18
-    767_u32 => 0x20_u8, # MC 1.21
-    769_u32 => 0x20_u8, # MC 1.21.4,
+    767_u32 => 0x1F_u8, # MC 1.21
+    769_u32 => 0x1F_u8, # MC 1.21.4,
     771_u32 => 0x20_u8, # MC 1.21.6,
   })
 
@@ -18,7 +18,7 @@ class Rosegold::Serverbound::PlayerNoMovement < Rosegold::Serverbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      
+
       if Client.protocol_version >= 767_u32
         # MC 1.21+ format: Use bit field (0x01: on ground, 0x02: pushing against wall)
         flags = 0_u8

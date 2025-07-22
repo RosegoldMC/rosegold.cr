@@ -9,8 +9,8 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
 
   # Define protocol-specific packet IDs (MC 1.21+ replacement for PlayerPositionAndLook)
   packet_ids({
-    767_u32 => 0x40_u8, # MC 1.21
-    769_u32 => 0x41_u8, # MC 1.21.4,
+    767_u32 => 0x42_u8, # MC 1.21
+    769_u32 => 0x42_u8, # MC 1.21.4,
     771_u32 => 0x41_u8, # MC 1.21.6,
   })
 
@@ -30,12 +30,12 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     velocity_z : Float64 = 0.0
 
   property? dismount_vehicle : Bool = false
-  
+
   def initialize(@x_raw, @y_raw, @z_raw, @yaw_raw, @pitch_raw, @relative_flags, @teleport_id, @dismount_vehicle = false, @velocity_x = 0.0, @velocity_y = 0.0, @velocity_z = 0.0)
   end
 
   def self.read(packet)
-    if Client.protocol_version >= 771_u32
+    if Client.protocol_version >= 769_u32
       # MC 1.21.6+ format: Teleport ID first, then coordinates, velocities, angles, flags
       teleport_id = packet.read_var_int
       x = packet.read_double
@@ -47,7 +47,7 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
       yaw = packet.read_float
       pitch = packet.read_float
       relative_flags = packet.read_byte
-      
+
       self.new(x, y, z, yaw, pitch, relative_flags, teleport_id, false, velocity_x, velocity_y, velocity_z)
     else
       # MC 1.21 format: Original format
@@ -93,14 +93,14 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
 
     Vec3d.new x, y, z
   end
-  
+
   private def sanitize_coordinate(value : Float64, min : Float64, max : Float64) : Float64
     # Check for NaN or infinite values - replace with 0
     return 0.0 if value.nan? || value.infinite?
-    
+
     # Check for extremely small values that might be corrupted (near-zero scientific notation)
     return 0.0 if value.abs < 1e-100
-    
+
     # Clamp to valid ranges as per protocol specification
     value.clamp(min, max)
   end
@@ -123,7 +123,7 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     player = client.player
     player.feet = feet player.feet
     player.look = look player.look
-    
+
     # Set velocity from packet for MC 1.21.6+, otherwise reset to origin
     if Client.protocol_version >= 771_u32
       player.velocity = Vec3d.new(velocity_x, velocity_y, velocity_z)
