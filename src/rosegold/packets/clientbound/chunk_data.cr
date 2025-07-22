@@ -1,4 +1,6 @@
 require "../packet"
+require "../../world/light_data"
+require "../../world/heightmap"
 
 class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
@@ -14,23 +16,37 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   property \
     chunk_x : Int32,
     chunk_z : Int32,
-    heightmaps : Minecraft::NBT::Tag,
+    heightmaps : Array(Heightmap),
     data : Bytes,
     block_entities : Array(Chunk::BlockEntity),
-    light_data : Bytes # hack. should read/write individual fields instead
+    light_data : LightData
 
   def initialize(@chunk_x, @chunk_z, @heightmaps, @data, @block_entities, @light_data); end
 
   def self.new(chunk : Chunk)
-    self.new chunk.x, chunk.z, chunk.heightmaps, chunk.data, chunk.block_entities, chunk.light_data
+    # Convert single NBT heightmap to array format (protocol expects array)
+    # For now, create default heightmaps (would need proper conversion logic)
+    heightmaps = [Heightmap.new(1_u32, [] of Int64)] # WORLD_SURFACE type
+    light_data = if chunk.light_data.empty?
+                   LightData.new
+                 else
+                   LightData.read(Minecraft::IO::Memory.new(chunk.light_data))
+                 end
+    self.new chunk.x, chunk.z, heightmaps, chunk.data, chunk.block_entities, light_data
   end
 
   def self.read(io)
     chunk_x = io.read_int
     chunk_z = io.read_int
-    heightmaps = io.read_nbt_unamed
+
+    # Read Heightmaps (Prefixed Array of Heightmap)
+    heightmaps_count = io.read_var_int
+    heightmaps = Array(Heightmap).new(heightmaps_count) { Heightmap.read(io) }
+
+    # Read Data (Prefixed Array of Byte)
     data = io.read_var_bytes
 
+    # Read Block Entities (Prefixed Array)
     block_entities_count = io.read_var_int
     block_entities = Array(Chunk::BlockEntity).new(block_entities_count) do
       xz = io.read_byte
@@ -43,17 +59,8 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
       )
     end
 
-    # Protocol-aware light data reading
-    light_data = if Client.protocol_version >= 767_u32
-                   # MC 1.21+ format: No light data in ChunkData packet (sent separately)
-                   Bytes.empty
-                 else
-                   # MC 1.18 format: Light data is remaining bytes
-                   remaining_size = io.size - io.pos
-                   remaining_bytes = Bytes.new(remaining_size)
-                   io.read(remaining_bytes)
-                   remaining_bytes
-                 end
+    # Read Light Data
+    light_data = LightData.read(io)
 
     self.new(chunk_x, chunk_z, heightmaps, data, block_entities, light_data)
   end
@@ -63,9 +70,16 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
       io.write self.class.packet_id_for_protocol(Client.protocol_version)
       io.write_full chunk_x
       io.write_full chunk_z
-      io.write heightmaps
+
+      # Write Heightmaps (Prefixed Array of Heightmap)
+      io.write(heightmaps.size.to_u32)
+      heightmaps.each { |heightmap| heightmap.write(io) }
+
+      # Write Data (Prefixed Array of Byte)
       io.write data.size
       io.write data
+
+      # Write Block Entities (Prefixed Array)
       io.write block_entities.size
       block_entities.each do |block_entity|
         io.write (((block_entity.x & 0xf) << 4) | (block_entity.z & 0xf)).to_u8
@@ -74,8 +88,8 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
         io.write block_entity.nbt
       end
 
-      # Write light data (protocol-aware, but simplified)
-      io.write light_data
+      # Write Light Data
+      light_data.write(io)
     end.to_slice
   end
 
@@ -83,8 +97,10 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     source = Minecraft::IO::Memory.new data
     chunk = Chunk.new chunk_x, chunk_z, source, client.dimension
     chunk.block_entities = block_entities
-    chunk.heightmaps = heightmaps
-    chunk.light_data = light_data
+    # Convert heightmaps back to single NBT structure for chunk
+    # TODO: Properly convert array of heightmaps to NBT format
+    chunk.heightmaps = Minecraft::NBT::CompoundTag.new
+    chunk.light_data = light_data.to_bytes
     client.dimension.load_chunk chunk
   end
 

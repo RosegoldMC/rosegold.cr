@@ -54,6 +54,13 @@ class Rosegold::Chunk
     def initialize(io)
       # Number of non-air blocks present in the chunk section. If the block count reaches 0, the whole chunk section is not rendered.
       @block_count = io.read_short
+
+      if @block_count.zero?
+        @blocks = PalettedContainer.air_filled(4096)
+        @biomes = PalettedContainer.air_filled(64)
+        return
+      end
+
       @blocks = PalettedContainer.new io, 9, 4096
       @biomes = PalettedContainer.new io, 4, 64
     end
