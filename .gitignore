@@ -13,6 +13,10 @@
 # Dependencies will be locked in applications that use them
 /shard.lock
 
+# Node.js dependencies for data generation scripts
+script/node_modules/
+script/package-lock.json
+
 # whole entire minecraft server for specs
 spec/fixtures/server/*
 !spec/fixtures/server/ops.json
