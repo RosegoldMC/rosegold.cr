@@ -11,7 +11,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
     subscribe Rosegold::Clientbound::ChatMessage
     subscribe Event::Tick
-    subscribe Rosegold::Clientbound::WindowItems
+    subscribe Rosegold::Clientbound::SetContainerContent
     subscribe Rosegold::Clientbound::SetSlot
   end
 

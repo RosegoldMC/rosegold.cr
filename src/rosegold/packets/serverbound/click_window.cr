@@ -36,9 +36,13 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
       buffer.write changed_slots.size
       changed_slots.each do |slot|
         buffer.write_full slot.slot_number.to_i16
-        buffer.write slot
+        # Use hashed slot format for 1.21.8
+        hashed_slot = HashedSlot.from_window_slot(slot)
+        hashed_slot.write(buffer)
       end
-      buffer.write cursor
+      # Use hashed slot format for cursor too
+      hashed_cursor = HashedSlot.from_slot(cursor)
+      hashed_cursor.write(buffer)
     end.to_slice
   end
 

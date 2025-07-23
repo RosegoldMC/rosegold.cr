@@ -285,7 +285,7 @@ class Rosegold::Interactions
     reach_block_or_entity_unified
   end
 
-  def reach_block : ReachedBlock?
+  private def reach_block : ReachedBlock?
     eyes = client.player.eyes
     boxes = get_block_hitboxes(eyes, reach_vec)
     Raytrace.raytrace(eyes, reach_vec, boxes).try do |reached|

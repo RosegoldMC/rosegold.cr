@@ -124,7 +124,7 @@ Spectator.describe "Rosegold::Bot inventory" do
           Rosegold::Bot.new(client).try do |bot|
             bot.chat "/clear"
             bot.wait_for Rosegold::Clientbound::SetSlot
-            bot.chat "/give #{bot.username} minecraft:diamond_pickaxe{Damage:1550,Enchantments:[{id:efficiency,lvl:1}]} 1"
+            bot.chat "/give #{bot.username} minecraft:diamond_pickaxe[damage=1550,enchantments={\"minecraft:efficiency\":1}] 1"
             bot.wait_for Rosegold::Clientbound::SetSlot
             expect { bot.inventory.pick!("diamond_pickaxe") }.to raise_error(Rosegold::Inventory::ItemNotFoundError)
           end
@@ -146,7 +146,7 @@ Spectator.describe "Rosegold::Bot inventory" do
 
           bot.pitch = 90
           bot.use_hand
-          bot.wait_for Rosegold::Clientbound::WindowItems
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
 
           expect(bot.inventory.withdraw_at_least(1, "diamond_sword")).to eq 1
 
@@ -157,8 +157,12 @@ Spectator.describe "Rosegold::Bot inventory" do
           expect((local_inventory + local_hotbar).map(&.item_id)).to contain "diamond_sword"
           expect(local_content.map(&.item_id)).not_to contain "diamond_sword"
 
+          # Close the chest first so we can reopen it
+          bot.inventory.close
+          bot.wait_tick
+
           bot.use_hand
-          bot.wait_for Rosegold::Clientbound::WindowItems
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
           bot.wait_tick
 
           expect(local_inventory.map(&.item_id)).to match_array bot.inventory.inventory.map(&.item_id)
@@ -186,7 +190,7 @@ Spectator.describe "Rosegold::Bot inventory" do
 
           bot.pitch = 90
           bot.use_hand
-          bot.wait_for Rosegold::Clientbound::WindowItems
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
 
           expect(bot.inventory.deposit_at_least(1, "diamond_sword")).to eq 1
 
@@ -198,7 +202,7 @@ Spectator.describe "Rosegold::Bot inventory" do
           expect(local_content.map(&.item_id)).to contain "diamond_sword"
 
           bot.use_hand
-          bot.wait_for Rosegold::Clientbound::WindowItems
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
 
           expect(local_inventory.map(&.item_id)).to match_array bot.inventory.inventory.map(&.item_id)
           expect(local_hotbar.map(&.item_id)).to match_array bot.inventory.hotbar.map(&.item_id)
@@ -223,7 +227,7 @@ Spectator.describe "Rosegold::Bot inventory" do
 
         bot.pitch = 90
         bot.use_hand
-        bot.wait_for Rosegold::Clientbound::WindowItems
+        bot.wait_for Rosegold::Clientbound::SetContainerContent
         bot.inventory.withdraw_at_least(1, "diamond_sword")
 
         bot.inventory.close

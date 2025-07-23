@@ -1,4 +1,5 @@
 require "../../minecraft/nbt"
+require "digest/crc32"
 
 # Data Component types for 1.21.8
 enum Rosegold::DataComponentType : UInt32
@@ -646,5 +647,68 @@ class Rosegold::WindowSlot < Rosegold::Slot
 
   def ==(other : Rosegold::WindowSlot)
     other.slot_number == slot_number && other.item_id_int == item_id_int && other.count == count && other.components_to_add == components_to_add && other.components_to_remove == components_to_remove
+  end
+end
+
+# Hashed slot format used in ClickContainer packet
+class Rosegold::HashedSlot
+  property has_item : Bool
+  property item_id_int : UInt32
+  property count : UInt32
+  property components_to_add : Hash(UInt32, UInt32) # Component type -> CRC32 hash
+  property components_to_remove : Set(UInt32)       # Component types to remove
+
+  def initialize(@has_item = false, @item_id_int = 0_u32, @count = 0_u32, @components_to_add = Hash(UInt32, UInt32).new, @components_to_remove = Set(UInt32).new); end
+
+  def self.from_slot(slot : Slot) : HashedSlot
+    if slot.empty?
+      new(false)
+    else
+      # Generate CRC32 hashes for components
+      hashed_components = Hash(UInt32, UInt32).new
+      slot.components_to_add.each do |component_type, component|
+        # Serialize component to bytes and compute CRC32
+        component_buffer = Minecraft::IO::Memory.new
+        component.write(component_buffer)
+        component_data = component_buffer.to_slice
+        crc32_hash = Digest::CRC32.checksum(component_data)
+        hashed_components[component_type] = crc32_hash
+      end
+      
+      new(true, slot.item_id_int, slot.count, hashed_components, slot.components_to_remove)
+    end
+  end
+
+  def self.from_window_slot(window_slot : WindowSlot) : HashedSlot
+    from_slot(window_slot.as(Slot))
+  end
+
+  def write(io)
+    io.write has_item
+    return unless has_item
+
+    io.write item_id_int
+    io.write count
+
+    # Write components to add
+    io.write components_to_add.size
+    components_to_add.each do |component_type, hash|
+      io.write component_type
+      io.write hash  # Write CRC32 hash as Int (4 bytes)
+    end
+
+    # Write components to remove
+    io.write components_to_remove.size
+    components_to_remove.each do |component_type|
+      io.write component_type
+    end
+  end
+
+  def empty?
+    !has_item
+  end
+
+  def present?
+    has_item
   end
 end
