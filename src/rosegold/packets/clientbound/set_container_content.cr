@@ -20,7 +20,7 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
   end
 
   def self.read(packet)
-    window_id = packet.read_byte.to_u8
+    window_id = packet.read_byte
     state_id = packet.read_var_int
 
     num_slots = packet.read_var_int
@@ -36,11 +36,13 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write window_id
+      buffer.write window_id # Write as VarInt
       buffer.write state_id
-      buffer.write slots.size
-      slots.each &.write buffer
-      buffer.write cursor
+      buffer.write slots.size.to_u32 # Write as VarInt
+      slots.each do |slot|
+        slot.write(buffer) # Write the slot data (Slot.write method)
+      end
+      cursor.write(buffer) # Write cursor slot data
     end.to_slice
   end
 
