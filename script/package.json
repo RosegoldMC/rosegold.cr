@@ -1,0 +1,15 @@
+{
+  "name": "rosegold-data-generation",
+  "version": "1.0.0",
+  "description": "Minecraft data generation scripts for Rosegold.cr",
+  "main": "generate_minecraft_data.js",
+  "scripts": {
+    "generate": "node generate_minecraft_data.js",
+    "list-versions": "node -e \"console.log('Available versions:', require('minecraft-data').supportedVersions.pc.slice(-10))\""
+  },
+  "dependencies": {
+    "minecraft-data": "^3.93.0"
+  },
+  "author": "Rosegold Contributors",
+  "license": "MIT"
+}
