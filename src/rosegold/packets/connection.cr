@@ -108,7 +108,22 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
       unless pkt_type && pkt_type.responds_to? :read
         return Clientbound::RawPacket.new(packet_bytes)
       end
-      pkt_type.read pkt_io
+      
+      begin
+        pkt_type.read pkt_io
+      rescue ex
+        # Log detailed error information for packet parsing failures
+        packet_name = pkt_type.name
+        packet_hex = "0x#{pkt_id.to_s(16).upcase.rjust(2, '0')}"
+        
+        Log.warn { "Failed to parse clientbound packet #{packet_name} (#{packet_hex}) in #{protocol_state.name} state for protocol #{protocol_version}: #{ex.message}" }
+        Log.warn { "Packet bytes (#{packet_bytes.size} bytes): #{packet_bytes.hexstring}" }
+        Log.warn { "Exception: #{ex.class}: #{ex.message}" }
+        Log.warn { "Stack trace:\n#{ex.backtrace?.try(&.join("\n")) || "No backtrace available"}" }
+        
+        # Return a raw packet as fallback to prevent connection loss
+        Clientbound::RawPacket.new(packet_bytes)
+      end
     end
   end
 
