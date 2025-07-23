@@ -6,6 +6,7 @@ class Rosegold::MCData
   private MCD_ROOT = "minecraft-data/data/pc"
 
   MC118 = Rosegold::MCData.new "1.18"
+  MC1218 = Rosegold::MCData.new "1.21.8"
 
   getter items : Array(Item)
   getter items_by_id : Hash(String, Item)
@@ -25,7 +26,7 @@ class Rosegold::MCData
 
   def initialize(mc_version : String)
     # for arbitrary version support, we would need to parse dataPaths.json
-    raise "we only support 1.18 for now" if mc_version != "1.18"
+    raise "we only support 1.18 and 1.21.8 for now" unless mc_version.in?("1.18", "1.21.8")
 
     @items = Array(Item)
       .from_json(Rosegold.read_game_asset "items.json")
