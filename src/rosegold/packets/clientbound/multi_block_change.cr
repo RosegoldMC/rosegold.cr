@@ -26,8 +26,6 @@ class Rosegold::Clientbound::MultiBlockChange < Rosegold::Clientbound::Packet
     section_z = (section_pos_bits << 22 >> 42).to_i32 # 22 bits
     section_x = (section_pos_bits >> 42).to_i32       # 22 bits
 
-    packet.read_bool # ignored
-
     block_states = Array(Tuple(Int32, Int32, Int32, UInt16)).new packet.read_var_int do
       long = packet.read_var_long
       y = section_y * 16 + (long & 0xf).to_u8

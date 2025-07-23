@@ -8,9 +8,10 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
     767_u32 => 0x3d_u8, # MC 1.21
     769_u32 => 0x3d_u8, # MC 1.21.4,
     771_u32 => 0x3d_u8, # MC 1.21.6,
-    772_u32 => 0x3d_u8, # MC 1.21.8,
+    772_u32 => 0x4B_u8, # MC 1.21.8,
   })
 
+  # TODO: new properties (https://minecraft.wiki/w/Java_Edition_protocol/Packets#Respawn)
   property \
     dimension : Minecraft::NBT::Tag,
     dimension_name : String,

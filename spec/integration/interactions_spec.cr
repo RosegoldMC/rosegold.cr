@@ -10,6 +10,15 @@ Spectator.describe "Rosegold::Bot interactions" do
     end
   end
 
+  it "should be able to chat" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        bot.chat "Hello, world!"
+        bot.wait_ticks 5 # Wait for chat message to be processed
+      end
+    end
+  end
+
   it "should be able to dig" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
@@ -19,6 +28,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.wait_ticks 5 # Wait for teleport and chunk updates
 
         bot.look &.down
+        bot.wait_ticks 5 # Wait for look update
 
         # Check initial block state
         initial_block = client.dimension.block_state(0, -57, 0)

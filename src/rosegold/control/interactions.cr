@@ -19,7 +19,7 @@ class Rosegold::Interactions
   @digging = false
   @block_damage_progress = 0_f32
   @last_tick_held_item : Slot = Slot.new
-  @sent_held_item_index : UInt8?
+  @sent_held_item_index : UInt32?
 
   getter client : Client
   property? digging : Bool = false

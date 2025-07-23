@@ -59,7 +59,7 @@ Spectator.describe "Rosegold::Bot movement" do
         expect(bot.yaw).to be_close(final_yaw, 0.1)
         expect(bot.pitch).to be_close(final_pitch, 0.1)
 
-        bot.wait_tick 3
+        bot.wait_ticks 3
       end
     end
     client.join_game do |client|

@@ -8,13 +8,13 @@ class Rosegold::Clientbound::OpenWindow < Rosegold::Clientbound::Packet
     767_u32 => 0x33_u8, # MC 1.21
     769_u32 => 0x33_u8, # MC 1.21.4,
     771_u32 => 0x33_u8, # MC 1.21.6,
-    772_u32 => 0x33_u8, # MC 1.21.8,
+    772_u32 => 0x34_u8, # MC 1.21.8,
   })
 
   property \
     window_id : UInt32,
     window_type : UInt32,
-    window_title : Rosegold::Chat
+    window_title : Rosegold::Chat # TODO: text component
 
   def initialize(@window_id, @window_type, @window_title)
   end

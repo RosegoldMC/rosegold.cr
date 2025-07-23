@@ -21,7 +21,6 @@ class Rosegold::Serverbound::KeepAlive < Rosegold::Serverbound::Packet
   end
 
   def write : Bytes
-    puts Client.protocol_version
     Minecraft::IO::Memory.new.tap do |buffer|
       # Use protocol-aware packet ID
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)

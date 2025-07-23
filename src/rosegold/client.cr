@@ -173,7 +173,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     # Send PlayerLoaded packet to indicate client is ready to start simulating the player
     # This is sent when the "Loading terrain..." screen closes (after chunks are loaded and player is positioned)
-    if protocol_version >= 769_u32  # MC 1.21.4+
+    if protocol_version >= 769_u32 # MC 1.21.4+
       send_packet! Serverbound::PlayerLoaded.new
       Log.debug { "Sent PlayerLoaded packet - client ready for player simulation" }
     end
