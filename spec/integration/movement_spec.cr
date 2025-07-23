@@ -41,19 +41,31 @@ Spectator.describe "Rosegold::Bot movement" do
   end
 
   it "should change yaw and pitch" do
+    final_yaw = rand(-180..180)
+    final_pitch = rand(-90..90)
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/tp 1 -60 1"
 
-        bot.yaw = 45
-        bot.pitch = 45
-        expect(bot.yaw).to be_close(45, 0.1)
-        expect(bot.pitch).to be_close(45, 0.1)
+        yaw = rand(-180..180)
+        pitch = rand(-90..90)
+        bot.yaw = yaw
+        bot.pitch = pitch
+        expect(bot.yaw).to be_close(yaw, 0.1)
+        expect(bot.pitch).to be_close(pitch, 0.1)
 
-        bot.yaw = 90
-        bot.pitch = 90
-        expect(bot.yaw).to be_close(90, 0.1)
-        expect(bot.pitch).to be_close(90, 0.1)
+        bot.yaw = final_yaw
+        bot.pitch = final_pitch
+        expect(bot.yaw).to be_close(final_yaw, 0.1)
+        expect(bot.pitch).to be_close(final_pitch, 0.1)
+
+        bot.wait_tick 3
+      end
+    end
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        expect(bot.yaw).to be_close(final_yaw, 0.1)
+        expect(bot.pitch).to be_close(final_pitch, 0.1)
       end
     end
   end

@@ -171,6 +171,13 @@ class Rosegold::Client < Rosegold::EventEmitter
       raise NotConnected.new "Took too long to join the game" if timeout_ticks <= 0
     end
 
+    # Send PlayerLoaded packet to indicate client is ready to start simulating the player
+    # This is sent when the "Loading terrain..." screen closes (after chunks are loaded and player is positioned)
+    if protocol_version >= 769_u32  # MC 1.21.4+
+      send_packet! Serverbound::PlayerLoaded.new
+      Log.debug { "Sent PlayerLoaded packet - client ready for player simulation" }
+    end
+
     start_ticker
 
     self
