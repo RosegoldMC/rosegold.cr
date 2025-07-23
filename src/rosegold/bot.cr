@@ -62,10 +62,10 @@ class Rosegold::Bot < Rosegold::EventEmitter
   def chat(message : String)
     if message.starts_with?('/') && client.protocol_version >= 767_u32
       # MC 1.21+ uses ChatCommand packet for commands
-      client.queue_packet Serverbound::ChatCommand.new message
+      client.chat_manager.send_command(message)
     else
-      # Regular chat message or older protocol versions
-      client.queue_packet Serverbound::ChatMessage.new message
+      # Regular chat message - use ChatManager for proper signing and acknowledgment
+      client.chat_manager.send_message(message)
     end
   end
 

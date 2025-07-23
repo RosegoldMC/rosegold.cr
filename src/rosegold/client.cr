@@ -6,6 +6,7 @@ require "./models/*"
 require "./packets/*"
 require "./events/*"
 require "./world/*"
+require "./chat_manager"
 
 struct Rosegold::BlockOperation
   property location : Vec3i
@@ -55,6 +56,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     interactions : Interactions,
     inventory : PlayerWindow,
     window : Window,
+    chat_manager : ChatManager,
     offline : NamedTuple(uuid: String, username: String)? = nil,
     sequence_counter : Int32 = 0,
     pending_block_operations : Hash(Int32, BlockOperation) = Hash(Int32, BlockOperation).new,
@@ -125,10 +127,12 @@ class Rosegold::Client < Rosegold::EventEmitter
     @interactions = uninitialized Interactions
     @inventory = uninitialized PlayerWindow
     @window = uninitialized Window
+    @chat_manager = uninitialized ChatManager
     @physics = Physics.new self
     @interactions = Interactions.new self
     @inventory = PlayerWindow.new self
     @window = @inventory
+    @chat_manager = ChatManager.new self
   end
 
   def connection? : Connection::Client?

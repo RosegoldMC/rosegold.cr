@@ -31,8 +31,10 @@ Spectator.describe "Rosegold::Bot attack" do
         bot.chat "/kill @e[type=!minecraft:player]"
         bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
         bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
+        bot.wait_ticks 5
       end
     end
+  end
 
   it "should be able to attack even if the target is moving" do
     client.join_game do |client|
