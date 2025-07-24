@@ -16,4 +16,9 @@
 # whole entire minecraft server for specs
 spec/fixtures/server/*
 !spec/fixtures/server/ops.json
+
+# added by copilot
 crystal.tar.gz
+
+# a place to put game data for searching
+game_assets/protocol_docs
