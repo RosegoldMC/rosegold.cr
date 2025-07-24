@@ -6,8 +6,8 @@ Spectator.describe Rosegold do
   end
 
   it "should support configurable protocol version" do
-    # Default is now 1.21.6 (protocol 771)
-    expect(Rosegold::Client.protocol_version).to eq(771_u32)
+    # Default is now 1.21.8 (protocol 772)
+    expect(Rosegold::Client.protocol_version).to eq(772_u32)
 
     # Can be changed to 1.18
     Rosegold::Client.protocol_version = 758_u32
