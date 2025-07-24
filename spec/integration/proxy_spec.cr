@@ -12,23 +12,25 @@ Spectator.describe "Proxy Integration" do
     proxy = bot_client.start_proxy("localhost", 25567)
     
     expect(proxy).not_to be_nil
-    expect(proxy.client).to eq(bot_client)
-    expect(proxy.host).to eq("localhost")
-    expect(proxy.port).to eq(25567)
-    
-    # Verify the proxy can be locked and unlocked
-    proxy.lock
-    expect(proxy.locked).to be_true
-    
-    proxy.unlock
-    expect(proxy.locked).to be_false
+    if proxy
+      expect(proxy.client).to eq(bot_client)
+      expect(proxy.host).to eq("localhost")
+      expect(proxy.port).to eq(25567)
+      
+      # Verify the proxy can be locked and unlocked
+      proxy.lock
+      expect(proxy.locked).to be_true
+      
+      proxy.unlock
+      expect(proxy.locked).to be_false
+    end
     
     # Stop the proxy
     bot_client.stop_proxy
     expect(bot_client.proxy?).to be_nil
   end
   
-  pending "connects two rosegold clients via proxy" do
+  skip "connects two rosegold clients via proxy" do
     # This would be a more comprehensive test that:
     # 1. Creates a bot that connects to a mock/test server
     # 2. Starts the proxy

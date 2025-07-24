@@ -176,7 +176,9 @@ class Rosegold::ProxyClient
       # Handle login - send success response with bot's identity
       Log.debug { "Proxy client login: #{packet.username}" }
       bot_player = @proxy.client.player
-      send_packet(Clientbound::LoginSuccess.new(bot_player.uuid, bot_player.username.not_nil!))
+      bot_uuid = bot_player.uuid || UUID.new("00000000-0000-0000-0000-000000000000")
+      bot_username = bot_player.username || "RosegoldBot"
+      send_packet(Clientbound::LoginSuccess.new(bot_uuid, bot_username))
       
       # Transition to appropriate state based on protocol version
       if @proxy.client.protocol_version >= 767
