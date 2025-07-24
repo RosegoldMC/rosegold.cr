@@ -62,13 +62,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Send a message or slash command.
   def chat(message : String)
-    if message.starts_with?('/') && client.protocol_version >= 767_u32
-      # MC 1.21+ uses ChatCommand packet for commands
-      client.chat_manager.send_command(message)
-    else
-      # Regular chat message - use ChatManager for proper signing and acknowledgment
-      client.chat_manager.send_message(message)
-    end
+    client.chat_manager.send_chat(message)
   end
 
   def wait_ticks(ticks : Int32)

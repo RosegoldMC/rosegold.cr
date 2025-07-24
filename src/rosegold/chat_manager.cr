@@ -84,6 +84,18 @@ class Rosegold::ChatManager
     end
   end
 
+  # Send chat message or command, automatically determining the correct method
+  # based on the message content and protocol version
+  def send_chat(message : String) : Bool
+    if message.starts_with?('/') && client.class.protocol_version >= 767_u32
+      # MC 1.21+ uses ChatCommand packet for commands
+      send_command(message)
+    else
+      # Regular chat message - use ChatMessage for proper signing and acknowledgment
+      send_message(message)
+    end
+  end
+
   # Add a received message signature to the last seen list
   def add_last_seen_signature(signature : Bytes)
     return unless signature.size == SIGNATURE_SIZE
