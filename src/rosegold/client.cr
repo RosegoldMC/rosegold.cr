@@ -7,6 +7,7 @@ require "./packets/*"
 require "./events/*"
 require "./world/*"
 require "./chat_manager"
+require "./proxy"
 
 # Holds world state (player, chunks, etc.)
 # and control state (physics, open window, etc.).
@@ -22,6 +23,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   property connection : Connection::Client?
   property detected_protocol_version : UInt32?
   property current_protocol_state : ProtocolState = ProtocolState::HANDSHAKING
+  property proxy : Proxy?
 
   property \
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
@@ -169,6 +171,28 @@ class Rosegold::Client < Rosegold::EventEmitter
     connection?.try &.disconnect Chat.new "End of script"
 
     self
+  end
+
+  # Start the proxy server to allow clients to connect
+  def start_proxy(host : String = "localhost", port : Int32 = 25566)
+    return @proxy if @proxy
+    
+    @proxy = Proxy.new(self, host, port)
+    @proxy.try(&.start)
+    
+    Log.info { "Proxy started on #{host}:#{port} - connect with a Minecraft client to control the bot" }
+    @proxy
+  end
+
+  # Stop the proxy server
+  def stop_proxy
+    @proxy.try(&.stop)
+    @proxy = nil
+  end
+
+  # Get the proxy if it's running
+  def proxy?
+    @proxy
   end
 
   def start_ticker
