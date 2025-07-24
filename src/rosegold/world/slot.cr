@@ -152,7 +152,7 @@ class Rosegold::DataComponents::Damage < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write value
+    io.write_var_int value
   end
 end
 
@@ -167,7 +167,7 @@ class Rosegold::DataComponents::MaxDamage < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write value
+    io.write_var_int value
   end
 end
 
@@ -182,7 +182,7 @@ class Rosegold::DataComponents::MaxStackSize < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write value
+    io.write_var_int value
   end
 end
 
@@ -197,7 +197,7 @@ class Rosegold::DataComponents::RepairCost < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write cost
+    io.write_var_int cost
   end
 end
 
@@ -219,10 +219,10 @@ class Rosegold::DataComponents::Enchantments < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write enchantments.size
+    io.write_var_int enchantments.size
     enchantments.each do |type_id, level|
-      io.write type_id
-      io.write level
+      io.write_var_int type_id
+      io.write_var_int level
     end
   end
 end
@@ -317,7 +317,7 @@ class Rosegold::DataComponents::ItemModel < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write model
+    io.write_var_string model
   end
 end
 
@@ -332,7 +332,7 @@ class Rosegold::DataComponents::Rarity < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write rarity
+    io.write_var_int rarity
   end
 end
 
@@ -387,6 +387,54 @@ class Rosegold::Slot
   property components_to_add : Hash(UInt32, DataComponent) # Component type -> structured component
   property components_to_remove : Set(UInt32)              # Component types to remove
 
+  @cached_item : MCData::Item?
+
+  # Enchantment type mapping for better maintainability
+  ENCHANTMENT_TYPE_MAP = {
+     0_u32 => "protection",
+     1_u32 => "fire_protection",
+     2_u32 => "feather_falling",
+     3_u32 => "blast_protection",
+     4_u32 => "projectile_protection",
+     5_u32 => "respiration",
+     6_u32 => "aqua_affinity",
+     7_u32 => "thorns",
+     8_u32 => "depth_strider",
+     9_u32 => "frost_walker",
+    10_u32 => "binding_curse",
+    11_u32 => "soul_speed",
+    12_u32 => "swift_sneak",
+    13_u32 => "sharpness",
+    14_u32 => "smite",
+    15_u32 => "bane_of_arthropods",
+    16_u32 => "knockback",
+    17_u32 => "fire_aspect",
+    18_u32 => "looting",
+    19_u32 => "sweeping",
+    20_u32 => "efficiency",
+    21_u32 => "silk_touch",
+    22_u32 => "unbreaking",
+    23_u32 => "fortune",
+    24_u32 => "power",
+    25_u32 => "punch",
+    26_u32 => "flame",
+    27_u32 => "infinity",
+    28_u32 => "luck_of_the_sea",
+    29_u32 => "lure",
+    30_u32 => "loyalty",
+    31_u32 => "impaling",
+    32_u32 => "riptide",
+    33_u32 => "channeling",
+    34_u32 => "multishot",
+    35_u32 => "quick_charge",
+    36_u32 => "piercing",
+    37_u32 => "density",
+    38_u32 => "breach",
+    39_u32 => "wind_burst",
+    40_u32 => "mending",
+    41_u32 => "vanishing_curse",
+  }
+
   def initialize(@count = 0_u32, @item_id_int = 0_u32, @components_to_add = Hash(UInt32, DataComponent).new, @components_to_remove = Set(UInt32).new); end
 
   def self.read(io) : Rosegold::Slot
@@ -424,25 +472,25 @@ class Rosegold::Slot
   end
 
   def write(io)
-    io.write count
+    io.write_var_int count
     return if count == 0 # Empty slot
 
-    io.write item_id_int
+    io.write_var_int item_id_int
 
     # Write components to add count
-    io.write components_to_add.size
+    io.write_var_int components_to_add.size
     # Write components to remove count
-    io.write components_to_remove.size
+    io.write_var_int components_to_remove.size
 
     components_to_add.each do |component_type, component|
-      io.write component_type
+      io.write_var_int component_type
       # Write component data directly (no size prefix)
       component.write(io)
     end
 
     # Write components to remove
     components_to_remove.each do |component_type|
-      io.write component_type
+      io.write_var_int component_type
     end
   end
 
@@ -459,7 +507,7 @@ class Rosegold::Slot
   end
 
   def item : MCData::Item
-    MCData::DEFAULT.items.find { |item| item.id == item_id_int } ||
+    @cached_item ||= MCData::DEFAULT.items.find { |item| item.id == item_id_int } ||
       raise "Unknown item ID: #{item_id_int}"
   end
 
@@ -501,52 +549,8 @@ class Rosegold::Slot
 
     result = Hash(String, Int8 | Int16 | Int32 | Int64 | UInt8).new
     enchant_component.enchantments.each do |type_id, level|
-      # Convert type_id to string name if possible, otherwise use "enchant_#{type_id}"
-      enchant_name = case type_id
-                     when  0 then "protection"
-                     when  1 then "fire_protection"
-                     when  2 then "feather_falling"
-                     when  3 then "blast_protection"
-                     when  4 then "projectile_protection"
-                     when  5 then "respiration"
-                     when  6 then "aqua_affinity"
-                     when  7 then "thorns"
-                     when  8 then "depth_strider"
-                     when  9 then "frost_walker"
-                     when 10 then "binding_curse"
-                     when 11 then "soul_speed"
-                     when 12 then "swift_sneak"
-                     when 13 then "sharpness"
-                     when 14 then "smite"
-                     when 15 then "bane_of_arthropods"
-                     when 16 then "knockback"
-                     when 17 then "fire_aspect"
-                     when 18 then "looting"
-                     when 19 then "sweeping"
-                     when 20 then "efficiency"
-                     when 21 then "silk_touch"
-                     when 22 then "unbreaking"
-                     when 23 then "fortune"
-                     when 24 then "power"
-                     when 25 then "punch"
-                     when 26 then "flame"
-                     when 27 then "infinity"
-                     when 28 then "luck_of_the_sea"
-                     when 29 then "lure"
-                     when 30 then "loyalty"
-                     when 31 then "impaling"
-                     when 32 then "riptide"
-                     when 33 then "channeling"
-                     when 34 then "multishot"
-                     when 35 then "quick_charge"
-                     when 36 then "piercing"
-                     when 37 then "density"
-                     when 38 then "breach"
-                     when 39 then "wind_burst"
-                     when 40 then "mending"
-                     when 41 then "vanishing_curse"
-                     else         "enchant_#{type_id}"
-                     end
+      # Convert type_id to string name using the mapping constant
+      enchant_name = ENCHANTMENT_TYPE_MAP[type_id] || "enchant_#{type_id}"
       result[enchant_name] = level.to_i32
     end
     result
@@ -690,20 +694,20 @@ class Rosegold::HashedSlot
     io.write has_item
     return unless has_item
 
-    io.write item_id_int
-    io.write count
+    io.write_var_int item_id_int
+    io.write_var_int count
 
     # Write components to add
-    io.write components_to_add.size
+    io.write_var_int components_to_add.size
     components_to_add.each do |component_type, hash|
-      io.write component_type
+      io.write_var_int component_type
       io.write hash # Write CRC32 hash as Int (4 bytes)
     end
 
     # Write components to remove
-    io.write components_to_remove.size
+    io.write_var_int components_to_remove.size
     components_to_remove.each do |component_type|
-      io.write component_type
+      io.write_var_int component_type
     end
   end
 
