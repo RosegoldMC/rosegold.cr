@@ -82,4 +82,4 @@ jobs:
         run: touch .env
 
       - name: Run tests
-        run: crystal spec || crystal spec || crystal spec
+        run: LOG_LEVEL=trace crystal spec || crystal spec || crystal spec
