@@ -4,9 +4,6 @@ class Rosegold::Serverbound::ChunkBatchReceived < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
   # Define protocol-specific packet IDs
   packet_ids({
-    767_u32 => 0x09_u8, # MC 1.21
-    769_u32 => 0x09_u8, # MC 1.21.4
-    771_u32 => 0x0A_u8, # MC 1.21.6,
     772_u32 => 0x0A_u8, # MC 1.21.8,
   })
 

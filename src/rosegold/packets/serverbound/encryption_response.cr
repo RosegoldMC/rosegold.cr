@@ -8,10 +8,6 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
 
   # Define protocol-specific packet IDs (same across all versions)
   packet_ids({
-    758_u32 => 0x01_u8, # MC 1.18
-    767_u32 => 0x01_u8, # MC 1.21
-    769_u32 => 0x01_u8, # MC 1.21.4,
-    771_u32 => 0x01_u8, # MC 1.21.6,
     772_u32 => 0x01_u8, # MC 1.21.8,
   })
 

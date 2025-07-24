@@ -5,10 +5,6 @@ class Rosegold::Serverbound::PlayerPosition < Rosegold::Serverbound::Packet
 
   # Define protocol-specific packet IDs (changes between versions!)
   packet_ids({
-    758_u32 => 0x11_u8, # MC 1.18
-    767_u32 => 0x1C_u8, # MC 1.21 - CHANGED!
-    769_u32 => 0x1C_u8, # MC 1.21.4,
-    771_u32 => 0x1D_u8, # MC 1.21.6,
     772_u32 => 0x1D_u8, # MC 1.21.8,
   })
 

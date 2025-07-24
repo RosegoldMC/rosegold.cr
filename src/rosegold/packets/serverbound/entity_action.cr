@@ -5,10 +5,6 @@ class Rosegold::Serverbound::EntityAction < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
   # Define protocol-specific packet IDs
   packet_ids({
-    758_u32 => 0x1b_u8, # MC 1.18
-    767_u32 => 0x29_u8, # MC 1.21 (Player Command)
-    769_u32 => 0x29_u8, # MC 1.21.4 (Player Command),
-    771_u32 => 0x29_u8, # MC 1.21.6 (Player Command),
     772_u32 => 0x29_u8, # MC 1.21.8 (Player Command),
   })
 

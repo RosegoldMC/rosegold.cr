@@ -6,10 +6,6 @@ class Rosegold::Clientbound::ChatMessage < Rosegold::Clientbound::Packet
 
   # Define protocol-specific packet IDs for System Chat Message
   packet_ids({
-    758_u32 => 0x0F_u8, # MC 1.18
-    767_u32 => 0x06_u8, # MC 1.21
-    769_u32 => 0x06_u8, # MC 1.21.4,
-    771_u32 => 0x06_u8, # MC 1.21.6,
     772_u32 => 0x72_u8, # MC 1.21.8 - System Chat Message
   })
 

@@ -5,9 +5,6 @@ class Rosegold::Serverbound::KnownPacks < Rosegold::Serverbound::Packet
 
   # Define protocol-specific packet IDs for KnownPacks
   packet_ids({
-    767_u32 => 0x07_u8, # MC 1.21
-    769_u32 => 0x07_u8, # MC 1.21.4,
-    771_u32 => 0x07_u8, # MC 1.21.6,
     772_u32 => 0x07_u8, # MC 1.21.8,
   })
 

@@ -7,8 +7,6 @@ class Rosegold::Clientbound::TickingStep < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    769_u32 => 0x79_u8, # MC 1.21.4,
-    771_u32 => 0x79_u8, # MC 1.21.6,
     772_u32 => 0x79_u8, # MC 1.21.8,
   })
 

@@ -5,10 +5,6 @@ class Rosegold::Serverbound::KeepAlive < Rosegold::Serverbound::Packet
 
   # Define protocol-specific packet IDs (these actually change between versions!)
   packet_ids({
-    758_u32 => 0x0F_u8, # MC 1.18
-    767_u32 => 0x1A_u8, # MC 1.21 - CHANGED!
-    769_u32 => 0x1A_u8, # MC 1.21.4,
-    771_u32 => 0x1B_u8, # MC 1.21.6,
     772_u32 => 0x1B_u8, # MC 1.21.8,
   })
 

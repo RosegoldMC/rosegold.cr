@@ -4,10 +4,6 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   # Define protocol-specific packet IDs
   packet_ids({
-    758_u32 => 0x1a_u8, # MC 1.18
-    767_u32 => 0x1D_u8, # MC 1.21 - Disconnect (play)
-    769_u32 => 0x1D_u8, # MC 1.21.4,
-    771_u32 => 0x1c_u8, # MC 1.21.6,
     772_u32 => 0x1c_u8, # MC 1.21.8,
   })
 
