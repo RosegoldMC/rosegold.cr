@@ -69,15 +69,16 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.chat "/tp 10 -60 10"
         bot.chat "/clear"
         bot.chat "/give @p minecraft:obsidian 64"
-        bot.inventory.pick "minecraft:obsidian"
         bot.wait_ticks 5
+
+        bot.inventory.pick! "obsidian"
 
         starting_y = bot.feet.y
         before = client.dimension.block_state(10, -60, 10)
 
         bot.pitch = 90
         bot.start_using_hand
-        2.times do
+        3.times do
           bot.start_jump
           15.times { bot.wait_tick }
         end

@@ -78,9 +78,9 @@ Spectator.describe "Rosegold::Bot inventory" do
             bot.wait_for Rosegold::Clientbound::SetSlot
 
             expect(bot.inventory.pick("stone")).to eq true
-            expect(bot.inventory.main_hand.item_id).to eq "stone"
+            expect(bot.inventory.main_hand.name).to eq "stone"
             expect(bot.inventory.pick("grass_block")).to eq true
-            expect(bot.inventory.main_hand.item_id).to eq "grass_block"
+            expect(bot.inventory.main_hand.name).to eq "grass_block"
           end
         end
       end
@@ -98,7 +98,7 @@ Spectator.describe "Rosegold::Bot inventory" do
             bot.wait_for Rosegold::Clientbound::SetSlot
 
             expect(bot.inventory.pick("grass_block")).to eq true
-            expect(bot.inventory.main_hand.item_id).to eq "grass_block"
+            expect(bot.inventory.main_hand.name).to eq "grass_block"
           end
         end
       end
@@ -154,8 +154,8 @@ Spectator.describe "Rosegold::Bot inventory" do
           local_hotbar = bot.inventory.hotbar.map &.dup
           local_content = bot.inventory.content.map &.dup
 
-          expect((local_inventory + local_hotbar).map(&.item_id)).to contain "diamond_sword"
-          expect(local_content.map(&.item_id)).not_to contain "diamond_sword"
+          expect((local_inventory + local_hotbar).map(&.name)).to contain "diamond_sword"
+          expect(local_content.map(&.name)).not_to contain "diamond_sword"
 
           # Close the chest first so we can reopen it
           bot.inventory.close
@@ -165,9 +165,9 @@ Spectator.describe "Rosegold::Bot inventory" do
           bot.wait_for Rosegold::Clientbound::SetContainerContent
           bot.wait_tick
 
-          expect(local_inventory.map(&.item_id)).to match_array bot.inventory.inventory.map(&.item_id)
-          expect(local_hotbar.map(&.item_id)).to match_array bot.inventory.hotbar.map(&.item_id)
-          expect(local_content.map(&.item_id)).to match_array bot.inventory.content.map(&.item_id)
+          expect(local_inventory.map(&.name)).to match_array bot.inventory.inventory.map(&.name)
+          expect(local_hotbar.map(&.name)).to match_array bot.inventory.hotbar.map(&.name)
+          expect(local_content.map(&.name)).to match_array bot.inventory.content.map(&.name)
           expect(local_inventory.map(&.slot_number)).to match_array bot.inventory.inventory.map(&.slot_number)
           expect(local_hotbar.map(&.slot_number)).to match_array bot.inventory.hotbar.map(&.slot_number)
           expect(local_content.map(&.slot_number)).to match_array bot.inventory.content.map(&.slot_number)
@@ -198,15 +198,15 @@ Spectator.describe "Rosegold::Bot inventory" do
           local_hotbar = bot.inventory.hotbar.map &.dup
           local_content = bot.inventory.content.map &.dup
 
-          expect((local_inventory + local_hotbar).map(&.item_id)).not_to contain "diamond_sword"
-          expect(local_content.map(&.item_id)).to contain "diamond_sword"
+          expect((local_inventory + local_hotbar).map(&.name)).not_to contain "diamond_sword"
+          expect(local_content.map(&.name)).to contain "diamond_sword"
 
           bot.use_hand
           bot.wait_for Rosegold::Clientbound::SetContainerContent
 
-          expect(local_inventory.map(&.item_id)).to match_array bot.inventory.inventory.map(&.item_id)
-          expect(local_hotbar.map(&.item_id)).to match_array bot.inventory.hotbar.map(&.item_id)
-          expect(local_content.map(&.item_id)).to match_array bot.inventory.content.map(&.item_id)
+          expect(local_inventory.map(&.name)).to match_array bot.inventory.inventory.map(&.name)
+          expect(local_hotbar.map(&.name)).to match_array bot.inventory.hotbar.map(&.name)
+          expect(local_content.map(&.name)).to match_array bot.inventory.content.map(&.name)
           expect(local_inventory.map(&.slot_number)).to match_array bot.inventory.inventory.map(&.slot_number)
           expect(local_hotbar.map(&.slot_number)).to match_array bot.inventory.hotbar.map(&.slot_number)
           expect(local_content.map(&.slot_number)).to match_array bot.inventory.content.map(&.slot_number)
@@ -236,7 +236,7 @@ Spectator.describe "Rosegold::Bot inventory" do
 
         slots_before_reload = bot.inventory.slots
 
-        expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.item_id)).to contain "diamond_sword"
+        expect((bot.inventory.inventory + bot.inventory.hotbar).map(&.name)).to contain "diamond_sword"
       end
     end
 
@@ -245,7 +245,7 @@ Spectator.describe "Rosegold::Bot inventory" do
         slots_after_reload = bot.inventory.slots
 
         expect(slots_before_reload.try &.size).to eq slots_after_reload.try &.size
-        expect(slots_before_reload.try &.map(&.item_id)).to eq slots_after_reload.try &.map(&.item_id)
+        expect(slots_before_reload.try &.map(&.name)).to eq slots_after_reload.try &.map(&.name)
         expect(slots_before_reload.try &.map(&.slot_number)).to eq slots_after_reload.try &.map(&.slot_number)
       end
     end
@@ -268,10 +268,10 @@ Spectator.describe "Rosegold::Bot inventory" do
 
           bot.wait_tick
 
-          expect(bot.inventory.inventory.map(&.item_id)).not_to contain "diamond_sword"
-          expect(bot.inventory.hotbar.map(&.item_id)).not_to contain "diamond_sword"
-          expect(bot.inventory.inventory.map(&.item_id)).not_to contain "stone"
-          expect(bot.inventory.hotbar.map(&.item_id)).not_to contain "stone"
+          expect(bot.inventory.inventory.map(&.name)).not_to contain "diamond_sword"
+          expect(bot.inventory.hotbar.map(&.name)).not_to contain "diamond_sword"
+          expect(bot.inventory.inventory.map(&.name)).not_to contain "stone"
+          expect(bot.inventory.hotbar.map(&.name)).not_to contain "stone"
         end
       end
     end

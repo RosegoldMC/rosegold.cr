@@ -458,6 +458,11 @@ class Rosegold::Slot
     count >= max_stack_size
   end
 
+  def item : MCData::Item
+    MCData::DEFAULT.items.find { |item| item.id == item_id_int } ||
+      raise "Unknown item ID: #{item_id_int}"
+  end
+
   def damage
     damage_component = components_to_add[DataComponentType::Damage.value]?
     return 0 unless damage_component.is_a?(DataComponents::Damage)
@@ -473,7 +478,7 @@ class Rosegold::Slot
     if max_damage_component.is_a?(DataComponents::MaxDamage)
       max_damage_component.value.to_u16
     else
-      MCData::DEFAULT.items_by_id_int[item_id_int].max_durability || 0_u16
+      item.max_durability || 0_u16
     end
   end
 
@@ -482,7 +487,7 @@ class Rosegold::Slot
     if max_stack_component.is_a?(DataComponents::MaxStackSize)
       max_stack_component.value.to_u8
     else
-      MCData::DEFAULT.items_by_id_int[item_id_int].stack_size
+      item.stack_size
     end
   end
 
@@ -556,7 +561,7 @@ class Rosegold::Slot
   end
 
   def worth_repairing? : Bool
-    return false unless item_id.includes?("diamond") || item_id.includes?("netherite")
+    return false unless name.includes?("diamond") || name.includes?("netherite")
 
     enchanted? && repair_cost <= 31
   end
@@ -567,18 +572,16 @@ class Rosegold::Slot
     repair_component.cost.to_i32
   end
 
-  # Use to get the item_id in new-age string format
-  # To get the legacy int format, use `item_id_int`
-  def item_id : String
-    MCData::DEFAULT.items_by_id_int[item_id_int]?.try &.id_str || raise "Unknown item_id_int: #{item_id_int}"
+  def name : String
+    item.name
   end
 
   def matches?(item_id_int : UInt32)
     self.item_id_int == item_id_int
   end
 
-  def matches?(item_id : String)
-    self.item_id == item_id
+  def matches?(name : String)
+    self.name == name
   end
 
   def matches?(spec : Rosegold::WindowSlot -> _)
@@ -630,7 +633,7 @@ class Rosegold::Slot
       "porkchop", "potato", "pufferfish", "pumpkin_pie", "rabbit", "rabbit_stew",
       "rotten_flesh", "salmon", "spider_eye", "suspicious_stew", "sweet_berries",
       "glow_berries", "tropical_fish",
-    ].includes? item_id
+    ].includes? name
   end
 
   def to_s(io)
@@ -674,7 +677,7 @@ class Rosegold::HashedSlot
         crc32_hash = Digest::CRC32.checksum(component_data)
         hashed_components[component_type] = crc32_hash
       end
-      
+
       new(true, slot.item_id_int, slot.count, hashed_components, slot.components_to_remove)
     end
   end
@@ -694,7 +697,7 @@ class Rosegold::HashedSlot
     io.write components_to_add.size
     components_to_add.each do |component_type, hash|
       io.write component_type
-      io.write hash  # Write CRC32 hash as Int (4 bytes)
+      io.write hash # Write CRC32 hash as Int (4 bytes)
     end
 
     # Write components to remove

@@ -11,7 +11,7 @@ class Rosegold::Inventory
   # Example:
   #   inventory.count "diamond_pickaxe" # => 2
   #   inventory.count &.empty? # => 2
-  #   inventory.count { |slot| slot.item_id == "diamond_pickaxe" && slot.efficiency >= 4 } # => 1
+  #   inventory.count { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 1
   #   inventory.count &.empty?, hotbar # => 1
   def count(spec, slots = slots)
     slots.select(&.matches? spec).sum(&.count.to_i32)
@@ -27,7 +27,7 @@ class Rosegold::Inventory
   # Example:
   #   inventory.pick "diamond_pickaxe" # => true
   #   inventory.pick &.empty? # => true
-  #   inventory.pick { |slot| slot.item_id == "diamond_pickaxe" && slot.efficiency >= 4 } # => false
+  #   inventory.pick { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => false
   def pick(spec)
     return true if main_hand.matches?(spec) && !main_hand.needs_repair?
 
@@ -58,7 +58,7 @@ class Rosegold::Inventory
   # Example:
   #   inventory.withdraw_at_least 5, "diamond_pickaxe" # => 3
   #   inventory.withdraw_at_least 5, &.empty?, hotbar # => 1
-  #   inventory.withdraw_at_least 5, { |slot| slot.item_id == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
+  #   inventory.withdraw_at_least 5, { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
   def withdraw_at_least(count, spec, source : Array(WindowSlot) = content, target : Array(WindowSlot) = inventory + hotbar)
     shift_click_at_least count, spec, source, target
   end
@@ -73,7 +73,7 @@ class Rosegold::Inventory
   # Example:
   #   inventory.deposit_at_least 5, "diamond_pickaxe" # => 3
   #   inventory.deposit_at_least 5, &.empty?, hotbar # => 1
-  #   inventory.deposit_at_least 5, { |slot| slot.item_id == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
+  #   inventory.deposit_at_least 5, { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
   def deposit_at_least(count, spec, source : Array(WindowSlot) = inventory + hotbar, target : Array(WindowSlot) = content)
     shift_click_at_least count, spec, source, target
   end
@@ -100,10 +100,10 @@ class Rosegold::Inventory
     empty_slot
   end
 
-  def throw_all_of(item_id)
+  def throw_all_of(name)
     quantity = 0
     slots.each do |slot|
-      next unless slot.item_id == item_id
+      next unless slot.name == name
       quantity += slot.count
 
       client.send_packet! Serverbound::ClickWindow.new :drop, 1_i8, slot.slot_number.to_i16, [] of WindowSlot, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor

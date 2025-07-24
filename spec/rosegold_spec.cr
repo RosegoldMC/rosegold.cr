@@ -18,17 +18,15 @@ Spectator.describe Rosegold do
   end
 
   it "should support 1.18, 1.21, and 1.21.6 MCData" do
-    expect { Rosegold::MCData.new("1.18") }.not_to raise_error
-    expect { Rosegold::MCData.new("1.21") }.not_to raise_error
-    expect { Rosegold::MCData.new("1.21.6") }.not_to raise_error
+    expect { Rosegold::MCData.new("1.21.8") }.not_to raise_error
   end
 
   it "should reject unsupported versions" do
-    expect { Rosegold::MCData.new("1.17") }.to raise_error(/we only support 1.18, 1.21, and 1.21.6/)
-    expect { Rosegold::MCData.new("1.22") }.to raise_error(/we only support 1.18, 1.21, and 1.21.6/)
+    expect { Rosegold::MCData.new("1.17") }.to raise_error(/Rosegold.cr only supports 1.21.8 for now/)
+    expect { Rosegold::MCData.new("1.22") }.to raise_error(/Rosegold.cr only supports 1.21.8 for now/)
   end
 
   it "should default to 1.21.6 MCData" do
-    expect(Rosegold::MCData::DEFAULT).to eq(Rosegold::MCData::MC1216)
+    expect(Rosegold::MCData::DEFAULT).to eq(Rosegold::MCData::MC1218)
   end
 end
