@@ -11,7 +11,7 @@ jobs:
     if: github.repository != 'grepsedawk/sharded.cr'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v4
 
       - uses: oprypin/install-crystal@v1
         with:
@@ -53,10 +53,9 @@ jobs:
           - false
 
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v4
 
       - run: |
-          ls spec/fixtures/server
           cd spec
           docker compose -f docker-compose.1.21.8.yml up -d
           sleep 30 # TODO: Wait for the container to be ready
