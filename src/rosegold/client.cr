@@ -8,8 +8,6 @@ require "./events/*"
 require "./world/*"
 require "./chat_manager"
 
-
-
 # Holds world state (player, chunks, etc.)
 # and control state (physics, open window, etc.).
 # Can be reconnected.
