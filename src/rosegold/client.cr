@@ -306,6 +306,9 @@ class Rosegold::Client < Rosegold::EventEmitter
     # Return the StatusResponse if it's the right type
     if packet.is_a?(Clientbound::StatusResponse)
       packet
+    elsif packet.is_a? Rosegold::Clientbound::RawPacket
+      Log.warn { "Received raw packet instead of StatusResponse: #{packet.bytes.inspect}" }
+      raise "Unexpected packet type: #{packet.class}"
     else
       raise "Unexpected packet type: #{packet.class}"
     end
