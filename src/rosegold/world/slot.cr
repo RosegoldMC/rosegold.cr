@@ -508,7 +508,7 @@ class Rosegold::Slot
 
   def item : MCData::Item
     @cached_item ||= MCData::DEFAULT.items.find { |item| item.id == item_id_int } ||
-      raise "Unknown item ID: #{item_id_int}"
+                     raise "Unknown item ID: #{item_id_int}"
   end
 
   def damage
