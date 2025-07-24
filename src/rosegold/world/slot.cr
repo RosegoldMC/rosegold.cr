@@ -152,7 +152,7 @@ class Rosegold::DataComponents::Damage < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write_var_int value
+    io.write value
   end
 end
 
@@ -167,7 +167,7 @@ class Rosegold::DataComponents::MaxDamage < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write_var_int value
+    io.write value
   end
 end
 
@@ -182,7 +182,7 @@ class Rosegold::DataComponents::MaxStackSize < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write_var_int value
+    io.write value
   end
 end
 
@@ -197,7 +197,7 @@ class Rosegold::DataComponents::RepairCost < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write_var_int cost
+    io.write cost
   end
 end
 
@@ -219,10 +219,10 @@ class Rosegold::DataComponents::Enchantments < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write_var_int enchantments.size
+    io.write enchantments.size
     enchantments.each do |type_id, level|
-      io.write_var_int type_id
-      io.write_var_int level
+      io.write type_id
+      io.write level
     end
   end
 end
@@ -317,7 +317,7 @@ class Rosegold::DataComponents::ItemModel < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write_var_string model
+    io.write model
   end
 end
 
@@ -332,7 +332,7 @@ class Rosegold::DataComponents::Rarity < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write_var_int rarity
+    io.write rarity
   end
 end
 
@@ -472,25 +472,25 @@ class Rosegold::Slot
   end
 
   def write(io)
-    io.write_var_int count
+    io.write count
     return if count == 0 # Empty slot
 
-    io.write_var_int item_id_int
+    io.write item_id_int
 
     # Write components to add count
-    io.write_var_int components_to_add.size
+    io.write components_to_add.size
     # Write components to remove count
-    io.write_var_int components_to_remove.size
+    io.write components_to_remove.size
 
     components_to_add.each do |component_type, component|
-      io.write_var_int component_type
+      io.write component_type
       # Write component data directly (no size prefix)
       component.write(io)
     end
 
     # Write components to remove
     components_to_remove.each do |component_type|
-      io.write_var_int component_type
+      io.write component_type
     end
   end
 
@@ -694,20 +694,20 @@ class Rosegold::HashedSlot
     io.write has_item
     return unless has_item
 
-    io.write_var_int item_id_int
-    io.write_var_int count
+    io.write item_id_int
+    io.write count
 
     # Write components to add
-    io.write_var_int components_to_add.size
+    io.write components_to_add.size
     components_to_add.each do |component_type, hash|
-      io.write_var_int component_type
+      io.write component_type
       io.write hash # Write CRC32 hash as Int (4 bytes)
     end
 
     # Write components to remove
-    io.write_var_int components_to_remove.size
+    io.write components_to_remove.size
     components_to_remove.each do |component_type|
-      io.write_var_int component_type
+      io.write component_type
     end
   end
 
