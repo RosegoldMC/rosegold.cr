@@ -34,6 +34,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   delegate host, port, connect, connected?, disconnect, join_game, spawned?, online_players, to: client
+  delegate start_proxy, stop_proxy, proxy?, to: client
   delegate uuid, username, feet, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory

@@ -24,7 +24,7 @@ class Rosegold::Serverbound::HeldItemChange < Rosegold::Serverbound::Packet
   end
 
   def self.read(packet)
-    self.new(packet.read_short.to_u8)
+    self.new(packet.read_short)
   end
 
   def write : Bytes
