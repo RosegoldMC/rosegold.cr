@@ -8,29 +8,7 @@ require "./events/*"
 require "./world/*"
 require "./chat_manager"
 
-struct Rosegold::BlockOperation
-  property location : Vec3i
-  property operation_type : Symbol
-  property timestamp : Time
 
-  def initialize(@location : Vec3i, @operation_type : Symbol, @timestamp : Time = Time.utc)
-  end
-end
-
-struct Rosegold::ChunkBatchSample
-  property millis_per_chunk : Float64
-  property batch_size : Int32
-  property timestamp : Time
-
-  def initialize(@millis_per_chunk : Float64, @batch_size : Int32, @timestamp : Time = Time.utc)
-  end
-end
-
-class Rosegold::Event::RawPacket < Rosegold::Event
-  getter bytes : Bytes
-
-  def initialize(@bytes); end
-end
 
 # Holds world state (player, chunks, etc.)
 # and control state (physics, open window, etc.).
