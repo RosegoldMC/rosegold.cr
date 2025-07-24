@@ -42,8 +42,8 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       expect(login_ack_packets.size).to eq(0)
     end
 
-    it "transitions MC 1.21 (protocol 767) to CONFIGURATION state" do
-      mock_client = MockClient.new(767_u32, Rosegold::ProtocolState::LOGIN)
+    it "transitions MC 1.21.8 (protocol 772) to CONFIGURATION state" do
+      mock_client = MockClient.new(772_u32, Rosegold::ProtocolState::LOGIN)
 
       # Create LoginSuccess packet and trigger callback
       login_success = Rosegold::Clientbound::LoginSuccess.new(
@@ -62,8 +62,8 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       expect(login_ack_packets.size).to eq(1)
     end
 
-    it "transitions MC 1.21.6 (protocol 771) to CONFIGURATION state" do
-      mock_client = MockClient.new(771_u32, Rosegold::ProtocolState::LOGIN)
+    it "transitions MC 1.21.8 (protocol 772) to CONFIGURATION state" do
+      mock_client = MockClient.new(772_u32, Rosegold::ProtocolState::LOGIN)
 
       # Create LoginSuccess packet and trigger callback
       login_success = Rosegold::Clientbound::LoginSuccess.new(
@@ -84,7 +84,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
 
   describe "LoginAcknowledged callback behavior" do
     it "sends ClientInformation packet automatically in CONFIGURATION state" do
-      mock_client = MockClient.new(767_u32, Rosegold::ProtocolState::CONFIGURATION)
+      mock_client = MockClient.new(772_u32, Rosegold::ProtocolState::CONFIGURATION)
 
       # Create LoginAcknowledged packet and trigger callback
       login_ack = Rosegold::Serverbound::LoginAcknowledged.new
@@ -98,7 +98,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
 
   describe "FinishConfiguration callback behavior" do
     it "sends FinishConfiguration response and transitions to PLAY state" do
-      mock_client = MockClient.new(767_u32, Rosegold::ProtocolState::CONFIGURATION)
+      mock_client = MockClient.new(772_u32, Rosegold::ProtocolState::CONFIGURATION)
 
       # Create FinishConfiguration clientbound packet and trigger callback
       finish_config = Rosegold::Clientbound::FinishConfiguration.new
@@ -115,7 +115,7 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
 
   describe "Complete configuration flow simulation for MC 1.21+" do
     it "follows correct state transitions from LOGIN to PLAY via CONFIGURATION" do
-      mock_client = MockClient.new(767_u32, Rosegold::ProtocolState::LOGIN)
+      mock_client = MockClient.new(772_u32, Rosegold::ProtocolState::LOGIN)
 
       # Step 1: LoginSuccess packet moves to CONFIGURATION and sends LoginAcknowledged
       login_success = Rosegold::Clientbound::LoginSuccess.new(
@@ -170,18 +170,14 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
     it "properly registers all configuration packets in CONFIGURATION state" do
       config_state = Rosegold::ProtocolState::CONFIGURATION
 
-      # Check clientbound packets
-      expect(config_state.get_clientbound_packet(0x03_u8, 767_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
-      expect(config_state.get_clientbound_packet(0x05_u8, 767_u32)).to eq(Rosegold::Clientbound::RegistryData)
-      expect(config_state.get_clientbound_packet(0x08_u8, 767_u32)).to eq(Rosegold::Clientbound::UpdateTags)
+      # Check clientbound packets for protocol 772
+      expect(config_state.get_clientbound_packet(0x03_u8, 772_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
+      expect(config_state.get_clientbound_packet(0x05_u8, 772_u32)).to eq(Rosegold::Clientbound::RegistryData)
+      expect(config_state.get_clientbound_packet(0x08_u8, 772_u32)).to eq(Rosegold::Clientbound::UpdateTags)
 
-      # Check serverbound packets
-      expect(config_state.get_serverbound_packet(0x00_u8, 767_u32)).to eq(Rosegold::Serverbound::ClientInformation)
-      expect(config_state.get_serverbound_packet(0x02_u8, 767_u32)).to eq(Rosegold::Serverbound::FinishConfiguration)
-
-      # Verify same for protocol 771
-      expect(config_state.get_clientbound_packet(0x03_u8, 771_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
-      expect(config_state.get_serverbound_packet(0x00_u8, 771_u32)).to eq(Rosegold::Serverbound::ClientInformation)
+      # Check serverbound packets for protocol 772
+      expect(config_state.get_serverbound_packet(0x00_u8, 772_u32)).to eq(Rosegold::Serverbound::ClientInformation)
+      expect(config_state.get_serverbound_packet(0x03_u8, 772_u32)).to eq(Rosegold::Serverbound::FinishConfiguration)
     end
   end
 end

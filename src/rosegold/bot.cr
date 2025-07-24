@@ -10,6 +10,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
     @inventory = Inventory.new client
 
     subscribe Rosegold::Clientbound::ChatMessage
+    subscribe Rosegold::Clientbound::PlayerChatMessage
+    subscribe Rosegold::Clientbound::DisguisedChatMessage
     subscribe Event::Tick
     subscribe Rosegold::Clientbound::SetContainerContent
     subscribe Rosegold::Clientbound::SetSlot

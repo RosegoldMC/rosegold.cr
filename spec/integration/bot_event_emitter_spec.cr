@@ -5,13 +5,11 @@ Spectator.describe "Rosegold::Bot event emitter" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         test = false
-        bot.on Rosegold::Clientbound::ChatMessage do |event|
-          if event.message.to_s == "<#{client.player.username}> Hello, world!"
-            test = true
-          end
+        bot.on Rosegold::Clientbound::DisguisedChatMessage do |event|
+          test = true
         end
-        bot.chat "Hello, world!"
-        bot.wait_tick
+        bot.chat "/say Hello from bot event emitter test!"
+        client.wait_for Rosegold::Clientbound::DisguisedChatMessage
         expect(test).to be true
       end
     end
@@ -21,16 +19,14 @@ Spectator.describe "Rosegold::Bot event emitter" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         test = false
-        uuid = bot.on Rosegold::Clientbound::ChatMessage do |event|
-          if event.message.to_s == "<#{client.player.username}> Hello, world!"
-            test = true
-          end
+        uuid = bot.on Rosegold::Clientbound::DisguisedChatMessage do |event|
+          test = true
         end
-        bot.chat "Hello, world!"
-        bot.wait_tick
+        bot.chat "/say Hello from bot event emitter test!"
+        client.wait_for Rosegold::Clientbound::DisguisedChatMessage
         expect(test).to be true
         expect(uuid).to be_a UUID
-        expect { bot.off Rosegold::Clientbound::ChatMessage, uuid }.not_to raise_error
+        expect { bot.off Rosegold::Clientbound::DisguisedChatMessage, uuid }.not_to raise_error
       end
     end
   end
@@ -40,13 +36,13 @@ Spectator.describe "Rosegold::Bot event emitter" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           test = 0
-          bot.once Rosegold::Clientbound::ChatMessage do |_event|
+          bot.once Rosegold::Clientbound::DisguisedChatMessage do |_event|
             test += 1
           end
-          bot.chat "Hello, world!"
-          bot.wait_tick
-          bot.chat "Hello, world!"
-          bot.wait_tick
+          bot.chat "/say First message"
+          client.wait_for Rosegold::Clientbound::DisguisedChatMessage
+          bot.chat "/say Second message"
+          client.wait_for Rosegold::Clientbound::DisguisedChatMessage
           expect(test).to eq 1
         end
       end
@@ -59,17 +55,17 @@ Spectator.describe "Rosegold::Bot event emitter" do
         Rosegold::Bot.new(client).try do |bot|
           ran_event = nil
           spawn do
-            ran_event = bot.wait_for Rosegold::Clientbound::ChatMessage
+            ran_event = bot.wait_for Rosegold::Clientbound::DisguisedChatMessage
           end
 
           expect(ran_event).to be nil
-          bot.chat "Hello, world!"
+          bot.chat "/say Hello from wait_for test!"
           ticks = 0
           until ran_event || ticks > 100
             bot.wait_tick
             ticks += 1
           end
-          expect(ran_event).to be_a Rosegold::Clientbound::ChatMessage
+          expect(ran_event).to be_a Rosegold::Clientbound::DisguisedChatMessage
         end
       end
     end
@@ -80,18 +76,18 @@ Spectator.describe "Rosegold::Bot event emitter" do
           Rosegold::Bot.new(client).try do |bot|
             ran_event = nil
             spawn do
-              ran_event = bot.wait_for Rosegold::Clientbound::ChatMessage, timeout: Time::Span.new(seconds: 1)
+              ran_event = bot.wait_for Rosegold::Clientbound::DisguisedChatMessage, timeout: Time::Span.new(seconds: 1)
             end
 
             expect(ran_event).to be nil
-            bot.chat "Hello, world!"
+            bot.chat "/say Hello from timeout test!"
             # until ran event or 5 seconds
             ticks = 0
             until ran_event || ticks > 100
               bot.wait_tick
               ticks += 1
             end
-            expect(ran_event).to be_a Rosegold::Clientbound::ChatMessage
+            expect(ran_event).to be_a Rosegold::Clientbound::DisguisedChatMessage
           end
         end
       end
@@ -101,12 +97,12 @@ Spectator.describe "Rosegold::Bot event emitter" do
           Rosegold::Bot.new(client).try do |bot|
             ran_event = nil
             spawn do
-              ran_event = bot.wait_for Rosegold::Clientbound::ChatMessage, timeout: Time::Span.new(nanoseconds: 1)
+              ran_event = bot.wait_for Rosegold::Clientbound::DisguisedChatMessage, timeout: Time::Span.new(nanoseconds: 1)
             end
 
             expect(ran_event).to be nil
             bot.wait_tick # enough to go beyond the 1 nanosecond timeout
-            bot.chat "Hello, world!"
+            bot.chat "/say This should timeout!"
             bot.wait_tick
             expect(ran_event).to be nil
           end
