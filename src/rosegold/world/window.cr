@@ -83,7 +83,16 @@ class Rosegold::Window
   end
 
   def main_hand : WindowSlot
-    hotbar[@client.player.hotbar_selection]
+    selection = @client.player.hotbar_selection
+    # Clamp to valid hotbar range (0-8)
+    selection = selection.clamp(0_u8, 8_u8)
+
+    if selection < hotbar.size
+      hotbar[selection]
+    else
+      # Default to first hotbar slot if selection is out of bounds
+      hotbar[0]? || WindowSlot.new(0, Slot.new)
+    end
   end
 
   # Hotbar starts at 0.

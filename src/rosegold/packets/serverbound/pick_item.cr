@@ -6,7 +6,11 @@ require "../packet"
 # - SetSlot for requested slot_number
 # - HeldItemChange for server selected slot
 class Rosegold::Serverbound::PickItem < Rosegold::Serverbound::Packet
-  class_getter packet_id = 0x17_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    772_u32 => 0x23_u8, # MC 1.21.8,
+  })
 
   property slot_number : UInt16
 
@@ -14,7 +18,7 @@ class Rosegold::Serverbound::PickItem < Rosegold::Serverbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write slot_number
     end.to_slice
   end

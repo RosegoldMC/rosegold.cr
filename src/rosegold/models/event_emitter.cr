@@ -46,7 +46,7 @@ class Rosegold::EventEmitter
 
     until ran_event
       return nil if timeout && (Time.utc - time_start) > timeout
-      sleep 0.01
+      sleep 0.01.seconds
     end
 
     ran_event

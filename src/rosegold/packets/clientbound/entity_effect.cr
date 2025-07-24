@@ -1,7 +1,11 @@
 require "../packet"
 
 class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x65_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    772_u32 => 0x7D_u8, # MC 1.21.8,
+  })
 
   property \
     entity_id : UInt64,

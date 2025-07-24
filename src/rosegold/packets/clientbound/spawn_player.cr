@@ -1,7 +1,11 @@
 require "../packet"
 
 class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x04_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    772_u32 => 0x02_u8, # MC 1.21.8,
+  })
 
   property \
     entity_id : UInt64,
@@ -22,7 +26,7 @@ class Rosegold::Clientbound::SpawnPlayer < Rosegold::Clientbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write entity_id
       buffer.write uuid
       buffer.write location.x

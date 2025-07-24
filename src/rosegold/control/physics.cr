@@ -22,12 +22,22 @@ class Rosegold::Physics
 
   VERY_CLOSE = 0.00001 # consider arrived at target if squared distance is closer than this
 
+  # Send a keep-alive movement packet every 20 ticks (1 second) even when stationary
+  # This prevents server timeouts while avoiding packet spam
+  MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL = 20
+
   private getter client : Rosegold::Client
   property? paused : Bool = true
   property? jump_queued : Bool = false
   private getter movement_action : Action(Vec3d)?
   private getter look_action : Action(Look)?
   private getter action_mutex : Mutex = Mutex.new
+
+  # Movement packet rate limiting
+  private property last_sent_feet : Vec3d = Vec3d::ORIGIN
+  private property last_sent_look : Look = Look.new(0, 0)
+  private property last_sent_on_ground : Bool = false
+  private property ticks_since_last_packet : Int32 = 0
 
   def movement_target
     movement_action.try &.target
@@ -43,9 +53,19 @@ class Rosegold::Physics
     @paused = true
   end
 
+  def running?
+    !paused?
+  end
+
   def handle_reset
     @paused = false
     player.velocity = Vec3d::ORIGIN
+
+    # Reset movement packet tracking
+    @last_sent_feet = player.feet
+    @last_sent_look = player.look
+    @last_sent_on_ground = player.on_ground?
+    @ticks_since_last_packet = 0
   end
 
   def handle_disconnect
@@ -173,7 +193,21 @@ class Rosegold::Physics
       @movement_action = nil
     end
 
-    send_movement_packet feet, look, on_ground
+    # Only send movement packet if something changed or keep-alive timer expired
+    should_send_packet = movement_changed?(feet, look, on_ground) ||
+                         ticks_since_last_packet >= MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL
+
+    if should_send_packet
+      send_movement_packet feet, look, on_ground
+      @ticks_since_last_packet = 0
+    else
+      @ticks_since_last_packet += 1
+      # Still update player state even if we don't send a packet
+      player.feet = feet
+      player.look = look
+      player.on_ground = on_ground
+    end
+
     player.velocity = next_velocity
 
     action_mutex.synchronize do
@@ -194,6 +228,13 @@ class Rosegold::Physics
     (target - player.feet).with_y(0).length < VERY_CLOSE
   end
 
+  # Check if movement state has changed enough to warrant sending a packet
+  private def movement_changed?(feet : Vec3d, look : Look, on_ground : Bool)
+    feet != last_sent_feet ||
+      look != last_sent_look ||
+      on_ground != last_sent_on_ground
+  end
+
   class MovementStuck < Exception; end
 
   private def send_movement_packet(feet : Vec3d, look : Look, on_ground : Bool)
@@ -212,9 +253,15 @@ class Rosegold::Physics
         client.send_packet! Serverbound::PlayerNoMovement.new on_ground
       end
     end
+
+    # Update player state and track last sent values
     player.feet = feet
     player.look = look
     player.on_ground = on_ground
+
+    @last_sent_feet = feet
+    @last_sent_look = look
+    @last_sent_on_ground = on_ground
   end
 
   private def velocity_for_inputs
@@ -327,7 +374,7 @@ class Rosegold::Physics
     blocks_coords.flat_map do |block_coords|
       x, y, z = block_coords
       dimension.block_state(x, y, z).try do |block_state|
-        block_shape = MCData::MC118.block_state_collision_shapes[block_state]
+        block_shape = MCData::DEFAULT.block_state_collision_shapes[block_state]
         block_shape.map &.to_f64.offset(x, y, z).grow(grow_aabb)
       end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
     end

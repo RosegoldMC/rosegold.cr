@@ -12,7 +12,7 @@ Spectator.describe "Rosegold::Bot movement" do
     end
   end
 
-  it "should fall due to gravity" do
+  it "should fall due to gravity (and get held up by the ground)" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/tp 1 -58 1"
@@ -41,19 +41,31 @@ Spectator.describe "Rosegold::Bot movement" do
   end
 
   it "should change yaw and pitch" do
+    final_yaw = rand(-180..180)
+    final_pitch = rand(-90..90)
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/tp 1 -60 1"
 
-        bot.yaw = 45
-        bot.pitch = 45
-        expect(bot.yaw).to be_close(45, 0.1)
-        expect(bot.pitch).to be_close(45, 0.1)
+        yaw = rand(-180..180)
+        pitch = rand(-90..90)
+        bot.yaw = yaw
+        bot.pitch = pitch
+        expect(bot.yaw).to be_close(yaw, 0.1)
+        expect(bot.pitch).to be_close(pitch, 0.1)
 
-        bot.yaw = 90
-        bot.pitch = 90
-        expect(bot.yaw).to be_close(90, 0.1)
-        expect(bot.pitch).to be_close(90, 0.1)
+        bot.yaw = final_yaw
+        bot.pitch = final_pitch
+        expect(bot.yaw).to be_close(final_yaw, 0.1)
+        expect(bot.pitch).to be_close(final_pitch, 0.1)
+
+        bot.wait_ticks 3
+      end
+    end
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        expect(bot.yaw).to be_close(final_yaw, 0.1)
+        expect(bot.pitch).to be_close(final_pitch, 0.1)
       end
     end
   end
@@ -67,7 +79,7 @@ Spectator.describe "Rosegold::Bot movement" do
         initial_feet = bot.feet
 
         bot.start_jump
-        sleep 0.5 # allow time for the jump
+        sleep 0.5.seconds # allow time for the jump
 
         expect(bot.feet.y).to be > initial_feet.y
 

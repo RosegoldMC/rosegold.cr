@@ -1,6 +1,10 @@
 class Rosegold::Clientbound::SpawnLivingEntity < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x02_u8
-  class_getter state = Rosegold::ProtocolState::PLAY
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    772_u32 => 0x01_u8, # MC 1.21.8,
+  })
+  class_getter state = ProtocolState::PLAY
 
   property \
     entity_id : UInt64,
@@ -12,11 +16,12 @@ class Rosegold::Clientbound::SpawnLivingEntity < Rosegold::Clientbound::Packet
     pitch : Float32,
     yaw : Float32,
     head_yaw : Float32,
+    data : UInt32 = 0_u32, # Default to 0 for compatibility
     velocity_x : Int16,
     velocity_y : Int16,
     velocity_z : Int16
 
-  def initialize(@entity_id, @uuid, @entity_type, @x, @y, @z, @pitch, @yaw, @head_yaw, @velocity_x, @velocity_y, @velocity_z)
+  def initialize(@entity_id, @uuid, @entity_type, @x, @y, @z, @pitch, @yaw, @head_yaw, @data, @velocity_x, @velocity_y, @velocity_z)
   end
 
   def self.read(packet)
@@ -29,16 +34,21 @@ class Rosegold::Clientbound::SpawnLivingEntity < Rosegold::Clientbound::Packet
     pitch = packet.read_angle256_deg
     yaw = packet.read_angle256_deg
     head_yaw = packet.read_angle256_deg
+    if Client.protocol_version >= 767
+      data = packet.read_var_int # Read data field for MC 1.21+
+    else
+      data = 0_u32 # Default to 0 for older versions
+    end
     velocity_x = packet.read_short
     velocity_y = packet.read_short
     velocity_z = packet.read_short
 
-    self.new(entity_id, uuid, entity_type, x, y, z, pitch, yaw, head_yaw, velocity_x, velocity_y, velocity_z)
+    self.new(entity_id, uuid, entity_type, x, y, z, pitch, yaw, head_yaw, data, velocity_x, velocity_y, velocity_z)
   end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write entity_id
       buffer.write uuid
       buffer.write entity_type

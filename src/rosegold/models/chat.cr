@@ -4,7 +4,7 @@ require "colorize"
 class Rosegold::Chat
   include JSON::Serializable
 
-  TRANSLATIONS = Hash(String, String).from_json Rosegold.read_game_asset "language.json"
+  TRANSLATIONS = Hash(String, String).from_json Rosegold.read_game_asset "1.21.8/language.json"
 
   property \
     bold : Bool?,

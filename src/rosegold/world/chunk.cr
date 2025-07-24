@@ -14,7 +14,15 @@ class Rosegold::Chunk
   def initialize(@x, @z, io, dimension : Dimension)
     @min_y = dimension.min_y
     section_count = dimension.world_height >> 4
-    @sections = Array(Section).new(section_count) { Section.new io }
+
+    # Check if data stream is empty (happens when no sections are sent)
+    if io.responds_to?(:size) && io.responds_to?(:pos) && io.size <= io.pos
+      # Create empty sections when no data is available
+      @sections = Array(Section).new(section_count) { Section.empty }
+    else
+      # Normal case: read sections from data stream
+      @sections = Array(Section).new(section_count) { Section.new io }
+    end
   end
 
   def data : Bytes
@@ -26,7 +34,8 @@ class Rosegold::Chunk
   # Returns nil if outside world vertically.
   def block_state(x : Int32, y : Int32, z : Int32) : BlockStateNr | Nil
     x, z = x & 15, z & 15
-    section = sections[(y - min_y) >> 4]? || return nil
+    section_index = (y - min_y) >> 4
+    section = sections[section_index]? || return nil
     index = (((y - min_y) & 15) << 8) | (z << 4) | x
     section.block_state index.to_u32
   end
@@ -45,8 +54,26 @@ class Rosegold::Chunk
     def initialize(io)
       # Number of non-air blocks present in the chunk section. If the block count reaches 0, the whole chunk section is not rendered.
       @block_count = io.read_short
+
+      if @block_count.zero?
+        @blocks = PalettedContainer.air_filled(4096)
+        @biomes = PalettedContainer.air_filled(64)
+        return
+      end
+
       @blocks = PalettedContainer.new io, 9, 4096
       @biomes = PalettedContainer.new io, 4, 64
+    end
+
+    # Creates an empty section (for when no section data is sent)
+    def self.empty
+      new(empty: true)
+    end
+
+    def initialize(empty : Bool)
+      @block_count = 0_i16
+      @blocks = PalettedContainer.air_filled(4096)
+      @biomes = PalettedContainer.air_filled(64)
     end
 
     def write(io)

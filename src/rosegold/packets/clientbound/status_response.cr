@@ -2,7 +2,16 @@ require "json"
 require "../packet"
 
 class Rosegold::Clientbound::StatusResponse < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0_u8
+  include Rosegold::Packets::ProtocolMapping
+
+  # Define protocol-specific packet IDs (same across all versions)
+  packet_ids({
+    758_u32 => 0x00_u8, # MC 1.18
+    767_u32 => 0x00_u8, # MC 1.21
+    771_u32 => 0x00_u8, # MC 1.21.6
+    772_u32 => 0x00_u8, # MC 1.21.8
+  })
+
   class_getter state = Rosegold::ProtocolState::STATUS
 
   property json_response : JSON::Any
@@ -15,7 +24,7 @@ class Rosegold::Clientbound::StatusResponse < Rosegold::Clientbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write json_response.to_json
     end.to_slice
   end
