@@ -383,11 +383,22 @@ end
 
 class Rosegold::Slot
   property count : UInt32
-  property item_id_int : UInt32
   property components_to_add : Hash(UInt32, DataComponent) # Component type -> structured component
   property components_to_remove : Set(UInt32)              # Component types to remove
 
   @cached_item : MCData::Item?
+  @item_id_int : UInt32
+
+  def item_id_int
+    @item_id_int
+  end
+
+  def item_id_int=(value : UInt32)
+    if @item_id_int != value
+      @item_id_int = value
+      @cached_item = nil
+    end
+  end
 
   # Enchantment type mapping for better maintainability
   ENCHANTMENT_TYPE_MAP = {
@@ -604,14 +615,14 @@ class Rosegold::Slot
 
   def make_empty
     @count = 0_u32
-    @item_id_int = 0_u32
+    self.item_id_int = 0_u32
     @components_to_add.clear
     @components_to_remove.clear
   end
 
   def swap_with(other)
-    tmp = @item_id_int
-    @item_id_int = other.item_id_int
+    tmp = self.item_id_int
+    self.item_id_int = other.item_id_int
     other.item_id_int = tmp
 
     tmp = @count
