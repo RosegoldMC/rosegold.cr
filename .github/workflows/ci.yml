@@ -58,7 +58,25 @@ jobs:
       - run: |
           cd spec
           docker compose -f docker-compose.1.21.8.yml up -d
-          sleep 30 # TODO: Wait for the container to be ready
+          
+          # Wait for Minecraft server to be ready instead of fixed sleep
+          echo "Waiting for Minecraft 1.21.8 server to start..."
+          for i in {1..60}; do
+            if docker compose -f docker-compose.1.21.8.yml logs mc | grep -q "Done.*For help, type"; then
+              echo "Server is ready after ${i} attempts"
+              break
+            fi
+            echo "Attempt ${i}/60: Server not ready yet..."
+            sleep 2
+          done
+          
+          # Additional check: verify server is accepting connections
+          echo "Testing server connectivity..."
+          timeout 10 bash -c 'until nc -z localhost 25565; then sleep 1; done' || echo "Warning: Could not verify server connectivity"
+          
+          # Give a bit more time for server to stabilize
+          echo "Allowing server to stabilize..."
+          sleep 5
 
       - uses: oprypin/install-crystal@v1
         with:
