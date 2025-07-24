@@ -5,7 +5,7 @@ Spectator.describe "Rosegold::Bot event emitter" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         test = false
-        bot.on Rosegold::Clientbound::DisguisedChatMessage do |event|
+        bot.on Rosegold::Clientbound::DisguisedChatMessage do |_|
           test = true
         end
         bot.chat "/say Hello from bot event emitter test!"
@@ -19,7 +19,7 @@ Spectator.describe "Rosegold::Bot event emitter" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         test = false
-        uuid = bot.on Rosegold::Clientbound::DisguisedChatMessage do |event|
+        uuid = bot.on Rosegold::Clientbound::DisguisedChatMessage do |_|
           test = true
         end
         bot.chat "/say Hello from bot event emitter test!"

@@ -69,7 +69,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
 
       # Write Heightmaps (Prefixed Array of Heightmap)
       io.write(heightmaps.size.to_u32)
-      heightmaps.each { |heightmap| heightmap.write(io) }
+      heightmaps.each(&.write(io))
 
       # Write Data (Prefixed Array of Byte)
       io.write data.size

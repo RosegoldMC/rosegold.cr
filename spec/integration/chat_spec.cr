@@ -53,7 +53,7 @@ Spectator.describe "Rosegold::Bot chat functionality" do
       received_system_chat = false
 
       # Listen specifically for System Chat Message packets
-      client.on(Rosegold::Clientbound::ChatMessage) do |packet|
+      client.on(Rosegold::Clientbound::ChatMessage) do |_|
         received_system_chat = true
       end
 
@@ -75,7 +75,7 @@ Spectator.describe "Rosegold::Bot chat functionality" do
       received_player_chat = false
 
       # Listen specifically for Player Chat Message packets
-      client.on(Rosegold::Clientbound::PlayerChatMessage) do |packet|
+      client.on(Rosegold::Clientbound::PlayerChatMessage) do |_|
         received_player_chat = true
       end
 
@@ -97,7 +97,7 @@ Spectator.describe "Rosegold::Bot chat functionality" do
       received_disguised_chat = false
 
       # Listen specifically for Disguised Chat Message packets
-      client.on(Rosegold::Clientbound::DisguisedChatMessage) do |packet|
+      client.on(Rosegold::Clientbound::DisguisedChatMessage) do |_|
         received_disguised_chat = true
       end
 

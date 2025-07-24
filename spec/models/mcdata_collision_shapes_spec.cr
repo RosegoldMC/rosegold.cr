@@ -3,7 +3,7 @@ require "../spec_helper"
 Spectator.describe "MCData block collision shapes" do
   describe "block_state_collision_shapes" do
     it "has collision shapes for all block states" do
-      max_state = Rosegold::MCData::DEFAULT.blocks.map(&.max_state_id).max
+      max_state = Rosegold::MCData::DEFAULT.blocks.max_of(&.max_state_id)
       expect(Rosegold::MCData::DEFAULT.block_state_collision_shapes.size).to eq(max_state + 1)
     end
 

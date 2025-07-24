@@ -37,7 +37,7 @@ class Rosegold::LightData
 
     # Read Sky Light arrays
     sky_light_arrays = [] of Bytes
-    sky_light_mask.each_with_index do |mask, i|
+    sky_light_mask.each_with_index do |mask, _|
       64.times do |bit|
         if (mask & (1_u64 << bit)) != 0
           array_length = io.read_var_int
@@ -50,7 +50,7 @@ class Rosegold::LightData
 
     # Read Block Light arrays
     block_light_arrays = [] of Bytes
-    block_light_mask.each_with_index do |mask, i|
+    block_light_mask.each_with_index do |mask, _|
       64.times do |bit|
         if (mask & (1_u64 << bit)) != 0
           array_length = io.read_var_int
