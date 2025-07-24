@@ -51,18 +51,18 @@ Spectator.describe "Rosegold::Bot chat functionality" do
   it "should receive System Chat Message packets (0x72)" do
     client.join_game do |client|
       received_system_chat = false
-      
+
       # Listen specifically for System Chat Message packets
       client.on(Rosegold::Clientbound::ChatMessage) do |packet|
         received_system_chat = true
       end
-      
+
       Rosegold::Bot.new(client).try do |bot|
         # Commands that typically generate system chat messages
         # /time query should generate a system response
         bot.chat "/time query daytime"
         bot.wait_ticks 10
-        
+
         # For now, just verify the packet type can be handled without errors
         # System chat messages may not always be generated depending on server config
         expect(true).to be_true
@@ -73,19 +73,19 @@ Spectator.describe "Rosegold::Bot chat functionality" do
   it "should receive Player Chat Message packets (0x3A)" do
     client.join_game do |client|
       received_player_chat = false
-      
+
       # Listen specifically for Player Chat Message packets
       client.on(Rosegold::Clientbound::PlayerChatMessage) do |packet|
         received_player_chat = true
       end
-      
+
       Rosegold::Bot.new(client).try do |bot|
         # Regular chat messages between players should generate PlayerChatMessage packets
         # Since we're testing alone, we won't receive player messages
         # But we can verify the packet handler is set up correctly
         bot.chat "Hello world!"
         bot.wait_ticks 5
-        
+
         # Test passes if no packet parsing errors occur
         expect(true).to be_true
       end
@@ -95,17 +95,17 @@ Spectator.describe "Rosegold::Bot chat functionality" do
   it "should receive Disguised Chat Message packets (0x1D)" do
     client.join_game do |client|
       received_disguised_chat = false
-      
+
       # Listen specifically for Disguised Chat Message packets
       client.on(Rosegold::Clientbound::DisguisedChatMessage) do |packet|
         received_disguised_chat = true
       end
-      
+
       Rosegold::Bot.new(client).try do |bot|
         # /say command should generate a DisguisedChatMessage packet
         bot.chat "/say Test message from server"
         bot.wait_ticks 10
-        
+
         # Verify we received the disguised chat message
         expect(received_disguised_chat).to be_true
       end

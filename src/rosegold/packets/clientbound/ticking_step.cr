@@ -1,6 +1,6 @@
 require "../packet"
 
-# Ticking Step packet (0x79) 
+# Ticking Step packet (0x79)
 # Advances the client processing by the specified number of ticks.
 # Has no effect unless client ticking is frozen.
 class Rosegold::Clientbound::TickingStep < Rosegold::Clientbound::Packet

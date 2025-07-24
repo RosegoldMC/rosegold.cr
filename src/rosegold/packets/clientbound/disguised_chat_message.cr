@@ -21,17 +21,17 @@ class Rosegold::Clientbound::DisguisedChatMessage < Rosegold::Clientbound::Packe
     # Read Text Component (NBT format)
     # Text Component starts with NBT tag type
     nbt_type = packet.read_byte
-    
+
     message = if nbt_type == 8 # NBT String Tag (TAG_String)
-      # Simple text component - just read the string
-      text = packet.read_var_string
-      Rosegold::Chat.new(text)
-    else
-      # Complex NBT component - for now, skip complex parsing
-      # This would require full NBT parsing which is complex
-      Rosegold::Chat.new("Complex text component")
-    end
-    
+                # Simple text component - just read the string
+                text = packet.read_var_string
+                Rosegold::Chat.new(text)
+              else
+                # Complex NBT component - for now, skip complex parsing
+                # This would require full NBT parsing which is complex
+                Rosegold::Chat.new("Complex text component")
+              end
+
     # Read chat type (ID or inline definition)
     chat_type_id = packet.read_var_int.to_u32
     if chat_type_id == 0
@@ -49,28 +49,28 @@ class Rosegold::Clientbound::DisguisedChatMessage < Rosegold::Clientbound::Packe
         # Skip complex NBT parsing for now
       end
     end
-    
+
     # Read Sender Name (Text Component)
     sender_nbt_type = packet.read_byte
     sender_name = if sender_nbt_type == 8 # NBT String Tag
-      text = packet.read_var_string
-      Rosegold::Chat.new(text)
-    else
-      Rosegold::Chat.new("Server")
-    end
-    
+                    text = packet.read_var_string
+                    Rosegold::Chat.new(text)
+                  else
+                    Rosegold::Chat.new("Server")
+                  end
+
     # Read optional target name
     target_name = nil
     if packet.read_bool
       target_nbt_type = packet.read_byte
       target_name = if target_nbt_type == 8 # NBT String Tag
-        text = packet.read_var_string
-        Rosegold::Chat.new(text)
-      else
-        Rosegold::Chat.new("Target")
-      end
+                      text = packet.read_var_string
+                      Rosegold::Chat.new(text)
+                    else
+                      Rosegold::Chat.new("Target")
+                    end
     end
-    
+
     self.new(message, chat_type_id, sender_name, target_name)
   end
 

@@ -36,10 +36,10 @@ class Rosegold::PalettedContainer
       @palette = [io.read_var_int.to_u16]
       @entries_per_long = 0
       @entry_mask = 0
-      
+
       # As of MC 1.21.5, the data array length is calculated instead of sent
       if Client.protocol_version >= 772_u32 # MC 1.21.8 (and presumably 1.21.5+)
-        num_longs = 0 # Single state mode has no data array
+        num_longs = 0                       # Single state mode has no data array
       else
         num_longs = io.read_var_int
         # MC 1.21+ may send data even in single state mode
@@ -47,7 +47,7 @@ class Rosegold::PalettedContainer
           raise "Unexpected num_longs=#{num_longs} should be 0" if num_longs > 0
         end
       end
-      
+
       # Read the data even if we don't use it in single state mode
       @long_array = Array(Long).new(num_longs) { io.read_long.to_u64! }
       return
@@ -68,7 +68,7 @@ class Rosegold::PalettedContainer
       num_longs = (size * bits_per_entry + 63) // 64 # Ceiling division
     else
       num_longs = io.read_var_int
-      # Allow server to send compressed data - don't enforce full size requirement for older MC versions  
+      # Allow server to send compressed data - don't enforce full size requirement for older MC versions
       if Client.protocol_version < 767_u32
         raise "Data too short! #{num_longs} * #{entries_per_long} < #{size}" if num_longs * entries_per_long < size
       end
@@ -91,7 +91,7 @@ class Rosegold::PalettedContainer
       io.write palette.size
       palette.each { |id| io.write id }
     end
-    # As of MC 1.21.5, array length is not sent (calculated)  
+    # As of MC 1.21.5, array length is not sent (calculated)
     unless Client.protocol_version >= 772_u32
       io.write long_array.size
     end

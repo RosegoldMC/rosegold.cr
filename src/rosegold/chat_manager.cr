@@ -5,8 +5,8 @@ require "uuid"
 # Manages chat message signing, salt generation, and acknowledgment tracking
 # according to the Minecraft 1.21.8 protocol requirements.
 class Rosegold::ChatManager
-  MAX_LAST_SEEN_MESSAGES = 20
-  SIGNATURE_SIZE = 256
+  MAX_LAST_SEEN_MESSAGES =  20
+  SIGNATURE_SIZE         = 256
 
   private getter client : Client
   private getter last_seen_signatures : Array(Bytes) = [] of Bytes
@@ -72,9 +72,9 @@ class Rosegold::ChatManager
   def send_command(command : String) : Bool
     # Commands use the ChatCommand packet which is simpler
     command_text = command.starts_with?('/') ? command[1..] : command
-    
+
     packet = Serverbound::ChatCommand.new(command_text)
-    
+
     begin
       client.send_packet!(packet)
       true
@@ -89,7 +89,7 @@ class Rosegold::ChatManager
     return unless signature.size == SIGNATURE_SIZE
 
     @last_seen_signatures << signature
-    
+
     # Keep only the most recent MAX_LAST_SEEN_MESSAGES signatures
     if @last_seen_signatures.size > MAX_LAST_SEEN_MESSAGES
       @last_seen_signatures.shift
@@ -112,19 +112,19 @@ class Rosegold::ChatManager
   private def create_acknowledged_bitset : Bytes
     # Fixed BitSet of 20 bits = 3 bytes (ceil(20/8) = 3)
     acknowledged = Bytes.new(3, 0)
-    
+
     # Set bits for each signature we've seen (most recent = highest bit)
     @last_seen_signatures.each_with_index do |_, index|
       break if index >= 20 # Only 20 bits available
-      
+
       # Calculate byte and bit position
       byte_index = index // 8
       bit_position = index % 8
-      
+
       # Set the bit
       acknowledged[byte_index] |= (1_u8 << bit_position)
     end
-    
+
     acknowledged
   end
 
@@ -147,23 +147,23 @@ class Rosegold::ChatManager
   private def calculate_checksum(message : String, timestamp : Int64, salt : Int64) : UInt8
     # Calculate checksum based on the last seen signatures for acknowledgment validation
     checksum = 0_u64
-    
+
     # Include the acknowledged messages in checksum calculation
     @last_seen_signatures.each do |sig|
       # Use first byte of each signature for checksum
       checksum = (checksum + (sig.size > 0 ? sig[0] : 0)) & 0xFF
     end
-    
+
     # Include message count in checksum
     checksum = (checksum + @message_count) & 0xFF
-    
+
     checksum.to_u8
   end
 
   # Get public key bytes for server authentication (if needed)
   def public_key_bytes : Bytes?
     return nil unless has_private_key?
-    
+
     if key = @private_key
       begin
         public_key = key.public_key

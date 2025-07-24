@@ -30,7 +30,6 @@ class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
     entity = client.dimension.entities[entity_id]?
     effect = Rosegold::EntityEffect.new(effect_id, amplifier, duration, flags)
 
-
     if client.player.entity_id == entity_id
       if existing_effect = client.player.effects.find { |active_effect| active_effect.effect == effect.effect }
         existing_effect.amplifier = amplifier

@@ -14,7 +14,7 @@ class Rosegold::LightData
     @empty_sky_light_mask = [] of UInt64,
     @empty_block_light_mask = [] of UInt64,
     @sky_light_arrays = [] of Bytes,
-    @block_light_arrays = [] of Bytes
+    @block_light_arrays = [] of Bytes,
   )
   end
 
