@@ -14,7 +14,7 @@ Spectator.describe Rosegold do
     expect(Rosegold::Client.protocol_version).to eq(758_u32)
 
     # Reset to default (1.21.6)
-    Rosegold::Client.protocol_version = 771_u32
+    Rosegold::Client.protocol_version = 772_u32
   end
 
   it "should support 1.18, 1.21, and 1.21.6 MCData" do
