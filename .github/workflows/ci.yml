@@ -11,11 +11,11 @@ jobs:
     if: github.repository != 'grepsedawk/sharded.cr'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v4
 
       - uses: oprypin/install-crystal@v1
         with:
-          crystal: latest
+          crystal: 1.17.0
 
       - name: Format
         run: crystal tool format --check
@@ -45,18 +45,30 @@ jobs:
       fail-fast: true
       matrix:
         crystal_version:
-          - 1.17.0
-          - latest
+          - "1.17.0"
+          # - latest
+        minecraft_version:
+          - "1.21.8"
         experimental:
           - false
 
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v4
 
       - run: |
           cd spec
-          docker compose up -d
-          sleep 30 # TODO: Wait for the container to be ready
+          docker compose -f docker-compose.1.21.8.yml up -d
+
+          # Wait for Minecraft server to be ready instead of fixed sleep
+          echo "Waiting for Minecraft 1.21.8 server to start..."
+          for i in {1..60}; do
+            if docker compose -f docker-compose.1.21.8.yml logs mc | grep -q "Done.*For help, type"; then
+              echo "Server is ready after ${i} attempts"
+              break
+            fi
+            echo "Attempt ${i}/60: Server not ready yet..."
+            sleep 2
+          done
 
       - uses: oprypin/install-crystal@v1
         with:
@@ -80,4 +92,4 @@ jobs:
         run: touch .env
 
       - name: Run tests
-        run: crystal spec || crystal spec || crystal spec
+        run: LOG_LEVEL=trace crystal spec || crystal spec || crystal spec

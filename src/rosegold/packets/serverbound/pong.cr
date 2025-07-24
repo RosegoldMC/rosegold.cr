@@ -1,7 +1,11 @@
 require "../packet"
 
 class Rosegold::Serverbound::Pong < Rosegold::Serverbound::Packet
-  class_getter packet_id = 0x1d_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    772_u32 => 0x2C_u8, # MC 1.21.8,
+  })
 
   property ping_id : Int32
 
@@ -9,7 +13,7 @@ class Rosegold::Serverbound::Pong < Rosegold::Serverbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write_full ping_id
     end.to_slice
   end

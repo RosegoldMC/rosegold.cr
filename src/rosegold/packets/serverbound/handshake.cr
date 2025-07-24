@@ -1,7 +1,13 @@
 require "../packet"
 
 class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
-  class_getter packet_id = 0x00_u8
+  include Rosegold::Packets::ProtocolMapping
+
+  # Define protocol-specific packet IDs (same across all versions)
+  packet_ids({
+    772_u32 => 0x00_u8, # MC 1.21.8,
+  })
+
   class_getter state = Rosegold::ProtocolState::HANDSHAKING
 
   property \
@@ -21,14 +27,15 @@ class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
     self.new(
       packet.read_var_int,
       packet.read_var_string,
-      packet.read_ushort,
-      packet.read_var_int
+      packet.read_ushort.to_i32,
+      packet.read_var_int.to_i32
     )
   end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      # Use protocol-aware packet ID
+      buffer.write self.class.packet_id_for_protocol(protocol_version)
       buffer.write protocol_version
       buffer.write server_address
       buffer.write_full server_port.to_u16

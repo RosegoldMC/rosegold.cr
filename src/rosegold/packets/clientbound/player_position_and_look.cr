@@ -4,7 +4,13 @@ require "../packet"
 
 # relative_flags: x/y/z/yaw/pitch. If a flag is set, its value is relative to the current player position/look.
 class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x38_u8
+  include Rosegold::Packets::ProtocolMapping
+
+  # Define protocol-specific packet IDs (only for older protocols)
+  packet_ids({
+    758_u32 => 0x38_u8, # MC 1.18
+    # MC 1.21+ uses SynchronizePlayerPosition instead
+  })
 
   property \
     x_raw : Float64,
@@ -53,7 +59,7 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write x_raw
       buffer.write y_raw
       buffer.write z_raw

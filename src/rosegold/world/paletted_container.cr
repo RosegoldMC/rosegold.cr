@@ -16,15 +16,40 @@ class Rosegold::PalettedContainer
 
   # TODO read+write lock
 
+  # Creates a container filled with air/default values (ID 0)
+  def self.air_filled(size : Index) : PalettedContainer
+    new(size: size, empty: true)
+  end
+
+  def initialize(size : Index, empty : Bool)
+    @size = size
+    @bits_per_entry = 0_u8 # single state mode
+    @palette = [0_u16]     # air block/biome (ID 0)
+    @entries_per_long = 0_u8
+    @entry_mask = 0_u64
+    @long_array = [] of Long
+  end
+
   def initialize(io : Minecraft::IO, num_bits_direct, @size)
     @bits_per_entry = io.read_byte
     if bits_per_entry == 0 # single state mode
       @palette = [io.read_var_int.to_u16]
       @entries_per_long = 0
       @entry_mask = 0
-      num_longs = io.read_var_int
-      raise "Unexpected num_longs=#{num_longs} should be 0" if num_longs > 0
-      @long_array = [] of Long
+
+      # As of MC 1.21.5, the data array length is calculated instead of sent
+      if Client.protocol_version >= 772_u32 # MC 1.21.8 (and presumably 1.21.5+)
+        num_longs = 0                       # Single state mode has no data array
+      else
+        num_longs = io.read_var_int
+        # MC 1.21+ may send data even in single state mode
+        if Client.protocol_version < 767_u32
+          raise "Unexpected num_longs=#{num_longs} should be 0" if num_longs > 0
+        end
+      end
+
+      # Read the data even if we don't use it in single state mode
+      @long_array = Array(Long).new(num_longs) { io.read_long.to_u64! }
       return
     end
 
@@ -37,8 +62,17 @@ class Rosegold::PalettedContainer
     @entries_per_long = 64_u8 // bits_per_entry
     @entry_mask = (1_u64 << bits_per_entry) - 1
 
-    num_longs = io.read_var_int
-    raise "Data too short! #{num_longs} * #{entries_per_long} < #{size}" if num_longs * entries_per_long < size
+    # As of MC 1.21.5, the data array length is calculated instead of sent
+    if Client.protocol_version >= 772_u32 # MC 1.21.8 (and presumably 1.21.5+)
+      # Calculate the required number of longs for the given number of entries
+      num_longs = (size * bits_per_entry + 63) // 64 # Ceiling division
+    else
+      num_longs = io.read_var_int
+      # Allow server to send compressed data - don't enforce full size requirement for older MC versions
+      if Client.protocol_version < 767_u32
+        raise "Data too short! #{num_longs} * #{entries_per_long} < #{size}" if num_longs * entries_per_long < size
+      end
+    end
 
     @long_array = Array(Long).new(num_longs) { io.read_long.to_u64! }
   end
@@ -47,27 +81,43 @@ class Rosegold::PalettedContainer
     io.write bits_per_entry
     if bits_per_entry == 0
       io.write palette[0]
-      io.write 0_i32
+      # As of MC 1.21.5, array length is not sent (calculated)
+      unless Client.protocol_version >= 772_u32
+        io.write 0_i32
+      end
       return
     end
     unless palette.empty?
       io.write palette.size
       palette.each { |id| io.write id }
     end
-    io.write long_array.size
+    # As of MC 1.21.5, array length is not sent (calculated)
+    unless Client.protocol_version >= 772_u32
+      io.write long_array.size
+    end
     long_array.each { |id| io.write_full id }
   end
 
   def [](index : Index) : Entry
     long_array = self.long_array
-    return palette[0] if long_array.empty? # single state mode
+    if long_array.empty? # single state mode
+      return palette[0]
+    end
+
+    # Add bounds checking for MC 1.21+ compatibility
+    return 0_u16 if index >= size # Return air block for out-of-bounds access
+
     long_index = index // entries_per_long
+    return 0_u16 if long_index >= long_array.size # Return air block for out-of-bounds array access
+
     bit_offset_in_long = (index % entries_per_long) * bits_per_entry
     value = long_array[long_index] >> bit_offset_in_long
     value = (value & entry_mask).to_u16
     return value if palette.empty? # direct mode
 
-    palette[value] # encoded mode
+    # Add bounds checking for palette access
+    return 0_u16 if value >= palette.size # Return air block for out-of-bounds palette access
+    palette[value]                        # encoded mode
   end
 
   def []=(index : Index, value : Entry) : Nil

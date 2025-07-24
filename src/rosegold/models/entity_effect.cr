@@ -1,6 +1,5 @@
 class Rosegold::EntityEffect
   enum Effect
-    Unused
     Speed
     Slowness
     Haste

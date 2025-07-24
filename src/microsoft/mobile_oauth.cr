@@ -72,7 +72,7 @@ module Microsoft::MobileOAuth
       STDERR.puts json["message"]
 
       loop do
-        sleep 5
+        sleep 5.seconds
         HTTP::Client.post(
           "https://login.microsoftonline.com/consumers/oauth2/v2.0/token",
           form: "client_id=#{CLIENT_ID}&scope=XboxLive.signin offline_access&code=#{json["device_code"]}&grant_type=urn:ietf:params:oauth:grant-type:device_code"

@@ -22,7 +22,7 @@ class Rosegold::Player
     health : Float32 = 0,
     food : UInt32 = 0,
     saturation : Float32 = 0,
-    hotbar_selection : UInt8 = 0,
+    hotbar_selection : UInt32 = 0,
     gamemode : Int8 = 0,
     effects : Array(EntityEffect) = [] of EntityEffect
   property? \

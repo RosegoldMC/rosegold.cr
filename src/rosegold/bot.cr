@@ -10,8 +10,10 @@ class Rosegold::Bot < Rosegold::EventEmitter
     @inventory = Inventory.new client
 
     subscribe Rosegold::Clientbound::ChatMessage
+    subscribe Rosegold::Clientbound::PlayerChatMessage
+    subscribe Rosegold::Clientbound::DisguisedChatMessage
     subscribe Event::Tick
-    subscribe Rosegold::Clientbound::WindowItems
+    subscribe Rosegold::Clientbound::SetContainerContent
     subscribe Rosegold::Clientbound::SetSlot
   end
 
@@ -60,7 +62,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Send a message or slash command.
   def chat(message : String)
-    client.queue_packet Serverbound::ChatMessage.new message
+    client.chat_manager.send_chat(message)
   end
 
   def wait_ticks(ticks : Int32)
@@ -212,16 +214,16 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   def swap_hands
-    client.queue_packet Serverbound::PlayerDigging.new :swap_hands
+    client.queue_packet Serverbound::PlayerAction.new :swap_hands
   end
 
   def drop_hand_single
-    client.queue_packet Serverbound::PlayerDigging.new :drop_hand_single
+    client.queue_packet Serverbound::PlayerAction.new :drop_hand_single
     client.queue_packet Serverbound::SwingArm.new
   end
 
   def drop_hand_full
-    client.queue_packet Serverbound::PlayerDigging.new :drop_hand_full
+    client.queue_packet Serverbound::PlayerAction.new :drop_hand_full
     client.queue_packet Serverbound::SwingArm.new
   end
 

@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(zcat:*)",
+      "Bash(gunzip:*)",
+      "Bash(crystal spec:*)",
+      "Bash(crystal eval:*)",
+      "Bash(rg:*)",
+      "Bash(crystal run:*)",
+      "Bash(crystal build:*)",
+      "Bash(LOG_LEVEL=trace crystal spec spec/integration/interactions_spec.cr)",
+      "Bash(timeout 60 bash -c \"LOG_LEVEL=trace crystal spec spec/integration/interactions_spec.cr\")",
+      "WebFetch(domain:minecraft.wiki)",
+      "Bash(gtimeout:*)",
+      "Bash(crystal docs:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:crystal-lang.org)",
+      "Bash(timeout 15s crystal spec *)",
+      "Bash(timeout 30s crystal spec *)",
+      "Bash(timeout 60s crystal spec *)",
+      "Bash(timeout 120s crystal spec *)",
+      "Bash(ls:*)"
+    ],
+    "deny": []
+  }
+}

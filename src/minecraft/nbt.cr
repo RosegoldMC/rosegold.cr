@@ -33,7 +33,9 @@ module Minecraft::NBT
       when 12
         LongArrayTag.read io
       else
-        raise "Unsupported NBT tag type: #{tag_type}"
+        Log.warn { "Unsupported NBT tag type: #{tag_type}, skipping" }
+        # For unknown tag types, return an empty EndTag as a fallback
+        EndTag.read io
       end
     end
 

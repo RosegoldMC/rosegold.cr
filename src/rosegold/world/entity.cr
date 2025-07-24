@@ -1,5 +1,5 @@
 class Rosegold::Entity
-  METADATA = Array(Metadata).from_json(Rosegold.read_game_asset "entities.json")
+  METADATA = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.8/entities.json")
 
   class Metadata
     include JSON::Serializable

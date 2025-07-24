@@ -1,7 +1,11 @@
 require "../packet"
 
 class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
-  class_getter packet_id = 0x08_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    772_u32 => 0x11_u8, # MC 1.21.8,
+  })
 
   enum Mode
     Click; Shift; Swap; Middle; Drop; Drag; Double
@@ -19,7 +23,7 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write window_id
       buffer.write state_id
       buffer.write_full slot_number
@@ -28,9 +32,13 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
       buffer.write changed_slots.size
       changed_slots.each do |slot|
         buffer.write_full slot.slot_number.to_i16
-        buffer.write slot
+        # Use hashed slot format for 1.21.8
+        hashed_slot = HashedSlot.from_window_slot(slot)
+        hashed_slot.write(buffer)
       end
-      buffer.write cursor
+      # Use hashed slot format for cursor too
+      hashed_cursor = HashedSlot.from_slot(cursor)
+      hashed_cursor.write(buffer)
     end.to_slice
   end
 

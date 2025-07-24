@@ -1,7 +1,11 @@
 require "../packet"
 
 class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x13_u8
+  include Rosegold::Packets::ProtocolMapping
+  # Define protocol-specific packet IDs
+  packet_ids({
+    772_u32 => 0x0F_u8, # MC 1.21.8,
+  })
 
   property \
     window_id : UInt32
@@ -17,7 +21,7 @@ class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write window_id
     end.to_slice
   end

@@ -167,6 +167,10 @@ module Minecraft::IO
     NBT::Tag.read_named(self)[1]
   end
 
+  def read_nbt_unamed : Minecraft::NBT::Tag
+    NBT::Tag.read(self)
+  end
+
   def read_angle256_deg : Float32
     read_byte.to_f32 * 360 / 256
   end

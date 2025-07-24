@@ -2,7 +2,12 @@ require "../../models/chat"
 require "../packet"
 
 class Rosegold::Clientbound::ChatMessage < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0x0f_u8
+  include Rosegold::Packets::ProtocolMapping
+
+  # Define protocol-specific packet IDs for System Chat Message
+  packet_ids({
+    772_u32 => 0x72_u8, # MC 1.21.8 - System Chat Message
+  })
 
   property \
     message : Rosegold::Chat,
@@ -21,7 +26,7 @@ class Rosegold::Clientbound::ChatMessage < Rosegold::Clientbound::Packet
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
-      buffer.write @@packet_id
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write message.to_json
       buffer.write position
       buffer.write sender
