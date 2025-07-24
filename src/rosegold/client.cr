@@ -8,6 +8,9 @@ require "./events/*"
 require "./world/*"
 require "./chat_manager"
 
+# Forward declaration to avoid circular dependency
+class Rosegold::ProxyServer; end
+
 # Holds world state (player, chunks, etc.)
 # and control state (physics, open window, etc.).
 # Can be reconnected.
@@ -22,6 +25,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   property connection : Connection::Client?
   property detected_protocol_version : UInt32?
   property current_protocol_state : ProtocolState = ProtocolState::HANDSHAKING
+  property proxy_server : ProxyServer?
 
   property \
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
@@ -217,6 +221,9 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
     Log.info { "Connected to #{host}:#{port}" }
 
+    # Set up proxy packet forwarding if proxy is attached
+    setup_proxy_forwarding
+
     send_packet! Serverbound::Handshake.new protocol_version, host, port, 2
     set_protocol_state(ProtocolState::LOGIN)
 
@@ -332,6 +339,28 @@ class Rosegold::Client < Rosegold::EventEmitter
     emit_event packet
 
     packet
+  end
+
+  # Attach a proxy server to this client
+  def attach_proxy(proxy : ProxyServer)
+    @proxy_server = proxy
+    proxy.attach_bot(self)
+    setup_proxy_forwarding if connected?
+  end
+
+  # Detach the proxy server
+  def detach_proxy
+    @proxy_server.try(&.detach_bot)
+    @proxy_server = nil
+  end
+
+  private def setup_proxy_forwarding
+    return unless proxy_server = @proxy_server
+    
+    # Forward all packets received from server to proxy clients
+    on Event::RawPacket do |event|
+      proxy_server.forward_to_clients(event.bytes)
+    end
   end
 
   class NotConnected < Exception; end
