@@ -88,18 +88,14 @@ Spectator.describe Rosegold::Clientbound::LoginSuccess do
   end
 
   describe "protocol support" do
-    it "supports all defined protocols" do
-      expect(Rosegold::Clientbound::LoginSuccess.supports_protocol?(758_u32)).to be_true
-      expect(Rosegold::Clientbound::LoginSuccess.supports_protocol?(767_u32)).to be_true
-      expect(Rosegold::Clientbound::LoginSuccess.supports_protocol?(771_u32)).to be_true
+    it "supports protocol 772 only" do
+      expect(Rosegold::Clientbound::LoginSuccess.supports_protocol?(772_u32)).to be_true
       expect(Rosegold::Clientbound::LoginSuccess.supports_protocol?(999_u32)).to be_false
     end
 
     it "returns correct supported protocols" do
       protocols = Rosegold::Clientbound::LoginSuccess.supported_protocols
-      expect(protocols).to contain(758_u32)
-      expect(protocols).to contain(767_u32)
-      expect(protocols).to contain(771_u32)
+      expect(protocols).to contain(772_u32)
     end
   end
 end
