@@ -79,7 +79,7 @@ class Rosegold::Physics
   # Set the movement target location and wait until it is achieved.
   # If there is already a movement target, it is cancelled, and replaced with this new target.
   # Set `target=nil` to stop moving and cancel any current movement.
-  def move(target : Vec3d?)
+  def move(target : Vec3d?, timeout : Time::Span = 30.seconds)
     if paused?
       Log.warn { "Ignoring movement to #{target} because physics is paused" }
       return
@@ -106,12 +106,18 @@ class Rosegold::Physics
       @movement_action.try &.fail "Replaced by movement to #{target}"
       @movement_action = action
     end
-    action.join
+    action.join(timeout)
   end
 
   # Set the look target and wait until it is achieved.
   # If there is already a look target, it is cancelled, and replaced with this new target.
   def look=(target : Look)
+    look_with_timeout(target, 5.seconds)
+  end
+
+  # Set the look target and wait until it is achieved with timeout.
+  # If there is already a look target, it is cancelled, and replaced with this new target.
+  def look_with_timeout(target : Look, timeout : Time::Span)
     if paused?
       Log.warn { "Ignoring look of #{target} because physics is paused" }
       return
@@ -122,7 +128,7 @@ class Rosegold::Physics
       @look_action.try &.fail "Replaced by look of #{target}"
       @look_action = action
     end
-    action.join
+    action.join(timeout)
   end
 
   def sneak(sneaking = true)

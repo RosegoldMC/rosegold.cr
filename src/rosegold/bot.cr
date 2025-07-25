@@ -86,14 +86,24 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   # Waits for the new look to be sent to the server.
+  def look_with_timeout(look : Look, timeout : Time::Span)
+    client.physics.look_with_timeout(look, timeout)
+  end
+
+  # Waits for the new look to be sent to the server.
   def look=(vec : Vec3d)
     look_at vec
   end
 
+  # Waits for the new look to be sent to the server.
+  def look_with_timeout(vec : Vec3d, timeout : Time::Span)
+    look_at_with_timeout vec, timeout
+  end
+
   # Computes the new look from the current look.
   # Waits for the new look to be sent to the server.
-  def look(&block : Look -> Look)
-    client.physics.look = block.call look
+  def look(timeout : Time::Span = 5.seconds, &block : Look -> Look)
+    client.physics.look_with_timeout(block.call(look), timeout)
   end
 
   # Sets the yaw of the look
@@ -102,10 +112,22 @@ class Rosegold::Bot < Rosegold::EventEmitter
     self.look = look.with_yaw yaw
   end
 
+  # Sets the yaw of the look
+  # Waits for the new look to be sent to the server
+  def set_yaw(yaw : Float64, timeout : Time::Span = 5.seconds)
+    look_with_timeout(look.with_yaw(yaw), timeout)
+  end
+
   # Sets the pitch of the look
   # Waits for the new look to be sent to the server
   def pitch=(pitch : Float64)
     self.look = look.with_pitch pitch
+  end
+
+  # Sets the pitch of the look
+  # Waits for the new look to be sent to the server
+  def set_pitch(pitch : Float64, timeout : Time::Span = 5.seconds)
+    look_with_timeout(look.with_pitch(pitch), timeout)
   end
 
   def yaw
@@ -121,33 +143,44 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.physics.look = Look.from_vec location - eyes
   end
 
+  # Waits for the new look to be sent to the server.
+  def look_at_with_timeout(location : Vec3d, timeout : Time::Span)
+    client.physics.look_with_timeout(Look.from_vec(location - eyes), timeout)
+  end
+
   # Ignores y coordinate; useful for looking straight while moving.
   # Waits for the new look to be sent to the server.
   def look_at_horizontal(location : Vec3d)
     look_at location.with_y eyes.y
   end
 
-  # Moves straight towards `location`.
-  # Waits for arrival.
-  def move_to(location : Vec3d)
-    client.physics.move location
+  # Ignores y coordinate; useful for looking straight while moving.
+  # Waits for the new look to be sent to the server.
+  def look_at_horizontal_with_timeout(location : Vec3d, timeout : Time::Span)
+    look_at_with_timeout location.with_y(eyes.y), timeout
   end
 
   # Moves straight towards `location`.
   # Waits for arrival.
-  def move_to(x : Float, z : Float)
-    client.physics.move Vec3d.new x, feet.y, z
+  def move_to(location : Vec3d, timeout : Time::Span = 30.seconds)
+    client.physics.move location, timeout
   end
 
-  def move_to(x : Int, y : Int)
-    move_to x + 0.5, y + 0.5
+  # Moves straight towards `location`.
+  # Waits for arrival.
+  def move_to(x : Float, z : Float, timeout : Time::Span = 30.seconds)
+    client.physics.move Vec3d.new(x, feet.y, z), timeout
+  end
+
+  def move_to(x : Int, y : Int, timeout : Time::Span = 30.seconds)
+    move_to x + 0.5, y + 0.5, timeout
   end
 
   # Computes the destination location from the current feet location.
   # Moves straight towards the destination.
   # Waits for arrival.
-  def move_to(&block : Vec3d -> Vec3d)
-    client.physics.move block.call feet
+  def move_to(timeout : Time::Span = 30.seconds, &block : Vec3d -> Vec3d)
+    client.physics.move block.call(feet), timeout
   end
 
   # Stop moving towards the target specified in #move_to
@@ -253,7 +286,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
     use_hand block + face
   end
 
-  def eat!
+  def eat!(timeout : Time::Span = 30.seconds)
     return if food >= 15 && full_health?
     return if food >= 18 # above healing threshold
 
@@ -266,8 +299,13 @@ class Rosegold::Bot < Rosegold::EventEmitter
       raise "Bot food not found"
 
     start_using_hand
+    start_time = Time.utc
 
     until food >= 18
+      if (Time.utc - start_time) > timeout
+        stop_using_hand
+        raise "Eating timed out after #{timeout}"
+      end
       wait_ticks 33
     end
 
