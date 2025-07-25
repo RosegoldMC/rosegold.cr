@@ -21,4 +21,14 @@ class Rosegold::Action(T)
     result = channel.receive
     raise result if result
   end
+
+  # Throw error if it failed, with timeout support
+  def join(timeout : Time::Span)
+    select
+    when result = channel.receive
+      raise result if result
+    when timeout(timeout)
+      raise "Action timed out after #{timeout}"
+    end
+  end
 end
