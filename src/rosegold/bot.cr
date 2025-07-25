@@ -102,7 +102,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Computes the new look from the current look.
   # Waits for the new look to be sent to the server.
-  def look(timeout : Time::Span = 5.seconds, &block : Look -> Look)
+  def look(&block : Look -> Look, timeout : Time::Span = 5.seconds)
     client.physics.look_with_timeout(block.call(look), timeout)
   end
 
@@ -179,7 +179,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Computes the destination location from the current feet location.
   # Moves straight towards the destination.
   # Waits for arrival.
-  def move_to(timeout : Time::Span = 30.seconds, &block : Vec3d -> Vec3d)
+  def move_to(&block : Vec3d -> Vec3d, timeout : Time::Span = 30.seconds)
     client.physics.move block.call(feet), timeout
   end
 
@@ -299,10 +299,10 @@ class Rosegold::Bot < Rosegold::EventEmitter
       raise "Bot food not found"
 
     start_using_hand
-    start_time = Time.utc
+    start_time = Time.monotonic
 
     until food >= 18
-      if (Time.utc - start_time) > timeout
+      if (Time.monotonic - start_time) > timeout
         stop_using_hand
         raise "Eating timed out after #{timeout}"
       end
