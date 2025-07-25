@@ -21,7 +21,7 @@ class Rosegold::Physics
   JUMP_FORCE = 0.42 # m/t; applied to velocity when starting a jump
 
   VERY_CLOSE = 0.00001 # consider arrived at target if squared distance is closer than this
-  
+
   # Maximum fall distance when sneaking before preventing movement (5/8 of a block)
   SNEAK_CLIFF_PROTECTION_DISTANCE = 0.625
 
@@ -279,7 +279,7 @@ class Rosegold::Physics
         # take one step of the length of movement_speed
         move_horiz_vec *= movement_speed / move_horiz_vec_len
       end # else: get there in one step
-      
+
       # Apply cliff protection when sneaking
       if player.sneaking? && move_horiz_vec.length > VERY_CLOSE
         destination = player.feet + move_horiz_vec
@@ -317,20 +317,20 @@ class Rosegold::Physics
   # protection threshold (5/8 blocks).
   private def would_fall_off_cliff?(destination : Vec3d) : Bool
     return false unless player.sneaking?
-    
+
     current_y = player.feet.y
     max_fall_y = current_y - SNEAK_CLIFF_PROTECTION_DISTANCE
-    
+
     # Check if there's solid ground below the destination within the protection range
     # We'll check downward from current level to max fall distance
     test_pos = destination.with_y(current_y)
-    
+
     # Use the same collision detection logic as movement to check for solid blocks
     # Create a small downward movement to test if we'd hit something solid
     downward_movement = Vec3d.new(0, max_fall_y - current_y, 0) # negative movement downward
-    
+
     obstacles = Physics.get_grown_obstacles(test_pos, downward_movement, Player::DEFAULT_AABB, dimension)
-    
+
     # If there are obstacles in the path downward, we have solid ground
     # If no obstacles, we would fall too far
     obstacles.any? { |obstacle| obstacle.max.y >= max_fall_y }
@@ -341,15 +341,15 @@ class Rosegold::Physics
   private def has_solid_ground_at?(position : Vec3d) : Bool
     # Check the block directly below the feet position
     check_pos = position.down(0.1).block
-    
+
     # Get the block state at this position
     block_state = dimension.block_state(check_pos)
     return false unless block_state # No block data (unloaded chunk or void)
-    
-    # Get the collision shapes for this block state  
+
+    # Get the collision shapes for this block state
     collision_shapes = MCData::DEFAULT.block_state_collision_shapes[block_state]
     return false if collision_shapes.empty? # No collision (like air)
-    
+
     # If there are collision shapes, this block can provide solid ground
     true
   end

@@ -15,21 +15,21 @@ Spectator.describe "Rosegold::Physics sneak cliff protection" do
     it "uses correct sneak speed when sneaking" do
       client.player.sneaking = true
       client.player.sprinting = false
-      
+
       expect(physics.movement_speed).to eq(Rosegold::Physics::SNEAK_SPEED)
     end
 
     it "uses correct walk speed when not sneaking" do
       client.player.sneaking = false
       client.player.sprinting = false
-      
+
       expect(physics.movement_speed).to eq(Rosegold::Physics::WALK_SPEED)
     end
 
     it "uses correct sprint speed when sprinting" do
       client.player.sneaking = false
       client.player.sprinting = true
-      
+
       expect(physics.movement_speed).to eq(Rosegold::Physics::SPRINT_SPEED)
     end
   end
@@ -40,17 +40,17 @@ Spectator.describe "Rosegold::Physics sneak cliff protection" do
 
     it "can enable sneaking" do
       expect(client.player.sneaking?).to be_false
-      
+
       # Mock the client.send_packet! method to avoid sending actual packets
       client.player.sneaking = true
-      
+
       expect(client.player.sneaking?).to be_true
     end
 
     it "can disable sneaking" do
       client.player.sneaking = true
       expect(client.player.sneaking?).to be_true
-      
+
       client.player.sneaking = false
       expect(client.player.sneaking?).to be_false
     end
