@@ -35,12 +35,23 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   def initialize(@entity_id, @hardcore, @dimension_names, @max_players, @view_distance, @simulation_distance, @reduced_debug_info, @enable_respawn_screen, @do_limited_crafting, @dimension_type, @dimension_name, @hashed_seed, @gamemode, @previous_gamemode, @is_debug, @is_flat, @has_death_location, @death_dimension_name, @death_location, @portal_cooldown, @sea_level, @enforces_secure_chat); end
 
   def self.read(io)
+    # Debug: log packet parsing attempt
+    Log.debug { "Attempting to parse JoinGame packet, available bytes: #{io.size - io.pos}" }
+    
     entity_id = io.read_int
+    Log.debug { "Read entity_id: #{entity_id}, remaining: #{io.size - io.pos}" }
+    
     hardcore = io.read_bool
+    Log.debug { "Read hardcore: #{hardcore}, remaining: #{io.size - io.pos}" }
 
     dim_count = io.read_var_int
-    dimension_names = Array(String).new(dim_count) {
-      io.read_var_string
+    Log.debug { "Read dim_count: #{dim_count}, remaining: #{io.size - io.pos}" }
+    
+    dimension_names = Array(String).new(dim_count) { |i|
+      Log.debug { "Reading dimension #{i}, remaining: #{io.size - io.pos}" }
+      name = io.read_var_string
+      Log.debug { "Read dimension #{i}: #{name}, remaining: #{io.size - io.pos}" }
+      name
     }
 
     max_players = io.read_var_int
@@ -98,7 +109,7 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write entity_id
+      buffer.write_full entity_id
       buffer.write hardcore?
       buffer.write dimension_names.size
       dimension_names.each { |name| buffer.write name }

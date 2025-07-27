@@ -10,11 +10,14 @@ class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
 
   class_getter state = ProtocolState::CONFIGURATION
 
+  # Type alias for registry entries
+  alias RegistryEntry = NamedTuple(id: String, data: Slice(UInt8) | Nil)
+
   property \
     registry_id : String,
-    entries : Array(NamedTuple(id: String, data: Bytes?))
+    entries : Array(RegistryEntry)
 
-  def initialize(@registry_id, @entries = [] of NamedTuple(id: String, data: Bytes?))
+  def initialize(@registry_id : String, @entries : Array(RegistryEntry))
   end
 
   def self.read(packet)
@@ -22,7 +25,7 @@ class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
 
     # Read entries array
     entry_count = packet.read_var_int
-    entries = Array(NamedTuple(id: String, data: Bytes?)).new(entry_count) do
+    entries = Array(RegistryEntry).new(entry_count) do
       entry_id = packet.read_var_string
       has_data = packet.read_bool
       data = has_data ? packet.read_var_bytes : nil

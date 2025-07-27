@@ -9,9 +9,12 @@ MINECRAFT_SERVER_PORT = 25565
 PROXY_HOST = "127.0.0.1"
 PROXY_PORT = 25566
 
-puts "🤖 Starting Rosegold Proxy Example"
+puts "🤖 Rosegold Proxy - Testing Mode Example"
+puts "⚠️  This example demonstrates proxy connection handling without a real server"
+puts ""
 
 # Create the bot client (offline mode for testing)
+# NOTE: This bot is NOT connected to a real server in this example
 bot = Rosegold::Client.new(
   MINECRAFT_SERVER_HOST, 
   MINECRAFT_SERVER_PORT,
@@ -31,32 +34,26 @@ bot.attach_proxy(proxy)
 proxy.start
 
 puts "✅ Proxy server started on #{PROXY_HOST}:#{PROXY_PORT}"
-puts "📋 Instructions:"
-puts "   1. Connect your Minecraft client to #{PROXY_HOST}:#{PROXY_PORT}"
-puts "   2. Use /rosegold help to see available commands"
-puts "   3. Use /rosegold lock to let the bot take control"
-puts "   4. Use /rosegold unlock to take control yourself"
 puts ""
+puts "📋 Test Instructions:"
+puts "   1. Connect your Minecraft client to #{PROXY_HOST}:#{PROXY_PORT}"
+puts "   2. Client will complete login process"  
+puts "   3. Client will be disconnected with 'No bot server connected' message"
+puts "   4. This demonstrates the proxy connection handling works correctly"
+puts ""
+puts "💡 For real usage with server forwarding, use examples/proxy_with_server.cr"
+puts ""
+puts "⏹️  Press Ctrl+C to stop"
 
-# Connect the bot to the Minecraft server
-puts "🔄 Connecting bot to Minecraft server..."
+# DON'T connect the bot - this is for testing proxy connection handling only
+# In production, you would call bot.connect here
+
+# Keep the proxy running for testing
 begin
-  bot.connect
-  
-  puts "✅ Bot connected to server!"
-  puts "🎮 You can now connect your Minecraft client to the proxy"
-  
-  # Keep the proxy running
   sleep
 rescue e
-  puts "❌ Failed to connect bot to server: #{e}"
-  puts "📝 Make sure the Minecraft server is running and accessible"
-  
-  # Keep proxy running even if bot connection fails
-  # This allows testing the proxy interface
-  puts "🔄 Proxy remains active for testing commands"
-  sleep
+  puts "\n🛑 Stopping proxy server..."
 ensure  
   proxy.stop
-  puts "🛑 Proxy server stopped"
+  puts "✅ Proxy server stopped"
 end

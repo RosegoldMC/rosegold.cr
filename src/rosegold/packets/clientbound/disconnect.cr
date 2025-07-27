@@ -80,10 +80,16 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       if Client.protocol_version >= 767_u32
-        # MC 1.21+ uses text component format
-        buffer.write reason.to_json
+        # MC 1.21+ uses NBT text component format (same as ChatMessage)
+        text_content = reason.text || reason.to_s
+        
+        # Write NBT string tag: tag_type (8) + empty name + string data
+        buffer.write 8_u8  # String tag type
+        buffer.write 0_u16  # Empty name (length 0)
+        buffer.write text_content.bytesize.to_u16  # String length
+        buffer.print text_content  # String value
       else
-        # Older versions use chat format
+        # Older versions use JSON chat format
         buffer.write reason.to_json
       end
     end.to_slice

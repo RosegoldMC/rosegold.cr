@@ -26,6 +26,9 @@ class Rosegold::Client < Rosegold::EventEmitter
   property detected_protocol_version : UInt32?
   property current_protocol_state : ProtocolState = ProtocolState::HANDSHAKING
   property proxy_server : ProxyServer?
+  property recorded_initialization_packets : Array(Bytes) = Array(Bytes).new
+  property recorded_join_game_packet : Bytes? = nil
+  property recorded_configuration_packets : Array(Bytes) = Array(Bytes).new
 
   property \
     online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
@@ -334,6 +337,9 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     Log.trace { "[#{current_protocol_state.name}] DCDE 0x#{raw_packet[0].to_s 16} #{packet}" }
 
+    # Record key initialization packets for proxy clients
+    record_initialization_packet(raw_packet, packet)
+
     packet.callback(self)
 
     emit_event packet
@@ -352,6 +358,103 @@ class Rosegold::Client < Rosegold::EventEmitter
   def detach_proxy
     @proxy_server.try(&.detach_bot)
     @proxy_server = nil
+  end
+
+  # Get recorded initialization packets for proxy clients
+  def get_initialization_packets : Array(Bytes)
+    @recorded_initialization_packets.dup
+  end
+
+  # Get the recorded JoinGame packet from when the bot connected
+  def get_recorded_join_game_packet : Bytes?
+    @recorded_join_game_packet.try(&.dup)
+  end
+
+  # Get recorded configuration packets (registry data, etc.)
+  def get_recorded_configuration_packets : Array(Bytes)
+    @recorded_configuration_packets.dup
+  end
+
+  private def record_initialization_packet(raw_packet : Bytes, packet : Clientbound::Packet)
+    # Only record packets if we have a proxy server attached
+    return unless @proxy_server
+    
+    # Record CONFIGURATION packets separately (registry data, etc.)
+    if @current_protocol_state == ProtocolState::CONFIGURATION
+      case packet
+      when Clientbound::RegistryData
+        Log.debug { "Recording registry data packet for proxy clients" }
+        @recorded_configuration_packets << raw_packet.dup
+      when Clientbound::RawPacket
+        # Record all CONFIGURATION raw packets as they likely contain registry data
+        Log.debug { "Recording CONFIGURATION raw packet 0x#{packet.bytes[0]?.try(&.to_s(16).upcase.rjust(2, '0'))}" }
+        @recorded_configuration_packets << raw_packet.dup
+      end
+      return # Don't process CONFIGURATION packets in the PLAY logic below
+    end
+    
+    # Record key packets that clients need for proper initialization
+    # Only record PLAY-state packets - explicitly filter known non-PLAY packets
+    should_record = case packet
+    when Clientbound::JoinGame
+      # Record JoinGame separately so we can use the bot's actual JoinGame data
+      @recorded_join_game_packet = raw_packet.dup
+      Log.debug { "Recorded JoinGame packet for proxy clients" }
+      false  # Don't include in regular recorded packets
+    when Clientbound::PlayerPositionAndLook, Clientbound::SynchronizePlayerPosition
+      true  # Essential - defines where the player spawns
+    when Clientbound::UpdateHealth
+      true  # Important - sets player health/hunger
+    when Clientbound::ChunkData
+      true  # Important - world chunks for rendering
+    when Clientbound::HeldItemChange
+      true  # Important - which item is selected
+    when Clientbound::RegistryData
+      # RegistryData is sent during CONFIGURATION phase, not PLAY
+      false
+    when Clientbound::SetSlot
+      false # Skip - inventory might be player-specific
+    when Clientbound::WindowItems, Clientbound::SetContainerContent
+      false # Skip - inventory might be player-specific
+    when Clientbound::SpawnPlayer, Clientbound::SpawnLivingEntity
+      false # Skip - entities might be player-specific
+    when Clientbound::PlayerInfo
+      false # Skip - contains player-specific UUIDs and data
+    when Clientbound::ChatMessage, Clientbound::PlayerChatMessage
+      false # Skip - not needed for initialization
+    when Clientbound::RawPacket
+      # For raw packets, be very selective - filter out known non-PLAY packets
+      packet_id = packet.bytes[0]?
+      case packet_id
+      when 0x01 # EncryptionRequest - LOGIN packet with server's public key, never replay!
+        Log.warn { "Filtering out EncryptionRequest packet (0x01) - would break proxy encryption" }
+        false
+      when 0x03 # set_compression - this is a configuration/login packet, not PLAY
+        false
+      when 0x0C # award_stats - contains player-specific statistics
+        false
+      when 0x09 # update_attributes - might be player-specific
+        false  
+      when 0x0A # update_entity_nbt - might be player-specific
+        false
+      else
+        # Only record if we're in PLAY state and during initial spawn phase
+        @current_protocol_state == ProtocolState::PLAY && !spawned?
+      end
+    else
+      # For other known packets, only record if we're in PLAY state and during spawn
+      @current_protocol_state == ProtocolState::PLAY && !spawned?
+    end
+    
+    if should_record
+      Log.debug { "Recording initialization packet: #{packet.class}" }
+      @recorded_initialization_packets << raw_packet.dup
+      
+      # Limit the number of recorded packets to prevent memory issues
+      if @recorded_initialization_packets.size > 1000
+        @recorded_initialization_packets.shift(100)  # Remove oldest 100 packets
+      end
+    end
   end
 
   private def setup_proxy_forwarding
