@@ -51,7 +51,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
         io.read_short,
         chunk_z + (xz & 0xf),
         io.read_var_int,
-        io.read_nbt
+        io.read_nbt_unamed
       )
     end
 
