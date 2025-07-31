@@ -53,7 +53,7 @@ Spectator.describe "Rosegold::Bot chat functionality" do
       received_system_chat = false
 
       # Listen specifically for System Chat Message packets
-      client.on(Rosegold::Clientbound::ChatMessage) do |_|
+      client.on(Rosegold::Clientbound::SystemChatMessage) do |_|
         received_system_chat = true
       end
 
@@ -117,11 +117,11 @@ Spectator.describe "Rosegold::Bot chat functionality" do
       message_received = false
 
       # Monitor for any chat-related packets
-      client.on(Rosegold::Clientbound::ChatMessage) do |packet|
+      client.on(Rosegold::Clientbound::SystemChatMessage) do |packet|
         message_received = true
         # Verify packet structure
         expect(packet.message).to be_a(Rosegold::Chat)
-        expect(packet.sender).to be_a(UUID)
+        expect(packet.overlay?).to be_a(Bool)
       end
 
       Rosegold::Bot.new(client).try do |bot|

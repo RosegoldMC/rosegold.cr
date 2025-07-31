@@ -6,6 +6,7 @@
 ## Development Notes
 - Generally, whenever you want to run integration specs you should add some sort of timeout to the command. Otherwise, you might lock yourself src/minecraft/auth.cr
 - Never ever change packet ID's. If packet ID's need to be changed please tell the user.
+- When a packet fails to decode, you can use the logs to retrieve the packet bytes for the packet to write a unit spec for the packet being decoded properly
 
 ## Server Logs
 - Server logs are located at spec/fixtures/server/logs/latest.log
