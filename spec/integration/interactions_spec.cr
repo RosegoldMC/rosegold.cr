@@ -90,6 +90,59 @@ Spectator.describe "Rosegold::Bot interactions" do
     end
   end
 
+  it "should be able to dig stone with diamond pickaxe (in a reasonable amount of time)" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        # Set up stone block and give diamond pickaxe
+        bot.chat "/fill 8 -60 8 8 -60 8 minecraft:stone"
+        bot.chat "/clear"
+        bot.chat "/give @p minecraft:diamond_pickaxe 1"
+        bot.wait_ticks 5 # Wait for commands to complete
+        bot.chat "/tp 8 -59 8"
+        bot.wait_ticks 5 # Wait for teleport and chunk updates
+
+        # Equip the diamond pickaxe
+        bot.inventory.pick! "diamond_pickaxe"
+        bot.wait_ticks 3
+
+        bot.look &.down
+        bot.wait_ticks 5
+
+        # Record initial state
+        initial_y = bot.feet.y
+        initial_block = client.dimension.block_state(8, -60, 8)
+
+        # Verify we have stone block (state ID should be 1)
+        expect(initial_block).to eq(1)
+
+        # Start digging stone (takes ~2.3 seconds / 46 ticks with diamond pickaxe)
+        bot.start_digging
+
+        # Smart wait: stone takes about 6 ticks to break with diamond pickaxe
+        timeout = 12
+        ticks_waited = 0
+        puts bot.feet.y
+        puts initial_y
+        until bot.feet.y < initial_y - 0.5 || ticks_waited >= timeout
+          bot.wait_tick
+          ticks_waited += 1
+        end
+
+        bot.stop_digging
+
+        # Check that stone block was broken
+        final_block = client.dimension.block_state(12, -60, 12)
+        expect(final_block).to_not eq(initial_block)
+
+        # Check that bot moved down (fell into the space)
+        expect(bot.feet.y).to be_lt(initial_y - 0.3)
+
+        # Verify mining completed within expected timeframe
+        expect(ticks_waited).to be_lt(timeout)
+      end
+    end
+  end
+
   it "should be able to place blocks" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
