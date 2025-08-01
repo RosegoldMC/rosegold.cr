@@ -10,5 +10,11 @@
     "name": "rosegoldtest",
     "level": 4,
     "bypassesPlayerLimit": false
+  },
+  {
+    "uuid": "810bc3ed-7c1a-3dcd-9adc-383cfd922e7f",
+    "name": "grepsedawk",
+    "level": 4,
+    "bypassesPlayerLimit": false
   }
 ]
