@@ -35,8 +35,6 @@ class Rosegold::Block
   end
 
   def best_tool?(slot : Slot)
-    material_tool_multipliers
-    slot.item_id_int.to_s
     material_tool_multipliers.as_h[slot.item_id_int.to_s]? || false
   end
 

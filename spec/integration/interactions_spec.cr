@@ -109,7 +109,6 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.wait_ticks 5
 
         # Record initial state
-        initial_y = bot.feet.y
         initial_block = client.dimension.block_state(8, -60, 8)
 
         # Verify we have stone block (state ID should be 1)
@@ -136,6 +135,57 @@ Spectator.describe "Rosegold::Bot interactions" do
         expect(final_block).to_not eq(initial_block)
 
         # Verify mining completed within expected timeframe (should be ~6 ticks)
+        expect(ticks_waited).to be_lt(timeout)
+      end
+    end
+  end
+
+  it "should be able to dig obsidian with diamond pickaxe and efficiency" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        # Set up obsidian block and give diamond pickaxe with efficiency
+        bot.chat "/fill 9 -60 9 9 -60 9 minecraft:obsidian"
+        bot.chat "/clear"
+        bot.chat "/give @p minecraft:diamond_pickaxe[enchantments={\"minecraft:efficiency\":5}] 1"
+        bot.wait_ticks 5 # Wait for commands to complete
+        bot.chat "/tp 9 -59 9"
+        bot.wait_ticks 5 # Wait for teleport and chunk updates
+
+        # Equip the efficiency 5 diamond pickaxe
+        bot.inventory.pick! "diamond_pickaxe"
+        bot.wait_ticks 3
+
+        bot.look &.down
+        bot.wait_ticks 5
+
+        # Record initial state
+        initial_block = client.dimension.block_state(9, -60, 9)
+
+        # Verify we have obsidian block (state ID should be 2400)
+        expect(initial_block).to eq(2400)
+
+        # Start digging obsidian
+        # With Efficiency 5, obsidian should break in moderate time
+        bot.start_digging
+
+        # obsidian takes 45 ticks to mine with diamond pickaxe and efficiency 5
+        timeout = 50
+        ticks_waited = 0
+        current_block = initial_block
+
+        until current_block != initial_block || ticks_waited >= timeout
+          bot.wait_tick
+          ticks_waited += 1
+          current_block = client.dimension.block_state(9, -60, 9)
+        end
+
+        bot.stop_digging
+
+        # Check that obsidian block was broken
+        final_block = client.dimension.block_state(9, -60, 9)
+        expect(final_block).to_not eq(initial_block)
+
+        # Verify mining completed within reasonable timeframe
         expect(ticks_waited).to be_lt(timeout)
       end
     end
