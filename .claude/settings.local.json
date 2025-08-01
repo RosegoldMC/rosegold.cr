@@ -22,7 +22,8 @@
       "Bash(timeout 120s crystal spec *)",
       "Bash(ls:*)",
       "Bash(timeout:*)",
-      "Bash(bin/ameba:*)"
+      "Bash(bin/ameba:*)",
+      "Bash(crystal tool format:*)"
     ],
     "deny": []
   }
