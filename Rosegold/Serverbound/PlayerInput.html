@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Clientbound::FinishConfiguration - rosegold main</title>
+  <title>Rosegold::Serverbound::PlayerInput - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -327,7 +327,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
@@ -427,7 +427,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/FinishConfiguration" data-name="rosegold::clientbound::finishconfiguration">
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/FinishConfiguration" data-name="rosegold::clientbound::finishconfiguration">
       <a href="../../Rosegold/Clientbound/FinishConfiguration.html">FinishConfiguration</a>
       
     </li>
@@ -1057,7 +1057,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
+  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
       <a href="../../Rosegold/Serverbound.html">Serverbound</a>
       
         <ul>
@@ -1257,7 +1257,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Serverbound/PlayerInput" data-name="rosegold::serverbound::playerinput">
+  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound/PlayerInput" data-name="rosegold::serverbound::playerinput">
       <a href="../../Rosegold/Serverbound/PlayerInput.html">PlayerInput</a>
       
         <ul>
@@ -1403,12 +1403,12 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>Clientbound::<wbr>FinishConfiguration
+  </span> Rosegold::<wbr>Serverbound::<wbr>PlayerInput
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/FinishConfiguration.html">Rosegold::Clientbound::FinishConfiguration</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Serverbound/PlayerInput.html">Rosegold::Serverbound::PlayerInput</a></li><li class="superclass"><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -1452,8 +1452,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L3" target="_blank">
-        rosegold/packets/clientbound/finish_configuration.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L3" target="_blank">
+        rosegold/packets/serverbound/player_input.cr
       </a>
     
     <br/>
@@ -1474,7 +1474,7 @@
   <dl>
     
       <dt class="entry-const" id="PROTOCOL_PACKET_IDS">
-        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">3_u8</span>}</code>
+        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">42_u8</span>}</code>
       </dt>
       
       <dd class="entry-const-doc">
@@ -1498,7 +1498,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
+        <a href="#new%28flags%3AFlag%3DFlag%3A%3ANone%29-class-method" class="signature"><strong>.new</strong>(flags : Flag = <span class="t">Flag</span><span class="t">::</span><span class="t">None</span>)</a>
         
       </li>
     
@@ -1545,16 +1545,6 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#state-class-method" class="signature"><strong>.state</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#supported_protocols%3AArray%28UInt32%29-class-method" class="signature"><strong>.supported_protocols</strong> : Array(UInt32)</a>
         
           <div class="summary"><p>Helper method to get all supported protocols</p></div>
@@ -1585,7 +1575,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
+        <a href="#flags%3AFlag-instance-method" class="signature"><strong>#flags</strong> : Flag</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#flags%3D%28flags%3AFlag%29-instance-method" class="signature"><strong>#flags=</strong>(flags : Flag)</a>
         
       </li>
     
@@ -1630,15 +1625,15 @@
 
       
 
-  <h3>Class methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
+  <h3>Class methods inherited from class <code><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></code></h3>
   
   
-    <a href="../../Rosegold/Clientbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
+    <a href="../../Rosegold/Serverbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
       <span>new_raw(bytes)</span>
     new_raw</a>, 
     
   
-    <a href="../../Rosegold/Clientbound/Packet.html#state-class-method" class="tooltip">
+    <a href="../../Rosegold/Serverbound/Packet.html#state-class-method" class="tooltip">
       <span>state</span>
     state</a>
     
@@ -1732,18 +1727,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new-class-method">
+    <div class="entry-detail" id="new(flags:Flag=Flag::None)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>
+        def self.<strong>new</strong>(flags : <a href="../../Rosegold/Serverbound/PlayerInput/Flag.html">Flag</a> = <span class="t">Flag</span><span class="t">::</span><span class="t">None</span>)
 
-        <a class="method-permalink" href="#new-class-method">#</a>
+        <a class="method-permalink" href="#new%28flags%3AFlag%3DFlag%3A%3ANone%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1776,7 +1771,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1797,7 +1792,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1838,39 +1833,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L7" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read(packet)-class-method">
-      <div class="signature">
-        
-        def self.<strong>read</strong>(packet)
-
-        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L15" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="state-class-method">
-      <div class="signature">
-        
-        def self.<strong>state</strong>
-
-        <a class="method-permalink" href="#state-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1891,7 +1854,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1912,7 +1875,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1931,18 +1894,34 @@ Use the first protocol's packet ID for registration compatibility</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="callback(client)-instance-method">
+    <div class="entry-detail" id="flags:Flag-instance-method">
       <div class="signature">
         
-        def <strong>callback</strong>(client)
+        def <strong>flags</strong> : <a href="../../Rosegold/Serverbound/PlayerInput/Flag.html">Flag</a>
 
-        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
+        <a class="method-permalink" href="#flags%3AFlag-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L23" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="flags=(flags:Flag)-instance-method">
+      <div class="signature">
+        
+        def <strong>flags=</strong>(flags : <a href="../../Rosegold/Serverbound/PlayerInput/Flag.html">Flag</a>)
+
+        <a class="method-permalink" href="#flags%3D%28flags%3AFlag%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1958,7 +1937,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/clientbound/finish_configuration.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/c56668b3e84ef5db6b16f6d54717a4f712cc1ba8/src/rosegold/packets/serverbound/player_input.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
