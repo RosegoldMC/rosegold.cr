@@ -31,6 +31,7 @@ class Rosegold::Physics
   property? jump_queued : Bool = false
   private getter movement_action : Action(Vec3d)?
   private getter look_action : Action(Look)?
+  private property player_input_flags : Serverbound::PlayerInput::Flag = Serverbound::PlayerInput::Flag::None
   private getter action_mutex : Mutex = Mutex.new
 
   # Movement packet rate limiting
@@ -128,13 +129,17 @@ class Rosegold::Physics
   def sneak(sneaking = true)
     # send nothing if already in desired state
     return if player.sneaking? == sneaking
+
     if sneaking
       # can't sprint while sneaking
       sprint false
-      client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StartSneaking
+      @player_input_flags |= Serverbound::PlayerInput::Flag::Sneak
     else
-      client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StopSneaking
+      @player_input_flags &= ~Serverbound::PlayerInput::Flag::Sneak
     end
+
+    # Send updated player input
+    client.send_packet! Serverbound::PlayerInput.new(@player_input_flags)
     player.sneaking = sneaking
   end
 
@@ -161,6 +166,12 @@ class Rosegold::Physics
     client.player
   end
 
+  private def current_player_aabb : AABBf
+    # TODO crawling
+    return Player::SNEAKING_AABB if player.sneaking?
+    Player::DEFAULT_AABB
+  end
+
   private def dimension
     client.dimension
   end
@@ -172,7 +183,7 @@ class Rosegold::Physics
     input_velocity = velocity_for_inputs
 
     movement, next_velocity = Physics.predict_movement_collision(
-      player.feet, input_velocity, Player::DEFAULT_AABB, dimension)
+      player.feet, input_velocity, current_player_aabb, dimension)
 
     look_action = action_mutex.synchronize do
       action = @look_action
