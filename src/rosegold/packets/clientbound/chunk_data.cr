@@ -1,5 +1,4 @@
 require "../packet"
-require "../../world/light_data"
 require "../../world/heightmap"
 
 class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
@@ -15,7 +14,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     heightmaps : Array(Heightmap),
     data : Bytes,
     block_entities : Array(Chunk::BlockEntity),
-    light_data : LightData
+    light_data : Bytes
 
   def initialize(@chunk_x, @chunk_z, @heightmaps, @data, @block_entities, @light_data); end
 
@@ -56,7 +55,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     end
 
     # Read Light Data
-    light_data = LightData.read(io)
+    light_data = io.getb_to_end
 
     self.new(chunk_x, chunk_z, heightmaps, data, block_entities, light_data)
   end
@@ -96,7 +95,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     # Convert heightmaps back to single NBT structure for chunk
     # TODO: Properly convert array of heightmaps to NBT format
     chunk.heightmaps = Minecraft::NBT::CompoundTag.new
-    chunk.light_data = light_data.to_bytes
+    chunk.light_data = light_data
     client.dimension.load_chunk chunk
   end
 
