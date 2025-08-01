@@ -131,7 +131,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.stop_digging
 
         # Check that stone block was broken
-        final_block = client.dimension.block_state(12, -60, 12)
+        final_block = client.dimension.block_state(8, -60, 8)
         expect(final_block).to_not eq(initial_block)
 
         # Check that bot moved down (fell into the space)
