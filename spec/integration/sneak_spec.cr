@@ -148,14 +148,9 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         bot.chat "/tp 1 -60 1"
         bot.wait_tick
 
-        # Enable verbose logging to verify packets are sent
-        original_log_level = Log.level
-        Log.level = Log::Severity::Trace
-        
-        begin
-          # Test that sneaking triggers the expected packet sends
-          # We verify this by testing the effects rather than just internal state
-          expect(bot.sneaking?).to be_false
+        # Test that sneaking triggers the expected packet sends
+        # We verify this by testing the effects rather than just internal state
+        expect(bot.sneaking?).to be_false
           
           # This should trigger sending EntityAction StartSneaking packet
           bot.sneak
@@ -175,9 +170,6 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
           bot.wait_tick
           expect(bot.sneaking?).to be_false
           
-        ensure
-          Log.level = original_log_level
-        end
       end
     end
   end
@@ -243,7 +235,7 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         
         # Move bot to edge of platform while not sneaking
         initial_pos = bot.feet
-        bot.move Vec3d.new(2.9, -57, 1.5)  # Move close to edge
+        bot.move_to Rosegold::Vec3d.new(2.9, -57, 1.5)  # Move close to edge
         edge_pos = bot.feet
         
         # Verify bot moved to edge position
@@ -255,8 +247,8 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         expect(bot.sneaking?).to be_true
         
         # Try to move off the platform - server should prevent this due to sneak edge protection
-        attempted_off_edge_pos = Vec3d.new(3.2, -57, 1.5)  # Beyond the platform edge
-        bot.move attempted_off_edge_pos
+        attempted_off_edge_pos = Rosegold::Vec3d.new(3.2, -57, 1.5)  # Beyond the platform edge
+        bot.move_to attempted_off_edge_pos
         
         # Check final position - should NOT have moved off the edge due to sneak protection
         final_sneak_pos = bot.feet
@@ -271,7 +263,7 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         expect(bot.sneaking?).to be_false
         
         # Try to move off the platform again - should work now
-        bot.move attempted_off_edge_pos
+        bot.move_to attempted_off_edge_pos
         final_unsneak_pos = bot.feet
         
         # Without sneaking, the bot should be able to move off the platform
@@ -316,8 +308,8 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         
         # Try to move under the low stone ceiling (1.5 block clearance)
         # Player height when standing is ~1.8 blocks, so this should not work well
-        target_under_stone = Vec3d.new(12.0, -58.5, 2.0)  # Under the stone ceiling
-        bot.move target_under_stone
+        target_under_stone = Rosegold::Vec3d.new(12.0, -58.5, 2.0)  # Under the stone ceiling
+        bot.move_to target_under_stone
         
         # Bot should have difficulty moving under the stone ceiling while standing
         standing_pos = bot.feet
@@ -328,7 +320,7 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         expect(bot.sneaking?).to be_true
         
         # Player height when sneaking is ~1.5 blocks, so this should fit under stone ceiling
-        bot.move target_under_stone
+        bot.move_to target_under_stone
         sneaking_pos = bot.feet
         
         # While sneaking, bot should be able to move closer to or reach the target
@@ -336,13 +328,13 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         
         # Test 3: Test edge protection while under the low ceiling
         # Move to edge of slab platform while sneaking under stone ceiling
-        edge_target = Vec3d.new(13.4, -58.5, 2.0)  # Near edge of slab, under stone
-        bot.move edge_target
+        edge_target = Rosegold::Vec3d.new(13.4, -58.5, 2.0)  # Near edge of slab, under stone
+        bot.move_to edge_target
         edge_pos = bot.feet
         
         # Attempt to move off the slab platform - should be prevented by sneak edge protection
-        attempted_off_slab_pos = Vec3d.new(13.8, -58.5, 2.0)  # Beyond slab edge
-        bot.move attempted_off_slab_pos
+        attempted_off_slab_pos = Rosegold::Vec3d.new(13.8, -58.5, 2.0)  # Beyond slab edge
+        bot.move_to attempted_off_slab_pos
         
         sneak_final_pos = bot.feet
         
@@ -352,8 +344,8 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         
         # Test 4: Verify movement is restricted by both ceiling and edge protection
         # Try to move to various positions that would violate either constraint
-        bot.move Vec3d.new(13.4, -58.5, 3.4)  # Near another edge under ceiling
-        bot.move Vec3d.new(13.8, -58.5, 3.8)  # Try to move off different edge
+        bot.move_to Rosegold::Vec3d.new(13.4, -58.5, 3.4)  # Near another edge under ceiling
+        bot.move_to Rosegold::Vec3d.new(13.8, -58.5, 3.8)  # Try to move off different edge
         
         constrained_pos = bot.feet
         
@@ -368,7 +360,7 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         
         # Without sneaking, movement under the low ceiling should be more restricted
         # Try to move to a new position under the ceiling
-        bot.move Vec3d.new(12.5, -58.5, 2.5)
+        bot.move_to Rosegold::Vec3d.new(12.5, -58.5, 2.5)
         unsneak_pos = bot.feet
         
         # Movement should be more limited without sneaking due to ceiling height
