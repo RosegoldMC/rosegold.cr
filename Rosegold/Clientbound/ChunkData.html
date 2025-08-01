@@ -862,11 +862,6 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/LightData" data-name="rosegold::lightdata">
-      <a href="../../Rosegold/LightData.html">LightData</a>
-      
-    </li>
-  
   <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
       <a href="../../Rosegold/Look.html">Look</a>
       
@@ -1407,7 +1402,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L5" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L4" target="_blank">
         rosegold/packets/clientbound/chunk_data.cr
       </a>
     
@@ -1453,7 +1448,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AArray%28Rosegold%3A%3AHeightmap%29%2Cdata%3ASlice%28UInt8%29%2Cblock_entities%3AArray%28Rosegold%3A%3AChunk%3A%3ABlockEntity%29%2Clight_data%3ARosegold%3A%3ALightData%29-class-method" class="signature"><strong>.new</strong>(chunk_x : Int32, chunk_z : Int32, heightmaps : Array(Rosegold::Heightmap), data : Slice(UInt8), block_entities : Array(Rosegold::Chunk::BlockEntity), light_data : Rosegold::LightData)</a>
+        <a href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AArray%28Rosegold%3A%3AHeightmap%29%2Cdata%3ASlice%28UInt8%29%2Cblock_entities%3AArray%28Rosegold%3A%3AChunk%3A%3ABlockEntity%29%2Clight_data%3ASlice%28UInt8%29%29-class-method" class="signature"><strong>.new</strong>(chunk_x : Int32, chunk_z : Int32, heightmaps : Array(Rosegold::Heightmap), data : Slice(UInt8), block_entities : Array(Rosegold::Chunk::BlockEntity), light_data : Slice(UInt8))</a>
         
       </li>
     
@@ -1600,12 +1595,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#light_data%3ALightData-instance-method" class="signature"><strong>#light_data</strong> : LightData</a>
+        <a href="#light_data%3ABytes-instance-method" class="signature"><strong>#light_data</strong> : Bytes</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#light_data%3D%28light_data%3ALightData%29-instance-method" class="signature"><strong>#light_data=</strong>(light_data : LightData)</a>
+        <a href="#light_data%3D%28light_data%3ABytes%29-instance-method" class="signature"><strong>#light_data=</strong>(light_data : Bytes)</a>
         
       </li>
     
@@ -1752,18 +1747,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(chunk_x:Int32,chunk_z:Int32,heightmaps:Array(Rosegold::Heightmap),data:Slice(UInt8),block_entities:Array(Rosegold::Chunk::BlockEntity),light_data:Rosegold::LightData)-class-method">
+    <div class="entry-detail" id="new(chunk_x:Int32,chunk_z:Int32,heightmaps:Array(Rosegold::Heightmap),data:Slice(UInt8),block_entities:Array(Rosegold::Chunk::BlockEntity),light_data:Slice(UInt8))-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(chunk_x : <a href="../../Int32.html">Int32</a>, chunk_z : <a href="../../Int32.html">Int32</a>, heightmaps : Array(<a href="../../Rosegold/Heightmap.html">Rosegold::Heightmap</a>), data : Slice(UInt8), block_entities : Array(<a href="../../Rosegold/Chunk/BlockEntity.html">Rosegold::Chunk::BlockEntity</a>), light_data : <a href="../../Rosegold/LightData.html">Rosegold::LightData</a>)
+        def self.<strong>new</strong>(chunk_x : <a href="../../Int32.html">Int32</a>, chunk_z : <a href="../../Int32.html">Int32</a>, heightmaps : Array(<a href="../../Rosegold/Heightmap.html">Rosegold::Heightmap</a>), data : Slice(UInt8), block_entities : Array(<a href="../../Rosegold/Chunk/BlockEntity.html">Rosegold::Chunk::BlockEntity</a>), light_data : Slice(UInt8))
 
-        <a class="method-permalink" href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AArray%28Rosegold%3A%3AHeightmap%29%2Cdata%3ASlice%28UInt8%29%2Cblock_entities%3AArray%28Rosegold%3A%3AChunk%3A%3ABlockEntity%29%2Clight_data%3ARosegold%3A%3ALightData%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28chunk_x%3AInt32%2Cchunk_z%3AInt32%2Cheightmaps%3AArray%28Rosegold%3A%3AHeightmap%29%2Cdata%3ASlice%28UInt8%29%2Cblock_entities%3AArray%28Rosegold%3A%3AChunk%3A%3ABlockEntity%29%2Clight_data%3ASlice%28UInt8%29%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1779,7 +1774,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1812,7 +1807,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1833,7 +1828,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1874,7 +1869,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1890,7 +1885,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1911,7 +1906,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1932,7 +1927,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1962,7 +1957,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1978,7 +1973,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1994,7 +1989,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L92" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L91" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2010,7 +2005,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2026,7 +2021,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2042,7 +2037,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2058,7 +2053,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2074,7 +2069,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2090,7 +2085,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2106,7 +2101,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2122,7 +2117,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2138,39 +2133,39 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L103" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L102" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="light_data:LightData-instance-method">
+    <div class="entry-detail" id="light_data:Bytes-instance-method">
       <div class="signature">
         
-        def <strong>light_data</strong> : <a href="../../Rosegold/LightData.html">LightData</a>
+        def <strong>light_data</strong> : Bytes
 
-        <a class="method-permalink" href="#light_data%3ALightData-instance-method">#</a>
+        <a class="method-permalink" href="#light_data%3ABytes-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="light_data=(light_data:LightData)-instance-method">
+    <div class="entry-detail" id="light_data=(light_data:Bytes)-instance-method">
       <div class="signature">
         
-        def <strong>light_data=</strong>(light_data : <a href="../../Rosegold/LightData.html">LightData</a>)
+        def <strong>light_data=</strong>(light_data : Bytes)
 
-        <a class="method-permalink" href="#light_data%3D%28light_data%3ALightData%29-instance-method">#</a>
+        <a class="method-permalink" href="#light_data%3D%28light_data%3ABytes%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2186,7 +2181,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/64fb0c82780d628e675cf4a01c2731068eceba55/src/rosegold/packets/clientbound/chunk_data.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/a851961df4724d33faf06dffa76b9e2076b3712a/src/rosegold/packets/clientbound/chunk_data.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
