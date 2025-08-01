@@ -101,6 +101,47 @@ Spectator.describe Rosegold::Clientbound::SetContainerContent do
       expect(result1).to eq(result2)
     end
 
+    it "writes consistent with WindowItems packet format" do
+      # Create a SetContainerContent packet
+      packet = Rosegold::Clientbound::SetContainerContent.new(
+        window_id: 1_u8,
+        state_id: 123_u32,
+        slots: window_slots,
+        cursor: cursor_slot
+      )
+
+      # Write the packet
+      written_bytes = packet.write
+      io = Minecraft::IO::Memory.new(written_bytes)
+      
+      # Skip packet ID
+      packet_id = io.read_byte
+      expect(packet_id).to eq(0x12_u8)
+
+      # Verify proper encoding:
+      # window_id as byte (not var_int)
+      window_id = io.read_byte
+      expect(window_id).to eq(1_u8)
+
+      # state_id as var_int
+      state_id = io.read_var_int
+      expect(state_id).to eq(123_u32)
+
+      # slots count as var_int (Int32.size becomes var_int)
+      slots_count = io.read_var_int
+      expect(slots_count).to eq(1_u32)
+      
+      # Now the packet should be readable by the read method
+      # Reset to start of the packet (skip packet ID again)
+      io_for_read = Minecraft::IO::Memory.new(written_bytes)
+      io_for_read.read_byte # Skip packet ID
+      
+      read_packet = Rosegold::Clientbound::SetContainerContent.read(io_for_read)
+      expect(read_packet.window_id).to eq(1_u8)
+      expect(read_packet.state_id).to eq(123_u32)
+      expect(read_packet.slots.size).to eq(1)
+    end
+
     it "reads and writes packet data correctly" do
       # Create a SetContainerContent packet
       packet = Rosegold::Clientbound::SetContainerContent.new(
