@@ -465,10 +465,6 @@ class Rosegold::Slot
       begin
         structured_component = DataComponent.create_component(component_type, io)
         components_to_add[component_type] = structured_component
-      rescue ex
-        # Log error and create empty unknown component as fallback
-        Log.warn { "Failed to parse component type #{component_type}: #{ex}" }
-        components_to_add[component_type] = DataComponents::Unknown.new(Bytes.new(0))
       end
     end
 

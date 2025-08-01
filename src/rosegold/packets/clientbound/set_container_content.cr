@@ -8,7 +8,7 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
   })
 
   property \
-    window_id : UInt8,
+    window_id : UInt32,
     state_id : UInt32,
     slots : Array(WindowSlot),
     cursor : WindowSlot
@@ -17,7 +17,7 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
   end
 
   def self.read(packet)
-    window_id = packet.read_byte
+    window_id = packet.read_var_int
     state_id = packet.read_var_int
 
     num_slots = packet.read_var_int
