@@ -550,7 +550,7 @@ class Rosegold::Slot
   end
 
   # Enchantment type mapping for better maintainability
-  ENCHANTMENT_TYPE_MAP = {
+  ENCHANTMENT_TYPE_MAP = { # TODO: fix mappings, they're definitely wrong
      0_u32 => "protection",
      1_u32 => "fire_protection",
      2_u32 => "feather_falling",
@@ -559,7 +559,7 @@ class Rosegold::Slot
      5_u32 => "respiration",
      6_u32 => "aqua_affinity",
      7_u32 => "thorns",
-     8_u32 => "depth_strider",
+     8_u32 => "efficiency",
      9_u32 => "frost_walker",
     10_u32 => "binding_curse",
     11_u32 => "soul_speed",

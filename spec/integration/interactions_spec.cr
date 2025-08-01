@@ -168,7 +168,8 @@ Spectator.describe "Rosegold::Bot interactions" do
         # With Efficiency 5, obsidian should break in moderate time
         bot.start_digging
 
-        timeout = 200 # TODO: should take 45 ticks to break if eff5 was working properly...
+        # obsidian takes 45 ticks to mine with diamond pickaxe and efficiency 5
+        timeout = 50
         ticks_waited = 0
         current_block = initial_block
 
