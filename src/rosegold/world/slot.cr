@@ -124,16 +124,26 @@ abstract class Rosegold::DataComponent
       DataComponents::ItemName.read(io)
     when 7 # minecraft:item_model - Identifier (String)
       DataComponents::ItemModel.read(io)
+    when 8 # minecraft:lore - Array of Text Components (NBT)
+      DataComponents::Lore.read(io)
     when 9 # minecraft:rarity - VarInt enum
       DataComponents::Rarity.read(io)
     when 10 # minecraft:enchantments - Complex structure
       DataComponents::Enchantments.read(io)
+    when 13 # minecraft:attribute_modifiers - Complex structure
+      DataComponents::AttributeModifiers.read(io)
     when 16 # minecraft:repair_cost - VarInt
       DataComponents::RepairCost.read(io)
+    when 27 # minecraft:enchantable - VarInt
+      DataComponents::Enchantable.read(io)
     when 17 # minecraft:creative_slot_lock - no fields
       DataComponents::CreativeSlotLock.read(io)
     when 18 # minecraft:enchantment_glint_override - Boolean
       DataComponents::EnchantmentGlintOverride.read(io)
+    when 36 # minecraft:map_color - Int
+      DataComponents::MapColor.read(io)
+    when 39 # minecraft:map_post_processing - VarInt enum
+      DataComponents::MapPostProcessing.read(io)
     else
       # For unknown components, skip/ignore to avoid decoding failures
       DataComponents::Unknown.read(io)
@@ -201,6 +211,54 @@ class Rosegold::DataComponents::RepairCost < Rosegold::DataComponent
   end
 end
 
+# Component for attribute modifiers (complex structure)
+class Rosegold::DataComponents::AttributeModifiers < Rosegold::DataComponent
+  property modifiers : Array(AttributeModifier)
+
+  struct AttributeModifier
+    property attribute_id : UInt32
+    property modifier_id : String
+    property value : Float64
+    property operation : UInt32
+    property slot : UInt32
+
+    def initialize(@attribute_id : UInt32, @modifier_id : String, @value : Float64, @operation : UInt32, @slot : UInt32)
+    end
+  end
+
+  def initialize(@modifiers : Array(AttributeModifier) = [] of AttributeModifier); end
+
+  def self.read(io) : self
+    modifier_count = io.read_var_int
+    modifiers = Array(AttributeModifier).new
+    modifier_count.times do |_|
+      attribute_id = io.read_var_int
+      modifier_id = io.read_var_string
+      value = io.read_double
+      operation = io.read_var_int
+      slot = io.read_var_int
+
+      # orphaned random byte causing misalignment, means nothing
+      io.read_byte
+
+      modifiers << AttributeModifier.new(attribute_id, modifier_id, value, operation, slot)
+    end
+
+    new(modifiers)
+  end
+
+  def write(io) : Nil
+    io.write modifiers.size
+    modifiers.each do |modifier|
+      io.write modifier.attribute_id
+      io.write modifier.modifier_id
+      io.write modifier.value
+      io.write modifier.operation
+      io.write modifier.slot
+    end
+  end
+end
+
 # Component for enchantments (complex structure)
 class Rosegold::DataComponents::Enchantments < Rosegold::DataComponent
   property enchantments : Hash(UInt32, UInt32) # type_id -> level
@@ -235,7 +293,7 @@ class Rosegold::DataComponents::CustomName < Rosegold::DataComponent
 
   def self.read(io) : self
     # Read as NBT Text Component
-    nbt = io.read_nbt
+    nbt = io.read_nbt_unamed
     name = case nbt
            when Minecraft::NBT::StringTag
              nbt.value
@@ -260,7 +318,10 @@ class Rosegold::DataComponents::CustomData < Rosegold::DataComponent
   def initialize(@data : Minecraft::NBT::Tag); end
 
   def self.read(io) : self
-    new(io.read_nbt)
+    # Read NBT compound using the standard NBT reading approach
+    # The CustomData component contains a full NBT compound tag
+    nbt_data = io.read_nbt_unamed
+    new(nbt_data)
   end
 
   def write(io) : Nil
@@ -321,6 +382,49 @@ class Rosegold::DataComponents::ItemModel < Rosegold::DataComponent
   end
 end
 
+class Rosegold::DataComponents::Lore < Rosegold::DataComponent
+  property lore : Array(String) # Array of Text Components
+
+  def initialize(@lore : Array(String) = [] of String); end
+
+  def self.read(io) : self
+    lore_count = io.read_var_int
+    lore = Array(String).new
+    lore_count.times do
+      nbt = io.read_nbt_unamed
+
+      lore_text = case nbt
+                  when Minecraft::NBT::StringTag
+                    nbt.value
+                  when Minecraft::NBT::CompoundTag
+                    text = nbt["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || ""
+                    extra_text = ""
+                    if extra = nbt["extra"]?
+                      if extra.is_a?(Minecraft::NBT::ListTag)
+                        extra.value.each do |item|
+                          if item.is_a?(Minecraft::NBT::CompoundTag)
+                            extra_text += item["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || ""
+                          end
+                        end
+                      end
+                    end
+                    text + extra_text
+                  else
+                    "Unknown"
+                  end
+      lore << lore_text
+    end
+    new(lore)
+  end
+
+  def write(io) : Nil
+    io.write lore.size
+    lore.each do |text|
+      io.write Minecraft::NBT::StringTag.new(text)
+    end
+  end
+end
+
 # Component for rarity (VarInt enum)
 class Rosegold::DataComponents::Rarity < Rosegold::DataComponent
   property rarity : UInt32
@@ -349,6 +453,21 @@ class Rosegold::DataComponents::CreativeSlotLock < Rosegold::DataComponent
   end
 end
 
+# Component for enchantable (VarInt)
+class Rosegold::DataComponents::Enchantable < Rosegold::DataComponent
+  property value : UInt32
+
+  def initialize(@value : UInt32); end
+
+  def self.read(io) : self
+    new(io.read_var_int)
+  end
+
+  def write(io) : Nil
+    io.write value
+  end
+end
+
 # Component for enchantment_glint_override (Boolean)
 class Rosegold::DataComponents::EnchantmentGlintOverride < Rosegold::DataComponent
   property has_glint : Bool
@@ -361,6 +480,36 @@ class Rosegold::DataComponents::EnchantmentGlintOverride < Rosegold::DataCompone
 
   def write(io) : Nil
     io.write has_glint
+  end
+end
+
+# Component for map_color (RGB color as Int)
+class Rosegold::DataComponents::MapColor < Rosegold::DataComponent
+  property color : Int32
+
+  def initialize(@color : Int32); end
+
+  def self.read(io) : self
+    new(io.read_int)
+  end
+
+  def write(io) : Nil
+    io.write color
+  end
+end
+
+# Component for map_post_processing (VarInt enum)
+class Rosegold::DataComponents::MapPostProcessing < Rosegold::DataComponent
+  property processing_type : UInt32
+
+  def initialize(@processing_type : UInt32); end
+
+  def self.read(io) : self
+    new(io.read_var_int)
+  end
+
+  def write(io) : Nil
+    io.write processing_type
   end
 end
 
@@ -461,11 +610,8 @@ class Rosegold::Slot
 
     components_to_add_count.times do
       component_type = io.read_var_int
-      # Read component data directly based on type (no size prefix)
-      begin
-        structured_component = DataComponent.create_component(component_type, io)
-        components_to_add[component_type] = structured_component
-      end
+      structured_component = DataComponent.create_component(component_type, io)
+      components_to_add[component_type] = structured_component
     end
 
     # Read components to remove
