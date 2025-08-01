@@ -119,7 +119,7 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
 
         # Test that calling sneak actually sends the packet by verifying state change
         initial_state = bot.sneaking?
-        
+
         # Call sneak and verify state changed
         bot.sneak
         new_state = bot.sneaking?
