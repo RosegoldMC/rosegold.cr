@@ -245,9 +245,9 @@ class Rosegold::Interactions
     reached = @digging_block
     return unless reached
 
-    # Reset digging state
+    # Reset digging block but keep digging state for continuous digging
     @digging_block = nil
-    self.digging = false
+    # Don't set self.digging = false here to allow continuous digging
 
     # Generate sequence number for MC 1.21+
     sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
