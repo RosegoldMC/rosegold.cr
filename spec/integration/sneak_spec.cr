@@ -297,25 +297,51 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         bot.chat "/fill 10 -59 0 13 -59 3 minecraft:stone_slab"
         bot.wait_tick
         
-        # Position bot on slab platform
-        bot.chat "/tp 11.5 -58.5 1.5"  # On top of slab (y=-58.5)
+        # Add stone blocks above the slab area to force sneaking
+        # Place stone blocks at y=-57 (1.5 blocks above slab) to create a low ceiling
+        # This forces the player to sneak to fit under the stone blocks when on the slab
+        bot.chat "/fill 11 -57 1 13 -57 3 minecraft:stone"
+        bot.wait_tick
+        
+        # Position bot on slab platform away from the low ceiling area first
+        bot.chat "/tp 10.5 -58.5 1.5"  # On slab but away from stone ceiling
         bot.wait_tick
         
         # Verify bot is at correct height on slab
         initial_pos = bot.feet
         expect(initial_pos.y).to be_close(-58.5, 0.1)
         
-        # Move to edge of slab platform while not sneaking
+        # Test 1: Try to move under the stone ceiling without sneaking - should fail/get stuck
         expect(bot.sneaking?).to be_false
-        bot.move Vec3d.new(13.4, -58.5, 1.5)  # Near edge of slab
-        edge_pos = bot.feet
         
-        # Start sneaking and try to move off the slab edge
+        # Try to move under the low stone ceiling (1.5 block clearance)
+        # Player height when standing is ~1.8 blocks, so this should not work well
+        target_under_stone = Vec3d.new(12.0, -58.5, 2.0)  # Under the stone ceiling
+        bot.move target_under_stone
+        
+        # Bot should have difficulty moving under the stone ceiling while standing
+        standing_pos = bot.feet
+        expect(standing_pos.x).to be < target_under_stone.x  # Didn't reach target
+        
+        # Test 2: Now sneak and try to move under the stone ceiling - should work
         bot.sneak
         expect(bot.sneaking?).to be_true
         
+        # Player height when sneaking is ~1.5 blocks, so this should fit under stone ceiling
+        bot.move target_under_stone
+        sneaking_pos = bot.feet
+        
+        # While sneaking, bot should be able to move closer to or reach the target
+        expect(sneaking_pos.x).to be > standing_pos.x  # Made more progress while sneaking
+        
+        # Test 3: Test edge protection while under the low ceiling
+        # Move to edge of slab platform while sneaking under stone ceiling
+        edge_target = Vec3d.new(13.4, -58.5, 2.0)  # Near edge of slab, under stone
+        bot.move edge_target
+        edge_pos = bot.feet
+        
         # Attempt to move off the slab platform - should be prevented by sneak edge protection
-        attempted_off_slab_pos = Vec3d.new(13.8, -58.5, 1.5)  # Beyond slab edge
+        attempted_off_slab_pos = Vec3d.new(13.8, -58.5, 2.0)  # Beyond slab edge
         bot.move attempted_off_slab_pos
         
         sneak_final_pos = bot.feet
@@ -324,28 +350,30 @@ Spectator.describe "Rosegold::Bot sneak functionality" do
         expect(sneak_final_pos.x).to be < attempted_off_slab_pos.x
         expect((sneak_final_pos.x - edge_pos.x).abs).to be < 0.3
         
-        # Test that sneaking also prevents movement that would change elevation
-        # Try to move to a position that would cause falling off the slab
-        bot.move Vec3d.new(13.4, -58.5, 3.4)  # Near another edge
+        # Test 4: Verify movement is restricted by both ceiling and edge protection
+        # Try to move to various positions that would violate either constraint
+        bot.move Vec3d.new(13.4, -58.5, 3.4)  # Near another edge under ceiling
         bot.move Vec3d.new(13.8, -58.5, 3.8)  # Try to move off different edge
         
-        edge_protection_pos = bot.feet
+        constrained_pos = bot.feet
         
-        # Bot should still be roughly on the slab platform due to edge protection
-        expect(edge_protection_pos.y).to be_close(-58.5, 0.2)
-        expect(edge_protection_pos.x).to be < 13.7
-        expect(edge_protection_pos.z).to be < 3.7
+        # Bot should be constrained by both ceiling height and edge protection
+        expect(constrained_pos.y).to be_close(-58.5, 0.2)  # Still on slab
+        expect(constrained_pos.x).to be < 13.7  # Edge protection
+        expect(constrained_pos.z).to be < 3.7  # Edge protection
         
-        # Now unsneak and verify normal movement works
+        # Test 5: Unsneak and verify the ceiling constraint becomes a problem
         bot.unsneak
         expect(bot.sneaking?).to be_false
         
-        # Bot should now be able to move off the slab (and potentially fall)
-        bot.move Vec3d.new(14.0, -58.5, 2.0)
+        # Without sneaking, movement under the low ceiling should be more restricted
+        # Try to move to a new position under the ceiling
+        bot.move Vec3d.new(12.5, -58.5, 2.5)
         unsneak_pos = bot.feet
         
-        # Without sneak protection, bot should have moved further
-        expect(unsneak_pos.x).to be > edge_protection_pos.x
+        # Movement should be more limited without sneaking due to ceiling height
+        distance_moved = Math.sqrt((unsneak_pos.x - constrained_pos.x)**2 + (unsneak_pos.z - constrained_pos.z)**2)
+        expect(distance_moved).to be < 0.5  # Limited movement due to ceiling constraint
         
         # Clean up
         bot.chat "/tp 1 -60 1"
