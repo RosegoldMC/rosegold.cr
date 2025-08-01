@@ -28,7 +28,11 @@ class Rosegold::Chat
 
   def to_s(io : IO) : Nil
     if translate
-      io << TRANSLATIONS[translate] % self.with.try &.map(&.to_s)
+      begin
+        io << TRANSLATIONS[translate] % self.with.try &.map(&.to_s)
+      rescue ex : ArgumentError
+        Log.warn { "Translation error: #{translate} with #{self.with.try &.map(&.to_s)}" }
+      end
     else
       io << text
       io << extra_text
