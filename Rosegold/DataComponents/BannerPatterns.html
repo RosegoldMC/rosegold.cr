@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Entity::Metadata - rosegold main</title>
+  <title>Rosegold::DataComponents::BannerPatterns - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -652,7 +652,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
+  <li class="parent open current" data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
       <a href="../../Rosegold/DataComponents.html">DataComponents</a>
       
         <ul>
@@ -672,7 +672,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/DataComponents/BannerPatterns" data-name="rosegold::datacomponents::bannerpatterns">
+  <li class="parent open current" data-id="rosegold/Rosegold/DataComponents/BannerPatterns" data-name="rosegold::datacomponents::bannerpatterns">
       <a href="../../Rosegold/DataComponents/BannerPatterns.html">BannerPatterns</a>
       
         <ul>
@@ -797,12 +797,12 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Entity" data-name="rosegold::entity">
+  <li class="parent " data-id="rosegold/Rosegold/Entity" data-name="rosegold::entity">
       <a href="../../Rosegold/Entity.html">Entity</a>
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Rosegold/Entity/Metadata" data-name="rosegold::entity::metadata">
+  <li class=" " data-id="rosegold/Rosegold/Entity/Metadata" data-name="rosegold::entity::metadata">
       <a href="../../Rosegold/Entity/Metadata.html">Metadata</a>
       
     </li>
@@ -1413,35 +1413,32 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>Entity::<wbr>Metadata
+  </span> Rosegold::<wbr>DataComponents::<wbr>BannerPatterns
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Entity/Metadata.html">Rosegold::Entity::Metadata</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
-
-
-
-
-
-
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/DataComponents/BannerPatterns.html">Rosegold::DataComponents::BannerPatterns</a></li><li class="superclass"><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
 
   <h2>
-    <a id="included-modules" class="anchor" href="#included-modules">
+    <a id="overview" class="anchor" href="#overview">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Included Modules
+    Overview
   </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type">JSON::Serializable</li>
-    
-  </ul>
+
+  <p>Component for banner_patterns (Array of banner pattern layers)</p>
+
+
+
+
+
+
 
 
 
@@ -1462,8 +1459,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L4" target="_blank">
-        rosegold/world/entity.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/slot.cr#L518" target="_blank">
+        rosegold/world/slot.cr
       </a>
     
     <br/>
@@ -1485,7 +1482,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28pull%3AJSON%3A%3APullParser%29-class-method" class="signature"><strong>.new</strong>(pull : JSON::PullParser)</a>
+        <a href="#new%28layers%3AArray%28BannerPatternLayer%29%3D%5B%5DofBannerPatternLayer%29-class-method" class="signature"><strong>.new</strong>(layers : Array(BannerPatternLayer) = <span class="o">[]</span> <span class="k">of</span> <span class="t">BannerPatternLayer</span>)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#read%28io%29%3Aself-class-method" class="signature"><strong>.read</strong>(io) : <span class="k">self</span></a>
         
       </li>
     
@@ -1508,82 +1510,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#category%3AString-instance-method" class="signature"><strong>#category</strong> : String</a>
+        <a href="#layers%3AArray%28BannerPatternLayer%29-instance-method" class="signature"><strong>#layers</strong> : Array(BannerPatternLayer)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#category%3D%28category%3AString%29-instance-method" class="signature"><strong>#category=</strong>(category : String)</a>
+        <a href="#layers%3D%28layers%3AArray%28BannerPatternLayer%29%29-instance-method" class="signature"><strong>#layers=</strong>(layers : Array(BannerPatternLayer))</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#display_name%3AString-instance-method" class="signature"><strong>#display_name</strong> : String</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#display_name%3D%28display_name%3AString%29-instance-method" class="signature"><strong>#display_name=</strong>(display_name : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#height%3AFloat64-instance-method" class="signature"><strong>#height</strong> : Float64</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#height%3D%28height%3AFloat64%29-instance-method" class="signature"><strong>#height=</strong>(height : Float64)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#id%3AInt32-instance-method" class="signature"><strong>#id</strong> : Int32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#id%3D%28id%3AInt32%29-instance-method" class="signature"><strong>#id=</strong>(id : Int32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#internal_id%3AInt32-instance-method" class="signature"><strong>#internal_id</strong> : Int32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#internal_id%3D%28internal_id%3AInt32%29-instance-method" class="signature"><strong>#internal_id=</strong>(internal_id : Int32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#name%3AString-instance-method" class="signature"><strong>#name</strong> : String</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#name%3D%28name%3AString%29-instance-method" class="signature"><strong>#name=</strong>(name : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#type%3AString-instance-method" class="signature"><strong>#type</strong> : String</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#type%3D%28type%3AString%29-instance-method" class="signature"><strong>#type=</strong>(type : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#width%3AFloat64-instance-method" class="signature"><strong>#width</strong> : Float64</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#width%3D%28width%3AFloat64%29-instance-method" class="signature"><strong>#width=</strong>(width : Float64)</a>
+        <a href="#write%28io%29%3ANil-instance-method" class="signature"><strong>#write</strong>(io) : Nil</a>
         
       </li>
     
@@ -1595,8 +1532,26 @@
     
       
 
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
+  
+  
+    <a href="../../Rosegold/DataComponent.html#write%28io%29%3ANil-instance-method" class="tooltip">
+      <span>write(io) : Nil</span>
+    write</a>
+    
+  
+
 
       
+
+  <h3>Constructor methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
+  
+  
+    <a href="../../Rosegold/DataComponent.html#create_component%28component_type%3AUInt32%2Cio%29%3ADataComponent-class-method" class="tooltip">
+      <span>create_component(component_type : UInt32, io) : DataComponent</span>
+    create_component</a>
+    
+  
 
 
       
@@ -1644,18 +1599,34 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(pull:JSON::PullParser)-class-method">
+    <div class="entry-detail" id="new(layers:Array(BannerPatternLayer)=[]ofBannerPatternLayer)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(pull : JSON::PullParser)
+        def self.<strong>new</strong>(layers : Array(<a href="../../Rosegold/DataComponents/BannerPatterns/BannerPatternLayer.html">BannerPatternLayer</a>) = <span class="o">[]</span> <span class="k">of</span> <span class="t">BannerPatternLayer</span>)
 
-        <a class="method-permalink" href="#new%28pull%3AJSON%3A%3APullParser%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28layers%3AArray%28BannerPatternLayer%29%3D%5B%5DofBannerPatternLayer%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/slot.cr#L531" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(io):self-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(io) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#read%28io%29%3Aself-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/slot.cr#L533" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1676,258 +1647,50 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="category:String-instance-method">
+    <div class="entry-detail" id="layers:Array(BannerPatternLayer)-instance-method">
       <div class="signature">
         
-        def <strong>category</strong> : String
+        def <strong>layers</strong> : Array(<a href="../../Rosegold/DataComponents/BannerPatterns/BannerPatternLayer.html">BannerPatternLayer</a>)
 
-        <a class="method-permalink" href="#category%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#layers%3AArray%28BannerPatternLayer%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/slot.cr#L519" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="category=(category:String)-instance-method">
+    <div class="entry-detail" id="layers=(layers:Array(BannerPatternLayer))-instance-method">
       <div class="signature">
         
-        def <strong>category=</strong>(category : String)
+        def <strong>layers=</strong>(layers : Array(<a href="../../Rosegold/DataComponents/BannerPatterns/BannerPatternLayer.html">BannerPatternLayer</a>))
 
-        <a class="method-permalink" href="#category%3D%28category%3AString%29-instance-method">#</a>
+        <a class="method-permalink" href="#layers%3D%28layers%3AArray%28BannerPatternLayer%29%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/slot.cr#L519" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="display_name:String-instance-method">
+    <div class="entry-detail" id="write(io):Nil-instance-method">
       <div class="signature">
         
-        def <strong>display_name</strong> : String
+        def <strong>write</strong>(io) : Nil
 
-        <a class="method-permalink" href="#display_name%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#write%28io%29%3ANil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L12" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="display_name=(display_name:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>display_name=</strong>(display_name : String)
-
-        <a class="method-permalink" href="#display_name%3D%28display_name%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L12" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="height:Float64-instance-method">
-      <div class="signature">
-        
-        def <strong>height</strong> : Float64
-
-        <a class="method-permalink" href="#height%3AFloat64-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L14" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="height=(height:Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>height=</strong>(height : Float64)
-
-        <a class="method-permalink" href="#height%3D%28height%3AFloat64%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L14" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="id:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>id</strong> : <a href="../../Int32.html">Int32</a>
-
-        <a class="method-permalink" href="#id%3AInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L7" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="id=(id:Int32)-instance-method">
-      <div class="signature">
-        
-        def <strong>id=</strong>(id : <a href="../../Int32.html">Int32</a>)
-
-        <a class="method-permalink" href="#id%3D%28id%3AInt32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L7" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="internal_id:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>internal_id</strong> : <a href="../../Int32.html">Int32</a>
-
-        <a class="method-permalink" href="#internal_id%3AInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L9" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="internal_id=(internal_id:Int32)-instance-method">
-      <div class="signature">
-        
-        def <strong>internal_id=</strong>(internal_id : <a href="../../Int32.html">Int32</a>)
-
-        <a class="method-permalink" href="#internal_id%3D%28internal_id%3AInt32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L9" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="name:String-instance-method">
-      <div class="signature">
-        
-        def <strong>name</strong> : String
-
-        <a class="method-permalink" href="#name%3AString-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="name=(name:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>name=</strong>(name : String)
-
-        <a class="method-permalink" href="#name%3D%28name%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="type:String-instance-method">
-      <div class="signature">
-        
-        def <strong>type</strong> : String
-
-        <a class="method-permalink" href="#type%3AString-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L15" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="type=(type:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>type=</strong>(type : String)
-
-        <a class="method-permalink" href="#type%3D%28type%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L15" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="width:Float64-instance-method">
-      <div class="signature">
-        
-        def <strong>width</strong> : Float64
-
-        <a class="method-permalink" href="#width%3AFloat64-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L13" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="width=(width:Float64)-instance-method">
-      <div class="signature">
-        
-        def <strong>width=</strong>(width : Float64)
-
-        <a class="method-permalink" href="#width%3D%28width%3AFloat64%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/entity.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/52595aae8fb8c2aada42b7021e885348f5e49372/src/rosegold/world/slot.cr#L555" target="_blank">View source</a>]
         
       </div>
     </div>
