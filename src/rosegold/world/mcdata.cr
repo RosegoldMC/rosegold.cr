@@ -1,5 +1,6 @@
 require "json"
 require "./aabb"
+require "../models/block"
 
 # parsed minecraft-data for a particular mc version
 class Rosegold::MCData
@@ -16,6 +17,8 @@ class Rosegold::MCData
 
   getter materials : Material
 
+  getter enchantments : Array(Enchantment)
+
   # block state nr -> "oak_slab[type=top, waterlogged=true]"
   getter block_state_names : Array(String)
 
@@ -31,6 +34,8 @@ class Rosegold::MCData
     @blocks = Array(Block).from_json(Rosegold.read_game_asset "1.21.8/blocks.json")
 
     @materials = Material.from_json Rosegold.read_game_asset "1.21.8/materials.json"
+
+    @enchantments = Array(Enchantment).from_json(Rosegold.read_game_asset "1.21.8/enchantments.json")
 
     block_collision_shapes_json = BlockCollisionShapes.from_json Rosegold.read_game_asset "1.21.8/blockCollisionShapes.json"
 
@@ -73,6 +78,29 @@ class Rosegold::MCData
         block_state_collision_shapes[state_nr] = shape.map { |aabb| AABBf.new *aabb }
       end
     end
+  end
+
+  # entries of enchantments.json
+  class Enchantment
+    include JSON::Serializable
+
+    def initialize(@id : UInt32, @name : String, @display_name : String, @max_level : UInt8, @treasure_only : Bool, @curse : Bool, @category : String, @weight : UInt8, @tradeable : Bool, @discoverable : Bool)
+    end
+
+    getter id : UInt32
+    @[JSON::Field(key: "name")]
+    getter name : String
+    @[JSON::Field(key: "displayName")]
+    getter display_name : String
+    @[JSON::Field(key: "maxLevel")]
+    getter max_level : UInt8
+    @[JSON::Field(key: "treasureOnly")]
+    getter treasure_only : Bool
+    getter curse : Bool
+    getter category : String
+    getter weight : UInt8
+    getter tradeable : Bool
+    getter discoverable : Bool
   end
 
   # entries of items.json
