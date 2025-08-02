@@ -32,7 +32,7 @@ class Rosegold::Clientbound::SystemChatMessage < Rosegold::Clientbound::Packet
     self.new(message, overlay)
   end
 
-  private def self.nbt_to_chat(nbt : Minecraft::NBT::Tag) : Chat
+  def self.nbt_to_chat(nbt : Minecraft::NBT::Tag) : Chat
     case nbt
     when Minecraft::NBT::CompoundTag
       nbt_compound_to_chat(nbt)
@@ -62,6 +62,8 @@ class Rosegold::Clientbound::SystemChatMessage < Rosegold::Clientbound::Packet
       chat.text = value.as_s if value.responds_to?(:as_s)
     when "translate"
       chat.translate = value.as_s if value.responds_to?(:as_s)
+    when "with"
+      chat.with = parse_with_components(value) if value.is_a?(Minecraft::NBT::ListTag)
     when "color"
       chat.color = value.as_s if value.responds_to?(:as_s)
     when "bold", "italic", "underlined", "strikethrough", "obfuscated"
@@ -95,6 +97,24 @@ class Rosegold::Clientbound::SystemChatMessage < Rosegold::Clientbound::Packet
       extra_components << nbt_to_chat(extra_nbt)
     end
     extra_components
+  end
+
+  private def self.parse_with_components(list_tag : Minecraft::NBT::ListTag) : Array(Chat | String)
+    with_components = [] of (Chat | String)
+    list_tag.value.each do |with_nbt|
+      case with_nbt
+      when Minecraft::NBT::StringTag
+        # Direct string parameter
+        with_components << with_nbt.value
+      when Minecraft::NBT::CompoundTag
+        # Chat component parameter
+        with_components << nbt_to_chat(with_nbt)
+      else
+        # Fallback: convert to string
+        with_components << with_nbt.to_s
+      end
+    end
+    with_components
   end
 
   def write : Bytes
