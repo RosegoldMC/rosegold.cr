@@ -27,11 +27,35 @@ class Rosegold::Chat
   property hover_event : JSON::Any?
 
   def to_s(io : IO) : Nil
-    if translate
+    if translate_key = translate
       begin
-        io << TRANSLATIONS[translate] % self.with.try &.map(&.to_s)
+        # Check if translation key exists
+        if translation_template = TRANSLATIONS[translate_key]?
+          # Try to interpolate with parameters
+          if with_params = self.with
+            io << translation_template % with_params.map(&.to_s)
+          else
+            # No parameters provided, use template as-is if it doesn't require parameters
+            io << translation_template
+          end
+        else
+          # Translation key not found, fall back to key itself
+          Log.warn { "Translation key not found: #{translate_key}" }
+          io << translate_key
+        end
       rescue ex : ArgumentError
-        Log.warn { "Translation error: #{translate} with #{self.with.try &.map(&.to_s)}" }
+        # Translation interpolation failed
+        Log.warn { "Translation error: #{translate_key} with #{self.with.try &.map(&.to_s)} - #{ex.message}" }
+        # Fall back to translation key with parameters
+        if with_params = self.with
+          io << "#{translate_key}(#{with_params.map(&.to_s).join(", ")})"
+        else
+          io << translate_key
+        end
+      rescue ex
+        # Any other error
+        Log.warn { "Unexpected translation error: #{ex.message}" }
+        io << translate_key
       end
     else
       io << text
