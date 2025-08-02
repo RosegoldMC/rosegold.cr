@@ -1,5 +1,6 @@
 require "../../minecraft/nbt"
 require "digest/crc32"
+require "./mcdata"
 
 # Data Component types for 1.21.8
 enum Rosegold::DataComponentType : UInt32
@@ -587,51 +588,6 @@ class Rosegold::Slot
     end
   end
 
-  # Enchantment type mapping for better maintainability
-  ENCHANTMENT_TYPE_MAP = { # TODO: fix mappings, they're definitely wrong
-     0_u32 => "protection",
-     1_u32 => "fire_protection",
-     2_u32 => "feather_falling",
-     3_u32 => "blast_protection",
-     4_u32 => "projectile_protection",
-     5_u32 => "respiration",
-     6_u32 => "aqua_affinity",
-     7_u32 => "thorns",
-     8_u32 => "efficiency",
-     9_u32 => "frost_walker",
-    10_u32 => "binding_curse",
-    11_u32 => "soul_speed",
-    12_u32 => "swift_sneak",
-    13_u32 => "sharpness",
-    14_u32 => "smite",
-    15_u32 => "bane_of_arthropods",
-    16_u32 => "knockback",
-    17_u32 => "fire_aspect",
-    18_u32 => "looting",
-    19_u32 => "sweeping",
-    20_u32 => "efficiency",
-    21_u32 => "silk_touch",
-    22_u32 => "unbreaking",
-    23_u32 => "fortune",
-    24_u32 => "power",
-    25_u32 => "punch",
-    26_u32 => "flame",
-    27_u32 => "infinity",
-    28_u32 => "luck_of_the_sea",
-    29_u32 => "lure",
-    30_u32 => "loyalty",
-    31_u32 => "impaling",
-    32_u32 => "riptide",
-    33_u32 => "channeling",
-    34_u32 => "multishot",
-    35_u32 => "quick_charge",
-    36_u32 => "piercing",
-    37_u32 => "density",
-    38_u32 => "breach",
-    39_u32 => "wind_burst",
-    40_u32 => "mending",
-    41_u32 => "vanishing_curse",
-  }
 
   def initialize(@count = 0_u32, @item_id_int = 0_u32, @components_to_add = Hash(UInt32, DataComponent).new, @components_to_remove = Set(UInt32).new); end
 
@@ -740,8 +696,9 @@ class Rosegold::Slot
 
     result = Hash(String, Int8 | Int16 | Int32 | Int64 | UInt8).new
     enchant_component.enchantments.each do |type_id, level|
-      # Convert type_id to string name using the mapping constant
-      enchant_name = ENCHANTMENT_TYPE_MAP[type_id] || "enchant_#{type_id}"
+      # Convert type_id to string name using MCData
+      enchantment = MCData::DEFAULT.enchantments.find { |e| e.id == type_id }
+      enchant_name = enchantment ? enchantment.name : "enchant_#{type_id}"
       result[enchant_name] = level.to_i32
     end
     result
