@@ -139,7 +139,7 @@ Spectator.describe "Rosegold::Bot inventory" do
         Rosegold::Bot.new(client).try do |bot|
           bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
           bot.wait_tick
-          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",Count:1b}]}"
+          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",Count:1b},{Slot:6b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":100}}]}"
           bot.chat "/clear"
           bot.wait_for Rosegold::Clientbound::SetSlot
           bot.wait_tick
@@ -148,13 +148,13 @@ Spectator.describe "Rosegold::Bot inventory" do
           bot.use_hand
           bot.wait_for Rosegold::Clientbound::SetContainerContent
 
-          expect(bot.inventory.withdraw_at_least(1, "diamond_sword")).to eq 1
+          expect(bot.inventory.withdraw_at_least(2, "diamond_sword")).to eq 2
 
           local_inventory = bot.inventory.inventory.map &.dup
           local_hotbar = bot.inventory.hotbar.map &.dup
           local_content = bot.inventory.content.map &.dup
 
-          expect((local_inventory + local_hotbar).map(&.name)).to contain "diamond_sword"
+          expect((local_inventory + local_hotbar).map(&.name).count("diamond_sword")).to eq 2
           expect(local_content.map(&.name)).not_to contain "diamond_sword"
 
           # Close the chest first so we can reopen it
