@@ -95,12 +95,12 @@ class Rosegold::MCData
     @[JSON::Field(key: "maxLevel")]
     getter max_level : UInt8
     @[JSON::Field(key: "treasureOnly")]
-    getter treasure_only : Bool
-    getter curse : Bool
+    getter? treasure_only : Bool
+    getter? curse : Bool
     getter category : String
     getter weight : UInt8
-    getter tradeable : Bool
-    getter discoverable : Bool
+    getter? tradeable : Bool
+    getter? discoverable : Bool
   end
 
   # entries of items.json
