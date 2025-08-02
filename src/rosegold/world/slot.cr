@@ -1,6 +1,7 @@
 require "../../minecraft/nbt"
 require "digest/crc32"
 require "./mcdata"
+require "../crc32c"
 
 # Data Component types for 1.21.8
 enum Rosegold::DataComponentType : UInt32
@@ -588,7 +589,6 @@ class Rosegold::Slot
     end
   end
 
-
   def initialize(@count = 0_u32, @item_id_int = 0_u32, @components_to_add = Hash(UInt32, DataComponent).new, @components_to_remove = Set(UInt32).new); end
 
   def self.read(io) : Rosegold::Slot
@@ -822,11 +822,11 @@ class Rosegold::HashedSlot
       # Generate CRC32 hashes for components
       hashed_components = Hash(UInt32, UInt32).new
       slot.components_to_add.each do |component_type, component|
-        # Serialize component to bytes and compute CRC32
         component_buffer = Minecraft::IO::Memory.new
+        component_buffer.write component_type
         component.write(component_buffer)
         component_data = component_buffer.to_slice
-        crc32_hash = Digest::CRC32.checksum(component_data)
+        crc32_hash = CRC32C.checksum(component_data)
         hashed_components[component_type] = crc32_hash
       end
 
@@ -849,7 +849,7 @@ class Rosegold::HashedSlot
     io.write components_to_add.size
     components_to_add.each do |component_type, hash|
       io.write component_type
-      io.write hash # Write CRC32 hash as Int (4 bytes)
+      io.write_full hash.to_u32 # Write CRC32 hash as full 4 bytes (not VarInt)
     end
 
     # Write components to remove
