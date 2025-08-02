@@ -144,9 +144,10 @@ abstract class Rosegold::DataComponent
       DataComponents::MapColor.read(io)
     when 39 # minecraft:map_post_processing - VarInt enum
       DataComponents::MapPostProcessing.read(io)
+    when 63 # minecraft:banner_patterns - Array of banner pattern layers
+      DataComponents::BannerPatterns.read(io)
     else
-      # For unknown components, skip/ignore to avoid decoding failures
-      DataComponents::Unknown.read(io)
+      raise "Unknown data component type: #{component_type}"
     end
   end
 end
@@ -513,20 +514,57 @@ class Rosegold::DataComponents::MapPostProcessing < Rosegold::DataComponent
   end
 end
 
-# Generic component for unknown types (stores raw bytes)
-class Rosegold::DataComponents::Unknown < Rosegold::DataComponent
-  property data : Bytes
+# Component for banner_patterns (Array of banner pattern layers)
+class Rosegold::DataComponents::BannerPatterns < Rosegold::DataComponent
+  property layers : Array(BannerPatternLayer)
 
-  def initialize(@data : Bytes); end
+  struct BannerPatternLayer
+    property pattern_type : UInt32
+    property asset_id : String?
+    property translation_key : String?
+    property color : UInt32
+
+    def initialize(@pattern_type : UInt32, @asset_id : String?, @translation_key : String?, @color : UInt32)
+    end
+  end
+
+  def initialize(@layers : Array(BannerPatternLayer) = [] of BannerPatternLayer); end
 
   def self.read(io) : self
-    # For unknown components, we can't know how much to read
-    # This is a fallback that should ideally not be used
-    new(Bytes.new(0))
+    layer_count = io.read_var_int
+    layers = Array(BannerPatternLayer).new
+    layer_count.times do
+      pattern_type = io.read_var_int
+
+      # Asset ID and Translation Key are only present when pattern_type is 0
+      asset_id = nil
+      translation_key = nil
+      if pattern_type == 0
+        asset_id = io.read_var_string
+        translation_key = io.read_var_string
+      end
+
+      # Color is a Dye Color (VarInt enum)
+      color = io.read_var_int
+
+      layers << BannerPatternLayer.new(pattern_type, asset_id, translation_key, color)
+    end
+    new(layers)
   end
 
   def write(io) : Nil
-    io.write data
+    io.write layers.size
+    layers.each do |layer|
+      io.write layer.pattern_type
+
+      # Write asset_id and translation_key only if pattern_type is 0
+      if layer.pattern_type == 0
+        io.write layer.asset_id.not_nil!        # ameba:disable Lint/NotNil
+        io.write layer.translation_key.not_nil! # ameba:disable Lint/NotNil
+      end
+
+      io.write layer.color
+    end
   end
 end
 
