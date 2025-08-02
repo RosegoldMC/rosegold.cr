@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Clientbound::ChunkBatchFinished - rosegold main</title>
+  <title>Rosegold::MCData::Enchantment - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -327,7 +327,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
@@ -352,7 +352,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/ChunkBatchFinished" data-name="rosegold::clientbound::chunkbatchfinished">
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ChunkBatchFinished" data-name="rosegold::clientbound::chunkbatchfinished">
       <a href="../../Rosegold/Clientbound/ChunkBatchFinished.html">ChunkBatchFinished</a>
       
     </li>
@@ -917,7 +917,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/MCData" data-name="rosegold::mcdata">
+  <li class="parent open current" data-id="rosegold/Rosegold/MCData" data-name="rosegold::mcdata">
       <a href="../../Rosegold/MCData.html">MCData</a>
       
         <ul>
@@ -937,7 +937,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/MCData/Enchantment" data-name="rosegold::mcdata::enchantment">
+  <li class=" current" data-id="rosegold/Rosegold/MCData/Enchantment" data-name="rosegold::mcdata::enchantment">
       <a href="../../Rosegold/MCData/Enchantment.html">Enchantment</a>
       
     </li>
@@ -1423,15 +1423,26 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>Clientbound::<wbr>ChunkBatchFinished
+  </span> Rosegold::<wbr>MCData::<wbr>Enchantment
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/ChunkBatchFinished.html">Rosegold::Clientbound::ChunkBatchFinished</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/MCData/Enchantment.html">Rosegold::MCData::Enchantment</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>entries of enchantments.json</p>
 
 
 
@@ -1449,7 +1460,7 @@
   </h2>
   <ul class="other-types-list">
     
-      <li class="other-type"><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></li>
+      <li class="other-type">JSON::Serializable</li>
     
   </ul>
 
@@ -1472,37 +1483,14 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L3" target="_blank">
-        rosegold/packets/clientbound/chunk_batch_finished.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L84" target="_blank">
+        rosegold/world/mcdata.cr
       </a>
     
     <br/>
   
 
 
-
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-      Constant Summary
-    </h2>
-  
-  <dl>
-    
-      <dt class="entry-const" id="PROTOCOL_PACKET_IDS">
-        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">11_u8</span>}</code>
-      </dt>
-      
-      <dd class="entry-const-doc">
-        <p>Store the protocol mappings as a constant</p>
-      </dd>
-      
-    
-  </dl>
 
 
 
@@ -1518,7 +1506,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28batch_size%3AInt32%29-class-method" class="signature"><strong>.new</strong>(batch_size : Int32)</a>
+        <a href="#new%28id%3AUInt32%2Cname%3AString%2Cdisplay_name%3AString%2Cmax_level%3AUInt8%2Ctreasure_only%3ABool%2Ccurse%3ABool%2Ccategory%3AString%2Cweight%3AUInt8%2Ctradeable%3ABool%2Cdiscoverable%3ABool%29-class-method" class="signature"><strong>.new</strong>(id : UInt32, name : String, display_name : String, max_level : UInt8, treasure_only : Bool, curse : Bool, category : String, weight : UInt8, tradeable : Bool, discoverable : Bool)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28pull%3AJSON%3A%3APullParser%29-class-method" class="signature"><strong>.new</strong>(pull : JSON::PullParser)</a>
         
       </li>
     
@@ -1526,65 +1519,6 @@
 
 
   
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt8-class-method" class="signature"><strong>.[]</strong>(protocol_version : UInt32) : UInt8</a>
-        
-          <div class="summary"><p>Generate the <a href="protocol_version"></a> method for elegant access</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#default_packet_id%3AUInt8-class-method" class="signature"><strong>.default_packet_id</strong> : UInt8</a>
-        
-          <div class="summary"><p>Define default packet ID (typically the latest/most common version)</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#packet_id%3AUInt8-class-method" class="signature"><strong>.packet_id</strong> : UInt8</a>
-        
-          <div class="summary"><p>Provide backward compatibility with existing packet_id class getter Use the first protocol's packet ID for registration compatibility</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt8-class-method" class="signature"><strong>.packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt8</a>
-        
-          <div class="summary"><p>Get packet ID for specific protocol version</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read%28io%29-class-method" class="signature"><strong>.read</strong>(io)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#supported_protocols%3AArray%28UInt32%29-class-method" class="signature"><strong>.supported_protocols</strong> : Array(UInt32)</a>
-        
-          <div class="summary"><p>Helper method to get all supported protocols</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method" class="signature"><strong>.supports_protocol?</strong>(protocol_version : UInt32) : Bool</a>
-        
-          <div class="summary"><p>Helper method to check if a protocol is supported</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
 
@@ -1600,17 +1534,52 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#batch_size%3AInt32-instance-method" class="signature"><strong>#batch_size</strong> : Int32</a>
+        <a href="#category%3AString-instance-method" class="signature"><strong>#category</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#batch_size%3D%28batch_size%3AInt32%29-instance-method" class="signature"><strong>#batch_size=</strong>(batch_size : Int32)</a>
+        <a href="#curse%3F%3ABool-instance-method" class="signature"><strong>#curse?</strong> : Bool</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
+        <a href="#discoverable%3F%3ABool-instance-method" class="signature"><strong>#discoverable?</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#display_name%3AString-instance-method" class="signature"><strong>#display_name</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#id%3AUInt32-instance-method" class="signature"><strong>#id</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#max_level%3AUInt8-instance-method" class="signature"><strong>#max_level</strong> : UInt8</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#name%3AString-instance-method" class="signature"><strong>#name</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#tradeable%3F%3ABool-instance-method" class="signature"><strong>#tradeable?</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#treasure_only%3F%3ABool-instance-method" class="signature"><strong>#treasure_only?</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#weight%3AUInt8-instance-method" class="signature"><strong>#weight</strong> : UInt8</a>
         
       </li>
     
@@ -1619,87 +1588,6 @@
 
 
   <div class="methods-inherited">
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-  <h3>Macros inherited from module <code><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Packets/ProtocolMapping.html#packet_ids%28mappings%29-macro" class="tooltip">
-      <span>packet_ids(mappings)</span>
-    packet_ids</a>
-    
-  
-
-
-    
-      
-
-
-      
-
-
-      
-
-  <h3>Class methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Clientbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
-      <span>new_raw(bytes)</span>
-    new_raw</a>, 
-    
-  
-    <a href="../../Rosegold/Clientbound/Packet.html#state-class-method" class="tooltip">
-      <span>state</span>
-    state</a>
-    
-  
-
-
-      
-
-
-    
-      
-
-  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
-      <span>callback(client_or_server)</span>
-    callback</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
-      <span>to_s(io)</span>
-    to_s</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
-      <span>write : Bytes</span>
-    write</a>
-    
-  
-
-
-      
-
-
-      
-
-
-      
-
-
     
       
 
@@ -1752,18 +1640,34 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(batch_size:Int32)-class-method">
+    <div class="entry-detail" id="new(id:UInt32,name:String,display_name:String,max_level:UInt8,treasure_only:Bool,curse:Bool,category:String,weight:UInt8,tradeable:Bool,discoverable:Bool)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(batch_size : <a href="../../Int32.html">Int32</a>)
+        def self.<strong>new</strong>(id : UInt32, name : String, display_name : String, max_level : UInt8, treasure_only : Bool, curse : Bool, category : String, weight : UInt8, tradeable : Bool, discoverable : Bool)
 
-        <a class="method-permalink" href="#new%28batch_size%3AInt32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28id%3AUInt32%2Cname%3AString%2Cdisplay_name%3AString%2Cmax_level%3AUInt8%2Ctreasure_only%3ABool%2Ccurse%3ABool%2Ccategory%3AString%2Cweight%3AUInt8%2Ctradeable%3ABool%2Cdiscoverable%3ABool%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L87" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(pull:JSON::PullParser)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(pull : JSON::PullParser)
+
+        <a class="method-permalink" href="#new%28pull%3AJSON%3A%3APullParser%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1771,157 +1675,6 @@
 
 
   
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="[](protocol_version:UInt32):UInt8-class-method">
-      <div class="signature">
-        
-        def self.<strong>[]</strong>(protocol_version : UInt32) : UInt8
-
-        <a class="method-permalink" href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt8-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Generate the <a href="protocol_version"></a> method for elegant access</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="default_packet_id:UInt8-class-method">
-      <div class="signature">
-        
-        def self.<strong>default_packet_id</strong> : UInt8
-
-        <a class="method-permalink" href="#default_packet_id%3AUInt8-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Define default packet ID (typically the latest/most common version)</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="packet_id:UInt8-class-method">
-      <div class="signature">
-        
-        def self.<strong>packet_id</strong> : UInt8
-
-        <a class="method-permalink" href="#packet_id%3AUInt8-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Provide backward compatibility with existing packet_id class getter
-Use the first protocol's packet ID for registration compatibility</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="packet_id_for_protocol(protocol_version:UInt32):UInt8-class-method">
-      <div class="signature">
-        
-        def self.<strong>packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt8
-
-        <a class="method-permalink" href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt8-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Get packet ID for specific protocol version</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read(io)-class-method">
-      <div class="signature">
-        
-        def self.<strong>read</strong>(io)
-
-        <a class="method-permalink" href="#read%28io%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L14" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="supported_protocols:Array(UInt32)-class-method">
-      <div class="signature">
-        
-        def self.<strong>supported_protocols</strong> : Array(UInt32)
-
-        <a class="method-permalink" href="#supported_protocols%3AArray%28UInt32%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Helper method to get all supported protocols</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="supports_protocol?(protocol_version:UInt32):Bool-class-method">
-      <div class="signature">
-        
-        def self.<strong>supports_protocol?</strong>(protocol_version : UInt32) : Bool
-
-        <a class="method-permalink" href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Helper method to check if a protocol is supported</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
@@ -1935,50 +1688,162 @@ Use the first protocol's packet ID for registration compatibility</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="batch_size:Int32-instance-method">
+    <div class="entry-detail" id="category:String-instance-method">
       <div class="signature">
         
-        def <strong>batch_size</strong> : <a href="../../Int32.html">Int32</a>
+        def <strong>category</strong> : String
 
-        <a class="method-permalink" href="#batch_size%3AInt32-instance-method">#</a>
+        <a class="method-permalink" href="#category%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="batch_size=(batch_size:Int32)-instance-method">
+    <div class="entry-detail" id="curse?:Bool-instance-method">
       <div class="signature">
         
-        def <strong>batch_size=</strong>(batch_size : <a href="../../Int32.html">Int32</a>)
+        def <strong>curse?</strong> : Bool
 
-        <a class="method-permalink" href="#batch_size%3D%28batch_size%3AInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#curse%3F%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L99" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="callback(client)-instance-method">
+    <div class="entry-detail" id="discoverable?:Bool-instance-method">
       <div class="signature">
         
-        def <strong>callback</strong>(client)
+        def <strong>discoverable?</strong> : Bool
 
-        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
+        <a class="method-permalink" href="#discoverable%3F%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/packets/clientbound/chunk_batch_finished.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L103" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="display_name:String-instance-method">
+      <div class="signature">
+        
+        def <strong>display_name</strong> : String
+
+        <a class="method-permalink" href="#display_name%3AString-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L94" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="id:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>id</strong> : UInt32
+
+        <a class="method-permalink" href="#id%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L90" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="max_level:UInt8-instance-method">
+      <div class="signature">
+        
+        def <strong>max_level</strong> : UInt8
+
+        <a class="method-permalink" href="#max_level%3AUInt8-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L96" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="name:String-instance-method">
+      <div class="signature">
+        
+        def <strong>name</strong> : String
+
+        <a class="method-permalink" href="#name%3AString-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L92" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="tradeable?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>tradeable?</strong> : Bool
+
+        <a class="method-permalink" href="#tradeable%3F%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L102" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="treasure_only?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>treasure_only?</strong> : Bool
+
+        <a class="method-permalink" href="#treasure_only%3F%3ABool-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L98" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="weight:UInt8-instance-method">
+      <div class="signature">
+        
+        def <strong>weight</strong> : UInt8
+
+        <a class="method-permalink" href="#weight%3AUInt8-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d03307642dfcec95b9b58851296524b340b3dc02/src/rosegold/world/mcdata.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
