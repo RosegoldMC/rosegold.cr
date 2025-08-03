@@ -1,7 +1,7 @@
 require "../../spec_helper"
 
-# Test to reproduce translated chat issue with NBT parsing
-Spectator.describe "Translated Chat NBT Parsing" do
+# Test to reproduce translated chat issue with NBT parsing - Unit tests for SystemChatMessage
+Spectator.describe "Translated Chat NBT Parsing (Unit Tests)" do
   it "should parse translated chat with 'with' parameters from NBT" do
     # Create NBT representation of:
     # {
