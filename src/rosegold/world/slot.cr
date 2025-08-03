@@ -146,6 +146,8 @@ abstract class Rosegold::DataComponent
       DataComponents::MapColor.read(io)
     when 39 # minecraft:map_post_processing - VarInt enum
       DataComponents::MapPostProcessing.read(io)
+    when 42 # minecraft:potion_contents - Visual and effects of a potion item
+      DataComponents::PotionContents.read(io)
     when 63 # minecraft:banner_patterns - Array of banner pattern layers
       DataComponents::BannerPatterns.read(io)
     else
@@ -566,6 +568,99 @@ class Rosegold::DataComponents::BannerPatterns < Rosegold::DataComponent
       end
 
       io.write layer.color
+    end
+  end
+end
+
+# Component for potion contents (visual and effects of a potion item)
+class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
+  property has_potion_id : Bool
+  property potion_id : UInt32?
+  property has_custom_color : Bool
+  property custom_color : UInt32?
+  property custom_effects : Array(PotionEffect)
+  property custom_name : String
+
+  def initialize(@has_potion_id = false, @potion_id = nil, @has_custom_color = false, @custom_color = nil, @custom_effects = [] of PotionEffect, @custom_name = "")
+  end
+
+  def self.read(io) : PotionContents
+    has_potion_id = io.read_bool
+    potion_id = has_potion_id ? io.read_var_int : nil
+
+    has_custom_color = io.read_bool
+    custom_color = has_custom_color ? io.read_int.to_u32 : nil
+
+    # Read custom effects array
+    effects_count = io.read_var_int
+    custom_effects = [] of PotionEffect
+    effects_count.times do
+      custom_effects << PotionEffect.read(io)
+    end
+
+    custom_name = io.read_var_string
+
+    new(has_potion_id, potion_id, has_custom_color, custom_color, custom_effects, custom_name)
+  end
+
+  def write(io) : Nil
+    io.write has_potion_id
+    if has_potion_id
+      io.write potion_id.not_nil! # ameba:disable Lint/NotNil
+    end
+
+    io.write has_custom_color
+    if has_custom_color
+      io.write_full custom_color.not_nil! # ameba:disable Lint/NotNil
+    end
+
+    # Write custom effects array
+    io.write custom_effects.size
+    custom_effects.each do |effect|
+      effect.write(io)
+    end
+
+    io.write custom_name
+  end
+
+  # Potion effect structure
+  class PotionEffect
+    property type_id : UInt32
+    property amplifier : UInt32
+    property duration : Int32
+    property ambient : Bool
+    property show_particles : Bool
+    property show_icon : Bool
+    property has_hidden_effect : Bool
+    property hidden_effect : PotionEffect?
+
+    def initialize(@type_id, @amplifier, @duration, @ambient = false, @show_particles = true, @show_icon = true, @has_hidden_effect = false, @hidden_effect = nil)
+    end
+
+    def self.read(io) : PotionEffect
+      type_id = io.read_var_int
+      amplifier = io.read_var_int
+      duration = io.read_var_int.to_i32
+      ambient = io.read_bool
+      show_particles = io.read_bool
+      show_icon = io.read_bool
+      has_hidden_effect = io.read_bool
+      hidden_effect = has_hidden_effect ? PotionEffect.read(io) : nil
+
+      new(type_id, amplifier, duration, ambient, show_particles, show_icon, has_hidden_effect, hidden_effect)
+    end
+
+    def write(io) : Nil
+      io.write type_id
+      io.write amplifier
+      io.write duration
+      io.write ambient
+      io.write show_particles
+      io.write show_icon
+      io.write has_hidden_effect
+      if has_hidden_effect
+        hidden_effect.not_nil!.write(io) # ameba:disable Lint/NotNil
+      end
     end
   end
 end
