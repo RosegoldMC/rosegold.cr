@@ -110,7 +110,28 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
       end
 
       begin
-        pkt_type.read pkt_io
+        result = pkt_type.read pkt_io
+
+        # Log specific packets based on LOG_PACKET env var (e.g., LOG_PACKET=72 or LOG_PACKET=0x72 or LOG_PACKET=72,73,74)
+        if log_packet_ids = ENV["LOG_PACKET"]?
+          packet_ids_to_log = log_packet_ids.split(",").compact_map do |id_str|
+            cleaned = id_str.strip
+            if cleaned.starts_with?("0x") || cleaned.starts_with?("0X")
+              cleaned[2..].to_u8?(16)
+            else
+              cleaned.to_u8?
+            end
+          end
+
+          if packet_ids_to_log.includes?(pkt_id)
+            packet_name = pkt_type.name
+            packet_hex = "0x#{pkt_id.to_s(16).upcase.rjust(2, '0')}"
+            Log.warn { "Logged packet #{packet_name} (#{packet_hex}) in #{protocol_state.name} state for protocol #{protocol_version}" }
+            Log.warn { "Packet bytes (#{packet_bytes.size} bytes): #{packet_bytes.hexstring}" }
+          end
+        end
+
+        result
       rescue ex
         # Log detailed error information for packet parsing failures
         packet_name = pkt_type.name
