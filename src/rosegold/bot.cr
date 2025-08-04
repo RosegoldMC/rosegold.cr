@@ -300,4 +300,38 @@ class Rosegold::Bot < Rosegold::EventEmitter
   def attack(target : Vec3d? | Look? = nil)
     dig 0, target
   end
+
+  # Returns information about nearby players
+  # Each entry contains the entity, position, distance from bot, and bearing
+  def radar(max_distance : Float64 = Float64::INFINITY)
+    nearby_players = [] of NamedTuple(entity: Entity, position: Vec3d, distance: Float64, bearing: Float64, uuid: UUID)
+    
+    client.dimension.entities.each_value do |entity|
+      # Filter for player entities (entity_type 111 based on entities.json)
+      next unless entity.entity_type == 111
+      # Skip if it's the bot itself
+      next if entity.uuid == client.player.uuid
+      
+      distance = feet.dist(entity.position)
+      next if distance > max_distance
+      
+      # Calculate bearing (horizontal angle from bot to player)
+      # 0° = North (+Z), 90° = East (+X), 180° = South (-Z), 270° = West (-X)
+      dx = entity.position.x - feet.x
+      dz = entity.position.z - feet.z
+      bearing = Math.atan2(dx, dz) * 180.0 / Math::PI
+      bearing += 360.0 if bearing < 0.0
+      
+      nearby_players << {
+        entity: entity,
+        position: entity.position,
+        distance: distance,
+        bearing: bearing,
+        uuid: entity.uuid
+      }
+    end
+    
+    # Sort by distance (closest first)
+    nearby_players.sort_by(&.[:distance])
+  end
 end
