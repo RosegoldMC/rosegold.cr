@@ -77,19 +77,6 @@ Naming/QueryBoolMethods:
   Enabled: true
   Severity: Convention
 
-# Problems found: 5
-# Run `ameba --only Metrics/CyclomaticComplexity` for details
-Metrics/CyclomaticComplexity:
-  Description: Disallows methods with a cyclomatic complexity higher than `MaxComplexity`
-  MaxComplexity: 10
-  Excluded:
-  - src/rosegold/world/slot.cr
-  - src/rosegold/packets/clientbound/player_info.cr
-  - src/rosegold/packets/clientbound/disconnect.cr
-  - src/rosegold/control/interactions.cr
-  Enabled: true
-  Severity: Warning
-
 # Problems found: 2
 # Run `ameba --only Lint/RedundantWithIndex` for details
 Lint/RedundantWithIndex:
