@@ -117,7 +117,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
         end
 
         if packet_ids_to_log.includes?(pkt_id)
-          packet_name = pkt_type ? pkt_type.name : "Unknown"
+          packet_name = pkt_type ? pkt_type.name : "Unknown (0x#{pkt_id.to_s(16).upcase})"
           packet_hex = "0x#{pkt_id.to_s(16).upcase.rjust(2, '0')}"
           Log.warn { "Logged packet #{packet_name} (#{packet_hex}) in #{protocol_state.name} state for protocol #{protocol_version}" }
           Log.warn { "Packet bytes (#{packet_bytes.size} bytes): #{packet_bytes.hexstring}" }
