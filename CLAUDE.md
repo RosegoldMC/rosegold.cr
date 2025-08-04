@@ -10,3 +10,7 @@
 
 ## Server Logs
 - Server logs are located at spec/fixtures/server/logs/latest.log
+
+## Debugging
+- Comprehensive debugging guide available at ./DEBUGGING.md
+- Use LOG_PACKET environment variable to log specific packet types (e.g., LOG_PACKET=72 for SystemChatMessage)
