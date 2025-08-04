@@ -3,6 +3,7 @@ require "socket"
 require "uuid"
 require "../rosegold/world/slot"
 require "../rosegold/world/vec3"
+require "../rosegold/models/text_component"
 
 module Minecraft::IO
   def write(value : Bool)
@@ -182,6 +183,10 @@ module Minecraft::IO
     z = ((value << 26) >> 38).to_i32 # 26 bits
     x = (value >> 38).to_i32         # 26 bits
     Rosegold::Vec3i.new(x, y, z)
+  end
+
+  def read_text_component : Rosegold::TextComponent
+    Rosegold::TextComponent.read(self)
   end
 end
 

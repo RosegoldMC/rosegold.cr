@@ -2,7 +2,7 @@ module Minecraft::NBT
   abstract class Tag
     abstract def tag_type : UInt8
 
-    def self.read(io : IO, tag_type = io.read_byte, &) : Tag # ameba:disable Metrics/CyclomaticComplexity
+    def self.read(io : IO, tag_type = io.read_byte, &) : Tag
       yield tag_type
 
       case tag_type

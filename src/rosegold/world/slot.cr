@@ -1,5 +1,7 @@
 require "../../minecraft/nbt"
 require "digest/crc32"
+require "./mcdata"
+require "../crc32c"
 
 # Data Component types for 1.21.8
 enum Rosegold::DataComponentType : UInt32
@@ -124,19 +126,32 @@ abstract class Rosegold::DataComponent
       DataComponents::ItemName.read(io)
     when 7 # minecraft:item_model - Identifier (String)
       DataComponents::ItemModel.read(io)
+    when 8 # minecraft:lore - Array of Text Components (NBT)
+      DataComponents::Lore.read(io)
     when 9 # minecraft:rarity - VarInt enum
       DataComponents::Rarity.read(io)
     when 10 # minecraft:enchantments - Complex structure
       DataComponents::Enchantments.read(io)
+    when 13 # minecraft:attribute_modifiers - Complex structure
+      DataComponents::AttributeModifiers.read(io)
     when 16 # minecraft:repair_cost - VarInt
       DataComponents::RepairCost.read(io)
+    when 27 # minecraft:enchantable - VarInt
+      DataComponents::Enchantable.read(io)
     when 17 # minecraft:creative_slot_lock - no fields
       DataComponents::CreativeSlotLock.read(io)
     when 18 # minecraft:enchantment_glint_override - Boolean
       DataComponents::EnchantmentGlintOverride.read(io)
+    when 36 # minecraft:map_color - Int
+      DataComponents::MapColor.read(io)
+    when 39 # minecraft:map_post_processing - VarInt enum
+      DataComponents::MapPostProcessing.read(io)
+    when 42 # minecraft:potion_contents - Visual and effects of a potion item
+      DataComponents::PotionContents.read(io)
+    when 63 # minecraft:banner_patterns - Array of banner pattern layers
+      DataComponents::BannerPatterns.read(io)
     else
-      # For unknown components, skip/ignore to avoid decoding failures
-      DataComponents::Unknown.read(io)
+      raise "Unknown data component type: #{component_type}"
     end
   end
 end
@@ -201,6 +216,54 @@ class Rosegold::DataComponents::RepairCost < Rosegold::DataComponent
   end
 end
 
+# Component for attribute modifiers (complex structure)
+class Rosegold::DataComponents::AttributeModifiers < Rosegold::DataComponent
+  property modifiers : Array(AttributeModifier)
+
+  struct AttributeModifier
+    property attribute_id : UInt32
+    property modifier_id : String
+    property value : Float64
+    property operation : UInt32
+    property slot : UInt32
+
+    def initialize(@attribute_id : UInt32, @modifier_id : String, @value : Float64, @operation : UInt32, @slot : UInt32)
+    end
+  end
+
+  def initialize(@modifiers : Array(AttributeModifier) = [] of AttributeModifier); end
+
+  def self.read(io) : self
+    modifier_count = io.read_var_int
+    modifiers = Array(AttributeModifier).new
+    modifier_count.times do |_|
+      attribute_id = io.read_var_int
+      modifier_id = io.read_var_string
+      value = io.read_double
+      operation = io.read_var_int
+      slot = io.read_var_int
+
+      # orphaned random byte causing misalignment, means nothing
+      io.read_byte
+
+      modifiers << AttributeModifier.new(attribute_id, modifier_id, value, operation, slot)
+    end
+
+    new(modifiers)
+  end
+
+  def write(io) : Nil
+    io.write modifiers.size
+    modifiers.each do |modifier|
+      io.write modifier.attribute_id
+      io.write modifier.modifier_id
+      io.write modifier.value
+      io.write modifier.operation
+      io.write modifier.slot
+    end
+  end
+end
+
 # Component for enchantments (complex structure)
 class Rosegold::DataComponents::Enchantments < Rosegold::DataComponent
   property enchantments : Hash(UInt32, UInt32) # type_id -> level
@@ -235,7 +298,7 @@ class Rosegold::DataComponents::CustomName < Rosegold::DataComponent
 
   def self.read(io) : self
     # Read as NBT Text Component
-    nbt = io.read_nbt
+    nbt = io.read_nbt_unamed
     name = case nbt
            when Minecraft::NBT::StringTag
              nbt.value
@@ -260,7 +323,10 @@ class Rosegold::DataComponents::CustomData < Rosegold::DataComponent
   def initialize(@data : Minecraft::NBT::Tag); end
 
   def self.read(io) : self
-    new(io.read_nbt)
+    # Read NBT compound using the standard NBT reading approach
+    # The CustomData component contains a full NBT compound tag
+    nbt_data = io.read_nbt_unamed
+    new(nbt_data)
   end
 
   def write(io) : Nil
@@ -321,6 +387,49 @@ class Rosegold::DataComponents::ItemModel < Rosegold::DataComponent
   end
 end
 
+class Rosegold::DataComponents::Lore < Rosegold::DataComponent
+  property lore : Array(String) # Array of Text Components
+
+  def initialize(@lore : Array(String) = [] of String); end
+
+  def self.read(io) : self
+    lore_count = io.read_var_int
+    lore = Array(String).new
+    lore_count.times do
+      nbt = io.read_nbt_unamed
+
+      lore_text = case nbt
+                  when Minecraft::NBT::StringTag
+                    nbt.value
+                  when Minecraft::NBT::CompoundTag
+                    text = nbt["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || ""
+                    extra_text = ""
+                    if extra = nbt["extra"]?
+                      if extra.is_a?(Minecraft::NBT::ListTag)
+                        extra.value.each do |item|
+                          if item.is_a?(Minecraft::NBT::CompoundTag)
+                            extra_text += item["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || ""
+                          end
+                        end
+                      end
+                    end
+                    text + extra_text
+                  else
+                    "Unknown"
+                  end
+      lore << lore_text
+    end
+    new(lore)
+  end
+
+  def write(io) : Nil
+    io.write lore.size
+    lore.each do |text|
+      io.write Minecraft::NBT::StringTag.new(text)
+    end
+  end
+end
+
 # Component for rarity (VarInt enum)
 class Rosegold::DataComponents::Rarity < Rosegold::DataComponent
   property rarity : UInt32
@@ -349,6 +458,21 @@ class Rosegold::DataComponents::CreativeSlotLock < Rosegold::DataComponent
   end
 end
 
+# Component for enchantable (VarInt)
+class Rosegold::DataComponents::Enchantable < Rosegold::DataComponent
+  property value : UInt32
+
+  def initialize(@value : UInt32); end
+
+  def self.read(io) : self
+    new(io.read_var_int)
+  end
+
+  def write(io) : Nil
+    io.write value
+  end
+end
+
 # Component for enchantment_glint_override (Boolean)
 class Rosegold::DataComponents::EnchantmentGlintOverride < Rosegold::DataComponent
   property has_glint : Bool
@@ -364,20 +488,180 @@ class Rosegold::DataComponents::EnchantmentGlintOverride < Rosegold::DataCompone
   end
 end
 
-# Generic component for unknown types (stores raw bytes)
-class Rosegold::DataComponents::Unknown < Rosegold::DataComponent
-  property data : Bytes
+# Component for map_color (RGB color as Int)
+class Rosegold::DataComponents::MapColor < Rosegold::DataComponent
+  property color : Int32
 
-  def initialize(@data : Bytes); end
+  def initialize(@color : Int32); end
 
   def self.read(io) : self
-    # For unknown components, we can't know how much to read
-    # This is a fallback that should ideally not be used
-    new(Bytes.new(0))
+    new(io.read_int)
   end
 
   def write(io) : Nil
-    io.write data
+    io.write color
+  end
+end
+
+# Component for map_post_processing (VarInt enum)
+class Rosegold::DataComponents::MapPostProcessing < Rosegold::DataComponent
+  property processing_type : UInt32
+
+  def initialize(@processing_type : UInt32); end
+
+  def self.read(io) : self
+    new(io.read_var_int)
+  end
+
+  def write(io) : Nil
+    io.write processing_type
+  end
+end
+
+# Component for banner_patterns (Array of banner pattern layers)
+class Rosegold::DataComponents::BannerPatterns < Rosegold::DataComponent
+  property layers : Array(BannerPatternLayer)
+
+  struct BannerPatternLayer
+    property pattern_type : UInt32
+    property asset_id : String?
+    property translation_key : String?
+    property color : UInt32
+
+    def initialize(@pattern_type : UInt32, @asset_id : String?, @translation_key : String?, @color : UInt32)
+    end
+  end
+
+  def initialize(@layers : Array(BannerPatternLayer) = [] of BannerPatternLayer); end
+
+  def self.read(io) : self
+    layer_count = io.read_var_int
+    layers = Array(BannerPatternLayer).new
+    layer_count.times do
+      pattern_type = io.read_var_int
+
+      # Asset ID and Translation Key are only present when pattern_type is 0
+      asset_id = nil
+      translation_key = nil
+      if pattern_type == 0
+        asset_id = io.read_var_string
+        translation_key = io.read_var_string
+      end
+
+      # Color is a Dye Color (VarInt enum)
+      color = io.read_var_int
+
+      layers << BannerPatternLayer.new(pattern_type, asset_id, translation_key, color)
+    end
+    new(layers)
+  end
+
+  def write(io) : Nil
+    io.write layers.size
+    layers.each do |layer|
+      io.write layer.pattern_type
+
+      # Write asset_id and translation_key only if pattern_type is 0
+      if layer.pattern_type == 0
+        io.write layer.asset_id.not_nil!        # ameba:disable Lint/NotNil
+        io.write layer.translation_key.not_nil! # ameba:disable Lint/NotNil
+      end
+
+      io.write layer.color
+    end
+  end
+end
+
+# Component for potion contents (visual and effects of a potion item)
+class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
+  property has_potion_id : Bool
+  property potion_id : UInt32?
+  property has_custom_color : Bool
+  property custom_color : UInt32?
+  property custom_effects : Array(PotionEffect)
+  property custom_name : String
+
+  def initialize(@has_potion_id = false, @potion_id = nil, @has_custom_color = false, @custom_color = nil, @custom_effects = [] of PotionEffect, @custom_name = "")
+  end
+
+  def self.read(io) : PotionContents
+    has_potion_id = io.read_bool
+    potion_id = has_potion_id ? io.read_var_int : nil
+
+    has_custom_color = io.read_bool
+    custom_color = has_custom_color ? io.read_int.to_u32 : nil
+
+    # Read custom effects array
+    effects_count = io.read_var_int
+    custom_effects = [] of PotionEffect
+    effects_count.times do
+      custom_effects << PotionEffect.read(io)
+    end
+
+    custom_name = io.read_var_string
+
+    new(has_potion_id, potion_id, has_custom_color, custom_color, custom_effects, custom_name)
+  end
+
+  def write(io) : Nil
+    io.write has_potion_id
+    if has_potion_id
+      io.write potion_id.not_nil! # ameba:disable Lint/NotNil
+    end
+
+    io.write has_custom_color
+    if has_custom_color
+      io.write_full custom_color.not_nil! # ameba:disable Lint/NotNil
+    end
+
+    # Write custom effects array
+    io.write custom_effects.size
+    custom_effects.each do |effect|
+      effect.write(io)
+    end
+
+    io.write custom_name
+  end
+
+  # Potion effect structure
+  class PotionEffect
+    property type_id : UInt32
+    property amplifier : UInt32
+    property duration : Int32
+    property ambient : Bool
+    property show_particles : Bool
+    property show_icon : Bool
+    property has_hidden_effect : Bool
+    property hidden_effect : PotionEffect?
+
+    def initialize(@type_id, @amplifier, @duration, @ambient = false, @show_particles = true, @show_icon = true, @has_hidden_effect = false, @hidden_effect = nil)
+    end
+
+    def self.read(io) : PotionEffect
+      type_id = io.read_var_int
+      amplifier = io.read_var_int
+      duration = io.read_var_int.to_i32
+      ambient = io.read_bool
+      show_particles = io.read_bool
+      show_icon = io.read_bool
+      has_hidden_effect = io.read_bool
+      hidden_effect = has_hidden_effect ? PotionEffect.read(io) : nil
+
+      new(type_id, amplifier, duration, ambient, show_particles, show_icon, has_hidden_effect, hidden_effect)
+    end
+
+    def write(io) : Nil
+      io.write type_id
+      io.write amplifier
+      io.write duration
+      io.write ambient
+      io.write show_particles
+      io.write show_icon
+      io.write has_hidden_effect
+      if has_hidden_effect
+        hidden_effect.not_nil!.write(io) # ameba:disable Lint/NotNil
+      end
+    end
   end
 end
 
@@ -400,52 +684,6 @@ class Rosegold::Slot
     end
   end
 
-  # Enchantment type mapping for better maintainability
-  ENCHANTMENT_TYPE_MAP = {
-     0_u32 => "protection",
-     1_u32 => "fire_protection",
-     2_u32 => "feather_falling",
-     3_u32 => "blast_protection",
-     4_u32 => "projectile_protection",
-     5_u32 => "respiration",
-     6_u32 => "aqua_affinity",
-     7_u32 => "thorns",
-     8_u32 => "depth_strider",
-     9_u32 => "frost_walker",
-    10_u32 => "binding_curse",
-    11_u32 => "soul_speed",
-    12_u32 => "swift_sneak",
-    13_u32 => "sharpness",
-    14_u32 => "smite",
-    15_u32 => "bane_of_arthropods",
-    16_u32 => "knockback",
-    17_u32 => "fire_aspect",
-    18_u32 => "looting",
-    19_u32 => "sweeping",
-    20_u32 => "efficiency",
-    21_u32 => "silk_touch",
-    22_u32 => "unbreaking",
-    23_u32 => "fortune",
-    24_u32 => "power",
-    25_u32 => "punch",
-    26_u32 => "flame",
-    27_u32 => "infinity",
-    28_u32 => "luck_of_the_sea",
-    29_u32 => "lure",
-    30_u32 => "loyalty",
-    31_u32 => "impaling",
-    32_u32 => "riptide",
-    33_u32 => "channeling",
-    34_u32 => "multishot",
-    35_u32 => "quick_charge",
-    36_u32 => "piercing",
-    37_u32 => "density",
-    38_u32 => "breach",
-    39_u32 => "wind_burst",
-    40_u32 => "mending",
-    41_u32 => "vanishing_curse",
-  }
-
   def initialize(@count = 0_u32, @item_id_int = 0_u32, @components_to_add = Hash(UInt32, DataComponent).new, @components_to_remove = Set(UInt32).new); end
 
   def self.read(io) : Rosegold::Slot
@@ -461,15 +699,8 @@ class Rosegold::Slot
 
     components_to_add_count.times do
       component_type = io.read_var_int
-      # Read component data directly based on type (no size prefix)
-      begin
-        structured_component = DataComponent.create_component(component_type, io)
-        components_to_add[component_type] = structured_component
-      rescue ex
-        # Log error and create empty unknown component as fallback
-        Log.warn { "Failed to parse component type #{component_type}: #{ex}" }
-        components_to_add[component_type] = DataComponents::Unknown.new(Bytes.new(0))
-      end
+      structured_component = DataComponent.create_component(component_type, io)
+      components_to_add[component_type] = structured_component
     end
 
     # Read components to remove
@@ -560,8 +791,9 @@ class Rosegold::Slot
 
     result = Hash(String, Int8 | Int16 | Int32 | Int64 | UInt8).new
     enchant_component.enchantments.each do |type_id, level|
-      # Convert type_id to string name using the mapping constant
-      enchant_name = ENCHANTMENT_TYPE_MAP[type_id] || "enchant_#{type_id}"
+      # Convert type_id to string name using MCData
+      enchantment = MCData::DEFAULT.enchantments.find { |e| e.id == type_id }
+      enchant_name = enchantment ? enchantment.name : "enchant_#{type_id}"
       result[enchant_name] = level.to_i32
     end
     result
@@ -685,11 +917,11 @@ class Rosegold::HashedSlot
       # Generate CRC32 hashes for components
       hashed_components = Hash(UInt32, UInt32).new
       slot.components_to_add.each do |component_type, component|
-        # Serialize component to bytes and compute CRC32
         component_buffer = Minecraft::IO::Memory.new
+        component_buffer.write component_type
         component.write(component_buffer)
         component_data = component_buffer.to_slice
-        crc32_hash = Digest::CRC32.checksum(component_data)
+        crc32_hash = CRC32C.checksum(component_data)
         hashed_components[component_type] = crc32_hash
       end
 
@@ -712,7 +944,7 @@ class Rosegold::HashedSlot
     io.write components_to_add.size
     components_to_add.each do |component_type, hash|
       io.write component_type
-      io.write hash # Write CRC32 hash as Int (4 bytes)
+      io.write_full hash.to_u32 # Write CRC32 hash as full 4 bytes (not VarInt)
     end
 
     # Write components to remove

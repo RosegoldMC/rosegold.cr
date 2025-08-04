@@ -31,7 +31,6 @@ class Rosegold::Client < Rosegold::EventEmitter
   property recorded_configuration_packets : Array(Bytes) = Array(Bytes).new
 
   property \
-    online_players : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
     player : Player = Player.new,
     access_token : String = "",
     dimension : Dimension = Dimension.new,
@@ -231,8 +230,6 @@ class Rosegold::Client < Rosegold::EventEmitter
     set_protocol_state(ProtocolState::LOGIN)
 
     queue_packet Serverbound::LoginStart.new player.username.not_nil!, player.uuid, protocol_version # ameba:disable Lint/NotNil
-
-    @online_players = Hash(UUID, PlayerList::Entry).new
 
     spawn do
       while connected?

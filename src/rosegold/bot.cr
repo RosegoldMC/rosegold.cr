@@ -9,7 +9,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   def initialize(@client)
     @inventory = Inventory.new client
 
-    subscribe Rosegold::Clientbound::ChatMessage
+    subscribe Rosegold::Clientbound::SystemChatMessage
     subscribe Rosegold::Clientbound::PlayerChatMessage
     subscribe Rosegold::Clientbound::DisguisedChatMessage
     subscribe Event::Tick
@@ -33,7 +33,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
     new Client.new(address).join_game(timeout_ticks)
   end
 
-  delegate host, port, connect, connected?, disconnect, join_game, spawned?, online_players, to: client
+  delegate host, port, connect, connected?, disconnect, join_game, spawned?, to: client
   delegate uuid, username, feet, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory

@@ -19,28 +19,55 @@ Spectator.describe "Rosegold::Bot interactions" do
     end
   end
 
-  it "should be able to dig" do
+  it "should be able to dig continuously through 3 blocks" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/fill 9 -60 10 9 -57 10 minecraft:dirt"
+        # Set up a column of 3 dirt blocks below the bot
+        bot.chat "/fill 9 -60 10 9 -58 10 minecraft:dirt"
         bot.wait_ticks 5 # Wait for fill to complete
-        bot.chat "/tp 9 -56 10"
+        bot.chat "/tp 9 -57 10"
         bot.wait_ticks 5 # Wait for teleport and chunk updates
 
         bot.look &.down
         bot.wait_ticks 5
 
-        # Check initial block state
-        initial_block = client.dimension.block_state(9, -57, 10)
+        # Record initial position and block states
+        initial_y = bot.feet.y
+        expected_final_y = initial_y - 3.0 # Should fall through 3 blocks
 
+        # Record initial block states
+        initial_blocks = [] of (UInt16 | Nil)
+        3.times do |i|
+          block = client.dimension.block_state(9, (-58 - i), 10)
+          initial_blocks << block
+        end
+
+        # Start continuous digging
         bot.start_digging
-        bot.wait_ticks 20 # Give it time to break blocks
+
+        # Smart wait: wait for bot to reach expected position with timeout
+        timeout = 100 # 5 seconds at 20 ticks/second
+        ticks_waited = 0
+        until bot.feet.y <= expected_final_y || ticks_waited >= timeout
+          bot.wait_tick
+          ticks_waited += 1
+        end
+
         bot.stop_digging
 
-        # Check that block was broken
-        final_block = client.dimension.block_state(9, -57, 10)
-        expect(final_block).to_not eq(initial_block)
-        expect(bot.feet.y).to be_lt -56.5 # Bot should have moved down a bit
+        # Check that bot moved down significantly (at least 2.5 blocks)
+        expect(bot.feet.y).to be_lt(initial_y - 2.5)
+
+        # Check that multiple blocks were broken
+        broken_blocks = 0
+        3.times do |i|
+          current_block = client.dimension.block_state(9, (-58 - i), 10)
+          if current_block != initial_blocks[i]
+            broken_blocks += 1
+          end
+        end
+
+        expect(broken_blocks).to be >= 2 # Should have broken at least 2 blocks
       end
     end
   end
@@ -59,6 +86,107 @@ Spectator.describe "Rosegold::Bot interactions" do
         sleep 1.second # long enough to dig 1 block, if it didn't stop
 
         expect(bot.feet.y).to be >= -56
+      end
+    end
+  end
+
+  it "should be able to dig stone with diamond pickaxe (in a reasonable amount of time)" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        # Set up stone block and give diamond pickaxe
+        bot.chat "/fill 8 -60 8 8 -60 8 minecraft:stone"
+        bot.chat "/clear"
+        bot.chat "/give @p minecraft:diamond_pickaxe 1"
+        bot.wait_ticks 5 # Wait for commands to complete
+        bot.chat "/tp 8 -59 8"
+        bot.wait_ticks 5 # Wait for teleport and chunk updates
+
+        # Equip the diamond pickaxe
+        bot.inventory.pick! "diamond_pickaxe"
+        bot.wait_ticks 3
+
+        bot.look &.down
+        bot.wait_ticks 5
+
+        # Record initial state
+        initial_block = client.dimension.block_state(8, -60, 8)
+
+        # Verify we have stone block (state ID should be 1)
+        expect(initial_block).to eq(1)
+
+        # Start digging stone (takes ~2.3 seconds / 46 ticks with diamond pickaxe)
+        bot.start_digging
+
+        # Smart wait: stone takes about 6 ticks to break with diamond pickaxe
+        timeout = 8
+        ticks_waited = 0
+        current_block = initial_block
+
+        until current_block != initial_block || ticks_waited >= timeout
+          bot.wait_tick
+          ticks_waited += 1
+          current_block = client.dimension.block_state(8, -60, 8)
+        end
+
+        bot.stop_digging
+
+        # Check that stone block was broken
+        final_block = client.dimension.block_state(8, -60, 8)
+        expect(final_block).to_not eq(initial_block)
+
+        # Verify mining completed within expected timeframe (should be ~6 ticks)
+        expect(ticks_waited).to be_lt(timeout)
+      end
+    end
+  end
+
+  it "should be able to dig obsidian with diamond pickaxe and efficiency" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        # Set up obsidian block and give diamond pickaxe with efficiency
+        bot.chat "/fill 9 -60 9 9 -60 9 minecraft:obsidian"
+        bot.chat "/clear"
+        bot.chat "/give @p minecraft:diamond_pickaxe[enchantments={\"minecraft:efficiency\":5}] 1"
+        bot.wait_ticks 5 # Wait for commands to complete
+        bot.chat "/tp 9 -59 9"
+        bot.wait_ticks 5 # Wait for teleport and chunk updates
+
+        # Equip the efficiency 5 diamond pickaxe
+        bot.inventory.pick! "diamond_pickaxe"
+        bot.wait_ticks 3
+
+        bot.look &.down
+        bot.wait_ticks 5
+
+        # Record initial state
+        initial_block = client.dimension.block_state(9, -60, 9)
+
+        # Verify we have obsidian block (state ID should be 2400)
+        expect(initial_block).to eq(2400)
+
+        # Start digging obsidian
+        # With Efficiency 5, obsidian should break in moderate time
+        bot.start_digging
+
+        # obsidian takes 45 ticks to mine with diamond pickaxe and efficiency 5
+        timeout = 50
+        ticks_waited = 0
+        current_block = initial_block
+
+        until current_block != initial_block || ticks_waited >= timeout
+          bot.wait_tick
+          ticks_waited += 1
+          current_block = client.dimension.block_state(9, -60, 9)
+        end
+
+        bot.stop_digging
+
+        # Check that obsidian block was broken
+        final_block = client.dimension.block_state(9, -60, 9)
+        expect(final_block).to_not eq(initial_block)
+
+        # Verify mining completed within reasonable timeframe
+        expect(ticks_waited).to be_lt(timeout)
       end
     end
   end
