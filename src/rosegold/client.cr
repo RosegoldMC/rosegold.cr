@@ -9,7 +9,7 @@ require "./world/*"
 require "./chat_manager"
 
 # Forward declaration to avoid circular dependency
-class Rosegold::ProxyServer; end
+class Rosegold::SpectateServer; end
 
 # Holds world state (player, chunks, etc.)
 # and control state (physics, open window, etc.).
@@ -25,10 +25,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   property connection : Connection::Client?
   property detected_protocol_version : UInt32?
   property current_protocol_state : ProtocolState = ProtocolState::HANDSHAKING
-  property proxy_server : ProxyServer?
-  property recorded_initialization_packets : Array(Bytes) = Array(Bytes).new
-  property recorded_join_game_packet : Bytes? = nil
-  property recorded_configuration_packets : Array(Bytes) = Array(Bytes).new
+  property spectate_server : SpectateServer?
 
   property \
     player : Player = Player.new,
@@ -46,7 +43,10 @@ class Rosegold::Client < Rosegold::EventEmitter
     chunk_batch_samples : Array(ChunkBatchSample) = Array(ChunkBatchSample).new,
     tick_rate : Float32 = 20.0_f32,
     ticking_frozen : Bool = false,
-    pending_tick_steps : UInt32 = 0_u32
+    pending_tick_steps : UInt32 = 0_u32,
+    registries : Hash(String, Clientbound::RegistryData) = Hash(String, Clientbound::RegistryData).new,
+    known_packs : Array(NamedTuple(namespace: String, id: String, version: String)) = [] of NamedTuple(namespace: String, id: String, version: String),
+    tags : Clientbound::UpdateTags? = nil
 
   def protocol_version
     detected_protocol_version || Client.protocol_version
@@ -223,8 +223,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
     Log.info { "Connected to #{host}:#{port}" }
 
-    # Set up proxy packet forwarding if proxy is attached
-    setup_proxy_forwarding
+    # Set up spectate packet forwarding if spectate server is attached
+    setup_spectate_forwarding
 
     send_packet! Serverbound::Handshake.new protocol_version, host, port, 2
     set_protocol_state(ProtocolState::LOGIN)
@@ -334,8 +334,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     Log.trace { "[#{current_protocol_state.name}] DCDE 0x#{raw_packet[0].to_s 16} #{packet}" }
 
-    # Record key initialization packets for proxy clients
-    record_initialization_packet(raw_packet, packet)
+    # No longer record packets - spectate server uses world state updates only
 
     packet.callback(self)
 
@@ -344,122 +343,65 @@ class Rosegold::Client < Rosegold::EventEmitter
     packet
   end
 
-  # Attach a proxy server to this client
-  def attach_proxy(proxy : ProxyServer)
-    @proxy_server = proxy
-    proxy.attach_bot(self)
-    setup_proxy_forwarding if connected?
+  # Attach a spectate server to this client
+  def attach_spectate_server(server : SpectateServer)
+    @spectate_server = server
+    server.attach_bot(self)
+    setup_spectate_forwarding if connected?
   end
 
-  # Detach the proxy server
-  def detach_proxy
-    @proxy_server.try(&.detach_bot)
-    @proxy_server = nil
+  # Detach the spectate server
+  def detach_spectate_server
+    @spectate_server.try(&.detach_bot)
+    @spectate_server = nil
   end
 
-  # Get recorded initialization packets for proxy clients
-  def get_initialization_packets : Array(Bytes)
-    @recorded_initialization_packets.dup
+  private def setup_spectate_forwarding
+    return unless spectate_server = @spectate_server
+
+    # No longer forward raw packets - only use world state updates
+    # Listen for specific packet events to update spectate server world state
+    setup_spectate_state_updates(spectate_server)
   end
 
-  # Get the recorded JoinGame packet from when the bot connected
-  def get_recorded_join_game_packet : Bytes?
-    @recorded_join_game_packet.try(&.dup)
-  end
-
-  # Get recorded configuration packets (registry data, etc.)
-  def get_recorded_configuration_packets : Array(Bytes)
-    @recorded_configuration_packets.dup
-  end
-
-  private def record_initialization_packet(raw_packet : Bytes, packet : Clientbound::Packet)
-    # Only record packets if we have a proxy server attached
-    return unless @proxy_server
-    
-    # Record CONFIGURATION packets separately (registry data, etc.)
-    if @current_protocol_state == ProtocolState::CONFIGURATION
-      case packet
-      when Clientbound::RegistryData
-        Log.debug { "Recording registry data packet for proxy clients" }
-        @recorded_configuration_packets << raw_packet.dup
-      when Clientbound::RawPacket
-        # Record all CONFIGURATION raw packets as they likely contain registry data
-        Log.debug { "Recording CONFIGURATION raw packet 0x#{packet.bytes[0]?.try(&.to_s(16).upcase.rjust(2, '0'))}" }
-        @recorded_configuration_packets << raw_packet.dup
-      end
-      return # Don't process CONFIGURATION packets in the PLAY logic below
-    end
-    
-    # Record key packets that clients need for proper initialization
-    # Only record PLAY-state packets - explicitly filter known non-PLAY packets
-    should_record = case packet
-    when Clientbound::JoinGame
-      # Record JoinGame separately so we can use the bot's actual JoinGame data
-      @recorded_join_game_packet = raw_packet.dup
-      Log.debug { "Recorded JoinGame packet for proxy clients" }
-      false  # Don't include in regular recorded packets
-    when Clientbound::PlayerPositionAndLook, Clientbound::SynchronizePlayerPosition
-      true  # Essential - defines where the player spawns
-    when Clientbound::UpdateHealth
-      true  # Important - sets player health/hunger
-    when Clientbound::ChunkData
-      true  # Important - world chunks for rendering
-    when Clientbound::HeldItemChange
-      true  # Important - which item is selected
-    when Clientbound::RegistryData
-      # RegistryData is sent during CONFIGURATION phase, not PLAY
-      false
-    when Clientbound::SetSlot
-      false # Skip - inventory might be player-specific
-    when Clientbound::WindowItems, Clientbound::SetContainerContent
-      false # Skip - inventory might be player-specific
-    when Clientbound::SpawnPlayer, Clientbound::SpawnLivingEntity
-      false # Skip - entities might be player-specific
-    when Clientbound::PlayerInfo
-      false # Skip - contains player-specific UUIDs and data
-    when Clientbound::ChatMessage, Clientbound::PlayerChatMessage
-      false # Skip - not needed for initialization
-    when Clientbound::RawPacket
-      # For raw packets, be very selective - filter out known non-PLAY packets
-      packet_id = packet.bytes[0]?
-      case packet_id
-      when 0x01 # EncryptionRequest - LOGIN packet with server's public key, never replay!
-        Log.warn { "Filtering out EncryptionRequest packet (0x01) - would break proxy encryption" }
-        false
-      when 0x03 # set_compression - this is a configuration/login packet, not PLAY
-        false
-      when 0x0C # award_stats - contains player-specific statistics
-        false
-      when 0x09 # update_attributes - might be player-specific
-        false  
-      when 0x0A # update_entity_nbt - might be player-specific
-        false
-      else
-        # Only record if we're in PLAY state and during initial spawn phase
-        @current_protocol_state == ProtocolState::PLAY && !spawned?
-      end
-    else
-      # For other known packets, only record if we're in PLAY state and during spawn
-      @current_protocol_state == ProtocolState::PLAY && !spawned?
-    end
-    
-    if should_record
-      Log.debug { "Recording initialization packet: #{packet.class}" }
-      @recorded_initialization_packets << raw_packet.dup
-      
-      # Limit the number of recorded packets to prevent memory issues
-      if @recorded_initialization_packets.size > 1000
-        @recorded_initialization_packets.shift(100)  # Remove oldest 100 packets
+  private def setup_spectate_state_updates(spectate_server : SpectateServer)
+    # Update chunks when received
+    on Clientbound::ChunkData do |packet|
+      chunk_pos = {packet.chunk_x, packet.chunk_z}
+      if chunk = @dimension.chunks[chunk_pos]?
+        spectate_server.update_chunk(chunk)
       end
     end
-  end
 
-  private def setup_proxy_forwarding
-    return unless proxy_server = @proxy_server
-    
-    # Forward all packets received from server to proxy clients
-    on Event::RawPacket do |event|
-      proxy_server.forward_to_clients(event.bytes)
+    # Update player position when it changes
+    on Clientbound::PlayerPositionAndLook do |packet|
+      # The player position will be updated by the packet callback first
+      spawn do
+        Fiber.yield # Let the packet update the player state first
+        spectate_server.update_player_position(@player.feet, @player.look)
+      end
+    end
+
+    on Clientbound::SynchronizePlayerPosition do |packet|
+      spawn do
+        Fiber.yield
+        spectate_server.update_player_position(@player.feet, @player.look)
+      end
+    end
+
+    # Update entities when they spawn/move
+    on Clientbound::SpawnLivingEntity do |packet|
+      entity_id = packet.entity_id
+      if entity = @dimension.entities[entity_id]?
+        spectate_server.update_entity(entity)
+      end
+    end
+
+    # Remove entities when they're destroyed
+    on Clientbound::DestroyEntities do |packet|
+      packet.entity_ids.each do |entity_id|
+        spectate_server.remove_entity(entity_id)
+      end
     end
   end
 

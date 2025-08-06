@@ -22,11 +22,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     # Convert single NBT heightmap to array format (protocol expects array)
     # For now, create default heightmaps (would need proper conversion logic)
     heightmaps = [Heightmap.new(1_u32, [] of Int64)] # WORLD_SURFACE type
-    light_data = if chunk.light_data.empty?
-                   LightData.new
-                 else
-                   LightData.read(Minecraft::IO::Memory.new(chunk.light_data))
-                 end
+    light_data = chunk.light_data
     self.new chunk.x, chunk.z, heightmaps, chunk.data, chunk.block_entities, light_data
   end
 
@@ -84,7 +80,7 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
       end
 
       # Write Light Data
-      light_data.write(io)
+      io.write light_data
     end.to_slice
   end
 

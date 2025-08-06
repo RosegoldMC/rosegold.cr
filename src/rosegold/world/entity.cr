@@ -17,7 +17,7 @@ class Rosegold::Entity
   end
 
   property \
-    entity_id : UInt64,
+    entity_id : UInt32,
     uuid : UUID,
     entity_type : UInt32,
     position : Vec3d,
@@ -25,7 +25,7 @@ class Rosegold::Entity
     yaw : Float32,
     head_yaw : Float32,
     velocity : Vec3d,
-    passenger_ids : Array(UInt64) = [] of UInt64,
+    passenger_ids : Array(UInt32) = [] of UInt32,
     effects : Array(EntityEffect) = [] of EntityEffect
 
   property? \

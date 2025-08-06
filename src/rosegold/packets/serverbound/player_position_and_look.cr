@@ -31,6 +31,31 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
     )
   end
 
+  def self.read(packet)
+    feet = Vec3d.new(
+      packet.read_double,
+      packet.read_double,
+      packet.read_double
+    )
+    look = Look.new(
+      packet.read_float,
+      packet.read_float
+    )
+
+    if Client.protocol_version >= 769_u32
+      # MC 1.21.4+ format: Read bit field (0x01: on ground, 0x02: pushing against wall)
+      flags = packet.read_byte
+      on_ground = (flags & 0x01_u8) != 0
+      pushing_against_wall = (flags & 0x02_u8) != 0
+    else
+      # Older formats: Just boolean on_ground
+      on_ground = packet.read_bool
+      pushing_against_wall = false
+    end
+
+    self.new(feet, look, on_ground, pushing_against_wall)
+  end
+
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)

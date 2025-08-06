@@ -24,7 +24,7 @@ class Rosegold::Clientbound::KnownPacks < Rosegold::Clientbound::Packet
       namespace = packet.read_var_string
       id = packet.read_var_string
       version = packet.read_var_string
-      {namespace: namespace, id: id, version: version}
+      pp!({namespace: namespace, id: id, version: version})
     end
 
     self.new(known_packs)
@@ -44,6 +44,10 @@ class Rosegold::Clientbound::KnownPacks < Rosegold::Clientbound::Packet
 
   def callback(client)
     Log.debug { "Received known packs from server: #{known_packs.size} packs" }
+
+    # Store the known packs in the client for later use
+    client.known_packs = known_packs.dup
+    Log.trace { "Stored #{known_packs.size} known packs in client" }
 
     # Respond with our known packs (for now, we acknowledge all server packs)
     response = Rosegold::Serverbound::KnownPacks.new(known_packs)

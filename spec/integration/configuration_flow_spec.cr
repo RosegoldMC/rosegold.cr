@@ -7,6 +7,9 @@ class MockClient
   property current_protocol_state : Rosegold::ProtocolState
   property player : Rosegold::Player = Rosegold::Player.new
   property sent_packets : Array(Rosegold::Packet) = [] of Rosegold::Packet
+  property registries : Hash(String, Rosegold::Clientbound::RegistryData) = Hash(String, Rosegold::Clientbound::RegistryData).new
+  property known_packs : Array(NamedTuple(namespace: String, id: String, version: String)) = [] of NamedTuple(namespace: String, id: String, version: String)
+  property tags : Rosegold::Clientbound::UpdateTags? = nil
 
   def initialize(@protocol_version, @current_protocol_state = Rosegold::ProtocolState::HANDSHAKING)
   end
@@ -172,8 +175,8 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
 
       # Check clientbound packets for protocol 772
       expect(config_state.get_clientbound_packet(0x03_u8, 772_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
-      expect(config_state.get_clientbound_packet(0x05_u8, 772_u32)).to eq(Rosegold::Clientbound::RegistryData)
-      expect(config_state.get_clientbound_packet(0x08_u8, 772_u32)).to eq(Rosegold::Clientbound::UpdateTags)
+      expect(config_state.get_clientbound_packet(0x07_u8, 772_u32)).to eq(Rosegold::Clientbound::RegistryData)
+      expect(config_state.get_clientbound_packet(0x0D_u8, 772_u32)).to eq(Rosegold::Clientbound::UpdateTags)
 
       # Check serverbound packets for protocol 772
       expect(config_state.get_serverbound_packet(0x00_u8, 772_u32)).to eq(Rosegold::Serverbound::ClientInformation)

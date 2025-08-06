@@ -3,7 +3,7 @@ require "io/hexdump"
 
 require "./rosegold/client"
 require "./rosegold/bot"
-require "./rosegold/proxy_server"
+require "./rosegold/spectate_server"
 
 # TODO: Write documentation for `Rosegold`
 module Rosegold

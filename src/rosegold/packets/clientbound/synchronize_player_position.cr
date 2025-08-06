@@ -46,7 +46,15 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
       pitch = packet.read_float
       relative_flags = packet.read_byte
 
-      self.new(x, y, z, yaw, pitch, relative_flags, teleport_id, false, velocity_x, velocity_y, velocity_z)
+      # Read dismount vehicle flag (MC 1.21.6+)  
+      dismount_vehicle = packet.read_byte != 0_u8
+      
+      # Read remaining bytes - appears to be 2 additional bytes in MC 1.21.8
+      extra_byte1 = packet.read_byte  
+      extra_byte2 = packet.read_byte
+      Log.debug { "SynchronizePlayerPosition extra bytes: #{extra_byte1.to_s(16)} #{extra_byte2.to_s(16)}" }
+      
+      self.new(x, y, z, yaw, pitch, relative_flags, teleport_id, dismount_vehicle, velocity_x, velocity_y, velocity_z)
     else
       # MC 1.21 format: Original format
       x = packet.read_double
@@ -64,13 +72,32 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |io|
       io.write self.class.packet_id_for_protocol(Client.protocol_version)
-      io.write x_raw
-      io.write y_raw
-      io.write z_raw
-      io.write yaw_raw
-      io.write pitch_raw
-      io.write relative_flags
-      io.write teleport_id
+      
+      if Client.protocol_version >= 769_u32
+        # MC 1.21.6+ format: Teleport ID first, then coordinates, velocities, angles, flags
+        io.write teleport_id
+        io.write x_raw
+        io.write y_raw
+        io.write z_raw
+        io.write velocity_x
+        io.write velocity_y
+        io.write velocity_z
+        io.write yaw_raw
+        io.write pitch_raw
+        io.write relative_flags
+        io.write(dismount_vehicle? ? 1_u8 : 0_u8)
+        io.write 0_u8 # Extra byte 1 (value 0)
+        io.write 0_u8 # Extra byte 2 (value 0)
+      else
+        # MC 1.21 format: Original format
+        io.write x_raw
+        io.write y_raw
+        io.write z_raw
+        io.write yaw_raw
+        io.write pitch_raw
+        io.write relative_flags
+        io.write teleport_id
+      end
     end.to_slice
   end
 
