@@ -662,7 +662,7 @@ class Rosegold::SpectateConnection
     spawn_entity_packet = Clientbound::SpawnLivingEntity.new(
       entity_id: bot_entity_id,
       uuid: bot_uuid,
-      entity_type: 119_u32, # Player entity type
+      entity_type: 149_u32, # Player entity type
       x: bot.player.feet.x,
       y: bot.player.feet.y,
       z: bot.player.feet.z,
