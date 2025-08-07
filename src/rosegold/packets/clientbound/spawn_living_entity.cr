@@ -47,19 +47,19 @@ class Rosegold::Clientbound::SpawnLivingEntity < Rosegold::Clientbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
 
-      buffer.write pp! entity_id
-      buffer.write pp! uuid
-      buffer.write pp! entity_type
-      buffer.write_full pp! x
-      buffer.write_full pp! y
-      buffer.write_full pp! z
-      buffer.write_angle256_deg pp! pitch
-      buffer.write_angle256_deg pp! yaw
-      buffer.write_angle256_deg pp! head_yaw
-      buffer.write pp! data
-      buffer.write_full pp! velocity_x
-      buffer.write_full pp! velocity_y
-      buffer.write_full pp! velocity_z
+      buffer.write entity_id
+      buffer.write uuid
+      buffer.write entity_type
+      buffer.write_full x
+      buffer.write_full y
+      buffer.write_full z
+      buffer.write_angle256_deg pitch
+      buffer.write_angle256_deg yaw
+      buffer.write_angle256_deg head_yaw
+      buffer.write data
+      buffer.write_full velocity_x
+      buffer.write_full velocity_y
+      buffer.write_full velocity_z
     end.to_slice
   end
 

@@ -217,6 +217,9 @@ class Rosegold::Physics
       player.feet = feet
       player.look = look
       player.on_ground = on_ground
+      
+      # Emit player position update event
+      client.emit_event Event::PlayerPositionUpdate.new(feet, look)
     end
 
     player.velocity = next_velocity
@@ -273,6 +276,9 @@ class Rosegold::Physics
     @last_sent_feet = feet
     @last_sent_look = look
     @last_sent_on_ground = on_ground
+    
+    # Emit player position update event
+    client.emit_event Event::PlayerPositionUpdate.new(feet, look)
   end
 
   private def velocity_for_inputs

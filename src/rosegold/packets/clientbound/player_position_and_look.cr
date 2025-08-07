@@ -1,6 +1,7 @@
 require "../../world/look"
 require "../../world/vec3"
 require "../packet"
+require "../../events/player_position_update"
 
 # relative_flags: x/y/z/yaw/pitch. If a flag is set, its value is relative to the current player position/look.
 class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Packet
@@ -95,5 +96,8 @@ class Rosegold::Clientbound::PlayerPositionAndLook < Rosegold::Clientbound::Pack
     Log.debug { "Position reset: #{player.feet} #{player.look} dismount=#{dismount_vehicle?} flags=#{relative_flags}" }
 
     client.physics.handle_reset
+    
+    # Emit player position update event
+    client.emit_event Event::PlayerPositionUpdate.new(player.feet, player.look)
   end
 end

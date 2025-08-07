@@ -373,20 +373,9 @@ class Rosegold::Client < Rosegold::EventEmitter
       end
     end
 
-    # Update player position when it changes
-    on Clientbound::PlayerPositionAndLook do |packet|
-      # The player position will be updated by the packet callback first
-      spawn do
-        Fiber.yield # Let the packet update the player state first
-        spectate_server.update_player_position(@player.feet, @player.look)
-      end
-    end
-
-    on Clientbound::SynchronizePlayerPosition do |packet|
-      spawn do
-        Fiber.yield
-        spectate_server.update_player_position(@player.feet, @player.look)
-      end
+    # Update spectate server whenever player position changes (from packets or physics)
+    on Event::PlayerPositionUpdate do |event|
+      spectate_server.update_player_position(event.position, event.look)
     end
 
     # Update entities when they spawn/move

@@ -231,7 +231,7 @@ class Rosegold::SpectateServer
 
       # Create entity position sync packet for the bot player entity
       position_sync_packet = Clientbound::EntityPositionSync.new(
-        entity_id: bot_entity_id.to_u64,
+        entity_id: bot_entity_id.to_u32,
         x: position.x,
         y: position.y,
         z: position.z,
@@ -621,20 +621,20 @@ class Rosegold::SpectateConnection
     send_packet(health_packet)
     Log.info { "Sent health update: #{bot.player.health}/20" }
 
-    # 6. Player abilities - defines flying, creative mode, etc.
+    # 6. Player abilities - spectator mode abilities
+    # Spectators are invulnerable, can fly, and can move through blocks
     abilities_flags = 0_u8
-    abilities_flags |= 0x01 if bot.player.invulnerable?
-    abilities_flags |= 0x02 if bot.player.flying?
-    abilities_flags |= 0x04 if bot.player.allow_flying?
-    abilities_flags |= 0x08 if bot.player.creative_mode?
+    abilities_flags |= 0x01 # Invulnerable
+    abilities_flags |= 0x02 # Flying
+    abilities_flags |= 0x04 # Allow flying
 
     abilities_packet = Clientbound::PlayerAbilities.new(
       flags: abilities_flags,
-      flying_speed: bot.player.flying_speed,
-      field_of_view_modifier: bot.player.field_of_view_modifier
+      flying_speed: 0.05_f32,         # Default spectator flying speed
+      field_of_view_modifier: 0.1_f32 # Default FOV modifier
     )
     send_packet(abilities_packet)
-    Log.info { "Sent player abilities: flags=0x#{abilities_flags.to_s(16).upcase.rjust(2, '0')}, flying_speed=#{bot.player.flying_speed}, fov=#{bot.player.field_of_view_modifier}" }
+    Log.info { "Sent player abilities: flags=0x#{abilities_flags.to_s(16).upcase.rjust(2, '0')}, flying_speed=0.05, fov=0.1 (spectator mode)" }
 
     # 7. Ticking state - sets game tick rate and freeze status
     ticking_state_packet = Clientbound::TickingState.new(
@@ -659,6 +659,7 @@ class Rosegold::SpectateConnection
 
     # 9. Spawn bot as visible entity (VarInt compatible entity ID)
     bot_entity_id = (1000 + (bot_name.hash.abs % 10000)).to_u32
+    Log.info { "Bot position: #{bot.player.feet} (Y=#{bot.player.feet.y} is #{bot.player.feet.y > 100 ? "HIGH" : "normal"})" }
     spawn_entity_packet = Clientbound::SpawnLivingEntity.new(
       entity_id: bot_entity_id,
       uuid: bot_uuid,
@@ -688,7 +689,12 @@ class Rosegold::SpectateConnection
     # 11. Send chunks - essential for world rendering
     send_chunks
 
-    Log.info { "Completed sending essential PLAY packets (JoinGame, SetDefaultSpawnPosition, SetChunkCacheCenter, SynchronizePlayerPosition, UpdateHealth, PlayerAbilities, TickingState, PlayerInfoUpdate, SpawnLivingEntity, GameEvent, Chunks) to client #{@username}" }
+    # 12. Set camera to follow bot entity (spectator mode)
+    set_camera_packet = Clientbound::SetCamera.new(bot_entity_id)
+    send_packet(set_camera_packet)
+    Log.info { "Set camera to follow bot entity #{bot_entity_id}" }
+
+    Log.info { "Completed sending essential PLAY packets (JoinGame, SetDefaultSpawnPosition, SetChunkCacheCenter, SynchronizePlayerPosition, UpdateHealth, PlayerAbilities, TickingState, PlayerInfoUpdate, SpawnLivingEntity, GameEvent, Chunks, SetCamera) to client #{@username}" }
   end
 
   # Send a minimal JoinGame packet with basic values
@@ -710,7 +716,7 @@ class Rosegold::SpectateConnection
       dimension_type: 0_u32, # This needs to match the read method type
       dimension_name: "minecraft:overworld",
       hashed_seed: 0_i64,
-      gamemode: 0_u8, # Survival mode (0) instead of creative (1)
+      gamemode: 3_u8, # Spectator mode for spectating
       previous_gamemode: -1_i8,
       is_debug: false,
       is_flat: false,

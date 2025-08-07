@@ -15,7 +15,7 @@ puts "   Spectate Server: #{SPECTATE_HOST}:#{SPECTATE_PORT}"
 puts ""
 
 # Create the bot client
-bot = Rosegold::Client.new(
+client = Rosegold::Client.new(
   MINECRAFT_SERVER_HOST,
   MINECRAFT_SERVER_PORT,
   offline: {
@@ -23,12 +23,13 @@ bot = Rosegold::Client.new(
     username: "SpectateBot",
   }
 )
+bot = Rosegold::Bot.new(client)
 
 # Create the spectate server
 spectate_server = Rosegold::SpectateServer.new(SPECTATE_HOST, SPECTATE_PORT)
 
 # Attach the spectate server to the bot
-bot.attach_spectate_server(spectate_server)
+client.attach_spectate_server(spectate_server)
 
 # Start the spectate server
 spectate_server.start
@@ -38,7 +39,7 @@ puts "✅ Spectate server started on #{SPECTATE_HOST}:#{SPECTATE_PORT}"
 puts "🔄 Connecting bot to Minecraft server #{MINECRAFT_SERVER_HOST}:#{MINECRAFT_SERVER_PORT}..."
 
 begin
-  bot.connect
+  client.join_game
 
   puts "✅ Bot connected to server successfully!"
   puts ""
@@ -53,6 +54,12 @@ begin
   puts "⚠️  The bot and client will share the same player - this is expected!"
   puts ""
   puts "⏹️  Press Ctrl+C to stop"
+
+  spawn do
+    while bot.connected?
+      bot.move_to rand(-10..10), rand(-10..10)
+    end
+  end
 
   # Keep the spectate server running
   sleep

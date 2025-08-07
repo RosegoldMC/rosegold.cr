@@ -2,6 +2,7 @@
 require "../../world/look"
 require "../../world/vec3"
 require "../packet"
+require "../../events/player_position_update"
 
 # relative_flags: x/y/z/yaw/pitch. If a flag is set, its value is relative to the current player position/look.
 class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::Packet
@@ -157,6 +158,9 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     end
 
     client.queue_packet Serverbound::TeleportConfirm.new teleport_id
+    
+    # Emit player position update event
+    client.emit_event Event::PlayerPositionUpdate.new(player.feet, player.look)
 
     Log.debug { "Position synchronized: #{player.feet} #{player.look} flags=#{relative_flags}" }
 
