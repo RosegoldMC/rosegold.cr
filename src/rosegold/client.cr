@@ -23,6 +23,8 @@ class Rosegold::Client < Rosegold::EventEmitter
   property detected_protocol_version : UInt32?
   property current_protocol_state : ProtocolState = ProtocolState::HANDSHAKING
 
+  delegate disconnect, to: connection
+
   property \
     player : Player = Player.new,
     access_token : String = "",
