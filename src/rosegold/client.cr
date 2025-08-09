@@ -229,6 +229,8 @@ class Rosegold::Client < Rosegold::EventEmitter
       end
     rescue e : IO::Error
       Log.debug { "Stopping reader: #{e}" }
+      # Properly disconnect when IO error occurs to update connection state
+      connection?.try &.disconnect Chat.new "IO Error: #{e.message}"
     end
   end
 
