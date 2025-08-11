@@ -28,7 +28,7 @@ class Rosegold::Serverbound::InteractEntity < Rosegold::Serverbound::Packet
     @target_y : Float32? = nil,
     @target_z : Float32? = nil,
     @hand : Hand? = nil,
-    @sneaking : Bool = false,
+    @sneaking : Bool = false
   ); end
 
   def write : Bytes

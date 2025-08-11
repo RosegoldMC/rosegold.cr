@@ -20,7 +20,7 @@ class Rosegold::Serverbound::Handshake < Rosegold::Serverbound::Packet
     @protocol_version : UInt32,
     @server_address : String,
     @server_port : Int32,
-    @next_state : Int32,
+    @next_state : Int32
   ); end
 
   def self.read(packet)
