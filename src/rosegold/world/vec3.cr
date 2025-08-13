@@ -149,7 +149,7 @@ module Rosegold::Vec3(T)
   # See also `#projected_factor_along_line`.
   def project_onto_line(
     start : self,
-    direction : self
+    direction : self,
   ) : self
     steps = projected_factor_along_line start, direction
     start + steps * direction
@@ -159,7 +159,7 @@ module Rosegold::Vec3(T)
   # See also `#project_onto_line`.
   def projected_factor_along_line(
     start : self,
-    direction : self
+    direction : self,
   ) : T
     (x - start.x) * direction.x +
       (y - start.y) * direction.y +

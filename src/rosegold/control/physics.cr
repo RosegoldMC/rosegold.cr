@@ -365,7 +365,7 @@ class Rosegold::Physics
   # including boxes 0.5m higher for stepping.
   # `entity_aabb` is at 0,0,0; the returned AABBs are grown by `entity_aabb` so collision checks are just raytracing.
   def self.get_grown_obstacles(
-    start : Vec3d, movement : Vec3d, entity_aabb : AABBf, dimension : Dimension
+    start : Vec3d, movement : Vec3d, entity_aabb : AABBf, dimension : Dimension,
   ) : Array(AABBd)
     entity_aabb = entity_aabb.to_f64
     grow_aabb = entity_aabb * -1
