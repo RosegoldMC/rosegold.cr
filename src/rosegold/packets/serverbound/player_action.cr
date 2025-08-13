@@ -22,7 +22,7 @@ class Rosegold::Serverbound::PlayerAction < Rosegold::Serverbound::Packet
     @status : Status,
     @location : Vec3i = Vec3i::ORIGIN,
     @face : BlockFace = :bottom,
-    @sequence : Int32 = 0
+    @sequence : Int32 = 0,
   ); end
 
   def write : Bytes
