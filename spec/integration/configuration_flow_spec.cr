@@ -18,6 +18,11 @@ class MockClient
   def send_packet!(packet : Rosegold::Packet)
     @sent_packets << packet
   end
+
+  def transfer_to(new_host : String, new_port : UInt32)
+    # Mock implementation for testing - just log the transfer attempt
+    # In real tests, we don't want to actually connect to servers
+  end
 end
 
 Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
