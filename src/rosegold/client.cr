@@ -273,7 +273,7 @@ class Rosegold::Client < Rosegold::EventEmitter
       connect
       Log.info { "Transfer to #{new_host}:#{new_port} completed successfully" }
     rescue e
-      Log.error { "Transfer failed: #{e.message}" }
+      Log.error { "Transfer failed during connection to #{new_host}:#{new_port}: #{e.message}" }
       @host = old_host
       @port = old_port
       @connection = old_connection
