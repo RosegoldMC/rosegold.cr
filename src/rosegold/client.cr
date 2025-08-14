@@ -276,7 +276,7 @@ class Rosegold::Client < Rosegold::EventEmitter
       Log.error { "Transfer failed during connection to #{new_host}:#{new_port}: #{e.message}" }
       @host = old_host
       @port = old_port
-      @connection = old_connection
+      @connection = nil
       raise e
     end
   end
