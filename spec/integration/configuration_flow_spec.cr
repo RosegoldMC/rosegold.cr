@@ -174,10 +174,44 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
       expect(config_state.get_clientbound_packet(0x03_u8, 772_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
       expect(config_state.get_clientbound_packet(0x05_u8, 772_u32)).to eq(Rosegold::Clientbound::RegistryData)
       expect(config_state.get_clientbound_packet(0x08_u8, 772_u32)).to eq(Rosegold::Clientbound::UpdateTags)
+      expect(config_state.get_clientbound_packet(0x0B_u8, 772_u32)).to eq(Rosegold::Clientbound::Transfer)
 
       # Check serverbound packets for protocol 772
       expect(config_state.get_serverbound_packet(0x00_u8, 772_u32)).to eq(Rosegold::Serverbound::ClientInformation)
       expect(config_state.get_serverbound_packet(0x03_u8, 772_u32)).to eq(Rosegold::Serverbound::FinishConfiguration)
+    end
+  end
+
+  describe "Transfer packet behavior" do
+    it "processes transfer packet correctly without errors" do
+      mock_client = MockClient.new(772_u32, Rosegold::ProtocolState::CONFIGURATION)
+
+      # Create a transfer packet
+      transfer_packet = Rosegold::Clientbound::Transfer.new("example.server.com", 25565_u32)
+
+      # Callback should not raise an error
+      expect { transfer_packet.callback(mock_client) }.not_to raise_error
+
+      # Should log the transfer request
+      expect(transfer_packet.host).to eq("example.server.com")
+      expect(transfer_packet.port).to eq(25565_u32)
+    end
+
+    it "handles transfer packet with different host formats" do
+      mock_client = MockClient.new(772_u32, Rosegold::ProtocolState::CONFIGURATION)
+
+      test_cases = [
+        {"localhost", 25565_u32},
+        {"192.168.1.100", 8080_u32},
+        {"play.hypixel.net", 25565_u32},
+      ]
+
+      test_cases.each do |host, port|
+        transfer_packet = Rosegold::Clientbound::Transfer.new(host, port)
+        expect { transfer_packet.callback(mock_client) }.not_to raise_error
+        expect(transfer_packet.host).to eq(host)
+        expect(transfer_packet.port).to eq(port)
+      end
     end
   end
 end
