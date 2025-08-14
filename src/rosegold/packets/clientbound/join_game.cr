@@ -1,5 +1,6 @@
 require "../../../minecraft/nbt"
 require "../packet"
+require "../serverbound/plugin_message"
 
 class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
@@ -133,6 +134,11 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
     # This may need adjustment based on how Dimension class is implemented
     # client.dimension = Dimension.new dimension_name, dimension_type
 
+    # Send minecraft:brand plugin message to identify the client
+    brand_packet = Rosegold::Serverbound::PluginMessage.brand("Rosegold")
+    client.queue_packet(brand_packet)
+
     Log.debug { "Ingame. #{dimension_name} gamemode=#{gamemode} entity_id=#{entity_id}" }
+    Log.debug { "Sent minecraft:brand plugin message with 'Rosegold'" }
   end
 end
