@@ -354,7 +354,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   # a EncryptionResponse has been sent.
   def send_packet!(packet : Serverbound::Packet)
     raise NotConnected.new unless connected?
-    Log.trace { "SEND #{packet}" }
+    Log.trace { "[#{current_protocol_state.name}] SEND #{packet}" }
     connection.send_packet packet
   end
 
