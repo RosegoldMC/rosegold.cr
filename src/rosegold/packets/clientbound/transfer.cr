@@ -36,7 +36,9 @@ class Rosegold::Clientbound::Transfer < Rosegold::Clientbound::Packet
       client.transfer_to(host, port)
       Log.info { "Server transfer to #{host}:#{port} completed successfully" }
     rescue e
-      Log.error { "Server transfer to #{host}:#{port} failed: #{e.message}" }
+      Log.error do
+        "Server transfer to #{host}:#{port} failed (#{e.class}): #{e.message}\nBacktrace:\n#{e.backtrace.join("\n") if e.responds_to?(:backtrace)}"
+      end
       raise e
     end
   end
