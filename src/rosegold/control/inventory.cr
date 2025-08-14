@@ -120,23 +120,8 @@ class Rosegold::Inventory
     source.sort_by { |slot| -slot.count.to_i8 }.each do |slot|
       next unless slot.matches? spec
 
-      # Find first empty slot in target container
-      target_slot = find_empty_slot target
-
-      # If the target container is full; break;
-      break if target_slot.nil?
-
-      # Swap slots
-      changed_slots = [
-        Rosegold::WindowSlot.new(target_slot.slot_number, slot),
-        Rosegold::WindowSlot.new(slot.slot_number, target_slot),
-      ]
-
-      client.send_packet! Serverbound::ClickWindow.new :shift, 0_i8, slot.slot_number.to_i16, changed_slots, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
-
-      slot.slot_number, target_slot.slot_number = target_slot.slot_number, slot.slot_number
-
-      self.slots = slots.sort_by &.slot_number
+      # Send shift-click packet to server - let server handle stacking logic
+      client.send_packet! Serverbound::ClickWindow.new :shift, 0_i8, slot.slot_number.to_i16, [] of WindowSlot, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
 
       transferred += slot.count
 

@@ -883,6 +883,22 @@ class Rosegold::Slot
     ].includes? name
   end
 
+  # Check if this slot can be stacked with another slot of the same item type
+  def can_stack_with?(other : Slot) : Bool
+    return false if empty? || other.empty?
+    return false if item_id_int != other.item_id_int
+    return false if full? || other.full?
+
+    # Components must match for stacking (enchantments, damage, etc.)
+    components_to_add == other.components_to_add && components_to_remove == other.components_to_remove
+  end
+
+  # Calculate how many items can be added to this slot from another slot
+  def available_stack_space : UInt32
+    return 0_u32 if full?
+    max_stack_size.to_u32 - count
+  end
+
   def to_s(io)
     inspect io
   end
