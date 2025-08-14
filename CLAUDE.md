@@ -1,16 +1,90 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Common Development Commands
+
+### Build & Run
+```bash
+# Build the project
+crystal build src/rosegold.cr
+
+# Run example bots
+crystal run examples/bot_example.cr
+crystal run examples/proxy_example.cr
+```
+
+### Testing
+```bash
+# Run all tests
+crystal spec
+
+# Run specific spec files with timeout (recommended for integration tests)
+timeout 60s crystal spec spec/integration/interactions_spec.cr
+
+# Run with environment variables for debugging
+LOG_LEVEL=trace crystal spec spec/integration/interactions_spec.cr
+LOG_PACKET=72 crystal spec  # Log specific packet types
+```
+
+### Code Quality
+```bash
+# Format code
+crystal tool format
+
+# Run linter
+bin/ameba
+
+# Generate documentation
+crystal docs
+```
+
+## Architecture Overview
+
+### Core Components
+- **Client** (`src/rosegold/client.cr`) - Main client class that manages connection, state, and protocol handling
+- **Bot** (`src/rosegold/bot.cr`) - High-level bot API built on top of Client, provides DSL for bot creation
+- **SpectateServer** (`src/rosegold/spectate_server.cr`) - Proxy server for "headless with headful feel" functionality
+
+### Packet System
+- **Clientbound packets** (`src/rosegold/packets/clientbound/`) - Packets received from server
+- **Serverbound packets** (`src/rosegold/packets/serverbound/`) - Packets sent to server
+- **Protocol mapping** (`src/rosegold/packets/protocol_mapping.cr`) - Maps packet IDs to packet classes
+- Protocol version 772 (Minecraft 1.21.8) is the default
+
+### World Management
+- **Dimension** (`src/rosegold/world/dimension.cr`) - Manages chunks and world state
+- **Player** (`src/rosegold/world/player.cr`) - Player state, position, health, etc.
+- **Physics** (`src/rosegold/control/physics.cr`) - Movement, collision detection
+- **Interactions** (`src/rosegold/control/interactions.cr`) - Block/entity interactions
+
+### Game Data
+- Game assets stored in `game_assets/` directory
+- Protocol documentation in `game_assets/protocol_docs/`
+- Block, item, and biome data from Minecraft 1.21.8
+
+## Development Guidelines
+
+### Protocol Work
+- **NEVER change packet IDs** without explicit user approval - they must match Minecraft protocol
+- Use `LOG_PACKET=<id>` environment variable to debug specific packets (e.g., `LOG_PACKET=72` for SystemChatMessage)
+- When packet parsing fails, use logged packet bytes to write unit specs
+- Protocol documentation available at `./game_assets/protocol_docs/1.21.8.wiki`
+
+### Testing
+- Always add timeouts to integration specs to prevent hanging
+- Integration specs connect to test server at `spec/fixtures/server/`
+- Server logs available at `spec/fixtures/server/logs/latest.log`
+- Use `spectator` testing framework
+
+### Debugging
+- Comprehensive debugging guide at `./DEBUGGING.md`
+- Set `LOG_LEVEL=trace` for verbose output
+- Use `LOG_PACKET=<packet_id>` to log specific packet types
+- Error packet logging automatically captures failed parsing attempts
+
 ## Documentation Links
-- wiki.vg is down, use minecraft.wiki instead
-- Docs for the protocol can be found at ./game_assets/protocol_docs
-- Most docs can be found at this link https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol?oldid=3024144, but a local copy that is easier to parse is at ./game_assets/protocol_docs/1.21.6.wiki
-
-## Development Notes
-- Generally, whenever you want to run integration specs you should add some sort of timeout to the command. Otherwise, you might lock yourself src/minecraft/auth.cr
-- Never ever change packet ID's. If packet ID's need to be changed please tell the user.
-- When a packet fails to decode, you can use the logs to retrieve the packet bytes for the packet to write a unit spec for the packet being decoded properly
-
-## Server Logs
-- Server logs are located at spec/fixtures/server/logs/latest.log
-
-## Debugging
-- Comprehensive debugging guide available at ./DEBUGGING.md
-- Use LOG_PACKET environment variable to log specific packet types (e.g., LOG_PACKET=72 for SystemChatMessage)
+- Use minecraft.wiki instead of wiki.vg (wiki.vg is down)
+- Protocol docs: https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol
+- Local protocol docs: `./game_assets/protocol_docs/1.21.8.wiki`
+- Protocol reference from GitHub Copilot instructions: https://minecraft.wiki/w/Java_Edition_protocol/Packets
