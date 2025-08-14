@@ -41,7 +41,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     chunk_batch_samples : Array(ChunkBatchSample) = Array(ChunkBatchSample).new,
     tick_rate : Float32 = 20.0_f32,
     ticking_frozen : Bool = false,
-    pending_tick_steps : UInt32 = 0_u32
+    pending_tick_steps : UInt32 = 0_u32,
+    cookies : Hash(String, Bytes) = Hash(String, Bytes).new
 
   def protocol_version
     detected_protocol_version || Client.protocol_version
@@ -78,6 +79,20 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     @pending_tick_steps += steps
     Log.debug { "Added #{steps} tick steps, total pending: #{@pending_tick_steps}" }
+  end
+
+  def store_cookie(identifier : String, data : Bytes)
+    @cookies[identifier] = data
+    Log.debug { "Stored cookie: #{identifier} (#{data.size} bytes)" }
+  end
+
+  def get_cookie(identifier : String) : Bytes?
+    @cookies[identifier]?
+  end
+
+  def clear_cookies
+    @cookies.clear
+    Log.debug { "Cleared all cookies" }
   end
 
   # Calculate tick interval based on current tick rate
@@ -229,6 +244,40 @@ class Rosegold::Client < Rosegold::EventEmitter
       end
     rescue e : IO::Error
       Log.debug { "Stopping reader: #{e}" }
+    end
+  end
+
+  def transfer_to(new_host : String, new_port : UInt32)
+    Log.info { "Initiating transfer to #{new_host}:#{new_port}" }
+
+    old_connection = @connection
+    old_host = @host
+    old_port = @port
+
+    Log.debug { "Preserving #{@cookies.size} cookies for transfer" }
+
+    old_connection.try do |conn|
+      if conn.open?
+        Log.debug { "Disconnecting from current server for transfer" }
+        conn.disconnect(Chat.new("Transferring to #{new_host}:#{new_port}"))
+      end
+    end
+
+    @host = new_host
+    @port = new_port.to_i
+    @connection = nil
+    @current_protocol_state = ProtocolState::HANDSHAKING
+
+    begin
+      Log.info { "Connecting to new server #{new_host}:#{new_port}" }
+      connect
+      Log.info { "Transfer to #{new_host}:#{new_port} completed successfully" }
+    rescue e
+      Log.error { "Transfer failed: #{e.message}" }
+      @host = old_host
+      @port = old_port
+      @connection = old_connection
+      raise e
     end
   end
 

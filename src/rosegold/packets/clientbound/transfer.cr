@@ -30,19 +30,14 @@ class Rosegold::Clientbound::Transfer < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    # When we receive a Transfer packet, we should initiate a connection
-    # to the new server while preserving cookies and session state
     Log.info { "Received transfer request to #{host}:#{port}" }
 
-    # For now, we'll just log the transfer request
-    # A full implementation would:
-    # 1. Preserve current cookies and session state
-    # 2. Disconnect from current server cleanly
-    # 3. Initiate new connection to host:port
-    # 4. Transfer preserved state to new connection
-
-    # This is a placeholder for the actual transfer logic
-    # The actual implementation would depend on the client's connection management
-    Log.warn { "Server transfer initiated but not fully implemented yet" }
+    begin
+      client.transfer_to(host, port)
+      Log.info { "Server transfer to #{host}:#{port} completed successfully" }
+    rescue e
+      Log.error { "Server transfer to #{host}:#{port} failed: #{e.message}" }
+      raise e
+    end
   end
 end
