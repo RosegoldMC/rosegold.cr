@@ -221,26 +221,16 @@ class Rosegold::SpectateServer
     return if @connections.empty?
 
     begin
-      # Send entity position sync packet to show bot movement to spectating clients
-      bot = @bot
-      return unless bot
-
-      # Generate consistent entity ID based on bot name (VarInt compatible)
-      bot_name = bot.offline.try(&.[:username]) || "SpectateBot"
-      bot_entity_id = (1000 + (bot_name.hash.abs % 10000)).to_u32
-
-      # Create entity position sync packet for the bot player entity
-      position_sync_packet = Clientbound::EntityPositionSync.new(
-        entity_id: bot_entity_id.to_u32,
-        x: position.x,
-        y: position.y,
-        z: position.z,
-        velocity_x: 0.0,
-        velocity_y: 0.0,
-        velocity_z: 0.0,
-        yaw: look.yaw,
-        pitch: look.pitch,
-        on_ground: true
+      # Update the spectate client's own position to match the bot
+      # This works better with spectator mode than creating separate entities
+      position_sync_packet = Clientbound::SynchronizePlayerPosition.new(
+        x_raw: position.x,
+        y_raw: position.y,
+        z_raw: position.z,
+        yaw_raw: look.yaw,
+        pitch_raw: look.pitch,
+        relative_flags: 0_u8, # Absolute positioning
+        teleport_id: (Time.utc.to_unix_ms % 1000000).to_u32 # Unique teleport ID
       )
 
       # Send to all spectating clients
@@ -249,11 +239,11 @@ class Rosegold::SpectateServer
         begin
           spectate_conn.send_packet(position_sync_packet)
         rescue e
-          Log.warn { "Failed to send entity position sync to client #{spectate_conn}: #{e}" }
+          Log.warn { "Failed to send position sync to client #{spectate_conn}: #{e}" }
         end
       end
 
-      Log.trace { "Sent bot entity position sync to #{@connections.size} spectate clients: #{position} look: #{look}" }
+      Log.trace { "Sent player position sync to #{@connections.size} spectate clients: #{position} look: #{look}" }
     rescue e
       Log.error { "Failed to send player position to spectate clients: #{e}" }
     end
@@ -621,20 +611,20 @@ class Rosegold::SpectateConnection
     send_packet(health_packet)
     Log.info { "Sent health update: #{bot.player.health}/20" }
 
-    # 6. Player abilities - spectator mode abilities
-    # Spectators are invulnerable, can fly, and can move through blocks
+    # 6. Player abilities - use bot's actual abilities
     abilities_flags = 0_u8
-    abilities_flags |= 0x01 # Invulnerable
-    abilities_flags |= 0x02 # Flying
-    abilities_flags |= 0x04 # Allow flying
+    abilities_flags |= 0x01 if bot.player.invulnerable?
+    abilities_flags |= 0x02 if bot.player.flying?
+    abilities_flags |= 0x04 if bot.player.allow_flying?
+    abilities_flags |= 0x08 if bot.player.creative_mode?
 
     abilities_packet = Clientbound::PlayerAbilities.new(
       flags: abilities_flags,
-      flying_speed: 0.05_f32,         # Default spectator flying speed
-      field_of_view_modifier: 0.1_f32 # Default FOV modifier
+      flying_speed: bot.player.flying_speed,
+      field_of_view_modifier: bot.player.field_of_view_modifier
     )
     send_packet(abilities_packet)
-    Log.info { "Sent player abilities: flags=0x#{abilities_flags.to_s(16).upcase.rjust(2, '0')}, flying_speed=0.05, fov=0.1 (spectator mode)" }
+    Log.info { "Sent player abilities: flags=0x#{abilities_flags.to_s(16).upcase.rjust(2, '0')}, flying_speed=#{bot.player.flying_speed}, fov=#{bot.player.field_of_view_modifier}" }
 
     # 7. Ticking state - sets game tick rate and freeze status
     ticking_state_packet = Clientbound::TickingState.new(
@@ -657,31 +647,7 @@ class Rosegold::SpectateConnection
     send_packet(player_info_packet)
     Log.info { "Added bot player #{bot_name} (#{bot_uuid}) to player list" }
 
-    # 9. Spawn bot as visible entity (VarInt compatible entity ID)
-    bot_entity_id = (1000 + (bot_name.hash.abs % 10000)).to_u32
-    Log.info { "Bot position: #{bot.player.feet} (Y=#{bot.player.feet.y} is #{bot.player.feet.y > 100 ? "HIGH" : "normal"})" }
-    spawn_entity_packet = Clientbound::SpawnLivingEntity.new(
-      entity_id: bot_entity_id,
-      uuid: bot_uuid,
-      entity_type: 149_u32, # Player entity type
-      x: bot.player.feet.x,
-      y: bot.player.feet.y,
-      z: bot.player.feet.z,
-      pitch: bot.player.look.pitch.to_f64,
-      yaw: bot.player.look.yaw.to_f64,
-      head_yaw: bot.player.look.yaw.to_f64,
-      data: 0_u32,
-      velocity_x: 0_i16,
-      velocity_y: 0_i16,
-      velocity_z: 0_i16
-    )
-    send_packet(spawn_entity_packet)
-    Log.info { "Spawned bot entity with ID #{bot_entity_id} at #{bot.player.feet}" }
-    # log packet contents
-    packet_bytes = spawn_entity_packet.write
-    Log.info { "SpawnLivingEntity contents: #{packet_bytes}" }
-
-    # 10. Game event - signals client ready state and chunk waiting
+    # 9. Game event - signals client ready state and chunk waiting
     game_event_packet = Clientbound::GameEvent.start_waiting_for_chunks
     send_packet(game_event_packet)
     Log.info { "Sent game event: start waiting for level chunks" }
@@ -689,12 +655,7 @@ class Rosegold::SpectateConnection
     # 11. Send chunks - essential for world rendering
     send_chunks
 
-    # 12. Set camera to follow bot entity (spectator mode)
-    set_camera_packet = Clientbound::SetCamera.new(bot_entity_id)
-    send_packet(set_camera_packet)
-    Log.info { "Set camera to follow bot entity #{bot_entity_id}" }
-
-    Log.info { "Completed sending essential PLAY packets (JoinGame, SetDefaultSpawnPosition, SetChunkCacheCenter, SynchronizePlayerPosition, UpdateHealth, PlayerAbilities, TickingState, PlayerInfoUpdate, SpawnLivingEntity, GameEvent, Chunks, SetCamera) to client #{@username}" }
+    Log.info { "Completed sending essential PLAY packets (JoinGame, SetDefaultSpawnPosition, SetChunkCacheCenter, SynchronizePlayerPosition, UpdateHealth, PlayerAbilities, TickingState, PlayerInfoUpdate, GameEvent, Chunks) to client #{@username}" }
   end
 
   # Send a minimal JoinGame packet with basic values
@@ -716,7 +677,7 @@ class Rosegold::SpectateConnection
       dimension_type: 0_u32, # This needs to match the read method type
       dimension_name: "minecraft:overworld",
       hashed_seed: 0_i64,
-      gamemode: 3_u8, # Spectator mode for spectating
+      gamemode: 0_u8, # Survival mode
       previous_gamemode: -1_i8,
       is_debug: false,
       is_flat: false,
@@ -730,8 +691,7 @@ class Rosegold::SpectateConnection
 
     # Debug: show the actual packet bytes being sent
     packet_bytes = join_game.write
-    Log.info { "JoinGame packet size: #{packet_bytes.size} bytes" }
-    Log.info { "JoinGame packet data: #{packet_bytes[0, [32, packet_bytes.size].min].map { |b| "0x#{b.to_s(16).upcase.rjust(2, '0')}" }.join(" ")}" }
+    Log.debug { "JoinGame packet size: #{packet_bytes.size} bytes" }
 
     send_packet(join_game)
   end
@@ -988,37 +948,46 @@ class Rosegold::SpectateConnection
     Log.debug { "Sent worldgen/biome registry with #{biome_entries.size} entries" }
   end
 
-  # Send all chunks stored on the bot to the spectate client
+  # Send only nearby chunks around the bot to the spectate client
   private def send_chunks
     bot = @proxy.bot
     return unless bot
 
+    player_chunk_x = (bot.player.feet.x / 16).floor.to_i
+    player_chunk_z = (bot.player.feet.z / 16).floor.to_i
+
     chunks = bot.dimension.chunks
-    Log.info { "Bot has #{chunks.size} chunks loaded" }
+    Log.info { "Bot has #{chunks.size} total chunks, sending chunks around player position (#{player_chunk_x}, #{player_chunk_z})" }
 
     if chunks.empty?
-      Log.info { "No chunks loaded from bot, generating minimal chunks around player position" }
+      Log.info { "No chunks loaded from bot, generating minimal chunks" }
       send_minimal_chunks_around_player
-    else
-      Log.info { "Sending #{chunks.size} chunks to spectate client #{@username}" }
+      return
+    end
 
-      chunks.each_with_index do |(chunk_pos, chunk), index|
-        begin
-          # Create ChunkData packet from the stored chunk
-          chunk_packet = Clientbound::ChunkData.new(chunk)
-          send_packet(chunk_packet)
-
-          Log.debug { "Sent chunk #{index + 1}/#{chunks.size}: (#{chunk_pos[0]}, #{chunk_pos[1]})" }
-
-          # Small delay between chunks to avoid overwhelming the client
-          sleep 0.01.seconds if index % 5 == 0
-        rescue e
-          Log.error { "Failed to send chunk at #{chunk_pos}: #{e}" }
+    # Send chunks in a reasonable radius around the player (e.g., 8 chunk radius)
+    sent_count = 0
+    view_distance = 8 # Reasonable view distance
+    
+    (-view_distance..view_distance).each do |dx|
+      (-view_distance..view_distance).each do |dz|
+        chunk_x = player_chunk_x + dx
+        chunk_z = player_chunk_z + dz
+        
+        # Check if bot has this chunk loaded
+        if chunk = bot.dimension.chunk_at?(chunk_x, chunk_z)
+          begin
+            chunk_packet = Clientbound::ChunkData.new(chunk)
+            send_packet(chunk_packet)
+            sent_count += 1
+          rescue e
+            Log.error { "Failed to send chunk at (#{chunk_x}, #{chunk_z}): #{e}" }
+          end
         end
       end
-
-      Log.info { "Completed sending #{chunks.size} chunks to spectate client #{@username}" }
     end
+
+    Log.info { "Completed sending #{sent_count} nearby chunks to spectate client #{@username}" }
   end
 
   # Send minimal empty chunks around the player position to prevent terrain loading freeze
@@ -1031,10 +1000,10 @@ class Rosegold::SpectateConnection
 
     Log.info { "Generating minimal chunks around player position (#{player_chunk_x}, #{player_chunk_z})" }
 
-    # Send a 3x3 grid of chunks around the player
+    # Send a 5x5 grid of chunks around the player for better coverage
     chunk_count = 0
-    (-1..1).each do |dx|
-      (-1..1).each do |dz|
+    (-2..2).each do |dx|
+      (-2..2).each do |dz|
         chunk_x = player_chunk_x + dx
         chunk_z = player_chunk_z + dz
 
@@ -1042,9 +1011,7 @@ class Rosegold::SpectateConnection
           # Create minimal empty chunk data
           empty_chunk_packet = create_empty_chunk_packet(chunk_x, chunk_z)
           send_packet(empty_chunk_packet)
-
           chunk_count += 1
-          Log.debug { "Sent empty chunk #{chunk_count}/9: (#{chunk_x}, #{chunk_z})" }
         rescue e
           Log.error { "Failed to send empty chunk at (#{chunk_x}, #{chunk_z}): #{e}" }
         end
