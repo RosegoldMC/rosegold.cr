@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Serverbound::UseItem - rosegold main</title>
+  <title>Rosegold::Serverbound::AcknowledgeConfiguration - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -1107,7 +1107,7 @@
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Serverbound/AcknowledgeConfiguration" data-name="rosegold::serverbound::acknowledgeconfiguration">
+  <li class=" current" data-id="rosegold/Rosegold/Serverbound/AcknowledgeConfiguration" data-name="rosegold::serverbound::acknowledgeconfiguration">
       <a href="../../Rosegold/Serverbound/AcknowledgeConfiguration.html">AcknowledgeConfiguration</a>
       
     </li>
@@ -1377,7 +1377,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Serverbound/UseItem" data-name="rosegold::serverbound::useitem">
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/UseItem" data-name="rosegold::serverbound::useitem">
       <a href="../../Rosegold/Serverbound/UseItem.html">UseItem</a>
       
     </li>
@@ -1478,12 +1478,12 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>Serverbound::<wbr>UseItem
+  </span> Rosegold::<wbr>Serverbound::<wbr>AcknowledgeConfiguration
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Serverbound/UseItem.html">Rosegold::Serverbound::UseItem</a></li><li class="superclass"><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Serverbound/AcknowledgeConfiguration.html">Rosegold::Serverbound::AcknowledgeConfiguration</a></li><li class="superclass"><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -1527,8 +1527,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L3" target="_blank">
-        rosegold/packets/serverbound/use_item.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L3" target="_blank">
+        rosegold/packets/serverbound/acknowledge_configuration.cr
       </a>
     
     <br/>
@@ -1549,7 +1549,7 @@
   <dl>
     
       <dt class="entry-const" id="PROTOCOL_PACKET_IDS">
-        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">64_u8</span>}</code>
+        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">15_u8</span>}</code>
       </dt>
       
       <dd class="entry-const-doc">
@@ -1573,7 +1573,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28hand%3AHand%3DHand%3A%3AMainHand%2Csequence%3AInt32%3D0%2Cyaw%3AFloat32%3D0.0_f32%2Cpitch%3AFloat32%3D0.0_f32%29-class-method" class="signature"><strong>.new</strong>(hand : Hand = <span class="t">Hand</span><span class="t">::</span><span class="t">MainHand</span>, sequence : Int32 = <span class="n">0</span>, yaw : Float32 = <span class="n">0.0_f32</span>, pitch : Float32 = <span class="n">0.0_f32</span>)</a>
+        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
         
       </li>
     
@@ -1620,6 +1620,16 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#state-class-method" class="signature"><strong>.state</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#supported_protocols%3AArray%28UInt32%29-class-method" class="signature"><strong>.supported_protocols</strong> : Array(UInt32)</a>
         
           <div class="summary"><p>Helper method to get all supported protocols</p></div>
@@ -1650,47 +1660,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#hand%3AHand-instance-method" class="signature"><strong>#hand</strong> : Hand</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#hand%3D%28hand%3AHand%29-instance-method" class="signature"><strong>#hand=</strong>(hand : Hand)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#pitch%3AFloat32-instance-method" class="signature"><strong>#pitch</strong> : Float32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#pitch%3D%28pitch%3AFloat32%29-instance-method" class="signature"><strong>#pitch=</strong>(pitch : Float32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#sequence%3AInt32-instance-method" class="signature"><strong>#sequence</strong> : Int32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#sequence%3D%28sequence%3AInt32%29-instance-method" class="signature"><strong>#sequence=</strong>(sequence : Int32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#write%3ABytes-instance-method" class="signature"><strong>#write</strong> : Bytes</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#yaw%3AFloat32-instance-method" class="signature"><strong>#yaw</strong> : Float32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#yaw%3D%28yaw%3AFloat32%29-instance-method" class="signature"><strong>#yaw=</strong>(yaw : Float32)</a>
         
       </li>
     
@@ -1832,18 +1802,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(hand:Hand=Hand::MainHand,sequence:Int32=0,yaw:Float32=0.0_f32,pitch:Float32=0.0_f32)-class-method">
+    <div class="entry-detail" id="new-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(hand : <a href="../../Rosegold/Hand.html">Hand</a> = <span class="t">Hand</span><span class="t">::</span><span class="t">MainHand</span>, sequence : <a href="../../Int32.html">Int32</a> = <span class="n">0</span>, yaw : Float32 = <span class="n">0.0_f32</span>, pitch : Float32 = <span class="n">0.0_f32</span>)
+        def self.<strong>new</strong>
 
-        <a class="method-permalink" href="#new%28hand%3AHand%3DHand%3A%3AMainHand%2Csequence%3AInt32%3D0%2Cyaw%3AFloat32%3D0.0_f32%2Cpitch%3AFloat32%3D0.0_f32%29-class-method">#</a>
+        <a class="method-permalink" href="#new-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1876,7 +1846,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1897,7 +1867,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1938,7 +1908,39 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(packet)-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(packet)
+
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="state-class-method">
+      <div class="signature">
+        
+        def self.<strong>state</strong>
+
+        <a class="method-permalink" href="#state-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1959,7 +1961,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1980,7 +1982,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1999,102 +2001,6 @@ Use the first protocol's packet ID for registration compatibility</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="hand:Hand-instance-method">
-      <div class="signature">
-        
-        def <strong>hand</strong> : <a href="../../Rosegold/Hand.html">Hand</a>
-
-        <a class="method-permalink" href="#hand%3AHand-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="hand=(hand:Hand)-instance-method">
-      <div class="signature">
-        
-        def <strong>hand=</strong>(hand : <a href="../../Rosegold/Hand.html">Hand</a>)
-
-        <a class="method-permalink" href="#hand%3D%28hand%3AHand%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="pitch:Float32-instance-method">
-      <div class="signature">
-        
-        def <strong>pitch</strong> : Float32
-
-        <a class="method-permalink" href="#pitch%3AFloat32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="pitch=(pitch:Float32)-instance-method">
-      <div class="signature">
-        
-        def <strong>pitch=</strong>(pitch : Float32)
-
-        <a class="method-permalink" href="#pitch%3D%28pitch%3AFloat32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="sequence:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>sequence</strong> : <a href="../../Int32.html">Int32</a>
-
-        <a class="method-permalink" href="#sequence%3AInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="sequence=(sequence:Int32)-instance-method">
-      <div class="signature">
-        
-        def <strong>sequence=</strong>(sequence : <a href="../../Int32.html">Int32</a>)
-
-        <a class="method-permalink" href="#sequence%3D%28sequence%3AInt32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="write:Bytes-instance-method">
       <div class="signature">
         
@@ -2106,39 +2012,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L14" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="yaw:Float32-instance-method">
-      <div class="signature">
-        
-        def <strong>yaw</strong> : Float32
-
-        <a class="method-permalink" href="#yaw%3AFloat32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="yaw=(yaw:Float32)-instance-method">
-      <div class="signature">
-        
-        def <strong>yaw=</strong>(yaw : Float32)
-
-        <a class="method-permalink" href="#yaw%3D%28yaw%3AFloat32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/use_item.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8aed8721d0f11a31cdb77736f9d3c4af80d92918/src/rosegold/packets/serverbound/acknowledge_configuration.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
