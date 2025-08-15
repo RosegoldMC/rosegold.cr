@@ -54,15 +54,30 @@ class Rosegold::Physics
     @paused = true
   end
 
+  def unpause_for_spawn_chunk
+    @paused = false
+    Log.debug { "Physics unpaused after spawn chunk loaded" }
+  end
+
   def running?
     !paused?
   end
 
   def handle_reset
-    @paused = false
+    spawn_chunk_x = player.feet.x.to_i >> 4
+    spawn_chunk_z = player.feet.z.to_i >> 4
+    spawn_chunk_loaded = client.dimension.chunks.has_key?({spawn_chunk_x, spawn_chunk_z})
+
+    if spawn_chunk_loaded
+      @paused = false
+      Log.debug { "Physics unpaused - spawn chunk (#{spawn_chunk_x}, #{spawn_chunk_z}) is loaded" }
+    else
+      @paused = true
+      Log.debug { "Physics remains paused - waiting for spawn chunk (#{spawn_chunk_x}, #{spawn_chunk_z}) to load" }
+    end
+
     player.velocity = Vec3d::ORIGIN
 
-    # Reset movement packet tracking
     @last_sent_feet = player.feet
     @last_sent_look = player.look
     @last_sent_on_ground = player.on_ground?
