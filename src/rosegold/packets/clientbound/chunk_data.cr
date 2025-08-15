@@ -92,11 +92,18 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     source = Minecraft::IO::Memory.new data
     chunk = Chunk.new chunk_x, chunk_z, source, client.dimension
     chunk.block_entities = block_entities
-    # Convert heightmaps back to single NBT structure for chunk
-    # TODO: Properly convert array of heightmaps to NBT format
     chunk.heightmaps = Minecraft::NBT::CompoundTag.new
     chunk.light_data = light_data
     client.dimension.load_chunk chunk
+
+    if client.physics.paused?
+      spawn_chunk_x = client.player.feet.x.to_i >> 4
+      spawn_chunk_z = client.player.feet.z.to_i >> 4
+      if chunk_x == spawn_chunk_x && chunk_z == spawn_chunk_z
+        client.physics.unpause_for_spawn_chunk
+        Log.debug { "Spawn chunk loaded - physics unpaused" }
+      end
+    end
   end
 
   def inspect(io)
