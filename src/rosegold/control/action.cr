@@ -16,7 +16,10 @@ class Rosegold::Action(T)
     @channel.send exception
   end
 
-  # Throw error if it failed
+  def cancel
+    @channel.send nil
+  end
+
   def join
     result = channel.receive
     raise result if result
