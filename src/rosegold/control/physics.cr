@@ -102,26 +102,17 @@ class Rosegold::Physics
     end
 
     if very_close_to? target
-      action_mutex.synchronize do
-        @movement_action.try &.fail "Replaced by movement to #{target}"
-        @movement_action = nil
-      end
+      replace_movement_action(nil)
       return
     end
 
     if target == nil
-      action_mutex.synchronize do
-        @movement_action.try &.fail "Movement stopped"
-        @movement_action = nil
-      end
+      replace_movement_action(nil)
       return
     end
 
     action = Action(Vec3d).new(target)
-    action_mutex.synchronize do
-      @movement_action.try &.fail "Replaced by movement to #{target}"
-      @movement_action = action
-    end
+    replace_movement_action(action)
     action.join
   end
 
@@ -134,10 +125,7 @@ class Rosegold::Physics
     end
 
     action = Action.new(target)
-    action_mutex.synchronize do
-      @look_action.try &.fail "Replaced by look of #{target}"
-      @look_action = action
-    end
+    replace_look_action(action)
     action.join
   end
 
@@ -179,6 +167,20 @@ class Rosegold::Physics
 
   private def player
     client.player
+  end
+
+  private def replace_movement_action(new_action : Action(Vec3d)?)
+    action_mutex.synchronize do
+      @movement_action.try &.cancel
+      @movement_action = new_action
+    end
+  end
+
+  private def replace_look_action(new_action : Action(Look)?)
+    action_mutex.synchronize do
+      @look_action.try &.cancel
+      @look_action = new_action
+    end
   end
 
   private def current_player_aabb : AABBf
