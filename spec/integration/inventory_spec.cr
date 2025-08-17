@@ -276,4 +276,96 @@ Spectator.describe "Rosegold::Bot inventory" do
       end
     end
   end
+
+  describe "#replenish" do
+    context "when player already has enough items" do
+      it "returns current count without withdrawing" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/clear"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+            bot.chat "/give #{bot.username} minecraft:stone 15"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            result = bot.inventory.replenish 10, "stone"
+            expect(result).to eq 15
+            expect(bot.inventory.count("stone")).to eq 15
+          end
+        end
+      end
+    end
+
+    context "when player has some items but needs more" do
+      it "withdraws additional items from container" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+            bot.wait_tick
+            bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:stone\",Count:10b}]}"
+            bot.chat "/clear"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+            bot.chat "/give #{bot.username} minecraft:stone 2"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            bot.pitch = 90
+            bot.use_hand
+            bot.wait_for Rosegold::Clientbound::SetContainerContent
+
+            initial_count = bot.inventory.count("stone", bot.inventory.inventory + bot.inventory.hotbar)
+            result = bot.inventory.replenish 5, "stone"
+            
+            expect(result).to be > initial_count
+          end
+        end
+      end
+    end
+
+    context "when player has no items" do
+      it "withdraws items from container" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+            bot.wait_tick
+            bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:diamond\",Count:5b}]}"
+            bot.chat "/clear"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            bot.pitch = 90
+            bot.use_hand
+            bot.wait_for Rosegold::Clientbound::SetContainerContent
+
+            result = bot.inventory.replenish 3, "diamond"
+            expect(result).to be > 0
+            expect(bot.inventory.count("diamond", bot.inventory.inventory + bot.inventory.hotbar)).to be > 0
+          end
+        end
+      end
+    end
+
+    context "when container doesn't have enough items" do
+      it "withdraws as many as available" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+            bot.wait_tick
+            bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:gold_ingot\",Count:2b}]}"
+            bot.chat "/clear"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+            bot.chat "/give #{bot.username} minecraft:gold_ingot 1"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            bot.pitch = 90
+            bot.use_hand
+            bot.wait_for Rosegold::Clientbound::SetContainerContent
+
+            initial_count = bot.inventory.count("gold_ingot", bot.inventory.inventory + bot.inventory.hotbar)
+            result = bot.inventory.replenish 5, "gold_ingot"
+
+            expect(result).to be > initial_count
+            expect(result).to be < 5
+          end
+        end
+      end
+    end
+  end
 end

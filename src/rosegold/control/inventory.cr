@@ -82,6 +82,21 @@ class Rosegold::Inventory
     deposit_at_least(count, spec)
   end
 
+  # Ensures the player has at least `count` items of the specified type in their inventory.
+  # If there are already enough items, returns the current count.
+  # If not enough items are present, attempts to withdraw more from a container.
+  # Returns the total count after replenishment attempt.
+  #
+  # Example:
+  #   inventory.replenish 10, "stone" # => 10 (if successful)
+  #   inventory.replenish 5, "diamond" # => 3 (if only 3 available)
+  def replenish(count, item_id)
+    current_count = count(item_id, inventory + hotbar)
+    return current_count if current_count >= count
+
+    current_count + withdraw_at_least count - current_count, item_id
+  end
+
   # Finds an empty slot in the source
   # In order to match vanilla:
   # When source is the container, prioritize first empty #container slot
