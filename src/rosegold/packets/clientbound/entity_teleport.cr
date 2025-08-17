@@ -49,7 +49,7 @@ class Rosegold::Clientbound::EntityTeleport < Rosegold::Clientbound::Packet
     entity = client.dimension.entities[entity_id]?
 
     if entity.nil?
-      Log.warn { "Received entity teleport packet for unknown entity ID #{entity_id}" }
+      Log.debug { "Received entity teleport packet for unknown entity ID #{entity_id}" }
       return
     end
 

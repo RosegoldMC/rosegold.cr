@@ -42,7 +42,7 @@ class Rosegold::Clientbound::EntityPosition < Rosegold::Clientbound::Packet
     entity = client.dimension.entities[entity_id]?
 
     if entity.nil?
-      Log.warn { "Received entity position packet for unknown entity ID #{entity_id}" }
+      Log.debug { "Received entity position packet for unknown entity ID #{entity_id}" }
       return
     end
 
