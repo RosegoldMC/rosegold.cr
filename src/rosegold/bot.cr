@@ -133,6 +133,10 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.physics.move location
   end
 
+  def move_to(location : Vec3i)
+    move_to Vec3d.new(location.x + 0.5, feet.y, location.z + 0.5)
+  end
+
   # Moves straight towards `location`.
   # Waits for arrival.
   def move_to(x : Float, z : Float)
