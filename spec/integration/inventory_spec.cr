@@ -313,7 +313,7 @@ Spectator.describe "Rosegold::Bot inventory" do
 
             initial_count = bot.inventory.count("stone", bot.inventory.inventory + bot.inventory.hotbar)
             result = bot.inventory.replenish 5, "stone"
-            
+
             expect(result).to be > initial_count
           end
         end
