@@ -129,29 +129,32 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Moves straight towards `location`.
   # Waits for arrival.
-  def move_to(location : Vec3d)
-    client.physics.move location
+  # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
+  def move_to(location : Vec3d, stuck_timeout_ticks : Int32 = 10)
+    client.physics.move location, stuck_timeout_ticks
   end
 
-  def move_to(location : Vec3i)
-    move_to Vec3d.new(location.x + 0.5, feet.y, location.z + 0.5)
+  def move_to(location : Vec3i, stuck_timeout_ticks : Int32 = 10)
+    move_to Vec3d.new(location.x + 0.5, feet.y, location.z + 0.5), stuck_timeout_ticks
   end
 
   # Moves straight towards `location`.
   # Waits for arrival.
-  def move_to(x : Float, z : Float)
-    client.physics.move Vec3d.new x, feet.y, z
+  # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
+  def move_to(x : Float, z : Float, stuck_timeout_ticks : Int32 = 10)
+    client.physics.move Vec3d.new(x, feet.y, z), stuck_timeout_ticks
   end
 
-  def move_to(x : Int, y : Int)
-    move_to x + 0.5, y + 0.5
+  def move_to(x : Int, y : Int, stuck_timeout_ticks : Int32 = 10)
+    move_to x + 0.5, y + 0.5, stuck_timeout_ticks
   end
 
   # Computes the destination location from the current feet location.
   # Moves straight towards the destination.
   # Waits for arrival.
-  def move_to(&block : Vec3d -> Vec3d)
-    client.physics.move block.call feet
+  # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
+  def move_to(stuck_timeout_ticks : Int32 = 10, &block : Vec3d -> Vec3d)
+    client.physics.move block.call(feet), stuck_timeout_ticks
   end
 
   # Stop moving towards the target specified in #move_to

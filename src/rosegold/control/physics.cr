@@ -34,6 +34,11 @@ class Rosegold::Physics
   private property player_input_flags : Serverbound::PlayerInput::Flag = Serverbound::PlayerInput::Flag::None
   private getter action_mutex : Mutex = Mutex.new
 
+  # Movement stuck tracking
+  private property consecutive_stuck_ticks : Int32 = 0
+  private property last_position : Vec3d? = nil
+  private property current_stuck_timeout_ticks : Int32 = 0
+
   # Movement packet rate limiting
   private property last_sent_feet : Vec3d = Vec3d::ORIGIN
   private property last_sent_look : Look = Look.new(0, 0)
@@ -95,7 +100,8 @@ class Rosegold::Physics
   # Set the movement target location and wait until it is achieved.
   # If there is already a movement target, it is cancelled, and replaced with this new target.
   # Set `target=nil` to stop moving and cancel any current movement.
-  def move(target : Vec3d?)
+  # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
+  def move(target : Vec3d?, stuck_timeout_ticks : Int32 = 10)
     if paused?
       Log.warn { "Ignoring movement to #{target} because physics is paused" }
       return
@@ -113,6 +119,10 @@ class Rosegold::Physics
 
     action = Action(Vec3d).new(target)
     replace_movement_action(action)
+    # Reset stuck tracking for new movement
+    @consecutive_stuck_ticks = 0
+    @last_position = nil
+    @current_stuck_timeout_ticks = stuck_timeout_ticks
     action.join
   end
 
@@ -216,9 +226,26 @@ class Rosegold::Physics
     # TODO: this only works with gravity on
     on_ground = movement.y > input_velocity.y
 
-    unless feet != player.feet
-      @movement_action.try &.fail MovementStuck.new "Stuck at #{feet}"
-      @movement_action = nil
+    # Track consecutive stuck ticks for timeout handling
+    if action = @movement_action
+      if last_pos = @last_position
+        # Check if we've made progress (moved more than a small threshold)
+        if (feet - last_pos).length < 0.001
+          @consecutive_stuck_ticks += 1
+
+          # Check if we've been stuck for too long
+          if @current_stuck_timeout_ticks > 0 && @consecutive_stuck_ticks >= @current_stuck_timeout_ticks
+            action.fail MovementStuck.new "Movement stuck for #{@current_stuck_timeout_ticks} consecutive ticks at #{feet}"
+            @movement_action = nil
+          end
+        else
+          # We made progress, reset stuck counter
+          @consecutive_stuck_ticks = 0
+        end
+      end
+
+      # Update position for next tick
+      @last_position = feet
     end
 
     # Only send movement packet if something changed or keep-alive timer expired
