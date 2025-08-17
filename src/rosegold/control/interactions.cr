@@ -166,6 +166,7 @@ class Rosegold::Interactions
       when Entity
         Log.warn { "Rosegold does not support using items on entities yet" }
       when ReachedBlock
+        Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
         place_block using_hand, reached
 
         # Generate sequence number for MC 1.21+
@@ -179,6 +180,7 @@ class Rosegold::Interactions
 
         send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
       else
+        Log.debug { "No block or entity reached" }
         # Generate sequence number for MC 1.21+
         sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
 
@@ -366,8 +368,67 @@ class Rosegold::Interactions
       x, y, z = block_coords
       client.dimension.block_state(x, y, z).try do |block_state|
         block_shape = MCData::DEFAULT.block_state_collision_shapes[block_state]
-        block_shape.map &.to_f64.offset(x, y, z)
+        Log.debug { "Block at (#{x}, #{y}, #{z}) state #{block_state} has #{block_shape.size} collision shapes" }
+
+        # If no collision shapes, check if it's an interactive block and use interaction hitbox
+        if block_shape.empty?
+          interaction_shape = get_interaction_hitbox(block_state, x, y, z)
+          if interaction_shape
+            [interaction_shape]
+          else
+            Array(AABBd).new 0
+          end
+        else
+          block_shape.map &.to_f64.offset(x, y, z)
+        end
       end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
+    end
+  end
+
+  # Returns interaction hitbox for blocks that have no collision shapes but can be interacted with
+  private def get_interaction_hitbox(block_state : UInt16, x : Int32, y : Int32, z : Int32) : AABBd?
+    block = Block.from_block_state_id(block_state)
+    case block.id_str
+    when .includes?("button")
+      # Buttons have a small hitbox depending on their face
+      # For floor buttons (face=floor), use a small hitbox on top of the block
+      if MCData::DEFAULT.block_state_names[block_state].includes?("face=floor")
+        # Floor button: small hitbox on top surface
+        AABBd.new(
+          x + 0.3125, y + 0.0, z + 0.3125,   # min corner
+          x + 0.6875, y + 0.0625, z + 0.6875 # max corner
+        )
+      elsif MCData::DEFAULT.block_state_names[block_state].includes?("face=wall")
+        # Wall button: determine which wall and create appropriate hitbox
+        block_state_name = MCData::DEFAULT.block_state_names[block_state]
+        if block_state_name.includes?("facing=north")
+          AABBd.new(x + 0.3125, y + 0.375, z + 0.875, x + 0.6875, y + 0.625, z + 1.0)
+        elsif block_state_name.includes?("facing=south")
+          AABBd.new(x + 0.3125, y + 0.375, z + 0.0, x + 0.6875, y + 0.625, z + 0.125)
+        elsif block_state_name.includes?("facing=east")
+          AABBd.new(x + 0.0, y + 0.375, z + 0.3125, x + 0.125, y + 0.625, z + 0.6875)
+        elsif block_state_name.includes?("facing=west")
+          AABBd.new(x + 0.875, y + 0.375, z + 0.3125, x + 1.0, y + 0.625, z + 0.6875)
+        else
+          # Default wall button hitbox
+          AABBd.new(x + 0.3125, y + 0.375, z + 0.3125, x + 0.6875, y + 0.625, z + 0.6875)
+        end
+      elsif MCData::DEFAULT.block_state_names[block_state].includes?("face=ceiling")
+        # Ceiling button: small hitbox on bottom surface
+        AABBd.new(
+          x + 0.3125, y + 0.9375, z + 0.3125, # min corner
+          x + 0.6875, y + 1.0, z + 0.6875     # max corner
+        )
+      else
+        # Default button hitbox (floor)
+        AABBd.new(
+          x + 0.3125, y + 0.0, z + 0.3125,
+          x + 0.6875, y + 0.0625, z + 0.6875
+        )
+      end
+    else
+      # No interaction hitbox for this block type
+      nil
     end
   end
 
