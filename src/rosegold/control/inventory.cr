@@ -6,14 +6,14 @@ class Rosegold::Inventory
 
   forward_missing_to @client.window
 
-  # Returns the number of matching items in the entire window, or in the given slots range.
+  # Returns the number of matching items in the player inventory (inventory + hotbar), or in the given slots range.
   #
   # Example:
   #   inventory.count "diamond_pickaxe" # => 2
   #   inventory.count &.empty? # => 2
   #   inventory.count { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 1
-  #   inventory.count &.empty?, hotbar # => 1
-  def count(spec, slots = slots)
+  #   inventory.count "stone", slots # => 5 (count in entire window including container)
+  def count(spec, slots = inventory + hotbar)
     slots.select(&.matches? spec).sum(&.count.to_i32)
   end
 
