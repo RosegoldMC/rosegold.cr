@@ -39,8 +39,11 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
       client.inventory.slots[slot.slot_number] = slot
     elsif client.window.id == window_id
       client.window.slots[slot.slot_number] = slot
+    elsif client.inventory.previous_window_id && client.inventory.previous_window_id == window_id.to_u8
+      # Handle late slot update packet using shared method
+      client.inventory.handle_late_packet(window_id.to_u8, slot: slot)
     else
-      Log.warn { "Received slot update for an unknown or mismatched window. Ignoring." }
+      Log.warn { "Received slot update for an unknown or mismatched window. Ignoring. Packet window_id=#{window_id}, client window_id=#{client.window.id}, previous_window_id=#{client.inventory.previous_window_id}, slot=#{slot}" }
       Log.debug { self }
     end
   end

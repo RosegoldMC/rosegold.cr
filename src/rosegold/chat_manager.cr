@@ -79,7 +79,7 @@ class Rosegold::ChatManager
       client.send_packet!(packet)
       true
     rescue e : Exception
-      Log.error { "Failed to send chat command: #{e}" }
+      Log.error { "Failed to send chat command (#{e.class} - #{e.message}): #{command}" }
       false
     end
   end
