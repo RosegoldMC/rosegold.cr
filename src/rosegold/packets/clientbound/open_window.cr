@@ -110,6 +110,8 @@ class Rosegold::Clientbound::OpenWindow < Rosegold::Clientbound::Packet
   def callback(client)
     # Clamp window_id to valid UInt8 range
     clamped_id = window_id > 255 ? 255_u8 : window_id.to_u8
+    # Clear previous window ID when opening a new window
+    client.inventory.previous_window_id = nil
     client.window = Window.new \
       client, clamped_id, window_title, window_type
     Log.debug { "Server opened window id=#{window_id} type=#{window_type} title: #{window_title}" }
