@@ -1508,7 +1508,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L167" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L169" target="_blank">
         rosegold/world/window.cr
       </a>
     
@@ -1574,6 +1574,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#handle_late_packet%28window_id%3AUInt8%2Cslots%3AArray%28WindowSlot%29%7CNil%3Dnil%2Cslot%3AWindowSlot%7CNil%3Dnil%2Ccursor%3AWindowSlot%7CNil%3Dnil%2Cstate_id%3AUInt32%3D0%29-instance-method" class="signature"><strong>#handle_late_packet</strong>(window_id : UInt8, slots : Array(WindowSlot) | Nil = <span class="n">nil</span>, slot : WindowSlot | Nil = <span class="n">nil</span>, cursor : WindowSlot | Nil = <span class="n">nil</span>, state_id : UInt32 = <span class="n">0</span>)</a>
+        
+          <div class="summary"><p>Handle late packets from a closed window by temporarily recreating and closing it</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#helmet%3AWindowSlot-instance-method" class="signature"><strong>#helmet</strong> : WindowSlot</a>
         
       </li>
@@ -1595,6 +1602,16 @@
     
       <li class="entry-summary">
         <a href="#off_hand%3AWindowSlot-instance-method" class="signature"><strong>#off_hand</strong> : WindowSlot</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#previous_window_id%3AUInt8%7CNil-instance-method" class="signature"><strong>#previous_window_id</strong> : UInt8 | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#previous_window_id%3D%28previous_window_id%3AUInt8%7CNil%29-instance-method" class="signature"><strong>#previous_window_id=</strong>(previous_window_id : UInt8 | Nil)</a>
         
       </li>
     
@@ -1799,7 +1816,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L168" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L172" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1831,7 +1848,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L195" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L235" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1847,7 +1864,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L187" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L227" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1863,7 +1880,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L179" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L219" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1879,7 +1896,28 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L175" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L215" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="handle_late_packet(window_id:UInt8,slots:Array(WindowSlot)|Nil=nil,slot:WindowSlot|Nil=nil,cursor:WindowSlot|Nil=nil,state_id:UInt32=0)-instance-method">
+      <div class="signature">
+        
+        def <strong>handle_late_packet</strong>(window_id : UInt8, slots : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>) | Nil = <span class="n">nil</span>, slot : <a href="../Rosegold/WindowSlot.html">WindowSlot</a> | Nil = <span class="n">nil</span>, cursor : <a href="../Rosegold/WindowSlot.html">WindowSlot</a> | Nil = <span class="n">nil</span>, state_id : UInt32 = <span class="n">0</span>)
+
+        <a class="method-permalink" href="#handle_late_packet%28window_id%3AUInt8%2Cslots%3AArray%28WindowSlot%29%7CNil%3Dnil%2Cslot%3AWindowSlot%7CNil%3Dnil%2Ccursor%3AWindowSlot%7CNil%3Dnil%2Cstate_id%3AUInt32%3D0%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Handle late packets from a closed window by temporarily recreating and closing it</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L180" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1895,7 +1933,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L183" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L223" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1911,7 +1949,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L205" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L245" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1927,7 +1965,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L199" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L239" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1943,7 +1981,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L191" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L231" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1959,7 +1997,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/647a6335664730eab015ce055e18595bf047bce8/src/rosegold/world/window.cr#L211" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L251" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="previous_window_id:UInt8|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>previous_window_id</strong> : UInt8 | Nil
+
+        <a class="method-permalink" href="#previous_window_id%3AUInt8%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L170" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="previous_window_id=(previous_window_id:UInt8|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>previous_window_id=</strong>(previous_window_id : UInt8 | Nil)
+
+        <a class="method-permalink" href="#previous_window_id%3D%28previous_window_id%3AUInt8%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8eca3dadaac7af930f2c1f582272da910928b62e/src/rosegold/world/window.cr#L170" target="_blank">View source</a>]
         
       </div>
     </div>
