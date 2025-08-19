@@ -38,6 +38,8 @@ class Rosegold::Window
     self.closed = true
 
     if @client.window == self
+      # Store the previous window ID to handle late packets
+      @client.inventory.previous_window_id = self.id
       @client.window = @client.inventory
       @client.inventory.slots = @client.inventory.slots[0..8] + inventory + hotbar + @client.inventory.slots[45..45]
       @client.inventory.slots.each_with_index { |slot, i| slot.slot_number = i }
@@ -165,11 +167,49 @@ class Rosegold::Window
 end
 
 class Rosegold::PlayerWindow < Rosegold::Window
+  property previous_window_id : UInt8? = nil
+
   def initialize(@client)
     @id = 0
     @title = Chat.new "Player Inventory"
     @type_id = 0
     @inventory_start = 9
+  end
+
+  # Handle late packets from a closed window by temporarily recreating and closing it
+  def handle_late_packet(window_id : UInt8, slots : Array(WindowSlot)? = nil, slot : WindowSlot? = nil, cursor : WindowSlot? = nil, state_id : UInt32 = 0)
+    Log.debug { "Handling late packet for previous window #{window_id}" }
+
+    # Create a temporary window with the late data
+    temp_window = Window.new(@client, window_id, Chat.new("Late Window"), 0_u32)
+
+    # Apply the packet data to the temporary window
+    if slots
+      # SetContainerContent case
+      temp_window.state_id = state_id
+      temp_window.slots = slots
+      temp_window.cursor = cursor if cursor
+    elsif slot
+      # SetSlot case - we need to initialize the window slots first
+      temp_window.slots = Array.new(54) { |i| WindowSlot.new i, Slot.new }
+      # Only set the slot if it's within bounds
+      if slot.slot_number >= 0 && slot.slot_number < temp_window.slots.size
+        temp_window.slots[slot.slot_number] = slot
+      else
+        Log.debug { "Ignoring SetSlot for out-of-bounds slot #{slot.slot_number}" }
+        return # Don't proceed with handle_closed for invalid slots
+      end
+    end
+
+    # Save current window
+    current_window = @client.window
+    @client.window = temp_window
+
+    # Close the temporary window to properly sync inventory
+    temp_window.handle_closed
+
+    # Restore the current window
+    @client.window = current_window
   end
 
   def crafting_result : WindowSlot

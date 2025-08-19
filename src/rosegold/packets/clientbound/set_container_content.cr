@@ -53,8 +53,11 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
       client.window.state_id = state_id
       client.window.slots = slots
       client.window.cursor = cursor
+    elsif client.inventory.previous_window_id && client.inventory.previous_window_id == window_id
+      # Handle late container content packet using shared method
+      client.inventory.handle_late_packet(window_id.to_u8, slots: slots, cursor: cursor, state_id: state_id)
     else
-      Log.warn { "Received container content for an unknown or mismatched window. Ignoring." }
+      Log.warn { "Received container content for an unknown or mismatched window. Ignoring. Packet window_id=#{window_id}, client window_id=#{client.window.id}, previous_window_id=#{client.inventory.previous_window_id}" }
       Log.debug { self }
     end
   end
