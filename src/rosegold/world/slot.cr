@@ -465,7 +465,7 @@ class Rosegold::DataComponents::TooltipDisplay < Rosegold::DataComponent
 
   def self.read(io) : self
     hide_tooltip = io.read_bool
-    
+
     # Read hidden components array (prefixed with count)
     hidden_count = io.read_var_int
     hidden_components = Array(UInt32).new
@@ -473,7 +473,7 @@ class Rosegold::DataComponents::TooltipDisplay < Rosegold::DataComponent
       component_id = io.read_var_int
       hidden_components << component_id
     end
-    
+
     new(hide_tooltip, hidden_components)
   end
 
@@ -546,7 +546,6 @@ class Rosegold::DataComponents::MapId < Rosegold::DataComponent
   end
 end
 
-
 # Component for trim (Armor's trim pattern and color)
 class Rosegold::DataComponents::Trim < Rosegold::DataComponent
   property material : TrimMaterial
@@ -587,10 +586,14 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
 
     def write(io) : Nil
       if registry_id
-        io.write(registry_id.not_nil! + 1)
+        if id = registry_id
+          io.write(id + 1)
+        end
       else
         io.write(0_u32)
-        inline_data.not_nil!.write(io)
+        if data = inline_data
+          data.write(io)
+        end
       end
     end
 
@@ -610,7 +613,7 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
         asset_name = io.read_var_string
         ingredient = io.read_var_int
         item_model_index = io.read_float
-        
+
         # Override armor materials (map of string->string)
         material_count = io.read_var_int
         override_materials = Hash(String, String).new
@@ -619,11 +622,11 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
           value = io.read_var_string
           override_materials[key] = value
         end
-        
+
         # Description as Text Component
         description_component = TextComponent.read(io)
         description = description_component.to_s
-        
+
         new(asset_name, ingredient, item_model_index, override_materials, description)
       end
 
@@ -641,7 +644,7 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
     end
   end
 
-  # ID or TrimPattern - either registry ID or inline definition  
+  # ID or TrimPattern - either registry ID or inline definition
   struct TrimPattern
     property registry_id : UInt32?
     property inline_data : InlineTrimPattern?
@@ -663,10 +666,14 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
 
     def write(io) : Nil
       if registry_id
-        io.write(registry_id.not_nil! + 1)
+        if id = registry_id
+          io.write(id + 1)
+        end
       else
         io.write(0_u32)
-        inline_data.not_nil!.write(io)
+        if data = inline_data
+          data.write(io)
+        end
       end
     end
 
