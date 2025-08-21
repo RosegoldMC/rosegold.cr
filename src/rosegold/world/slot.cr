@@ -150,6 +150,8 @@ abstract class Rosegold::DataComponent
       DataComponents::MapPostProcessing.read(io)
     when 42 # minecraft:potion_contents - Visual and effects of a potion item
       DataComponents::PotionContents.read(io)
+    when 47 # minecraft:trim - Armor's trim pattern and color
+      DataComponents::Trim.read(io)
     when 63 # minecraft:banner_patterns - Array of banner pattern layers
       DataComponents::BannerPatterns.read(io)
     else
@@ -512,6 +514,159 @@ class Rosegold::DataComponents::MapId < Rosegold::DataComponent
   end
 end
 
+
+# Component for trim (Armor's trim pattern and color)
+class Rosegold::DataComponents::Trim < Rosegold::DataComponent
+  property material : TrimMaterial
+  property pattern : TrimPattern
+
+  def initialize(@material : TrimMaterial, @pattern : TrimPattern); end
+
+  def self.read(io) : self
+    material = TrimMaterial.read(io)
+    pattern = TrimPattern.read(io)
+    new(material, pattern)
+  end
+
+  def write(io) : Nil
+    material.write(io)
+    pattern.write(io)
+  end
+
+  # ID or TrimMaterial - either registry ID or inline definition
+  struct TrimMaterial
+    property registry_id : UInt32?
+    property inline_data : InlineTrimMaterial?
+
+    def initialize(@registry_id : UInt32?, @inline_data : InlineTrimMaterial?)
+    end
+
+    def self.read(io) : self
+      id = io.read_var_int
+      if id == 0
+        # Inline definition (not implemented yet - would need full material structure)
+        inline_data = InlineTrimMaterial.read(io)
+        new(nil, inline_data)
+      else
+        # Registry ID (id - 1 since 0 means inline)
+        new(id - 1, nil)
+      end
+    end
+
+    def write(io) : Nil
+      if registry_id
+        io.write(registry_id.not_nil! + 1)
+      else
+        io.write(0_u32)
+        inline_data.not_nil!.write(io)
+      end
+    end
+
+    # Placeholder for inline trim material data
+    struct InlineTrimMaterial
+      property asset_name : String
+      property ingredient : UInt32
+      property item_model_index : Float32
+      property override_armor_materials : Hash(String, String)
+      property description : String
+
+      def initialize(@asset_name = "", @ingredient = 0_u32, @item_model_index = 0.0_f32, @override_armor_materials = Hash(String, String).new, @description = "")
+      end
+
+      def self.read(io) : self
+        # Read trim material structure
+        asset_name = io.read_var_string
+        ingredient = io.read_var_int
+        item_model_index = io.read_float
+        
+        # Override armor materials (map of string->string)
+        material_count = io.read_var_int
+        override_materials = Hash(String, String).new
+        material_count.times do
+          key = io.read_var_string
+          value = io.read_var_string
+          override_materials[key] = value
+        end
+        
+        # Description as Text Component
+        description_component = TextComponent.read(io)
+        description = description_component.to_s
+        
+        new(asset_name, ingredient, item_model_index, override_materials, description)
+      end
+
+      def write(io) : Nil
+        io.write asset_name
+        io.write ingredient
+        io.write item_model_index
+        io.write override_armor_materials.size
+        override_armor_materials.each do |key, value|
+          io.write key
+          io.write value
+        end
+        io.write Minecraft::NBT::StringTag.new(description)
+      end
+    end
+  end
+
+  # ID or TrimPattern - either registry ID or inline definition  
+  struct TrimPattern
+    property registry_id : UInt32?
+    property inline_data : InlineTrimPattern?
+
+    def initialize(@registry_id : UInt32?, @inline_data : InlineTrimPattern?)
+    end
+
+    def self.read(io) : self
+      id = io.read_var_int
+      if id == 0
+        # Inline definition
+        inline_data = InlineTrimPattern.read(io)
+        new(nil, inline_data)
+      else
+        # Registry ID (id - 1 since 0 means inline)
+        new(id - 1, nil)
+      end
+    end
+
+    def write(io) : Nil
+      if registry_id
+        io.write(registry_id.not_nil! + 1)
+      else
+        io.write(0_u32)
+        inline_data.not_nil!.write(io)
+      end
+    end
+
+    # Inline trim pattern structure
+    struct InlineTrimPattern
+      property asset_name : String
+      property template_item : UInt32
+      property description : String
+      property decal : Bool
+
+      def initialize(@asset_name : String, @template_item : UInt32, @description : String, @decal : Bool)
+      end
+
+      def self.read(io) : self
+        asset_name = io.read_var_string
+        template_item = io.read_var_int
+        # Description is a Text Component - for now read as simple string
+        description_component = TextComponent.read(io)
+        description = description_component.to_s
+        decal = io.read_bool
+        new(asset_name, template_item, description, decal)
+      end
+
+      def write(io) : Nil
+        io.write asset_name
+        io.write template_item
+        io.write Minecraft::NBT::StringTag.new(description)
+        io.write decal
+      end
+    end
+  end
+end
 
 # Component for map_post_processing (VarInt enum)
 class Rosegold::DataComponents::MapPostProcessing < Rosegold::DataComponent
