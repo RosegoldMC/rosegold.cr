@@ -144,6 +144,8 @@ abstract class Rosegold::DataComponent
       DataComponents::EnchantmentGlintOverride.read(io)
     when 36 # minecraft:map_color - Int
       DataComponents::MapColor.read(io)
+    when 37 # minecraft:map_id - The ID of the map (VarInt)
+      DataComponents::MapId.read(io)
     when 39 # minecraft:map_post_processing - VarInt enum
       DataComponents::MapPostProcessing.read(io)
     when 42 # minecraft:potion_contents - Visual and effects of a potion item
@@ -355,16 +357,8 @@ class Rosegold::DataComponents::ItemName < Rosegold::DataComponent
 
   def self.read(io) : self
     # Read as NBT Text Component
-    nbt = io.read_nbt
-    name = case nbt
-           when Minecraft::NBT::StringTag
-             nbt.value
-           when Minecraft::NBT::CompoundTag
-             nbt["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || "Unknown"
-           else
-             "Unknown"
-           end
-    new(name)
+    text_component = TextComponent.read(io)
+    new(text_component.to_s)
   end
 
   def write(io) : Nil
@@ -502,6 +496,22 @@ class Rosegold::DataComponents::MapColor < Rosegold::DataComponent
     io.write color
   end
 end
+
+# Component for map_id (VarInt) - The ID of the map
+class Rosegold::DataComponents::MapId < Rosegold::DataComponent
+  property id : UInt32
+
+  def initialize(@id : UInt32); end
+
+  def self.read(io) : self
+    new(io.read_var_int)
+  end
+
+  def write(io) : Nil
+    io.write id
+  end
+end
+
 
 # Component for map_post_processing (VarInt enum)
 class Rosegold::DataComponents::MapPostProcessing < Rosegold::DataComponent
