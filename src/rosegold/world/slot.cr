@@ -134,6 +134,8 @@ abstract class Rosegold::DataComponent
       DataComponents::Enchantments.read(io)
     when 13 # minecraft:attribute_modifiers - Complex structure
       DataComponents::AttributeModifiers.read(io)
+    when 15 # minecraft:tooltip_display - Hide all or parts of the item tooltip
+      DataComponents::TooltipDisplay.read(io)
     when 16 # minecraft:repair_cost - VarInt
       DataComponents::RepairCost.read(io)
     when 27 # minecraft:enchantable - VarInt
@@ -451,6 +453,36 @@ class Rosegold::DataComponents::CreativeSlotLock < Rosegold::DataComponent
 
   def write(io) : Nil
     # No fields to write
+  end
+end
+
+# Component for tooltip_display (Hide all or parts of the item tooltip)
+class Rosegold::DataComponents::TooltipDisplay < Rosegold::DataComponent
+  property hide_tooltip : Bool
+  property hidden_components : Array(UInt32)
+
+  def initialize(@hide_tooltip : Bool, @hidden_components : Array(UInt32) = [] of UInt32); end
+
+  def self.read(io) : self
+    hide_tooltip = io.read_bool
+    
+    # Read hidden components array (prefixed with count)
+    hidden_count = io.read_var_int
+    hidden_components = Array(UInt32).new
+    hidden_count.times do
+      component_id = io.read_var_int
+      hidden_components << component_id
+    end
+    
+    new(hide_tooltip, hidden_components)
+  end
+
+  def write(io) : Nil
+    io.write hide_tooltip
+    io.write hidden_components.size
+    hidden_components.each do |component_id|
+      io.write component_id
+    end
   end
 end
 
