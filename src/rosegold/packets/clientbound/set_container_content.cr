@@ -54,7 +54,6 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
       client.window.slots = slots
       client.window.cursor = cursor
     elsif client.inventory.previous_window_id && client.inventory.previous_window_id == window_id
-      debugger
       # Handle late container content packet using shared method
       client.inventory.handle_late_packet(window_id.to_u8, slots: slots, cursor: cursor, state_id: state_id)
     else
