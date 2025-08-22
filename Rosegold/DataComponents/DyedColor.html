@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::PlayerList::Property - rosegold main</title>
+  <title>Rosegold::DataComponents::DyedColor - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -662,7 +662,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
+  <li class="parent open current" data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
       <a href="../../Rosegold/DataComponents.html">DataComponents</a>
       
         <ul>
@@ -717,7 +717,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/DataComponents/DyedColor" data-name="rosegold::datacomponents::dyedcolor">
+  <li class=" current" data-id="rosegold/Rosegold/DataComponents/DyedColor" data-name="rosegold::datacomponents::dyedcolor">
       <a href="../../Rosegold/DataComponents/DyedColor.html">DyedColor</a>
       
     </li>
@@ -1082,7 +1082,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/PlayerList" data-name="rosegold::playerlist">
+  <li class="parent " data-id="rosegold/Rosegold/PlayerList" data-name="rosegold::playerlist">
       <a href="../../Rosegold/PlayerList.html">PlayerList</a>
       
         <ul>
@@ -1092,7 +1092,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/PlayerList/Property" data-name="rosegold::playerlist::property">
+  <li class=" " data-id="rosegold/Rosegold/PlayerList/Property" data-name="rosegold::playerlist::property">
       <a href="../../Rosegold/PlayerList/Property.html">Property</a>
       
     </li>
@@ -1528,15 +1528,26 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>PlayerList::<wbr>Property
+  </span> Rosegold::<wbr>DataComponents::<wbr>DyedColor
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/PlayerList/Property.html">Rosegold::PlayerList::Property</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/DataComponents/DyedColor.html">Rosegold::DataComponents::DyedColor</a></li><li class="superclass"><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Component for dyed_color (RGB color as Int)</p>
 
 
 
@@ -1563,8 +1574,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/player_list.cr#L24" target="_blank">
-        rosegold/world/player_list.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/slot.cr#L873" target="_blank">
+        rosegold/world/slot.cr
       </a>
     
     <br/>
@@ -1586,7 +1597,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28name%3AString%2Cvalue%3AString%2Csignature%3ANil%7CString%3Dnil%29-class-method" class="signature"><strong>.new</strong>(name : String, value : String, signature : Nil | String = <span class="n">nil</span>)</a>
+        <a href="#new%28color%3AInt32%29-class-method" class="signature"><strong>.new</strong>(color : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#read%28io%29%3Aself-class-method" class="signature"><strong>.read</strong>(io) : <span class="k">self</span></a>
         
       </li>
     
@@ -1609,17 +1625,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#name%3AString-instance-method" class="signature"><strong>#name</strong> : String</a>
+        <a href="#color%3AInt32-instance-method" class="signature"><strong>#color</strong> : Int32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#signature%3AString%7CNil-instance-method" class="signature"><strong>#signature</strong> : String | Nil</a>
+        <a href="#color%3D%28color%3AInt32%29-instance-method" class="signature"><strong>#color=</strong>(color : Int32)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#value%3AString-instance-method" class="signature"><strong>#value</strong> : String</a>
+        <a href="#write%28io%29%3ANil-instance-method" class="signature"><strong>#write</strong>(io) : Nil</a>
         
       </li>
     
@@ -1628,6 +1644,37 @@
 
 
   <div class="methods-inherited">
+    
+      
+
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
+  
+  
+    <a href="../../Rosegold/DataComponent.html#write%28io%29%3ANil-instance-method" class="tooltip">
+      <span>write(io) : Nil</span>
+    write</a>
+    
+  
+
+
+      
+
+  <h3>Constructor methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
+  
+  
+    <a href="../../Rosegold/DataComponent.html#create_component%28component_type%3AUInt32%2Cio%29%3ADataComponent-class-method" class="tooltip">
+      <span>create_component(component_type : UInt32, io) : DataComponent</span>
+    create_component</a>
+    
+  
+
+
+      
+
+
+      
+
+
     
       
 
@@ -1667,18 +1714,34 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(name:String,value:String,signature:Nil|String=nil)-class-method">
+    <div class="entry-detail" id="new(color:Int32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(name : String, value : String, signature : Nil | String = <span class="n">nil</span>)
+        def self.<strong>new</strong>(color : <a href="../../Int32.html">Int32</a>)
 
-        <a class="method-permalink" href="#new%28name%3AString%2Cvalue%3AString%2Csignature%3ANil%7CString%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28color%3AInt32%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/player_list.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/slot.cr#L876" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(io):self-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(io) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#read%28io%29%3Aself-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/slot.cr#L878" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1699,50 +1762,50 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="name:String-instance-method">
+    <div class="entry-detail" id="color:Int32-instance-method">
       <div class="signature">
         
-        def <strong>name</strong> : String
+        def <strong>color</strong> : <a href="../../Int32.html">Int32</a>
 
-        <a class="method-permalink" href="#name%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#color%3AInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/player_list.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/slot.cr#L874" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="signature:String|Nil-instance-method">
+    <div class="entry-detail" id="color=(color:Int32)-instance-method">
       <div class="signature">
         
-        def <strong>signature</strong> : String | Nil
+        def <strong>color=</strong>(color : <a href="../../Int32.html">Int32</a>)
 
-        <a class="method-permalink" href="#signature%3AString%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#color%3D%28color%3AInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/player_list.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/slot.cr#L874" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="value:String-instance-method">
+    <div class="entry-detail" id="write(io):Nil-instance-method">
       <div class="signature">
         
-        def <strong>value</strong> : String
+        def <strong>write</strong>(io) : Nil
 
-        <a class="method-permalink" href="#value%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#write%28io%29%3ANil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/player_list.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6b06d60adc98f4972fb492796023772a84c32db0/src/rosegold/world/slot.cr#L882" target="_blank">View source</a>]
         
       </div>
     </div>
