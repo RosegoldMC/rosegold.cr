@@ -30,10 +30,16 @@ Spectator.describe "Rosegold::Bot bed interactions" do
         bot.chat "/tp 0.5 -60 0.5"
         bot.wait_tick
 
+        # Record initial position
+        initial_position = bot.feet
+
         # Interact with the bed to get in (look down at the bed)
         bot.look_at Rosegold::Vec3d.new(0.5, -60.5, 0.5)
         bot.use_hand
         bot.wait_ticks 5 # Wait for bed interaction to process
+
+        # Position may have changed when sleeping
+        sleeping_position = bot.feet
 
         # Get out of bed using the leave_bed method
         bot.leave_bed
@@ -100,10 +106,16 @@ Spectator.describe "Rosegold::Bot bed interactions" do
         bot.chat "/tp 3.5 -60 0.5"
         bot.wait_tick
 
+        # Record initial position
+        initial_position = bot.feet
+
         # Interact with the bed at night
         bot.look_at Rosegold::Vec3d.new(3.5, -60.5, 0.5)
         bot.use_hand
         bot.wait_ticks 5 # Wait for bed interaction to process
+
+        # Position may have changed if sleeping was successful
+        sleeping_position = bot.feet
 
         # Wake up using leave_bed method
         bot.leave_bed
