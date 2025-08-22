@@ -869,6 +869,21 @@ class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
   end
 end
 
+# Component for dyed_color (RGB color as Int)
+class Rosegold::DataComponents::DyedColor < Rosegold::DataComponent
+  property color : Int32
+
+  def initialize(@color : Int32); end
+
+  def self.read(io) : self
+    new(io.read_int)
+  end
+
+  def write(io) : Nil
+    io.write color
+  end
+end
+
 class Rosegold::Slot
   property count : UInt32
   property components_to_add : Hash(UInt32, DataComponent) # Component type -> structured component
