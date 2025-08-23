@@ -84,5 +84,14 @@ Spectator.describe Rosegold::Clientbound::SetContainerContent do
         expect { Rosegold::Clientbound::SetContainerContent.read(io) }.not_to raise_error(Exception, /Unknown data component type: 15/)
       end
     end
+
+    describe "includes dyed_color data component type 35" do
+      let(:failing_packet_hex) { "12002e2e00000000000000000194070600050a0100066974616c696300080005636f6c6f720004676f6c6408000474657874001a5061726b6f757220436976696c697a6174696f6e20426f6f74730008010a0100066974616c69630008000474657874002155736520746865736520746f206265636f6d652061205061726b6f75722050726f000a060201070309041b06270528010f00020a2f2f0a1223009d9d970000000000000000000000000000000000000000000000000000000000000000000000319b0900000000" }
+
+      it "is able to read" do
+        io.read_byte # Skip packet ID (0x12)
+        expect { Rosegold::Clientbound::SetContainerContent.read(io) }.not_to raise_error
+      end
+    end
   end
 end

@@ -144,6 +144,8 @@ abstract class Rosegold::DataComponent
       DataComponents::CreativeSlotLock.read(io)
     when 18 # minecraft:enchantment_glint_override - Boolean
       DataComponents::EnchantmentGlintOverride.read(io)
+    when 35 # minecraft:dyed_color - Color of dyed leather armor
+      DataComponents::DyedColor.read(io)
     when 36 # minecraft:map_color - Int
       DataComponents::MapColor.read(io)
     when 37 # minecraft:map_id - The ID of the map (VarInt)
