@@ -12,13 +12,16 @@ class Rosegold::Player
   SNEAKING_EYE_HEIGHT = 1.27
   CRAWLING_EYE_HEIGHT = 0.40
 
+  @mutex = Mutex.new
+
+  @feet : Vec3d = Vec3d::ORIGIN
+  @velocity : Vec3d = Vec3d::ORIGIN
+  @look : Look = Look::SOUTH
+
   property \
     uuid : UUID?,
     username : String?, # Note: The server may give us a different name than we used during authentication.
     entity_id : UInt64 = 0,
-    look : Look = Look::SOUTH,
-    feet : Vec3d = Vec3d::ORIGIN,
-    velocity : Vec3d = Vec3d::ORIGIN,
     health : Float32 = 0,
     food : UInt32 = 0,
     saturation : Float32 = 0,
@@ -30,6 +33,30 @@ class Rosegold::Player
     sneaking : Bool = false,
     sprinting : Bool = false,
     in_water : Bool = false
+
+  def feet
+    @mutex.synchronize { @feet }
+  end
+
+  def feet=(value : Vec3d)
+    @mutex.synchronize { @feet = value }
+  end
+
+  def velocity
+    @mutex.synchronize { @velocity }
+  end
+
+  def velocity=(value : Vec3d)
+    @mutex.synchronize { @velocity = value }
+  end
+
+  def look
+    @mutex.synchronize { @look }
+  end
+
+  def look=(value : Look)
+    @mutex.synchronize { @look = value }
+  end
 
   def aabb
     # TODO crawling
