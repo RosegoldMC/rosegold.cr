@@ -154,6 +154,8 @@ abstract class Rosegold::DataComponent
       DataComponents::PotionContents.read(io)
     when 47 # minecraft:trim - Armor's trim pattern and color
       DataComponents::Trim.read(io)
+    when 35 # minecraft:dyed_color - Color of dyed leather armor
+      DataComponents::DyedColor.read(io)
     when 63 # minecraft:banner_patterns - Array of banner pattern layers
       DataComponents::BannerPatterns.read(io)
     else
