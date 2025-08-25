@@ -103,6 +103,35 @@ Spectator.describe "Rosegold::Bot inventory" do
         end
       end
     end
+
+    context "when picking items with different durabilities" do
+      it "picks items with lower durability first" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/clear"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+            # Give undamaged diamond pickaxe first (will go to hotbar slot 0)
+            bot.chat "/give #{bot.username} minecraft:diamond_pickaxe"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+            # Give damaged diamond pickaxe (will go to hotbar slot 1)
+            bot.chat "/give #{bot.username} minecraft:diamond_pickaxe[damage=1400]"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            # Switch away from the pickaxes first
+            bot.hotbar_selection = 3_u8
+
+            # Pick should select the damaged one (lower durability)
+            expect(bot.inventory.pick("diamond_pickaxe")).to eq true
+
+            # Verify we picked the damaged pickaxe
+            picked_pickaxe = bot.inventory.main_hand
+            expect(picked_pickaxe.name).to eq "diamond_pickaxe"
+            expect(picked_pickaxe.damage).to eq 1400 # Should be the damaged one
+            expect(picked_pickaxe.durability).to eq 161
+          end
+        end
+      end
+    end
   end
 
   describe "#pick!" do
@@ -171,6 +200,78 @@ Spectator.describe "Rosegold::Bot inventory" do
           expect(local_inventory.map(&.slot_number)).to match_array bot.inventory.inventory.map(&.slot_number)
           expect(local_hotbar.map(&.slot_number)).to match_array bot.inventory.hotbar.map(&.slot_number)
           expect(local_content.map(&.slot_number)).to match_array bot.inventory.content.map(&.slot_number)
+        end
+      end
+    end
+
+    it "withdraws items with lower durability first" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          bot.wait_tick
+          # Create chest with two diamond pickaxes: one undamaged, one heavily damaged
+          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:diamond_pickaxe\",Count:1b},{Slot:1b, id: \"minecraft:diamond_pickaxe\",Count:1b,components:{\"minecraft:damage\":1400}}]}"
+          bot.chat "/clear"
+          bot.wait_for Rosegold::Clientbound::SetSlot
+          bot.wait_tick
+
+          bot.pitch = 90
+          bot.use_hand
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
+
+          # Withdraw 1 diamond pickaxe - should get the damaged one first (lower durability)
+          expect(bot.inventory.withdraw_at_least(1, "diamond_pickaxe")).to eq 1
+
+          # Check that the withdrawn pickaxe is the damaged one
+          withdrawn_pickaxe = (bot.inventory.inventory + bot.inventory.hotbar).find { |slot| slot.name == "diamond_pickaxe" }
+          expect(withdrawn_pickaxe).not_to be_nil
+          if pickaxe = withdrawn_pickaxe
+            expect(pickaxe.damage).to eq 1400    # Should be the heavily damaged one
+            expect(pickaxe.durability).to eq 161 # Diamond pickaxe max durability (1561) - damage (1400)
+          end
+
+          # Verify the undamaged pickaxe is still in the chest
+          undamaged_pickaxe = bot.inventory.content.find { |slot| slot.name == "diamond_pickaxe" }
+          expect(undamaged_pickaxe).not_to be_nil
+          if pickaxe = undamaged_pickaxe
+            expect(pickaxe.damage).to eq 0 # Should be undamaged
+          end
+        end
+      end
+    end
+
+    it "withdraws multiple items in durability order" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          bot.wait_tick
+          # Create chest with multiple diamond swords of varying durability
+          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:diamond_sword\",Count:1b},{Slot:1b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":800}},{Slot:2b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":1200}},{Slot:3b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":400}}]}"
+          bot.chat "/clear"
+          bot.wait_for Rosegold::Clientbound::SetSlot
+          bot.wait_tick
+
+          bot.pitch = 90
+          bot.use_hand
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
+
+          # Withdraw 3 swords - should get the most damaged ones first
+          expect(bot.inventory.withdraw_at_least(3, "diamond_sword")).to eq 3
+
+          # Check that we got the 3 most damaged swords
+          withdrawn_swords = (bot.inventory.inventory + bot.inventory.hotbar).select { |slot| slot.name == "diamond_sword" }
+          expect(withdrawn_swords.size).to eq 3
+
+          # Sort by damage to verify we got the most damaged ones
+          damages = withdrawn_swords.map(&.damage).sort!
+          expect(damages).to eq [400, 800, 1200] # Should be the 3 most damaged ones
+
+          # Verify the undamaged sword is still in the chest
+          remaining_sword = bot.inventory.content.find { |slot| slot.name == "diamond_sword" }
+          expect(remaining_sword).not_to be_nil
+          if sword = remaining_sword
+            expect(sword.damage).to eq 0 # Should be undamaged
+          end
         end
       end
     end
@@ -303,11 +404,10 @@ Spectator.describe "Rosegold::Bot inventory" do
             bot.wait_tick
             bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:stone\",Count:10b}]}"
             bot.chat "/clear"
-            bot.wait_for Rosegold::Clientbound::SetSlot
             bot.chat "/give #{bot.username} minecraft:stone 2"
             bot.wait_for Rosegold::Clientbound::SetSlot
-
             bot.pitch = 90
+            bot.wait_ticks 2
             bot.use_hand
             bot.wait_for Rosegold::Clientbound::SetContainerContent
 
