@@ -19,7 +19,7 @@ Minecraft client written in [Crystal](http://crystal-lang.org/), following the [
    dependencies:
      rosegold:
        github: grepsedawk/rosegold.cr
-       version: ~> 0.4
+       version: ~> 0.6
    ```
 1. Run `shards install`
 1. Start with a basic example by writing a file in `src/`, something like...
