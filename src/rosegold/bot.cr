@@ -167,6 +167,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Jumps the next time the player is on the ground.
   def start_jump
     client.physics.jump_queued = true
+    # Send PlayerInput with jump bit set
+    client.queue_packet Rosegold::Serverbound::PlayerInput.new(Rosegold::Serverbound::PlayerInput::Flag::Jump)
   end
 
   # Jumps and waits until the bot is `height` above the ground.
@@ -175,6 +177,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
     target_y = feet.y + height
     prev_y = feet.y
     client.physics.jump_queued = true
+    # Send PlayerInput with jump bit set
+    client.queue_packet Rosegold::Serverbound::PlayerInput.new(Rosegold::Serverbound::PlayerInput::Flag::Jump)
     timeout_ticks.times do
       wait_tick
       break if feet.y >= target_y

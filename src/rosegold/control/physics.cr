@@ -20,7 +20,15 @@ class Rosegold::Physics
 
   JUMP_FORCE = 0.42 # m/t; applied to velocity when starting a jump
 
-  VERY_CLOSE = 0.00001 # consider arrived at target if squared distance is closer than this
+  # Block slipperiness values
+  DEFAULT_SLIP  =   0.6 # Default block slipperiness
+  SLIME_SLIP    =   0.8 # Slime block slipperiness
+  ICE_SLIP      =  0.98 # Ice and Packed Ice slipperiness
+  BLUE_ICE_SLIP = 0.989 # Blue Ice slipperiness (most slippery)
+  AIR_SLIP      =   1.0 # Air has no friction
+
+  VERY_CLOSE     = 0.1 # consider arrived at target if distance is closer than this
+  BRAKE_DISTANCE = 2.0 # start braking when within this distance
 
   # Send a keep-alive movement packet every 20 ticks (1 second) even when stationary
   # This prevents server timeouts while avoiding packet spam
@@ -82,6 +90,7 @@ class Rosegold::Physics
     end
 
     player.velocity = Vec3d::ORIGIN
+    player.on_ground = false # Ensure bot isn't considered on ground after teleport/reset
 
     @last_sent_feet = player.feet
     @last_sent_look = player.look
@@ -140,26 +149,21 @@ class Rosegold::Physics
   end
 
   def sneak(sneaking = true)
-    # send nothing if already in desired state
     return if player.sneaking? == sneaking
 
     if sneaking
-      # can't sprint while sneaking
       sprint false
       @player_input_flags |= Serverbound::PlayerInput::Flag::Sneak
     else
       @player_input_flags &= ~Serverbound::PlayerInput::Flag::Sneak
     end
 
-    # Send updated player input
     client.send_packet! Serverbound::PlayerInput.new(@player_input_flags)
     player.sneaking = sneaking
   end
 
   def sprint(sprinting = true)
-    # can't sprint while sneaking
     return if player.sneaking?
-    # send nothing if already in desired state
     return if player.sprinting? == sprinting
     if sprinting
       client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StartSprinting
@@ -173,6 +177,35 @@ class Rosegold::Physics
     return SNEAK_SPEED if player.sneaking?
     return SPRINT_SPEED if player.sprinting?
     WALK_SPEED
+  end
+
+  def block_slip : Float64
+    feet_pos = player.feet
+    block_x = feet_pos.x.floor.to_i
+    block_y = (feet_pos.y - 0.5).floor.to_i
+    block_z = feet_pos.z.floor.to_i
+
+    # Get block state from dimension
+    block_state = client.dimension.block_state(block_x, block_y, block_z)
+    return DEFAULT_SLIP unless block_state
+
+    # Get block name from state
+    block_name = MCData::DEFAULT.block_state_names[block_state]
+
+    # Extract base block name (before any properties in brackets)
+    base_block_name = block_name.split('[').first
+
+    # Return slipperiness based on block type
+    case base_block_name
+    when "blue_ice"
+      BLUE_ICE_SLIP
+    when "ice", "packed_ice", "frosted_ice"
+      ICE_SLIP
+    when "slime_block"
+      SLIME_SLIP
+    else
+      DEFAULT_SLIP
+    end
   end
 
   private def player
@@ -220,10 +253,8 @@ class Rosegold::Physics
     look = look_action.try(&.target) || player.look
 
     feet = player.feet + movement
-    # align with grid in case of rounding errors
-    feet = feet.with_y feet.y.round(4)
+    feet = feet.with_y feet.y
 
-    # TODO: this only works with gravity on
     on_ground = movement.y > input_velocity.y
 
     # Track consecutive stuck ticks for timeout handling
@@ -270,6 +301,9 @@ class Rosegold::Physics
 
       @movement_action.try do |movement_action|
         if very_close_to? movement_action.target
+          # Snap to exact target position for precision (preserve natural Y movement)
+          target_with_y = Vec3d.new(movement_action.target.x, feet.y, movement_action.target.z)
+          player.feet = target_with_y
           movement_action.succeed
           @movement_action = nil
         end
@@ -321,28 +355,47 @@ class Rosegold::Physics
 
   private def velocity_for_inputs
     curr_movement = @movement_action
+    existing_horiz = player.velocity.with_y(0)
+
     if curr_movement
-      # curr_movement.target only influences x,z; rely on stepping/falling to change y
-      move_horiz_vec = (curr_movement.target - player.feet).with_y(0)
-      move_horiz_vec_len = move_horiz_vec.length
-      if move_horiz_vec_len < VERY_CLOSE
-        move_horiz_vec = Vec3d::ORIGIN
-      elsif move_horiz_vec_len > movement_speed
-        # take one step of the length of movement_speed
-        move_horiz_vec *= movement_speed / move_horiz_vec_len
-      end # else: get there in one step
+      move_direction = (curr_movement.target - player.feet).with_y(0)
+      move_direction_len = move_direction.length
+
+      if move_direction_len < VERY_CLOSE
+        movement_input = Vec3d::ORIGIN
+      else
+        movement_input = move_direction * (movement_speed / move_direction_len)
+      end
     else
-      move_horiz_vec = Vec3d::ORIGIN
+      movement_input = Vec3d::ORIGIN
     end
 
-    if jump_queued? && player.on_ground?
-      @jump_queued = false
-      vel_y = JUMP_FORCE
+    if player.on_ground?
+      slip = block_slip
+      momentum = existing_horiz * slip * 0.91
+      acceleration = movement_input * 1.0 * ((0.6 / slip) ** 3)
+      move_horiz_vec = momentum + acceleration
     else
-      vel_y = (player.velocity.y - GRAVITY) * DRAG
+      momentum = existing_horiz * AIR_SLIP * 0.91
+      acceleration = movement_input * 0.2
+      move_horiz_vec = momentum + acceleration
     end
 
-    # TODO floating up water/ladders
+    vel_y = if jump_queued? && player.on_ground?
+              @jump_queued = false
+
+              # Apply sprint jump boost according to Minecraft formula
+              if player.sprinting? && movement_input.length > 0
+                # Add 0.2 sprint jump boost in movement direction
+                direction = movement_input / movement_input.length
+                move_horiz_vec += direction * 0.2
+              end
+
+              client.queue_packet Rosegold::Serverbound::PlayerInput.new
+              JUMP_FORCE
+            else
+              (player.velocity.y - GRAVITY) * DRAG
+            end
 
     Vec3d.new move_horiz_vec.x, vel_y, move_horiz_vec.z
   end

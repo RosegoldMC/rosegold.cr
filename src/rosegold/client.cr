@@ -189,12 +189,41 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   def start_ticker
     spawn do
-      loop do
-        sleep tick_interval
+      target_interval_ns = 50_000_000_u64 # 50ms in nanoseconds for 20 TPS
+      tick_counter = 0_u64
 
+      # Record the absolute start time as our reference point
+      start_time_ns = Time.monotonic.total_nanoseconds.to_u64
+
+      loop do
         break unless connected?
 
-        # Only tick if not frozen, or if we have pending steps when frozen
+        # Calculate the exact time this tick should start (metronome-accurate)
+        target_tick_time_ns = start_time_ns + (tick_counter * target_interval_ns)
+        current_time_ns = Time.monotonic.total_nanoseconds.to_u64
+
+        # Calculate sleep time needed to hit target exactly
+        if current_time_ns < target_tick_time_ns
+          sleep_ns = target_tick_time_ns - current_time_ns
+
+          # Use high-precision sleep with busy-wait for final microseconds
+          if sleep_ns > 1_000_000               # If more than 1ms, use regular sleep
+            rough_sleep_ns = sleep_ns - 500_000 # Sleep for all but last 0.5ms
+            sleep Time::Span.new(nanoseconds: rough_sleep_ns.to_i64)
+
+            # Busy-wait for the remaining time for ultra-precision
+            while Time.monotonic.total_nanoseconds.to_u64 < target_tick_time_ns
+              Fiber.yield
+            end
+          else
+            # For very short waits, just busy-wait
+            while Time.monotonic.total_nanoseconds.to_u64 < target_tick_time_ns
+              Fiber.yield
+            end
+          end
+        end
+
+        # Execute tick logic
         should_tick = if @ticking_frozen
                         if @pending_tick_steps > 0
                           @pending_tick_steps -= 1
@@ -207,11 +236,23 @@ class Rosegold::Client < Rosegold::EventEmitter
                       end
 
         if should_tick
-          spawn do
-            interactions.tick
-            physics.tick
-            emit_event Event::Tick.new
-          end
+          interactions.tick
+          physics.tick
+          emit_event Event::Tick.new
+
+          # Send Client Tick End packet as per protocol
+          queue_packet Serverbound::ClientTickEnd.new
+        end
+
+        # Always increment tick counter for next iteration
+        tick_counter += 1
+
+        # Optional: Log timing accuracy every 100 ticks for debugging
+        if tick_counter % 100 == 0
+          actual_time_ns = Time.monotonic.total_nanoseconds.to_u64
+          expected_time_ns = start_time_ns + (tick_counter * target_interval_ns)
+          drift_ms = (actual_time_ns.to_i64 - expected_time_ns.to_i64) / 1_000_000.0
+          Log.trace { "Tick #{tick_counter}: drift #{drift_ms.round(2)}ms" }
         end
       end
     end
