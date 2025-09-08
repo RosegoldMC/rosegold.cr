@@ -22,3 +22,5 @@ crystal.tar.gz
 
 # a place to put game data for searching
 game_assets/protocol_docs
+
+tmp

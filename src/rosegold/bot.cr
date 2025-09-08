@@ -34,11 +34,20 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   delegate host, port, connect, connected?, disconnect, join_game, spawned?, to: client
-  delegate uuid, username, feet, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
+  delegate uuid, username, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory
   delegate stop_using_hand, stop_digging, to: client.interactions
   delegate x, y, z, to: feet
+
+  def location
+    client.player.feet
+  end
+
+  @[Deprecated("Use `bot.location` instead of `bot.feet`")]
+  def feet
+    client.player.feet
+  end
 
   def disconnect_reason
     client.connection?.try &.close_reason
@@ -145,8 +154,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.physics.move Vec3d.new(x, feet.y, z), stuck_timeout_ticks
   end
 
-  def move_to(x : Int, y : Int, stuck_timeout_ticks : Int32 = 60)
-    move_to x + 0.5, y + 0.5, stuck_timeout_ticks
+  def move_to(x : Int, z : Int, stuck_timeout_ticks : Int32 = 60)
+    move_to x + 0.5, z + 0.5, stuck_timeout_ticks
   end
 
   # Computes the destination location from the current feet location.
@@ -167,6 +176,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Jumps the next time the player is on the ground.
   def start_jump
     client.physics.jump_queued = true
+    client.physics.reset_jump_delay
   end
 
   # Jumps and waits until the bot is `height` above the ground.

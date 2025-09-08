@@ -69,6 +69,7 @@ class Rosegold::Interactions
   end
 
   def tick
+    return unless client.connected?
     tick_held_item
     tick_attack
     tick_digging

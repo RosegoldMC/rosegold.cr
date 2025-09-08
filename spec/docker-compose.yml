@@ -11,6 +11,7 @@ services:
       ONLINE_MODE: "FALSE"
       LEVEL_TYPE: flat
       SPAWN_PROTECTION: 0
+      # TYPE: PAPER
 
     tty: true
     stdin_open: true
