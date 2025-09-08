@@ -1,8 +1,6 @@
 require "./look"
 require "./vec3"
 
-# Holds assumed server-side player state.
-# Only gets updated when reading/writing packets.
 class Rosegold::Player
   DEFAULT_AABB  = AABBf.new -0.3, 0.0, -0.3, 0.3, 1.8, 0.3
   SNEAKING_AABB = AABBf.new -0.3, 0.0, -0.3, 0.3, 1.5, 0.3
