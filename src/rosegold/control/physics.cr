@@ -9,18 +9,43 @@ class Rosegold::Event::PhysicsTick < Rosegold::Event
   def initialize(@movement); end
 end
 
+struct Rosegold::VirtualInput
+  getter? forward : Bool
+  getter? backward : Bool
+  getter? left : Bool
+  getter? right : Bool
+  getter? jump : Bool
+  getter? sneak : Bool
+  getter? sprint : Bool
+
+  def initialize(@forward : Bool, @backward : Bool, @left : Bool, @right : Bool, @jump : Bool, @sneak : Bool, @sprint : Bool)
+  end
+
+  def has_movement_input?
+    forward? || backward? || left? || right?
+  end
+end
+
 # Updates the player feet/look/velocity/on_ground by sending movement packets.
 class Rosegold::Physics
   DRAG    = 0.98 # y velocity multiplicator per tick when not on ground
   GRAVITY = 0.08 # m/t/t; subtracted from y velocity each tick when not on ground
 
-  WALK_SPEED   = 4.3 / 20   # m/t
-  SPRINT_SPEED = 5.612 / 20 # m/t
-  SNEAK_SPEED  = 1.31 / 20  # m/t
+  BASE_MOVEMENT_SPEED =        0.1 # Actual player movement attribute
+  FRICTION_CONSTANT   = 0.21600002 # The magic number for friction calculation
+  SNEAK_MULTIPLIER    =        0.3 # 30% of base speed when sneaking
+  SPRINT_MULTIPLIER   =        1.3 # 30% boost for sprinting
 
   JUMP_FORCE = 0.42 # m/t; applied to velocity when starting a jump
 
-  VERY_CLOSE = 0.00001 # consider arrived at target if squared distance is closer than this
+  # Block slipperiness values
+  DEFAULT_SLIP  =   0.6 # Default block slipperiness
+  SLIME_SLIP    =   0.8 # Slime block slipperiness
+  ICE_SLIP      =  0.98 # Ice and Packed Ice slipperiness
+  BLUE_ICE_SLIP = 0.989 # Blue Ice slipperiness (most slippery)
+  AIR_SLIP      =   1.0 # Air has no friction
+
+  VERY_CLOSE = 0.1
 
   # Send a keep-alive movement packet every 20 ticks (1 second) even when stationary
   # This prevents server timeouts while avoiding packet spam
@@ -31,8 +56,14 @@ class Rosegold::Physics
   property? jump_queued : Bool = false
   private getter movement_action : Action(Vec3d)?
   private getter look_action : Action(Look)?
-  private property player_input_flags : Serverbound::PlayerInput::Flag = Serverbound::PlayerInput::Flag::None
   private getter action_mutex : Mutex = Mutex.new
+
+  private property jump_trigger_time : Int32 = 0   # For double-tap mechanics
+  private property sprint_trigger_time : Int32 = 0 # For double-tap sprint
+  private property no_jump_delay : Int32 = 0       # Jump spam prevention
+
+  private property movement_input : Vec3d = Vec3d::ORIGIN
+  private property jumping_input : Bool = false
 
   # Movement stuck tracking
   private property consecutive_stuck_ticks : Int32 = 0
@@ -40,9 +71,9 @@ class Rosegold::Physics
   private property current_stuck_timeout_ticks : Int32 = 0
 
   # Movement packet rate limiting
-  private property last_sent_feet : Vec3d = Vec3d::ORIGIN
-  private property last_sent_look : Look = Look.new(0, 0)
-  private property last_sent_on_ground : Bool = false
+  property last_sent_feet : Vec3d = Vec3d::ORIGIN
+  property last_sent_look : Look = Look::SOUTH
+  property last_sent_on_ground : Bool = false # ameba:disable Naming/QueryBoolMethods
   private property ticks_since_last_packet : Int32 = 0
 
   def movement_target
@@ -54,6 +85,17 @@ class Rosegold::Physics
   end
 
   def initialize(@client : Rosegold::Client); end
+
+  def look=(target : Look)
+    if paused?
+      Log.warn { "Ignoring look of #{target} because physics is paused" }
+      return
+    end
+
+    action = Action.new(target)
+    replace_look_action(action)
+    action.join
+  end
 
   def pause
     @paused = true
@@ -82,9 +124,9 @@ class Rosegold::Physics
     end
 
     player.velocity = Vec3d::ORIGIN
+    player.on_ground = false
 
     @last_sent_feet = player.feet
-    @last_sent_look = player.look
     @last_sent_on_ground = player.on_ground?
     @ticks_since_last_packet = 0
   end
@@ -126,40 +168,18 @@ class Rosegold::Physics
     action.join
   end
 
-  # Set the look target and wait until it is achieved.
-  # If there is already a look target, it is cancelled, and replaced with this new target.
-  def look=(target : Look)
-    if paused?
-      Log.warn { "Ignoring look of #{target} because physics is paused" }
-      return
-    end
-
-    action = Action.new(target)
-    replace_look_action(action)
-    action.join
-  end
-
   def sneak(sneaking = true)
-    # send nothing if already in desired state
     return if player.sneaking? == sneaking
 
     if sneaking
-      # can't sprint while sneaking
       sprint false
-      @player_input_flags |= Serverbound::PlayerInput::Flag::Sneak
-    else
-      @player_input_flags &= ~Serverbound::PlayerInput::Flag::Sneak
     end
 
-    # Send updated player input
-    client.send_packet! Serverbound::PlayerInput.new(@player_input_flags)
     player.sneaking = sneaking
   end
 
   def sprint(sprinting = true)
-    # can't sprint while sneaking
     return if player.sneaking?
-    # send nothing if already in desired state
     return if player.sprinting? == sprinting
     if sprinting
       client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StartSprinting
@@ -169,10 +189,32 @@ class Rosegold::Physics
     player.sprinting = sprinting
   end
 
-  def movement_speed : Float64
-    return SNEAK_SPEED if player.sneaking?
-    return SPRINT_SPEED if player.sprinting?
-    WALK_SPEED
+  def reset_jump_delay
+    @no_jump_delay = 0
+  end
+
+  def block_slip : Float64
+    feet_pos = player.feet
+    block_x = feet_pos.x.floor.to_i
+    block_y = (feet_pos.y - 0.5).floor.to_i
+    block_z = feet_pos.z.floor.to_i
+
+    block_state = client.dimension.block_state(block_x, block_y, block_z)
+    return DEFAULT_SLIP unless block_state
+
+    block_name = MCData::DEFAULT.block_state_names[block_state]
+    base_block_name = block_name.split('[').first
+
+    case base_block_name
+    when "blue_ice"
+      BLUE_ICE_SLIP
+    when "ice", "packed_ice", "frosted_ice"
+      ICE_SLIP
+    when "slime_block"
+      SLIME_SLIP
+    else
+      DEFAULT_SLIP
+    end
   end
 
   private def player
@@ -203,148 +245,300 @@ class Rosegold::Physics
     client.dimension
   end
 
-  def tick
-    return if paused?
-    return unless client.connected?
+  def tick(virtual_input : Rosegold::VirtualInput? = nil)
+    return if paused? || !client.connected?
 
-    input_velocity = velocity_for_inputs
+    input = virtual_input || convert_movement_goals_to_input
+    process_virtual_input(input)
 
-    movement, next_velocity = Physics.predict_movement_collision(
+    movement, next_velocity, new_feet, on_ground = execute_movement_physics
+
+    player.feet = new_feet
+    player.on_ground = on_ground
+
+    track_stuck_movement(new_feet)
+
+    sync_with_server
+
+    player.velocity = next_velocity
+
+    complete_actions(new_feet)
+
+    client.emit_event Event::PhysicsTick.new movement
+  end
+
+  private def convert_movement_goals_to_input : Rosegold::VirtualInput
+    curr_movement = @movement_action
+
+    forward = false
+
+    if curr_movement
+      move_direction = (curr_movement.target - player.feet).with_y(0)
+
+      if move_direction.length >= VERY_CLOSE
+        target_yaw = Math.atan2(-move_direction.x, move_direction.z) * (180.0 / Math::PI)
+        target_look = Look.new(target_yaw.to_f32, player.look.pitch)
+        player.look = target_look
+        forward = true
+      end
+    end
+
+    jump = jump_queued? && player.on_ground?
+    sneak = player.sneaking?
+    sprint = player.sprinting? && !sneak
+
+    Rosegold::VirtualInput.new(
+      forward: forward,
+      backward: false,
+      left: false,
+      right: false,
+      jump: jump,
+      sneak: sneak,
+      sprint: sprint
+    )
+  end
+
+  def very_close_to?(target : Vec3d)
+    distance = (target - player.feet).with_y(0).length
+    is_close = distance < VERY_CLOSE
+    is_close
+  end
+
+  private def movement_changed?
+    player.feet != last_sent_feet ||
+      player.look != last_sent_look ||
+      player.on_ground? != last_sent_on_ground
+  end
+
+  class MovementStuck < Exception; end
+
+  private def process_virtual_input(input : Rosegold::VirtualInput)
+    process_input_timing
+
+    @movement_input = calculate_movement_vector(input)
+    @jumping_input = input.jump? && can_jump?
+
+    handle_sprint_mechanics(input)
+
+    apply_input_state_transitions(input)
+  end
+
+  private def process_input_timing
+    @jump_trigger_time = [@jump_trigger_time - 1, 0].max
+    @sprint_trigger_time = [@sprint_trigger_time - 1, 0].max
+    @no_jump_delay = [@no_jump_delay - 1, 0].max
+  end
+
+  private def calculate_movement_vector(input : Rosegold::VirtualInput) : Vec3d
+    strafe = 0.0
+    forward = 0.0
+
+    strafe += 1.0 if input.left?
+    strafe -= 1.0 if input.right?
+    forward += 1.0 if input.forward?
+    forward -= 1.0 if input.backward?
+
+    if strafe != 0.0 && forward != 0.0
+      diagonal_factor = Math.sin(Math::PI / 4.0)
+      strafe *= diagonal_factor
+      forward *= diagonal_factor
+    end
+
+    Vec3d.new(strafe, 0.0, forward)
+  end
+
+  private def can_jump? : Bool
+    player.on_ground? && @no_jump_delay <= 0
+  end
+
+  private def handle_sprint_mechanics(input : Rosegold::VirtualInput)
+    should_sprint = input.sprint? && input.has_movement_input? && !input.sneak?
+
+    if should_sprint != player.sprinting?
+      sprint(should_sprint)
+    end
+  end
+
+  private def apply_input_state_transitions(input : Rosegold::VirtualInput)
+    if @jumping_input && player.on_ground?
+      @jump_queued = false
+      @no_jump_delay = 10
+    end
+
+    if input.sneak? != player.sneaking?
+      sneak(input.sneak?)
+    end
+  end
+
+  private def execute_movement_physics : {Vec3d, Vec3d, Vec3d, Bool}
+    input_velocity = velocity_from_movement_input
+
+    movement, post_collision_velocity = Physics.predict_movement_collision(
       player.feet, input_velocity, current_player_aabb, dimension)
 
-    look_action = action_mutex.synchronize do
-      action = @look_action
-      @look_action = nil
-      action
+    if player.on_ground?
+      slip = block_slip
+      drag_factor = slip * 0.91
+      final_velocity = Vec3d.new(
+        post_collision_velocity.x * drag_factor,
+        post_collision_velocity.y * 0.98, post_collision_velocity.z * drag_factor
+      )
+    else
+      final_velocity = Vec3d.new(
+        post_collision_velocity.x * 0.91,
+        post_collision_velocity.y * 0.98, post_collision_velocity.z * 0.91
+      )
     end
-    look = look_action.try(&.target) || player.look
 
-    feet = player.feet + movement
-    # align with grid in case of rounding errors
-    feet = feet.with_y feet.y.round(4)
+    new_feet = player.feet + movement
 
-    # TODO: this only works with gravity on
     on_ground = movement.y > input_velocity.y
 
-    # Track consecutive stuck ticks for timeout handling
+    {movement, final_velocity, new_feet, on_ground}
+  end
+
+  # Refactored velocity calculation using the processed movement input
+  private def velocity_from_movement_input : Vec3d
+    existing_velocity = player.velocity
+
+    # 1. Calculate friction-influenced speed (like getFrictionInfluencedSpeed)
+    if player.on_ground?
+      slip = block_slip
+      friction_cubed = slip * slip * slip
+      # Correct Minecraft formula: base_speed * (friction_constant / friction³)
+      movement_multiplier = BASE_MOVEMENT_SPEED * (FRICTION_CONSTANT / friction_cubed)
+
+      # Apply movement state modifiers
+      if player.sneaking?
+        movement_multiplier *= SNEAK_MULTIPLIER
+      elsif player.sprinting?
+        movement_multiplier *= SPRINT_MULTIPLIER
+      end
+    else
+      movement_multiplier = 0.02 # Air movement
+    end
+
+    # 2. Apply moveRelative transformation (like Minecraft's getInputVector)
+    input_length_sq = @movement_input.length * @movement_input.length
+    if input_length_sq < 1.0e-7
+      input_velocity = Vec3d::ORIGIN
+    else
+      # Normalize if length > 1
+      normalized_input = input_length_sq > 1.0 ? @movement_input.normed : @movement_input
+      scaled_input = normalized_input * movement_multiplier
+
+      # Rotate by player yaw (critical step that was missing!)
+      yaw_rad = player.look.yaw_rad
+      sin_yaw = Math.sin(yaw_rad)
+      cos_yaw = Math.cos(yaw_rad)
+
+      input_velocity = Vec3d.new(
+        scaled_input.x * cos_yaw - scaled_input.z * sin_yaw,
+        scaled_input.y,
+        scaled_input.z * cos_yaw + scaled_input.x * sin_yaw
+      )
+    end
+
+    combined_velocity = existing_velocity + input_velocity
+
+    vel_y = if @jumping_input && player.on_ground?
+              if player.sprinting? && combined_velocity.length > 0
+                direction = Vec3d.new(combined_velocity.x, 0, combined_velocity.z).normed
+                combined_velocity = Vec3d.new(
+                  combined_velocity.x + direction.x * 0.2,
+                  combined_velocity.y,
+                  combined_velocity.z + direction.z * 0.2
+                )
+              end
+
+              client.queue_packet Rosegold::Serverbound::PlayerInput.new
+              JUMP_FORCE
+            else
+              combined_velocity.y - 0.08
+            end
+
+    horiz_length = Vec3d.new(combined_velocity.x, 0, combined_velocity.z).length
+    if horiz_length < 0.003
+      combined_velocity = Vec3d.new(0, combined_velocity.y, 0)
+    end
+
+    Vec3d.new(combined_velocity.x, vel_y, combined_velocity.z)
+  end
+
+  private def sync_with_server
+    if look_action = @look_action
+      player.look = look_action.target
+    end
+
+    should_send_packet = movement_changed? || ticks_since_last_packet >= MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL
+
+    if should_send_packet
+      send_movement_packet
+      @ticks_since_last_packet = 0
+    else
+      @ticks_since_last_packet += 1
+    end
+  end
+
+  private def complete_actions(new_feet : Vec3d)
+    action_mutex.synchronize do
+      @movement_action.try do |movement_action|
+        if very_close_to?(movement_action.target)
+          target_with_y = Vec3d.new(movement_action.target.x, new_feet.y, movement_action.target.z)
+          player.feet = target_with_y
+          player.velocity = Vec3d.new(0.0, player.velocity.y, 0.0)
+          movement_action.succeed
+          @movement_action = nil
+        end
+      end
+
+      @look_action.try(&.succeed)
+      @look_action = nil
+    end
+  end
+
+  private def track_stuck_movement(feet : Vec3d)
     if action = @movement_action
       if last_pos = @last_position
-        # Check if we've made progress (moved more than a small threshold)
         if (feet - last_pos).length < 0.001
           @consecutive_stuck_ticks += 1
 
-          # Check if we've been stuck for too long
           if @current_stuck_timeout_ticks > 0 && @consecutive_stuck_ticks >= @current_stuck_timeout_ticks
             action.fail MovementStuck.new "Movement stuck for #{@current_stuck_timeout_ticks} consecutive ticks at #{feet}"
             @movement_action = nil
           end
         else
-          # We made progress, reset stuck counter
           @consecutive_stuck_ticks = 0
         end
       end
 
-      # Update position for next tick
       @last_position = feet
     end
-
-    # Only send movement packet if something changed or keep-alive timer expired
-    should_send_packet = movement_changed?(feet, look, on_ground) ||
-                         ticks_since_last_packet >= MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL
-
-    if should_send_packet
-      send_movement_packet feet, look, on_ground
-      @ticks_since_last_packet = 0
-    else
-      @ticks_since_last_packet += 1
-      # Still update player state even if we don't send a packet
-      player.feet = feet
-      player.look = look
-      player.on_ground = on_ground
-    end
-
-    player.velocity = next_velocity
-
-    action_mutex.synchronize do
-      look_action.try &.succeed
-
-      @movement_action.try do |movement_action|
-        if very_close_to? movement_action.target
-          movement_action.succeed
-          @movement_action = nil
-        end
-      end
-    end
-
-    client.emit_event Event::PhysicsTick.new movement
   end
 
-  def very_close_to?(target : Vec3d)
-    (target - player.feet).with_y(0).length < VERY_CLOSE
-  end
+  private def send_movement_packet
+    feet = player.feet
+    look = player.look
+    on_ground = player.on_ground?
 
-  # Check if movement state has changed enough to warrant sending a packet
-  private def movement_changed?(feet : Vec3d, look : Look, on_ground : Bool)
-    feet != last_sent_feet ||
-      look != last_sent_look ||
-      on_ground != last_sent_on_ground
-  end
-
-  class MovementStuck < Exception; end
-
-  private def send_movement_packet(feet : Vec3d, look : Look, on_ground : Bool)
     # anticheat requires sending these different packets
-    if feet != player.feet
-      if look != player.look
-        client.send_packet! Serverbound::PlayerPositionAndLook.new(
-          feet, look, on_ground)
+    if feet != last_sent_feet
+      if look != last_sent_look
+        client.send_packet! Serverbound::PlayerPositionAndLook.new(feet, look, on_ground)
       else
         client.send_packet! Serverbound::PlayerPosition.new feet, on_ground
       end
     else
-      if look != player.look
+      if look != last_sent_look
         client.send_packet! Serverbound::PlayerLook.new look, on_ground
       else
         client.send_packet! Serverbound::PlayerNoMovement.new on_ground
       end
     end
 
-    # Update player state and track last sent values
-    player.feet = feet
-    player.look = look
-    player.on_ground = on_ground
-
     @last_sent_feet = feet
     @last_sent_look = look
     @last_sent_on_ground = on_ground
-  end
-
-  private def velocity_for_inputs
-    curr_movement = @movement_action
-    if curr_movement
-      # curr_movement.target only influences x,z; rely on stepping/falling to change y
-      move_horiz_vec = (curr_movement.target - player.feet).with_y(0)
-      move_horiz_vec_len = move_horiz_vec.length
-      if move_horiz_vec_len < VERY_CLOSE
-        move_horiz_vec = Vec3d::ORIGIN
-      elsif move_horiz_vec_len > movement_speed
-        # take one step of the length of movement_speed
-        move_horiz_vec *= movement_speed / move_horiz_vec_len
-      end # else: get there in one step
-    else
-      move_horiz_vec = Vec3d::ORIGIN
-    end
-
-    if jump_queued? && player.on_ground?
-      @jump_queued = false
-      vel_y = JUMP_FORCE
-    else
-      vel_y = (player.velocity.y - GRAVITY) * DRAG
-    end
-
-    # TODO floating up water/ladders
-
-    Vec3d.new move_horiz_vec.x, vel_y, move_horiz_vec.z
   end
 
   # Applies collision handling including stepping.

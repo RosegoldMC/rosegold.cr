@@ -402,12 +402,14 @@ Spectator.describe "Rosegold::Bot inventory" do
           Rosegold::Bot.new(client).try do |bot|
             bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
             bot.wait_tick
-            bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:stone\",Count:10b}]}"
+            bot.chat "/setblock ~ ~ ~ air"
+            bot.chat "/setblock ~ ~-1 ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:stone\",Count:10b}]}"
             bot.chat "/clear"
+            bot.wait_tick
             bot.chat "/give #{bot.username} minecraft:stone 2"
             bot.wait_for Rosegold::Clientbound::SetSlot
             bot.pitch = 90
-            bot.wait_ticks 2
+            bot.wait_ticks 5
             bot.use_hand
             bot.wait_for Rosegold::Clientbound::SetContainerContent
 
