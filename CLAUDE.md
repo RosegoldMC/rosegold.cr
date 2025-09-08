@@ -19,8 +19,9 @@ crystal run examples/proxy_example.cr
 # Run all tests
 crystal spec
 
-# Run specific spec files with timeout (recommended for integration tests)
-timeout 60s crystal spec spec/integration/interactions_spec.cr
+# Run specific spec files in background (recommended for integration tests)
+# Use run_in_background parameter for better control over long-running tasks
+crystal spec spec/integration/interactions_spec.cr
 
 # Run with environment variables for debugging
 LOG_LEVEL=trace crystal spec spec/integration/interactions_spec.cr
@@ -72,7 +73,8 @@ crystal docs
 - Protocol documentation available at `./game_assets/protocol_docs/1.21.8.wiki`
 
 ### Testing
-- Always add timeouts to integration specs to prevent hanging
+- Use background execution for long-running integration specs to maintain better control
+- Monitor background tasks using appropriate process management tools
 - Integration specs connect to test server at `spec/fixtures/server/`
 - Server logs available at `spec/fixtures/server/logs/latest.log`
 - Use `spectator` testing framework
@@ -88,3 +90,4 @@ crystal docs
 - Protocol docs: https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol
 - Local protocol docs: `./game_assets/protocol_docs/1.21.8.wiki`
 - Protocol reference from GitHub Copilot instructions: https://minecraft.wiki/w/Java_Edition_protocol/Packets
+- I prefer to write minimal comments. I like to make my code self descriptive and only use comments for when things are magical or weird
