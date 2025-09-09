@@ -76,6 +76,9 @@ class Rosegold::Physics
   property last_sent_on_ground : Bool = false # ameba:disable Naming/QueryBoolMethods
   private property ticks_since_last_packet : Int32 = 0
 
+  # Input state tracking for PlayerInput packet
+  private property last_sent_input_flags : Serverbound::PlayerInput::Flag = Serverbound::PlayerInput::Flag::None
+
   def movement_target
     movement_action.try &.target
   end
@@ -129,6 +132,7 @@ class Rosegold::Physics
     @last_sent_feet = player.feet
     @last_sent_on_ground = player.on_ground?
     @ticks_since_last_packet = 0
+    @last_sent_input_flags = Serverbound::PlayerInput::Flag::None
   end
 
   def handle_disconnect
@@ -171,9 +175,7 @@ class Rosegold::Physics
   def sneak(sneaking = true)
     return if player.sneaking? == sneaking
 
-    if sneaking
-      sprint false
-    end
+    sprint false if sneaking
 
     player.sneaking = sneaking
   end
@@ -181,11 +183,6 @@ class Rosegold::Physics
   def sprint(sprinting = true)
     return if player.sneaking?
     return if player.sprinting? == sprinting
-    if sprinting
-      client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StartSprinting
-    else
-      client.send_packet! Serverbound::EntityAction.new player.entity_id, Serverbound::EntityAction::Type::StopSprinting
-    end
     player.sprinting = sprinting
   end
 
@@ -258,6 +255,7 @@ class Rosegold::Physics
 
     track_stuck_movement(new_feet)
 
+    send_input_if_changed(input)
     sync_with_server
 
     player.velocity = next_velocity
@@ -451,7 +449,6 @@ class Rosegold::Physics
                 )
               end
 
-              client.queue_packet Rosegold::Serverbound::PlayerInput.new
               JUMP_FORCE
             else
               combined_velocity.y - 0.08
@@ -513,6 +510,24 @@ class Rosegold::Physics
       end
 
       @last_position = feet
+    end
+  end
+
+  private def send_input_if_changed(input : Rosegold::VirtualInput)
+    # Convert VirtualInput to PlayerInput flags, matching vanilla behavior
+    flags = Serverbound::PlayerInput::Flag::None
+    flags |= Serverbound::PlayerInput::Flag::Forward if input.forward?
+    flags |= Serverbound::PlayerInput::Flag::Backward if input.backward?
+    flags |= Serverbound::PlayerInput::Flag::Left if input.left?
+    flags |= Serverbound::PlayerInput::Flag::Right if input.right?
+    flags |= Serverbound::PlayerInput::Flag::Jump if input.jump?
+    flags |= Serverbound::PlayerInput::Flag::Sneak if input.sneak?
+    flags |= Serverbound::PlayerInput::Flag::Sprint if input.sprint?
+
+    # Only send if input state changed, like vanilla
+    if flags != @last_sent_input_flags
+      client.send_packet! Serverbound::PlayerInput.new(flags)
+      @last_sent_input_flags = flags
     end
   end
 

@@ -54,6 +54,7 @@ Spectator.describe "Rosegold::Bot ice road physics" do
           if distance_remaining > 10.0
             bot.sprint
             bot.start_jump
+            bot.eat!
           else
             bot.sprint(false)
           end
