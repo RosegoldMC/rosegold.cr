@@ -2,6 +2,10 @@ require "http"
 require "json"
 require "../microsoft/mobile_oauth"
 
+# Custom exception for authentication errors
+class Minecraft::AuthenticationError < Exception
+end
+
 class Minecraft::Auth
   @xbox_token : String?
   @uhs : String?
@@ -67,6 +71,21 @@ class Minecraft::Auth
       }.to_json)
 
     json = JSON.parse(response.body)
+
+    # Check for authentication errors
+    if json.as_h.has_key?("error")
+      error_msg = json["error"].as_s
+      if error_msg == "TOO_MANY_REQUESTS"
+        raise AuthenticationError.new("Microsoft authentication rate limit exceeded. Please wait a few minutes before trying again.")
+      else
+        raise AuthenticationError.new("Microsoft authentication failed: #{error_msg}")
+      end
+    end
+
+    unless json.as_h.has_key?("access_token")
+      raise AuthenticationError.new("Microsoft authentication failed: No access token received. Response: #{json}")
+    end
+
     @access_token = json["access_token"].as_s
   end
 
