@@ -25,6 +25,32 @@ class Rosegold::Dimension
     })
   end
 
+  def self.new_nether
+    self.new "minecraft:the_nether", Minecraft::NBT::CompoundTag.new({
+      "min_y"  => Minecraft::NBT::IntTag.new(0_i32).as(Minecraft::NBT::Tag),
+      "height" => Minecraft::NBT::IntTag.new(128_i32).as(Minecraft::NBT::Tag),
+    })
+  end
+
+  def self.new_end
+    self.new "minecraft:the_end", Minecraft::NBT::CompoundTag.new({
+      "min_y"  => Minecraft::NBT::IntTag.new(0_i32).as(Minecraft::NBT::Tag),
+      "height" => Minecraft::NBT::IntTag.new(256_i32).as(Minecraft::NBT::Tag),
+    })
+  end
+
+  # TODO: set dimension based on dimension_type via registry
+  def self.for_dimension_name(name : String)
+    case name
+    when "minecraft:the_nether"
+      new_nether
+    when "minecraft:the_end"
+      new_end
+    else
+      new # defaults to overworld
+    end
+  end
+
   def load_chunk(chunk : Chunk)
     chunk_pos = {chunk.x, chunk.z}
     @chunks[chunk_pos] = chunk

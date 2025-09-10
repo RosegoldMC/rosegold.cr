@@ -129,9 +129,10 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   def callback(client)
     client.player.entity_id = entity_id.to_u64
     client.player.gamemode = gamemode.to_i8
-    # Note: dimension is no longer NBT data, just the dimension type ID
-    # This may need adjustment based on how Dimension class is implemented
-    # client.dimension = Dimension.new dimension_name, dimension_type
+
+    # Set dimension based on dimension_name
+    # TODO: set dimension based on dimension_type via registry
+    client.dimension = Dimension.for_dimension_name(dimension_name)
 
     Log.debug { "Ingame. #{dimension_name} gamemode=#{gamemode} entity_id=#{entity_id}" }
   end

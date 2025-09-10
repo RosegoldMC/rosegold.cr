@@ -91,9 +91,10 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
   def callback(client)
     client.physics.pause
     client.player.gamemode = gamemode.to_i8
-    # Note: dimension_type is now an ID, not NBT data
-    # TODO: Create dimension from dimension_type ID and dimension_name
-    # client.dimension = Dimension.new dimension_name, dimension_type
+
+    # Update dimension based on dimension_name
+    # TODO: set dimension based on dimension_type via registry
+    client.dimension = Dimension.for_dimension_name(dimension_name)
 
     Log.debug { "Respawned in #{dimension_name} gamemode=#{gamemode} dimension_type=#{dimension_type}" }
   end
