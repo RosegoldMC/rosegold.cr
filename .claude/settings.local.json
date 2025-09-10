@@ -4,7 +4,8 @@
       "Bash(crystal build:*)",
       "Bash(crystal spec:*)",
       "Bash(bin/ameba:*)",
-      "Bash(crystal tool format:*)"
+      "Bash(crystal tool format:*)",
+      "Bash(LOG_LEVEL=debug crystal spec:*)"
     ],
     "deny": [],
     "ask": [],
