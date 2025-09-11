@@ -1599,17 +1599,22 @@
   </svg>
 </a>rosegold</h1>
 <p>Minecraft client written in <a href="http://crystal-lang.org/">Crystal</a>, following the <a href="https://civwiki.org/wiki/Botting#Botting_Rules">botting rules</a> of <a href="https://civwiki.org/wiki/CivMC">CivMC</a></p>
-<h3><a id="rosegold-is-a-custom-minecraft-botting-client-with-the-following-goals" class="anchor" href="#rosegold-is-a-custom-minecraft-botting-client-with-the-following-goals">
+<h2><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Rosegold is a custom Minecraft botting client with the following goals:</h3>
-<ol>
-<li><strong>Efficiency and accessibility</strong>: Rosegold aims to make botting accessible to all Civ users by providing a clean and easy-to-understand DSL for creating bots, while also ensuring that the client remains efficient.</li>
-<li><strong>Headless with a headful feel (coming soon)</strong>: Although Rosegold is a headless client, it seeks to address the limitations of current bots by providing a proxy that allows a standard vanilla Minecraft client to connect, spectate, and control. This approach offers the benefits of headless clients while maintaining a headful user experience.</li>
-<li><strong>Compliance with server-specific botting rules</strong>: Rosegold is designed for use on servers with specific botting rules, such as CivMC, which restrict bots from seeing or hearing. The client makes it challenging to create bots that violate these rules, ensuring a fair gameplay experience.</li>
-<li><strong>Portable and easy-to-distribute</strong>: Leveraging Crystal's ability to compile into portable binaries, Rosegold aims to simplify the distribution process for developers, making it easier to set up and manage bots for their nations.</li>
-</ol>
+</a>Features</h2>
+<ul>
+<li><strong>Accurate Physics</strong>: Movement physics that match vanilla Minecraft, including collision detection and block slipperiness</li>
+<li><strong>Full Inventory System</strong>: Container handling, shift-clicking, equipment management, and all the inventory operations you'd expect</li>
+<li><strong>Combat &amp; Mining</strong>: Dig blocks with proper damage calculation, attack entities, place blocks, and handle food/eating (<code>dig</code>, <code>attack</code>, <code>eat!</code>)</li>
+<li><strong>Point-to-Point Movement</strong>: Move directly to coordinates with jump controls and look targeting (<code>move_to</code>, <code>look_at</code>)</li>
+<li><strong>CivMC Legal</strong>: Designed specifically to follow CivMC botting rules - no seeing/hearing violations</li>
+<li><strong>Easy to Use</strong>: Clean API that's straightforward to learn and use</li>
+<li><strong>Cross-Platform</strong>: Compiles to static binaries for Mac, Linux, Raspberry Pi, and Windows</li>
+<li><strong>Complete World State</strong>: Tracks chunks, entities, player status, respawn handling, and dimensions</li>
+<li><strong>Chat &amp; Events</strong>: Send chat messages, subscribe to game events, comprehensive logging</li>
+</ul>
 <h2><a id="how-to-start-writing-bots" class="anchor" href="#how-to-start-writing-bots">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
