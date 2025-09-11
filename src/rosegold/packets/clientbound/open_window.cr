@@ -108,12 +108,27 @@ class Rosegold::Clientbound::OpenWindow < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    # Clamp window_id to valid UInt8 range
     clamped_id = window_id > 255 ? 255_u8 : window_id.to_u8
-    # Clear previous window ID when opening a new window
-    client.inventory.previous_window_id = nil
-    client.window = Window.new \
-      client, clamped_id, window_title, window_type
-    Log.debug { "Server opened window id=#{window_id} type=#{window_type} title: #{window_title}" }
+    container_size = case window_type
+                     when  0 then 27 # Chest (3x9)
+                     when  1 then 45 # Chest (5x9) - Large chest
+                     when  2 then 27 # Chest (3x9) - Generic 3x9 container
+                     when  3 then 3  # Furnace
+                     when  4 then 3  # Dispenser
+                     when  5 then 5  # Enchanting table
+                     when  6 then 3  # Brewing stand
+                     when  7 then 1  # Villager trading
+                     when  8 then 5  # Beacon
+                     when  9 then 3  # Anvil
+                     when 10 then 3  # Hopper
+                     when 11 then 9  # Dropper
+                     when 12 then 15 # Shulker box
+                     when 13 then 54 # Horse/donkey/mule
+                     when 14 then 27 # Horse armor
+                     else         27 # Default to chest size
+                     end
+
+    ContainerMenu.open(client, clamped_id, window_title, window_type, container_size)
+    Log.debug { "Server opened window id=#{window_id} type=#{window_type} size=#{container_size} title: #{window_title}" }
   end
 end

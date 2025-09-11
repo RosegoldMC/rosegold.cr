@@ -45,19 +45,16 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
 
   def callback(client)
     Log.debug { "Received #{slots.size} container content for window #{window_id} state #{state_id}" }
+
     if window_id == 0
-      client.inventory.state_id = state_id
-      client.inventory.slots = slots
-      client.inventory.cursor = cursor
-    elsif client.window.id == window_id
-      client.window.state_id = state_id
-      client.window.slots = slots
-      client.window.cursor = cursor
-    elsif client.inventory.previous_window_id && client.inventory.previous_window_id == window_id
-      # Handle late container content packet using shared method
-      client.inventory.handle_late_packet(window_id.to_u8, slots: slots, cursor: cursor, state_id: state_id)
+      slot_array = slots.map(&.as(Rosegold::Slot))
+      client.inventory_menu.update_all_slots(slot_array, cursor.as(Rosegold::Slot), state_id)
+    elsif client.container_menu && client.container_menu.id == window_id
+      slot_array = slots.map(&.as(Rosegold::Slot))
+      client.container_menu.update_all_slots(slot_array, cursor.as(Rosegold::Slot), state_id)
     else
-      Log.warn { "Received container content for an unknown or mismatched window. Ignoring. Packet window_id=#{window_id}, client window_id=#{client.window.id}, previous_window_id=#{client.inventory.previous_window_id}" }
+      container_id = client.container_menu.try(&.id) || "nil"
+      Log.debug { "Received container content for an unknown or mismatched window. Ignoring. Packet window_id=#{window_id}, client container_id=#{container_id}" }
       Log.debug { self }
     end
   end

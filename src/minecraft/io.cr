@@ -1,7 +1,7 @@
 require "io/hexdump"
 require "socket"
 require "uuid"
-require "../rosegold/world/slot"
+require "../rosegold/inventory/slot"
 require "../rosegold/world/vec3"
 require "../rosegold/models/text_component"
 

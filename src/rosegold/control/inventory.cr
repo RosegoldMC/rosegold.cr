@@ -4,7 +4,7 @@ class Rosegold::Inventory
 
   def initialize(@client); end
 
-  forward_missing_to @client.window
+  forward_missing_to @client.container_menu
 
   # Returns the number of matching items in the player inventory (inventory + hotbar), or in the given slots range.
   #
@@ -13,11 +13,11 @@ class Rosegold::Inventory
   #   inventory.count &.empty? # => 2
   #   inventory.count { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 1
   #   inventory.count "stone", slots # => 5 (count in entire window including container)
-  def count(spec, slots = inventory + hotbar)
+  def count(spec, slots = player_inventory_slots)
     slots.select(&.matches? spec).sum(&.count.to_i32)
   end
 
-  def count(&spec : WindowSlot -> _)
+  def count(&spec : Slot -> _)
     count(spec)
   end
 
@@ -32,7 +32,7 @@ class Rosegold::Inventory
     return true if main_hand.matches?(spec) && !main_hand.needs_repair?
 
     # Sort hotbar by durability (lower durability first) while preserving index mapping
-    hotbar_with_indices = hotbar.map_with_index { |slot, index| {slot, index} }
+    hotbar_with_indices = hotbar_slots.map_with_index { |slot, index| {slot, index} }
     sorted_hotbar = hotbar_with_indices.sort_by { |slot_index_pair|
       slot = slot_index_pair[0]
       max_durability = slot.max_durability
@@ -75,11 +75,12 @@ class Rosegold::Inventory
   #   inventory.withdraw_at_least 5, "diamond_pickaxe" # => 3
   #   inventory.withdraw_at_least 5, &.empty?, hotbar # => 1
   #   inventory.withdraw_at_least 5, { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
-  def withdraw_at_least(count, spec, source : Array(WindowSlot) = content, target : Array(WindowSlot) = inventory + hotbar)
-    shift_click_at_least count, spec, source, target
+  def withdraw_at_least(count, spec, source : Array(WindowSlot) = content, target : Array(WindowSlot)? = nil)
+    actual_target = target || (inventory + hotbar)
+    shift_click_at_least count, spec, source, actual_target
   end
 
-  def withdraw_at_least(count, &spec : WindowSlot -> _)
+  def withdraw_at_least(count, &spec : Slot -> _)
     withdraw_at_least(count, spec)
   end
 
@@ -94,7 +95,7 @@ class Rosegold::Inventory
     shift_click_at_least count, spec, source, target
   end
 
-  def deposit_at_least(count, &spec : WindowSlot -> _)
+  def deposit_at_least(count, &spec : Slot -> _)
     deposit_at_least(count, spec)
   end
 
@@ -133,11 +134,18 @@ class Rosegold::Inventory
 
   def throw_all_of(name)
     quantity = 0
+    # Collect slot numbers first to avoid iterator invalidation
+    slot_numbers_to_drop = [] of Int32
+
     slots.each do |slot|
       next unless slot.name == name
       quantity += slot.count
+      slot_numbers_to_drop << slot.slot_number
+    end
 
-      client.send_packet! Serverbound::ClickWindow.new :drop, 1_i8, slot.slot_number.to_i16, [] of WindowSlot, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
+    # Drop by slot number to avoid issues with slots array being modified during iteration
+    slot_numbers_to_drop.each do |slot_number|
+      @client.container_menu.send_click slot_number, 1, :drop
     end
 
     quantity
@@ -171,18 +179,10 @@ class Rosegold::Inventory
       # If the target container is full; break;
       break if target_slot.nil?
 
-      # Swap slots
-      changed_slots = [
-        Rosegold::WindowSlot.new(target_slot.slot_number, slot),
-        Rosegold::WindowSlot.new(slot.slot_number, target_slot),
-      ]
+      # Send shift-click packet to server (with optimistic local updates)
+      @client.container_menu.send_click slot.slot_number, 0, :shift
 
-      client.send_packet! Serverbound::ClickWindow.new :shift, 0_i8, slot.slot_number.to_i16, changed_slots, client.window.id.to_u8, client.window.state_id.to_i32, client.window.cursor
-
-      slot.slot_number, target_slot.slot_number = target_slot.slot_number, slot.slot_number
-
-      self.slots = slots.sort_by &.slot_number
-
+      # Count the transferred amount based on what the slot had
       transferred += slot.count
 
       break if transferred >= count
@@ -190,6 +190,9 @@ class Rosegold::Inventory
 
     transferred
   end
+
+  # Equipment slot accessors
+  delegate helmet, chestplate, leggings, boots, off_hand, to: @client.inventory_menu
 
   class ItemNotFoundError < Exception; end
 end

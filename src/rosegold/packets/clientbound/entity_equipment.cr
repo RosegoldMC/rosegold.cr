@@ -1,5 +1,5 @@
 require "../../world/look"
-require "../../world/slot"
+require "../../inventory/slot"
 require "../../world/vec3"
 require "../packet"
 

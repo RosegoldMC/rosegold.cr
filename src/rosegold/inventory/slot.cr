@@ -1,6 +1,6 @@
 require "../../minecraft/nbt"
 require "digest/crc32"
-require "./mcdata"
+require "../world/mcdata"
 require "../crc32c"
 
 # Data Component types for 1.21.8
@@ -1052,7 +1052,7 @@ class Rosegold::Slot
     self.name == name
   end
 
-  def matches?(spec : Rosegold::WindowSlot -> _)
+  def matches?(spec : Rosegold::Slot -> _)
     spec.call self
   end
 
