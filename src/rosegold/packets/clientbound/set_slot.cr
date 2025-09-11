@@ -34,16 +34,14 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
 
   def callback(client)
     if window_id == -1 && slot.slot_number == -1
-      client.window.cursor = slot
+      client.container_menu.cursor = slot.as(Rosegold::Slot)
     elsif window_id == 0
-      client.inventory.slots[slot.slot_number] = slot
-    elsif client.window.id == window_id
-      client.window.slots[slot.slot_number] = slot
-    elsif client.inventory.previous_window_id && client.inventory.previous_window_id == window_id.to_u8
-      # Handle late slot update packet using shared method
-      client.inventory.handle_late_packet(window_id.to_u8, slot: slot)
+      client.inventory_menu.update_slot(slot.slot_number, slot.as(Rosegold::Slot), state_id)
+    elsif client.container_menu && client.container_menu.id == window_id
+      client.container_menu.update_slot(slot.slot_number, slot.as(Rosegold::Slot), state_id)
     else
-      Log.warn { "Received slot update for an unknown or mismatched window. Ignoring. Packet window_id=#{window_id}, client window_id=#{client.window.id}, previous_window_id=#{client.inventory.previous_window_id}, slot=#{slot}" }
+      container_id = client.container_menu.try(&.id) || "nil"
+      Log.debug { "Received slot update for an unknown or mismatched window. Ignoring. Packet window_id=#{window_id}, client container_id=#{container_id}, slot=#{slot}" }
       Log.debug { self }
     end
   end

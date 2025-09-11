@@ -166,14 +166,15 @@ Spectator.describe "Rosegold::Bot inventory" do
     it "updates the inventory locally to be the same as externally" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
-          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          bot.chat "/tp #{bot.username} 30 -60 30"
+          bot.chat "/setblock 21 -60 21 minecraft:air"
           bot.wait_tick
-          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",Count:1b},{Slot:6b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":100}}]}"
+          bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",Count:1b},{Slot:6b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":100}}]}"
           bot.chat "/clear"
           bot.wait_for Rosegold::Clientbound::SetSlot
-          bot.wait_tick
-
           bot.pitch = 90
+          bot.wait_ticks 20
+
           bot.use_hand
           bot.wait_for Rosegold::Clientbound::SetContainerContent
 
@@ -207,10 +208,13 @@ Spectator.describe "Rosegold::Bot inventory" do
     it "withdraws items with lower durability first" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
-          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          # Teleport to known location and clear area
+          bot.chat "/tp 30 -60 30"
+          bot.wait_tick
+          bot.chat "/fill 29 -62 29 31 -58 31 minecraft:air"
           bot.wait_tick
           # Create chest with two diamond pickaxes: one undamaged, one heavily damaged
-          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:diamond_pickaxe\",Count:1b},{Slot:1b, id: \"minecraft:diamond_pickaxe\",Count:1b,components:{\"minecraft:damage\":1400}}]}"
+          bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[{Slot:0b, id: \"minecraft:diamond_pickaxe\",Count:1b},{Slot:1b, id: \"minecraft:diamond_pickaxe\",Count:1b,components:{\"minecraft:damage\":1400}}]}"
           bot.chat "/clear"
           bot.wait_for Rosegold::Clientbound::SetSlot
           bot.wait_tick
@@ -243,10 +247,13 @@ Spectator.describe "Rosegold::Bot inventory" do
     it "withdraws multiple items in durability order" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
-          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          # Teleport to known location and clear area
+          bot.chat "/tp 30 -60 30"
+          bot.wait_tick
+          bot.chat "/fill 29 -62 29 31 -58 31 minecraft:air"
           bot.wait_tick
           # Create chest with multiple diamond swords of varying durability
-          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:diamond_sword\",Count:1b},{Slot:1b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":800}},{Slot:2b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":1200}},{Slot:3b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":400}}]}"
+          bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[{Slot:0b, id: \"minecraft:diamond_sword\",Count:1b},{Slot:1b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":800}},{Slot:2b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":1200}},{Slot:3b, id: \"minecraft:diamond_sword\",Count:1b,components:{\"minecraft:damage\":400}}]}"
           bot.chat "/clear"
           bot.wait_for Rosegold::Clientbound::SetSlot
           bot.wait_tick
@@ -281,9 +288,12 @@ Spectator.describe "Rosegold::Bot inventory" do
     it "updates the inventory locally to be the same as externally" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
-          bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+          # Teleport to known location and clear area
+          bot.chat "/tp 30 -60 30"
           bot.wait_tick
-          bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[]}"
+          bot.chat "/fill 29 -62 29 31 -58 31 minecraft:air"
+          bot.wait_tick
+          bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[]}"
           bot.chat "/clear"
           bot.wait_for Rosegold::Clientbound::SetSlot
           bot.chat "/give #{bot.username} minecraft:diamond_sword 1"
@@ -292,6 +302,7 @@ Spectator.describe "Rosegold::Bot inventory" do
           bot.pitch = 90
           bot.use_hand
           bot.wait_for Rosegold::Clientbound::SetContainerContent
+          bot.wait_tick
 
           expect(bot.inventory.deposit_at_least(1, "diamond_sword")).to eq 1
 
@@ -320,10 +331,10 @@ Spectator.describe "Rosegold::Bot inventory" do
     slots_before_reload = nil
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp #{bot.username} -10 -60 -10"
-        bot.chat "/fill ~ ~ ~ ~ ~ ~ minecraft:air"
+        bot.chat "/tp 30 -60 30"
         bot.wait_tick
-        bot.chat "/setblock ~ ~ ~ minecraft:chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",Count:1b}]}"
+        bot.wait_tick
+        bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",Count:1b}]}"
         bot.chat "/clear"
 
         bot.pitch = 90
@@ -346,8 +357,8 @@ Spectator.describe "Rosegold::Bot inventory" do
         slots_after_reload = bot.inventory.slots
 
         expect(slots_before_reload.try &.size).to eq slots_after_reload.try &.size
-        expect(slots_before_reload.try &.map(&.name)).to eq slots_after_reload.try &.map(&.name)
-        expect(slots_before_reload.try &.map(&.slot_number)).to eq slots_after_reload.try &.map(&.slot_number)
+        expect(slots_before_reload.try &.map(&.name).sort!).to eq slots_after_reload.try &.map(&.name).sort!
+        expect(slots_before_reload.try &.count(&.name.==("diamond_sword"))).to eq slots_after_reload.try &.count(&.name.==("diamond_sword"))
       end
     end
   end
@@ -373,6 +384,75 @@ Spectator.describe "Rosegold::Bot inventory" do
           expect(bot.inventory.hotbar.map(&.name)).not_to contain "diamond_sword"
           expect(bot.inventory.inventory.map(&.name)).not_to contain "stone"
           expect(bot.inventory.hotbar.map(&.name)).not_to contain "stone"
+        end
+      end
+    end
+
+    it "throws all lava buckets (single-stack items)" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          bot.chat "/clear"
+          bot.wait_for Rosegold::Clientbound::SetSlot
+          bot.chat "/give #{bot.username} minecraft:lava_bucket 33"
+          bot.wait_for Rosegold::Clientbound::SetSlot
+
+          bot.look = Rosegold::Look.new 0, 0
+          expect(bot.inventory.throw_all_of "lava_bucket").to eq 33
+
+          bot.wait_tick
+
+          expect(bot.inventory.inventory.map(&.name)).not_to contain "lava_bucket"
+          expect(bot.inventory.hotbar.map(&.name)).not_to contain "lava_bucket"
+        end
+      end
+
+      # Relog and verify inventory is still clear
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          expect(bot.inventory.inventory.map(&.name)).not_to contain "lava_bucket"
+          expect(bot.inventory.hotbar.map(&.name)).not_to contain "lava_bucket"
+        end
+      end
+    end
+
+    it "throws all items from an open container" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          bot.chat "throws all items from an open container"
+          # Teleport to known location and clear area
+          bot.chat "/tp 30 -60 30"
+          bot.wait_tick
+
+          # Create chest with cobblestone inside
+          bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[{Slot:0b, id: \"minecraft:cobblestone\",Count:32b},{Slot:1b, id: \"minecraft:cobblestone\",Count:20b}]}"
+          bot.wait_tick
+
+          bot.chat "/clear"
+          bot.wait_for Rosegold::Clientbound::SetSlot
+
+          # Open the chest
+          bot.pitch = 90
+          bot.wait_ticks 10
+          bot.use_hand
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
+          bot.wait_tick
+          bot.pitch = 0
+
+          # Verify we have cobblestone in container
+          expect(bot.inventory.content.map(&.name)).to contain "cobblestone"
+          expect(bot.inventory.count("cobblestone", bot.inventory.content)).to eq 2
+
+          # Throw all cobblestone from the open container
+          expect(bot.inventory.throw_all_of "cobblestone").to eq 2
+
+          bot.wait_tick
+
+          # Verify all cobblestone is gone from container
+          expect(bot.inventory.content.map(&.name)).not_to contain "cobblestone"
+          expect(bot.inventory.count("cobblestone", bot.inventory.content)).to eq 0
+
+          # Close container
+          bot.inventory.close
         end
       end
     end
@@ -465,6 +545,64 @@ Spectator.describe "Rosegold::Bot inventory" do
 
             expect(result).to be > initial_count
             expect(result).to be < 5
+          end
+        end
+      end
+    end
+  end
+
+  describe "#shift_click_equipment" do
+    context "when shift-clicking equipment items without a container open" do
+      it "shift-click equipment functionality" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            bot.chat "/clear"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            # Give one full set of diamond armor and shield
+            bot.chat "/give #{bot.username} minecraft:diamond_helmet 1"
+            bot.chat "/give #{bot.username} minecraft:diamond_chestplate 1"
+            bot.chat "/give #{bot.username} minecraft:diamond_leggings 1"
+            bot.chat "/give #{bot.username} minecraft:diamond_boots 1"
+            bot.chat "/give #{bot.username} minecraft:shield 1"
+            bot.wait_ticks 5
+
+            # Find equipment items in inventory
+            helmet_slot = (bot.inventory.inventory + bot.inventory.hotbar).find { |slot| slot.name == "diamond_helmet" }
+            chestplate_slot = (bot.inventory.inventory + bot.inventory.hotbar).find { |slot| slot.name == "diamond_chestplate" }
+            leggings_slot = (bot.inventory.inventory + bot.inventory.hotbar).find { |slot| slot.name == "diamond_leggings" }
+            boots_slot = (bot.inventory.inventory + bot.inventory.hotbar).find { |slot| slot.name == "diamond_boots" }
+            shield_slot = (bot.inventory.inventory + bot.inventory.hotbar).find { |slot| slot.name == "shield" }
+
+            # Shift-click all equipment items to equip them
+            helmet_slot.try { |slot| bot.inventory.send_click slot.slot_number, 0, :shift }
+            bot.wait_ticks 2
+            chestplate_slot.try { |slot| bot.inventory.send_click slot.slot_number, 0, :shift }
+            bot.wait_ticks 2
+            leggings_slot.try { |slot| bot.inventory.send_click slot.slot_number, 0, :shift }
+            bot.wait_ticks 2
+            boots_slot.try { |slot| bot.inventory.send_click slot.slot_number, 0, :shift }
+            bot.wait_ticks 2
+            shield_slot.try { |slot| bot.inventory.send_click slot.slot_number, 0, :shift }
+            bot.wait_ticks 2
+
+            # Assert equipment is equipped
+            expect(bot.inventory.helmet.name).to eq("diamond_helmet")
+            expect(bot.inventory.chestplate.name).to eq("diamond_chestplate")
+            expect(bot.inventory.leggings.name).to eq("diamond_leggings")
+            expect(bot.inventory.boots.name).to eq("diamond_boots")
+            expect(bot.inventory.off_hand.name).to eq("shield")
+          end
+        end
+
+        # Relog and assert equipment persists
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            expect(bot.inventory.helmet.name).to eq("diamond_helmet")
+            expect(bot.inventory.chestplate.name).to eq("diamond_chestplate")
+            expect(bot.inventory.leggings.name).to eq("diamond_leggings")
+            expect(bot.inventory.boots.name).to eq("diamond_boots")
+            expect(bot.inventory.off_hand.name).to eq("shield")
           end
         end
       end

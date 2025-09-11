@@ -74,15 +74,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.chat_manager.send_chat(message)
   end
 
-  def wait_ticks(ticks : Int32)
-    ticks.times do
-      wait_tick
-    end
-  end
-
-  def wait_tick
-    wait_for Event::Tick, timeout: 1.second
-  end
+  delegate wait_tick, wait_ticks, to: client
 
   # Direction the player is looking.
   def look

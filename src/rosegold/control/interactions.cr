@@ -369,7 +369,6 @@ class Rosegold::Interactions
       x, y, z = block_coords
       client.dimension.block_state(x, y, z).try do |block_state|
         block_shape = MCData::DEFAULT.block_state_collision_shapes[block_state]
-        Log.debug { "Block at (#{x}, #{y}, #{z}) state #{block_state} has #{block_shape.size} collision shapes" }
 
         # If no collision shapes, check if it's an interactive block and use interaction hitbox
         if block_shape.empty?

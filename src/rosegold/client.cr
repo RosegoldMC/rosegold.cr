@@ -6,6 +6,7 @@ require "./models/*"
 require "./packets/*"
 require "./events/*"
 require "./world/*"
+require "./inventory/*"
 require "./chat_manager"
 
 # Holds world state (player, chunks, etc.)
@@ -31,8 +32,9 @@ class Rosegold::Client < Rosegold::EventEmitter
     dimension : Dimension = Dimension.new,
     physics : Physics,
     interactions : Interactions,
-    inventory : PlayerWindow,
-    window : Window,
+    player_inventory : PlayerInventory,
+    inventory_menu : InventoryMenu,
+    container_menu : ContainerMenu | InventoryMenu,
     chat_manager : ChatManager,
     offline : NamedTuple(uuid: String, username: String)? = nil,
     sequence_counter : Int32 = 0,
@@ -95,6 +97,16 @@ class Rosegold::Client < Rosegold::EventEmitter
     Log.debug { "Cleared all cookies" }
   end
 
+  def wait_ticks(ticks : Int32)
+    ticks.times do
+      wait_tick
+    end
+  end
+
+  def wait_tick
+    wait_for Event::Tick, timeout: 1.second
+  end
+
   # Calculate tick interval based on current tick rate
   def tick_interval : Time::Span
     # Convert TPS to milliseconds per tick
@@ -117,13 +129,15 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
     @physics = uninitialized Physics
     @interactions = uninitialized Interactions
-    @inventory = uninitialized PlayerWindow
-    @window = uninitialized Window
+    @player_inventory = uninitialized PlayerInventory
+    @inventory_menu = uninitialized InventoryMenu
+    @container_menu = uninitialized ContainerMenu | InventoryMenu
     @chat_manager = uninitialized ChatManager
     @physics = Physics.new self
     @interactions = Interactions.new self
-    @inventory = PlayerWindow.new self
-    @window = @inventory
+    @player_inventory = PlayerInventory.new
+    @inventory_menu = InventoryMenu.new self
+    @container_menu = @inventory_menu
     @chat_manager = ChatManager.new self
   end
 
@@ -154,7 +168,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def spawned?
-    inventory.ready? && physics.running? && connected?
+    inventory_menu && physics.running? && connected?
   end
 
   # Waits for the client to be fully spawned, ie. physics and inventory being ready.

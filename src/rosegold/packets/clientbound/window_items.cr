@@ -42,15 +42,13 @@ class Rosegold::Clientbound::WindowItems < Rosegold::Clientbound::Packet
   def callback(client)
     Log.debug { "Received #{slots.size} window items for window #{window_id} state #{state_id}" }
     if window_id == 0
-      client.inventory.state_id = state_id
-      client.inventory.slots = slots
-      client.inventory.cursor = cursor
-    elsif client.window.id == window_id
-      client.window.state_id = state_id
-      client.window.slots = slots
-      client.window.cursor = cursor
+      slot_array = slots.map(&.as(Rosegold::Slot))
+      client.inventory_menu.update_all_slots(slot_array, cursor.as(Rosegold::Slot), state_id)
+    elsif client.container_menu && client.container_menu.id == window_id
+      slot_array = slots.map(&.as(Rosegold::Slot))
+      client.container_menu.update_all_slots(slot_array, cursor.as(Rosegold::Slot), state_id)
     else
-      Log.warn { "Received window items for an unknown or mismatched window. Ignoring." }
+      Log.debug { "Received window items for an unknown or mismatched window. Ignoring." }
       Log.debug { self }
     end
   end
