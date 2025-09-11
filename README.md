@@ -2,12 +2,17 @@
 
 Minecraft client written in [Crystal](http://crystal-lang.org/), following the [botting rules](https://civwiki.org/wiki/Botting#Botting_Rules) of [CivMC](https://civwiki.org/wiki/CivMC)
 
-### Rosegold is a custom Minecraft botting client with the following goals:
+## Features
 
-1. **Efficiency and accessibility**: Rosegold aims to make botting accessible to all Civ users by providing a clean and easy-to-understand DSL for creating bots, while also ensuring that the client remains efficient.
-2. **Headless with a headful feel (coming soon)**: Although Rosegold is a headless client, it seeks to address the limitations of current bots by providing a proxy that allows a standard vanilla Minecraft client to connect, spectate, and control. This approach offers the benefits of headless clients while maintaining a headful user experience.
-3. **Compliance with server-specific botting rules**: Rosegold is designed for use on servers with specific botting rules, such as CivMC, which restrict bots from seeing or hearing. The client makes it challenging to create bots that violate these rules, ensuring a fair gameplay experience.
-4. **Portable and easy-to-distribute**: Leveraging Crystal's ability to compile into portable binaries, Rosegold aims to simplify the distribution process for developers, making it easier to set up and manage bots for their nations.
+- **Accurate Physics**: Movement physics that match vanilla Minecraft, including collision detection and block slipperiness
+- **Full Inventory System**: Container handling, shift-clicking, equipment management, and all the inventory operations you'd expect
+- **Combat & Mining**: Dig blocks with proper damage calculation, attack entities, place blocks, and handle food/eating (`dig`, `attack`, `eat!`)
+- **Point-to-Point Movement**: Move directly to coordinates with jump controls and look targeting (`move_to`, `look_at`)
+- **CivMC Legal**: Designed specifically to follow CivMC botting rules - no seeing/hearing violations
+- **Easy to Use**: Clean API that's straightforward to learn and use
+- **Cross-Platform**: Compiles to static binaries for Mac, Linux, Raspberry Pi, and Windows
+- **Complete World State**: Tracks chunks, entities, player status, respawn handling, and dimensions
+- **Chat & Events**: Send chat messages, subscribe to game events, comprehensive logging
 
 
 ## How to Start Writing Bots
