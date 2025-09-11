@@ -657,6 +657,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/ContainerMenu" data-name="rosegold::containermenu">
+      <a href="../Rosegold/ContainerMenu.html">ContainerMenu</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/CRC32C" data-name="rosegold::crc32c">
       <a href="../Rosegold/CRC32C.html">CRC32C</a>
       
@@ -992,6 +997,46 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/InventoryMenu" data-name="rosegold::inventorymenu">
+      <a href="../Rosegold/InventoryMenu.html">InventoryMenu</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/InventoryOperations" data-name="rosegold::inventoryoperations">
+      <a href="../Rosegold/InventoryOperations.html">InventoryOperations</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/ItemConstants" data-name="rosegold::itemconstants">
+      <a href="../Rosegold/ItemConstants.html">ItemConstants</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/ItemConstants/ContainerType" data-name="rosegold::itemconstants::containertype">
+      <a href="../Rosegold/ItemConstants/ContainerType.html">ContainerType</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ItemConstants/InventorySize" data-name="rosegold::itemconstants::inventorysize">
+      <a href="../Rosegold/ItemConstants/InventorySize.html">InventorySize</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ItemConstants/PlayerSlots" data-name="rosegold::itemconstants::playerslots">
+      <a href="../Rosegold/ItemConstants/PlayerSlots.html">PlayerSlots</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ItemConstants/Quickcraft" data-name="rosegold::itemconstants::quickcraft">
+      <a href="../Rosegold/ItemConstants/Quickcraft.html">Quickcraft</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
       <a href="../Rosegold/Look.html">Look</a>
       
@@ -1087,6 +1132,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/PlayerInventory" data-name="rosegold::playerinventory">
+      <a href="../Rosegold/PlayerInventory.html">PlayerInventory</a>
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/PlayerList" data-name="rosegold::playerlist">
       <a href="../Rosegold/PlayerList.html">PlayerList</a>
       
@@ -1139,6 +1189,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/RemoteSlot" data-name="rosegold::remoteslot">
+      <a href="../Rosegold/RemoteSlot.html">RemoteSlot</a>
       
     </li>
   
@@ -1589,7 +1644,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L2" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L2" target="_blank">
         rosegold/control/inventory.cr
       </a>
     
@@ -1652,26 +1707,96 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#count%28spec%2Cslots%3Dinventory%2Bhotbar%29-instance-method" class="signature"><strong>#count</strong>(spec, slots = inventory <span class="o">+</span> hotbar)</a>
+        <a href="#boots%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#boots</strong>(*args, **options)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#boots%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#boots</strong>(*args, **options, &)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#chestplate%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#chestplate</strong>(*args, **options)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#chestplate%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#chestplate</strong>(*args, **options, &)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#count%28spec%2Cslots%3Dplayer_inventory_slots%29-instance-method" class="signature"><strong>#count</strong>(spec, slots = player_inventory_slots)</a>
         
           <div class="summary"><p>Returns the number of matching items in the player inventory (inventory + hotbar), or in the given slots range.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#count%28%26spec%3AWindowSlot-%3E_%29-instance-method" class="signature"><strong>#count</strong>(&spec : WindowSlot -> _)</a>
+        <a href="#count%28%26spec%3ASlot-%3E_%29-instance-method" class="signature"><strong>#count</strong>(&spec : Slot -> _)</a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#deposit_at_least%28count%2Cspec%2Csource%3AArray%28WindowSlot%29%3Dinventory%2Bhotbar%2Ctarget%3AArray%28WindowSlot%29%3Dcontent%29-instance-method" class="signature"><strong>#deposit_at_least</strong>(count, spec, source : Array(WindowSlot) = inventory <span class="o">+</span> hotbar, target : Array(WindowSlot) = content)</a>
         
-          <div class="summary"><p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> matching items from the container to the player inventory, using shift-clicking.</p></div>
+          <div class="summary"><p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3ASlot-%3E_%29-instance-method">#count</a></code> matching items from the container to the player inventory, using shift-clicking.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#deposit_at_least%28count%2C%26spec%3AWindowSlot-%3E_%29-instance-method" class="signature"><strong>#deposit_at_least</strong>(count, &spec : WindowSlot -> _)</a>
+        <a href="#deposit_at_least%28count%2C%26spec%3ASlot-%3E_%29-instance-method" class="signature"><strong>#deposit_at_least</strong>(count, &spec : Slot -> _)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#helmet%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#helmet</strong>(*args, **options)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#helmet%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#helmet</strong>(*args, **options, &)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#leggings%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#leggings</strong>(*args, **options)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#leggings%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#leggings</strong>(*args, **options, &)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#off_hand%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#off_hand</strong>(*args, **options)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#off_hand%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#off_hand</strong>(*args, **options, &)</a>
+        
+          <div class="summary"><p>Equipment slot accessors</p></div>
         
       </li>
     
@@ -1690,7 +1815,7 @@
       <li class="entry-summary">
         <a href="#replenish%28count%2Citem_id%29-instance-method" class="signature"><strong>#replenish</strong>(count, item_id)</a>
         
-          <div class="summary"><p>Ensures the player has at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> items of the specified type in their inventory.</p></div>
+          <div class="summary"><p>Ensures the player has at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3ASlot-%3E_%29-instance-method">#count</a></code> items of the specified type in their inventory.</p></div>
         
       </li>
     
@@ -1700,14 +1825,14 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#withdraw_at_least%28count%2Cspec%2Csource%3AArray%28WindowSlot%29%3Dcontent%2Ctarget%3AArray%28WindowSlot%29%3Dinventory%2Bhotbar%29-instance-method" class="signature"><strong>#withdraw_at_least</strong>(count, spec, source : Array(WindowSlot) = content, target : Array(WindowSlot) = inventory <span class="o">+</span> hotbar)</a>
+        <a href="#withdraw_at_least%28count%2Cspec%2Csource%3AArray%28WindowSlot%29%3Dcontent%2Ctarget%3AArray%28WindowSlot%29%7CNil%3Dnil%29-instance-method" class="signature"><strong>#withdraw_at_least</strong>(count, spec, source : Array(WindowSlot) = content, target : Array(WindowSlot) | Nil = <span class="n">nil</span>)</a>
         
-          <div class="summary"><p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> matching items from the player inventory to the container, using shift-clicking.</p></div>
+          <div class="summary"><p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3ASlot-%3E_%29-instance-method">#count</a></code> matching items from the player inventory to the container, using shift-clicking.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#withdraw_at_least%28count%2C%26spec%3AWindowSlot-%3E_%29-instance-method" class="signature"><strong>#withdraw_at_least</strong>(count, &spec : WindowSlot -> _)</a>
+        <a href="#withdraw_at_least%28count%2C%26spec%3ASlot-%3E_%29-instance-method" class="signature"><strong>#withdraw_at_least</strong>(count, &spec : Slot -> _)</a>
         
       </li>
     
@@ -1766,7 +1891,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L5" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1796,7 +1921,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1813,12 +1938,96 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="count(spec,slots=inventory+hotbar)-instance-method">
+    <div class="entry-detail" id="boots(*args,**options)-instance-method">
       <div class="signature">
         
-        def <strong>count</strong>(spec, slots = inventory <span class="o">+</span> hotbar)
+        def <strong>boots</strong>(*args, **options)
 
-        <a class="method-permalink" href="#count%28spec%2Cslots%3Dinventory%2Bhotbar%29-instance-method">#</a>
+        <a class="method-permalink" href="#boots%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="boots(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>boots</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#boots%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="chestplate(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>chestplate</strong>(*args, **options)
+
+        <a class="method-permalink" href="#chestplate%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="chestplate(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>chestplate</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#chestplate%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="count(spec,slots=player_inventory_slots)-instance-method">
+      <div class="signature">
+        
+        def <strong>count</strong>(spec, slots = player_inventory_slots)
+
+        <a class="method-permalink" href="#count%28spec%2Cslots%3Dplayer_inventory_slots%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1834,23 +2043,23 @@ inventory.count &quot;stone&quot;, slots # =&gt; 5 (count in entire window inclu
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="count(&amp;spec:WindowSlot-&gt;_)-instance-method">
+    <div class="entry-detail" id="count(&amp;spec:Slot-&gt;_)-instance-method">
       <div class="signature">
         
-        def <strong>count</strong>(&spec : <a href="../Rosegold/WindowSlot.html">WindowSlot</a> -> _)
+        def <strong>count</strong>(&spec : <a href="../Rosegold/Slot.html">Slot</a> -> _)
 
-        <a class="method-permalink" href="#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#</a>
+        <a class="method-permalink" href="#count%28%26spec%3ASlot-%3E_%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1865,7 +2074,7 @@ inventory.count &quot;stone&quot;, slots # =&gt; 5 (count in entire window inclu
       
         <div class="doc">
           
-          <p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> matching items from the container to the player inventory, using shift-clicking.
+          <p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3ASlot-%3E_%29-instance-method">#count</a></code> matching items from the container to the player inventory, using shift-clicking.
 Returns the number of actually transferred items.</p>
 <p>Example:
 inventory.deposit_at_least 5, &quot;diamond_pickaxe&quot; # =&gt; 3
@@ -1876,23 +2085,149 @@ inventory.deposit_at_least 5, { |slot| slot.name == &quot;diamond_pickaxe&quot; 
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L94" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="deposit_at_least(count,&amp;spec:WindowSlot-&gt;_)-instance-method">
+    <div class="entry-detail" id="deposit_at_least(count,&amp;spec:Slot-&gt;_)-instance-method">
       <div class="signature">
         
-        def <strong>deposit_at_least</strong>(count, &spec : <a href="../Rosegold/WindowSlot.html">WindowSlot</a> -> _)
+        def <strong>deposit_at_least</strong>(count, &spec : <a href="../Rosegold/Slot.html">Slot</a> -> _)
 
-        <a class="method-permalink" href="#deposit_at_least%28count%2C%26spec%3AWindowSlot-%3E_%29-instance-method">#</a>
+        <a class="method-permalink" href="#deposit_at_least%28count%2C%26spec%3ASlot-%3E_%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L97" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L98" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="helmet(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>helmet</strong>(*args, **options)
+
+        <a class="method-permalink" href="#helmet%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="helmet(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>helmet</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#helmet%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="leggings(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>leggings</strong>(*args, **options)
+
+        <a class="method-permalink" href="#leggings%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="leggings(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>leggings</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#leggings%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="off_hand(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>off_hand</strong>(*args, **options)
+
+        <a class="method-permalink" href="#off_hand%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="off_hand(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>off_hand</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#off_hand%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Equipment slot accessors</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L195" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1918,7 +2253,7 @@ inventory.pick { |slot| slot.name == &quot;diamond_pickaxe&quot; &amp;&amp; slot
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1934,7 +2269,7 @@ inventory.pick { |slot| slot.name == &quot;diamond_pickaxe&quot; &amp;&amp; slot
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1949,7 +2284,7 @@ inventory.pick { |slot| slot.name == &quot;diamond_pickaxe&quot; &amp;&amp; slot
       
         <div class="doc">
           
-          <p>Ensures the player has at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> items of the specified type in their inventory.
+          <p>Ensures the player has at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3ASlot-%3E_%29-instance-method">#count</a></code> items of the specified type in their inventory.
 If there are already enough items, returns the current count.
 If not enough items are present, attempts to withdraw more from a container.
 Returns the total count after replenishment attempt.</p>
@@ -1961,7 +2296,7 @@ inventory.replenish 5, &quot;diamond&quot; # =&gt; 3 (if only 3 available)</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1977,22 +2312,22 @@ inventory.replenish 5, &quot;diamond&quot; # =&gt; 3 (if only 3 available)</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L134" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L135" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="withdraw_at_least(count,spec,source:Array(WindowSlot)=content,target:Array(WindowSlot)=inventory+hotbar)-instance-method">
+    <div class="entry-detail" id="withdraw_at_least(count,spec,source:Array(WindowSlot)=content,target:Array(WindowSlot)|Nil=nil)-instance-method">
       <div class="signature">
         
-        def <strong>withdraw_at_least</strong>(count, spec, source : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>) = content, target : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>) = inventory <span class="o">+</span> hotbar)
+        def <strong>withdraw_at_least</strong>(count, spec, source : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>) = content, target : Array(<a href="../Rosegold/WindowSlot.html">WindowSlot</a>) | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#withdraw_at_least%28count%2Cspec%2Csource%3AArray%28WindowSlot%29%3Dcontent%2Ctarget%3AArray%28WindowSlot%29%3Dinventory%2Bhotbar%29-instance-method">#</a>
+        <a class="method-permalink" href="#withdraw_at_least%28count%2Cspec%2Csource%3AArray%28WindowSlot%29%3Dcontent%2Ctarget%3AArray%28WindowSlot%29%7CNil%3Dnil%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3AWindowSlot-%3E_%29-instance-method">#count</a></code> matching items from the player inventory to the container, using shift-clicking.
+          <p>Tries to transfer at least <code><a href="../Rosegold/Inventory.html#count%28%26spec%3ASlot-%3E_%29-instance-method">#count</a></code> matching items from the player inventory to the container, using shift-clicking.
 Returns the number of actually transferred items.</p>
 <p>Example:
 inventory.withdraw_at_least 5, &quot;diamond_pickaxe&quot; # =&gt; 3
@@ -2003,23 +2338,23 @@ inventory.withdraw_at_least 5, { |slot| slot.name == &quot;diamond_pickaxe&quot;
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L78" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L78" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="withdraw_at_least(count,&amp;spec:WindowSlot-&gt;_)-instance-method">
+    <div class="entry-detail" id="withdraw_at_least(count,&amp;spec:Slot-&gt;_)-instance-method">
       <div class="signature">
         
-        def <strong>withdraw_at_least</strong>(count, &spec : <a href="../Rosegold/WindowSlot.html">WindowSlot</a> -> _)
+        def <strong>withdraw_at_least</strong>(count, &spec : <a href="../Rosegold/Slot.html">Slot</a> -> _)
 
-        <a class="method-permalink" href="#withdraw_at_least%28count%2C%26spec%3AWindowSlot-%3E_%29-instance-method">#</a>
+        <a class="method-permalink" href="#withdraw_at_least%28count%2C%26spec%3ASlot-%3E_%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/33e19112d02a29d84307c7e64239e1b78bde7df4/src/rosegold/control/inventory.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9605d960597602920d524cb5f08c302b037cd9ff/src/rosegold/control/inventory.cr#L83" target="_blank">View source</a>]
         
       </div>
     </div>
