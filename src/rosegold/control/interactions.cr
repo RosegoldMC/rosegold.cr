@@ -165,7 +165,8 @@ class Rosegold::Interactions
       @queue_using_hand = nil
       case reached = reach_block_or_entity
       when Entity
-        Log.warn { "Rosegold does not support using items on entities yet" }
+        Log.debug { "Interacting with entity: #{reached.entity_id}" }
+        interact_with_entity using_hand, reached
       when ReachedBlock
         Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
         place_block using_hand, reached
@@ -310,13 +311,16 @@ class Rosegold::Interactions
     # Get all block collision boxes
     block_boxes = get_block_hitboxes(eyes, reach_vector)
 
-    # Get all entity bounding boxes for living entities within reach
+    # Get all entity bounding boxes for pickable entities within reach
+    # Following vanilla behavior: item entities are NOT pickable via interactions
     entity_boxes = [] of AABBd
     entity_map = [] of Rosegold::Entity
 
     reach_aabb = AABBd.new(eyes, eyes + reach_vector)
     client.dimension.entities.each_value do |entity|
-      next unless entity.living?
+      # Only include pickable entities (living entities and certain interactable types)
+      # Item entities are excluded as they're picked up via collision, not interaction
+      next unless entity.living? || entity.interactable?
 
       entity_bounding_box = entity.bounding_box
       # Only include entities that could potentially be hit
@@ -430,6 +434,48 @@ class Rosegold::Interactions
       # No interaction hitbox for this block type
       nil
     end
+  end
+
+  private def interact_with_entity(hand : Hand, entity : Rosegold::Entity)
+    # Calculate interaction position relative to entity (for InteractAt)
+    eyes = client.player.eyes
+    relative_pos = eyes - entity.position
+
+    # Try InteractAt first (for precise entity interactions)
+    send_packet Serverbound::InteractEntity.new(
+      entity.entity_id,
+      Serverbound::InteractEntity::Action::InteractAt,
+      relative_pos.x.to_f32,
+      relative_pos.y.to_f32,
+      relative_pos.z.to_f32,
+      hand,
+      client.player.sneaking?
+    )
+
+    # Also send regular Interact (vanilla does this as fallback)
+    send_packet Serverbound::InteractEntity.new(
+      entity.entity_id,
+      Serverbound::InteractEntity::Action::Interact,
+      hand: hand,
+      sneaking: client.player.sneaking?
+    )
+
+    # Send arm swing for visual feedback
+    send_packet Serverbound::SwingArm.new(hand)
+
+    # Continue with UseItem for items that should be used on entities
+    # (like name tags, leads, golden apples on zombie villagers, etc.)
+
+    # Generate sequence number for MC 1.21+
+    sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
+
+    # Track pending operation
+    if client.protocol_version >= 767_u32
+      operation = BlockOperation.new(Vec3i::ORIGIN, :use)
+      client.pending_block_operations[sequence] = operation
+    end
+
+    send_packet Serverbound::UseItem.new(hand, sequence, client.player.look.yaw, client.player.look.pitch)
   end
 
   private def inventory : Inventory

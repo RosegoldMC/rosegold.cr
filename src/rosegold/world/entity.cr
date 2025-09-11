@@ -66,4 +66,24 @@ class Rosegold::Entity
       end
     end
   end
+
+  def item?
+    metadata_obj = metadata
+    return false unless metadata_obj
+    metadata_obj.name == "item"
+  end
+
+  def interactable?
+    metadata_obj = metadata
+    return false unless metadata_obj
+
+    case metadata_obj.name
+    when "item_frame", "glow_item_frame", "painting", "leash_knot",
+         "armor_stand", "boat", "chest_boat", "minecart", "chest_minecart",
+         "furnace_minecart", "tnt_minecart", "spawner_minecart", "hopper_minecart"
+      true
+    else
+      false
+    end
+  end
 end
