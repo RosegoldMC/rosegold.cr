@@ -274,15 +274,30 @@ class Rosegold::Bot < Rosegold::EventEmitter
       inventory.pick("carrot") ||
       raise "Bot food not found"
 
+    # Verify we actually have edible food equipped
+    unless main_hand.edible?
+      Log.warn { "No edible food equipped after pick attempt" }
+      return
+    end
+
     start_using_hand
 
-    until food >= 18
+    max_attempts = 100  # Prevent infinite loop (about 55 seconds)
+    attempts = 0
+
+    until food >= 18 || attempts >= max_attempts
+      break unless main_hand.edible?  # Stop if no food equipped anymore
       wait_ticks 33
+      attempts += 1
     end
 
     stop_using_hand
 
-    Log.info { "Eating finished, food is #{food} and health is #{health}" }
+    if attempts >= max_attempts
+      Log.warn { "Eating timed out after #{max_attempts} attempts, food is #{food}" }
+    else
+      Log.info { "Eating finished, food is #{food} and health is #{health}" }
+    end
   end
 
   def full_health?
