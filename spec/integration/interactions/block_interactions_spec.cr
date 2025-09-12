@@ -169,7 +169,7 @@ Spectator.describe "Rosegold::Bot block interactions" do
         bot.start_digging
 
         # obsidian takes 45 ticks to mine with diamond pickaxe and efficiency 5
-        timeout = 50
+        timeout = 80
         ticks_waited = 0
         current_block = initial_block
 

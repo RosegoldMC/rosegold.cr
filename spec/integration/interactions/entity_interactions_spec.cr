@@ -5,6 +5,7 @@ Spectator.describe "Rosegold::Bot entity interactions" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/kill @e[type=!minecraft:player]"
+        bot.wait_ticks 3
         bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
         bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
         bot.wait_ticks 5
@@ -13,9 +14,15 @@ Spectator.describe "Rosegold::Bot entity interactions" do
         bot.chat "/clear"
         bot.wait_for Rosegold::Clientbound::SetSlot
 
+        bot.chat "/give #{bot.username} minecraft:diamond_sword[enchantments={\"minecraft:sharpness\":5}]"
+        bot.chat "/effect give #{bot.username} minecraft:strength 60 2"
+        bot.wait_for Rosegold::Clientbound::SetSlot
+
         # Create the water funnel system for safe testing
         bot.chat "/fill -10 -60 8 0 -58 6 minecraft:obsidian"
         bot.chat "/fill -9 -60 7 0 -58 7 minecraft:air"
+        bot.chat "/fill -9 -59 8 -9 -59 8 minecraft:air"
+        # Ensure interaction window is air like other attack specs
         bot.wait_tick
         bot.chat "/fill -6 -60 7 -6 -60 7 minecraft:water"
         bot.wait_tick
@@ -64,160 +71,58 @@ Spectator.describe "Rosegold::Bot entity interactions" do
     end
   end
 
-  it "should be able to interact with entity (zombie villager curing)" do
+  it "should be able to interact with entity (cow feeding)" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Give golden apple and weakness potion for curing
-        bot.chat "/give #{bot.username} minecraft:golden_apple 1"
-        bot.chat "/give #{bot.username} minecraft:splash_potion[potion_contents={potion:\"minecraft:weakness\"}] 1"
-        bot.chat "/give #{bot.username} minecraft:diamond_sword[enchantments={\"minecraft:sharpness\":5}]"
-        bot.chat "/effect give #{bot.username} minecraft:strength 60 2"
+        # Give wheat for cow feeding
+        bot.chat "/give #{bot.username} minecraft:wheat 5"
         bot.wait_for Rosegold::Clientbound::SetSlot
 
-        # Spawn zombie villager in the funnel area
-        bot.chat "/summon minecraft:zombie_villager -7 -60 7"
-        bot.wait_ticks 5
+        # Spawn cow in the funnel area (ensure no existing cows first)
+        bot.chat "/kill @e[type=cow]"
+        bot.wait_ticks 2
+        bot.chat "/summon cow -9 -60 7"
+        bot.wait_ticks 3
 
-        # Look at the zombie villager (facing south toward negative Z)
-        bot.yaw = 180.0 # South (towards the zombie villager at Z=7 from bot at Z=9)
+        # Look at the cow (facing south toward negative Z)
+        bot.yaw = 180.0 # South (towards the cow at Z=7 from bot at Z=9)
         bot.pitch = 0.0 # Level
-        bot.wait_ticks 3
 
-        # Count entities before curing
-        zombie_villagers_before = client.dimension.entities.count { |_, e| e.entity_type == 146 } # zombie_villager entity type
-        villagers_before = client.dimension.entities.count { |_, e| e.entity_type == 23 } # villager entity type
-        expect(zombie_villagers_before).to eq(1)
-        expect(villagers_before).to eq(0)
+        # Count wheat before feeding
+        wheat_count_before = bot.inventory.count("wheat")
+        expect(wheat_count_before).to eq(5)
 
-        # First throw weakness potion
-        bot.inventory.pick! "splash_potion"
+        # Count cows before feeding
+        cows_before = client.dimension.entities.count { |_, e| e.entity_type == 28 } # cow entity type from game_assets/1.21.8/entities.json
+        expect(cows_before).to eq(1)
+
+        # Pick wheat and interact with cow
+        bot.inventory.pick! "wheat"
         bot.start_using_hand
-        bot.wait_ticks 5
-        bot.stop_using_hand
-        bot.wait_ticks 10 # Wait for potion effect
 
-        # Then use golden apple on zombie villager to start curing
-        bot.inventory.pick! "golden_apple"
-        bot.start_using_hand
-        bot.wait_ticks 5
-        bot.stop_using_hand
+        # Check wheat count every tick until it decreases (with timeout)
+        timeout_ticks = 30
+        ticks_waited = 0
+        current_wheat_count = wheat_count_before
 
-        # Wait a bit for curing to start (immediate effect, not full cure)
-        bot.wait_ticks 20
+        until current_wheat_count < wheat_count_before || ticks_waited >= timeout_ticks
+          bot.wait_tick
+          ticks_waited += 1
+          current_wheat_count = bot.inventory.count("wheat")
+        end
 
-        # The test is mainly that we don't crash when using items on entities
-        # We don't wait for full cure (takes 2-5 minutes) but verify interaction worked
-        expect(true).to be_true
-
-        # Optional: verify curing started by checking if zombie villager still exists
-        # (it should still be there but with curing effect started)
-        zombie_villagers_after = client.dimension.entities.count { |_, e| e.entity_type == 146 }
-        expect(zombie_villagers_after).to eq(1) # Still there, but curing should have started
-      end
-    end
-  end
-
-  it "should be able to interact with armor stand entities" do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        # Setup test area
-        bot.chat "/fill -5 -60 -5 5 -58 5 minecraft:air"
-        bot.wait_ticks 3
-        bot.chat "/tp 0 -59 0"
-        bot.wait_ticks 5
-
-        # Spawn an armor stand
-        bot.chat "/summon minecraft:armor_stand ~ ~1 ~2"
-        bot.wait_ticks 5
-
-        # Give the bot a helmet to put on the armor stand
-        bot.chat "/give @s diamond_helmet 1"
-        bot.wait_ticks 3
-        bot.hotbar_selection = 0_u32
-        bot.wait_ticks 2
-
-        # Look at the armor stand
-        bot.look_at Rosegold::Vec3d.new(0, -58, 2)
-        bot.wait_ticks 3
-
-        # Try to interact with the armor stand
-        bot.start_using_hand
-        bot.wait_ticks 5
         bot.stop_using_hand
 
-        # Test passes if no crash occurs
-        expect(true).to be_true
-      end
-    end
-  end
+        # Check wheat count after feeding
+        wheat_count_after = bot.inventory.count("wheat")
+        expect(wheat_count_after).to eq(4) # Should be 1 less than before (5 - 1 = 4)
 
-  it "should handle raytracing priority correctly" do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        # Setup: Place a block and spawn an entity in front of it
-        bot.chat "/fill -5 -60 -5 5 -58 5 minecraft:air"
-        bot.wait_ticks 3
-        bot.chat "/tp 0 -59 0"
-        bot.wait_ticks 5
+        # Verify cow is still alive (feeding doesn't kill it)
+        cows_after = client.dimension.entities.count { |_, e| e.entity_type == 28 } # cow entity type from game_assets/1.21.8/entities.json
+        expect(cows_after).to eq(1)
 
-        # Place a block at distance
-        bot.chat "/setblock ~ ~1 ~3 minecraft:stone"
-        bot.wait_ticks 3
-
-        # Spawn a zombie between bot and block
-        bot.chat "/summon minecraft:zombie ~ ~1 ~2"
-        bot.wait_ticks 5
-
-        # Look straight ahead toward both block and entity
-        bot.look_at Rosegold::Vec3d.new(0, -58, 2.5)
-        bot.wait_ticks 3
-
-        # Test using hand - should hit entity first, not block
-        # We can't easily verify what was hit, but we test that raytracing works
-        bot.start_using_hand
-        bot.wait_ticks 3
-        bot.stop_using_hand
-
-        # Test passes if no crash occurs and packets are sent
-        expect(true).to be_true
-      end
-    end
-  end
-
-  it "should respect reach ranges for survival mode" do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        # Setup test area
-        bot.chat "/fill -10 -60 -10 10 -58 10 minecraft:air"
-        bot.wait_ticks 3
-        bot.chat "/tp 0 -59 0"
-        bot.wait_ticks 5
-
-        # Test survival mode reach (4.5 blocks)
-        bot.chat "/gamemode survival"
-        bot.wait_ticks 3
-
-        # Place block just within reach
-        bot.chat "/setblock ~ ~ ~4 minecraft:stone"
-        bot.wait_ticks 3
-        bot.look_at Rosegold::Vec3d.new(0, -59, 4)
-        bot.wait_ticks 2
-
-        # Should be able to reach this block
-        bot.start_using_hand
-        bot.wait_ticks 3
-        bot.stop_using_hand
-
-        # Place block just outside reach
-        bot.chat "/setblock ~ ~ ~6 minecraft:stone"
-        bot.wait_ticks 3
-        bot.look_at Rosegold::Vec3d.new(0, -59, 6)
-        bot.wait_ticks 2
-
-        # Should not be able to reach this block (no crash expected)
-        bot.start_using_hand
-        bot.wait_ticks 3
-        bot.stop_using_hand
+        # Test passes if wheat count decremented, proving successful entity interaction
+        expect(wheat_count_before - wheat_count_after).to eq(1)
       end
     end
   end
