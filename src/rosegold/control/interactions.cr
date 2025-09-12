@@ -13,6 +13,7 @@ class Rosegold::Interactions
   @using_hand = nil
   @queue_using_hand = nil
   @using_hand_delay = 0_i32
+  @right_click_delay = 0_i32
   @digging_block : ReachedBlock?
   @dig_hand_swing_countdown = 0_i8
   @attack_queued = false
@@ -158,43 +159,87 @@ class Rosegold::Interactions
 
   private def tick_using_hand
     @using_hand_delay -= 1 if @using_hand_delay > 0
+    @right_click_delay -= 1 if @right_click_delay > 0
     return if @using_hand_delay > 0
+    return if @right_click_delay > 0
 
     if using_hand = @using_hand || @queue_using_hand
-      @using_hand_delay = using_hand_delay_for inventory.main_hand
+      @right_click_delay = 4  # Vanilla 4-tick right-click delay
       @queue_using_hand = nil
-      case reached = reach_block_or_entity
-      when Entity
-        Log.debug { "Interacting with entity: #{reached.entity_id}" }
-        interact_with_entity using_hand, reached
-      when ReachedBlock
-        Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
-        place_block using_hand, reached
-
-        # Generate sequence number for MC 1.21+
-        sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
-
-        # Track pending operation
-        if client.protocol_version >= 767_u32
-          operation = BlockOperation.new(Vec3i::ORIGIN, :use) # Use operations don't target specific blocks
-          client.pending_block_operations[sequence] = operation
-        end
-
-        send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
-      else
-        Log.debug { "No block or entity reached" }
-        # Generate sequence number for MC 1.21+
-        sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
-
-        # Track pending operation
-        if client.protocol_version >= 767_u32
-          operation = BlockOperation.new(Vec3i::ORIGIN, :use) # Use operations don't target specific blocks
-          client.pending_block_operations[sequence] = operation
-        end
-
-        send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
+      
+      # Try both hands like vanilla (main hand, then off hand)
+      [Hand::MainHand, Hand::OffHand].each do |hand|
+        success = try_use_hand(hand)
+        break if success
       end
     end
+  end
+
+  # Vanilla-style interaction per hand: entity -> block -> air  
+  private def try_use_hand(hand : Hand) : Bool
+    return false if player_is_using_item?
+    
+    case reached = reach_block_or_entity(hand)
+    when Entity
+      Log.debug { "Interacting with entity: #{reached.entity_id}" }
+      result = interact_with_entity hand, reached
+      if result
+        @using_hand_delay = using_hand_delay_for inventory.main_hand
+        return true
+      end
+      # Fall through to block interaction if entity interaction failed
+    when ReachedBlock
+      Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
+      result = try_block_interaction hand, reached
+      if result
+        @using_hand_delay = using_hand_delay_for inventory.main_hand
+        return true
+      end
+      # Fall through to item use if block interaction failed
+    end
+    
+    # Try using item in air (vanilla fallback)
+    Log.debug { "Using item in air" }
+    result = try_item_use hand
+    if result
+      @using_hand_delay = using_hand_delay_for inventory.main_hand
+      return true
+    end
+    
+    false
+  end
+  
+  private def player_is_using_item? : Bool
+    # Check if player is already using an item (eating, drinking, blocking, etc.)
+    @using_hand != nil && @using_hand_delay > 0
+  end
+  
+  private def try_block_interaction(hand : Hand, reached : ReachedBlock) : Bool
+    place_block hand, reached
+    
+    # Only send UseItem if block placement might have failed
+    # (vanilla sends UseItem as fallback for block interactions)
+    sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
+    if client.protocol_version >= 767_u32
+      operation = BlockOperation.new(Vec3i::ORIGIN, :use)
+      client.pending_block_operations[sequence] = operation
+    end
+    send_packet Serverbound::UseItem.new hand, sequence, client.player.look.yaw, client.player.look.pitch
+    true
+  end
+  
+  private def try_item_use(hand : Hand) : Bool
+    # Generate sequence number for MC 1.21+
+    sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
+
+    # Track pending operation
+    if client.protocol_version >= 767_u32
+      operation = BlockOperation.new(Vec3i::ORIGIN, :use)
+      client.pending_block_operations[sequence] = operation
+    end
+
+    send_packet Serverbound::UseItem.new hand, sequence, client.player.look.yaw, client.player.look.pitch
+    true
   end
 
   def using_hand_delay_for(slot)
@@ -285,8 +330,8 @@ class Rosegold::Interactions
       :cancel, reached.block, reached.face, sequence
   end
 
-  private def reach_block_or_entity : ReachedBlock? | Rosegold::Entity?
-    reach_block_or_entity_unified
+  private def reach_block_or_entity(hand : Hand = Hand::MainHand) : ReachedBlock? | Rosegold::Entity?
+    reach_block_or_entity_unified(hand)
   end
 
   private def reach_block : ReachedBlock?
@@ -302,60 +347,85 @@ class Rosegold::Interactions
     client.dimension.raycast_entity client.player.eyes, reach_vec, reach_length
   end
 
-  # Unified raytracing that properly handles both entities and blocks
-  # ensuring entities cannot be hit through blocks
-  private def reach_block_or_entity_unified : ReachedBlock? | Rosegold::Entity?
+  # Vanilla-style unified raytracing with separate block/entity reach distances
+  private def reach_block_or_entity_unified(hand : Hand) : ReachedBlock? | Rosegold::Entity?
     eyes = client.player.eyes
-    reach_vector = reach_vec
+    block_reach = block_interaction_range
+    entity_reach = entity_interaction_range
+    max_reach = Math.max(block_reach, entity_reach)
+    
+    # Use max reach for raytracing, filter by appropriate distance later
+    reach_vector = client.player.look.to_vec3 * max_reach
 
-    # Get all block collision boxes
+    # Get block raytracing result
     block_boxes = get_block_hitboxes(eyes, reach_vector)
-
-    # Get all entity bounding boxes for pickable entities within reach
-    # Following vanilla behavior: item entities are NOT pickable via interactions
-    entity_boxes = [] of AABBd
-    entity_map = [] of Rosegold::Entity
-
+    block_result = Raytrace.raytrace(eyes, reach_vector, block_boxes)
+    
+    # Get entity raytracing result  
+    entity_result = nil
+    closest_entity_distance = Float64::INFINITY
+    closest_entity = nil
+    
     reach_aabb = AABBd.new(eyes, eyes + reach_vector)
     client.dimension.entities.each_value do |entity|
-      # Only include pickable entities (living entities and certain interactable types)
-      # Item entities are excluded as they're picked up via collision, not interaction
       next unless entity.living? || entity.interactable?
-
-      entity_bounding_box = entity.bounding_box
-      # Only include entities that could potentially be hit
-      if reach_aabb.intersects?(entity_bounding_box)
-        entity_boxes << entity_bounding_box
-        entity_map << entity
+      
+      entity_box = entity.bounding_box
+      next unless reach_aabb.intersects?(entity_box)
+      
+      # Raytrace against this entity
+      entity_ray_result = Raytrace.raytrace(eyes, reach_vector, [entity_box])
+      next unless entity_ray_result
+      
+      distance = (entity_ray_result.intercept - eyes).length
+      if distance < closest_entity_distance && distance <= entity_reach
+        closest_entity_distance = distance
+        closest_entity = entity
+        entity_result = entity_ray_result
       end
     end
 
-    # Combine all boxes for unified raytracing
-    all_boxes = block_boxes + entity_boxes
-    block_count = block_boxes.size
-
-    # Perform unified raytracing
-    result = Raytrace.raytrace(eyes, reach_vector, all_boxes)
-    return nil unless result
-
-    # Determine if we hit a block or entity based on box index
-    if result.box_nr < block_count
-      # Hit a block
-      block = block_boxes[result.box_nr].min.block
-      ReachedBlock.new result.intercept, block, result.face
+    # Return closest hit, but respect reach distances
+    block_distance = block_result ? (block_result.intercept - eyes).length : Float64::INFINITY
+    entity_distance = entity_result ? closest_entity_distance : Float64::INFINITY
+    
+    # Filter by reach distances and return closest valid hit
+    valid_block = block_result && block_distance <= block_reach
+    valid_entity = entity_result && closest_entity && entity_distance <= entity_reach
+    
+    if valid_block && valid_entity
+      # Both valid, return closest
+      if block_distance < entity_distance
+        if br = block_result
+          block = block_boxes[br.box_nr].min.block
+          ReachedBlock.new br.intercept, block, br.face
+        else
+          closest_entity
+        end
+      else
+        closest_entity
+      end
+    elsif valid_block
+      if br = block_result
+        block = block_boxes[br.box_nr].min.block
+        ReachedBlock.new br.intercept, block, br.face
+      else
+        nil
+      end
+    elsif valid_entity
+      closest_entity
     else
-      # Hit an entity
-      entity_index = result.box_nr - block_count
-      entity_map[entity_index]
+      nil
     end
   end
 
-  private def reach_length
+  # Vanilla reach distances
+  private def block_interaction_range
     client.player.gamemode == 1 ? 5.0 : 4.5
   end
-
-  private def reach_vec
-    client.player.look.to_vec3 * reach_length
+  
+  private def entity_interaction_range  
+    client.player.gamemode == 1 ? 5.0 : 3.0
   end
 
   # Returns all block collision boxes that may intersect from `start` towards `reach`.
@@ -436,12 +506,20 @@ class Rosegold::Interactions
     end
   end
 
-  private def interact_with_entity(hand : Hand, entity : Rosegold::Entity)
-    # Calculate interaction position relative to entity (for InteractAt)
+  private def interact_with_entity(hand : Hand, entity : Rosegold::Entity) : Bool
+    # Get the exact hit location from raytracing for proper relative positioning
     eyes = client.player.eyes
-    relative_pos = eyes - entity.position
+    reach_vector = client.player.look.to_vec3 * entity_interaction_range
+    entity_box = entity.bounding_box
+    
+    # Get precise hit location on entity
+    ray_result = Raytrace.raytrace(eyes, reach_vector, [entity_box])
+    hit_location = ray_result ? ray_result.intercept : eyes + reach_vector.normed * (entity.position - eyes).length
+    
+    # Calculate interaction position relative to entity (CORRECTED)
+    relative_pos = hit_location - entity.position
 
-    # Try InteractAt first (for precise entity interactions)
+    # Try InteractAt first (vanilla behavior)
     send_packet Serverbound::InteractEntity.new(
       entity.entity_id,
       Serverbound::InteractEntity::Action::InteractAt,
@@ -452,7 +530,9 @@ class Rosegold::Interactions
       client.player.sneaking?
     )
 
-    # Also send regular Interact (vanilla does this as fallback)
+    # In vanilla, we would check if InteractAt consumed the action
+    # For now, always try regular Interact as fallback (matches current behavior)
+    # TODO: Implement proper InteractionResult tracking
     send_packet Serverbound::InteractEntity.new(
       entity.entity_id,
       Serverbound::InteractEntity::Action::Interact,
@@ -463,19 +543,9 @@ class Rosegold::Interactions
     # Send arm swing for visual feedback
     send_packet Serverbound::SwingArm.new(hand)
 
-    # Continue with UseItem for items that should be used on entities
-    # (like name tags, leads, golden apples on zombie villagers, etc.)
-
-    # Generate sequence number for MC 1.21+
-    sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
-
-    # Track pending operation
-    if client.protocol_version >= 767_u32
-      operation = BlockOperation.new(Vec3i::ORIGIN, :use)
-      client.pending_block_operations[sequence] = operation
-    end
-
-    send_packet Serverbound::UseItem.new(hand, sequence, client.player.look.yaw, client.player.look.pitch)
+    # Return success (entity interaction always succeeds for now)
+    # TODO: Track actual interaction results from server
+    true
   end
 
   private def inventory : Inventory
