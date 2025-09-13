@@ -2,6 +2,7 @@ require "../../minecraft/nbt"
 require "digest/crc32"
 require "../world/mcdata"
 require "../crc32c"
+require "../models/text_component"
 
 # Data Component types for 1.21.8
 enum Rosegold::DataComponentType : UInt32
@@ -156,6 +157,8 @@ abstract class Rosegold::DataComponent
       DataComponents::PotionContents.read(io)
     when 47 # minecraft:trim - Armor's trim pattern and color
       DataComponents::Trim.read(io)
+    when 49 # minecraft:entity_data - Data for the entity to be created from this item
+      DataComponents::EntityData.read(io)
     when 63 # minecraft:banner_patterns - Array of banner pattern layers
       DataComponents::BannerPatterns.read(io)
     else
@@ -306,16 +309,19 @@ class Rosegold::DataComponents::CustomName < Rosegold::DataComponent
 
   def self.read(io) : self
     # Read as NBT Text Component
-    nbt = io.read_nbt_unamed
-    name = case nbt
+    nbt_data = io.read_nbt_unamed
+
+    # Extract text from NBT
+    text = case nbt_data
            when Minecraft::NBT::StringTag
-             nbt.value
+             nbt_data.value
            when Minecraft::NBT::CompoundTag
-             nbt["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || "Unknown"
+             nbt_data["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || "Unknown"
            else
              "Unknown"
            end
-    new(name)
+
+    new(text)
   end
 
   def write(io) : Nil
@@ -778,6 +784,22 @@ class Rosegold::DataComponents::BannerPatterns < Rosegold::DataComponent
   end
 end
 
+# Component for entity_data (NBT compound containing data for entity to be created)
+class Rosegold::DataComponents::EntityData < Rosegold::DataComponent
+  property data : Minecraft::NBT::Tag
+
+  def initialize(@data : Minecraft::NBT::Tag); end
+
+  def self.read(io) : self
+    nbt_data = io.read_nbt_unamed
+    new(nbt_data)
+  end
+
+  def write(io) : Nil
+    io.write data
+  end
+end
+
 # Component for potion contents (visual and effects of a potion item)
 class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
   property has_potion_id : Bool
@@ -918,7 +940,7 @@ class Rosegold::Slot
     components_to_remove_count = io.read_var_int
     components_to_add = Hash(UInt32, DataComponent).new
 
-    components_to_add_count.times do
+    components_to_add_count.times do |i|
       component_type = io.read_var_int
       structured_component = DataComponent.create_component(component_type, io)
       components_to_add[component_type] = structured_component
