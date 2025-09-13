@@ -4,11 +4,13 @@ require "io/hexdump"
 require "./rosegold/client"
 require "./rosegold/bot"
 
+Log.setup_from_env
+
 # TODO: Write documentation for `Rosegold`
 module Rosegold
   VERSION = "0.4.1"
 
-  Log.setup_from_env
+  Log = ::Log.for self
 
   GAME_ASSETS_ROOT = "#{__DIR__}/../game_assets/"
 
