@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Clientbound::Disconnect - rosegold main</title>
+  <title>Rosegold::DataComponents::EntityData - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -332,7 +332,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
@@ -387,7 +387,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/Disconnect" data-name="rosegold::clientbound::disconnect">
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/Disconnect" data-name="rosegold::clientbound::disconnect">
       <a href="../../Rosegold/Clientbound/Disconnect.html">Disconnect</a>
       
     </li>
@@ -672,7 +672,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
+  <li class="parent open current" data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
       <a href="../../Rosegold/DataComponents.html">DataComponents</a>
       
         <ul>
@@ -747,7 +747,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/DataComponents/EntityData" data-name="rosegold::datacomponents::entitydata">
+  <li class=" current" data-id="rosegold/Rosegold/DataComponents/EntityData" data-name="rosegold::datacomponents::entitydata">
       <a href="../../Rosegold/DataComponents/EntityData.html">EntityData</a>
       
     </li>
@@ -1603,35 +1603,32 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>Clientbound::<wbr>Disconnect
+  </span> Rosegold::<wbr>DataComponents::<wbr>EntityData
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/Disconnect.html">Rosegold::Clientbound::Disconnect</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
-
-
-
-
-
-
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/DataComponents/EntityData.html">Rosegold::DataComponents::EntityData</a></li><li class="superclass"><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
 
   <h2>
-    <a id="included-modules" class="anchor" href="#included-modules">
+    <a id="overview" class="anchor" href="#overview">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Included Modules
+    Overview
   </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></li>
-    
-  </ul>
+
+  <p>Component for entity_data (NBT compound containing data for entity to be created)</p>
+
+
+
+
+
+
 
 
 
@@ -1652,37 +1649,14 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L3" target="_blank">
-        rosegold/packets/clientbound/disconnect.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/inventory/slot.cr#L788" target="_blank">
+        rosegold/inventory/slot.cr
       </a>
     
     <br/>
   
 
 
-
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-      Constant Summary
-    </h2>
-  
-  <dl>
-    
-      <dt class="entry-const" id="PROTOCOL_PACKET_IDS">
-        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">28_u8</span>}</code>
-      </dt>
-      
-      <dd class="entry-const-doc">
-        <p>Store the protocol mappings as a constant</p>
-      </dd>
-      
-    
-  </dl>
 
 
 
@@ -1698,7 +1672,12 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28reason%3ARosegold%3A%3AChat%29-class-method" class="signature"><strong>.new</strong>(reason : Rosegold::Chat)</a>
+        <a href="#new%28data%3AMinecraft%3A%3ANBT%3A%3ATag%29-class-method" class="signature"><strong>.new</strong>(data : Minecraft::NBT::Tag)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#read%28io%29%3Aself-class-method" class="signature"><strong>.read</strong>(io) : <span class="k">self</span></a>
         
       </li>
     
@@ -1706,65 +1685,6 @@
 
 
   
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt8-class-method" class="signature"><strong>.[]</strong>(protocol_version : UInt32) : UInt8</a>
-        
-          <div class="summary"><p>Generate the <a href="protocol_version"></a> method for elegant access</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#default_packet_id%3AUInt8-class-method" class="signature"><strong>.default_packet_id</strong> : UInt8</a>
-        
-          <div class="summary"><p>Define default packet ID (typically the latest/most common version)</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#packet_id%3AUInt8-class-method" class="signature"><strong>.packet_id</strong> : UInt8</a>
-        
-          <div class="summary"><p>Provide backward compatibility with existing packet_id class getter Use the first protocol's packet ID for registration compatibility</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt8-class-method" class="signature"><strong>.packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt8</a>
-        
-          <div class="summary"><p>Get packet ID for specific protocol version</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#supported_protocols%3AArray%28UInt32%29-class-method" class="signature"><strong>.supported_protocols</strong> : Array(UInt32)</a>
-        
-          <div class="summary"><p>Helper method to get all supported protocols</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method" class="signature"><strong>.supports_protocol?</strong>(protocol_version : UInt32) : Bool</a>
-        
-          <div class="summary"><p>Helper method to check if a protocol is supported</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
 
@@ -1780,22 +1700,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
+        <a href="#data%3AMinecraft%3A%3ANBT%3A%3ATag-instance-method" class="signature"><strong>#data</strong> : Minecraft::NBT::Tag</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#reason%3AChat-instance-method" class="signature"><strong>#reason</strong> : Chat</a>
+        <a href="#data%3D%28data%3AMinecraft%3A%3ANBT%3A%3ATag%29-instance-method" class="signature"><strong>#data=</strong>(data : Minecraft::NBT::Tag)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#reason%3D%28reason%3AChat%29-instance-method" class="signature"><strong>#reason=</strong>(reason : Chat)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%3ABytes-instance-method" class="signature"><strong>#write</strong> : Bytes</a>
+        <a href="#write%28io%29%3ANil-instance-method" class="signature"><strong>#write</strong>(io) : Nil</a>
         
       </li>
     
@@ -1807,70 +1722,11 @@
     
       
 
-
-      
-
-
-      
-
-
-      
-
-  <h3>Macros inherited from module <code><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></code></h3>
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
   
   
-    <a href="../../Rosegold/Packets/ProtocolMapping.html#packet_ids%28mappings%29-macro" class="tooltip">
-      <span>packet_ids(mappings)</span>
-    packet_ids</a>
-    
-  
-
-
-    
-      
-
-
-      
-
-
-      
-
-  <h3>Class methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Clientbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
-      <span>new_raw(bytes)</span>
-    new_raw</a>, 
-    
-  
-    <a href="../../Rosegold/Clientbound/Packet.html#state-class-method" class="tooltip">
-      <span>state</span>
-    state</a>
-    
-  
-
-
-      
-
-
-    
-      
-
-  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
-      <span>callback(client_or_server)</span>
-    callback</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
-      <span>to_s(io)</span>
-    to_s</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
-      <span>write : Bytes</span>
+    <a href="../../Rosegold/DataComponent.html#write%28io%29%3ANil-instance-method" class="tooltip">
+      <span>write(io) : Nil</span>
     write</a>
     
   
@@ -1878,18 +1734,14 @@
 
       
 
-
-      
-
-
-      
-
-
+  <h3>Constructor methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
+  
+  
+    <a href="../../Rosegold/DataComponent.html#create_component%28component_type%3AUInt32%2Cio%29%3ADataComponent-class-method" class="tooltip">
+      <span>create_component(component_type : UInt32, io) : DataComponent</span>
+    create_component</a>
     
-      
-
-
-      
+  
 
 
       
@@ -1937,18 +1789,34 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(reason:Rosegold::Chat)-class-method">
+    <div class="entry-detail" id="new(data:Minecraft::NBT::Tag)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(reason : <a href="../../Rosegold/Chat.html">Rosegold::Chat</a>)
+        def self.<strong>new</strong>(data : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>)
 
-        <a class="method-permalink" href="#new%28reason%3ARosegold%3A%3AChat%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28data%3AMinecraft%3A%3ANBT%3A%3ATag%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/inventory/slot.cr#L791" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(io):self-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(io) : <span class="k">self</span>
+
+        <a class="method-permalink" href="#read%28io%29%3Aself-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/inventory/slot.cr#L793" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1956,157 +1824,6 @@
 
 
   
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="[](protocol_version:UInt32):UInt8-class-method">
-      <div class="signature">
-        
-        def self.<strong>[]</strong>(protocol_version : UInt32) : UInt8
-
-        <a class="method-permalink" href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt8-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Generate the <a href="protocol_version"></a> method for elegant access</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="default_packet_id:UInt8-class-method">
-      <div class="signature">
-        
-        def self.<strong>default_packet_id</strong> : UInt8
-
-        <a class="method-permalink" href="#default_packet_id%3AUInt8-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Define default packet ID (typically the latest/most common version)</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="packet_id:UInt8-class-method">
-      <div class="signature">
-        
-        def self.<strong>packet_id</strong> : UInt8
-
-        <a class="method-permalink" href="#packet_id%3AUInt8-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Provide backward compatibility with existing packet_id class getter
-Use the first protocol's packet ID for registration compatibility</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="packet_id_for_protocol(protocol_version:UInt32):UInt8-class-method">
-      <div class="signature">
-        
-        def self.<strong>packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt8
-
-        <a class="method-permalink" href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt8-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Get packet ID for specific protocol version</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read(packet)-class-method">
-      <div class="signature">
-        
-        def self.<strong>read</strong>(packet)
-
-        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L14" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="supported_protocols:Array(UInt32)-class-method">
-      <div class="signature">
-        
-        def self.<strong>supported_protocols</strong> : Array(UInt32)
-
-        <a class="method-permalink" href="#supported_protocols%3AArray%28UInt32%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Helper method to get all supported protocols</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="supports_protocol?(protocol_version:UInt32):Bool-class-method">
-      <div class="signature">
-        
-        def self.<strong>supports_protocol?</strong>(protocol_version : UInt32) : Bool
-
-        <a class="method-permalink" href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Helper method to check if a protocol is supported</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
@@ -2120,66 +1837,50 @@ Use the first protocol's packet ID for registration compatibility</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="callback(client)-instance-method">
+    <div class="entry-detail" id="data:Minecraft::NBT::Tag-instance-method">
       <div class="signature">
         
-        def <strong>callback</strong>(client)
+        def <strong>data</strong> : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>
 
-        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
+        <a class="method-permalink" href="#data%3AMinecraft%3A%3ANBT%3A%3ATag-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L92" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/inventory/slot.cr#L789" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="reason:Chat-instance-method">
+    <div class="entry-detail" id="data=(data:Minecraft::NBT::Tag)-instance-method">
       <div class="signature">
         
-        def <strong>reason</strong> : <a href="../../Rosegold/Chat.html">Chat</a>
+        def <strong>data=</strong>(data : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>)
 
-        <a class="method-permalink" href="#reason%3AChat-instance-method">#</a>
+        <a class="method-permalink" href="#data%3D%28data%3AMinecraft%3A%3ANBT%3A%3ATag%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/inventory/slot.cr#L789" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="reason=(reason:Chat)-instance-method">
+    <div class="entry-detail" id="write(io):Nil-instance-method">
       <div class="signature">
         
-        def <strong>reason=</strong>(reason : <a href="../../Rosegold/Chat.html">Chat</a>)
+        def <strong>write</strong>(io) : Nil
 
-        <a class="method-permalink" href="#reason%3D%28reason%3AChat%29-instance-method">#</a>
+        <a class="method-permalink" href="#write%28io%29%3ANil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write:Bytes-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong> : Bytes
-
-        <a class="method-permalink" href="#write%3ABytes-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/packets/clientbound/disconnect.cr#L79" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/cdbd014ceb180cc3410b8ae77339b6849f863a88/src/rosegold/inventory/slot.cr#L798" target="_blank">View source</a>]
         
       </div>
     </div>
