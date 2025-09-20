@@ -17,7 +17,7 @@ class Rosegold::Heightmap
 
   def write(io)
     io.write(type)
-    io.write(data.size.to_u32)
+    io.write(data.size)
     data.each { |long| io.write_full(long) }
   end
 

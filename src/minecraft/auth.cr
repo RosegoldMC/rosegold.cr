@@ -94,6 +94,22 @@ class Minecraft::Auth
       headers: headers.merge!({"Authorization" => "Bearer #{@access_token}"}))
 
     json = JSON.parse(response.body)
+
+    # Check for API errors
+    if json.as_h.has_key?("error")
+      error_msg = json["error"].as_s
+      raise AuthenticationError.new("Minecraft profile error: #{error_msg}")
+    end
+
+    # Check if the user owns Minecraft
+    unless json.as_h.has_key?("id")
+      raise AuthenticationError.new("Rate limited? Response: #{json}")
+    end
+
+    unless json.as_h.has_key?("name")
+      raise AuthenticationError.new("Minecraft profile missing username. Response: #{json}")
+    end
+
     @uuid = json["id"].as_s
     @mc_name = json["name"].as_s
 

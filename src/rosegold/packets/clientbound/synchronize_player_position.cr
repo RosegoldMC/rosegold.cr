@@ -2,6 +2,7 @@
 require "../../world/look"
 require "../../world/vec3"
 require "../packet"
+require "../../events/player_position_update"
 
 # relative_flags: x/y/z/yaw/pitch. If a flag is set, its value is relative to the current player position/look.
 class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::Packet
@@ -33,44 +34,47 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
   end
 
   def self.read(packet)
-    if Client.protocol_version >= 769_u32
-      # MC 1.21.6+ format: Teleport ID first, then coordinates, velocities, angles, flags
-      teleport_id = packet.read_var_int
-      x = packet.read_double
-      y = packet.read_double
-      z = packet.read_double
-      velocity_x = packet.read_double
-      velocity_y = packet.read_double
-      velocity_z = packet.read_double
-      yaw = packet.read_float
-      pitch = packet.read_float
-      relative_flags = packet.read_byte
+    # MC 1.21.6+ format: Teleport ID first, then coordinates, velocities, angles, flags
+    teleport_id = packet.read_var_int
+    x = packet.read_double
+    y = packet.read_double
+    z = packet.read_double
+    velocity_x = packet.read_double
+    velocity_y = packet.read_double
+    velocity_z = packet.read_double
+    yaw = packet.read_float
+    pitch = packet.read_float
+    relative_flags = packet.read_byte
 
-      self.new(x, y, z, yaw, pitch, relative_flags, teleport_id, false, velocity_x, velocity_y, velocity_z)
-    else
-      # MC 1.21 format: Original format
-      x = packet.read_double
-      y = packet.read_double
-      z = packet.read_double
-      yaw = packet.read_float
-      pitch = packet.read_float
-      relative_flags = packet.read_byte
-      teleport_id = packet.read_var_int
+    # Read dismount vehicle flag (MC 1.21.6+)
+    dismount_vehicle = packet.read_byte != 0_u8
 
-      self.new(x, y, z, yaw, pitch, relative_flags, teleport_id)
-    end
+    # Read remaining bytes - appears to be 2 additional bytes in MC 1.21.8
+    extra_byte1 = packet.read_byte
+    extra_byte2 = packet.read_byte
+    Log.debug { "SynchronizePlayerPosition extra bytes: #{extra_byte1.to_s(16)} #{extra_byte2.to_s(16)}" }
+
+    self.new(x, y, z, yaw, pitch, relative_flags, teleport_id, dismount_vehicle, velocity_x, velocity_y, velocity_z)
   end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |io|
       io.write self.class.packet_id_for_protocol(Client.protocol_version)
+
+      # MC 1.21.6+ format: Teleport ID first, then coordinates, velocities, angles, flags
+      io.write teleport_id
       io.write x_raw
       io.write y_raw
       io.write z_raw
+      io.write velocity_x
+      io.write velocity_y
+      io.write velocity_z
       io.write yaw_raw
       io.write pitch_raw
       io.write relative_flags
-      io.write teleport_id
+      io.write(dismount_vehicle? ? 1_u8 : 0_u8)
+      io.write 0_u8 # Extra byte 1 (value 0)
+      io.write 0_u8 # Extra byte 2 (value 0)
     end.to_slice
   end
 
@@ -122,14 +126,13 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     player.feet = feet player.feet
     player.look = look player.look
 
-    # Set velocity from packet for MC 1.21.6+, otherwise reset to origin
-    if Client.protocol_version >= 771_u32
-      player.velocity = Vec3d.new(velocity_x, velocity_y, velocity_z)
-    else
-      player.velocity = Vec3d::ORIGIN
-    end
+    # Set velocity from packet for MC 1.21.6+
+    player.velocity = Vec3d.new(velocity_x, velocity_y, velocity_z)
 
     client.queue_packet Serverbound::TeleportConfirm.new teleport_id
+
+    # Emit player position update event
+    client.emit_event Event::PlayerPositionUpdate.new(player.feet, player.look)
 
     Log.debug { "Position synchronized: #{player.feet} #{player.look} flags=#{relative_flags}" }
 

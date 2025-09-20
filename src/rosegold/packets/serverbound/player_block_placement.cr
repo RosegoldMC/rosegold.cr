@@ -50,10 +50,8 @@ class Rosegold::Serverbound::PlayerBlockPlacement < Rosegold::Serverbound::Packe
       buffer.write inside_block?
 
       # MC 1.21+ adds sequence number
-      if Client.protocol_version >= 767_u32
-        buffer.write false # TODO: world border hit, probably false
-        buffer.write sequence
-      end
+      buffer.write false # TODO: world border hit, probably false
+      buffer.write sequence
     end.to_slice
   end
 end

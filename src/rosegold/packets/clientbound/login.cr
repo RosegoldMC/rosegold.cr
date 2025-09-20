@@ -1,7 +1,9 @@
 require "../../../minecraft/nbt"
 require "../packet"
 
-class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
+# Login (play) packet - clientbound/minecraft:login (0x2B)
+# Sent by server after configuration phase to join the game
+class Rosegold::Clientbound::Login < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   # Define protocol-specific packet IDs
@@ -36,10 +38,12 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
 
   def self.read(io)
     entity_id = io.read_int
+
     hardcore = io.read_bool
 
     dim_count = io.read_var_int
-    dimension_names = Array(String).new(dim_count) {
+
+    dimension_names = Array(String).new(dim_count) { |_|
       io.read_var_string
     }
 
@@ -98,7 +102,7 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write entity_id
+      buffer.write_full entity_id
       buffer.write hardcore?
       buffer.write dimension_names.size
       dimension_names.each { |name| buffer.write name }
@@ -117,8 +121,8 @@ class Rosegold::Clientbound::JoinGame < Rosegold::Clientbound::Packet
       buffer.write is_flat?
       buffer.write has_death_location?
       if has_death_location?
-        buffer.write death_dimension_name.not_nil!
-        buffer.write death_location.not_nil!
+        buffer.write death_dimension_name.not_nil! # ameba:disable Lint/NotNil
+        buffer.write death_location.not_nil!       # ameba:disable Lint/NotNil
       end
       buffer.write portal_cooldown
       buffer.write sea_level

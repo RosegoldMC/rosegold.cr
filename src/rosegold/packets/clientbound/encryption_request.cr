@@ -17,20 +17,12 @@ class Rosegold::Clientbound::EncryptionRequest < Rosegold::Clientbound::Packet
   def initialize(@server_id, @public_key, @verify_token, @should_authenticate = false); end
 
   def self.read(packet)
-    if Client.protocol_version >= 767
-      self.new(
-        packet.read_var_string,
-        packet.read_var_string,
-        packet.read_var_bytes,
-        packet.read_bool
-      )
-    else
-      self.new(
-        packet.read_var_string,
-        packet.read_var_string,
-        packet.read_var_bytes
-      )
-    end
+    self.new(
+      packet.read_var_string,
+      packet.read_var_string,
+      packet.read_var_bytes,
+      packet.read_bool
+    )
   end
 
   def callback(client)

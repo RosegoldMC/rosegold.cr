@@ -5,6 +5,23 @@ require "../rosegold/inventory/slot"
 require "../rosegold/world/vec3"
 require "../rosegold/models/text_component"
 
+# Represents a Minecraft protocol angle (0-255 representing 0-360 degrees)
+struct Minecraft::Angle
+  property degrees : Float32
+
+  def initialize(@degrees : Float32 | Float64)
+    @degrees = @degrees.to_f32
+  end
+
+  def to_f32
+    @degrees
+  end
+
+  def to_f64
+    @degrees.to_f64
+  end
+end
+
 module Minecraft::IO
   def write(value : Bool)
     write_byte value ? 1_u8 : 0_u8
@@ -59,8 +76,16 @@ module Minecraft::IO
     slot.write self
   end
 
+  def write(text_component : Rosegold::TextComponent)
+    text_component.write self
+  end
+
   def write_angle256_deg(deg : Float32 | Float64)
     write ((deg * 256 / 360) % 256).to_i8!
+  end
+
+  def write(angle : Minecraft::Angle)
+    write_angle256_deg(angle.degrees)
   end
 
   def write(x : Int32, y : Int32, z : Int32)

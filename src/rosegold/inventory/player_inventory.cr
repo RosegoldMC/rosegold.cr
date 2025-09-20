@@ -1,12 +1,12 @@
 require "./slot"
-require "./item_constants"
+require "./slot_offsets"
 
 # Persistent player inventory that matches vanilla Minecraft's model.
 # This inventory never changes structure (always 36 slots) and persists across container operations.
 class Rosegold::PlayerInventory
-  INVENTORY_SIZE      = ItemConstants::InventorySize::PLAYER_INVENTORY
-  HOTBAR_SIZE         =  9
-  MAIN_INVENTORY_SIZE = 27
+  INVENTORY_SIZE      = SlotOffsets::PLAYER_INVENTORY_SIZE
+  HOTBAR_SIZE         = SlotOffsets::HOTBAR_SIZE
+  MAIN_INVENTORY_SIZE = SlotOffsets::MAIN_INVENTORY_SIZE
 
   # Persistent inventory items - matches vanilla Player.inventory.items
   @items : Array(Rosegold::Slot)
@@ -21,14 +21,14 @@ class Rosegold::PlayerInventory
     @items
   end
 
-  # Hotbar slots (indices 0-8)
-  def hotbar : Array(Rosegold::Slot)
-    @items[0...HOTBAR_SIZE]
-  end
-
-  # Main inventory slots (indices 9-35)
+  # Main inventory slots (indices 9-35) - matches vanilla Player.inventory.items
   def main_inventory : Array(Rosegold::Slot)
     @items[HOTBAR_SIZE...INVENTORY_SIZE]
+  end
+
+  # Hotbar slots (indices 0-8) - matches vanilla Player.inventory.items
+  def hotbar : Array(Rosegold::Slot)
+    @items[0...HOTBAR_SIZE]
   end
 
   # Get slot by index (0-35)

@@ -36,6 +36,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     inventory_menu : InventoryMenu,
     container_menu : ContainerMenu | InventoryMenu,
     chat_manager : ChatManager,
+    player_list : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
     offline : NamedTuple(uuid: String, username: String)? = nil,
     sequence_counter : Int32 = 0,
     pending_block_operations : Hash(Int32, BlockOperation) = Hash(Int32, BlockOperation).new,
@@ -44,7 +45,10 @@ class Rosegold::Client < Rosegold::EventEmitter
     tick_rate : Float32 = 20.0_f32,
     ticking_frozen : Bool = false,
     pending_tick_steps : UInt32 = 0_u32,
-    cookies : Hash(String, Bytes) = Hash(String, Bytes).new
+    cookies : Hash(String, Bytes) = Hash(String, Bytes).new,
+    registries : Hash(String, Clientbound::RegistryData) = Hash(String, Clientbound::RegistryData).new,
+    known_packs : Array(NamedTuple(namespace: String, id: String, version: String)) = [] of NamedTuple(namespace: String, id: String, version: String),
+    tags : Clientbound::UpdateTags? = nil
 
   def protocol_version
     detected_protocol_version || Client.protocol_version
@@ -196,7 +200,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   def join_game(*args, &)
     join_game(*args)
     yield self
-    connection?.try &.disconnect Chat.new "End of script"
+    connection?.try &.disconnect "End of script"
 
     self
   end
@@ -302,7 +306,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     old_connection.try do |conn|
       if conn.open?
         Log.debug { "Disconnecting from current server for transfer" }
-        conn.disconnect(Chat.new("Transferring to #{new_host}:#{new_port}"))
+        conn.disconnect("Transferring to #{new_host}:#{new_port}")
       end
     end
 

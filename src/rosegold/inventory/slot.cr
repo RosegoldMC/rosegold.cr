@@ -161,6 +161,8 @@ abstract class Rosegold::DataComponent
       DataComponents::EntityData.read(io)
     when 63 # minecraft:banner_patterns - Array of banner pattern layers
       DataComponents::BannerPatterns.read(io)
+    when 26 # minecraft:weapon - Weapon damage and blocking disable time
+      DataComponents::Weapon.read(io)
     else
       raise "Unknown data component type: #{component_type}"
     end
@@ -237,8 +239,9 @@ class Rosegold::DataComponents::AttributeModifiers < Rosegold::DataComponent
     property value : Float64
     property operation : UInt32
     property slot : UInt32
+    property display : UInt32
 
-    def initialize(@attribute_id : UInt32, @modifier_id : String, @value : Float64, @operation : UInt32, @slot : UInt32)
+    def initialize(@attribute_id : UInt32, @modifier_id : String, @value : Float64, @operation : UInt32, @slot : UInt32, @display : UInt32 = 0_u32)
     end
   end
 
@@ -248,16 +251,19 @@ class Rosegold::DataComponents::AttributeModifiers < Rosegold::DataComponent
     modifier_count = io.read_var_int
     modifiers = Array(AttributeModifier).new
     modifier_count.times do |_|
+      # Correct field order per decompiled client:
+      # 1. Attribute ID (VarInt registry ID)
       attribute_id = io.read_var_int
+      # 2. Modifier (ResourceLocation + Double + Operation)
       modifier_id = io.read_var_string
       value = io.read_double
       operation = io.read_var_int
+      # 3. Equipment Slot Group (VarInt)
       slot = io.read_var_int
+      # 4. Display (VarInt display type)
+      display = io.read_var_int
 
-      # orphaned random byte causing misalignment, means nothing
-      io.read_byte
-
-      modifiers << AttributeModifier.new(attribute_id, modifier_id, value, operation, slot)
+      modifiers << AttributeModifier.new(attribute_id, modifier_id, value, operation, slot, display)
     end
 
     new(modifiers)
@@ -266,11 +272,13 @@ class Rosegold::DataComponents::AttributeModifiers < Rosegold::DataComponent
   def write(io) : Nil
     io.write modifiers.size
     modifiers.each do |modifier|
+      # Correct field order per decompiled client
       io.write modifier.attribute_id
       io.write modifier.modifier_id
       io.write modifier.value
       io.write modifier.operation
       io.write modifier.slot
+      io.write modifier.display
     end
   end
 end
@@ -325,8 +333,9 @@ class Rosegold::DataComponents::CustomName < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    # Write as simple string NBT for now
-    io.write Minecraft::NBT::StringTag.new(value)
+    # Use TextComponent class for proper NBT serialization
+    text_component = TextComponent.new(value)
+    text_component.write(io)
   end
 end
 
@@ -374,7 +383,9 @@ class Rosegold::DataComponents::ItemName < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write Minecraft::NBT::StringTag.new(value)
+    # Use TextComponent class for proper NBT serialization
+    text_component = TextComponent.new(value)
+    text_component.write(io)
   end
 end
 
@@ -431,7 +442,9 @@ class Rosegold::DataComponents::Lore < Rosegold::DataComponent
   def write(io) : Nil
     io.write lore.size
     lore.each do |text|
-      io.write Minecraft::NBT::StringTag.new(text)
+      # Use TextComponent class for proper NBT serialization
+      text_component = TextComponent.new(text)
+      text_component.write(io)
     end
   end
 end
@@ -466,7 +479,7 @@ end
 
 # Component for tooltip_display (Hide all or parts of the item tooltip)
 class Rosegold::DataComponents::TooltipDisplay < Rosegold::DataComponent
-  property hide_tooltip : Bool
+  property? hide_tooltip : Bool
   property hidden_components : Array(UInt32)
 
   def initialize(@hide_tooltip : Bool, @hidden_components : Array(UInt32) = [] of UInt32); end
@@ -486,7 +499,7 @@ class Rosegold::DataComponents::TooltipDisplay < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write hide_tooltip
+    io.write hide_tooltip?
     io.write hidden_components.size
     hidden_components.each do |component_id|
       io.write component_id
@@ -511,7 +524,7 @@ end
 
 # Component for enchantment_glint_override (Boolean)
 class Rosegold::DataComponents::EnchantmentGlintOverride < Rosegold::DataComponent
-  property has_glint : Bool
+  property? has_glint : Bool
 
   def initialize(@has_glint : Bool); end
 
@@ -520,7 +533,7 @@ class Rosegold::DataComponents::EnchantmentGlintOverride < Rosegold::DataCompone
   end
 
   def write(io) : Nil
-    io.write has_glint
+    io.write has_glint?
   end
 end
 
@@ -690,7 +703,7 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
       property asset_name : String
       property template_item : UInt32
       property description : String
-      property decal : Bool
+      property? decal : Bool
 
       def initialize(@asset_name : String, @template_item : UInt32, @description : String, @decal : Bool)
       end
@@ -709,7 +722,7 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
         io.write asset_name
         io.write template_item
         io.write Minecraft::NBT::StringTag.new(description)
-        io.write decal
+        io.write decal?
       end
     end
   end
@@ -802,9 +815,9 @@ end
 
 # Component for potion contents (visual and effects of a potion item)
 class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
-  property has_potion_id : Bool
+  property? has_potion_id : Bool
   property potion_id : UInt32?
-  property has_custom_color : Bool
+  property? has_custom_color : Bool
   property custom_color : UInt32?
   property custom_effects : Array(PotionEffect)
   property custom_name : String
@@ -832,13 +845,13 @@ class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write has_potion_id
-    if has_potion_id
+    io.write has_potion_id?
+    if has_potion_id?
       io.write potion_id.not_nil! # ameba:disable Lint/NotNil
     end
 
-    io.write has_custom_color
-    if has_custom_color
+    io.write has_custom_color?
+    if has_custom_color?
       io.write_full custom_color.not_nil! # ameba:disable Lint/NotNil
     end
 
@@ -856,10 +869,10 @@ class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
     property type_id : UInt32
     property amplifier : UInt32
     property duration : Int32
-    property ambient : Bool
-    property show_particles : Bool
-    property show_icon : Bool
-    property has_hidden_effect : Bool
+    property? ambient : Bool
+    property? show_particles : Bool
+    property? show_icon : Bool
+    property? has_hidden_effect : Bool
     property hidden_effect : PotionEffect?
 
     def initialize(@type_id, @amplifier, @duration, @ambient = false, @show_particles = true, @show_icon = true, @has_hidden_effect = false, @hidden_effect = nil)
@@ -882,11 +895,11 @@ class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
       io.write type_id
       io.write amplifier
       io.write duration
-      io.write ambient
-      io.write show_particles
-      io.write show_icon
-      io.write has_hidden_effect
-      if has_hidden_effect
+      io.write ambient?
+      io.write show_particles?
+      io.write show_icon?
+      io.write has_hidden_effect?
+      if has_hidden_effect?
         hidden_effect.not_nil!.write(io) # ameba:disable Lint/NotNil
       end
     end
@@ -905,6 +918,25 @@ class Rosegold::DataComponents::DyedColor < Rosegold::DataComponent
 
   def write(io) : Nil
     io.write color
+  end
+end
+
+# Component for weapon (item damage per attack and disable blocking time)
+class Rosegold::DataComponents::Weapon < Rosegold::DataComponent
+  property item_damage_per_attack : UInt32
+  property disable_blocking_for_seconds : Float32
+
+  def initialize(@item_damage_per_attack : UInt32 = 1_u32, @disable_blocking_for_seconds : Float32 = 0.0_f32); end
+
+  def self.read(io) : self
+    item_damage_per_attack = io.read_var_int
+    disable_blocking_for_seconds = io.read_float
+    new(item_damage_per_attack, disable_blocking_for_seconds)
+  end
+
+  def write(io) : Nil
+    io.write item_damage_per_attack
+    io.write disable_blocking_for_seconds
   end
 end
 
@@ -940,7 +972,7 @@ class Rosegold::Slot
     components_to_remove_count = io.read_var_int
     components_to_add = Hash(UInt32, DataComponent).new
 
-    components_to_add_count.times do |i|
+    components_to_add_count.times do |_|
       component_type = io.read_var_int
       structured_component = DataComponent.create_component(component_type, io)
       components_to_add[component_type] = structured_component
@@ -1145,7 +1177,7 @@ end
 
 # Hashed slot format used in ClickContainer packet
 class Rosegold::HashedSlot
-  property has_item : Bool
+  property? has_item : Bool
   property item_id_int : UInt32
   property count : UInt32
   property components_to_add : Hash(UInt32, UInt32) # Component type -> CRC32 hash
@@ -1177,8 +1209,8 @@ class Rosegold::HashedSlot
   end
 
   def write(io)
-    io.write has_item
-    return unless has_item
+    io.write has_item?
+    return unless has_item?
 
     io.write item_id_int
     io.write count
@@ -1198,10 +1230,10 @@ class Rosegold::HashedSlot
   end
 
   def empty?
-    !has_item
+    !has_item?
   end
 
   def present?
-    has_item
+    has_item?
   end
 end

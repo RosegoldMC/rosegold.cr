@@ -29,17 +29,13 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
     username = packet.read_var_string
 
     # For protocol 767+ (MC 1.21+), also read properties array
-    properties = if Client.protocol_version >= 767
-                   Array(Property).new(packet.read_var_int) do
-                     Property.new(
-                       packet.read_var_string,                         # name
-                       packet.read_var_string,                         # value
-                       packet.read_bool ? packet.read_var_string : nil # signature (optional)
-                     )
-                   end
-                 else
-                   [] of Property
-                 end
+    properties = Array(Property).new(packet.read_var_int) do
+      Property.new(
+        packet.read_var_string,                         # name
+        packet.read_var_string,                         # value
+        packet.read_bool ? packet.read_var_string : nil # signature (optional)
+      )
+    end
 
     self.new(uuid, username, properties)
   end
@@ -52,17 +48,15 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
       buffer.write username
 
       # For protocol 767+ (MC 1.21+), also write properties array
-      if Client.protocol_version >= 767
-        buffer.write properties.size
-        properties.each do |prop|
-          buffer.write prop.name
-          buffer.write prop.value
-          if signature = prop.signature
-            buffer.write true
-            buffer.write signature
-          else
-            buffer.write false
-          end
+      buffer.write properties.size
+      properties.each do |prop|
+        buffer.write prop.name
+        buffer.write prop.value
+        if signature = prop.signature
+          buffer.write true
+          buffer.write signature
+        else
+          buffer.write false
         end
       end
     end.to_slice
@@ -70,13 +64,8 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
 
   def callback(client)
     # For protocol 767+ (MC 1.21+), send LoginAcknowledged packet and transition to CONFIGURATION state
-    # For protocol 758 (MC 1.18), go directly to PLAY state
-    if client.protocol_version >= 767
-      client.send_packet! Rosegold::Serverbound::LoginAcknowledged.new
-      client.set_protocol_state(ProtocolState::CONFIGURATION)
-    else
-      client.set_protocol_state(ProtocolState::PLAY)
-    end
+    client.send_packet! Rosegold::Serverbound::LoginAcknowledged.new
+    client.set_protocol_state(ProtocolState::CONFIGURATION)
 
     Log.info { "Logged in as #{username} #{uuid}" }
     client.player.uuid = uuid

@@ -32,7 +32,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.wait_ticks 5
 
         # Record initial position and block states
-        initial_y = bot.feet.y
+        initial_y = bot.location.y
         expected_final_y = initial_y - 3.0 # Should fall through 3 blocks
 
         # Record initial block states
@@ -48,7 +48,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         # Smart wait: wait for bot to reach expected position with timeout
         timeout = 100 # 5 seconds at 20 ticks/second
         ticks_waited = 0
-        until bot.feet.y <= expected_final_y || ticks_waited >= timeout
+        until bot.location.y <= expected_final_y || ticks_waited >= timeout
           bot.wait_tick
           ticks_waited += 1
         end
@@ -56,7 +56,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.stop_digging
 
         # Check that bot moved down significantly (at least 2.5 blocks)
-        expect(bot.feet.y).to be_lt(initial_y - 2.5)
+        expect(bot.location.y).to be_lt(initial_y - 2.5)
 
         # Check that multiple blocks were broken
         broken_blocks = 0
@@ -85,7 +85,7 @@ Spectator.describe "Rosegold::Bot interactions" do
 
         sleep 1.second # long enough to dig 1 block, if it didn't stop
 
-        expect(bot.feet.y).to be >= -56
+        expect(bot.location.y).to be >= -56
       end
     end
   end
@@ -201,7 +201,7 @@ Spectator.describe "Rosegold::Bot interactions" do
 
         bot.inventory.pick! "obsidian"
 
-        starting_y = bot.feet.y
+        starting_y = bot.location.y
         before = client.dimension.block_state(10, -60, 10)
 
         bot.pitch = 90
@@ -212,7 +212,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         end
 
         expect(client.dimension.block_state(10, -60, 10)).to_not eq(before)
-        expect(bot.feet.y).to be > starting_y
+        expect(bot.location.y).to be > starting_y
       end
     end
   end

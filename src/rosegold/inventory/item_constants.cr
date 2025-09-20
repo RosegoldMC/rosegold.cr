@@ -32,37 +32,6 @@ module Rosegold::ItemConstants
     }
   end
 
-  # Player inventory slot indices
-  module PlayerSlots
-    # Player inventory menu layout (46 slots total)
-    CRAFTING_RESULT =  0
-    CRAFTING_START  =  1
-    CRAFTING_END    =  4
-    ARMOR_START     =  5
-    ARMOR_END       =  8
-    MAIN_START      =  9
-    MAIN_END        = 35
-    HOTBAR_START    = 36
-    HOTBAR_END      = 44
-    OFF_HAND        = 45
-
-    # Specific armor slots
-    HELMET_SLOT     = 5
-    CHESTPLATE_SLOT = 6
-    LEGGINGS_SLOT   = 7
-    BOOTS_SLOT      = 8
-
-    TOTAL_SLOTS = 46
-  end
-
-  # Standard inventory sizes
-  module InventorySize
-    PLAYER_INVENTORY = 36 # Main inventory (27) + hotbar (9)
-    CRAFTING_GRID    =  4 # 2x2 crafting
-    ARMOR_SLOTS      =  4 # Helmet, chestplate, leggings, boots
-    MAX_STACK_SIZE   = 64
-  end
-
   # Quickcraft types
   module Quickcraft
     CHARITABLE = 0 # Distribute evenly
