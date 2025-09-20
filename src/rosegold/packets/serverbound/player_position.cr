@@ -46,16 +46,11 @@ class Rosegold::Serverbound::PlayerPosition < Rosegold::Serverbound::Packet
       buffer.write y
       buffer.write z
 
-      if Client.protocol_version >= 769_u32
-        # MC 1.21.4+ format: Use bit field (0x01: on ground, 0x02: pushing against wall)
-        flags = 0_u8
-        flags |= 0x01_u8 if on_ground?
-        flags |= 0x02_u8 if pushing_against_wall?
-        buffer.write flags
-      else
-        # Older formats: Just boolean on_ground
-        buffer.write on_ground?
-      end
+      # MC 1.21.4+ format: Use bit field (0x01: on ground, 0x02: pushing against wall)
+      flags = 0_u8
+      flags |= 0x01_u8 if on_ground?
+      flags |= 0x02_u8 if pushing_against_wall?
+      buffer.write flags
     end.to_slice
   end
 end

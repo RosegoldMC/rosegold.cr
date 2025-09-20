@@ -24,12 +24,12 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write window_id
-      buffer.write state_id
+      buffer.write window_id.to_u32 # VarInt encoding
+      buffer.write state_id.to_u32  # VarInt encoding
       buffer.write_full slot_number
       buffer.write button
-      buffer.write mode.value
-      buffer.write changed_slots.size
+      buffer.write mode.value.to_u32         # VarInt encoding
+      buffer.write changed_slots.size.to_u32 # VarInt encoding
       changed_slots.each do |slot|
         buffer.write_full slot.slot_number.to_i16
         # Use hashed slot format for 1.21.8

@@ -59,9 +59,6 @@ class Rosegold::PalettedContainer
     if bits_per_entry == 0
       io.write palette[0]
       # As of MC 1.21.5, array length is not sent (calculated)
-      unless Client.protocol_version >= 772_u32
-        io.write 0_i32
-      end
       return
     end
     unless palette.empty?
@@ -69,9 +66,6 @@ class Rosegold::PalettedContainer
       palette.each { |id| io.write id }
     end
     # As of MC 1.21.5, array length is not sent (calculated)
-    unless Client.protocol_version >= 772_u32
-      io.write long_array.size
-    end
     long_array.each { |id| io.write_full id }
   end
 

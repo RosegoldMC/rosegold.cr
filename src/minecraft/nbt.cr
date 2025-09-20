@@ -56,7 +56,7 @@ module Minecraft::NBT
 
     def as_i8 : Int8
       raise "Wrong type #{self}" unless self.is_a? ByteTag
-      self.value
+      self.value.to_i8!
     end
 
     def as_i16 : Int16
@@ -489,36 +489,36 @@ module Minecraft::NBT
       12_u8
     end
 
-    getter values : Array(Int64)
+    getter value : Array(Int64)
 
-    def initialize(@values : Array(Int64))
+    def initialize(@value : Array(Int64))
     end
 
     def self.read(io : IO) : LongArrayTag
       length = io.read_int
-      values = Array(Int64).new(length)
+      value = Array(Int64).new(length)
 
       length.times do
-        values << io.read_long
+        value << io.read_long
       end
 
-      new(values)
+      new(value)
     end
 
     def write(io : IO)
-      io.write_full values.size.to_i32
+      io.write_full value.size.to_i32
 
-      values.each do |val|
+      value.each do |val|
         io.write_full val
       end
     end
 
     def inspect(io)
-      io << "NBT[#{values.inspect} : LongArray]"
+      io << "NBT[#{value.inspect} : LongArray]"
     end
 
     def ==(other)
-      other.is_a?(LongArrayTag) && self.values == other.values
+      other.is_a?(LongArrayTag) && self.value == other.value
     end
   end
 end

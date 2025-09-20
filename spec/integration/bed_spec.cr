@@ -40,7 +40,7 @@ Spectator.describe "Rosegold::Bot bed interactions" do
         bot.wait_ticks 3
 
         # Position should be valid after leaving bed
-        final_position = bot.feet
+        final_position = bot.location
 
         # Bot should still be functional after bed interaction
         expect(client.connected?).to be_true
@@ -111,7 +111,7 @@ Spectator.describe "Rosegold::Bot bed interactions" do
 
         # Verify bot is still functional
         expect(client.connected?).to be_true
-        final_position = bot.feet
+        final_position = bot.location
         expect(final_position).to be_a(Rosegold::Vec3d)
       end
     end

@@ -282,6 +282,119 @@ Spectator.describe "Rosegold::Bot inventory" do
         end
       end
     end
+
+    it "withdraws exact amounts of stackable items" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          # Teleport to known location and clear area
+          bot.chat "/tp 30 -60 30"
+          bot.wait_tick
+          bot.chat "/fill 29 -62 29 31 -58 31 minecraft:air"
+          bot.wait_tick
+
+          # Create chest with exactly 20 stacks of cobblestone (20 * 64 = 1280 items)
+          items_array = (0..19).map { |i| "{Slot:#{i},id:cobblestone,count:64}" }
+          bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[#{items_array.join(",")}]} replace"
+          bot.wait_tick
+          bot.chat "/clear"
+          bot.wait_for Rosegold::Clientbound::SetSlot
+
+          # Open the chest
+          bot.pitch = 90
+          bot.use_hand
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
+          bot.wait_tick
+
+          # Verify chest has exactly 1280 cobblestone (20 stacks)
+          initial_chest_count = bot.inventory.count("cobblestone", bot.inventory.content)
+          expect(initial_chest_count).to eq 1280
+
+          # Try to withdraw exactly 20 stacks (1280 items)
+          result = bot.inventory.withdraw_at_least(1280, "cobblestone")
+
+          # Should withdraw exactly 1280 items
+          expect(result).to eq 1280
+
+          # Verify player now has exactly 1280 cobblestone
+          final_player_count = bot.inventory.count("cobblestone", bot.inventory.inventory + bot.inventory.hotbar)
+          expect(final_player_count).to eq 1280
+
+          # Verify chest is now empty
+          final_chest_count = bot.inventory.count("cobblestone", bot.inventory.content)
+          expect(final_chest_count).to eq 0
+        end
+      end
+    end
+
+    it "deposits exact amounts of stackable items" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          # Teleport to known location and clear area
+          bot.chat "/tp 30 -60 30"
+          bot.wait_tick
+          bot.chat "/fill 29 -62 29 31 -58 31 minecraft:air"
+          bot.wait_tick
+
+          # Create empty chest
+          bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[]} replace"
+          bot.wait_tick
+          bot.chat "/clear"
+          bot.wait_for Rosegold::Clientbound::SetSlot
+
+          # Give player exactly 20 stacks of cobblestone (1280 items)
+          bot.chat "/give #{bot.username} minecraft:cobblestone 1280"
+          bot.wait_for Rosegold::Clientbound::SetSlot
+
+          # Open the chest
+          bot.pitch = 90
+          bot.use_hand
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
+          bot.wait_tick
+
+          # Verify player has exactly 1280 cobblestone
+          initial_player_count = bot.inventory.count("cobblestone", bot.inventory.inventory + bot.inventory.hotbar)
+          expect(initial_player_count).to eq 1280
+
+          # Try to deposit exactly 20 stacks (1280 items)
+          result = bot.inventory.deposit_at_least(1280, "cobblestone")
+
+          # Should deposit exactly 1280 items
+          expect(result).to eq 1280
+
+          # Verify player now has 0 cobblestone
+          final_player_count = bot.inventory.count("cobblestone", bot.inventory.inventory + bot.inventory.hotbar)
+          expect(final_player_count).to eq 0
+
+          # Verify chest now has exactly 1280 cobblestone
+          final_chest_count = bot.inventory.count("cobblestone", bot.inventory.content)
+          expect(final_chest_count).to eq 1280
+
+          # Close the chest before relogging
+          bot.inventory.close
+          bot.wait_tick
+        end
+      end
+
+      # Relog and verify the numbers persist
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          # Player should still have 0 cobblestone after relog
+          player_count_after_relog = bot.inventory.count("cobblestone", bot.inventory.inventory + bot.inventory.hotbar)
+          expect(player_count_after_relog).to eq 0
+
+          # Reopen the chest and verify it still has 1280 cobblestone
+          bot.chat "/tp 30 -60 30"
+          bot.wait_tick
+          bot.pitch = 90
+          bot.use_hand
+          bot.wait_for Rosegold::Clientbound::SetContainerContent
+          bot.wait_tick
+
+          chest_count_after_relog = bot.inventory.count("cobblestone", bot.inventory.content)
+          expect(chest_count_after_relog).to eq 1280
+        end
+      end
+    end
   end
 
   describe "#deposit_at_least" do
@@ -453,6 +566,138 @@ Spectator.describe "Rosegold::Bot inventory" do
 
           # Close container
           bot.inventory.close
+        end
+      end
+    end
+
+    context "when chest is completely full" do
+      it "handles depositing into full chest without infinite loop" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            # Teleport to known location and clear area
+            bot.chat "/tp 30 -60 30"
+            bot.wait_tick
+            bot.chat "/fill 29 -62 29 31 -58 31 minecraft:air"
+            bot.wait_tick
+
+            # Create a completely full chest using the correct NBT format
+            items_array = (0..26).map { |i| "{Slot:#{i},id:cobblestone,count:64}" }.join(",")
+            bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[#{items_array}]} replace"
+            bot.wait_tick
+            bot.chat "/clear"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            # Give player diamond swords to try to deposit into the full chest
+            bot.chat "/give #{bot.username} minecraft:diamond_sword 3"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            # Open the chest
+            bot.pitch = 90
+            bot.use_hand
+            bot.wait_for Rosegold::Clientbound::SetContainerContent
+            bot.wait_tick
+
+            # Verify chest is completely full (all 27 slots should be filled with cobblestone)
+            expect(bot.inventory.content.size).to eq 27
+            empty_slots = bot.inventory.content.count(&.empty?)
+            expect(empty_slots).to eq 0 # Should have no empty slots
+
+            # Verify player has diamond swords to deposit
+            expect(bot.inventory.count("diamond_sword")).to eq 3
+
+            # Try to deposit diamond swords into the full chest - should return 0 without hanging
+            start_time = Time.utc
+            result = bot.inventory.deposit_at_least(3, "diamond_sword")
+            end_time = Time.utc
+
+            # Should complete quickly (within 5 seconds) and not deposit anything
+            expect(end_time - start_time).to be < 5.seconds
+            expect(result).to eq 0
+
+            # Player should still have all diamond swords since chest is full
+            expect(bot.inventory.count("diamond_sword")).to eq 3
+
+            # Chest should still be completely full (no empty slots)
+            expect(bot.inventory.content.count(&.empty?)).to eq 0
+          end
+        end
+      end
+    end
+
+    context "when chest has partial room for items" do
+      it "handles depositing when chest has limited space without infinite loop" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            # Teleport to known location and clear area
+            bot.chat "/tp 30 -60 30"
+            bot.wait_tick
+            bot.chat "/fill 29 -62 29 31 -58 31 minecraft:air"
+            bot.wait_tick
+
+            # Create a chest with one slot partially filled (50/64 cobblestone)
+            # and give the rest of the chest filled with other items
+            items_array = ["{Slot:0,id:cobblestone,count:50}"] +
+                          (1..26).map { |i| "{Slot:#{i},id:diamond_sword,count:1}" }
+            bot.chat "/setblock 30 -61 30 minecraft:chest{Items:[#{items_array.join(",")}]} replace"
+            bot.wait_tick
+            bot.chat "/clear"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            # Give player diamond swords and cobblestone to deposit
+            bot.chat "/give #{bot.username} minecraft:diamond_sword 10"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+            bot.chat "/give #{bot.username} minecraft:cobblestone 64"
+            bot.wait_for Rosegold::Clientbound::SetSlot
+
+            # Open the chest
+            bot.pitch = 90
+            bot.use_hand
+            bot.wait_for Rosegold::Clientbound::SetContainerContent
+            bot.wait_tick
+
+            # Verify chest setup: slot 0 has 50 cobblestone, others full with diamond swords
+            cobblestone_slot = bot.inventory.content.find { |slot| slot.name == "cobblestone" }
+            expect(cobblestone_slot).not_to be_nil
+            if slot = cobblestone_slot
+              expect(slot.count).to eq 50
+            end
+
+            # Verify player has the items
+            initial_player_diamond_swords = bot.inventory.count("diamond_sword")
+            initial_player_cobblestone = bot.inventory.count("cobblestone")
+            expect(initial_player_diamond_swords).to eq 10
+            expect(initial_player_cobblestone).to eq 64
+
+            # First: Try to deposit diamond swords (should fail - no space)
+            start_time = Time.utc
+            diamond_result = bot.inventory.deposit_at_least(5, "diamond_sword")
+            end_time = Time.utc
+
+            # Should complete quickly and deposit 0 (no room for diamond swords)
+            expect(end_time - start_time).to be < 5.seconds
+            expect(diamond_result).to eq 0
+
+            # Second: Try to deposit cobblestone (should deposit 14 items to fill the partial stack)
+            start_time = Time.utc
+            cobble_result = bot.inventory.deposit_at_least(64, "cobblestone")
+            end_time = Time.utc
+
+            # Should complete quickly and deposit only what fits (14 items)
+            expect(end_time - start_time).to be < 5.seconds
+            expect(cobble_result).to eq 14 # Only 14 can fit to complete the stack
+
+            # Verify final state
+            final_player_diamond_swords = bot.inventory.count("diamond_sword")
+            final_player_cobblestone = bot.inventory.count("cobblestone")
+            expect(final_player_diamond_swords).to eq 10 # No diamond swords deposited
+            expect(final_player_cobblestone).to eq 50    # 64 - 14 = 50 remaining
+
+            # Chest cobblestone slot should now be full (64)
+            updated_cobblestone_slot = bot.inventory.content.find { |inventory_slot| inventory_slot.name == "cobblestone" }
+            if slot = updated_cobblestone_slot
+              expect(slot.count).to eq 64
+            end
+          end
         end
       end
     end

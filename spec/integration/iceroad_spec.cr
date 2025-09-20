@@ -20,7 +20,7 @@ Spectator.describe "Rosegold::Bot ice road physics" do
 
         bot.eat!
 
-        initial_position = bot.feet
+        initial_position = bot.location
 
         measurement_start = 15.0
         measurement_end = 25.0
@@ -34,7 +34,7 @@ Spectator.describe "Rosegold::Bot ice road physics" do
 
         until move_done
           bot.wait_ticks 1
-          current_z = bot.feet.z
+          current_z = bot.location.z
 
           if start_time.nil? && current_z >= measurement_start
             start_time = Time.utc
@@ -65,10 +65,10 @@ Spectator.describe "Rosegold::Bot ice road physics" do
         end
 
         average_speed ||= 0.0
-        distance_traveled = bot.feet.z - initial_position.z
+        distance_traveled = bot.location.z - initial_position.z
 
-        expect(bot.feet.x).to be_close(start_pos.x, 1.0)
-        expect(bot.feet.z).to be >= 25.0
+        expect(bot.location.x).to be_close(start_pos.x, 1.0)
+        expect(bot.location.z).to be >= 25.0
         expect(average_speed).to be >= 15.0
         expect(average_speed).to be <= 27.0
 

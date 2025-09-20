@@ -7,14 +7,9 @@ Spectator.describe Rosegold::Serverbound::LoginAcknowledged do
       expect(Rosegold::Serverbound::LoginAcknowledged[772_u32]).to eq(0x03_u8)
     end
 
-    it "does not support protocol 758 (MC 1.18)" do
-      expect(Rosegold::Serverbound::LoginAcknowledged.supports_protocol?(758_u32)).to be_false
-    end
-
     it "returns correct supported protocols" do
       supported = Rosegold::Serverbound::LoginAcknowledged.supported_protocols
       expect(supported).to contain(772_u32)
-      expect(supported).not_to contain(758_u32)
     end
   end
 

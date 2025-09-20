@@ -5,7 +5,7 @@ class Rosegold::Clientbound::UpdateTags < Rosegold::Clientbound::Packet
 
   # Define protocol-specific packet IDs for UpdateTags
   packet_ids({
-    772_u32 => 0x08_u8, # MC 1.21.8,
+    772_u32 => 0x0D_u8, # MC 1.21.8,
   })
 
   class_getter state = ProtocolState::CONFIGURATION
@@ -18,7 +18,6 @@ class Rosegold::Clientbound::UpdateTags < Rosegold::Clientbound::Packet
   end
 
   def self.read(packet)
-    # Read tag types array
     type_count = packet.read_var_int
     tag_types = Array(TagType).new(type_count) do
       type_name = packet.read_var_string
@@ -28,7 +27,6 @@ class Rosegold::Clientbound::UpdateTags < Rosegold::Clientbound::Packet
       tags = Array(NamedTuple(name: String, entries: Array(UInt32))).new(tag_count) do
         tag_name = packet.read_var_string
 
-        # Read entries for this tag
         entry_count = packet.read_var_int
         entries = Array(UInt32).new(entry_count) do
           packet.read_var_int
@@ -63,5 +61,9 @@ class Rosegold::Clientbound::UpdateTags < Rosegold::Clientbound::Packet
 
   def callback(client)
     Log.debug { "Received tag updates for #{tag_types.size} tag types" }
+
+    # Store the tags in the client for later use
+    client.tags = self
+    Log.trace { "Stored #{tag_types.size} tag types in client" }
   end
 end

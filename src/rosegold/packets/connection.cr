@@ -3,11 +3,12 @@ require "../../minecraft/io"
 require "./packet"
 require "./clientbound/*"
 require "./serverbound/*"
+require "../models/text_component"
 
 abstract class Rosegold::Event; end # defined elsewhere, but otherwise it would be a module
 
 class Rosegold::Event::Disconnected < Rosegold::Event
-  getter reason : Chat
+  getter reason : TextComponent
 
   def initialize(@reason); end
 end
@@ -26,7 +27,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   property handler : Rosegold::EventEmitter?
 
   property compression_threshold : UInt32 = 0
-  property close_reason : Chat?
+  property close_reason : TextComponent?
   private getter read_mutex : Mutex = Mutex.new
   private getter write_mutex : Mutex = Mutex.new
 
@@ -52,11 +53,12 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     !!close_reason
   end
 
-  def disconnect(reason : Chat)
-    Log.info { "Disconnected: #{reason}" }
-    @close_reason = reason
+  def disconnect(reason : String)
+    text_component = TextComponent.new(reason)
+    Log.info { "Disconnected: #{text_component}" }
+    @close_reason = text_component
     io.close
-    handler.try &.emit_event Event::Disconnected.new reason
+    handler.try &.emit_event Event::Disconnected.new text_component
   end
 
   private def compress?
@@ -90,7 +92,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     end
     packet_bytes
   rescue e
-    disconnect Chat.new "IO Error: #{e.message}"
+    disconnect "IO Error: #{e.message}"
     raise_without_backtrace e
   end
 
@@ -197,7 +199,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
       end
     end
   rescue e
-    disconnect Chat.new "IO Error: #{e.message}"
+    disconnect "IO Error: #{e.message}"
     raise_without_backtrace e
   end
 end

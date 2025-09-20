@@ -554,6 +554,8 @@ class Rosegold::Physics
     @last_sent_feet = feet
     @last_sent_look = look
     @last_sent_on_ground = on_ground
+
+    client.emit_event Event::PlayerPositionUpdate.new(feet, look)
   end
 
   # Applies collision handling including stepping.

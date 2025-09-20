@@ -56,6 +56,11 @@ class Rosegold::Dimension
     @chunks[chunk_pos] = chunk
   end
 
+  def chunk_at?(x : Int32, z : Int32) : Chunk?
+    chunk_pos = {x, z}
+    @chunks[chunk_pos]?
+  end
+
   def unload_chunk(chunk_pos : ChunkPos)
     @chunks.delete chunk_pos
   end

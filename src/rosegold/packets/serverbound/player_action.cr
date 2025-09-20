@@ -33,9 +33,7 @@ class Rosegold::Serverbound::PlayerAction < Rosegold::Serverbound::Packet
       buffer.write face.value
 
       # MC 1.21+ adds sequence number
-      if Client.protocol_version >= 767_u32
-        buffer.write sequence
-      end
+      buffer.write sequence
     end.to_slice
   end
 end

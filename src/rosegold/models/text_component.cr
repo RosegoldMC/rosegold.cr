@@ -33,6 +33,8 @@ class Rosegold::TextComponent
   # Interactive fields
   property insertion : String?
   property click_event : ClickEventComponent?
+
+  @[JSON::Field(ignore: true)]
   property hover_event : HoverEventComponent?
 
   # Child components
@@ -322,6 +324,13 @@ class Rosegold::TextComponent
     compound
   end
 
+  def write(io : Minecraft::IO) : Nil
+    # Write NBT tag type followed by tag content (unnamed NBT)
+    nbt = to_nbt
+    io.write_byte nbt.tag_type
+    nbt.write(io)
+  end
+
   private def simple_text_component? : Bool
     # Check if this is just a simple text component with no formatting or extras
     return false unless text
@@ -354,12 +363,35 @@ class Rosegold::TextComponent
   end
 
   class HoverEventComponent
-    include JSON::Serializable
-
     property action : String
     property contents : Minecraft::NBT::Tag
 
     def initialize(@action : String, @contents : Minecraft::NBT::Tag)
+    end
+
+    def to_json(builder : JSON::Builder)
+      builder.object do
+        builder.field "action", @action
+        builder.field "contents", @contents.to_s
+      end
+    end
+
+    def self.from_json(json : JSON::PullParser)
+      action = ""
+      contents = Minecraft::NBT::StringTag.new("")
+
+      json.read_object do |key|
+        case key
+        when "action"
+          action = json.read_string
+        when "contents"
+          contents = Minecraft::NBT::StringTag.new(json.read_string)
+        else
+          json.skip
+        end
+      end
+
+      new(action, contents)
     end
   end
 end

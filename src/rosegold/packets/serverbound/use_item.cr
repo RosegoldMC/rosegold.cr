@@ -17,11 +17,9 @@ class Rosegold::Serverbound::UseItem < Rosegold::Serverbound::Packet
       buffer.write hand.value
 
       # MC 1.21+ adds sequence number, yaw, and pitch
-      if Client.protocol_version >= 767_u32
-        buffer.write sequence
-        buffer.write yaw
-        buffer.write pitch
-      end
+      buffer.write sequence
+      buffer.write yaw
+      buffer.write pitch
     end.to_slice
   end
 end

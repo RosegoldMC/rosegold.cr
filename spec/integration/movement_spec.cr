@@ -20,7 +20,7 @@ Spectator.describe "Rosegold::Bot movement" do
         until client.player.on_ground?
           bot.wait_tick
         end
-        expect(bot.feet).to eq(Rosegold::Vec3d.new(1.5, -60, 1.5))
+        expect(bot.location).to eq(Rosegold::Vec3d.new(1.5, -60, 1.5))
       end
     end
   end
@@ -32,10 +32,10 @@ Spectator.describe "Rosegold::Bot movement" do
         bot.wait_tick
 
         bot.move_to 2, 2
-        expect(bot.feet).to eq(Rosegold::Vec3d.new(2.5, -60, 2.5))
+        expect(bot.location).to eq(Rosegold::Vec3d.new(2.5, -60, 2.5))
 
         bot.move_to -1, -1
-        expect(bot.feet).to eq(Rosegold::Vec3d.new(-0.5, -60, -0.5))
+        expect(bot.location).to eq(Rosegold::Vec3d.new(-0.5, -60, -0.5))
       end
     end
   end
@@ -76,18 +76,18 @@ Spectator.describe "Rosegold::Bot movement" do
         bot.chat "/tp 1 -60 1"
         bot.wait_tick
 
-        initial_feet = bot.feet
+        initial_feet = bot.location
 
         bot.start_jump
         sleep 0.5.seconds # allow time for the jump
 
-        expect(bot.feet.y).to be > initial_feet.y
+        expect(bot.location.y).to be > initial_feet.y
 
         until client.player.on_ground?
           bot.wait_tick
         end
 
-        expect(bot.feet.y).to be_close(initial_feet.y, 0.1)
+        expect(bot.location.y).to be_close(initial_feet.y, 0.1)
       end
     end
   end

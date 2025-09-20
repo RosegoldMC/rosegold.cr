@@ -45,6 +45,10 @@ class Rosegold::Clientbound::KnownPacks < Rosegold::Clientbound::Packet
   def callback(client)
     Log.debug { "Received known packs from server: #{known_packs.size} packs" }
 
+    # Store the known packs in the client for later use
+    client.known_packs = known_packs.dup
+    Log.trace { "Stored #{known_packs.size} known packs in client" }
+
     # Respond with our known packs (for now, we acknowledge all server packs)
     response = Rosegold::Serverbound::KnownPacks.new(known_packs)
     client.send_packet! response

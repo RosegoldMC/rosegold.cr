@@ -25,12 +25,18 @@ class Rosegold::Player
     saturation : Float32 = 0,
     hotbar_selection : UInt32 = 0,
     gamemode : Int8 = 0,
-    effects : Array(EntityEffect) = [] of EntityEffect
+    effects : Array(EntityEffect) = [] of EntityEffect,
+    flying_speed : Float32 = 0.05_f32,
+    field_of_view_modifier : Float32 = 0.1_f32
   property? \
     on_ground : Bool = false,
     sneaking : Bool = false,
     sprinting : Bool = false,
-    in_water : Bool = false
+    in_water : Bool = false,
+    invulnerable : Bool = false,
+    flying : Bool = false,
+    allow_flying : Bool = false,
+    creative_mode : Bool = false
 
   def feet
     @mutex.synchronize { @feet }

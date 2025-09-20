@@ -88,19 +88,27 @@ module Rosegold::InventoryOperations
   # Vanilla's moveItemStackTo equivalent - exact implementation from AbstractContainerMenu.java
   def move_item_stack_to(source_index : Int32, target_start : Int32, target_end : Int32, reverse : Bool = false) : Bool
     source_slot = self[source_index]
-    return false if source_slot.empty?
+
+    if source_slot.empty?
+      return false
+    end
 
     moved_any = false
 
     # Phase 1: Try to merge with existing stacks (if stackable)
-    if source_slot.count > 1 || get_max_stack_size(source_slot) > 1
+    max_source_stack = get_max_stack_size(source_slot)
+
+    if source_slot.count > 1 || max_source_stack > 1
       if reverse
         index = target_end - 1
         while index >= target_start && source_slot.count > 0
           target_slot = self[index]
+
           if !target_slot.empty? && same_item_same_components?(source_slot, target_slot)
             max_stack = get_max_stack_size(target_slot)
-            transfer_amount = [source_slot.count.to_i, max_stack - target_slot.count.to_i].min
+            available_space = max_stack - target_slot.count.to_i
+            transfer_amount = [source_slot.count.to_i, available_space].min
+
             if transfer_amount > 0
               target_slot.count += transfer_amount.to_u32
               source_slot.count -= transfer_amount.to_u32
@@ -113,9 +121,12 @@ module Rosegold::InventoryOperations
         index = target_start
         while index < target_end && source_slot.count > 0
           target_slot = self[index]
+
           if !target_slot.empty? && same_item_same_components?(source_slot, target_slot)
             max_stack = get_max_stack_size(target_slot)
-            transfer_amount = [source_slot.count.to_i, max_stack - target_slot.count.to_i].min
+            available_space = max_stack - target_slot.count.to_i
+            transfer_amount = [source_slot.count.to_i, available_space].min
+
             if transfer_amount > 0
               target_slot.count += transfer_amount.to_u32
               source_slot.count -= transfer_amount.to_u32
@@ -131,8 +142,8 @@ module Rosegold::InventoryOperations
     if source_slot.count > 0
       if reverse
         index = target_end - 1
-        while index >= target_start
-          if self[index].empty?
+        while index >= target_start && source_slot.count > 0
+          if self[index].empty? && may_place?(index, source_slot)
             self[index] = copy_slot(source_slot)
             source_slot.count = 0_u32
             moved_any = true
@@ -142,8 +153,8 @@ module Rosegold::InventoryOperations
         end
       else
         index = target_start
-        while index < target_end
-          if self[index].empty?
+        while index < target_end && source_slot.count > 0
+          if self[index].empty? && may_place?(index, source_slot)
             self[index] = copy_slot(source_slot)
             source_slot.count = 0_u32
             moved_any = true
@@ -253,11 +264,10 @@ module Rosegold::InventoryOperations
         perform_hotbar_swap(slot_index, button)
       when :drop
         perform_drop_operation(slot_index, button)
-        # Other operations can be added as needed
       end
     end
 
-    # VANILLA PATTERN: Compare before/after to detect actual changes
+    # VANILLA PATTERN: Compare before/after to detect changes
     changed_slots = [] of Rosegold::WindowSlot
     total_slots.times do |i|
       before_slot = before_slots[i]
@@ -270,12 +280,8 @@ module Rosegold::InventoryOperations
     # Always send current cursor state (vanilla behavior)
     cursor_slot = @cursor
 
-    # Increment state ID for all operations (matching vanilla)
-    increment_state_id
-
-    Log.debug { "Click #{click_type}: changed #{changed_slots.size} slots, new state_id: #{@state_id}" }
-
-    packet = Serverbound::ClickWindow.new(mode, button.to_i8, slot_index.to_i16, changed_slots, menu_id, @state_id.to_i32, cursor_slot)
+    # Increment state ID and use incremented value in packet (matching vanilla)
+    packet = Serverbound::ClickWindow.new(mode, button.to_i8, slot_index.to_i16, changed_slots, menu_id, increment_state_id.to_i32, cursor_slot)
     @client.send_packet!(packet)
   end
 
@@ -389,6 +395,7 @@ module Rosegold::InventoryOperations
         self[index] = slot
       end
     end
+
     @cursor = cursor
 
     # Update remote slots to match what server sent (vanilla behavior)
@@ -402,7 +409,6 @@ module Rosegold::InventoryOperations
 
   # Update single slot (vanilla behavior - no validation)
   def update_slot(index : Int32, slot : Rosegold::Slot, packet_state_id : UInt32)
-    # Follow vanilla behavior: simply accept the server's state ID without validation
     @state_id = packet_state_id
 
     if index >= 0 && index < total_slots
@@ -508,7 +514,7 @@ module Rosegold::InventoryOperations
 
     # Perform local swap using abstracted hotbar calculation
     hotbar_slot_index = hotbar_slot_index(hotbar_nr.to_i32)
-    if hotbar_slot_index < total_slots
+    if hotbar_slot_index >= 0 && hotbar_slot_index < total_slots
       current_slot = self[slot_number]
       hotbar_slot = self[hotbar_slot_index]
       self[slot_number] = hotbar_slot
@@ -525,17 +531,17 @@ module Rosegold::InventoryOperations
       end
     end
 
-    # Increment state ID and send packet with actual changes
-    increment_state_id
+    # Increment state ID and use incremented value in packet (matching vanilla)
     packet = Serverbound::ClickWindow.new(
       Serverbound::ClickWindow::Mode::Swap,
       hotbar_nr.to_i8,
       slot_number.to_i16,
       changed_slots,
       menu_id,
-      @state_id.to_i32,
+      increment_state_id.to_i32,
       @cursor
     )
+
     @client.send_packet!(packet)
   end
 

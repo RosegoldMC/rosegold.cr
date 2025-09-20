@@ -5,24 +5,28 @@ class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
 
   # Define protocol-specific packet IDs for RegistryData
   packet_ids({
-    772_u32 => 0x05_u8, # MC 1.21.8,
+    772_u32 => 0x07_u8, # MC 1.21.8,
   })
 
   class_getter state = ProtocolState::CONFIGURATION
 
+  # Type alias for registry entries
+  alias RegistryEntry = NamedTuple(id: String, data: Slice(UInt8) | Nil)
+
   property \
     registry_id : String,
-    entries : Array(NamedTuple(id: String, data: Bytes?))
+    entries : Array(RegistryEntry)
 
-  def initialize(@registry_id, @entries = [] of NamedTuple(id: String, data: Bytes?))
+  def initialize(@registry_id : String, @entries : Array(RegistryEntry) = [] of RegistryEntry)
   end
 
   def self.read(packet)
     registry_id = packet.read_var_string
+    Log.warn { "registry_id => #{registry_id}" }
 
     # Read entries array
     entry_count = packet.read_var_int
-    entries = Array(NamedTuple(id: String, data: Bytes?)).new(entry_count) do
+    entries = Array(RegistryEntry).new(entry_count) do
       entry_id = packet.read_var_string
       has_data = packet.read_bool
       data = has_data ? packet.read_var_bytes : nil
@@ -50,6 +54,7 @@ class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    Log.debug { "Received registry data for #{registry_id} with #{entries.size} entries" }
+    client.registries[registry_id] = self
+    Log.trace { "Stored registry #{registry_id} in client registries" }
   end
 end

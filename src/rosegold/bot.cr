@@ -38,7 +38,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory
   delegate stop_using_hand, stop_digging, to: client.interactions
-  delegate x, y, z, to: feet
+  delegate x, y, z, to: location
 
   def location
     client.player.feet
@@ -143,7 +143,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Waits for arrival.
   # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
   def move_to(x : Float, z : Float, stuck_timeout_ticks : Int32 = 60)
-    client.physics.move Vec3d.new(x, feet.y, z), stuck_timeout_ticks
+    client.physics.move Vec3d.new(x, location.y, z), stuck_timeout_ticks
   end
 
   def move_to(x : Int, z : Int, stuck_timeout_ticks : Int32 = 60)
@@ -257,6 +257,24 @@ class Rosegold::Bot < Rosegold::EventEmitter
     stop_using_hand
   end
 
+  # Opens a container (chest, barrel, etc.) and yields control for interaction.
+  # Automatically uses the main hand, waits for container content to load,
+  # executes the provided block, then closes the container.
+  #
+  # ```
+  # bot.open_container do
+  #   bot.inventory.deposit_at_least(10, "diamond")
+  #   bot.inventory.withdraw_at_least(5, "emerald")
+  # end
+  # ```
+  def open_container(timeout : Time::Span = 5.seconds, &)
+    use_hand
+    wait_for Rosegold::Clientbound::SetContainerContent, timeout: timeout
+    yield
+    wait_tick
+    inventory.close
+  end
+
   # Looks at that face of that block, then activates and immediately deactivates the `use` button.
   def place_block_against(block : Vec3i, face : BlockFace)
     use_hand block + face
@@ -282,11 +300,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
     start_using_hand
 
-    max_attempts = 100  # Prevent infinite loop (about 55 seconds)
+    max_attempts = 100 # Prevent infinite loop (about 55 seconds)
     attempts = 0
 
     until food >= 18 || attempts >= max_attempts
-      break unless main_hand.edible?  # Stop if no food equipped anymore
+      break unless main_hand.edible? # Stop if no food equipped anymore
       wait_ticks 33
       attempts += 1
     end
