@@ -29,11 +29,7 @@ class Rosegold::Clientbound::AcknowledgeBlockChange < Rosegold::Clientbound::Pac
     successful = packet.read_bool
 
     # MC 1.21+ includes sequence number
-    sequence = if Client.protocol_version >= 767_u32
-                 packet.read_var_int.to_i32
-               else
-                 0
-               end
+    sequence = packet.read_var_int.to_i32
 
     self.new(location, block_id, status, successful, sequence)
   end
@@ -42,7 +38,7 @@ class Rosegold::Clientbound::AcknowledgeBlockChange < Rosegold::Clientbound::Pac
     Log.debug { "dig ack #{self}" }
 
     # Remove pending operation if sequence number is provided (MC 1.21+)
-    if sequence > 0 && client.protocol_version >= 767_u32
+    if sequence > 0
       client.pending_block_operations.delete(sequence)
     end
 

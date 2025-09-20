@@ -6,16 +6,16 @@ class Rosegold::Clientbound::SetPassengers < Rosegold::Clientbound::Packet
   })
 
   property \
-    entity_id : UInt64,
-    passengers : Array(UInt64)
+    entity_id : UInt32,
+    passengers : Array(UInt32)
 
   def initialize(@entity_id, @passengers)
   end
 
   def self.read(packet)
-    entity_id = packet.read_var_long
-    passenger_count = packet.read_var_long
-    passengers = passenger_count.times.map { packet.read_var_long }.to_a
+    entity_id = packet.read_var_int
+    passenger_count = packet.read_var_int
+    passengers = passenger_count.times.map { packet.read_var_int }.to_a
 
     self.new(entity_id, passengers)
   end
@@ -26,7 +26,7 @@ class Rosegold::Clientbound::SetPassengers < Rosegold::Clientbound::Packet
       buffer.write entity_id
       buffer.write_var_int(passengers.length)
       passengers.each do |eid|
-        buffer.write_var_long(eid)
+        buffer.write eid
       end
     end.to_slice
   end

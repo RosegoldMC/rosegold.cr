@@ -3,6 +3,7 @@ require "./player_inventory"
 require "./remote_slot"
 require "./inventory_operations"
 require "./item_constants"
+require "./slot_offsets"
 require "../models/chat"
 
 # Container menu that acts as a view combining container slots + player inventory.
@@ -78,9 +79,20 @@ class Rosegold::ContainerMenu
       # Container slot
       @container_slots[index]
     elsif index < total_slots
-      # Player inventory slot
+      # Player inventory slot - handle network order mapping
       player_index = index - @container_size
-      @player_inventory[player_index]
+
+      # Container menus use network order: [main inventory(0-26), hotbar(27-35)]
+      # PlayerInventory uses internal order: [hotbar(0-8), main(9-35)]
+      if player_index < 27
+        # Network main inventory (0-26) → PlayerInventory main (9-35)
+        internal_index = player_index + 9
+      else
+        # Network hotbar (27-35) → PlayerInventory hotbar (0-8)
+        internal_index = player_index - 27
+      end
+
+      @player_inventory[internal_index]
     else
       raise ArgumentError.new("Slot index #{index} out of bounds for container with #{total_slots} slots")
     end
@@ -94,9 +106,20 @@ class Rosegold::ContainerMenu
       # Container slot
       @container_slots[index] = slot
     elsif index < total_slots
-      # Player inventory slot - update the persistent inventory
+      # Player inventory slot - handle network order mapping
       player_index = index - @container_size
-      @player_inventory[player_index] = slot
+
+      # Container menus use network order: [main inventory(0-26), hotbar(27-35)]
+      # PlayerInventory uses internal order: [hotbar(0-8), main(9-35)]
+      if player_index < 27
+        # Network main inventory (0-26) → PlayerInventory main (9-35)
+        internal_index = player_index + 9
+      else
+        # Network hotbar (27-35) → PlayerInventory hotbar (0-8)
+        internal_index = player_index - 27
+      end
+
+      @player_inventory[internal_index] = slot
     else
       raise ArgumentError.new("Slot index #{index} out of bounds for container with #{total_slots} slots")
     end
@@ -122,16 +145,37 @@ class Rosegold::ContainerMenu
 
   # Override update_all_slots to handle container-specific slot layout
   def update_all_slots(slots : Array(Rosegold::Slot), cursor : Rosegold::Slot, packet_state_id : UInt32)
+    log = Log.for("update_all_slots")
+
     # Follow vanilla behavior: simply accept the server's state ID without validation
+    old_state_id = @state_id
     @state_id = packet_state_id
 
-    # First slots are container-specific
-    update_container_slots(slots[0...@container_size])
+    log.debug { "Container update: id=#{@id}, state_id #{old_state_id}→#{packet_state_id}, #{slots.size} slots" }
 
-    # Remaining slots are player inventory
+    # First slots are container-specific
+    container_slots = slots[0...@container_size]
+    update_container_slots(container_slots)
+
+    # Remaining slots are player inventory in network order: [main inventory, hotbar]
+    # Network order: [main(0-26), hotbar(27-35)] → PlayerInventory: [hotbar(0-8), main(9-35)]
     if slots.size > @container_size
       player_slots = slots[@container_size...slots.size]
-      @player_inventory.update_slots(player_slots, 0)
+
+      # Ensure we have exactly 36 slots (27 main + 9 hotbar)
+      if player_slots.size == 36
+        # Split network order: first 27 are main inventory, last 9 are hotbar
+        network_main_inventory = player_slots[0...27] # Network indices 0-26
+        network_hotbar = player_slots[27...36]        # Network indices 27-35
+
+        # Map to correct PlayerInventory positions
+        @player_inventory.update_slots(network_hotbar, 0)         # Hotbar → slots 0-8
+        @player_inventory.update_slots(network_main_inventory, 9) # Main → slots 9-35
+      else
+        # Fallback for unexpected slot count - use original logic with warning
+        log.warn { "Unexpected player inventory slot count: #{player_slots.size}, expected 36" }
+        @player_inventory.update_slots(player_slots, 0)
+      end
     end
 
     @cursor = cursor
@@ -180,56 +224,46 @@ class Rosegold::ContainerMenu
   # Perform individual click operations (vanilla client-side simulation)
   private def perform_shift_click(slot_index : Int32)
     return if slot_index < 0 || slot_index >= total_slots
-    return if self[slot_index].empty?
 
-    # ChestMenu logic: container to player inventory, or player inventory to container
-    if slot_index < @container_size
-      # Move from container to player inventory (slots container_size to total_slots-1, reverse order)
-      move_item_stack_to(slot_index, @container_size, total_slots, true)
-    else
-      # Move from player inventory to container (slots 0 to container_size-1, forward order)
-      move_item_stack_to(slot_index, 0, @container_size, false)
-    end
+    # VANILLA PATTERN: Loop until no more moves possible (AbstractContainerMenu.java lines 430-441)
+    clicked_slot = self[slot_index]
+    return if clicked_slot.empty?
 
-    # Update slot state after move
-    if self[slot_index].empty?
-      self[slot_index] = Rosegold::Slot.new
+    original_clicked_slot = copy_slot(clicked_slot)
+    moved_item = quick_move_stack(slot_index)
+
+    while !moved_item.empty? && same_item_same_components?(original_clicked_slot, moved_item)
+      current_slot = self[slot_index]
+      if slots_match?(clicked_slot, current_slot)
+        break
+      end
+
+      clicked_slot = current_slot
+      moved_item = quick_move_stack(slot_index)
     end
   end
 
-  # Vanilla client-side shift-click logic (based on ChestMenu.quickMoveStack)
-  private def quick_move_stack(slot_index : Int32) : Array(Rosegold::WindowSlot)
-    return [] of Rosegold::WindowSlot if slot_index < 0 || slot_index >= total_slots
+  # Vanilla's quickMoveStack equivalent for containers (ChestMenu.java lines 74-96)
+  private def quick_move_stack(slot_index : Int32) : Rosegold::Slot
+    slot = self[slot_index]
+    return Rosegold::Slot.new if slot.empty?
 
-    # Take snapshot of all slots before operation
-    before_slots = Array.new(total_slots) do |i|
-      copy_slot(self[i])
-    end
+    original_item = copy_slot(slot)
 
-    # Perform client-side quickMoveStack logic
-    source_slot = self[slot_index]
-    return [] of Rosegold::WindowSlot if source_slot.empty?
-
-    # ChestMenu logic: if slot is in container, move to player inventory; else move to container
     if slot_index < @container_size
-      # Move from container to player inventory (slots container_size to total_slots-1, reverse order)
+      # Move from container to player inventory (reverse order for hotbar priority)
       move_item_stack_to(slot_index, @container_size, total_slots, true)
     else
-      # Move from player inventory to container (slots 0 to container_size-1, forward order)
+      # Move from player inventory to container (forward order)
       move_item_stack_to(slot_index, 0, @container_size, false)
     end
 
-    # Collect changed slots
-    changed_slots = [] of Rosegold::WindowSlot
-    total_slots.times do |i|
-      before = before_slots[i]
-      after = self[i]
-      if !slots_match?(before, after)
-        changed_slots << Rosegold::WindowSlot.new(i, after)
-      end
+    # Update slot state after move (vanilla behavior)
+    if self[slot_index].empty?
+      self[slot_index] = Rosegold::Slot.new
     end
 
-    changed_slots
+    original_item
   end
 
   # Close this container
@@ -246,11 +280,11 @@ class Rosegold::ContainerMenu
 
   # Abstract method implementations for InventoryOperations
   def offhand_slot_index : Int32
-    @container_size + ItemConstants::PlayerSlots::OFF_HAND
+    SlotOffsets::ContainerMenuOffsets.offhand_slot_index(@container_size)
   end
 
   def hotbar_slot_index(hotbar_nr : Int32) : Int32
-    @container_size + hotbar_nr
+    SlotOffsets::ContainerMenuOffsets.hotbar_slot_index(@container_size, hotbar_nr)
   end
 
   def content_slots : Array(Rosegold::WindowSlot)
@@ -264,7 +298,8 @@ class Rosegold::ContainerMenu
   def inventory_slots : Array(Rosegold::WindowSlot)
     result = Array(Rosegold::WindowSlot).new(27)
     @player_inventory.main_inventory.each_with_index do |slot, index|
-      result << Rosegold::WindowSlot.new(@container_size + 9 + index, slot)
+      absolute_index = SlotOffsets::ContainerMenuOffsets.main_inventory_start_index(@container_size) + index
+      result << Rosegold::WindowSlot.new(absolute_index, slot)
     end
     result
   end
@@ -272,7 +307,8 @@ class Rosegold::ContainerMenu
   def hotbar_slots : Array(Rosegold::WindowSlot)
     result = Array(Rosegold::WindowSlot).new(9)
     @player_inventory.hotbar.each_with_index do |slot, index|
-      result << Rosegold::WindowSlot.new(@container_size + index, slot)
+      absolute_index = SlotOffsets::ContainerMenuOffsets.hotbar_slot_index(@container_size, index)
+      result << Rosegold::WindowSlot.new(absolute_index, slot)
     end
     result
   end

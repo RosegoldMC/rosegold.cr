@@ -26,6 +26,17 @@ class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
     )
   end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
+      buffer.write entity_id
+      buffer.write effect_id
+      buffer.write amplifier
+      buffer.write duration
+      buffer.write flags
+    end.to_slice
+  end
+
   def callback(client)
     entity = client.dimension.entities[entity_id]?
     effect = Rosegold::EntityEffect.new(effect_id, amplifier, duration, flags)

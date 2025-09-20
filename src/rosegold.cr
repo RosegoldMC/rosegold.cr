@@ -3,6 +3,7 @@ require "io/hexdump"
 
 require "./rosegold/client"
 require "./rosegold/bot"
+require "./rosegold/spectate_server"
 
 Log.setup_from_env
 

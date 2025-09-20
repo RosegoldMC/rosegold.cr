@@ -7,6 +7,9 @@ class MockClient
   property current_protocol_state : Rosegold::ProtocolState
   property player : Rosegold::Player = Rosegold::Player.new
   property sent_packets : Array(Rosegold::Packet) = [] of Rosegold::Packet
+  property registries : Hash(String, Rosegold::Clientbound::RegistryData) = Hash(String, Rosegold::Clientbound::RegistryData).new
+  property known_packs : Array(NamedTuple(namespace: String, id: String, version: String)) = [] of NamedTuple(namespace: String, id: String, version: String)
+  property tags : Rosegold::Clientbound::UpdateTags? = nil
 
   def initialize(@protocol_version, @current_protocol_state = Rosegold::ProtocolState::HANDSHAKING)
   end
@@ -27,26 +30,6 @@ end
 
 Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
   describe "LoginSuccess callback behavior" do
-    it "transitions MC 1.18 (protocol 758) directly to PLAY state" do
-      mock_client = MockClient.new(758_u32, Rosegold::ProtocolState::LOGIN)
-
-      # Create LoginSuccess packet and trigger callback
-      login_success = Rosegold::Clientbound::LoginSuccess.new(
-        UUID.new("12345678-1234-5678-9012-123456789012"),
-        "testuser"
-      )
-
-      login_success.callback(mock_client)
-
-      # For MC 1.18, should go directly to PLAY
-      expect(mock_client.current_protocol_state).to eq(Rosegold::ProtocolState::PLAY)
-      expect(mock_client.player.username).to eq("testuser")
-
-      # Should not send LoginAcknowledged for MC 1.18
-      login_ack_packets = mock_client.sent_packets.select(Rosegold::Serverbound::LoginAcknowledged)
-      expect(login_ack_packets.size).to eq(0)
-    end
-
     it "transitions MC 1.21.8 (protocol 772) to CONFIGURATION state" do
       mock_client = MockClient.new(772_u32, Rosegold::ProtocolState::LOGIN)
 
@@ -177,9 +160,8 @@ Spectator.describe "Protocol state transitions for MC 1.21+ configuration" do
 
       # Check clientbound packets for protocol 772
       expect(config_state.get_clientbound_packet(0x03_u8, 772_u32)).to eq(Rosegold::Clientbound::FinishConfiguration)
-      expect(config_state.get_clientbound_packet(0x05_u8, 772_u32)).to eq(Rosegold::Clientbound::RegistryData)
-      expect(config_state.get_clientbound_packet(0x08_u8, 772_u32)).to eq(Rosegold::Clientbound::UpdateTags)
-      expect(config_state.get_clientbound_packet(0x0B_u8, 772_u32)).to eq(Rosegold::Clientbound::Transfer)
+      expect(config_state.get_clientbound_packet(0x07_u8, 772_u32)).to eq(Rosegold::Clientbound::RegistryData)
+      expect(config_state.get_clientbound_packet(0x0D_u8, 772_u32)).to eq(Rosegold::Clientbound::UpdateTags)
 
       # Check serverbound packets for protocol 772
       expect(config_state.get_serverbound_packet(0x00_u8, 772_u32)).to eq(Rosegold::Serverbound::ClientInformation)

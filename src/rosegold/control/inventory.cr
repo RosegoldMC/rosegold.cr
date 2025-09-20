@@ -68,31 +68,33 @@ class Rosegold::Inventory
     pick(spec) || raise ItemNotFoundError.new("Item #{spec} not found in inventory")
   end
 
-  # Tries to transfer at least `count` matching items from the player inventory to the container, using shift-clicking.
+  # Tries to transfer at least `count` matching items from the container to the player inventory, using shift-clicking.
   # Returns the number of actually transferred items.
   #
   # Example:
   #   inventory.withdraw_at_least 5, "diamond_pickaxe" # => 3
-  #   inventory.withdraw_at_least 5, &.empty?, hotbar # => 1
+  #   inventory.withdraw_at_least 5, &.empty? # => 1
   #   inventory.withdraw_at_least 5, { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
-  def withdraw_at_least(count, spec, source : Array(WindowSlot) = content, target : Array(WindowSlot)? = nil)
-    actual_target = target || (inventory + hotbar)
-    shift_click_at_least count, spec, source, actual_target
+  def withdraw_at_least(count, spec)
+    shift_click_at_least count, spec, :container_to_player
   end
 
   def withdraw_at_least(count, &spec : Slot -> _)
     withdraw_at_least(count, spec)
   end
 
-  # Tries to transfer at least `count` matching items from the container to the player inventory, using shift-clicking.
+  # Tries to transfer at least `count` matching items from the player inventory to the container, using shift-clicking.
   # Returns the number of actually transferred items.
   #
   # Example:
   #   inventory.deposit_at_least 5, "diamond_pickaxe" # => 3
-  #   inventory.deposit_at_least 5, &.empty?, hotbar # => 1
+  #   inventory.deposit_at_least 5, &.empty? # => 1
   #   inventory.deposit_at_least 5, { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
-  def deposit_at_least(count, spec, source : Array(WindowSlot) = inventory + hotbar, target : Array(WindowSlot) = content)
-    shift_click_at_least count, spec, source, target
+  def deposit_at_least(count, spec)
+    # If container is not ready, return immediately rather than blocking
+    return 0 if content.empty?
+
+    shift_click_at_least count, spec, :player_to_container
   end
 
   def deposit_at_least(count, &spec : Slot -> _)
@@ -111,7 +113,7 @@ class Rosegold::Inventory
     current_count = count(item_id, inventory + hotbar)
     return current_count if current_count >= count
 
-    current_count + withdraw_at_least count - current_count, item_id
+    current_count + withdraw_at_least(count - current_count, item_id)
   end
 
   # Finds an empty slot in the source
@@ -165,27 +167,39 @@ class Rosegold::Inventory
     }
   end
 
-  private def shift_click_at_least(count, spec, source : Array(WindowSlot), target : Array(WindowSlot))
+  private def shift_click_at_least(count, spec, direction : Symbol)
     transferred = 0
 
-    # prefer items with lower durability first, then large stacks for minimum clicks
-    # for items without durability, fall back to original stack size preference
-    sort_by_durability_and_count(source).each do |slot|
-      next unless slot.matches? spec
+    loop do
+      current_source_slots = case direction
+                             when :container_to_player
+                               content
+                             when :player_to_container
+                               inventory + hotbar
+                             else
+                               raise ArgumentError.new("Invalid direction: #{direction}")
+                             end
 
-      # Find first empty slot in target container
-      target_slot = find_empty_slot target
+      sorted_source = sort_by_durability_and_count(current_source_slots)
+      slot_to_transfer = sorted_source.find(&.matches?(spec))
+      break if slot_to_transfer.nil?
 
-      # If the target container is full; break;
-      break if target_slot.nil?
+      player_count_before = count(spec, inventory + hotbar)
+      @client.container_menu.send_click slot_to_transfer.slot_number, 0, :shift
+      player_count_after = count(spec, inventory + hotbar)
 
-      # Send shift-click packet to server (with optimistic local updates)
-      @client.container_menu.send_click slot.slot_number, 0, :shift
+      actual_transferred = case direction
+                           when :container_to_player
+                             player_count_after - player_count_before
+                           when :player_to_container
+                             player_count_before - player_count_after
+                           else
+                             0
+                           end
 
-      # Count the transferred amount based on what the slot had
-      transferred += slot.count
+      transferred += actual_transferred
 
-      break if transferred >= count
+      break if transferred >= count || actual_transferred == 0
     end
 
     transferred

@@ -1,4 +1,4 @@
-require "../models/chat"
+require "../models/text_component"
 
 module Rosegold::PlayerList
   class Entry
@@ -7,7 +7,7 @@ module Rosegold::PlayerList
     property properties = [] of Property
     property gamemode : Int8?
     property ping : UInt32?
-    property display_name : Rosegold::Chat?
+    property display_name : Rosegold::TextComponent?
 
     def initialize(@uuid, @name = nil, @properties = [] of Property, @gamemode = nil, @ping = nil, @display_name = nil); end
 

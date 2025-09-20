@@ -53,9 +53,10 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
       slot_array = slots.map(&.as(Rosegold::Slot))
       client.container_menu.update_all_slots(slot_array, cursor.as(Rosegold::Slot), state_id)
     else
+      # Follow vanilla behavior: silently ignore packets for containers that aren't currently open
+      # This is expected when containers are closed before SetContainerContent packets arrive
       container_id = client.container_menu.try(&.id) || "nil"
-      Log.debug { "Received container content for an unknown or mismatched window. Ignoring. Packet window_id=#{window_id}, client container_id=#{container_id}" }
-      Log.debug { self }
+      Log.debug { "Ignoring SetContainerContent for mismatched window. Packet window_id=#{window_id}, client container_id=#{container_id}" }
     end
   end
 end

@@ -35,10 +35,7 @@ class Rosegold::Clientbound::SystemChatMessage < Rosegold::Clientbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       # MC 1.21+ uses NBT text component format
-      # Convert TextComponent to NBT and write unnamed
-      nbt = message.to_nbt
-      buffer.write_byte nbt.tag_type
-      nbt.write(buffer)
+      message.write(buffer)
       buffer.write @overlay
     end.to_slice
   end
