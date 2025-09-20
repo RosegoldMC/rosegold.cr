@@ -13,6 +13,7 @@ Minecraft client written in [Crystal](http://crystal-lang.org/), following the [
 - **Cross-Platform**: Compiles to static binaries for Mac, Linux, Raspberry Pi, and Windows
 - **Complete World State**: Tracks chunks, entities, player status, respawn handling, and dimensions
 - **Chat & Events**: Send chat messages, subscribe to game events, comprehensive logging
+- **Spectate Server**: [Headless proxy server](https://rosegoldmc.github.io/rosegold.cr/Rosegold/SpectateServer.html) for "headless with headful feel" debugging and monitoring
 
 
 ## How to Start Writing Bots
@@ -24,7 +25,7 @@ Minecraft client written in [Crystal](http://crystal-lang.org/), following the [
    dependencies:
      rosegold:
        github: grepsedawk/rosegold.cr
-       version: ~> 0.6
+       version: ~> 0.7
    ```
 1. Run `shards install`
 1. Start with a basic example by writing a file in `src/`, something like...
