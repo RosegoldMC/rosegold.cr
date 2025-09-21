@@ -238,7 +238,7 @@ class Rosegold::SpectateConnection
     Log.info { "Login start for #{@username}" }
 
     # Check if bot is connected before proceeding
-    unless client_connected?
+    unless client_ready?
       Log.warn { "Client #{@username} attempting to login but no bot is connected" }
       send_disconnect("No bot available for spectating")
       return
@@ -280,7 +280,7 @@ class Rosegold::SpectateConnection
     Log.debug { "Received status request, sending server status" }
 
     # Determine player count based on bot connection
-    online_players = client_connected? ? 1 : 0
+    online_players = client_ready? ? 1 : 0
     max_players = 1
 
     # Create status response JSON
@@ -295,7 +295,7 @@ class Rosegold::SpectateConnection
         "sample" => [] of Hash(String, String),
       },
       "description" => {
-        "text" => "Rosegold SpectateServer - #{client_connected? ? "Bot Connected" : "Waiting for Bot"}",
+        "text" => "Rosegold SpectateServer - #{client_ready? ? "Bot Connected" : "Waiting for Bot"}",
       },
     }.to_json
 
@@ -1070,7 +1070,7 @@ class Rosegold::SpectateConnection
     # Socket already closed
   end
 
-  private def client_connected?
-    @spectate_server.client.try &.connected? || false
+  private def client_ready?
+    @spectate_server.client.try &.spawned? || false
   end
 end
