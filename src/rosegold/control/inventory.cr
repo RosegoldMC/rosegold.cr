@@ -116,6 +116,85 @@ class Rosegold::Inventory
     current_count + withdraw_at_least(count - current_count, item_id)
   end
 
+  # Refills the main hand to its maximum stack size by manually combining stacks.
+  # Only works when no container is open (player inventory only).
+  # Returns the final quantity in the main hand after refilling.
+  #
+  # Example:
+  #   inventory.refill_hand # => 64 (if main hand was stone and got filled to max stack)
+  #   inventory.refill_hand # => 32 (if only 32 items were available)
+  #   inventory.refill_hand # => 0 (if main hand is empty)
+  def refill_hand
+    # Check if container is open - if so, warn and return current quantity
+    if @client.container_menu != @client.inventory_menu
+      Log.warn { "Cannot refill hand while container is open" }
+      return main_hand.count.to_i32
+    end
+
+    # Get initial state
+    return 0 if main_hand.empty?
+
+    target_item_id = main_hand.item_id_int
+    max_stack_size = main_hand.max_stack_size.to_i32
+
+    return main_hand.count.to_i32 if main_hand.count.to_i32 >= max_stack_size
+
+    # Get current hotbar selection
+    current_hotbar_selection = @client.player.hotbar_selection.to_i32
+
+    # Process main inventory first (shift-clicking moves items TO hotbar)
+    loop do
+      break if main_hand.count.to_i32 >= max_stack_size
+
+      # Find matching item in main inventory
+      matching_slot = inventory.find { |slot|
+        slot.item_id_int == target_item_id && slot.count > 0
+      }
+      break unless matching_slot
+
+      # Shift-click to move items from main inventory to hotbar (stacks with main hand)
+      @client.inventory_menu.send_click matching_slot.slot_number, 0, :shift
+
+      # Check if any items were actually transferred
+      # If main hand didn't change, we're done with main inventory
+      break if main_hand.count.to_i32 >= max_stack_size
+    end
+
+    # Then process other hotbar slots - use a two-stage approach for hotbar consolidation
+    hotbar_slots_with_matching_items = [] of Int32
+    hotbar.each_with_index do |slot, index|
+      # Skip the current main hand slot
+      next if index == current_hotbar_selection
+
+      # Collect slots with matching items
+      if slot.item_id_int == target_item_id && slot.count > 0
+        hotbar_slots_with_matching_items << slot.slot_number
+      end
+    end
+
+    # Stage 1: Move items from other hotbar slots to main inventory (if we have items to consolidate)
+    hotbar_slots_with_matching_items.each do |slot_number|
+      break if main_hand.count.to_i32 >= max_stack_size
+      @client.inventory_menu.send_click slot_number, 0, :shift
+    end
+
+    # Stage 2: Move items back from main inventory to main hand
+    loop do
+      break if main_hand.count.to_i32 >= max_stack_size
+
+      # Find matching item in main inventory that we just moved there
+      matching_slot = inventory.find { |slot|
+        slot.item_id_int == target_item_id && slot.count > 0
+      }
+      break unless matching_slot
+
+      # Shift-click to move items from main inventory back to hotbar (stacks with main hand)
+      @client.inventory_menu.send_click matching_slot.slot_number, 0, :shift
+    end
+
+    main_hand.count.to_i32
+  end
+
   # Finds an empty slot in the source
   # In order to match vanilla:
   # When source is the container, prioritize first empty #container slot
