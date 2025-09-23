@@ -34,11 +34,24 @@ class Rosegold::Chunk
     section.block_state index.to_u32
   end
 
-  def set_block_state(x : Int32, y : Int32, z : Int32, block_state : BlockStateNr)
+  def set_block_state(x : Int32, y : Int32, z : Int32, block_state : BlockStateNr) : BlockStateNr?
     x, z = x & 15, z & 15
-    section = sections[(y - min_y) >> 4]
+    section_index = (y - min_y) >> 4
+    return nil if section_index < 0 || section_index >= sections.size
+    section = sections[section_index]
+
+    # Java client optimization: if setting air to air in an air-only section, return nil
+    if section.has_only_air? && block_state == 0_u16
+      return nil
+    end
+
     index = (((y - min_y) & 15) << 8) | (z << 4) | x
-    section.set_block_state index.to_u32, block_state
+    previous_state = section.set_block_state index.to_u32, block_state
+
+    # Return nil if no change occurred (matching Java behavior)
+    return nil if previous_state == block_state
+
+    previous_state
   end
 
   struct BlockEntity
