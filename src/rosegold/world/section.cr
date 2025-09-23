@@ -5,7 +5,7 @@ require "./paletted_container"
 class Rosegold::Section
   alias BlockStateNr = UInt16
 
-  @block_count : Int16
+  getter block_count : Int16
 
   def initialize(io)
     # Number of non-air blocks present in the chunk section. If the block count reaches 0, the whole chunk section is not rendered.
@@ -36,7 +36,22 @@ class Rosegold::Section
     @blocks[index]
   end
 
-  def set_block_state(index : UInt32, block_state : BlockStateNr)
+  def set_block_state(index : UInt32, block_state : BlockStateNr) : BlockStateNr
+    previous_state = @blocks[index]
     @blocks[index] = block_state
+
+    # Update block count based on air transitions (0 = air)
+    if previous_state != 0_u16 # was not air
+      @block_count -= 1
+    end
+    if block_state != 0_u16 # is not air
+      @block_count += 1
+    end
+
+    previous_state
+  end
+
+  def has_only_air? : Bool
+    @block_count == 0
   end
 end

@@ -97,6 +97,9 @@ class Rosegold::PalettedContainer
         return # nothing to do, value is already set
       else
         grow_from_single_state
+        # After growing from single state, restart the operation
+        self[index] = value
+        return
       end
     end
     if palette.empty? # direct mode
@@ -107,10 +110,12 @@ class Rosegold::PalettedContainer
         max_palette_size = 1_u64 << bits_per_entry
         if palette.size + 1 >= max_palette_size
           grow_palette
+          # After growing, we need to try again since the palette structure may have changed
+          self[index] = value
+          return
         end
         encoded = palette.size
         palette << value
-        encoded
       end
     end
     encoded = encoded.to_u64!
@@ -126,38 +131,41 @@ class Rosegold::PalettedContainer
     @bits_per_entry = 4_u8
     @entries_per_long = 64_u8 // bits_per_entry
     @entry_mask = (1_u64 << bits_per_entry) - 1
-    @long_array = Array(Long).new(size*4//64, 0_u64)
+    num_longs = (size + entries_per_long - 1) // entries_per_long
+    @long_array = Array(Long).new(num_longs, 0_u64)
     # all values will be 0, and our single value is also at palette index 0
-    Log.debug { "Growing PalettedContainer from single state. Array length: #{@long_array.size}" }
   end
 
   private def grow_palette : Nil
     new_bits_per_entry = bits_per_entry + 1
     new_entries_per_long = 64_u8 // new_bits_per_entry
     new_entry_mask = (1_u64 << new_bits_per_entry) - 1
-    new_num_longs = (size / new_entries_per_long).ceil.to_i
+    new_num_longs = (size + new_entries_per_long - 1) // new_entries_per_long
     new_long_array = Array(Long).new(new_num_longs, 0_u64)
 
+    # Java copyFrom implementation: iterate through the actual storage size (which is always `size`)
+    # and use the accessor methods to handle bit manipulation
     (0_u32...size).each do |i|
-      # read from old array
-      # note that we can't use self[i] because that returns the decoded value if the palette is in effect, but we want the encoded value
+      # Get the encoded value using our current accessor (which handles the bit manipulation)
+      # Note: we can't use self[i] because that returns the decoded value if the palette is in effect
       old_long_index = i // entries_per_long
+      break if old_long_index >= long_array.size # Safety check
+
       old_bit_offset_in_long = (i % entries_per_long) * bits_per_entry
-      value = long_array[old_long_index] >> old_bit_offset_in_long
-      value = (value & entry_mask).to_u16
-      # write to new array
-      long_index = i // new_entries_per_long
+      encoded_value = long_array[old_long_index] >> old_bit_offset_in_long
+      encoded_value = (encoded_value & entry_mask).to_u16
+
+      # Store in new array using similar bit manipulation
+      new_long_index = i // new_entries_per_long
+      break if new_long_index >= new_long_array.size # Safety check
+
       new_bit_offset_in_long = (i % new_entries_per_long) * new_bits_per_entry
-      long = new_long_array[long_index]
-      # no need to zero-out previous value's bits, are already 0
-      long |= (value & new_entry_mask) << new_bit_offset_in_long
-      new_long_array[long_index] = long
+      new_long_array[new_long_index] |= (encoded_value.to_u64 & new_entry_mask) << new_bit_offset_in_long
     end
 
     @bits_per_entry = new_bits_per_entry
     @entries_per_long = new_entries_per_long
     @entry_mask = new_entry_mask
     @long_array = new_long_array
-    Log.debug { "Growing PalettedContainer. Array length: #{@long_array.size}, Palette length: #{@palette.size}" }
   end
 end

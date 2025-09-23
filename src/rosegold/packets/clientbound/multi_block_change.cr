@@ -24,9 +24,17 @@ class Rosegold::Clientbound::MultiBlockChange < Rosegold::Clientbound::Packet
 
     block_states = Array(Tuple(Int32, Int32, Int32, UInt16)).new packet.read_var_int do
       long = packet.read_var_long
-      y = section_y * 16 + (long & 0xf).to_u8
-      z = section_z * 16 + ((long >> 4) & 0xf).to_u8
-      x = section_x * 16 + ((long >> 8) & 0xf).to_u8
+
+      # Extract relative position within section (0-15)
+      rel_y = (long & 0xf).to_i32
+      rel_z = ((long >> 4) & 0xf).to_i32
+      rel_x = ((long >> 8) & 0xf).to_i32
+
+      # Convert to absolute world coordinates
+      x = section_x * 16 + rel_x
+      y = section_y * 16 + rel_y
+      z = section_z * 16 + rel_z
+
       block_state = (long >> 12).to_u16
       {x, y, z, block_state}
     end
