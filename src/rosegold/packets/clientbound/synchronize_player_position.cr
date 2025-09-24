@@ -8,7 +8,6 @@ require "../../events/player_position_update"
 class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
-  # Define protocol-specific packet IDs (MC 1.21+ replacement for PlayerPositionAndLook)
   packet_ids({
     772_u32 => 0x41_u8, # MC 1.21.8,
   })

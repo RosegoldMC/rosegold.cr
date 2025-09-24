@@ -4,7 +4,6 @@ require "../serverbound/player_action"
 class Rosegold::Clientbound::AcknowledgeBlockChange < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
-  # Define protocol-specific packet IDs
   packet_ids({
     758_u32 => 0x08_u8, # MC 1.18
   })

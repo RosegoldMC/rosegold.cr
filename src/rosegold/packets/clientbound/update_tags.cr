@@ -3,7 +3,6 @@ require "../packet"
 class Rosegold::Clientbound::UpdateTags < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
-  # Define protocol-specific packet IDs for UpdateTags
   packet_ids({
     772_u32 => 0x0D_u8, # MC 1.21.8,
   })

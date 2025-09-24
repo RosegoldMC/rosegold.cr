@@ -3,7 +3,6 @@ require "../packet"
 class Rosegold::Serverbound::ClientInformation < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
-  # Define protocol-specific packet IDs for ClientInformation (during configuration)
   packet_ids({
     772_u32 => 0x00_u8, # MC 1.21.8,
   })

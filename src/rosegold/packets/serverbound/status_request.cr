@@ -3,7 +3,6 @@ require "../packet"
 class Rosegold::Serverbound::StatusRequest < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
-  # Define protocol-specific packet IDs (same across all versions)
   packet_ids({
     758_u32 => 0x00_u8, # MC 1.18
     767_u32 => 0x00_u8, # MC 1.21
