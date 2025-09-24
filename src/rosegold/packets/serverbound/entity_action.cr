@@ -3,7 +3,6 @@ require "../packet"
 # Jump boost is from 0 to 100
 class Rosegold::Serverbound::EntityAction < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
-  # Define protocol-specific packet IDs
   packet_ids({
     772_u32 => 0x29_u8, # MC 1.21.8 (Player Command),
   })

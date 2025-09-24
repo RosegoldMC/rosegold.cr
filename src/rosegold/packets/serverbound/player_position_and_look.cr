@@ -4,7 +4,6 @@ require "../packet"
 
 class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
-  # Define protocol-specific packet IDs
   packet_ids({
     772_u32 => 0x1E_u8, # MC 1.21.8,
   })

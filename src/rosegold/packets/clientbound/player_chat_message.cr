@@ -4,7 +4,6 @@ require "../packet"
 class Rosegold::Clientbound::PlayerChatMessage < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
-  # Define protocol-specific packet IDs for Player Chat Message
   packet_ids({
     772_u32 => 0x3A_u8, # MC 1.21.8 - Player Chat Message
   })

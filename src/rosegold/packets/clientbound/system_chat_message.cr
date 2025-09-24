@@ -4,7 +4,6 @@ require "../packet"
 class Rosegold::Clientbound::SystemChatMessage < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
-  # Define protocol-specific packet IDs for System Chat Message
   packet_ids({
     772_u32 => 0x72_u8, # MC 1.21.8 - System Chat Message
   })

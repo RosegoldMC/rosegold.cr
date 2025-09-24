@@ -1,6 +1,5 @@
 class Rosegold::Clientbound::EntityPosition < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
-  # Define protocol-specific packet IDs
   packet_ids({
     772_u32 => 0x2E_u8, # MC 1.21.8,
   })

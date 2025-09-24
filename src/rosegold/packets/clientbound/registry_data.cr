@@ -3,7 +3,6 @@ require "../packet"
 class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
-  # Define protocol-specific packet IDs for RegistryData
   packet_ids({
     772_u32 => 0x07_u8, # MC 1.21.8,
   })
