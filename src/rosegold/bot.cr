@@ -242,18 +242,17 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.queue_packet Serverbound::PickItem.new slot_number
   end
 
-  # Activates the "use" button.
-  def start_using_hand(hand : Hand = :main_hand)
-    # can't delegate this because it wouldn't pick up the symbol as a Hand value
-    client.interactions.start_using_hand hand
+  # Activates the "use" button. Uses vanilla hand selection (tries both hands).
+  def start_using_hand
+    client.interactions.start_using_hand
   end
 
   # Looks in the direction of `target`, then
   # activates and immediately deactivates the `use` button.
-  def use_hand(target : Vec3d? | Look? = nil, hand : Hand = :main_hand)
+  def use_hand(target : Vec3d? | Look? = nil)
     look_at target if target.is_a? Vec3d
     look target if target.is_a? Look
-    start_using_hand hand
+    start_using_hand
     stop_using_hand
   end
 

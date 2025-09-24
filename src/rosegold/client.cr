@@ -247,8 +247,8 @@ class Rosegold::Client < Rosegold::EventEmitter
                       end
 
         if should_tick
-          interactions.tick
           physics.tick
+          interactions.tick
           emit_event Event::Tick.new
         end
 

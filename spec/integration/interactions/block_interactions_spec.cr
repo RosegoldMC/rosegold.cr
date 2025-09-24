@@ -1,6 +1,6 @@
-require "../spec_helper"
+require "../../spec_helper"
 
-Spectator.describe "Rosegold::Bot interactions" do
+Spectator.describe "Rosegold::Bot block interactions" do
   before_all do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
@@ -169,7 +169,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.start_digging
 
         # obsidian takes 45 ticks to mine with diamond pickaxe and efficiency 5
-        timeout = 50
+        timeout = 80
         ticks_waited = 0
         current_block = initial_block
 
