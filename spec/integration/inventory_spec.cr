@@ -967,7 +967,7 @@ Spectator.describe "Rosegold::Bot inventory" do
             final_count = bot.inventory.main_hand.count
 
             expect(initial_count).to eq 32
-            expect(result).to eq 64  # Should stop at max stack
+            expect(result).to eq 64 # Should stop at max stack
             expect(final_count).to eq 64
             # Total should remain 128: 64 in main hand + 64 remaining elsewhere
             expect(bot.inventory.count("stone")).to eq 128
