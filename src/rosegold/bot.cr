@@ -286,11 +286,38 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
     Log.info { "Eating because food is #{food} and health is #{health}" }
 
-    inventory.pick("apple") ||
-      inventory.pick("baked_potato") ||
-      inventory.pick("bread") ||
-      inventory.pick("carrot") ||
-      raise "Bot food not found"
+    foods = [
+      "carrot",
+      "baked_potato",
+      "bread",
+      "beetroot",
+      "apple",
+      "cooked_beef",
+      "cooked_porkchop",
+      "cooked_chicken",
+      "cooked_salmon",
+      "cooked_cod",
+      "cooked_mutton",
+      "cooked_rabbit",
+      "melon_slice",
+      "dried_kelp",
+      "pumpkin_pie",
+      "rabbit_stew",
+      "mushroom_stew",
+      "beetroot_soup",
+    ]
+
+    found_food = false
+    foods.each do |food|
+      if inventory.pick(food)
+        found_food = true
+        break
+      end
+    end
+
+    unless found_food
+      raise "No edible food found in inventory. Allowed foods: #{foods.join(", ")}"
+    end
 
     # Verify we actually have edible food equipped
     unless main_hand.edible?
