@@ -7,12 +7,14 @@ class Rosegold::Clientbound::PlayerInfoUpdate < Rosegold::Clientbound::Packet
   })
 
   # Action flags (bitfield)
-  ADD_PLAYER          = 0x01_u8
-  INITIALIZE_CHAT     = 0x02_u8
-  UPDATE_GAMEMODE     = 0x04_u8
-  UPDATE_LISTED       = 0x08_u8
-  UPDATE_LATENCY      = 0x10_u8
-  UPDATE_DISPLAY_NAME = 0x20_u8
+  ADD_PLAYER           = 0x01_u8
+  INITIALIZE_CHAT      = 0x02_u8
+  UPDATE_GAMEMODE      = 0x04_u8
+  UPDATE_LISTED        = 0x08_u8
+  UPDATE_LATENCY       = 0x10_u8
+  UPDATE_DISPLAY_NAME  = 0x20_u8
+  UPDATE_LIST_PRIORITY = 0x40_u8
+  UPDATE_HAT           = 0x80_u8
 
   property \
     actions : UInt8,
@@ -24,12 +26,18 @@ class Rosegold::Clientbound::PlayerInfoUpdate < Rosegold::Clientbound::Packet
     property uuid : UUID
     property name : String?
     property properties : Array(Property)?
+    property chat_session_id : UUID?
+    property public_key_expiry_time : Int64?
+    property encoded_public_key : Bytes?
+    property public_key_signature : Bytes?
     property gamemode : Int32?
     property listed : Bool?
     property latency : Int32?
     property display_name : Rosegold::TextComponent?
+    property list_priority : Int32?
+    property hat_visible : Bool?
 
-    def initialize(@uuid, @name = nil, @properties = nil, @gamemode = nil, @listed = nil, @latency = nil, @display_name = nil)
+    def initialize(@uuid, @name = nil, @properties = nil, @chat_session_id = nil, @public_key_expiry_time = nil, @encoded_public_key = nil, @public_key_signature = nil, @gamemode = nil, @listed = nil, @latency = nil, @display_name = nil, @list_priority = nil, @hat_visible = nil)
     end
 
     struct Property
@@ -46,7 +54,7 @@ class Rosegold::Clientbound::PlayerInfoUpdate < Rosegold::Clientbound::Packet
     actions = packet.read_byte
     player_count = packet.read_var_int
 
-    players = Array(PlayerEntry).new(player_count.to_i32) do
+    players = Array(PlayerEntry).new(player_count.to_i32) do |_|
       uuid = packet.read_uuid
 
       # Read fields based on action flags
@@ -55,21 +63,48 @@ class Rosegold::Clientbound::PlayerInfoUpdate < Rosegold::Clientbound::Packet
       if (actions & ADD_PLAYER) != 0
         name = packet.read_var_string
         prop_count = packet.read_var_int
-        properties = Array(PlayerEntry::Property).new(prop_count.to_i32) do
+        properties = Array(PlayerEntry::Property).new(prop_count.to_i32) do |_|
           prop_name = packet.read_var_string
           prop_value = packet.read_var_string
-          prop_signature = packet.read_bool ? packet.read_var_string : nil
+          has_signature = packet.read_bool
+          prop_signature = has_signature ? packet.read_var_string : nil
           PlayerEntry::Property.new(prop_name, prop_value, prop_signature)
         end
       end
 
-      # Skip other fields for now - implement as needed
+      # Initialize Chat fields
+      chat_session_id = nil
+      public_key_expiry_time = nil
+      encoded_public_key = nil
+      public_key_signature = nil
+      if (actions & INITIALIZE_CHAT) != 0
+        has_chat_session = packet.read_bool
+        if has_chat_session
+          chat_session_id = packet.read_uuid
+          public_key_expiry_time = packet.read_long
+          key_length = packet.read_var_int
+          encoded_public_key = Bytes.new(key_length.to_i32)
+          packet.read(encoded_public_key)
+          sig_length = packet.read_var_int
+          public_key_signature = Bytes.new(sig_length.to_i32)
+          packet.read(public_key_signature)
+        end
+      end
+
       gamemode = (actions & UPDATE_GAMEMODE) != 0 ? packet.read_var_int.to_i32 : nil
       listed = (actions & UPDATE_LISTED) != 0 ? packet.read_bool : nil
       latency = (actions & UPDATE_LATENCY) != 0 ? packet.read_var_int.to_i32 : nil
-      display_name = (actions & UPDATE_DISPLAY_NAME) != 0 ? (packet.read_bool ? Rosegold::TextComponent.read(packet) : nil) : nil
 
-      PlayerEntry.new(uuid, name, properties, gamemode, listed, latency, display_name)
+      display_name = nil
+      if (actions & UPDATE_DISPLAY_NAME) != 0
+        has_display_name = packet.read_bool
+        display_name = has_display_name ? Rosegold::TextComponent.read(packet) : nil
+      end
+
+      list_priority = (actions & UPDATE_LIST_PRIORITY) != 0 ? packet.read_var_int.to_i32 : nil
+      hat_visible = (actions & UPDATE_HAT) != 0 ? packet.read_bool : nil
+
+      PlayerEntry.new(uuid, name, properties, chat_session_id, public_key_expiry_time, encoded_public_key, public_key_signature, gamemode, listed, latency, display_name, list_priority, hat_visible)
     end
 
     self.new(actions, players)
@@ -104,6 +139,23 @@ class Rosegold::Clientbound::PlayerInfoUpdate < Rosegold::Clientbound::Packet
           end
         end
 
+        if (actions & INITIALIZE_CHAT) != 0
+          # Chat session ID (always present as optional)
+          if chat_session_id = player.chat_session_id
+            buffer.write true
+            buffer.write chat_session_id
+
+            # Write signature data (always written when chat session exists)
+            buffer.write_full player.public_key_expiry_time.not_nil! # ameba:disable Lint/NotNil
+            buffer.write player.encoded_public_key.not_nil!.size     # ameba:disable Lint/NotNil
+            buffer.write player.encoded_public_key.not_nil!          # ameba:disable Lint/NotNil
+            buffer.write player.public_key_signature.not_nil!.size   # ameba:disable Lint/NotNil
+            buffer.write player.public_key_signature.not_nil!        # ameba:disable Lint/NotNil
+          else
+            buffer.write false
+          end
+        end
+
         if (actions & UPDATE_GAMEMODE) != 0
           buffer.write player.gamemode.not_nil! # ameba:disable Lint/NotNil
         end
@@ -123,6 +175,14 @@ class Rosegold::Clientbound::PlayerInfoUpdate < Rosegold::Clientbound::Packet
           else
             buffer.write false
           end
+        end
+
+        if (actions & UPDATE_LIST_PRIORITY) != 0
+          buffer.write player.list_priority.not_nil! # ameba:disable Lint/NotNil
+        end
+
+        if (actions & UPDATE_HAT) != 0
+          buffer.write player.hat_visible.not_nil! # ameba:disable Lint/NotNil
         end
       end
     end.to_slice
