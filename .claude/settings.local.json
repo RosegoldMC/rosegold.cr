@@ -5,7 +5,10 @@
       "Bash(crystal spec:*)",
       "Bash(bin/ameba:*)",
       "Bash(crystal tool format:*)",
-      "Bash(LOG_LEVEL=debug crystal spec:*)"
+      "Bash(LOG_LEVEL=debug crystal spec:*)",
+      "Bash(xxd:*)",
+      "Bash(cat:*)",
+      "WebFetch(domain:minecraft.wiki)"
     ],
     "deny": [],
     "ask": [],
