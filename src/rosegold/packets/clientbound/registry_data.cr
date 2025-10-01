@@ -21,7 +21,6 @@ class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     registry_id = packet.read_var_string
-    Log.warn { "registry_id => #{registry_id}" }
 
     # Read entries array
     entry_count = packet.read_var_int
