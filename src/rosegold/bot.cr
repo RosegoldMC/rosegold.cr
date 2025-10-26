@@ -128,6 +128,22 @@ class Rosegold::Bot < Rosegold::EventEmitter
     look_at location.with_y eyes.y
   end
 
+  def forward_key=(state : Bool)
+    client.physics.forward_key = state
+  end
+
+  def backward_key=(state : Bool)
+    client.physics.backward_key = state
+  end
+
+  def left_key=(state : Bool)
+    client.physics.left_key = state
+  end
+
+  def right_key=(state : Bool)
+    client.physics.right_key = state
+  end
+
   # Moves straight towards `location`.
   # Waits for arrival.
   # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
