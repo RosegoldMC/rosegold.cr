@@ -290,7 +290,11 @@ class Rosegold::Client < Rosegold::EventEmitter
         read_packet
       end
     rescue e : IO::Error
-      Log.debug { "Stopping reader: #{e}" }
+      if connected?
+        Log.warn { "Reader stopped unexpectedly: #{e}" }
+      else
+        Log.debug { "Reader stopped: cleanly disconnected" }
+      end
     end
   end
 

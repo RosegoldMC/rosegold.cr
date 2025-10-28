@@ -54,6 +54,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def disconnect(reason : String)
+    return if @close_reason
     text_component = TextComponent.new(reason)
     Log.info { "Disconnected: #{text_component}" }
     @close_reason = text_component
