@@ -45,7 +45,6 @@ class Rosegold::Clientbound::ConfigurationDisconnect < Rosegold::Clientbound::Pa
   end
 
   def callback(client)
-    # Configuration disconnect doesn't need special callback handling
-    # The connection will be closed by the spectate server
+    client.connection.disconnect reason.to_s
   end
 end
