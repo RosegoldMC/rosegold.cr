@@ -169,17 +169,8 @@ class Rosegold::Interactions
       when ReachedBlock
         Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
         place_block using_hand, reached
-
-        # Generate sequence number for MC 1.21+
-        sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
-
-        # Track pending operation
-        if client.protocol_version >= 767_u32
-          operation = BlockOperation.new(Vec3i::ORIGIN, :use) # Use operations don't target specific blocks
-          client.pending_block_operations[sequence] = operation
-        end
-
-        send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
+        # Note: Do not send UseItem here - vanilla client only sends UseItemOn (PlayerBlockPlacement)
+        # when a block is reached. UseItem is only sent when right-clicking in air.
       else
         Log.debug { "No block or entity reached" }
         # Generate sequence number for MC 1.21+
@@ -389,6 +380,26 @@ class Rosegold::Interactions
   private def get_interaction_hitbox(block_state : UInt16, x : Int32, y : Int32, z : Int32) : AABBd?
     block = Block.from_block_state_id(block_state)
     case block.id_str
+    when .includes?("sapling"), .includes?("propagule"),
+         .includes?("flower"), .includes?("grass"), .includes?("fern"),
+         .includes?("dead_bush"), .includes?("bush"), .includes?("fungus"),
+         .includes?("roots"), "sugar_cane", "kelp", "seagrass",
+         "nether_sprouts", "warped_fungus", "crimson_fungus"
+      # Saplings, flowers, and other small plants: column(12.0, 0.0, 12.0) in vanilla
+      # Pixel coords: box(2, 0, 2, 14, 12, 14) → normalized: 0.125 to 0.875 (x,z), 0.0 to 0.75 (y)
+      AABBd.new(
+        x + 0.125, y + 0.0, z + 0.125,   # min corner
+        x + 0.875, y + 0.75, z + 0.875   # max corner
+      )
+    when .includes?("crop"), .includes?("wheat"), .includes?("carrot"),
+         .includes?("potato"), .includes?("beetroot"), .includes?("melon_stem"),
+         .includes?("pumpkin_stem"), "nether_wart"
+      # Crops: grow from 2-14 pixels tall depending on age
+      # Using full block width and 14 pixels (0.875) max height for interaction
+      AABBd.new(
+        x + 0.0, y + 0.0, z + 0.0,        # min corner
+        x + 1.0, y + 0.875, z + 1.0       # max corner (14 pixels tall)
+      )
     when .includes?("button")
       # Buttons have a small hitbox depending on their face
       # For floor buttons (face=floor), use a small hitbox on top of the block
