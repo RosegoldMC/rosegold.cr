@@ -109,11 +109,16 @@ class Rosegold::Inventory
   # Example:
   #   inventory.replenish 10, "stone" # => 10 (if successful)
   #   inventory.replenish 5, "diamond" # => 3 (if only 3 available)
-  def replenish(count, item_id)
-    current_count = count(item_id, inventory + hotbar)
+  #   inventory.replenish 3 { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
+  def replenish(count, spec)
+    current_count = count(spec, inventory + hotbar)
     return current_count if current_count >= count
 
-    current_count + withdraw_at_least(count - current_count, item_id)
+    current_count + withdraw_at_least(count - current_count, spec)
+  end
+
+  def replenish(count, &spec : Slot -> _)
+    replenish(count, spec)
   end
 
   # Refills the main hand to its maximum stack size by manually combining stacks.
