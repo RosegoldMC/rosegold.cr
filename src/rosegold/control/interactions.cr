@@ -41,14 +41,9 @@ class Rosegold::Interactions
     # TODO: seems to be only for eating
     # move to tick loop
 
-    # Generate sequence number for MC 1.21+
-    sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
-
-    # Track pending operation
-    if client.protocol_version >= 767_u32
-      operation = BlockOperation.new(Vec3i::ORIGIN, :use) # Use operations don't target specific blocks
-      client.pending_block_operations[sequence] = operation
-    end
+    sequence = client.next_sequence
+    operation = BlockOperation.new(Vec3i::ORIGIN, :use)
+    client.pending_block_operations[sequence] = operation
 
     send_packet Serverbound::PlayerAction.new :finish_using_hand, Vec3i::ORIGIN, :bottom, sequence
   end
@@ -169,18 +164,18 @@ class Rosegold::Interactions
       when ReachedBlock
         Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
         place_block using_hand, reached
-        # Note: Do not send UseItem here - vanilla client only sends UseItemOn (PlayerBlockPlacement)
-        # when a block is reached. UseItem is only sent when right-clicking in air.
+
+        sequence = client.next_sequence
+        operation = BlockOperation.new(Vec3i::ORIGIN, :use)
+        client.pending_block_operations[sequence] = operation
+
+        send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
       else
         Log.debug { "No block or entity reached" }
-        # Generate sequence number for MC 1.21+
-        sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
 
-        # Track pending operation
-        if client.protocol_version >= 767_u32
-          operation = BlockOperation.new(Vec3i::ORIGIN, :use) # Use operations don't target specific blocks
-          client.pending_block_operations[sequence] = operation
-        end
+        sequence = client.next_sequence
+        operation = BlockOperation.new(Vec3i::ORIGIN, :use)
+        client.pending_block_operations[sequence] = operation
 
         send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
       end
@@ -203,14 +198,9 @@ class Rosegold::Interactions
     cursor = (reached.intercept - reached.block.to_f64).to_f32
     inside_block = false # TODO
 
-    # Generate sequence number for MC 1.21+
-    sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
-
-    # Track pending operation
-    if client.protocol_version >= 767_u32
-      operation = BlockOperation.new(reached.block, :place)
-      client.pending_block_operations[sequence] = operation
-    end
+    sequence = client.next_sequence
+    operation = BlockOperation.new(reached.block, :place)
+    client.pending_block_operations[sequence] = operation
 
     send_packet Serverbound::PlayerBlockPlacement.new \
       hand, reached.block, reached.face, cursor, inside_block, sequence
@@ -221,14 +211,9 @@ class Rosegold::Interactions
     @digging_block = reached
     @dig_hand_swing_countdown = 6
 
-    # Generate sequence number for MC 1.21+
-    sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
-
-    # Track pending operation
-    if client.protocol_version >= 767_u32
-      operation = BlockOperation.new(reached.block, :dig)
-      client.pending_block_operations[sequence] = operation
-    end
+    sequence = client.next_sequence
+    operation = BlockOperation.new(reached.block, :dig)
+    client.pending_block_operations[sequence] = operation
 
     send_packet Serverbound::PlayerAction.new \
       :start, reached.block, reached.face, sequence
@@ -243,14 +228,9 @@ class Rosegold::Interactions
     @digging_block = nil
     # Don't set self.digging = false here to allow continuous digging
 
-    # Generate sequence number for MC 1.21+
-    sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
-
-    # Track pending operation
-    if client.protocol_version >= 767_u32
-      operation = BlockOperation.new(reached.block, :dig)
-      client.pending_block_operations[sequence] = operation
-    end
+    sequence = client.next_sequence
+    operation = BlockOperation.new(reached.block, :dig)
+    client.pending_block_operations[sequence] = operation
 
     send_packet Serverbound::PlayerAction.new \
       :finish, reached.block, reached.face, sequence
@@ -262,14 +242,9 @@ class Rosegold::Interactions
     @digging_block = nil
     @block_damage_progress = 0.0
 
-    # Generate sequence number for MC 1.21+
-    sequence = client.protocol_version >= 767_u32 ? client.next_sequence : 0
-
-    # Track pending operation
-    if client.protocol_version >= 767_u32
-      operation = BlockOperation.new(reached.block, :dig)
-      client.pending_block_operations[sequence] = operation
-    end
+    sequence = client.next_sequence
+    operation = BlockOperation.new(reached.block, :dig)
+    client.pending_block_operations[sequence] = operation
 
     send_packet Serverbound::PlayerAction.new \
       :cancel, reached.block, reached.face, sequence
