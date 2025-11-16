@@ -24,6 +24,6 @@ class Rosegold::Clientbound::ConfigurationKeepAlive < Rosegold::Clientbound::Pac
   end
 
   def callback(client)
-    client.queue_packet Serverbound::KeepAlive.new keep_alive_id
+    client.queue_packet Serverbound::ConfigurationKeepAlive.new keep_alive_id
   end
 end
