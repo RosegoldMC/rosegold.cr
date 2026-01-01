@@ -250,6 +250,7 @@ class Rosegold::Client < Rosegold::EventEmitter
           interactions.tick
           physics.tick
           emit_event Event::Tick.new
+          send_packet! Serverbound::ClientTickEnd.new
         end
 
         tick_counter += 1
