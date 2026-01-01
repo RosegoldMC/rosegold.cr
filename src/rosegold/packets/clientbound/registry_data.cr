@@ -28,16 +28,16 @@ class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
       entry_id = packet.read_var_string
       has_data = packet.read_bool
       data = if has_data
-        # Read unnamed NBT and capture raw bytes for round-trip serialization
-        start_pos = packet.pos
-        _tag = Minecraft::NBT::Tag.read(packet)
-        end_pos = packet.pos
+               # Read unnamed NBT and capture raw bytes for round-trip serialization
+               start_pos = packet.pos
+               _tag = Minecraft::NBT::Tag.read(packet)
+               end_pos = packet.pos
 
-        # Extract the raw bytes we just read
-        packet.to_slice[start_pos...end_pos]
-      else
-        nil
-      end
+               # Extract the raw bytes we just read
+               packet.to_slice[start_pos...end_pos]
+             else
+               nil
+             end
       {id: entry_id, data: data}
     end
 

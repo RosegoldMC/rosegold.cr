@@ -363,8 +363,8 @@ class Rosegold::Interactions
       # Saplings, flowers, and other small plants: column(12.0, 0.0, 12.0) in vanilla
       # Pixel coords: box(2, 0, 2, 14, 12, 14) → normalized: 0.125 to 0.875 (x,z), 0.0 to 0.75 (y)
       AABBd.new(
-        x + 0.125, y + 0.0, z + 0.125,   # min corner
-        x + 0.875, y + 0.75, z + 0.875   # max corner
+        x + 0.125, y + 0.0, z + 0.125, # min corner
+        x + 0.875, y + 0.75, z + 0.875 # max corner
       )
     when .includes?("crop"), .includes?("wheat"), .includes?("carrot"),
          .includes?("potato"), .includes?("beetroot"), .includes?("melon_stem"),
@@ -372,8 +372,8 @@ class Rosegold::Interactions
       # Crops: grow from 2-14 pixels tall depending on age
       # Using full block width and 14 pixels (0.875) max height for interaction
       AABBd.new(
-        x + 0.0, y + 0.0, z + 0.0,        # min corner
-        x + 1.0, y + 0.875, z + 1.0       # max corner (14 pixels tall)
+        x + 0.0, y + 0.0, z + 0.0,  # min corner
+        x + 1.0, y + 0.875, z + 1.0 # max corner (14 pixels tall)
       )
     when .includes?("button")
       # Buttons have a small hitbox depending on their face
