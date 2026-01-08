@@ -961,12 +961,11 @@ class Rosegold::SpectateConnection
       end
 
       if all_players.size > 0
-        # Send comprehensive PlayerInfoUpdate with all flags
+        # Send PlayerInfoUpdate without display names to avoid UTF-8 serialization issues
         actions = Rosegold::Clientbound::PlayerInfoUpdate::ADD_PLAYER |
                   Rosegold::Clientbound::PlayerInfoUpdate::UPDATE_GAMEMODE |
                   Rosegold::Clientbound::PlayerInfoUpdate::UPDATE_LISTED |
-                  Rosegold::Clientbound::PlayerInfoUpdate::UPDATE_LATENCY |
-                  Rosegold::Clientbound::PlayerInfoUpdate::UPDATE_DISPLAY_NAME
+                  Rosegold::Clientbound::PlayerInfoUpdate::UPDATE_LATENCY
 
         player_info_packet = Rosegold::Clientbound::PlayerInfoUpdate.new(actions, all_players)
         send_packet(player_info_packet)
