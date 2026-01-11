@@ -366,14 +366,43 @@ class Rosegold::Interactions
         x + 0.125, y + 0.0, z + 0.125, # min corner
         x + 0.875, y + 0.75, z + 0.875 # max corner
       )
-    when .includes?("crop"), .includes?("wheat"), .includes?("carrot"),
-         .includes?("potato"), .includes?("beetroot"), .includes?("melon_stem"),
-         .includes?("pumpkin_stem"), "nether_wart"
-      # Crops: grow from 2-14 pixels tall depending on age
-      # Using full block width and 14 pixels (0.875) max height for interaction
+    when "wheat", "carrots", "potatoes", "beetroots", "melon_stem", "pumpkin_stem"
+      # Basic crops and stems: Block.boxes(7, age -> Block.column(16.0/2.0, 0.0, (2 + age * 2)))
+      # Height in pixels = 2 + age * 2, normalized = (2 + age * 2) / 16
+      age = extract_age_property(block_state)
+      height = (2 + age * 2) / 16.0
       AABBd.new(
-        x + 0.0, y + 0.0, z + 0.0,  # min corner
-        x + 1.0, y + 0.875, z + 1.0 # max corner (14 pixels tall)
+        x + 0.0, y + 0.0, z + 0.0,
+        x + 1.0, y + height, z + 1.0
+      )
+    when "nether_wart"
+      # Nether wart: Block.boxes(3, age -> Block.column(16.0, 0.0, (5 + age * 3)))
+      # Height in pixels = 5 + age * 3, normalized = (5 + age * 3) / 16
+      age = extract_age_property(block_state)
+      height = (5 + age * 3) / 16.0
+      AABBd.new(
+        x + 0.0, y + 0.0, z + 0.0,
+        x + 1.0, y + height, z + 1.0
+      )
+    when "torchflower_crop"
+      # Torchflower: Block.boxes(1, age -> Block.column(6.0, 0.0, (6 + age * 4)))
+      # Height in pixels = 6 + age * 4, normalized = (6 + age * 4) / 16
+      age = extract_age_property(block_state)
+      height = (6 + age * 4) / 16.0
+      AABBd.new(
+        x + 0.0, y + 0.0, z + 0.0,
+        x + 1.0, y + height, z + 1.0
+      )
+    when "sweet_berry_bush"
+      # Sweet berry bush has special shapes per age
+      # Age 0: column(10.0, 0.0, 8.0) = 0.5 blocks
+      # Age 1-2: column(14.0, 0.0, 16.0) = 1.0 blocks
+      # Age 3: Shapes.block() = 1.0 blocks
+      age = extract_age_property(block_state)
+      height = age == 0 ? 0.5 : 1.0
+      AABBd.new(
+        x + 0.0, y + 0.0, z + 0.0,
+        x + 1.0, y + height, z + 1.0
       )
     when .includes?("button")
       # Buttons have a small hitbox depending on their face
@@ -420,5 +449,16 @@ class Rosegold::Interactions
 
   private def inventory : Inventory
     @inventory ||= Inventory.new client
+  end
+
+  # Extracts the age property from a block state ID
+  # Returns 0 if the block doesn't have an age property
+  private def extract_age_property(block_state : UInt16) : Int32
+    block_state_name = MCData::DEFAULT.block_state_names[block_state]
+    if match = block_state_name.match(/age=(\d+)/)
+      match[1].to_i
+    else
+      0
+    end
   end
 end
