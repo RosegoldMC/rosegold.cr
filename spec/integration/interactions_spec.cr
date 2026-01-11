@@ -216,4 +216,62 @@ Spectator.describe "Rosegold::Bot interactions" do
       end
     end
   end
+
+  it "should raytrace wheat crops with age-dependent hitboxes" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        # Setup: place wheat at age 0 (tiny, 2 pixels tall) and give bonemeal
+        bot.chat "/setblock 6 -60 6 minecraft:farmland"
+        bot.chat "/setblock 6 -59 6 minecraft:wheat[age=0]"
+        bot.chat "/tp 6.5 -60 7.5"
+        bot.chat "/clear"
+        bot.chat "/give @p minecraft:bone_meal 10"
+        bot.wait_ticks 5
+
+        # Verify wheat was created at age 0
+        wheat_age_0 = client.dimension.block_state(6, -59, 6)
+        expect(wheat_age_0).to_not be_nil
+        age_0_name = Rosegold::MCData::DEFAULT.block_state_names[wheat_age_0.not_nil!]
+        expect(age_0_name).to eq("wheat[age=0]")
+
+        # Pick bonemeal and count initial amount
+        bot.inventory.pick! "bone_meal"
+        bot.wait_ticks 2
+        initial_bonemeal = bot.main_hand.count
+
+        # Look horizontally at tiny age-0 wheat (should miss - too short at 0.125 blocks)
+        bot.yaw = 180
+        bot.pitch = 0
+        bot.wait_ticks 2
+
+        # Try to use bonemeal (should miss the tiny wheat)
+        bot.start_using_hand
+        bot.wait_ticks 3
+        bot.stop_using_hand
+        bot.wait_ticks 3
+
+        # Verify bonemeal was NOT consumed (ray passed above tiny wheat)
+        expect(bot.main_hand.count).to eq(initial_bonemeal)
+        wheat_after_miss = client.dimension.block_state(6, -59, 6)
+        expect(wheat_after_miss).to eq(wheat_age_0)
+
+        # Now look down at an angle that should hit the wheat
+        bot.pitch = 35
+        bot.wait_ticks 2
+
+        # Use bonemeal on wheat (should hit this time)
+        bot.start_using_hand
+        bot.wait_ticks 3
+        bot.stop_using_hand
+        bot.wait_ticks 3
+
+        # Verify bonemeal was consumed (successfully hit the wheat)
+        expect(bot.main_hand.count).to be < initial_bonemeal
+
+        # Verify wheat grew (bonemeal actually worked)
+        wheat_after_growth = client.dimension.block_state(6, -59, 6)
+        expect(wheat_after_growth).to_not eq(wheat_age_0)
+      end
+    end
+  end
 end
