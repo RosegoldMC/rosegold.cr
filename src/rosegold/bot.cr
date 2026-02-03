@@ -369,4 +369,72 @@ class Rosegold::Bot < Rosegold::EventEmitter
   def attack(target : Vec3d? | Look? = nil)
     dig 0, target
   end
+
+  # Runs a slash command and waits for a confirmation message from the server.
+  #
+  # Use this for non-idempotent commands (like toggles) or when you want to
+  # force retries on idempotent commands until confirmation. Retries automatically
+  # if the command fails or returns an inverse message.
+  #
+  # The *expected_message* is matched after stripping formatting codes. If
+  # *inverse_message* is provided and received, the command will retry, which is
+  # useful for toggle commands where the bot may be in the wrong state.
+  #
+  # Returns `true` if the expected message is received within *max_tries*
+  # attempts, `false` otherwise.
+  #
+  # ```
+  # bot.run_command_with_confirmation(
+  #   "/ignoregroup !",
+  #   "You stopped ignoring !.",
+  #   3,
+  #   "You are now ignoring !"
+  # )
+  # ```
+  def run_command_with_confirmation(command : String, expected_message : String, max_tries : Int32 = 3, inverse_message : String? = nil)
+    got_response = false
+    command_completed = false
+
+    handler_id = self.on Rosegold::Clientbound::SystemChatMessage do |event|
+      next if got_response
+
+      msg = event.message.to_s.gsub(/§[0-9a-fk-or]/, "").strip
+
+      if msg == expected_message
+        command_completed = true
+        got_response = true
+      elsif inverse_message && msg == inverse_message
+        got_response = true
+      end
+    end
+
+    max_tries.times do |try_count|
+      got_response = false
+      command_completed = false
+
+      self.chat command
+      Log.info { "Running command (attempt #{try_count + 1}/#{max_tries}): #{command}" }
+
+      timeout_time = Time.utc + 5.seconds
+      while !got_response && Time.utc < timeout_time
+        sleep 0.1.seconds
+      end
+
+      if command_completed
+        Log.info { "Received expected response for: #{command}" }
+        self.off Rosegold::Clientbound::SystemChatMessage, handler_id
+        return true
+      elsif got_response
+        Log.info { "Got inverse response, trying again: #{inverse_message}" }
+        wait_ticks 2 if try_count < max_tries - 1
+      else
+        Log.warn { "Attempt #{try_count + 1}/#{max_tries}: Did not receive expected message '#{expected_message}' for: #{command}" }
+        wait_ticks 2 if try_count < max_tries - 1
+      end
+    end
+
+    Log.error { "Failed to get expected response after #{max_tries} attempts: #{command}" }
+    self.off Rosegold::Clientbound::SystemChatMessage, handler_id
+    false
+  end
 end
