@@ -42,8 +42,8 @@ class Rosegold::Client; end
 class Rosegold::SpectateServer
   # Configuration constants
   DEFAULT_SPECTATOR_ENTITY_ID = 0x7fffffff
-  DEFAULT_RENDER_DISTANCE     =          3
-  DEFAULT_VIEW_DISTANCE       =      3_u32
+  DEFAULT_RENDER_DISTANCE     =          4
+  DEFAULT_VIEW_DISTANCE       =     10_u32
   DEFAULT_SIMULATION_DISTANCE =      3_u32
   KEEP_ALIVE_INTERVAL         = 20.seconds
   INVENTORY_POLL_INTERVAL     = 1.second
@@ -601,7 +601,7 @@ class Rosegold::SpectateConnection
     send_packet(packet)
 
     # Send chunks from bot's dimension if available
-    view_distance = 3
+    view_distance = SpectateServer::DEFAULT_RENDER_DISTANCE
     (-view_distance..view_distance).each do |delta_x|
       (-view_distance..view_distance).each do |delta_z|
         chunk_x = player_chunk_x + delta_x
