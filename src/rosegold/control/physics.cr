@@ -47,6 +47,12 @@ class Rosegold::Physics
 
   VERY_CLOSE = 0.1
 
+  # Epsilon constants for floating point precision
+  EPSILON_COLLISION  = 1.0e-7
+  EPSILON_MOVEMENT   = 1.0e-6
+  EPSILON_STUCK      =  0.001
+  EPSILON_HORIZONTAL =  0.003
+
   # Send a keep-alive movement packet every 20 ticks (1 second) even when stationary
   # This prevents server timeouts while avoiding packet spam
   MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL = 20
@@ -390,7 +396,9 @@ class Rosegold::Physics
 
     new_feet = player.feet + movement
 
-    on_ground = movement.y > input_velocity.y
+    # Ground detection: check if we collided vertically while moving downward
+    vertical_collision = (movement.y - input_velocity.y).abs > EPSILON_MOVEMENT
+    on_ground = vertical_collision && input_velocity.y < 0
 
     {movement, final_velocity, new_feet, on_ground}
   end
@@ -571,9 +579,10 @@ class Rosegold::Physics
     obstacles = obstacles.reject &.contains? start
 
     movement = slide start, velocity, obstacles
-    collided_x = movement.x != velocity.x
-    collided_y = movement.y != velocity.y
-    collided_z = movement.z != velocity.z
+    # Use epsilon to detect meaningful collisions vs floating point noise
+    collided_x = (movement.x - velocity.x).abs > EPSILON_COLLISION
+    collided_y = (movement.y - velocity.y).abs > EPSILON_COLLISION
+    collided_z = (movement.z - velocity.z).abs > EPSILON_COLLISION
 
     if collided_x || collided_z
       step_up_movement = slide start, Vec3d.new(0, 0.5, 0), obstacles
@@ -642,7 +651,11 @@ class Rosegold::Physics
       dimension.block_state(x, y, z).try do |block_state|
         block_shape = MCData::DEFAULT.block_state_collision_shapes[block_state]
         block_shape.map &.to_f64.offset(x, y, z).grow(grow_aabb)
-      end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
+      end || begin
+        # Unloaded chunks should be solid to prevent falling through
+        [AABBd.new(x.to_f64, y.to_f64, z.to_f64,
+          x.to_f64 + 1.0, y.to_f64 + 1.0, z.to_f64 + 1.0).grow(grow_aabb)]
+      end
     end
   end
 end
