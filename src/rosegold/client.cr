@@ -21,7 +21,6 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   property host : String, port : Int32
   property connection : Connection::Client?
-  property detected_protocol_version : UInt32?
   property current_protocol_state : ProtocolState = ProtocolState::HANDSHAKING
 
   delegate disconnect, to: connection
@@ -51,7 +50,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     tags : Clientbound::UpdateTags? = nil
 
   def protocol_version
-    detected_protocol_version || Client.protocol_version
+    Client.protocol_version
   end
 
   def next_sequence : Int32
@@ -270,8 +269,8 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     authenticate!
 
-    # Auto-detect server protocol version before connecting
-    detect_and_set_protocol_version
+    # Log server protocol version for debugging
+    detect_protocol_version
 
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING, protocol_version, self
@@ -347,22 +346,19 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
   end
 
-  private def detect_and_set_protocol_version
-    # Ping the server to get its protocol version
-    # We'll try with a commonly supported protocol first, then adjust
+  private def detect_protocol_version
     status_response = status
     if protocol_info = status_response.json_response["version"]?
       if server_protocol = protocol_info["protocol"]?.try(&.as_i?)
-        Log.info { "Detected server protocol version: #{server_protocol}" }
-        @detected_protocol_version = server_protocol.to_u32
+        Log.info { "Server protocol version: #{server_protocol} (using #{protocol_version})" }
       else
-        Log.warn { "Could not parse protocol version from server status, using default" }
+        Log.warn { "Could not parse protocol version from server status" }
       end
     else
-      Log.warn { "Server status response missing version info, using default" }
+      Log.warn { "Server status response missing version info" }
     end
   rescue e
-    Log.warn { "Failed to detect server protocol version: #{e}, using default" }
+    Log.warn { "Failed to detect server protocol version: #{e}" }
   end
 
   def status
