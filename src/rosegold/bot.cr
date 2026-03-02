@@ -35,7 +35,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   delegate host, port, connect, connected?, disconnect, join_game, spawned?, to: client
   delegate uuid, username, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
-  delegate sneak, sprint, to: client.physics
+  delegate sneak, sprint, forward_key, backward_key, left_key, right_key, to: client.physics
   delegate main_hand, to: inventory
   delegate stop_using_hand, stop_digging, to: client.interactions
   delegate x, y, z, to: location
@@ -126,6 +126,22 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Waits for the new look to be sent to the server.
   def look_at_horizontal(location : Vec3d)
     look_at location.with_y eyes.y
+  end
+
+  def forward_key=(state : Bool)
+    client.physics.forward_key = state
+  end
+
+  def backward_key=(state : Bool)
+    client.physics.backward_key = state
+  end
+
+  def left_key=(state : Bool)
+    client.physics.left_key = state
+  end
+
+  def right_key=(state : Bool)
+    client.physics.right_key = state
   end
 
   # Moves straight towards `location`.
