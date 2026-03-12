@@ -64,5 +64,11 @@ class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
   def callback(client)
     client.registries[registry_id] = self
     Log.trace { "Stored registry #{registry_id} in client registries" }
+
+    if registry_id == "minecraft:enchantment"
+      names = entries.map { |e| e[:id].sub("minecraft:", "") }
+      Rosegold::Slot.enchantment_registry = names
+      Log.info { "Loaded enchantment registry: #{names.size} entries" }
+    end
   end
 end
