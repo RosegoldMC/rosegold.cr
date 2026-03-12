@@ -192,6 +192,8 @@ class Rosegold::SpectateConnection
         handle_login_acknowledged
       when Rosegold::Serverbound::ClientInformation
         handle_client_information
+      when Rosegold::Serverbound::KnownPacks
+        handle_known_packs_response(packet)
       when Rosegold::Serverbound::FinishConfiguration
         handle_finish_configuration
       when Rosegold::Serverbound::KeepAlive
@@ -348,43 +350,26 @@ class Rosegold::SpectateConnection
   end
 
   private def send_configuration_packets
-    Log.info { "Sending configuration packets to client #{@username}" }
-
-    # Send update tags FIRST - these define blocks, items, etc. that may be referenced by other packets
     if bot_update_tags = get_bot_update_tags
-      Log.info { "Sending #{bot_update_tags.tag_types.size} stored tag types from bot" }
       send_packet(bot_update_tags)
     else
-      Log.info { "No stored update tags from bot, sending empty update tags" }
-      empty_update_tags = Rosegold::Clientbound::UpdateTags.new
-      send_packet(empty_update_tags)
+      send_packet(Rosegold::Clientbound::UpdateTags.new)
     end
 
-    # Send known packs SECOND - informs client about data packs before registry data
-    if bot_known_packs = get_bot_known_packs
-      Log.info { "Sending #{bot_known_packs.size} stored known packs from bot" }
-      known_packs_packet = Rosegold::Clientbound::KnownPacks.new(bot_known_packs)
-      send_packet(known_packs_packet)
-    else
-      Log.info { "No stored known packs from bot, sending empty known packs" }
-      empty_known_packs = Rosegold::Clientbound::KnownPacks.new
-      send_packet(empty_known_packs)
-    end
+    # Empty KnownPacks; wait for client response before sending registries
+    send_packet(Rosegold::Clientbound::KnownPacks.new)
+  end
 
-    # Send registry data AFTER known packs - registry content may depend on data packs
+  private def handle_known_packs_response(packet : Rosegold::Serverbound::KnownPacks)
     if bot_registries = get_bot_registries
-      Log.info { "Sending #{bot_registries.size} stored registries from bot" }
       bot_registries.each do |registry_id, registry_data|
         send_packet(registry_data)
-        Log.debug { "Sent stored registry: #{registry_id} with #{registry_data.entries.size} entries" }
       end
     else
-      Log.info { "No stored registry data from bot, sending minimal registry data" }
       send_minimal_registry_data
     end
 
     # Send FinishConfiguration to transition to PLAY state
-    Log.debug { "Sending FinishConfiguration to client #{@username}" }
     send_packet(Rosegold::Clientbound::FinishConfiguration.new)
   end
 
@@ -509,7 +494,7 @@ class Rosegold::SpectateConnection
     send_set_ticking_state(false)
     send_player_abilities
     send_player_position
-    start_inventory_polling
+    # Inventory handled by raw packet relay (0x12, 0x14)
     send_hotbar_selection(bot.player.hotbar_selection)
     send_start_waiting_for_chunks
     send_chunks
