@@ -268,8 +268,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # end
   # ```
   def open_container(timeout : Time::Span = 5.seconds, &)
-    use_hand
-    wait_for Rosegold::Clientbound::SetContainerContent, timeout: timeout
+    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
     yield
     wait_tick
     inventory.close

@@ -941,6 +941,8 @@ class Rosegold::DataComponents::Weapon < Rosegold::DataComponent
 end
 
 class Rosegold::Slot
+  class_property enchantment_registry : Array(String) = [] of String
+
   property count : UInt32
   property components_to_add : Hash(UInt32, DataComponent) # Component type -> structured component
   property components_to_remove : Set(UInt32)              # Component types to remove
@@ -1066,9 +1068,13 @@ class Rosegold::Slot
 
     result = Hash(String, Int8 | Int16 | Int32 | Int64 | UInt8).new
     enchant_component.enchantments.each do |type_id, level|
-      # Convert type_id to string name using MCData
-      enchantment = MCData::DEFAULT.enchantments.find { |e| e.id == type_id }
-      enchant_name = enchantment ? enchantment.name : "enchant_#{type_id}"
+      registry = Rosegold::Slot.enchantment_registry
+      enchant_name = if !registry.empty? && type_id < registry.size
+                       registry[type_id]
+                     else
+                       enchantment = MCData::DEFAULT.enchantments.find { |e| e.id == type_id }
+                       enchantment ? enchantment.name : "enchant_#{type_id}"
+                     end
       result[enchant_name] = level.to_i32
     end
     result

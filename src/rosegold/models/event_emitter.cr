@@ -34,9 +34,8 @@ class Rosegold::EventEmitter
     end
   end
 
-  # Waits for an event, if timeout is given, it will return nil
-  # if the timeout is reached before the event is emitted.
-  def wait_for(event_type : T.class, timeout : Time::Span? = nil) forall T
+  # Waits for an event. Returns nil on timeout.
+  def wait_for(event_type : T.class, timeout : Time::Span = 5.seconds) forall T
     ran_event = nil
     time_start = Time.utc
 
@@ -45,11 +44,30 @@ class Rosegold::EventEmitter
     end
 
     until ran_event
-      return nil if timeout && (Time.utc - time_start) > timeout
+      return nil if (Time.utc - time_start) > timeout
       sleep 0.01.seconds
     end
 
     ran_event
+  end
+
+  # Registers listener before running block, then waits. Raises on timeout.
+  def wait_for(event_type : T.class, timeout : Time::Span = 5.seconds, &) forall T
+    ran_event = nil
+    time_start = Time.utc
+
+    once event_type do |event|
+      ran_event = event
+    end
+
+    yield
+
+    until ran_event
+      raise "Timed out waiting for #{event_type} after #{timeout}" if (Time.utc - time_start) > timeout
+      sleep 0.01.seconds
+    end
+
+    ran_event.not_nil!
   end
 
   def emit_event(event : Event)
