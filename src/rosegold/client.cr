@@ -47,7 +47,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     cookies : Hash(String, Bytes) = Hash(String, Bytes).new,
     registries : Hash(String, Clientbound::RegistryData) = Hash(String, Clientbound::RegistryData).new,
     known_packs : Array(NamedTuple(namespace: String, id: String, version: String)) = [] of NamedTuple(namespace: String, id: String, version: String),
-    tags : Clientbound::UpdateTags? = nil
+    tags : Clientbound::UpdateTags? = nil,
+    ticker_done : Channel(Nil) = Channel(Nil).new
 
   def protocol_version
     Client.protocol_version
@@ -200,11 +201,13 @@ class Rosegold::Client < Rosegold::EventEmitter
     join_game(*args)
     yield self
     connection?.try &.disconnect "End of script"
+    @ticker_done.receive
 
     self
   end
 
   def start_ticker
+    @ticker_done = Channel(Nil).new
     spawn do
       target_interval_ns = 50_000_000_u64
       tick_counter = 0_u64
@@ -246,10 +249,14 @@ class Rosegold::Client < Rosegold::EventEmitter
                       end
 
         if should_tick
-          interactions.tick
-          physics.tick
-          emit_event Event::Tick.new
-          send_packet! Serverbound::ClientTickEnd.new
+          begin
+            interactions.tick
+            physics.tick
+            emit_event Event::Tick.new
+            send_packet! Serverbound::ClientTickEnd.new
+          rescue NotConnected
+            break
+          end
         end
 
         tick_counter += 1
@@ -261,6 +268,8 @@ class Rosegold::Client < Rosegold::EventEmitter
           Log.trace { "Tick #{tick_counter}: drift #{drift_ms.round(2)}ms" }
         end
       end
+
+      @ticker_done.send nil
     end
   end
 
