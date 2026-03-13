@@ -60,6 +60,7 @@ class Rosegold::Physics
   private getter client : Rosegold::Client
   property? paused : Bool = true
   property? jump_queued : Bool = false
+  getter keys : MovementKeys = MovementKeys.new
   private getter movement_action : Action(Vec3d)?
   private getter look_action : Action(Look)?
   private getter action_mutex : Mutex = Mutex.new
@@ -143,9 +144,8 @@ class Rosegold::Physics
 
   def handle_disconnect
     @paused = true
-    @movement_action.try &.fail Client::NotConnected.new "Disconnected from server"
-    @movement_action = nil
-    @look_action.try &.fail Rosegold::Client::NotConnected.new "Disconnected from server"
+    stop_moving
+    @look_action.try &.cancel
     @look_action = nil
   end
 
@@ -176,6 +176,11 @@ class Rosegold::Physics
     @last_position = nil
     @current_stuck_timeout_ticks = stuck_timeout_ticks
     action.join
+  end
+
+  def stop_moving
+    replace_movement_action(nil)
+    keys.release_all
   end
 
   def sneak(sneaking = true)
@@ -248,10 +253,10 @@ class Rosegold::Physics
     client.dimension
   end
 
-  def tick(virtual_input : Rosegold::VirtualInput? = nil)
+  def tick
     return if paused? || !client.connected?
 
-    input = virtual_input || convert_movement_goals_to_input
+    input = convert_movement_goals_to_input
     process_virtual_input(input)
 
     movement, next_velocity, new_feet, on_ground = execute_movement_physics
@@ -274,16 +279,15 @@ class Rosegold::Physics
   private def convert_movement_goals_to_input : Rosegold::VirtualInput
     curr_movement = @movement_action
 
-    forward = false
-
     if curr_movement
       move_direction = (curr_movement.target - player.feet).with_y(0)
 
+      keys.release_all
       if move_direction.length >= VERY_CLOSE
+        keys.press MovementKeys::Key::Forward
         target_yaw = Math.atan2(-move_direction.x, move_direction.z) * (180.0 / Math::PI)
         target_look = Look.new(target_yaw.to_f32, player.look.pitch)
         player.look = target_look
-        forward = true
       end
     end
 
@@ -292,10 +296,10 @@ class Rosegold::Physics
     sprint = player.sprinting? && !sneak
 
     Rosegold::VirtualInput.new(
-      forward: forward,
-      backward: false,
-      left: false,
-      right: false,
+      forward: keys.forward?,
+      backward: keys.backward?,
+      left: keys.left?,
+      right: keys.right?,
       jump: jump,
       sneak: sneak,
       sprint: sprint
@@ -494,6 +498,7 @@ class Rosegold::Physics
           player.velocity = Vec3d.new(0.0, player.velocity.y, 0.0)
           movement_action.succeed
           @movement_action = nil
+          keys.release_all
         end
       end
 
@@ -510,7 +515,7 @@ class Rosegold::Physics
 
           if @current_stuck_timeout_ticks > 0 && @consecutive_stuck_ticks >= @current_stuck_timeout_ticks
             action.fail MovementStuck.new "Movement stuck for #{@current_stuck_timeout_ticks} consecutive ticks at #{feet}"
-            @movement_action = nil
+            stop_moving
           end
         else
           @consecutive_stuck_ticks = 0
