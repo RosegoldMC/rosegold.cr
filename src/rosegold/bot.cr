@@ -128,6 +128,10 @@ class Rosegold::Bot < Rosegold::EventEmitter
     look_at location.with_y eyes.y
   end
 
+  def keys
+    client.physics.keys
+  end
+
   # Moves straight towards `location`.
   # Waits for arrival.
   # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
@@ -159,9 +163,9 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   # Stop moving towards the target specified in #move_to
-  # Dequeue any jump queued with #start_jump
+  # Also releases all movement keys and dequeues any pending jump.
   def stop_moving
-    client.physics.move = nil
+    client.physics.stop_moving
     client.physics.jump_queued = false
   end
 
