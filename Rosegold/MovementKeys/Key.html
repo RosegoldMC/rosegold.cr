@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Event::Tick - rosegold main</title>
+  <title>Rosegold::MovementKeys::Key - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -1017,7 +1017,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
+  <li class="parent " data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
       <a href="../../Rosegold/Event.html">Event</a>
       
         <ul>
@@ -1042,7 +1042,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Event/Tick" data-name="rosegold::event::tick">
+  <li class=" " data-id="rosegold/Rosegold/Event/Tick" data-name="rosegold::event::tick">
       <a href="../../Rosegold/Event/Tick.html">Tick</a>
       
     </li>
@@ -1182,12 +1182,12 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/MovementKeys" data-name="rosegold::movementkeys">
+  <li class="parent open current" data-id="rosegold/Rosegold/MovementKeys" data-name="rosegold::movementkeys">
       <a href="../../Rosegold/MovementKeys.html">MovementKeys</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/MovementKeys/Key" data-name="rosegold::movementkeys::key">
+  <li class=" current" data-id="rosegold/Rosegold/MovementKeys/Key" data-name="rosegold::movementkeys::key">
       <a href="../../Rosegold/MovementKeys/Key.html">Key</a>
       
     </li>
@@ -1707,13 +1707,11 @@
 <h1 class="type-name">
 
   <span class="kind">
-    class
-  </span> Rosegold::<wbr>Event::<wbr>Tick
+    enum
+  </span> Rosegold::<wbr>MovementKeys::<wbr>Key
 
 </h1>
 
-
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Event/Tick.html">Rosegold::Event::Tick</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -1743,8 +1741,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/fde86f4bf6c98b8d6ecf7db4444a6afc0d7f09a2/src/rosegold/events/tick.cr#L13" target="_blank">
-        rosegold/events/tick.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/fde86f4bf6c98b8d6ecf7db4444a6afc0d7f09a2/src/rosegold/control/movement_keys.cr#L3" target="_blank">
+        rosegold/control/movement_keys.cr
       </a>
     
     <br/>
@@ -1752,6 +1750,50 @@
 
 
 
+  
+    <h2>
+      <a id="enum-members" class="anchor" href="#enum-members">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Enum Members
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="Forward">
+        <strong>Forward</strong> = <code><span class="n">1</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Backward">
+        <strong>Backward</strong> = <code><span class="n">2</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Left">
+        <strong>Left</strong> = <code><span class="n">4</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="Right">
+        <strong>Right</strong> = <code><span class="n">8</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="None">
+        <strong>None</strong> = <code><span class="n">0</span></code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="All">
+        <strong>All</strong> = <code><span class="n">15</span></code>
+      </dt>
+      
+    
+  </dl>
+
 
 
   
@@ -1761,9 +1803,67 @@
   
 
   
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#backward%3F-instance-method" class="signature"><strong>#backward?</strong></a>
+        
+          <div class="summary"><p>Returns <code>true</code> if this enum value contains <code><a href="../../Rosegold/MovementKeys/Key.html#Backward">Backward</a></code></p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#forward%3F-instance-method" class="signature"><strong>#forward?</strong></a>
+        
+          <div class="summary"><p>Returns <code>true</code> if this enum value contains <code><a href="../../Rosegold/MovementKeys/Key.html#Forward">Forward</a></code></p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#left%3F-instance-method" class="signature"><strong>#left?</strong></a>
+        
+          <div class="summary"><p>Returns <code>true</code> if this enum value contains <code><a href="../../Rosegold/MovementKeys/Key.html#Left">Left</a></code></p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#none%3F-instance-method" class="signature"><strong>#none?</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#right%3F-instance-method" class="signature"><strong>#right?</strong></a>
+        
+          <div class="summary"><p>Returns <code>true</code> if this enum value contains <code><a href="../../Rosegold/MovementKeys/Key.html#Right">Right</a></code></p></div>
+        
+      </li>
+    
+  </ul>
+
 
 
   <div class="methods-inherited">
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
     
       
 
@@ -1813,6 +1913,116 @@
   
 
   
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="backward?-instance-method">
+      <div class="signature">
+        
+        def <strong>backward?</strong>
+
+        <a class="method-permalink" href="#backward%3F-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <code>true</code> if this enum value contains <code><a href="../../Rosegold/MovementKeys/Key.html#Backward">Backward</a></code></p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fde86f4bf6c98b8d6ecf7db4444a6afc0d7f09a2/src/rosegold/control/movement_keys.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="forward?-instance-method">
+      <div class="signature">
+        
+        def <strong>forward?</strong>
+
+        <a class="method-permalink" href="#forward%3F-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <code>true</code> if this enum value contains <code><a href="../../Rosegold/MovementKeys/Key.html#Forward">Forward</a></code></p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fde86f4bf6c98b8d6ecf7db4444a6afc0d7f09a2/src/rosegold/control/movement_keys.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="left?-instance-method">
+      <div class="signature">
+        
+        def <strong>left?</strong>
+
+        <a class="method-permalink" href="#left%3F-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <code>true</code> if this enum value contains <code><a href="../../Rosegold/MovementKeys/Key.html#Left">Left</a></code></p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fde86f4bf6c98b8d6ecf7db4444a6afc0d7f09a2/src/rosegold/control/movement_keys.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="none?-instance-method">
+      <div class="signature">
+        
+        def <strong>none?</strong>
+
+        <a class="method-permalink" href="#none%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fde86f4bf6c98b8d6ecf7db4444a6afc0d7f09a2/src/rosegold/control/movement_keys.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="right?-instance-method">
+      <div class="signature">
+        
+        def <strong>right?</strong>
+
+        <a class="method-permalink" href="#right%3F-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <code>true</code> if this enum value contains <code><a href="../../Rosegold/MovementKeys/Key.html#Right">Right</a></code></p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/fde86f4bf6c98b8d6ecf7db4444a6afc0d7f09a2/src/rosegold/control/movement_keys.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
 
 </div>
