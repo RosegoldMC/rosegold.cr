@@ -362,7 +362,7 @@ class Rosegold::SpectateConnection
 
   private def handle_known_packs_response(packet : Rosegold::Serverbound::KnownPacks)
     if bot_registries = get_bot_registries
-      bot_registries.each do |registry_id, registry_data|
+      bot_registries.each do |_registry_id, registry_data|
         send_packet(registry_data)
       end
     else

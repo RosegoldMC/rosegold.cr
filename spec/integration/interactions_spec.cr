@@ -231,7 +231,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         # Verify wheat was created at age 0
         wheat_age_0 = client.dimension.block_state(6, -59, 6)
         expect(wheat_age_0).to_not be_nil
-        age_0_name = Rosegold::MCData::DEFAULT.block_state_names[wheat_age_0.not_nil!]
+        age_0_name = Rosegold::MCData::DEFAULT.block_state_names[wheat_age_0.as(UInt16)]
         expect(age_0_name).to eq("wheat[age=0]")
 
         # Pick bonemeal and count initial amount

@@ -212,26 +212,26 @@ class Rosegold::Client < Rosegold::EventEmitter
       target_interval_ns = 50_000_000_u64
       tick_counter = 0_u64
 
-      start_time_ns = Time.monotonic.total_nanoseconds.to_u64
+      start_time = Time.instant
 
       loop do
         break unless connected?
 
-        target_tick_time_ns = start_time_ns + (tick_counter * target_interval_ns)
-        current_time_ns = Time.monotonic.total_nanoseconds.to_u64
+        target_elapsed_ns = tick_counter * target_interval_ns
+        current_elapsed_ns = (Time.instant - start_time).total_nanoseconds.to_u64
 
-        if current_time_ns < target_tick_time_ns
-          sleep_ns = target_tick_time_ns - current_time_ns
+        if current_elapsed_ns < target_elapsed_ns
+          sleep_ns = target_elapsed_ns - current_elapsed_ns
 
           if sleep_ns > 1_000_000
             rough_sleep_ns = sleep_ns - 500_000
             sleep Time::Span.new(nanoseconds: rough_sleep_ns.to_i64)
 
-            while Time.monotonic.total_nanoseconds.to_u64 < target_tick_time_ns
+            while (Time.instant - start_time).total_nanoseconds.to_u64 < target_elapsed_ns
               Fiber.yield
             end
           else
-            while Time.monotonic.total_nanoseconds.to_u64 < target_tick_time_ns
+            while (Time.instant - start_time).total_nanoseconds.to_u64 < target_elapsed_ns
               Fiber.yield
             end
           end
@@ -262,9 +262,9 @@ class Rosegold::Client < Rosegold::EventEmitter
         tick_counter += 1
 
         if tick_counter % 100 == 0
-          actual_time_ns = Time.monotonic.total_nanoseconds.to_u64
-          expected_time_ns = start_time_ns + (tick_counter * target_interval_ns)
-          drift_ms = (actual_time_ns.to_i64 - expected_time_ns.to_i64) / 1_000_000.0
+          actual_elapsed_ns = (Time.instant - start_time).total_nanoseconds.to_u64
+          expected_elapsed_ns = tick_counter * target_interval_ns
+          drift_ms = (actual_elapsed_ns.to_i64 - expected_elapsed_ns.to_i64) / 1_000_000.0
           Log.trace { "Tick #{tick_counter}: drift #{drift_ms.round(2)}ms" }
         end
       end

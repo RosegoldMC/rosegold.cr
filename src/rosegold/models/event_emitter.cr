@@ -67,7 +67,7 @@ class Rosegold::EventEmitter
       sleep 0.01.seconds
     end
 
-    ran_event.not_nil!
+    ran_event.as(T)
   end
 
   def emit_event(event : Event)
