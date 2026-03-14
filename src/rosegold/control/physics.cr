@@ -45,6 +45,8 @@ class Rosegold::Physics
   BLUE_ICE_SLIP = 0.989 # Blue Ice slipperiness (most slippery)
   AIR_SLIP      =   1.0 # Air has no friction
 
+  MAX_UP_STEP = 0.6
+
   VERY_CLOSE = 0.1
 
   # Epsilon constants for floating point precision
@@ -136,6 +138,7 @@ class Rosegold::Physics
 
     player.velocity = Vec3d::ORIGIN
     player.on_ground = false
+    player.fall_distance = 0.0
 
     @last_sent_feet = player.feet
     @last_sent_on_ground = player.on_ground?
@@ -278,6 +281,12 @@ class Rosegold::Physics
     player.feet = new_feet
     player.on_ground = on_ground
 
+    if on_ground
+      player.fall_distance = 0.0
+    elsif movement.y < 0
+      player.fall_distance -= movement.y
+    end
+
     track_stuck_movement(new_feet)
 
     send_input_if_changed(input)
@@ -394,6 +403,7 @@ class Rosegold::Physics
 
   private def execute_movement_physics : {Vec3d, Vec3d, Vec3d, Bool}
     input_velocity = velocity_from_movement_input
+    input_velocity = maybe_back_off_from_edge(input_velocity)
 
     movement, post_collision_velocity = Physics.predict_movement_collision(
       player.feet, input_velocity, current_player_aabb, dimension)
@@ -486,6 +496,116 @@ class Rosegold::Physics
     end
 
     Vec3d.new(combined_velocity.x, vel_y, combined_velocity.z)
+  end
+
+  private def maybe_back_off_from_edge(velocity : Vec3d) : Vec3d
+    return velocity unless player.sneaking?
+    return velocity if player.flying?
+    return velocity if velocity.y > 0.0
+    return velocity unless above_ground?
+
+    entity_aabb = current_player_aabb
+    Physics.maybe_back_off_from_edge(player.feet, velocity, entity_aabb) do |test_aabb|
+      no_collision?(test_aabb)
+    end
+  end
+
+  private def above_ground? : Bool
+    player.on_ground? || (player.fall_distance < MAX_UP_STEP &&
+      !can_fall_at_least?(0.0, 0.0, MAX_UP_STEP - player.fall_distance))
+  end
+
+  private def can_fall_at_least?(dx : Float64, dz : Float64, max_fall_dist : Float64) : Bool
+    test_aabb = Physics.make_fall_test_aabb(
+      player.feet, current_player_aabb.to_f64, dx, dz, max_fall_dist, EPSILON_COLLISION)
+    no_collision?(test_aabb)
+  end
+
+  private def no_collision?(box : AABBd) : Bool
+    min_block = box.min.block
+    max_block = box.max.block
+    block_coords = Indexable.cartesian_product({
+      (min_block.x..max_block.x).to_a,
+      (min_block.y..max_block.y).to_a,
+      (min_block.z..max_block.z).to_a,
+    })
+    block_coords.each do |coords|
+      bx, by, bz = coords
+      block_state = dimension.block_state(bx, by, bz)
+      if block_state
+        shapes = MCData.default.block_state_collision_shapes[block_state]
+        shapes.each do |shape|
+          block_aabb = shape.to_f64.offset(bx.to_f64, by.to_f64, bz.to_f64)
+          return false if box.intersects?(block_aabb)
+        end
+      else
+        return false
+      end
+    end
+    true
+  end
+
+  def self.maybe_back_off_from_edge(
+    feet : Vec3d, velocity : Vec3d, entity_aabb : AABBf,
+    &would_fall : AABBd -> Bool
+  ) : Vec3d
+    x = velocity.x
+    z = velocity.z
+    step = 0.05
+    entity_aabb_d = entity_aabb.to_f64
+    step_x = x.sign * step
+    step_z = z.sign * step
+
+    while x != 0.0
+      test_aabb = make_fall_test_aabb(feet, entity_aabb_d, x, 0.0, MAX_UP_STEP, EPSILON_COLLISION)
+      break unless would_fall.call(test_aabb)
+      if x.abs <= step
+        x = 0.0
+        break
+      end
+      x -= step_x
+    end
+
+    while z != 0.0
+      test_aabb = make_fall_test_aabb(feet, entity_aabb_d, 0.0, z, MAX_UP_STEP, EPSILON_COLLISION)
+      break unless would_fall.call(test_aabb)
+      if z.abs <= step
+        z = 0.0
+        break
+      end
+      z -= step_z
+    end
+
+    while x != 0.0 && z != 0.0
+      test_aabb = make_fall_test_aabb(feet, entity_aabb_d, x, z, MAX_UP_STEP, EPSILON_COLLISION)
+      break unless would_fall.call(test_aabb)
+      if x.abs <= step
+        x = 0.0
+      else
+        x -= step_x
+      end
+      if z.abs <= step
+        z = 0.0
+      else
+        z -= step_z
+      end
+    end
+
+    Vec3d.new(x, velocity.y, z)
+  end
+
+  protected def self.make_fall_test_aabb(
+    feet : Vec3d, entity_aabb : AABBd,
+    dx : Float64, dz : Float64, max_fall_dist : Float64, epsilon : Float64,
+  ) : AABBd
+    AABBd.new(
+      entity_aabb.min.x + epsilon + dx + feet.x,
+      feet.y - max_fall_dist - epsilon,
+      entity_aabb.min.z + epsilon + dz + feet.z,
+      entity_aabb.max.x - epsilon + dx + feet.x,
+      feet.y,
+      entity_aabb.max.z - epsilon + dz + feet.z,
+    )
   end
 
   private def sync_with_server
