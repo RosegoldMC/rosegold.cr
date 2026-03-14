@@ -28,6 +28,7 @@ class Rosegold::Player
     effects : Array(EntityEffect) = [] of EntityEffect,
     flying_speed : Float32 = 0.05_f32,
     field_of_view_modifier : Float32 = 0.1_f32
+  property fall_distance : Float64 = 0.0
   property? \
     on_ground : Bool = false,
     sneaking : Bool = false,
