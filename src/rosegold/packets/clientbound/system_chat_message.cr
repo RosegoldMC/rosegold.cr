@@ -5,7 +5,8 @@ class Rosegold::Clientbound::SystemChatMessage < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    772_u32 => 0x72_u8, # MC 1.21.8 - System Chat Message
+    772_u32 => 0x72_u32, # MC 1.21.8
+    774_u32 => 0x77_u32, # MC 1.21.11
   })
 
   property message : Rosegold::TextComponent
@@ -14,19 +15,8 @@ class Rosegold::Clientbound::SystemChatMessage < Rosegold::Clientbound::Packet
   def initialize(@message, @overlay = false); end
 
   def self.read(packet)
-    # Read Content (Text Component) - NBT format for MC 1.21.8
-    begin
-      message = packet.read_text_component
-    rescue ex
-      # Fallback if NBT reading fails
-      Log.warn { "Failed to parse system chat content as NBT: #{ex.message}, trying as string" }
-      content_string = packet.read_var_string rescue "System message"
-      message = TextComponent.new(content_string)
-    end
-
-    # Read Overlay (Boolean)
+    message = packet.read_text_component
     overlay = packet.read_bool
-
     self.new(message, overlay)
   end
 

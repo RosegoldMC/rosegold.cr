@@ -3,7 +3,8 @@ require "../packet"
 class Rosegold::Clientbound::RemoveEntityEffect < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x47_u8, # MC 1.21.8,
+    772_u32 => 0x47_u32, # MC 1.21.8
+    774_u32 => 0x4C_u32, # MC 1.21.11
   })
 
   property \
@@ -13,10 +14,14 @@ class Rosegold::Clientbound::RemoveEntityEffect < Rosegold::Clientbound::Packet
   def initialize(@entity_id, @effect_id); end
 
   def self.read(packet)
-    self.new(
-      packet.read_var_long,
-      packet.read_var_int,
-    )
+    if Client.protocol_version >= 774_u32
+      entity_id = packet.read_var_int.to_u64
+    else
+      entity_id = packet.read_var_long
+    end
+    effect_id = packet.read_var_int
+
+    self.new(entity_id, effect_id)
   end
 
   def callback(client)

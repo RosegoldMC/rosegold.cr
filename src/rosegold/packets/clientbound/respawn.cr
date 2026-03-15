@@ -4,7 +4,8 @@ require "../../world/vec3"
 class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x4B_u8, # MC 1.21.8,
+    772_u32 => 0x4B_u32, # MC 1.21.8
+    774_u32 => 0x50_u32, # MC 1.21.11
   })
 
   property \

@@ -1,6 +1,7 @@
 require "../../spec_helper"
 
 Spectator.describe "PlayerPositionAndLook Serialization" do
+  after_each { Rosegold::Client.reset_protocol_version! }
   it "can read and write PlayerPositionAndLook packet with perfect equality" do
     # Set protocol version to match MC 1.21.8
     Rosegold::Client.protocol_version = 772_u32

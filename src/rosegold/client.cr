@@ -13,10 +13,26 @@ require "./chat_manager"
 # and control state (physics, open window, etc.).
 # Can be reconnected.
 class Rosegold::Client < Rosegold::EventEmitter
-  class_getter protocol_version = 772_u32 # Default to 1.21.8 (protocol 772)
+  SUPPORTED_PROTOCOLS = {772_u32, 774_u32}
+  LATEST_PROTOCOL     = 774_u32
+
+  # TODO: @@protocol_version is global state shared across all Client instances.
+  # This prevents connecting to servers with different protocol versions concurrently.
+  # To fix, protocol_version should become an instance variable set during handshake.
+  class_getter protocol_version = LATEST_PROTOCOL
+  class_getter? protocol_version_explicit = false
 
   def self.protocol_version=(version : UInt32)
+    unless SUPPORTED_PROTOCOLS.includes?(version)
+      raise ArgumentError.new("Unsupported protocol version #{version}. Supported: #{SUPPORTED_PROTOCOLS.join(", ")}")
+    end
     @@protocol_version = version
+    @@protocol_version_explicit = true
+  end
+
+  def self.reset_protocol_version!
+    @@protocol_version = LATEST_PROTOCOL
+    @@protocol_version_explicit = false
   end
 
   property host : String, port : Int32
@@ -278,7 +294,6 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     authenticate!
 
-    # Log server protocol version for debugging
     detect_protocol_version
 
     io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
@@ -356,10 +371,22 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   private def detect_protocol_version
+    if Client.protocol_version_explicit?
+      Log.info { "Using explicitly set protocol version: #{protocol_version}" }
+      return
+    end
+
     status_response = status
     if protocol_info = status_response.json_response["version"]?
       if server_protocol = protocol_info["protocol"]?.try(&.as_i?)
-        Log.info { "Server protocol version: #{server_protocol} (using #{protocol_version})" }
+        server_version = server_protocol.to_u32
+        if SUPPORTED_PROTOCOLS.includes?(server_version)
+          @@protocol_version = server_version
+          Log.info { "Auto-detected server protocol version: #{server_version}" }
+        else
+          @@protocol_version = LATEST_PROTOCOL
+          Log.warn { "Server protocol #{server_version} not supported, falling back to #{LATEST_PROTOCOL}" }
+        end
       else
         Log.warn { "Could not parse protocol version from server status" }
       end

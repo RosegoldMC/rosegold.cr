@@ -15,7 +15,7 @@ jobs:
 
       - uses: oprypin/install-crystal@v1
         with:
-          crystal: 1.17.0
+          crystal: 1.19.1
 
       - name: Format
         run: crystal tool format --check
@@ -45,30 +45,21 @@ jobs:
       fail-fast: true
       matrix:
         crystal_version:
-          - "1.17.0"
+          - "1.19.1"
           # - latest
         minecraft_version:
           - "1.21.8"
+          - "1.21.11"
         experimental:
           - false
 
     steps:
       - uses: actions/checkout@v4
 
-      - run: |
+      - name: Start Minecraft ${{ matrix.minecraft_version }} server
+        run: |
           cd spec
-          docker compose -f docker-compose.1.21.8.yml up -d
-
-          # Wait for Minecraft server to be ready instead of fixed sleep
-          echo "Waiting for Minecraft 1.21.8 server to start..."
-          for i in {1..60}; do
-            if docker compose -f docker-compose.1.21.8.yml logs mc | grep -q "Done.*For help, type"; then
-              echo "Server is ready after ${i} attempts"
-              break
-            fi
-            echo "Attempt ${i}/60: Server not ready yet..."
-            sleep 2
-          done
+          MC_VERSION=${{ matrix.minecraft_version }} docker compose up -d --wait --wait-timeout 120
 
       - uses: oprypin/install-crystal@v1
         with:
@@ -91,5 +82,5 @@ jobs:
       - name: Create .env
         run: touch .env
 
-      - name: Run tests
-        run: crystal spec || crystal spec || crystal spec
+      - name: Run integration tests
+        run: crystal spec

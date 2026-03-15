@@ -1,48 +1,24 @@
-require "../serverbound/player_action"
-
-# Some servers do not send this.
+# Since 1.19, this packet is just a single VarInt sequence ID.
 class Rosegold::Clientbound::AcknowledgeBlockChange < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    758_u32 => 0x08_u8, # MC 1.18
+    772_u32 => 0x04_u32, # MC 1.21.8
+    774_u32 => 0x04_u32, # MC 1.21.11
   })
 
-  alias Status = Rosegold::Serverbound::PlayerAction::Status
+  property sequence : Int32
 
-  property \
-    location : Vec3i,
-    block_id : UInt16,
-    status : Status,
-    sequence : Int32
-  property? \
-    successful : Bool
-
-  def initialize(@location, @block_id, @status, @successful, @sequence = 0)
+  def initialize(@sequence)
   end
 
   def self.read(packet)
-    location = packet.read_bit_location
-    block_id = packet.read_var_int.to_u16
-    status = Status.new(packet.read_var_int.to_i32)
-    successful = packet.read_bool
-
-    # MC 1.21+ includes sequence number
     sequence = packet.read_var_int.to_i32
-
-    self.new(location, block_id, status, successful, sequence)
+    self.new(sequence)
   end
 
   def callback(client)
-    Log.debug { "dig ack #{self}" }
-
-    # Remove pending operation if sequence number is provided (MC 1.21+)
-    if sequence > 0
-      client.pending_block_operations.delete(sequence)
-    end
-
-    if status == Status::Finish && successful?
-      client.dimension.set_block_state location, block_id
-    end
+    Log.debug { "dig ack sequence=#{sequence}" }
+    client.pending_block_operations.delete(sequence) if sequence > 0
   end
 end

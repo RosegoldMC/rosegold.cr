@@ -188,12 +188,6 @@ module Rosegold::InventoryOperations
   abstract def [](index : Int32) : Rosegold::Slot
   abstract def []=(index : Int32, slot : Rosegold::Slot)
 
-  # Vanilla state ID increment with 15-bit wraparound (matches vanilla's incrementStateId)
-  def increment_state_id : UInt32
-    @state_id = (@state_id + 1) & 32767
-    @state_id
-  end
-
   # Helper method to compare if two slots are equivalent (vanilla's ItemStack.matches equivalent)
   def slots_match?(slot1 : Rosegold::Slot, slot2 : Rosegold::Slot) : Bool
     return true if slot1.empty? && slot2.empty?
@@ -280,8 +274,10 @@ module Rosegold::InventoryOperations
     # Always send current cursor state (vanilla behavior)
     cursor_slot = @cursor
 
-    # Increment state ID and use incremented value in packet (matching vanilla)
-    packet = Serverbound::ClickWindow.new(mode, button.to_i8, slot_index.to_i16, changed_slots, menu_id, increment_state_id.to_i32, cursor_slot)
+    # Send the last received state_id from the server (protocol spec)
+    send_state_id = @state_id.to_i32
+    packet = Serverbound::ClickWindow.new(mode, button.to_i8, slot_index.to_i16, changed_slots, menu_id, send_state_id, cursor_slot)
+    Log.for("send_click").debug { "ClickWindow: slot=#{slot_index}, mode=#{click_type}, state_id=#{send_state_id}, changed=#{changed_slots.map { |slot| "#{slot.slot_number}:#{slot.name}x#{slot.count}" }}" }
     @client.send_packet!(packet)
   end
 
@@ -531,14 +527,15 @@ module Rosegold::InventoryOperations
       end
     end
 
-    # Increment state ID and use incremented value in packet (matching vanilla)
+    # Send the last received state_id from the server (protocol spec)
+    send_state_id = @state_id.to_i32
     packet = Serverbound::ClickWindow.new(
       Serverbound::ClickWindow::Mode::Swap,
       hotbar_nr.to_i8,
       slot_number.to_i16,
       changed_slots,
       menu_id,
-      increment_state_id.to_i32,
+      send_state_id,
       @cursor
     )
 

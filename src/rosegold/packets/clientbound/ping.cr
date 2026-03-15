@@ -3,7 +3,8 @@ require "../packet"
 class Rosegold::Clientbound::Ping < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x36_u8, # MC 1.21.8,
+    772_u32 => 0x36_u32, # MC 1.21.8
+    774_u32 => 0x3B_u32, # MC 1.21.11
   })
 
   property ping_id : Int32

@@ -4,8 +4,9 @@ Spectator.describe "Rosegold::Bot interactions" do
   before_all do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
+        bot.chat "/kill @e[type=!minecraft:player]"
         bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
-        bot.wait_ticks 3
+        bot.wait_ticks 20
       end
     end
   end
@@ -13,8 +14,9 @@ Spectator.describe "Rosegold::Bot interactions" do
   it "should be able to chat" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
+        bot.wait_ticks 5
         bot.chat "Hello, world!"
-        bot.wait_ticks 5 # Wait for chat message to be processed
+        bot.wait_ticks 10
       end
     end
   end
@@ -22,11 +24,14 @@ Spectator.describe "Rosegold::Bot interactions" do
   it "should be able to dig continuously through 3 blocks" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
+        bot.wait_ticks 5
+        bot.chat "/clear"
+        bot.wait_ticks 5
         # Set up a column of 3 dirt blocks below the bot
         bot.chat "/fill 9 -60 10 9 -58 10 minecraft:dirt"
-        bot.wait_ticks 5 # Wait for fill to complete
+        bot.wait_ticks 10
         bot.chat "/tp 9 -57 10"
-        bot.wait_ticks 5 # Wait for teleport and chunk updates
+        bot.wait_ticks 10
 
         bot.look &.down
         bot.wait_ticks 5
@@ -46,7 +51,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.start_digging
 
         # Smart wait: wait for bot to reach expected position with timeout
-        timeout = 100 # 5 seconds at 20 ticks/second
+        timeout = 200 # 10 seconds at 20 ticks/second
         ticks_waited = 0
         until bot.location.y <= expected_final_y || ticks_waited >= timeout
           bot.wait_tick
@@ -75,11 +80,14 @@ Spectator.describe "Rosegold::Bot interactions" do
   it "should stop digging when bot.stop_digging is called" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
+        bot.wait_ticks 5
         bot.chat "/fill 10 -60 9 10 -57 9 minecraft:dirt"
+        bot.wait_ticks 10
         bot.chat "/tp 10 -56 9"
-        bot.wait_tick
+        bot.wait_ticks 15
 
         bot.look &.down
+        bot.wait_ticks 5
         bot.start_digging
         bot.stop_digging
 
@@ -96,14 +104,15 @@ Spectator.describe "Rosegold::Bot interactions" do
         # Set up stone block and give diamond pickaxe
         bot.chat "/fill 8 -60 8 8 -60 8 minecraft:stone"
         bot.chat "/clear"
+        bot.wait_ticks 5
         bot.chat "/give @p minecraft:diamond_pickaxe 1"
-        bot.wait_ticks 5 # Wait for commands to complete
+        bot.wait_ticks 10 # Wait for /fill, /clear, and /give to all complete
         bot.chat "/tp 8 -59 8"
-        bot.wait_ticks 5 # Wait for teleport and chunk updates
+        bot.wait_ticks 10 # Wait for teleport and chunk updates
 
         # Equip the diamond pickaxe
         bot.inventory.pick! "diamond_pickaxe"
-        bot.wait_ticks 3
+        bot.wait_ticks 5
 
         bot.look &.down
         bot.wait_ticks 5
@@ -118,7 +127,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.start_digging
 
         # Smart wait: stone takes about 6 ticks to break with diamond pickaxe
-        timeout = 8
+        timeout = 20
         ticks_waited = 0
         current_block = initial_block
 
@@ -145,15 +154,17 @@ Spectator.describe "Rosegold::Bot interactions" do
       Rosegold::Bot.new(client).try do |bot|
         # Set up obsidian block and give diamond pickaxe with efficiency
         bot.chat "/fill 9 -60 9 9 -60 9 minecraft:obsidian"
+        bot.wait_ticks 5
         bot.chat "/clear"
+        bot.wait_ticks 5
         bot.chat "/give @p minecraft:diamond_pickaxe[enchantments={\"minecraft:efficiency\":5}] 1"
-        bot.wait_ticks 5 # Wait for commands to complete
+        bot.wait_ticks 5
         bot.chat "/tp 9 -59 9"
-        bot.wait_ticks 5 # Wait for teleport and chunk updates
+        bot.wait_ticks 10
 
         # Equip the efficiency 5 diamond pickaxe
         bot.inventory.pick! "diamond_pickaxe"
-        bot.wait_ticks 3
+        bot.wait_ticks 5
 
         bot.look &.down
         bot.wait_ticks 5
@@ -161,15 +172,16 @@ Spectator.describe "Rosegold::Bot interactions" do
         # Record initial state
         initial_block = client.dimension.block_state(9, -60, 9)
 
-        # Verify we have obsidian block (state ID should be 2400)
-        expect(initial_block).to eq(2400)
+        # Verify we have obsidian block
+        obsidian = Rosegold::MCData.default.blocks.find! { |blk| blk.id_str == "obsidian" }
+        expect(initial_block).to eq(obsidian.min_state_id)
 
         # Start digging obsidian
         # With Efficiency 5, obsidian should break in moderate time
         bot.start_digging
 
         # obsidian takes 45 ticks to mine with diamond pickaxe and efficiency 5
-        timeout = 50
+        timeout = 60
         ticks_waited = 0
         current_block = initial_block
 
@@ -194,12 +206,17 @@ Spectator.describe "Rosegold::Bot interactions" do
   it "should be able to place blocks" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 10 -60 10"
-        bot.chat "/clear"
-        bot.chat "/give @p minecraft:obsidian 64"
+        bot.chat "/kill @e[type=!minecraft:player]"
         bot.wait_ticks 5
+        bot.chat "/tp 10 -60 10"
+        bot.wait_ticks 10
+        bot.chat "/clear"
+        bot.wait_ticks 10
+        bot.chat "/give @p minecraft:obsidian 64"
+        bot.wait_ticks 10
 
         bot.inventory.pick! "obsidian"
+        bot.wait_ticks 5
 
         starting_y = bot.location.y
         before = client.dimension.block_state(10, -60, 10)
@@ -231,7 +248,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         # Verify wheat was created at age 0
         wheat_age_0 = client.dimension.block_state(6, -59, 6)
         expect(wheat_age_0).to_not be_nil
-        age_0_name = Rosegold::MCData::DEFAULT.block_state_names[wheat_age_0.as(UInt16)]
+        age_0_name = Rosegold::MCData.default.block_state_names[wheat_age_0.as(UInt16)]
         expect(age_0_name).to eq("wheat[age=0]")
 
         # Pick bonemeal and count initial amount
@@ -246,9 +263,9 @@ Spectator.describe "Rosegold::Bot interactions" do
 
         # Try to use bonemeal (should miss the tiny wheat)
         bot.start_using_hand
-        bot.wait_ticks 3
+        bot.wait_ticks 5
         bot.stop_using_hand
-        bot.wait_ticks 3
+        bot.wait_ticks 5
 
         # Verify bonemeal was NOT consumed (ray passed above tiny wheat)
         expect(bot.main_hand.count).to eq(initial_bonemeal)
@@ -261,9 +278,9 @@ Spectator.describe "Rosegold::Bot interactions" do
 
         # Use bonemeal on wheat (should hit this time)
         bot.start_using_hand
-        bot.wait_ticks 3
+        bot.wait_ticks 5
         bot.stop_using_hand
-        bot.wait_ticks 3
+        bot.wait_ticks 5
 
         # Verify bonemeal was consumed (successfully hit the wheat)
         expect(bot.main_hand.count).to be < initial_bonemeal

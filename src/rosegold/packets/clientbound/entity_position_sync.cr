@@ -3,7 +3,8 @@ require "../packet"
 class Rosegold::Clientbound::EntityPositionSync < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x1F_u8, # MC 1.21.8,
+    772_u32 => 0x1F_u32, # MC 1.21.8
+    774_u32 => 0x23_u32, # MC 1.21.11
   })
   class_getter state = ProtocolState::PLAY
 
@@ -24,50 +25,40 @@ class Rosegold::Clientbound::EntityPositionSync < Rosegold::Clientbound::Packet
   end
 
   def self.read(packet)
-    entity_id = packet.read_var_long
+    if Client.protocol_version >= 774_u32
+      entity_id = packet.read_var_int.to_u64
+    else
+      entity_id = packet.read_var_long
+    end
     x = packet.read_double
     y = packet.read_double
     z = packet.read_double
     velocity_x = packet.read_double
     velocity_y = packet.read_double
     velocity_z = packet.read_double
-    yaw = packet.read_angle256_deg
-    pitch = packet.read_angle256_deg
+    yaw = packet.read_float
+    pitch = packet.read_float
     on_ground = packet.read_bool
 
     self.new(entity_id, x, y, z, velocity_x, velocity_y, velocity_z, yaw, pitch, on_ground)
   end
 
-  # Custom VarLong encoding to work around minecraft IO bug
-  private def write_var_long(buffer, value : UInt64)
-    more = true
-    while more
-      b = (value & 0x7F).to_u8
-      value >>= 7
-      if value == 0
-        more = false
-      else
-        b |= 0x80
-      end
-      buffer.write_byte(b)
-    end
-  end
-
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-
-      # Use custom VarLong encoding for entity_id
-      write_var_long(buffer, entity_id)
-
-      buffer.write x
-      buffer.write y
-      buffer.write z
-      buffer.write velocity_x
-      buffer.write velocity_y
-      buffer.write velocity_z
-      buffer.write yaw
-      buffer.write pitch
+      if Client.protocol_version >= 774_u32
+        buffer.write entity_id.to_u32
+      else
+        buffer.write entity_id
+      end
+      buffer.write_full x
+      buffer.write_full y
+      buffer.write_full z
+      buffer.write_full velocity_x
+      buffer.write_full velocity_y
+      buffer.write_full velocity_z
+      buffer.write_full yaw
+      buffer.write_full pitch
       buffer.write on_ground?
     end.to_slice
   end

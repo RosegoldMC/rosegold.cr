@@ -11,7 +11,8 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
   end
 
   packet_ids({
-    772_u32 => 0x02_u8, # MC 1.21.8,
+    772_u32 => 0x02_u32, # MC 1.21.8
+    774_u32 => 0x02_u32, # MC 1.21.11
   })
 
   class_getter state = ProtocolState::LOGIN

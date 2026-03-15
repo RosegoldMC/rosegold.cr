@@ -4,7 +4,8 @@ require "../../models/text_component"
 class Rosegold::Clientbound::ConfigurationDisconnect < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x02_u8, # MC 1.21.8
+    772_u32 => 0x02_u32, # MC 1.21.8
+    774_u32 => 0x02_u32, # MC 1.21.11
   })
   class_getter state = ProtocolState::CONFIGURATION
 
@@ -17,23 +18,10 @@ class Rosegold::Clientbound::ConfigurationDisconnect < Rosegold::Clientbound::Pa
   end
 
   def self.read(packet)
-    # MC 1.21+ uses NBT text component format
-
-    reason_nbt = packet.read_nbt_unamed
-    text_component = nbt_to_text_component(reason_nbt)
-    self.new text_component
+    self.new TextComponent.from_nbt(packet.read_nbt_unamed)
   rescue
-    # Fallback if NBT reading fails
-    Log.warn { "Failed to parse configuration disconnect reason as NBT, trying as string" }
-    reason_string = packet.read_var_string rescue "Unknown disconnect reason"
-    self.new TextComponent.new(reason_string)
-  end
-
-  private def self.nbt_to_text_component(nbt : Minecraft::NBT::Tag) : TextComponent
-    TextComponent.from_nbt(nbt)
-  rescue
-    # Fallback for any NBT parsing errors
-    TextComponent.new("Configuration disconnect reason (parsing error)")
+    Log.warn { "Failed to parse configuration disconnect reason" }
+    self.new TextComponent.new("Unknown disconnect reason")
   end
 
   def write : Bytes

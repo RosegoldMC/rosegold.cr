@@ -120,7 +120,7 @@ Spectator.describe "Rosegold::Bot chat functionality" do
       client.on(Rosegold::Clientbound::SystemChatMessage) do |packet|
         message_received = true
         # Verify packet structure
-        expect(packet.message).to be_a(Rosegold::Chat)
+        expect(packet.message).to be_a(Rosegold::TextComponent)
         expect(packet.overlay?).to be_a(Bool)
       end
 

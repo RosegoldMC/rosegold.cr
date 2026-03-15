@@ -1,46 +1,51 @@
 require "../spec_helper"
 
 Spectator.describe "SpectateServer Integration" do
-  it "can connect second bot to spectate server" do
-    main_bot = client
-    spectate_server = Rosegold::SpectateServer.new("127.0.0.1", 25569)
-    spectate_server.attach_client(main_bot)
+  let(spectate_port) { 25569 }
 
-    # Create a second bot to act as spectator
-    spectator_bot = Rosegold::Client.new(
-      "127.0.0.1", 25569,
-      offline: {
-        uuid:     "87654321-4321-8765-2109-876543210987",
-        username: "SpectatorBot",
-      }
-    )
+  it "spectator client can connect and receive play packets" do
+    main_client = client()
+    Rosegold::Client.protocol_version = main_client.protocol_version
 
-    begin
-      client.join_game
-      # Start the spectate server
-      spectate_server.start
-      sleep 0.1.seconds
+    main_client.join_game do |bot_client|
+      bot = Rosegold::Bot.new(bot_client)
+      bot.wait_ticks 20 # Ensure physics, inventory, and all systems are fully initialized
 
-      # Attempt to connect spectator bot to the spectate server
-      spawn do
-        begin
-          spectator_bot.join_game
-        rescue e
-          # Connection might fail due to missing server handshake, but that's OK for this test
-          Log.debug { "Spectator connection attempt: #{e.message}" }
-        end
+      # Verify the bot is fully spawned before starting spectate server
+      unless bot_client.spawned?
+        fail("Bot not fully spawned after wait_ticks 20")
       end
 
-      # Give some time for connection attempt
-      sleep 0.3.seconds
+      # Start spectate server
+      spectate_server = Rosegold::SpectateServer.new("127.0.0.1", spectate_port)
+      spectate_server.attach_client(bot_client)
+      spectate_server.start
+      sleep 0.5.seconds # Allow TCP server to fully start accepting connections
 
-      # Test passes if we can attempt the connection without crashes
-      # The actual handshake might fail since we don't have a full server implementation
-      expect(spectate_server.server).to_not be_nil
-    ensure
-      # Clean up
-      spectate_server.stop
-      sleep 0.1.seconds
+      # Connect spectator to SpectateServer
+      spectator = Rosegold::Client.new(
+        "127.0.0.1", spectate_port,
+        offline: {uuid: "11111111-1111-1111-1111-111111111111", username: "SpectatorBot"}
+      )
+
+      begin
+        spectator.connect
+
+        # Give enough time for all packets to arrive
+        sleep 2.seconds
+
+        unless spectator.connected?
+          fail("Spectator disconnected: #{spectator.connection?.try(&.close_reason)}")
+        end
+
+        # Verify basic play state was received
+        expect(spectator.player.entity_id).not_to eq(0_u64)
+        expect(spectator.dimension.chunks.size).to be > 0
+      ensure
+        spectator.connection?.try(&.disconnect("test done"))
+        spectate_server.stop
+        sleep 0.2.seconds
+      end
     end
   end
 end

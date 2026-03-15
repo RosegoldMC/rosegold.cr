@@ -1,6 +1,7 @@
 require "../../spec_helper"
 
 Spectator.describe "ChunkData Serialization" do
+  after_each { Rosegold::Client.reset_protocol_version! }
   it "can read ChunkData packet and verify structural consistency" do
     # Set protocol version to match the captured packet
     Rosegold::Client.protocol_version = 772_u32

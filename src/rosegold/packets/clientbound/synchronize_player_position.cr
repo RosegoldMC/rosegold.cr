@@ -9,7 +9,8 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    772_u32 => 0x41_u8, # MC 1.21.8,
+    772_u32 => 0x41_u32, # MC 1.21.8
+    774_u32 => 0x46_u32, # MC 1.21.11
   })
 
   property \
@@ -18,7 +19,7 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     z_raw : Float64,
     yaw_raw : Float32,
     pitch_raw : Float32,
-    relative_flags : UInt8,
+    relative_flags : Int32,
     teleport_id : UInt32
 
   # MC 1.21.6+ additional velocity fields
@@ -27,9 +28,7 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     velocity_y : Float64 = 0.0,
     velocity_z : Float64 = 0.0
 
-  property? dismount_vehicle : Bool = false
-
-  def initialize(@x_raw, @y_raw, @z_raw, @yaw_raw, @pitch_raw, @relative_flags, @teleport_id, @dismount_vehicle = false, @velocity_x = 0.0, @velocity_y = 0.0, @velocity_z = 0.0)
+  def initialize(@x_raw, @y_raw, @z_raw, @yaw_raw, @pitch_raw, @relative_flags, @teleport_id, @velocity_x = 0.0, @velocity_y = 0.0, @velocity_z = 0.0)
   end
 
   def self.read(packet)
@@ -43,17 +42,9 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     velocity_z = packet.read_double
     yaw = packet.read_float
     pitch = packet.read_float
-    relative_flags = packet.read_byte
+    relative_flags = packet.read_int
 
-    # Read dismount vehicle flag (MC 1.21.6+)
-    dismount_vehicle = packet.read_byte != 0_u8
-
-    # Read remaining bytes - appears to be 2 additional bytes in MC 1.21.8
-    extra_byte1 = packet.read_byte
-    extra_byte2 = packet.read_byte
-    Log.debug { "SynchronizePlayerPosition extra bytes: #{extra_byte1.to_s(16)} #{extra_byte2.to_s(16)}" }
-
-    self.new(x, y, z, yaw, pitch, relative_flags, teleport_id, dismount_vehicle, velocity_x, velocity_y, velocity_z)
+    self.new(x, y, z, yaw, pitch, relative_flags, teleport_id, velocity_x, velocity_y, velocity_z)
   end
 
   def write : Bytes
@@ -70,10 +61,7 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
       io.write velocity_z
       io.write yaw_raw
       io.write pitch_raw
-      io.write relative_flags
-      io.write(dismount_vehicle? ? 1_u8 : 0_u8)
-      io.write 0_u8 # Extra byte 1 (value 0)
-      io.write 0_u8 # Extra byte 2 (value 0)
+      io.write_full relative_flags
     end.to_slice
   end
 

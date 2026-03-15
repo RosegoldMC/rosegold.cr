@@ -1,6 +1,7 @@
 require "../../spec_helper"
 
 Spectator.describe Rosegold::Serverbound::LoginAcknowledged do
+  after_each { Rosegold::Client.reset_protocol_version! }
   describe "protocol support" do
     it "supports protocol 772 (MC 1.21.8)" do
       expect(Rosegold::Serverbound::LoginAcknowledged.supports_protocol?(772_u32)).to be_true

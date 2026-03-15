@@ -70,13 +70,13 @@ Spectator.describe "Rosegold::Bot movement keys" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/tp 0 -60 0"
-        bot.wait_tick
+        bot.wait_ticks 3
 
         bot.yaw = 0.0 # face south
         initial = bot.location
 
         bot.keys.press Rosegold::MovementKeys::Key::Forward | Rosegold::MovementKeys::Key::Left
-        bot.wait_ticks 10
+        bot.wait_ticks 20
         bot.keys.release_all
 
         expect(bot.location.z).to be > initial.z

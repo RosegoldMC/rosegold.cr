@@ -48,8 +48,8 @@ Spectator.describe Rosegold::Block do
               hash[20_u32] = 4_u32 # efficiency = 20, level = 4
             })
 
-            components_to_add = Hash(UInt32, Rosegold::DataComponent).new
-            components_to_add[Rosegold::DataComponentType::Enchantments.value] = enchantments
+            components_to_add = Hash(String, Rosegold::DataComponent).new
+            components_to_add["enchantments"] = enchantments
 
             Rosegold::Slot.new(
               item_id_int: 721,

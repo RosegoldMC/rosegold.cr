@@ -3,7 +3,8 @@ require "../packet"
 class Rosegold::Clientbound::ChunkBatchStart < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x0C_u8, # MC 1.21.8,
+    772_u32 => 0x0C_u32, # MC 1.21.8
+    774_u32 => 0x0C_u32, # MC 1.21.11
   })
 
   def initialize; end

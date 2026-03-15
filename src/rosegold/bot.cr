@@ -240,10 +240,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.queue_packet Serverbound::SwingArm.new
   end
 
-  # Moves the slot to the hotbar and selects it.
-  # This is faster and less error-prone than moving slots around individually.
-  def pick_slot(slot_number : UInt16)
-    client.queue_packet Serverbound::PickItem.new slot_number
+  # Pick the item at the given block position (middle-click on a block).
+  # The server finds the matching item in the player's inventory,
+  # moves it to the hotbar, and sends the appropriate slot update packets.
+  def pick_item_from_block(pos : Vec3i, include_data : Bool = false)
+    client.queue_packet Serverbound::PickItemFromBlock.new pos, include_data
   end
 
   # Activates the "use" button.
