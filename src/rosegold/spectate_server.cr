@@ -49,33 +49,54 @@ class Rosegold::SpectateServer
   INVENTORY_POLL_INTERVAL     = 1.second
   BOT_MONITOR_INTERVAL        = 50.milliseconds
 
-  # Packet IDs for raw forwarding
-  FORWARDED_PACKETS = {
-    0x72_u8 => "SystemChatMessage",
-    0x11_u8 => "CloseWindow",
-    0x34_u8 => "OpenWindow",
-    0x08_u8 => "BlockChange",
-    0x4D_u8 => "MultiBlockChange",
-    0x01_u8 => "SpawnEntity",
-    0x1F_u8 => "EntityPositionSync",
-    0x2E_u8 => "move_entity_pos",
-    0x31_u8 => "EntityRotation",
-    0x2F_u8 => "move_entity_pos_rot",
-    0x5F_u8 => "EntityEquipment",
-    0x5E_u8 => "set_entity_motion",
-    0x5C_u8 => "set_entity_data",
-    0x46_u8 => "remove_entities",
-    0x7C_u8 => "update_attributes",
-    0x3F_u8 => "PlayerInfoUpdate",
-    0x3E_u8 => "PlayerInfoRemove",
-    0x6E_u8 => "sound",
-    0x05_u8 => "block_destruction",
-    0x12_u8 => "SetContainerContent",
-    0x14_u8 => "SetSlot",
-    0x61_u8 => "UpdateHealth",
-    0x7D_u8 => "EntityEffect",
-    0x47_u8 => "RemoveEntityEffect",
+  # Packets without a Crystal class that we still forward by raw ID
+  UNIMPLEMENTED_FORWARDED = {
+    "set_entity_motion" => {772_u32 => 0x5E_u32, 774_u32 => 0x63_u32},
+    "set_entity_data"   => {772_u32 => 0x5C_u32, 774_u32 => 0x61_u32},
+    "sound"             => {772_u32 => 0x6E_u32, 774_u32 => 0x73_u32},
+    "update_attributes" => {772_u32 => 0x7C_u32, 774_u32 => 0x81_u32},
   }
+
+  # Build forwarded packet map at compile time to avoid runtime union types
+  macro build_forwarded_packets_method
+    def self.forwarded_packets(protocol : UInt32) : Hash(UInt32, String)
+      result = Hash(UInt32, String).new
+
+      {% for klass in [
+                        Clientbound::SystemChatMessage,
+                        Clientbound::CloseWindow,
+                        Clientbound::OpenWindow,
+                        Clientbound::BlockChange,
+                        Clientbound::MultiBlockChange,
+                        Clientbound::SpawnEntity,
+                        Clientbound::EntityPositionSync,
+                        Clientbound::EntityPosition,
+                        Clientbound::EntityRotation,
+                        Clientbound::EntityPositionAndRotation,
+                        Clientbound::EntityEquipment,
+                        Clientbound::DestroyEntities,
+                        Clientbound::PlayerInfoUpdate,
+                        Clientbound::PlayerInfoRemove,
+                        Clientbound::SetBlockDestroyStage,
+                        Clientbound::UpdateHealth,
+                        Clientbound::EntityEffect,
+                        Clientbound::RemoveEntityEffect,
+                      ] %}
+        result[{{klass}}[protocol]] = {{klass.name.split("::").last}}
+      {% end %}
+
+      UNIMPLEMENTED_FORWARDED.each do |name, ids|
+        if id = ids[protocol]?
+          result[id] = name
+        end
+      end
+
+      result
+    end
+  end
+
+  build_forwarded_packets_method
+
   Log = ::Log.for self
 
   property host : String
@@ -157,6 +178,7 @@ class Rosegold::SpectateConnection
   property last_digging_block : Vec3i? = nil
   property last_dig_progress : Float32 = 0.0_f32
   property last_swing_countdown : Int8 = 0_i8
+  @handshake_protocol : UInt32 = 0_u32
   @packet_send_mutex = Mutex.new
 
   def initialize(raw_socket : TCPSocket, @spectate_server : SpectateServer)
@@ -165,8 +187,17 @@ class Rosegold::SpectateConnection
     @client = @spectate_server.client
   end
 
+  PROTOCOL_VERSION_NAMES = {
+    772_u32 => "1.21.8",
+    774_u32 => "1.21.11",
+  }
+
   private def protocol_version : UInt32
-    @client.try(&.protocol_version) || 772_u32
+    @client.try(&.protocol_version) || Client.protocol_version
+  end
+
+  private def protocol_version_name : String
+    PROTOCOL_VERSION_NAMES[protocol_version]? || "1.21.11"
   end
 
   def handle_client
@@ -224,11 +255,17 @@ class Rosegold::SpectateConnection
     Log.debug { "Handshake: protocol=#{packet.protocol_version}, next_state=#{packet.next_state}" }
 
     @connected = true
+    @handshake_protocol = packet.protocol_version
 
     case packet.next_state
     when 1 # Status
       @protocol_state = ProtocolState::STATUS
     when 2 # Login
+      if packet.protocol_version != protocol_version
+        @protocol_state = ProtocolState::LOGIN
+        send_disconnect("Protocol version mismatch: server is #{protocol_version_name} (protocol #{protocol_version}), client sent #{packet.protocol_version}")
+        return
+      end
       @protocol_state = ProtocolState::LOGIN
     end
   end
@@ -254,12 +291,14 @@ class Rosegold::SpectateConnection
   private def handle_login_acknowledged
     Log.debug { "Received Login Acknowledged, transitioning to configuration" }
     @protocol_state = ProtocolState::CONFIGURATION
+
+    # Send configuration packets immediately — don't wait for ClientInformation,
+    # since some clients (including rosegold) expect the server to initiate.
+    send_configuration_packets
   end
 
   private def handle_client_information
-    Log.debug { "Received client information" }
-
-    send_configuration_packets
+    Log.debug { "Received client information (ignored — config already sent)" }
   end
 
   private def handle_finish_configuration
@@ -288,7 +327,7 @@ class Rosegold::SpectateConnection
     # Create status response JSON
     status_json = {
       "version" => {
-        "name"     => "1.21.8",
+        "name"     => protocol_version_name,
         "protocol" => protocol_version,
       },
       "players" => {
@@ -494,7 +533,7 @@ class Rosegold::SpectateConnection
     send_set_ticking_state(false)
     send_player_abilities
     send_player_position
-    # Inventory handled by raw packet relay (0x12, 0x14)
+    start_inventory_polling
     send_hotbar_selection(bot.player.hotbar_selection)
     send_start_waiting_for_chunks
     send_chunks
@@ -698,7 +737,7 @@ class Rosegold::SpectateConnection
 
     # Send SetContainerContent packet for player inventory (window_id = 0)
     # Use a safe state_id to avoid overflow
-    safe_state_id = (inventory.state_id % UInt32::MAX).to_u32
+    safe_state_id = inventory.state_id
     packet = Rosegold::Clientbound::SetContainerContent.new(
       window_id: 0_u32, # Player inventory
       state_id: safe_state_id,
@@ -853,7 +892,7 @@ class Rosegold::SpectateConnection
       send_packet(chunk_packet)
       true
     else
-      Log.warn { "Chunk (#{chunk_x}, #{chunk_z}) not available in bot's dimension. Bot has #{bot.dimension.chunks.size} chunks loaded." }
+      Log.debug { "Chunk (#{chunk_x}, #{chunk_z}) not available in bot's dimension. Bot has #{bot.dimension.chunks.size} chunks loaded." }
 
       # Show what chunks the bot actually has
       if bot.dimension.chunks.size > 0
@@ -882,9 +921,9 @@ class Rosegold::SpectateConnection
         yaw: entity.yaw.to_f64,
         head_yaw: entity.head_yaw.to_f64,
         data: 0_u32, # Default data
-        velocity_x: entity.velocity.x.to_i16,
-        velocity_y: entity.velocity.y.to_i16,
-        velocity_z: entity.velocity.z.to_i16
+        velocity_x: entity.velocity.x,
+        velocity_y: entity.velocity.y,
+        velocity_z: entity.velocity.z
       )
 
       send_packet(spawn_packet)
@@ -901,12 +940,11 @@ class Rosegold::SpectateConnection
 
     # Send player effects only - these are the ones that impact the player directly
     bot.player.effects.each do |effect|
-      # TODO: decrease to debug when done
-      Log.info { "Sending existing effect #{effect.id} (amplifier #{effect.amplifier}, duration #{effect.duration}) to spectator #{@username}" }
+      Log.debug { "Sending existing effect #{effect.id} (amplifier #{effect.amplifier}, duration #{effect.duration}) to spectator #{@username}" }
       effect_packet = Rosegold::Clientbound::EntityEffect.new(
-        bot.player.entity_id,
+        bot.player.entity_id.to_u64,
         effect.id.to_u32,
-        effect.amplifier.to_u8,
+        effect.amplifier.to_u32,
         effect.duration.to_u32,
         effect.flags.to_u8
       )
@@ -971,6 +1009,7 @@ class Rosegold::SpectateConnection
     @packet_send_mutex.synchronize do
       return unless @connected
       data = packet.write
+      Log.debug { "SEND pkt=#{packet.class.name.split("::").last} len=#{data.size} first_bytes=#{data[0, Math.min(16, data.size)].hexstring}" }
       socket.write(data.size)
       socket.write(data)
       socket.flush
@@ -1014,16 +1053,20 @@ class Rosegold::SpectateConnection
   private def setup_raw_packet_relay
     return unless bot = @client
 
+    forwarded = SpectateServer.forwarded_packets(protocol_version)
+
     # Listen for raw packets and forward specific types verbatim
     bot.on(Rosegold::Event::RawPacket) do |event|
       raw_bytes = event.bytes
       next unless raw_bytes.size > 0
 
-      if packet_name = SpectateServer::FORWARDED_PACKETS[raw_bytes[0]]?
-        # Create RawPacket to forward
+      # Decode VarInt packet ID from raw bytes (handles multi-byte IDs > 127)
+      pkt_id = decode_varint_from_bytes(raw_bytes)
+      next unless pkt_id
+
+      if packet_name = forwarded[pkt_id]?
         relay_packet = Rosegold::Clientbound::RawPacket.new(raw_bytes)
 
-        # Send only to this specific connection (not all connections)
         if @connected
           begin
             send_packet(relay_packet)
@@ -1035,6 +1078,18 @@ class Rosegold::SpectateConnection
         end
       end
     end
+  end
+
+  private def decode_varint_from_bytes(bytes : Bytes) : UInt32?
+    result = 0_u32
+    shift = 0
+    bytes.each do |byte|
+      result |= ((byte & 0x7F).to_u32) << shift
+      return result if byte & 0x80 == 0
+      shift += 7
+      return nil if shift >= 32
+    end
+    nil
   end
 
   private def setup_position_event_listener

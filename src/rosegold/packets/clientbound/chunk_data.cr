@@ -5,7 +5,8 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    772_u32 => 0x27_u8, # MC 1.21.8,
+    772_u32 => 0x27_u32, # MC 1.21.8
+    774_u32 => 0x2C_u32, # MC 1.21.11
   })
 
   property \
@@ -126,14 +127,13 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     nbt_heightmaps = Minecraft::NBT::CompoundTag.new
 
     heightmaps.each do |heightmap|
-      # Map heightmap types to their NBT names
       name = case heightmap.type
+             when 0_u32 then "WORLD_SURFACE_WG"
              when 1_u32 then "WORLD_SURFACE"
-             when 2_u32 then "WORLD_SURFACE_WG"
+             when 2_u32 then "OCEAN_FLOOR_WG"
              when 3_u32 then "OCEAN_FLOOR"
-             when 4_u32 then "OCEAN_FLOOR_WG"
-             when 5_u32 then "MOTION_BLOCKING"
-             when 6_u32 then "MOTION_BLOCKING_NO_LEAVES"
+             when 4_u32 then "MOTION_BLOCKING"
+             when 5_u32 then "MOTION_BLOCKING_NO_LEAVES"
              else            "UNKNOWN_#{heightmap.type}"
              end
 
@@ -150,15 +150,14 @@ class Rosegold::Clientbound::ChunkData < Rosegold::Clientbound::Packet
     return heightmaps unless nbt_heightmaps.is_a?(Minecraft::NBT::CompoundTag)
 
     nbt_heightmaps.as(Minecraft::NBT::CompoundTag).value.each do |name, tag|
-      # Map NBT names back to heightmap type IDs
       type = case name
+             when "WORLD_SURFACE_WG"          then 0_u32
              when "WORLD_SURFACE"             then 1_u32
-             when "WORLD_SURFACE_WG"          then 2_u32
+             when "OCEAN_FLOOR_WG"            then 2_u32
              when "OCEAN_FLOOR"               then 3_u32
-             when "OCEAN_FLOOR_WG"            then 4_u32
-             when "MOTION_BLOCKING"           then 5_u32
-             when "MOTION_BLOCKING_NO_LEAVES" then 6_u32
-             else                                  1_u32 # Default to WORLD_SURFACE
+             when "MOTION_BLOCKING"           then 4_u32
+             when "MOTION_BLOCKING_NO_LEAVES" then 5_u32
+             else                                  1_u32
              end
 
       # Extract heightmap data from LongArrayTag

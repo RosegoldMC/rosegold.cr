@@ -1,7 +1,8 @@
 class Rosegold::Clientbound::EntityPositionAndRotation < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x2F_u8, # MC 1.21.8,
+    772_u32 => 0x2F_u32, # MC 1.21.8
+    774_u32 => 0x34_u32, # MC 1.21.11
   })
 
   property \
@@ -19,7 +20,11 @@ class Rosegold::Clientbound::EntityPositionAndRotation < Rosegold::Clientbound::
   end
 
   def self.read(packet)
-    entity_id = packet.read_var_long
+    if Client.protocol_version >= 774_u32
+      entity_id = packet.read_var_int.to_u64
+    else
+      entity_id = packet.read_var_long
+    end
     delta_x = packet.read_short
     delta_y = packet.read_short
     delta_z = packet.read_short
@@ -33,12 +38,16 @@ class Rosegold::Clientbound::EntityPositionAndRotation < Rosegold::Clientbound::
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write entity_id
+      if Client.protocol_version >= 774_u32
+        buffer.write entity_id.to_u32
+      else
+        buffer.write entity_id
+      end
       buffer.write delta_x
       buffer.write delta_y
       buffer.write delta_z
-      buffer.write yaw
-      buffer.write pitch
+      buffer.write_angle256_deg yaw
+      buffer.write_angle256_deg pitch
       buffer.write on_ground?
     end.to_slice
   end

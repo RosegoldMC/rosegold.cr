@@ -50,7 +50,7 @@ class Rosegold::EntityEffect
 
   property \
     effect : Effect,
-    amplifier : UInt8,
+    amplifier : UInt32,
     duration : UInt32,
     flags : UInt8
 

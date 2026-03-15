@@ -26,12 +26,12 @@ class Rosegold::Block
   getter states : Array(MCData::BlockProperty)
 
   def self.from_block_state_id(state_id : UInt16) : Block
-    MCData::DEFAULT.blocks.find { |block| block.min_state_id <= state_id && block.max_state_id >= state_id } || \
+    MCData.default.blocks.find { |block| block.min_state_id <= state_id && block.max_state_id >= state_id } || \
        raise "Invalid block state id #{state_id}"
   end
 
   def material_tool_multipliers
-    MCData::DEFAULT.materials.json_unmapped[material]
+    MCData.default.materials.json_unmapped[material]
   end
 
   def best_tool?(slot : Slot)
@@ -44,12 +44,35 @@ class Rosegold::Block
     best_tool?(slot) || harvest_tools.try &.keys.includes? slot.item_id_int.to_s
   end
 
+  # Search all materials for the tool's speed multiplier.
+  # Handles cases where the block's material doesn't list all valid tools
+  # (e.g. obsidian's "incorrect_for_wooden_tool" omits diamond/netherite pickaxes).
+  def tool_speed_from_any_material(slot : Slot) : Float64?
+    item_id = slot.item_id_int.to_s
+    MCData.default.materials.json_unmapped.each_value do |multipliers|
+      if speed = multipliers.as_h[item_id]?
+        return speed.as_f
+      end
+    end
+    nil
+  end
+
   def break_damage(main_hand : Slot, player : Player, creative : Bool = false) : Float64
     return 0_f64 if creative
 
     speed_multiplier = 1.0
     if best_tool?(main_hand)
       speed_multiplier = material_tool_multipliers[main_hand.item_id_int.to_s].as_f
+      speed_multiplier += main_hand.efficiency ** 2 + 1 if main_hand.efficiency > 0
+    elsif tool_speed = main_hand.tool_speed_for_tag(material)
+      speed_multiplier = tool_speed.to_f64
+      speed_multiplier += main_hand.efficiency ** 2 + 1 if main_hand.efficiency > 0
+    elsif can_harvest?(main_hand)
+      if speed = tool_speed_from_any_material(main_hand)
+        speed_multiplier = speed
+      elsif tc = main_hand.tool_component
+        speed_multiplier = tc.default_mining_speed.to_f64
+      end
       speed_multiplier += main_hand.efficiency ** 2 + 1 if main_hand.efficiency > 0
     end
 

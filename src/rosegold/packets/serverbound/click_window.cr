@@ -3,7 +3,8 @@ require "../packet"
 class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x11_u8, # MC 1.21.8,
+    772_u32 => 0x11_u32, # MC 1.21.8
+    774_u32 => 0x11_u32, # MC 1.21.11
   })
 
   enum Mode
@@ -31,11 +32,9 @@ class Rosegold::Serverbound::ClickWindow < Rosegold::Serverbound::Packet
       buffer.write changed_slots.size.to_u32 # VarInt encoding
       changed_slots.each do |slot|
         buffer.write_full slot.slot_number.to_i16
-        # Use hashed slot format for 1.21.8
         hashed_slot = HashedSlot.from_window_slot(slot)
         hashed_slot.write(buffer)
       end
-      # Use hashed slot format for cursor too
       hashed_cursor = HashedSlot.from_slot(cursor)
       hashed_cursor.write(buffer)
     end.to_slice

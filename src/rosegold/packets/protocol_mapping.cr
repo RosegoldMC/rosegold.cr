@@ -3,30 +3,30 @@
 
 module Rosegold::Packets::ProtocolMapping
   # Macro to define protocol-specific packet IDs for a packet class
-  # Usage: packet_ids({758 => 0x00_u8, 767 => 0x01_u8, 771 => 0x01_u8})
+  # Usage: packet_ids({758 => 0x00, 767 => 0x01, 771 => 0x01})
   macro packet_ids(mappings)
     # Store the protocol mappings as a constant
     PROTOCOL_PACKET_IDS = {{mappings}}
 
     # Generate the [](protocol_version) method for elegant access
-    def self.[](protocol_version : UInt32) : UInt8
-      PROTOCOL_PACKET_IDS[protocol_version]?.try(&.to_u8) || default_packet_id
+    def self.[](protocol_version : UInt32) : UInt32
+      PROTOCOL_PACKET_IDS[protocol_version]?.try(&.to_u32) || default_packet_id
     end
 
     # Provide backward compatibility with existing packet_id class getter
     # Use the first protocol's packet ID for registration compatibility
-    class_getter packet_id : UInt8 = {{mappings.values.first}}.to_u8
+    class_getter packet_id : UInt32 = {{mappings.values.first}}.to_u32
 
-    # Get packet ID for specific protocol version
-    def self.packet_id_for_protocol(protocol_version : UInt32) : UInt8
+    # Get packet ID for specific protocol version (returns UInt32 for VarInt encoding in write methods)
+    def self.packet_id_for_protocol(protocol_version : UInt32) : UInt32
       self[protocol_version]
     end
 
     # Define default packet ID (typically the latest/most common version)
-    def self.default_packet_id : UInt8
+    def self.default_packet_id : UInt32
       # Use the first defined packet ID as default
       {% first_id = mappings.values.first %}
-      {{first_id}}.to_u8
+      {{first_id}}.to_u32
     end
 
     # Helper method to get all supported protocols

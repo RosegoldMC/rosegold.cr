@@ -130,6 +130,8 @@ class Rosegold::Inventory
   #   inventory.refill_hand # => 32 (if only 32 items were available)
   #   inventory.refill_hand # => 0 (if main hand is empty)
   def refill_hand
+    log = Log.for("refill_hand")
+
     # Check if container is open - if so, warn and return current quantity
     if @client.container_menu != @client.inventory_menu
       Log.warn { "Cannot refill hand while container is open" }
@@ -141,6 +143,8 @@ class Rosegold::Inventory
 
     target_item_id = main_hand.item_id_int
     max_stack_size = main_hand.max_stack_size.to_i32
+
+    log.debug { "refill_hand: main_hand=#{main_hand.name}x#{main_hand.count}, target_id=#{target_item_id}, max_stack=#{max_stack_size}, hotbar_sel=#{@client.player.hotbar_selection}, state_id=#{@client.inventory_menu.state_id}" }
 
     return main_hand.count.to_i32 if main_hand.count.to_i32 >= max_stack_size
 
@@ -157,8 +161,10 @@ class Rosegold::Inventory
       }
       break unless matching_slot
 
+      log.debug { "refill_hand: shift-clicking slot #{matching_slot.slot_number} (#{matching_slot.name}x#{matching_slot.count}), state_id=#{@client.inventory_menu.state_id}" }
       # Shift-click to move items from main inventory to hotbar (stacks with main hand)
       @client.inventory_menu.send_click matching_slot.slot_number, 0, :shift
+      log.debug { "refill_hand: after click, main_hand=#{main_hand.count}, state_id=#{@client.inventory_menu.state_id}" }
 
       # Check if any items were actually transferred
       # If main hand didn't change, we're done with main inventory
@@ -270,6 +276,7 @@ class Rosegold::Inventory
 
       player_count_before = count(spec, inventory + hotbar)
       @client.container_menu.send_click slot_to_transfer.slot_number, 0, :shift
+      @client.wait_tick # Wait for server to process and sync state
       player_count_after = count(spec, inventory + hotbar)
 
       actual_transferred = case direction

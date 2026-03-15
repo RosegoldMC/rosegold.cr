@@ -3,7 +3,7 @@ require "json"
 class Rosegold::TextComponent
   include JSON::Serializable
 
-  TRANSLATIONS = Hash(String, String).from_json Rosegold.read_game_asset "1.21.8/language.json"
+  TRANSLATIONS = Hash(String, String).from_json Rosegold.read_game_asset "1.21.11/language.json"
 
   # Core content fields
   property type : String?
@@ -73,42 +73,41 @@ class Rosegold::TextComponent
     nbt.value.each do |key, value|
       case key
       when "type"
-        component.type = value.as_s if value.responds_to?(:as_s)
+        component.type = value.value.to_s if value.is_a?(Minecraft::NBT::StringTag)
       when "text", ""
-        # Empty string key should also be treated as text content
-        component.text = value.as_s if value.responds_to?(:as_s)
+        component.text = nbt_value_to_s(value)
       when "translate"
-        component.translate = value.as_s if value.responds_to?(:as_s)
+        component.translate = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "with"
         component.with = parse_with_array(value) if value.is_a?(Minecraft::NBT::ListTag)
       when "score"
         component.score = parse_score_component(value) if value.is_a?(Minecraft::NBT::CompoundTag)
       when "selector"
-        component.selector = value.as_s if value.responds_to?(:as_s)
+        component.selector = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "keybind"
-        component.keybind = value.as_s if value.responds_to?(:as_s)
+        component.keybind = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "nbt"
-        component.nbt = value.as_s if value.responds_to?(:as_s)
+        component.nbt = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "block"
-        component.block = value.as_s if value.responds_to?(:as_s)
+        component.block = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "entity"
-        component.entity = value.as_s if value.responds_to?(:as_s)
+        component.entity = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "storage"
-        component.storage = value.as_s if value.responds_to?(:as_s)
+        component.storage = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "interpret"
-        component.interpret = value.as_bool if value.responds_to?(:as_bool)
+        component.interpret = (value.value != 0) if value.is_a?(Minecraft::NBT::ByteTag)
       when "separator"
         component.separator = from_nbt(value)
       when "color"
-        component.color = value.as_s if value.responds_to?(:as_s)
+        component.color = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "font"
-        component.font = value.as_s if value.responds_to?(:as_s)
+        component.font = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "bold", "italic", "underlined", "strikethrough", "obfuscated"
         set_boolean_property(component, key, value)
       when "shadow_color"
         component.shadow_color = parse_shadow_color(value) if value.is_a?(Minecraft::NBT::ListTag)
       when "insertion"
-        component.insertion = value.as_s if value.responds_to?(:as_s)
+        component.insertion = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "clickEvent", "click_event"
         component.click_event = parse_click_event(value) if value.is_a?(Minecraft::NBT::CompoundTag)
       when "hoverEvent", "hover_event"
@@ -133,11 +132,11 @@ class Rosegold::TextComponent
   end
 
   private def self.parse_score_component(compound : Minecraft::NBT::CompoundTag) : ScoreComponent?
-    name = compound.value["name"]?.try(&.as_s)
-    objective = compound.value["objective"]?.try(&.as_s)
-    return nil unless name && objective
+    name_tag = compound.value["name"]?
+    objective_tag = compound.value["objective"]?
+    return nil unless name_tag.is_a?(Minecraft::NBT::StringTag) && objective_tag.is_a?(Minecraft::NBT::StringTag)
 
-    ScoreComponent.new(name, objective)
+    ScoreComponent.new(name_tag.value, objective_tag.value)
   end
 
   private def self.parse_shadow_color(list_tag : Minecraft::NBT::ListTag) : Array(Float32)?
@@ -145,8 +144,11 @@ class Rosegold::TextComponent
 
     color_values = [] of Float32
     list_tag.value.each do |tag|
-      if tag.responds_to?(:as_f)
-        color_values << tag.as_f.to_f32
+      case tag
+      when Minecraft::NBT::FloatTag
+        color_values << tag.value
+      when Minecraft::NBT::DoubleTag
+        color_values << tag.value.to_f32
       else
         return nil
       end
@@ -155,32 +157,43 @@ class Rosegold::TextComponent
   end
 
   private def self.parse_click_event(compound : Minecraft::NBT::CompoundTag) : ClickEventComponent?
-    action = compound.value["action"]?.try(&.as_s)
-    value = compound.value["value"]?.try(&.as_s)
-    return nil unless action && value
+    action_tag = compound.value["action"]?
+    value_tag = compound.value["value"]?
+    return nil unless action_tag.is_a?(Minecraft::NBT::StringTag) && value_tag.is_a?(Minecraft::NBT::StringTag)
 
-    ClickEventComponent.new(action, value)
+    ClickEventComponent.new(action_tag.value, value_tag.value)
   end
 
   private def self.parse_hover_event(compound : Minecraft::NBT::CompoundTag) : HoverEventComponent?
-    action = compound.value["action"]?.try(&.as_s)
+    action_tag = compound.value["action"]?
     contents = compound.value["contents"]? || compound.value["value"]?
-    return nil unless action && contents
+    return nil unless action_tag.is_a?(Minecraft::NBT::StringTag) && contents
 
-    HoverEventComponent.new(action, contents)
+    HoverEventComponent.new(action_tag.value, contents)
   end
 
   private def self.parse_extra_components(list_tag : Minecraft::NBT::ListTag) : Array(TextComponent)
     list_tag.value.map { |tag| from_nbt(tag) }
   end
 
-  private def self.set_boolean_property(component : TextComponent, key : String, value : Minecraft::NBT::Tag)
-    return unless value.responds_to?(:as_bool) || value.responds_to?(:as_i)
+  private def self.nbt_value_to_s(value : Minecraft::NBT::Tag) : String
+    case value
+    when Minecraft::NBT::StringTag then value.value
+    when Minecraft::NBT::IntTag    then value.value.to_s
+    when Minecraft::NBT::LongTag   then value.value.to_s
+    when Minecraft::NBT::ShortTag  then value.value.to_s
+    when Minecraft::NBT::ByteTag   then value.value.to_s
+    when Minecraft::NBT::FloatTag  then value.value.to_s
+    when Minecraft::NBT::DoubleTag then value.value.to_s
+    else                                value.to_s
+    end
+  end
 
-    bool_value = if value.responds_to?(:as_bool)
-                   value.as_bool
-                 else
-                   value.as_i != 0
+  private def self.set_boolean_property(component : TextComponent, key : String, value : Minecraft::NBT::Tag)
+    bool_value = case value
+                 when Minecraft::NBT::ByteTag then value.value != 0
+                 when Minecraft::NBT::IntTag  then value.value != 0
+                 else                              return
                  end
 
     case key

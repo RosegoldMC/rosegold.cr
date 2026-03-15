@@ -51,7 +51,7 @@ crystal docs
 - **Clientbound packets** (`src/rosegold/packets/clientbound/`) - Packets received from server
 - **Serverbound packets** (`src/rosegold/packets/serverbound/`) - Packets sent to server
 - **Protocol mapping** (`src/rosegold/packets/protocol_mapping.cr`) - Maps packet IDs to packet classes
-- Protocol version 772 (Minecraft 1.21.8) is the default
+- Supports protocol versions 772 (1.21.8) and 774 (1.21.11), with auto-detection
 
 ### World Management
 - **Dimension** (`src/rosegold/world/dimension.cr`) - Manages chunks and world state
@@ -61,8 +61,8 @@ crystal docs
 
 ### Game Data
 - Game assets stored in `game_assets/` directory
-- Protocol documentation in `game_assets/protocol_docs/`
-- Block, item, and biome data from Minecraft 1.21.8
+- Protocol documentation in `tmp/protocol_docs/` (not committed)
+- Block, item, and biome data from Minecraft 1.21.8 and 1.21.11
 
 ## Development Guidelines
 
@@ -70,7 +70,7 @@ crystal docs
 - **NEVER change packet IDs** without explicit user approval - they must match Minecraft protocol
 - Use `LOG_PACKET=<id>` environment variable to debug specific packets (e.g., `LOG_PACKET=72` for SystemChatMessage)
 - When packet parsing fails, use logged packet bytes to write unit specs
-- Protocol documentation available at `./game_assets/protocol_docs/1.21.8.wiki`
+- Protocol documentation in `./tmp/protocol_docs/` (not committed)
 
 ### Testing
 - Use background execution for long-running integration specs to maintain better control
@@ -88,6 +88,6 @@ crystal docs
 ## Documentation Links
 - Use minecraft.wiki instead of wiki.vg (wiki.vg is down)
 - Protocol docs: https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol
-- Local protocol docs: `./game_assets/protocol_docs/1.21.8.wiki`
+- Local protocol docs: `./tmp/protocol_docs/` (not committed)
 - Protocol reference from GitHub Copilot instructions: https://minecraft.wiki/w/Java_Edition_protocol/Packets
 - I prefer to write minimal comments. I like to make my code self descriptive and only use comments for when things are magical or weird

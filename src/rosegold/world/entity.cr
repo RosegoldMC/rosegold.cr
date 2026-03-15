@@ -1,5 +1,15 @@
 class Rosegold::Entity
-  METADATA = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.8/entities.json")
+  METADATA_1218  = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.8/entities.json")
+  METADATA_12111 = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.11/entities.json")
+
+  METADATA_BY_PROTOCOL = {
+    772_u32 => METADATA_1218,
+    774_u32 => METADATA_12111,
+  }
+
+  def self.metadata_for_protocol : Array(Metadata)
+    METADATA_BY_PROTOCOL[Client.protocol_version]? || METADATA_12111
+  end
 
   class Metadata
     include JSON::Serializable
@@ -36,7 +46,7 @@ class Rosegold::Entity
   end
 
   def metadata
-    METADATA.find { |data| data.id == @entity_type }
+    Entity.metadata_for_protocol.find { |data| data.id == @entity_type }
   end
 
   def bounding_box

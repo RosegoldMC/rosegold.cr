@@ -13,7 +13,8 @@ class Rosegold::Serverbound::PlayerLoaded < Rosegold::Serverbound::Packet
   RESOURCE_NAME = "minecraft:player_loaded"
 
   packet_ids({
-    772_u32 => 0x2B_u8, # MC 1.21.8
+    772_u32 => 0x2B_u32, # MC 1.21.8
+    774_u32 => 0x2B_u32, # MC 1.21.11
   })
 
   def initialize

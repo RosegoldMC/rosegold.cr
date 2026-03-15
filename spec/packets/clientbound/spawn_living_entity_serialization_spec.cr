@@ -1,6 +1,7 @@
 require "../../spec_helper"
 
 Spectator.describe "SpawnEntity Serialization" do
+  after_each { Rosegold::Client.reset_protocol_version! }
   it "can serialize and deserialize a basic spawn entity packet" do
     # Set protocol version for consistency
     Rosegold::Client.protocol_version = 772_u32

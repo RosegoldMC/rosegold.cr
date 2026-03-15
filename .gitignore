@@ -24,3 +24,6 @@ crystal.tar.gz
 game_assets/protocol_docs
 
 tmp
+
+# User-specific Claude Code settings
+.claude/settings.local.json

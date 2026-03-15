@@ -3,7 +3,8 @@ require "../packet"
 class Rosegold::Clientbound::LoginPluginRequest < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x04_u8, # MC 1.21.8,
+    772_u32 => 0x04_u32, # MC 1.21.8
+    774_u32 => 0x04_u32, # MC 1.21.11
   })
   class_getter state = Rosegold::ProtocolState::LOGIN
 
@@ -18,7 +19,7 @@ class Rosegold::Clientbound::LoginPluginRequest < Rosegold::Clientbound::Packet
     self.new(
       packet.read_var_int,
       packet.read_var_string,
-      packet.read_var_bytes
+      Bytes.new(packet.size - packet.pos).tap { |buf| packet.read_fully(buf) }
     )
   end
 

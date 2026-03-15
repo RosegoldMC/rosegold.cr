@@ -3,7 +3,8 @@ require "../packet"
 class Rosegold::Serverbound::InteractEntity < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x19_u8, # MC 1.21.8,
+    772_u32 => 0x19_u32, # MC 1.21.8
+    774_u32 => 0x19_u32, # MC 1.21.11
   })
 
   enum Action
@@ -33,7 +34,11 @@ class Rosegold::Serverbound::InteractEntity < Rosegold::Serverbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write entity_id
+      if Client.protocol_version >= 774_u32
+        buffer.write entity_id.to_u32
+      else
+        buffer.write entity_id
+      end
       buffer.write action.value
 
       if action == Action::InteractAt

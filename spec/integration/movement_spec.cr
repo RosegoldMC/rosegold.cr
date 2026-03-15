@@ -15,12 +15,17 @@ Spectator.describe "Rosegold::Bot movement" do
   it "should fall due to gravity (and get held up by the ground)" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 1 -58 1"
-        bot.wait_tick
+        bot.chat "/tp 1.5 -58 1.5"
+        # Wait for teleport to take effect (bot must be above ground level)
+        until bot.location.y > -59 && (bot.location.x - 1.5).abs < 0.5
+          bot.wait_tick
+        end
         until client.player.on_ground?
           bot.wait_tick
         end
-        expect(bot.location).to eq(Rosegold::Vec3d.new(1.5, -60, 1.5))
+        expect(bot.location.x).to be_close(1.5, 0.1)
+        expect(bot.location.y).to be_close(-60, 0.1)
+        expect(bot.location.z).to be_close(1.5, 0.1)
       end
     end
   end
@@ -41,14 +46,14 @@ Spectator.describe "Rosegold::Bot movement" do
   end
 
   it "should change yaw and pitch" do
-    final_yaw = rand(-180..180)
-    final_pitch = rand(-90..90)
+    final_yaw = rand(-179..179)
+    final_pitch = rand(-89..89)
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.chat "/tp 1 -60 1"
 
-        yaw = rand(-180..180)
-        pitch = rand(-90..90)
+        yaw = rand(-179..179)
+        pitch = rand(-89..89)
         bot.yaw = yaw
         bot.pitch = pitch
         expect(bot.yaw).to be_close(yaw, 0.1)

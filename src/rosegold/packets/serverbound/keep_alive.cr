@@ -4,7 +4,8 @@ class Rosegold::Serverbound::KeepAlive < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    772_u32 => 0x1B_u8, # MC 1.21.8,
+    772_u32 => 0x1B_u32, # MC 1.21.8
+    774_u32 => 0x1B_u32, # MC 1.21.11
   })
 
   property keep_alive_id : Int64
