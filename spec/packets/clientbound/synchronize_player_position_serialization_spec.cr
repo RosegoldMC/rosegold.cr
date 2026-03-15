@@ -1,6 +1,7 @@
 require "../../spec_helper"
 
 Spectator.describe "SynchronizePlayerPosition Serialization" do
+  after_each { Rosegold::Client.reset_protocol_version! }
   it "can read and write SynchronizePlayerPosition packet with perfect equality" do
     # Set protocol version to match the captured packet
     Rosegold::Client.protocol_version = 772_u32
@@ -46,6 +47,6 @@ Spectator.describe "SynchronizePlayerPosition Serialization" do
     expect(packet.velocity_z).to eq(0.0)
     expect(packet.yaw_raw).to be_close(-180.0, 0.001)
     expect(packet.pitch_raw).to eq(0.0)
-    expect(packet.relative_flags).to eq(0_u8)
+    expect(packet.relative_flags).to eq(0_i32)
   end
 end

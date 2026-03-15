@@ -4,7 +4,8 @@ class Rosegold::Clientbound::Transfer < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    772_u32 => 0x0B_u8, # MC 1.21.8,
+    772_u32 => 0x0B_u32, # MC 1.21.8
+    774_u32 => 0x0B_u32, # MC 1.21.11
   })
 
   class_getter state = ProtocolState::CONFIGURATION
@@ -40,5 +41,39 @@ class Rosegold::Clientbound::Transfer < Rosegold::Clientbound::Packet
       end
       raise e
     end
+  end
+end
+
+class Rosegold::Clientbound::PlayTransfer < Rosegold::Clientbound::Packet
+  include Rosegold::Packets::ProtocolMapping
+
+  packet_ids({
+    772_u32 => 0x7A_u32,
+    774_u32 => 0x7F_u32,
+  })
+
+  class_getter state = ProtocolState::PLAY
+
+  property host : String
+  property port : UInt32
+
+  def initialize(@host : String, @port : UInt32); end
+
+  def self.read(packet)
+    host = packet.read_var_string
+    port = packet.read_var_int
+    self.new(host, port)
+  end
+
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
+      buffer.write host
+      buffer.write port
+    end.to_slice
+  end
+
+  def callback(client)
+    client.connection.disconnect "Transferred to #{host}:#{port}"
   end
 end

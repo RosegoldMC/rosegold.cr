@@ -3,32 +3,41 @@ require "../packet"
 class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x7D_u8, # MC 1.21.8,
+    772_u32 => 0x7D_u32, # MC 1.21.8
+    774_u32 => 0x82_u32, # MC 1.21.11
   })
 
   property \
     entity_id : UInt64,
     effect_id : UInt32,
-    amplifier : UInt8,
+    amplifier : UInt32,
     duration : UInt32,
     flags : UInt8
 
   def initialize(@entity_id, @effect_id, @amplifier, @duration, @flags); end
 
   def self.read(packet)
-    self.new(
-      packet.read_var_long,
-      packet.read_var_int,
-      packet.read_byte,
-      packet.read_var_int,
-      packet.read_byte
-    )
+    if Client.protocol_version >= 774_u32
+      entity_id = packet.read_var_int.to_u64
+    else
+      entity_id = packet.read_var_long
+    end
+    effect_id = packet.read_var_int
+    amplifier = packet.read_var_int
+    duration = packet.read_var_int
+    flags = packet.read_byte
+
+    self.new(entity_id, effect_id, amplifier, duration, flags)
   end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write entity_id
+      if Client.protocol_version >= 774_u32
+        buffer.write entity_id.to_u32
+      else
+        buffer.write entity_id
+      end
       buffer.write effect_id
       buffer.write amplifier
       buffer.write duration

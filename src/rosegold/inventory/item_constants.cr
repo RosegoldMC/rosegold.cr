@@ -3,7 +3,7 @@
 module Rosegold::ItemConstants
   # Helper to check if item has specific enchantment category
   private def self.has_enchant_category?(item_id : UInt32, category : String) : Bool
-    found_item = MCData::DEFAULT.items.find { |item| item.id == item_id }
+    found_item = MCData.default.items.find { |item| item.id == item_id }
     return false unless found_item
     enchant_categories = found_item.enchant_categories
     return false unless enchant_categories
@@ -66,7 +66,7 @@ module Rosegold::ItemConstants
   end
 
   def self.offhand_item?(item_id : Int32 | UInt32) : Bool
-    found_item = MCData::DEFAULT.items.find { |item| item.id == item_id.to_u32 }
+    found_item = MCData.default.items.find { |item| item.id == item_id.to_u32 }
     return false unless found_item
     found_item.name == "shield"
   end

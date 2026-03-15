@@ -3,7 +3,8 @@ require "../packet"
 class Rosegold::Clientbound::UnloadChunk < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x21_u8, # MC 1.21.8,
+    772_u32 => 0x21_u32, # MC 1.21.8
+    774_u32 => 0x25_u32, # MC 1.21.11
   })
 
   property \
@@ -13,29 +14,21 @@ class Rosegold::Clientbound::UnloadChunk < Rosegold::Clientbound::Packet
   def initialize(@chunk_x, @chunk_z); end
 
   def self.read(packet)
-    # MC 1.21+ format: Position value
-    pos = packet.read_bit_location
-    chunk_x = pos.x >> 4
-    chunk_z = pos.z >> 4
+    # MC 1.21+ format: ChunkPos encoded as a Long
+    # x = lower 32 bits, z = upper 32 bits (already chunk coordinates)
+    long = packet.read_long
+    chunk_x = (long & 0xFFFFFFFF).to_i32
+    chunk_z = (long >> 32).to_i32
     self.new(chunk_x, chunk_z)
   end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      # MC 1.21+ format: Position value
-      # Convert chunk coordinates to world coordinates (chunk coords * 16)
-      world_x = chunk_x << 4
-      world_z = chunk_z << 4
-      world_y = 0 # Y doesn't matter for chunk unloading
-
-      # Encode position as bit location (inverse of read_bit_location)
-      # Format: x (26 bits), z (26 bits), y (12 bits) from MSB to LSB
-      value = (world_x.to_i64 & 0x3FFFFFF) << 38 | # x: 26 bits at position 38
-              (world_z.to_i64 & 0x3FFFFFF) << 12 | # z: 26 bits at position 12
-              (world_y.to_i64 & 0xFFF)             # y: 12 bits at position 0
-
-      buffer.write_full(value)
+      # MC 1.21+ format: ChunkPos encoded as a Long
+      # x = lower 32 bits, z = upper 32 bits (already chunk coordinates)
+      long = (chunk_x.to_i64 & 0xFFFFFFFF) | ((chunk_z.to_i64 & 0xFFFFFFFF) << 32)
+      buffer.write_full(long)
     end.to_slice
   end
 

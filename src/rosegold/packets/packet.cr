@@ -40,8 +40,15 @@ end
 module Rosegold::RawPacket
   getter bytes : Bytes
 
-  def packet_id
-    bytes[0]
+  def packet_id : UInt32
+    result = 0_u32
+    shift = 0
+    bytes.each do |byte|
+      result |= ((byte & 0x7F).to_u32) << shift
+      return result if byte & 0x80 == 0
+      shift += 7
+    end
+    result
   end
 
   def write : Bytes
@@ -51,7 +58,7 @@ end
 
 # not decoded eg. because unknown packet_id
 class Rosegold::Clientbound::RawPacket < Rosegold::Clientbound::Packet
-  class_getter packet_id = 0xff_u8
+  class_getter packet_id = 0xff_u32
   include Rosegold::RawPacket
 
   def initialize(@bytes); end
@@ -59,7 +66,7 @@ end
 
 # not decoded eg. because unknown packet_id
 class Rosegold::Serverbound::RawPacket < Rosegold::Serverbound::Packet
-  class_getter packet_id = 0xff_u8
+  class_getter packet_id = 0xff_u32
   include Rosegold::RawPacket
 
   def initialize(@bytes); end
@@ -73,8 +80,8 @@ class Rosegold::ProtocolState
   PLAY          = ProtocolState.new "PLAY"
 
   getter name : String
-  getter clientbound = Hash({UInt8, UInt32}, Clientbound::Packet.class).new
-  getter serverbound = Hash({UInt8, UInt32}, Serverbound::Packet.class).new
+  getter clientbound = Hash({UInt32, UInt32}, Clientbound::Packet.class).new
+  getter serverbound = Hash({UInt32, UInt32}, Serverbound::Packet.class).new
 
   def initialize(@name)
   end
@@ -113,17 +120,16 @@ class Rosegold::ProtocolState
   end
 
   # Get packet class for specific packet ID and protocol version
-  def get_clientbound_packet(packet_id : UInt8, protocol : UInt32)
+  def get_clientbound_packet(packet_id : UInt32, protocol : UInt32)
     clientbound[{packet_id, protocol}]?
   end
 
-  def get_serverbound_packet(packet_id : UInt8, protocol : UInt32)
+  def get_serverbound_packet(packet_id : UInt32, protocol : UInt32)
     serverbound[{packet_id, protocol}]?
   end
 
-  # Legacy methods for backward compatibility
-  def clientbound_for_protocol(protocol : UInt32) : Hash(UInt8, Clientbound::Packet.class)
-    result = Hash(UInt8, Clientbound::Packet.class).new
+  def clientbound_for_protocol(protocol : UInt32) : Hash(UInt32, Clientbound::Packet.class)
+    result = Hash(UInt32, Clientbound::Packet.class).new
     clientbound.each do |(packet_id, proto), packet_class|
       if proto == protocol
         result[packet_id] = packet_class
@@ -132,8 +138,8 @@ class Rosegold::ProtocolState
     result
   end
 
-  def serverbound_for_protocol(protocol : UInt32) : Hash(UInt8, Serverbound::Packet.class)
-    result = Hash(UInt8, Serverbound::Packet.class).new
+  def serverbound_for_protocol(protocol : UInt32) : Hash(UInt32, Serverbound::Packet.class)
+    result = Hash(UInt32, Serverbound::Packet.class).new
     serverbound.each do |(packet_id, proto), packet_class|
       if proto == protocol
         result[packet_id] = packet_class

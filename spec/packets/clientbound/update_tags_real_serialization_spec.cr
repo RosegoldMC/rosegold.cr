@@ -1,6 +1,7 @@
 require "../../spec_helper"
 
 Spectator.describe "UpdateTags Real Packet Serialization" do
+  after_each { Rosegold::Client.reset_protocol_version! }
   it "can read and write real UpdateTags packet with perfect equality" do
     # Set protocol version to match the captured packet
     Rosegold::Client.protocol_version = 772_u32

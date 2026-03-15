@@ -104,7 +104,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     protocol_version : UInt32,
   ) : Clientbound::Packet
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
-      pkt_id = pkt_io.read_byte || raise "Empty packet"
+      pkt_id = pkt_io.read_var_int.to_u32
 
       pkt_type = protocol_state.get_clientbound_packet(pkt_id, protocol_version)
 
@@ -113,9 +113,9 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
         packet_ids_to_log = log_packet_ids.split(",").compact_map do |id_str|
           cleaned = id_str.strip
           if cleaned.starts_with?("0x") || cleaned.starts_with?("0X")
-            cleaned[2..].to_u8?(16)
+            cleaned[2..].to_u32?(16)
           else
-            cleaned.to_u8?
+            cleaned.to_u32?
           end
         end
 
@@ -157,7 +157,7 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     protocol_version : UInt32,
   ) : Serverbound::Packet
     Minecraft::IO::Memory.new(packet_bytes).try do |pkt_io|
-      pkt_id = pkt_io.read_byte || raise "Empty packet"
+      pkt_id = pkt_io.read_var_int.to_u32
 
       pkt_type = protocol_state.get_serverbound_packet(pkt_id, protocol_version)
 

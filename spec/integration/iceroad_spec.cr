@@ -4,6 +4,8 @@ Spectator.describe "Rosegold::Bot ice road physics" do
   it "should achieve high speed ice road movement" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
+        bot.chat "/kill @e[type=!minecraft:player]"
+
         base_y = -61
         start_pos = Rosegold::Vec3d.new(20.5, base_y + 1.0, 0.5)
         test_distance = 30.0
@@ -16,7 +18,7 @@ Spectator.describe "Rosegold::Bot ice road physics" do
 
         bot.chat "/tp #{start_pos.x} #{start_pos.y} #{start_pos.z}"
         bot.chat "/give @s minecraft:baked_potato 64"
-        bot.wait_ticks 5
+        bot.wait_ticks 15
 
         bot.eat!
 

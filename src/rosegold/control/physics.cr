@@ -67,7 +67,8 @@ class Rosegold::Physics
 
   private property jump_trigger_time : Int32 = 0   # For double-tap mechanics
   private property sprint_trigger_time : Int32 = 0 # For double-tap sprint
-  private property no_jump_delay : Int32 = 0       # Jump spam prevention
+  private property sprint_requested : Bool = false
+  private property no_jump_delay : Int32 = 0 # Jump spam prevention
 
   private property movement_input : Vec3d = Vec3d::ORIGIN
   private property jumping_input : Bool = false
@@ -189,12 +190,25 @@ class Rosegold::Physics
     sprint false if sneaking
 
     player.sneaking = sneaking
+    # Sneaking is handled via PlayerInput Sneak flag (bit 0x20)
   end
 
   def sprint(sprinting = true)
+    @sprint_requested = sprinting
+    apply_sprint_state(sprinting)
+  end
+
+  private def apply_sprint_state(sprinting : Bool)
     return if player.sneaking?
     return if player.sprinting? == sprinting
     player.sprinting = sprinting
+
+    # Server requires EntityAction (PlayerCommand) for sprint state changes
+    if sprinting
+      client.send_packet! Serverbound::EntityAction.new(player.entity_id, :start_sprinting)
+    else
+      client.send_packet! Serverbound::EntityAction.new(player.entity_id, :stop_sprinting)
+    end
   end
 
   def reset_jump_delay
@@ -210,7 +224,7 @@ class Rosegold::Physics
     block_state = client.dimension.block_state(block_x, block_y, block_z)
     return DEFAULT_SLIP unless block_state
 
-    block_name = MCData::DEFAULT.block_state_names[block_state]
+    block_name = MCData.default.block_state_names[block_state]
     base_block_name = block_name.split('[').first
 
     case base_block_name
@@ -293,7 +307,7 @@ class Rosegold::Physics
 
     jump = jump_queued? && player.on_ground?
     sneak = player.sneaking?
-    sprint = player.sprinting? && !sneak
+    sprint = @sprint_requested && !sneak
 
     Rosegold::VirtualInput.new(
       forward: keys.forward?,
@@ -363,7 +377,7 @@ class Rosegold::Physics
     should_sprint = input.sprint? && input.has_movement_input? && !input.sneak?
 
     if should_sprint != player.sprinting?
-      sprint(should_sprint)
+      apply_sprint_state(should_sprint)
     end
   end
 
@@ -654,7 +668,7 @@ class Rosegold::Physics
     blocks_coords.flat_map do |block_coords|
       x, y, z = block_coords
       dimension.block_state(x, y, z).try do |block_state|
-        block_shape = MCData::DEFAULT.block_state_collision_shapes[block_state]
+        block_shape = MCData.default.block_state_collision_shapes[block_state]
         block_shape.map &.to_f64.offset(x, y, z).grow(grow_aabb)
       end || begin
         # Unloaded chunks should be solid to prevent falling through

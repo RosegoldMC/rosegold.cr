@@ -4,7 +4,8 @@ class Rosegold::Serverbound::PlayerInput < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    772_u32 => 0x2A_u8, # MC 1.21.8 (Player Input)
+    772_u32 => 0x2A_u32, # MC 1.21.8 (Player Input)
+    774_u32 => 0x2A_u32, # MC 1.21.11
   })
 
   # Player Input flags from protocol documentation

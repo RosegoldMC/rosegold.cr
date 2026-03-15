@@ -52,12 +52,20 @@ module Minecraft::IO
 
   # writes var int
   def write(value : UInt16 | Int16 | UInt32 | Int32 | UInt64 | Int64)
+    # Convert signed types to unsigned to avoid arithmetic right shift
+    # keeping two's complement bit pattern (what Minecraft VarInt expects)
+    unsigned = case value
+               when Int16 then value.unsafe_as(UInt16).to_u64
+               when Int32 then value.unsafe_as(UInt32).to_u64
+               when Int64 then value.unsafe_as(UInt64)
+               else            value.to_u64
+               end
     a = Array(UInt8).new
     more = true
     while more
-      b = (value & 0x7F).to_u8
-      value >>= 7
-      if value == 0
+      b = (unsigned & 0x7F).to_u8
+      unsigned >>= 7
+      if unsigned == 0
         more = false
       else
         b |= 0x80
@@ -201,6 +209,85 @@ module Minecraft::IO
     read_byte.to_f32 * 360 / 256
   end
 
+  # Read LpVec3 (packed velocity format used in 1.21.11+)
+  # See decompiled net.minecraft.network.LpVec3 for reference
+  def read_lp_vec3 : {Float64, Float64, Float64}
+    first_byte = read_byte
+    if first_byte == 0x00
+      return {0.0, 0.0, 0.0}
+    end
+
+    second_byte = read_byte
+    hi = read_bytes(UInt32, ::IO::ByteFormat::BigEndian).to_u64
+    bits = (hi << 16) | (second_byte.to_u64 << 8) | first_byte.to_u64
+
+    packed_x = (bits >> 3) & 0x7FFF_u64
+    packed_y = (bits >> 18) & 0x7FFF_u64
+    packed_z = (bits >> 33) & 0x7FFF_u64
+    continuation = (bits >> 2) & 1_u64
+    scale = (first_byte & 0x3).to_u64
+
+    if continuation == 1
+      extra = read_var_int.to_u32.to_u64
+      scale = scale | (extra << 2)
+    end
+
+    x = unpack_lp_component(packed_x) * scale.to_f64
+    y = unpack_lp_component(packed_y) * scale.to_f64
+    z = unpack_lp_component(packed_z) * scale.to_f64
+    {x, y, z}
+  end
+
+  private def unpack_lp_component(value : UInt64) : Float64
+    clamped = Math.min(value & 0x7FFF_u64, 32766_u64).to_f64
+    clamped * 2.0 / 32766.0 - 1.0
+  end
+
+  ABS_MAX_LP_VEC3 =      1.7179869183e10
+  ABS_MIN_LP_VEC3 = 3.051944088384301e-5
+
+  # Write LpVec3 (packed velocity format used in 1.21.11+)
+  def write_lp_vec3(vx : Float64, vy : Float64, vz : Float64)
+    max_abs = Math.max(vx.abs, Math.max(vy.abs, vz.abs))
+    if max_abs < ABS_MIN_LP_VEC3
+      write 0x00_u8
+      return
+    end
+
+    scale = max_abs.ceil.to_i64
+    scale = Math.max(scale, 1_i64)
+
+    px = pack_lp_component(vx, scale.to_f64)
+    py = pack_lp_component(vy, scale.to_f64)
+    pz = pack_lp_component(vz, scale.to_f64)
+
+    continuation = (scale & 0x3) != scale ? 1_u64 : 0_u64
+    low_scale_bits = scale.to_u64 & 0x3_u64
+
+    bits = low_scale_bits |
+           (continuation << 2) |
+           (px << 3) |
+           (py << 18) |
+           (pz << 33)
+
+    # Write 2 bytes (byte1, byte2)
+    write (bits & 0xFF).to_u8
+    write ((bits >> 8) & 0xFF).to_u8
+    # Write 4 bytes big-endian
+    write_bytes(((bits >> 16) & 0xFFFFFFFF_u64).to_u32, ::IO::ByteFormat::BigEndian)
+
+    if continuation == 1
+      write (scale >> 2).to_u32
+    end
+  end
+
+  private def pack_lp_component(value : Float64, scale : Float64) : UInt64
+    normalized = scale > 0.0 ? value / scale : 0.0
+    packed = ((normalized * 0.5 + 0.5) * 32766.0).round.to_i64
+    packed = packed.clamp(0_i64, 32766_i64)
+    packed.to_u64
+  end
+
   def read_bit_location : Rosegold::Vec3i
     value = read_long
     # here ordered LSB to MSB; use arithmetic shift to preserve sign
@@ -233,6 +320,25 @@ end
 
 class Minecraft::IO::Memory < IO::Memory
   include Minecraft::IO
+end
+
+class Minecraft::IO::CaptureIO < IO
+  include Minecraft::IO
+
+  getter buffer : ::IO::Memory = ::IO::Memory.new
+
+  def initialize(@inner : ::IO)
+  end
+
+  def read(slice : Bytes) : Int32
+    bytes_read = @inner.read(slice)
+    @buffer.write(slice[0, bytes_read]) if bytes_read > 0
+    bytes_read
+  end
+
+  def write(slice : Bytes) : Nil
+    @inner.write(slice)
+  end
 end
 
 class Minecraft::IO::Hexdump < IO::Hexdump

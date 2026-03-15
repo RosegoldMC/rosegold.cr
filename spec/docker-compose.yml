@@ -7,11 +7,21 @@ services:
       - 25565:25565
     environment:
       EULA: "TRUE"
-      VERSION: 1.21.8
+      VERSION: ${MC_VERSION:-1.21.11}
       ONLINE_MODE: "FALSE"
       LEVEL_TYPE: flat
       SPAWN_PROTECTION: 0
+      SPAWN_MONSTERS: "FALSE"
+      SPAWN_ANIMALS: "FALSE"
+      RCON_CMDS_STARTUP: |-
+        gamerule spawn_mobs false
       # TYPE: PAPER
+
+    healthcheck:
+      test: mc-health
+      start_period: 60s
+      interval: 5s
+      retries: 20
 
     tty: true
     stdin_open: true

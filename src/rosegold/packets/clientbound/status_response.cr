@@ -5,10 +5,11 @@ class Rosegold::Clientbound::StatusResponse < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
   packet_ids({
-    758_u32 => 0x00_u8, # MC 1.18
-    767_u32 => 0x00_u8, # MC 1.21
-    771_u32 => 0x00_u8, # MC 1.21.6
-    772_u32 => 0x00_u8, # MC 1.21.8
+    758_u32 => 0x00_u32, # MC 1.18
+    767_u32 => 0x00_u32, # MC 1.21
+    771_u32 => 0x00_u32, # MC 1.21.6
+    772_u32 => 0x00_u32, # MC 1.21.8
+    774_u32 => 0x00_u32, # MC 1.21.11
   })
 
   class_getter state = Rosegold::ProtocolState::STATUS

@@ -72,10 +72,6 @@ class Rosegold::Interactions
     @last_tick_held_item = inventory.main_hand
   end
 
-  private def inventory
-    Inventory.new client
-  end
-
   private def tick_held_item
     if @sent_held_item_index != client.player.hotbar_selection
       @sent_held_item_index = client.player.hotbar_selection
@@ -126,6 +122,7 @@ class Rosegold::Interactions
     if digging_block = @digging_block
       if reached.block != digging_block.block
         cancel_digging
+        return
       end
 
       if @last_tick_held_item != inventory.main_hand
@@ -334,7 +331,7 @@ class Rosegold::Interactions
     blocks_coords.flat_map do |block_coords|
       x, y, z = block_coords
       client.dimension.block_state(x, y, z).try do |block_state|
-        block_shape = MCData::DEFAULT.block_state_collision_shapes[block_state]
+        block_shape = MCData.default.block_state_collision_shapes[block_state]
 
         # If no collision shapes, check if it's an interactive block and use interaction hitbox
         if block_shape.empty?
@@ -407,15 +404,15 @@ class Rosegold::Interactions
     when .includes?("button")
       # Buttons have a small hitbox depending on their face
       # For floor buttons (face=floor), use a small hitbox on top of the block
-      if MCData::DEFAULT.block_state_names[block_state].includes?("face=floor")
+      if MCData.default.block_state_names[block_state].includes?("face=floor")
         # Floor button: small hitbox on top surface
         AABBd.new(
           x + 0.3125, y + 0.0, z + 0.3125,   # min corner
           x + 0.6875, y + 0.0625, z + 0.6875 # max corner
         )
-      elsif MCData::DEFAULT.block_state_names[block_state].includes?("face=wall")
+      elsif MCData.default.block_state_names[block_state].includes?("face=wall")
         # Wall button: determine which wall and create appropriate hitbox
-        block_state_name = MCData::DEFAULT.block_state_names[block_state]
+        block_state_name = MCData.default.block_state_names[block_state]
         if block_state_name.includes?("facing=north")
           AABBd.new(x + 0.3125, y + 0.375, z + 0.875, x + 0.6875, y + 0.625, z + 1.0)
         elsif block_state_name.includes?("facing=south")
@@ -428,7 +425,7 @@ class Rosegold::Interactions
           # Default wall button hitbox
           AABBd.new(x + 0.3125, y + 0.375, z + 0.3125, x + 0.6875, y + 0.625, z + 0.6875)
         end
-      elsif MCData::DEFAULT.block_state_names[block_state].includes?("face=ceiling")
+      elsif MCData.default.block_state_names[block_state].includes?("face=ceiling")
         # Ceiling button: small hitbox on bottom surface
         AABBd.new(
           x + 0.3125, y + 0.9375, z + 0.3125, # min corner
@@ -454,7 +451,7 @@ class Rosegold::Interactions
   # Extracts the age property from a block state ID
   # Returns 0 if the block doesn't have an age property
   private def extract_age_property(block_state : UInt16) : Int32
-    block_state_name = MCData::DEFAULT.block_state_names[block_state]
+    block_state_name = MCData.default.block_state_names[block_state]
     if match = block_state_name.match(/age=(\d+)/)
       match[1].to_i
     else

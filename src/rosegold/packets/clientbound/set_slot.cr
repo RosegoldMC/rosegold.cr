@@ -1,7 +1,8 @@
 class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x14_u8, # MC 1.21.8,
+    772_u32 => 0x14_u32, # MC 1.21.8
+    774_u32 => 0x14_u32, # MC 1.21.11
   })
 
   property \
@@ -13,18 +14,22 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
   end
 
   def self.read(packet)
-    new \
-      packet.read_byte.to_i8!,
-      packet.read_var_int,
-      WindowSlot.new \
-        packet.read_short.to_i16,
-        Slot.read(packet)
+    window_id = packet.read_var_int.to_i8!
+    state_id = packet.read_var_int
+    slot_number = packet.read_short.to_i16
+    begin
+      slot = Slot.read(packet)
+    rescue ex : UnknownComponentError
+      Log.warn { "#{ex.message} in SetSlot (window #{window_id}, slot #{slot_number})" }
+      slot = Slot.new
+    end
+    new window_id, state_id, WindowSlot.new(slot_number, slot)
   end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write window_id
+      buffer.write window_id.to_i32
       buffer.write state_id
       buffer.write_full slot.slot_number.to_i16
       buffer.write slot

@@ -1,7 +1,8 @@
 class Rosegold::Clientbound::SetPassengers < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
-    772_u32 => 0x64_u8, # MC 1.21.8,
+    772_u32 => 0x64_u32, # MC 1.21.8
+    774_u32 => 0x69_u32, # MC 1.21.11
   })
 
   property \

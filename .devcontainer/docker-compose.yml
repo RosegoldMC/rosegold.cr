@@ -16,7 +16,7 @@ services:
       - 25565:25565
     environment:
       EULA: "TRUE"
-      VERSION: 1.21.8
+      VERSION: ${MC_VERSION:-1.21.11}
       ONLINE_MODE: "FALSE"
       LEVEL_TYPE: flat
       SPAWN_PROTECTION: 0

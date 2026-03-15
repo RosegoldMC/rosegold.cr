@@ -6,10 +6,20 @@ require "../models/block"
 class Rosegold::MCData
   private MCD_ROOT = "minecraft-data/data/pc"
 
-  MC1218 = Rosegold::MCData.new "1.21.8"
+  MC1218  = Rosegold::MCData.new "1.21.8"
+  MC12111 = Rosegold::MCData.new "1.21.11"
 
-  # Default to latest supported version
-  DEFAULT = MC1218
+  PROTOCOL_VERSION_MAP = {
+    772_u32 => MC1218,
+    774_u32 => MC12111,
+  }
+
+  @[Deprecated("Use MCData.default instead for version-aware data")]
+  DEFAULT = MC12111
+
+  def self.default : MCData
+    PROTOCOL_VERSION_MAP[Client.protocol_version]? || MC12111
+  end
 
   getter items : Array(Item)
 
@@ -26,18 +36,42 @@ class Rosegold::MCData
   # TODO: more compact memory layout: only store one Shape if it's the same for all variants of a block
   getter block_state_collision_shapes : Array(Array(AABBf))
 
+  SUPPORTED_VERSIONS = ["1.21.8", "1.21.11"]
+
+  # Must use string literals — read_game_asset is a compile-time macro
+  protected def self.assets_for(mc_version : String)
+    case mc_version
+    when "1.21.8"
+      {
+        Rosegold.read_game_asset("1.21.8/items.json"),
+        Rosegold.read_game_asset("1.21.8/blocks.json"),
+        Rosegold.read_game_asset("1.21.8/materials.json"),
+        Rosegold.read_game_asset("1.21.8/enchantments.json"),
+        Rosegold.read_game_asset("1.21.8/blockCollisionShapes.json"),
+      }
+    when "1.21.11"
+      {
+        Rosegold.read_game_asset("1.21.11/items.json"),
+        Rosegold.read_game_asset("1.21.11/blocks.json"),
+        Rosegold.read_game_asset("1.21.11/materials.json"),
+        Rosegold.read_game_asset("1.21.11/enchantments.json"),
+        Rosegold.read_game_asset("1.21.11/blockCollisionShapes.json"),
+      }
+    else
+      raise "Unsupported version: #{mc_version}"
+    end
+  end
+
   def initialize(mc_version : String)
-    raise "Rosegold.cr only supports 1.21.8 for now" if mc_version != "1.21.8"
+    raise "Rosegold.cr only supports #{SUPPORTED_VERSIONS.join(", ")}" unless SUPPORTED_VERSIONS.includes?(mc_version)
 
-    @items = Array(Item).from_json(Rosegold.read_game_asset "1.21.8/items.json")
+    items_json, blocks_json, materials_json, enchantments_json, collision_shapes_json = MCData.assets_for(mc_version)
 
-    @blocks = Array(Block).from_json(Rosegold.read_game_asset "1.21.8/blocks.json")
-
-    @materials = Material.from_json Rosegold.read_game_asset "1.21.8/materials.json"
-
-    @enchantments = Array(Enchantment).from_json(Rosegold.read_game_asset "1.21.8/enchantments.json")
-
-    block_collision_shapes_json = BlockCollisionShapes.from_json Rosegold.read_game_asset "1.21.8/blockCollisionShapes.json"
+    @items = Array(Item).from_json(items_json)
+    @blocks = Array(Block).from_json(blocks_json)
+    @materials = Material.from_json(materials_json)
+    @enchantments = Array(Enchantment).from_json(enchantments_json)
+    block_collision_shapes_json = BlockCollisionShapes.from_json(collision_shapes_json)
 
     max_block_state = blocks.flat_map(&.max_state_id).max
 
