@@ -2024,7 +2024,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L30" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L30" target="_blank">
         rosegold/control/physics.cr
       </a>
     
@@ -2118,6 +2118,11 @@
       </dt>
       
     
+      <dt class="entry-const" id="MAX_UP_STEP">
+        <strong>MAX_UP_STEP</strong> = <code><span class="n">0.6</span></code>
+      </dt>
+      
+    
       <dt class="entry-const" id="MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL">
         <strong>MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL</strong> = <code><span class="n">20</span></code>
       </dt>
@@ -2186,6 +2191,11 @@ This prevents server timeouts while avoiding packet spam</p>
         <a href="#get_grown_obstacles%28start%3AVec3d%2Cmovement%3AVec3d%2Centity_aabb%3AAABBf%2Cdimension%3ADimension%29%3AArray%28AABBd%29-class-method" class="signature"><strong>.get_grown_obstacles</strong>(start : Vec3d, movement : Vec3d, entity_aabb : AABBf, dimension : Dimension) : Array(AABBd)</a>
         
           <div class="summary"><p>Returns all block collision boxes that may intersect <code>entity_aabb</code> during the movement from <code>start</code> by <code>vec</code>, including boxes 0.5m higher for stepping.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#maybe_back_off_from_edge%28feet%3AVec3d%2Cvelocity%3AVec3d%2Centity_aabb%3AAABBf%2C%26would_fall%3AAABBd-%3EBool%29%3AVec3d-class-method" class="signature"><strong>.maybe_back_off_from_edge</strong>(feet : Vec3d, velocity : Vec3d, entity_aabb : AABBf, &would_fall : AABBd -> Bool) : Vec3d</a>
         
       </li>
     
@@ -2415,7 +2425,7 @@ This prevents server timeouts while avoiding packet spam</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L98" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2450,7 +2460,23 @@ including boxes 0.5m higher for stepping.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L650" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L770" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="maybe_back_off_from_edge(feet:Vec3d,velocity:Vec3d,entity_aabb:AABBf,&amp;would_fall:AABBd-&gt;Bool):Vec3d-class-method">
+      <div class="signature">
+        
+        def self.<strong>maybe_back_off_from_edge</strong>(feet : <a href="../Rosegold/Vec3d.html">Vec3d</a>, velocity : <a href="../Rosegold/Vec3d.html">Vec3d</a>, entity_aabb : <a href="../Rosegold/AABBf.html">AABBf</a>, &would_fall : <a href="../Rosegold/AABBd.html">AABBd</a> -> Bool) : <a href="../Rosegold/Vec3d.html">Vec3d</a>
+
+        <a class="method-permalink" href="#maybe_back_off_from_edge%28feet%3AVec3d%2Cvelocity%3AVec3d%2Centity_aabb%3AAABBf%2C%26would_fall%3AAABBd-%3EBool%29%3AVec3d-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L548" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2472,7 +2498,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L590" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L710" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2494,7 +2520,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L596" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L716" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2524,7 +2550,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L218" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L221" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2540,7 +2566,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L146" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L149" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2556,7 +2582,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L124" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L126" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2572,7 +2598,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L62" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L64" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2588,7 +2614,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L62" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L64" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2604,7 +2630,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L63" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2625,7 +2651,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L84" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2646,7 +2672,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L84" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2662,7 +2688,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2678,7 +2704,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2694,7 +2720,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L84" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2710,7 +2736,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L84" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2726,7 +2752,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L100" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L102" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2742,7 +2768,7 @@ Returns adjusted movement vector and adjusted post-movement velocity.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L96" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2766,7 +2792,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L157" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L160" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2782,7 +2808,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L90" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L92" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2798,7 +2824,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L111" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L113" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2814,7 +2840,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2830,7 +2856,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2846,7 +2872,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L214" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L217" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2862,7 +2888,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L120" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L122" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2878,7 +2904,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L187" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L190" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2894,7 +2920,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L196" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L199" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2910,7 +2936,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L182" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L185" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2926,7 +2952,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L270" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L273" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2942,7 +2968,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L115" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2958,7 +2984,7 @@ Set <code>target=nil</code> to stop moving and cancel any current movement.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/af7b2e1359887f6be4029bf293ea196ad5f1d36e/src/rosegold/control/physics.cr#L323" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d4d9d4d6907136f75bec4d29a8091ea44b691cae/src/rosegold/control/physics.cr#L332" target="_blank">View source</a>]
         
       </div>
     </div>
