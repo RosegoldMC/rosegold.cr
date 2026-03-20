@@ -39,6 +39,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   delegate main_hand, to: inventory
   delegate stop_using_hand, stop_digging, to: client.interactions
   delegate x, y, z, to: location
+  delegate recipe_registry, to: client
 
   def location
     client.player.feet
@@ -272,11 +273,37 @@ class Rosegold::Bot < Rosegold::EventEmitter
   #   bot.inventory.withdraw_at_least(5, "emerald")
   # end
   # ```
+  # Caller must already be looking at the container block.
   def open_container(timeout : Time::Span = 5.seconds, &)
     wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
     yield
     wait_tick
     inventory.close
+  end
+
+  # Opens a container and yields a ContainerHandle for typed interaction.
+  # The handle provides intent-level operations (withdraw, deposit) and
+  # typed menu access (as_chest, as_furnace, etc.).
+  #
+  # ```
+  # bot.open_container_handle do |handle|
+  #   handle.deposit("diamond", 10)
+  #   handle.withdraw("emerald", 5)
+  #   if chest = handle.as_chest
+  #     chest.contents.each { |slot| puts slot.name }
+  #   end
+  # end
+  # ```
+  # Caller must already be looking at the container block.
+  def open_container_handle(timeout : Time::Span = 5.seconds, &)
+    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
+    handle = ContainerHandle.new(client, client.container_menu)
+    begin
+      yield handle
+    ensure
+      wait_tick
+      handle.close
+    end
   end
 
   # Looks at that face of that block, then activates and immediately deactivates the `use` button.
@@ -352,6 +379,229 @@ class Rosegold::Bot < Rosegold::EventEmitter
   def full_health?
     health >= 20
   end
+
+  def recipes_for(item_name : String) : Array(RecipeDisplayEntry)
+    recipe_registry.find_by_result(item_name)
+  end
+
+  def can_craft?(recipe : RecipeDisplayEntry) : Bool
+    display = recipe.display
+    ingredients = case display
+                  when RecipeDisplayShapedCrafting    then display.ingredients
+                  when RecipeDisplayShapelessCrafting then display.ingredients
+                  else                                     return false
+                  end
+
+    available = Hash(UInt32, Int32).new(0)
+    client.container_menu.player_inventory_slots.each do |slot|
+      next if slot.empty?
+      available[slot.item_id_int.to_u32] += slot.count.to_i32
+    end
+
+    # Build ingredient groups: prefer crafting_requirements, resolve empty (tag-based)
+    # groups using display ingredients + tag registry
+    ingredient_groups = if reqs = recipe.crafting_requirements
+                          reqs.each_with_index.map do |options, i|
+                            if options.empty? && i < ingredients.size
+                              resolve_ingredient_ids(ingredients[i])
+                            else
+                              options
+                            end
+                          end.to_a
+                        else
+                          ingredients.map { |ing| resolve_ingredient_ids(ing) }
+                        end
+
+    return false if !ingredients.empty? && ingredient_groups.all?(&.empty?)
+
+    used = Hash(UInt32, Int32).new(0)
+    ingredient_groups.all? do |options|
+      next true if options.empty?
+      found = options.find { |id| available.fetch(id, 0) - used.fetch(id, 0) > 0 }
+      if found
+        used[found] += 1
+        true
+      else
+        false
+      end
+    end
+  end
+
+  def craft(item_name : String, count : Int32 = 1, table : Vec3i? = nil)
+    recipes = recipes_for(item_name)
+    raise CraftingError.new("No recipe found for '#{item_name}'") if recipes.empty?
+    recipe = recipes.find { |candidate| can_craft?(candidate) }
+    raise CraftingError.new("Not enough materials to craft '#{item_name}'") unless recipe
+    craft(recipe, count, table)
+  end
+
+  def craft(recipe : RecipeDisplayEntry, count : Int32 = 1, table : Vec3i? = nil)
+    raise CraftingError.new("Not enough materials to craft") unless can_craft?(recipe)
+    with_crafting_menu(recipe, table) do |menu|
+      place_recipe_loop(menu, recipe, count, use_max: false)
+    end
+  end
+
+  def craft_all(item_name : String, table : Vec3i? = nil)
+    recipes = recipes_for(item_name)
+    raise CraftingError.new("No recipe found for '#{item_name}'") if recipes.empty?
+    recipe = recipes.find { |candidate| can_craft?(candidate) }
+    raise CraftingError.new("Not enough materials to craft '#{item_name}'") unless recipe
+    craft_all(recipe, table)
+  end
+
+  def craft_all(recipe : RecipeDisplayEntry, table : Vec3i? = nil)
+    with_crafting_menu(recipe, table) do |menu|
+      place_recipe_loop(menu, recipe, 1, use_max: true)
+    end
+  end
+
+  private def resolve_ingredient_ids(ingredient : SlotDisplay) : Array(UInt32)
+    case ingredient
+    when SlotDisplayTag
+      resolve_item_tag(ingredient.tag)
+    else
+      ingredient.all_item_ids
+    end
+  end
+
+  private def resolve_item_tag(tag_name : String) : Array(UInt32)
+    tags = client.tags
+    return [] of UInt32 unless tags
+
+    # Item tags are under the "minecraft:item" type
+    item_type = tags.tag_types.find { |tag_type| tag_type[:type] == "minecraft:item" }
+    return [] of UInt32 unless item_type
+
+    # Tag name may or may not have "minecraft:" prefix
+    search_name = tag_name.starts_with?("minecraft:") ? tag_name : "minecraft:#{tag_name}"
+    bare_name = tag_name.lchop("minecraft:")
+
+    tag = item_type[:tags].find { |entry| entry[:name] == search_name || entry[:name] == bare_name }
+    tag ? tag[:entries] : [] of UInt32
+  end
+
+  private def requires_crafting_table?(recipe : RecipeDisplayEntry) : Bool
+    case display = recipe.display
+    when RecipeDisplayShapedCrafting    then display.width > 2 || display.height > 2
+    when RecipeDisplayShapelessCrafting then display.ingredients.size > 4
+    else                                     false
+    end
+  end
+
+  private def with_crafting_menu(recipe : RecipeDisplayEntry, table : Vec3i?, &)
+    if requires_crafting_table?(recipe)
+      raise CraftingError.new("Crafting table position required for this recipe") unless table
+      with_table(table) { yield client.container_menu }
+    else
+      yield client.inventory_menu
+    end
+  end
+
+  private def with_table(table_pos : Vec3i, &)
+    look_at Vec3d.new(table_pos.x + 0.5, table_pos.y + 0.5, table_pos.z + 0.5)
+    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: 5.seconds) { use_hand }
+    begin
+      yield
+    ensure
+      wait_tick
+      inventory.close
+    end
+  end
+
+  private def place_recipe_loop(menu : Menu, recipe : RecipeDisplayEntry, count : Int32, use_max : Bool)
+    count.times do
+      client.send_packet! Serverbound::PlaceRecipe.new(
+        container_id: menu.menu_id.to_u32,
+        recipe: recipe.id,
+        use_max_items: use_max
+      )
+      # Wait for result slot to be populated before collecting
+      3.times do
+        break unless menu[0].empty?
+        wait_tick
+      end
+      menu.send_click(0, 0, :shift)
+      wait_tick
+      break if use_max
+    end
+  end
+
+  # Craft by manually placing items into the grid. Use this for custom/modded
+  # recipes or when the recipe book doesn't have what you need.
+  #
+  # ```
+  # bot.craft_pattern([
+  #   ["iron_ingot", "iron_ingot", "iron_ingot"],
+  #   [nil, "stick", nil],
+  #   [nil, "stick", nil],
+  # ])
+  # ```
+  def craft_pattern(pattern : Array(Array(String?)), count : Int32 = 1, table : Vec3i? = nil)
+    raise CraftingError.new("Cannot craft with an empty pattern") if pattern.empty?
+    height = pattern.size
+    width = pattern.max_of(&.size)
+    raise CraftingError.new("Pattern too large: #{width}x#{height}") if width > 3 || height > 3
+
+    if width > 2 || height > 2
+      raise CraftingError.new("Crafting table position required for #{width}x#{height} pattern") unless table
+      with_table(table) { pattern_loop(client.container_menu, pattern, grid_width: 3, grid_size: 9, count: count) }
+    else
+      pattern_loop(client.inventory_menu, pattern, grid_width: 2, grid_size: 4, count: count)
+    end
+  end
+
+  private def pattern_loop(menu : Menu, pattern : Array(Array(String?)), grid_width : Int32, grid_size : Int32, count : Int32)
+    count.times do
+      place_pattern_in_grid(menu, pattern, grid_start: 1, grid_width: grid_width)
+      # Wait for result slot to be populated before collecting
+      3.times do
+        break unless menu[0].empty?
+        wait_tick
+      end
+      menu.send_click(0, 0, :shift)
+      wait_tick
+      clear_crafting_grid(menu, grid_start: 1, grid_size: grid_size)
+    end
+  end
+
+  private def place_pattern_in_grid(menu : Menu, pattern : Array(Array(String?)), grid_start : Int32, grid_width : Int32)
+    pattern.each_with_index do |row, row_idx|
+      row.each_with_index do |item_name, col_idx|
+        next unless item_name
+        grid_slot = grid_start + row_idx * grid_width + col_idx
+
+        source = find_item_in_menu(menu, item_name)
+        raise CraftingError.new("Item '#{item_name}' not found in inventory") unless source
+
+        menu.send_click(source, 0, :click)    # left-click: pick up stack
+        menu.send_click(grid_slot, 1, :click) # right-click: place one
+
+        # Put remaining stack back
+        unless menu.cursor.empty?
+          menu.send_click(source, 0, :click)
+        end
+        wait_tick
+      end
+    end
+  end
+
+  private def clear_crafting_grid(menu : Menu, grid_start : Int32, grid_size : Int32)
+    grid_size.times do |offset|
+      slot_idx = grid_start + offset
+      next if menu[slot_idx].empty?
+      menu.send_click(slot_idx, 0, :shift)
+    end
+  end
+
+  private def find_item_in_menu(menu : Menu, item_name : String) : Int32?
+    (menu.inventory_slots + menu.hotbar_window_slots).each do |window_slot|
+      return window_slot.slot_number if window_slot.matches?(item_name)
+    end
+    nil
+  end
+
+  class CraftingError < Exception; end
 
   # Looks at that target, then activates the `attack` button.
   def start_digging(target : Vec3d? | Look? = nil)

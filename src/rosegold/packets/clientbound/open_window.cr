@@ -109,26 +109,7 @@ class Rosegold::Clientbound::OpenWindow < Rosegold::Clientbound::Packet
 
   def callback(client)
     clamped_id = window_id > 255 ? 255_u8 : window_id.to_u8
-    container_size = case window_type
-                     when  0 then 9  # GENERIC_9x1 (1 row × 9 = 9 slots)
-                     when  1 then 18 # GENERIC_9x2 (2 rows × 9 = 18 slots)
-                     when  2 then 27 # GENERIC_9x3 (3 rows × 9 = 27 slots)
-                     when  3 then 36 # GENERIC_9x4 (4 rows × 9 = 36 slots)
-                     when  4 then 45 # GENERIC_9x5 (5 rows × 9 = 45 slots)
-                     when  5 then 54 # GENERIC_9x6 (6 rows × 9 = 54 slots)
-                     when  6 then 9  # GENERIC_3x3 (Dispenser: 3×3 = 9 slots)
-                     when  7 then 9  # CRAFTER_3x3 (3×3 = 9 slots)
-                     when  8 then 3  # ANVIL (3 slots: 2 input + 1 output)
-                     when  9 then 1  # BEACON (1 payment slot)
-                     when 10 then 3  # BLAST_FURNACE (3 slots: input, fuel, output)
-                     when 11 then 5  # BREWING_STAND (5 slots: 3 bottles + 1 ingredient + 1 fuel)
-                     when 12 then 10 # CRAFTING (9 crafting + 1 result = 10 slots)
-                     when 13 then 2  # ENCHANTMENT (2 slots: item + lapis)
-                     when 14 then 3  # FURNACE (3 slots: input, fuel, output)
-                     else         27 # Default to chest size
-                     end
-
-    ContainerMenu.open(client, clamped_id, window_title, window_type, container_size)
-    Log.debug { "Server opened window id=#{window_id} type=#{window_type} size=#{container_size} title: #{window_title}" }
+    MenuFactory.open(client, clamped_id, window_title, window_type)
+    Log.debug { "Server opened window id=#{window_id} type=#{window_type} title: #{window_title}" }
   end
 end

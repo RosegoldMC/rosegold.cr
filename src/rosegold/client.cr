@@ -48,8 +48,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     physics : Physics,
     interactions : Interactions,
     player_inventory : PlayerInventory,
-    inventory_menu : InventoryMenu,
-    container_menu : ContainerMenu | InventoryMenu,
+    inventory_menu : PlayerMenu,
+    container_menu : Menu,
     chat_manager : ChatManager,
     player_list : Hash(UUID, PlayerList::Entry) = Hash(UUID, PlayerList::Entry).new,
     offline : NamedTuple(uuid: String, username: String)? = nil,
@@ -64,7 +64,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     registries : Hash(String, Clientbound::RegistryData) = Hash(String, Clientbound::RegistryData).new,
     known_packs : Array(NamedTuple(namespace: String, id: String, version: String)) = [] of NamedTuple(namespace: String, id: String, version: String),
     tags : Clientbound::UpdateTags? = nil,
-    ticker_done : Channel(Nil) = Channel(Nil).new
+    ticker_done : Channel(Nil) = Channel(Nil).new,
+    recipe_registry : RecipeRegistry = RecipeRegistry.new
 
   def protocol_version
     Client.protocol_version
@@ -150,13 +151,13 @@ class Rosegold::Client < Rosegold::EventEmitter
     @physics = uninitialized Physics
     @interactions = uninitialized Interactions
     @player_inventory = uninitialized PlayerInventory
-    @inventory_menu = uninitialized InventoryMenu
-    @container_menu = uninitialized ContainerMenu | InventoryMenu
+    @inventory_menu = uninitialized PlayerMenu
+    @container_menu = uninitialized Menu
     @chat_manager = uninitialized ChatManager
     @physics = Physics.new self
     @interactions = Interactions.new self
     @player_inventory = PlayerInventory.new
-    @inventory_menu = InventoryMenu.new self
+    @inventory_menu = PlayerMenu.new self
     @container_menu = @inventory_menu
     @chat_manager = ChatManager.new self
   end
