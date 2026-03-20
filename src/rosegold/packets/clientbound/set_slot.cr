@@ -41,10 +41,10 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
       client.container_menu.cursor = slot.as(Rosegold::Slot)
     elsif window_id == 0
       client.inventory_menu.update_slot(slot.slot_number, slot.as(Rosegold::Slot), state_id)
-    elsif client.container_menu && client.container_menu.id == window_id
+    elsif client.container_menu.id == window_id
       client.container_menu.update_slot(slot.slot_number, slot.as(Rosegold::Slot), state_id)
     else
-      container_id = client.container_menu.try(&.id) || "nil"
+      container_id = client.container_menu.id
       Log.debug { "Received slot update for an unknown or mismatched window. Ignoring. Packet window_id=#{window_id}, client container_id=#{container_id}, slot=#{slot}" }
       Log.debug { self }
     end
