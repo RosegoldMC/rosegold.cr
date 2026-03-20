@@ -84,3 +84,7 @@ jobs:
 
       - name: Run integration tests
         run: crystal spec
+
+      - name: Retry failed specs
+        if: failure()
+        run: crystal spec --only-failures
