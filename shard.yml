@@ -23,5 +23,5 @@ development_dependencies:
     github: crystal-ameba/ameba
     version: ~> 1
   spectator:
-    github: icy-arctic-fox/spectator
-    version: ~> 0.11
+    github: grepsedawk/spectator
+    branch: only-failures
