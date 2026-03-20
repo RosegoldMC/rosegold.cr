@@ -65,6 +65,12 @@ module Rosegold::ItemConstants
     helmet?(item_id) || chestplate?(item_id) || leggings?(item_id) || boots?(item_id)
   end
 
+  def self.lapis_lazuli?(item_id : Int32 | UInt32) : Bool
+    found_item = MCData.default.items.find { |item| item.id == item_id.to_u32 }
+    return false unless found_item
+    found_item.name == "lapis_lazuli"
+  end
+
   def self.offhand_item?(item_id : Int32 | UInt32) : Bool
     found_item = MCData.default.items.find { |item| item.id == item_id.to_u32 }
     return false unless found_item

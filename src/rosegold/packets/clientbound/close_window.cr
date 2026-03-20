@@ -27,13 +27,13 @@ class Rosegold::Clientbound::CloseWindow < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    if client.container_menu && window_id == client.container_menu.id
+    if window_id == client.container_menu.id
       Log.debug { "Server closed container #{client.container_menu}" }
       client.container_menu.handle_close
     elsif window_id == 0
       Log.debug { "Server requested close of player inventory (ignored)" }
     else
-      container_id = client.container_menu.try(&.id) || "nil"
+      container_id = client.container_menu.id
       Log.warn { "Server closed unknown window: #{window_id}. Current container: #{container_id}. Ignoring." }
       Log.debug { self }
     end
