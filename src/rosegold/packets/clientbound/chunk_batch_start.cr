@@ -9,6 +9,12 @@ class Rosegold::Clientbound::ChunkBatchStart < Rosegold::Clientbound::Packet
 
   def initialize; end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
+    end.to_slice
+  end
+
   def self.read(io)
     # No fields to read
     self.new
