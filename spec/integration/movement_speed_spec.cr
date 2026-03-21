@@ -2,21 +2,15 @@ require "../spec_helper"
 
 Spectator.describe "Rosegold::Bot movement speeds" do
   before_all do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-        bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
-        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
-        bot.wait_ticks 20
-      end
-    end
+    admin.setup_arena
+    admin.wait_ticks 19
   end
 
   it "should have correct movement speeds for sneak, walk, and sprint" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         bot.wait_ticks 5
-        bot.chat "/tp 0 -60 0"
+        admin.tp 0, -60, 0
         bot.wait_ticks 10
 
         bot.sneak(true)
@@ -26,7 +20,7 @@ Spectator.describe "Rosegold::Bot movement speeds" do
         sneak_time = Time.instant - start_time
         sneak_speed = 5.0 / sneak_time.total_seconds
 
-        bot.chat "/tp 0 -60 0"
+        admin.tp 0, -60, 0
         bot.wait_ticks 10
         bot.sneak(false)
         bot.wait_ticks 2
@@ -36,7 +30,7 @@ Spectator.describe "Rosegold::Bot movement speeds" do
         walk_time = Time.instant - start_time
         walk_speed = 5.0 / walk_time.total_seconds
 
-        bot.chat "/tp 0 -60 0"
+        admin.tp 0, -60, 0
         bot.wait_ticks 10
 
         bot.sprint(true)

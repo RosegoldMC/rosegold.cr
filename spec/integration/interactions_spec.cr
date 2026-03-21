@@ -2,13 +2,9 @@ require "../spec_helper"
 
 Spectator.describe "Rosegold::Bot interactions" do
   before_all do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-        bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
-        bot.wait_ticks 20
-      end
-    end
+    admin.kill_entities
+    admin.fill -10, -60, -10, 10, 0, 10, "air"
+    admin.wait_ticks 20
   end
 
   it "should be able to chat" do
@@ -22,15 +18,13 @@ Spectator.describe "Rosegold::Bot interactions" do
   end
 
   it "should be able to dig continuously through 3 blocks" do
+    admin.fill 9, -60, 10, 9, -58, 10, "dirt"
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.wait_ticks 5
-        bot.chat "/clear"
-        bot.wait_ticks 5
-        # Set up a column of 3 dirt blocks below the bot
-        bot.chat "/fill 9 -60 10 9 -58 10 minecraft:dirt"
-        bot.wait_ticks 10
-        bot.chat "/tp 9 -57 10"
+        admin.clear
+        admin.wait_ticks 5
+        admin.tp 9, -57, 10
         bot.wait_ticks 10
 
         bot.look &.down
@@ -78,12 +72,11 @@ Spectator.describe "Rosegold::Bot interactions" do
   end
 
   it "should stop digging when bot.stop_digging is called" do
+    admin.fill 10, -60, 9, 10, -57, 9, "dirt"
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.wait_ticks 5
-        bot.chat "/fill 10 -60 9 10 -57 9 minecraft:dirt"
-        bot.wait_ticks 10
-        bot.chat "/tp 10 -56 9"
+        admin.tp 10, -56, 9
         bot.wait_ticks 15
 
         bot.look &.down
@@ -99,16 +92,15 @@ Spectator.describe "Rosegold::Bot interactions" do
   end
 
   it "should be able to dig stone with diamond pickaxe (in a reasonable amount of time)" do
+    admin.fill 8, -60, 8, 8, -60, 8, "stone"
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Set up stone block and give diamond pickaxe
-        bot.chat "/fill 8 -60 8 8 -60 8 minecraft:stone"
-        bot.chat "/clear"
-        bot.wait_ticks 5
-        bot.chat "/give @p minecraft:diamond_pickaxe 1"
-        bot.wait_ticks 10 # Wait for /fill, /clear, and /give to all complete
-        bot.chat "/tp 8 -59 8"
-        bot.wait_ticks 10 # Wait for teleport and chunk updates
+        admin.clear
+        admin.wait_ticks 5
+        admin.give "diamond_pickaxe"
+        admin.wait_ticks 10
+        admin.tp 8, -59, 8
+        bot.wait_ticks 10
 
         # Equip the diamond pickaxe
         bot.inventory.pick! "diamond_pickaxe"
@@ -150,16 +142,15 @@ Spectator.describe "Rosegold::Bot interactions" do
   end
 
   it "should be able to dig obsidian with diamond pickaxe and efficiency" do
+    admin.fill 9, -60, 9, 9, -60, 9, "obsidian"
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Set up obsidian block and give diamond pickaxe with efficiency
-        bot.chat "/fill 9 -60 9 9 -60 9 minecraft:obsidian"
-        bot.wait_ticks 5
-        bot.chat "/clear"
-        bot.wait_ticks 5
-        bot.chat "/give @p minecraft:diamond_pickaxe[enchantments={\"minecraft:efficiency\":5}] 1"
-        bot.wait_ticks 5
-        bot.chat "/tp 9 -59 9"
+        admin.clear
+        admin.wait_ticks 5
+        admin.give "diamond_pickaxe[enchantments={\"minecraft:efficiency\":5}]"
+        admin.wait_ticks 5
+        admin.tp 9, -59, 9
         bot.wait_ticks 10
 
         # Equip the efficiency 5 diamond pickaxe
@@ -204,15 +195,15 @@ Spectator.describe "Rosegold::Bot interactions" do
   end
 
   it "should be able to place blocks" do
+    admin.kill_entities
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-        bot.wait_ticks 5
-        bot.chat "/tp 10 -60 10"
+        admin.tp 10, -60, 10
         bot.wait_ticks 10
-        bot.chat "/clear"
-        bot.wait_ticks 10
-        bot.chat "/give @p minecraft:obsidian 64"
+        admin.clear
+        admin.wait_ticks 10
+        admin.give "obsidian", 64
         bot.wait_ticks 10
 
         bot.inventory.pick! "obsidian"
@@ -238,9 +229,9 @@ Spectator.describe "Rosegold::Bot interactions" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         # Mimic vine farm: stone above, vine hangs below with inherited face
-        bot.chat "/setblock 5 -59 6 minecraft:stone"
-        bot.chat "/setblock 5 -60 6 minecraft:vine[west=true]"
-        bot.wait_ticks 10
+        admin.setblock 5, -59, 6, "stone"
+        admin.setblock 5, -60, 6, "vine[west=true]"
+        admin.wait_ticks 10
 
         vine_state = client.dimension.block_state(5, -60, 6)
         vine_name = Rosegold::MCData.default.block_state_names[vine_state.as(UInt16)]
@@ -250,10 +241,10 @@ Spectator.describe "Rosegold::Bot interactions" do
         # Bot at same Y as vine, ~1.5 blocks west
         # Eyes at y=-58.38, vine hitbox y=-60 to y=-59
         # At x-distance 1.5, ray y = -58.38 - 1.258 = -59.64 → inside vine range
-        bot.chat "/tp 3.5 -60 6.5"
-        bot.chat "/clear"
-        bot.chat "/give @p minecraft:shears 1"
-        bot.wait_ticks 10
+        admin.tp 3.5, -60, 6.5
+        admin.clear
+        admin.give "shears"
+        admin.wait_ticks 10
 
         bot.inventory.pick! "shears"
         bot.wait_ticks 5
@@ -283,14 +274,13 @@ Spectator.describe "Rosegold::Bot interactions" do
   end
 
   it "should raytrace wheat crops with age-dependent hitboxes" do
+    admin.setblock 6, -60, 6, "farmland"
+    admin.setblock 6, -59, 6, "wheat[age=0]"
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Setup: place wheat at age 0 (tiny, 2 pixels tall) and give bonemeal
-        bot.chat "/setblock 6 -60 6 minecraft:farmland"
-        bot.chat "/setblock 6 -59 6 minecraft:wheat[age=0]"
-        bot.chat "/tp 6.5 -60 7.5"
-        bot.chat "/clear"
-        bot.chat "/give @p minecraft:bone_meal 10"
+        admin.tp 6.5, -60, 7.5
+        admin.clear
+        admin.give "bone_meal", 10
         bot.wait_ticks 5
 
         # Verify wheat was created at age 0
