@@ -4,6 +4,7 @@
 /.shards/
 *.dwarf
 *.env*
+.spectator-failures
 
 # binaries
 /play

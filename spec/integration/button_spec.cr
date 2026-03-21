@@ -2,21 +2,17 @@ require "../spec_helper"
 
 Spectator.describe "Rosegold::Bot button interactions" do
   before_all do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 0 -60 0"
-      end
-    end
+    admin.tp 0, -60, 0
   end
   it "should be able to push a stone button on the ground" do
+    admin.fill 5, -61, 5, 7, -59, 5, "air"
+    admin.wait_ticks 5
+    admin.setblock 5, -61, 5, "stone_button[face=floor]"
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 5.5 -60 5.5"
-        bot.wait_ticks 5
-        bot.chat "/fill 5 -61 5 7 -59 5 minecraft:air"
-        bot.wait_ticks 5
-        bot.chat "/setblock 5 -61 5 minecraft:stone_button[face=floor]"
-        bot.wait_ticks 20
+        admin.tp 5.5, -60, 5.5
+        bot.wait_ticks 15
 
         bot.pitch = 90
         bot.wait_ticks 15
@@ -46,23 +42,19 @@ Spectator.describe "Rosegold::Bot button interactions" do
         post_name = Rosegold::MCData.default.block_state_names[post_button_state.as(UInt16)]
         expect(post_name).to contain("powered=false")
 
-        bot.chat "/fill 5 -61 5 7 -59 5 minecraft:air"
+        admin.fill 5, -61, 5, 7, -59, 5, "air"
         bot.wait_tick
       end
     end
   end
 
   it "should be able to push a stone button on the wall" do
+    admin.setblock 3, -60, 3, "stone"
+    admin.setblock 4, -60, 3, "stone_button[face=wall,facing=east]"
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Use z=3 to avoid any interference from other tests
-        # Place stone wall and button (facing east = button on west face of block, protruding east)
-        bot.chat "/setblock 3 -60 3 minecraft:stone"
-        bot.chat "/setblock 4 -60 3 minecraft:stone_button[face=wall,facing=east]"
-        bot.wait_ticks 20
-
-        # Bot stands on untouched grass at (5,-60,3.5), feet at -59, eyes at -57.38
-        bot.chat "/tp 5 -60 3.5"
+        admin.tp 5, -60, 3.5
         bot.wait_ticks 15
 
         initial_button_state = client.dimension.block_state(4, -60, 3)
@@ -87,8 +79,8 @@ Spectator.describe "Rosegold::Bot button interactions" do
         post_name = Rosegold::MCData.default.block_state_names[post_button_state.as(UInt16)]
         expect(post_name).to contain("powered=false")
 
-        bot.chat "/setblock 3 -60 3 minecraft:air"
-        bot.chat "/setblock 4 -60 3 minecraft:air"
+        admin.setblock 3, -60, 3, "air"
+        admin.setblock 4, -60, 3, "air"
         bot.wait_tick
       end
     end

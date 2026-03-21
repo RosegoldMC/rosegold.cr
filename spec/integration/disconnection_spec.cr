@@ -13,8 +13,8 @@ Spectator.describe "Rosegold::Client disconnection" do
       end
 
       Rosegold::Bot.new(client).try do |bot|
-        username = client.player.username
-        bot.chat "/kick #{username}"
+        bot.wait_ticks 5
+        admin.chat "/kick #{AdminBot::TEST_PLAYER}"
         bot.wait_ticks 10
 
         expect(disconnected).to be_true
@@ -28,8 +28,8 @@ Spectator.describe "Rosegold::Client disconnection" do
       begin
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
-            username = client.player.username
-            bot.chat "/kick #{username}"
+            bot.wait_ticks 5
+            admin.chat "/kick #{AdminBot::TEST_PLAYER}"
             bot.wait_ticks 10
           end
         end

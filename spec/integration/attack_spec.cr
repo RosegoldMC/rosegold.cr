@@ -6,44 +6,34 @@ end
 
 Spectator.describe "Rosegold::Bot attack" do
   after_all do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-        bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
-        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
-        bot.wait_ticks 5
-      end
-    end
+    admin.setup_arena
+    admin.wait_ticks 4
   end
 
   it "should be able to attack even if the target is moving" do
+    admin.setup_arena
+    admin.wait_ticks 19
+    admin.time_set 13000
+    admin.fill -10, -60, 8, 0, -58, 6, "obsidian"
+    admin.fill -9, -60, 7, 0, -58, 7, "air"
+    admin.wait_ticks 5
+    admin.fill -6, -60, 7, -6, -60, 7, "water"
+    admin.wait_tick
+    admin.fill -9, -59, 8, -9, -59, 8, "air"
+    admin.wait_tick
+    admin.chat "/kill @e[type=zombie]"
+    admin.wait_ticks 10
+    admin.summon "zombie", -7, -60, 7
+    admin.wait_ticks 10
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Setup (inlined from before_each to avoid extra reconnect cycle)
-        bot.chat "/kill @e[type=!minecraft:player]"
-        bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
-        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
-        bot.wait_ticks 20 # Wait for entity despawn and world rebuild
-        bot.chat "/tp @p -9 -60 9"
-        bot.chat "/time set 13000"
-        bot.chat "/clear"
-        bot.wait_ticks 5
-        bot.chat "/give #{bot.username} minecraft:diamond_sword[enchantments={\"minecraft:sharpness\":5}]"
-        bot.wait_ticks 5
-        bot.chat "/effect give #{bot.username} minecraft:strength 60 2"
-        bot.wait_ticks 5
-        bot.chat "/fill -10 -60 8 0 -58 6 minecraft:obsidian"
-        bot.chat "/fill -9 -60 7 0 -58 7 minecraft:air"
-        bot.wait_ticks 5
-        bot.chat "/fill -6 -60 7 -6 -60 7 minecraft:water"
-        bot.wait_tick
-
-        bot.chat "/fill -9 -59 8 -9 -59 8 minecraft:air"
-        bot.wait_tick
-        bot.chat "/kill @e[type=zombie]"
-        bot.wait_ticks 10
-        bot.chat "/summon minecraft:zombie -7 -60 7"
-        bot.wait_ticks 20
+        admin.tp -9, -60, 9
+        admin.clear
+        admin.wait_ticks 5
+        admin.give "diamond_sword[enchantments={\"minecraft:sharpness\":5}]"
+        admin.wait_ticks 5
+        admin.effect_give "strength", 60, 2
+        admin.wait_ticks 5
 
         bot.inventory.pick! "diamond_sword"
         bot.yaw = 180
@@ -67,31 +57,27 @@ Spectator.describe "Rosegold::Bot attack" do
   end
 
   it "should not be able to attack entities through blocks" do
+    admin.setup_arena
+    admin.wait_ticks 19
+    admin.time_set 13000
+    admin.fill -10, -60, 8, 0, -58, 6, "obsidian"
+    admin.fill -9, -60, 7, 0, -58, 7, "air"
+    admin.wait_ticks 5
+    admin.fill -6, -60, 7, -6, -60, 7, "water"
+    admin.wait_tick
+    admin.chat "/kill @e[type=zombie]"
+    admin.wait_ticks 5
+    admin.summon "zombie", -7, -60, 7
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Setup (inlined from before_each to avoid extra reconnect cycle)
-        bot.chat "/kill @e[type=!minecraft:player]"
-        bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
-        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
-        bot.wait_ticks 20 # Wait for entity despawn and world rebuild
-        bot.chat "/tp @p -9 -60 9"
-        bot.chat "/time set 13000"
-        bot.chat "/clear"
-        bot.wait_ticks 5
-        bot.chat "/give #{bot.username} minecraft:diamond_sword[enchantments={\"minecraft:sharpness\":5}]"
-        bot.wait_ticks 5
-        bot.chat "/effect give #{bot.username} minecraft:strength 60 2"
-        bot.wait_ticks 5
-        bot.chat "/fill -10 -60 8 0 -58 6 minecraft:obsidian"
-        bot.chat "/fill -9 -60 7 0 -58 7 minecraft:air"
-        bot.wait_ticks 5
-        bot.chat "/fill -6 -60 7 -6 -60 7 minecraft:water"
-        bot.wait_tick
-
-        bot.chat "/kill @e[type=zombie]"
-        bot.wait_ticks 5
-        bot.chat "/summon minecraft:zombie -7 -60 7"
-        bot.wait_ticks 5
+        admin.tp -9, -60, 9
+        admin.clear
+        admin.wait_ticks 5
+        admin.give "diamond_sword[enchantments={\"minecraft:sharpness\":5}]"
+        admin.wait_ticks 5
+        admin.effect_give "strength", 60, 2
+        admin.wait_ticks 5
         bot.inventory.pick! "diamond_sword"
 
         # Aim towards the zombie (south, towards negative Z)
