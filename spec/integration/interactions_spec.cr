@@ -234,6 +234,54 @@ Spectator.describe "Rosegold::Bot interactions" do
     end
   end
 
+  it "should be able to harvest a hanging vine while walking east with pitch=40" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        # Mimic vine farm: stone above, vine hangs below with inherited face
+        bot.chat "/setblock 5 -59 6 minecraft:stone"
+        bot.chat "/setblock 5 -60 6 minecraft:vine[west=true]"
+        bot.wait_ticks 10
+
+        vine_state = client.dimension.block_state(5, -60, 6)
+        vine_name = Rosegold::MCData.default.block_state_names[vine_state.as(UInt16)]
+        expect(vine_name).to contain("vine")
+        expect(vine_name).to contain("west=true")
+
+        # Bot at same Y as vine, ~1.5 blocks west
+        # Eyes at y=-58.38, vine hitbox y=-60 to y=-59
+        # At x-distance 1.5, ray y = -58.38 - 1.258 = -59.64 → inside vine range
+        bot.chat "/tp 3.5 -60 6.5"
+        bot.chat "/clear"
+        bot.chat "/give @p minecraft:shears 1"
+        bot.wait_ticks 10
+
+        bot.inventory.pick! "shears"
+        bot.wait_ticks 5
+
+        bot.yaw = -90
+        bot.pitch = 40
+        bot.wait_ticks 5
+
+        bot.start_digging
+
+        timeout = 40
+        ticks_waited = 0
+        current_state = vine_state
+        until current_state != vine_state || ticks_waited >= timeout
+          bot.wait_tick
+          ticks_waited += 1
+          current_state = client.dimension.block_state(5, -60, 6)
+        end
+
+        bot.stop_digging
+
+        final_state = client.dimension.block_state(5, -60, 6)
+        expect(final_state).to_not eq(vine_state)
+        expect(ticks_waited).to be_lt(timeout)
+      end
+    end
+  end
+
   it "should raytrace wheat crops with age-dependent hitboxes" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
