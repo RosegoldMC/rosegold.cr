@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Serverbound::ChatCommand - rosegold main</title>
+  <title>Rosegold::Clientbound::SetTime - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -372,7 +372,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
@@ -697,7 +697,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/SetTime" data-name="rosegold::clientbound::settime">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/SetTime" data-name="rosegold::clientbound::settime">
       <a href="../../Rosegold/Clientbound/SetTime.html">SetTime</a>
       
     </li>
@@ -1732,7 +1732,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
       <a href="../../Rosegold/Serverbound.html">Serverbound</a>
       
         <ul>
@@ -1742,7 +1742,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Serverbound/ChatCommand" data-name="rosegold::serverbound::chatcommand">
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ChatCommand" data-name="rosegold::serverbound::chatcommand">
       <a href="../../Rosegold/Serverbound/ChatCommand.html">ChatCommand</a>
       
     </li>
@@ -2188,12 +2188,12 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>Serverbound::<wbr>ChatCommand
+  </span> Rosegold::<wbr>Clientbound::<wbr>SetTime
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Serverbound/ChatCommand.html">Rosegold::Serverbound::ChatCommand</a></li><li class="superclass"><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/SetTime.html">Rosegold::Clientbound::SetTime</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -2237,8 +2237,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L3" target="_blank">
-        rosegold/packets/serverbound/chat_command.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L3" target="_blank">
+        rosegold/packets/clientbound/set_time.cr
       </a>
     
     <br/>
@@ -2259,7 +2259,7 @@
   <dl>
     
       <dt class="entry-const" id="PROTOCOL_PACKET_IDS">
-        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">6_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">6_u32</span>}</code>
+        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">106_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">111_u32</span>}</code>
       </dt>
       
       <dd class="entry-const-doc">
@@ -2283,7 +2283,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28command%3AString%29-class-method" class="signature"><strong>.new</strong>(command : String)</a>
+        <a href="#new%28world_age%3AInt64%2Ctime_of_day%3AInt64%2Ctick_day_time%3ABool%3Dtrue%29-class-method" class="signature"><strong>.new</strong>(world_age : Int64, time_of_day : Int64, tick_day_time : Bool = <span class="n">true</span>)</a>
         
       </li>
     
@@ -2330,7 +2330,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#read%28io%29-class-method" class="signature"><strong>.read</strong>(io)</a>
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
         
       </li>
     
@@ -2365,12 +2365,37 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#command%3AString-instance-method" class="signature"><strong>#command</strong> : String</a>
+        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#command%3D%28command%3AString%29-instance-method" class="signature"><strong>#command=</strong>(command : String)</a>
+        <a href="#tick_day_time%3ABool-instance-method" class="signature"><strong>#tick_day_time</strong> : Bool</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#tick_day_time%3D%28tick_day_time%3ABool%29-instance-method" class="signature"><strong>#tick_day_time=</strong>(tick_day_time : Bool)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#time_of_day%3AInt64-instance-method" class="signature"><strong>#time_of_day</strong> : Int64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#time_of_day%3D%28time_of_day%3AInt64%29-instance-method" class="signature"><strong>#time_of_day=</strong>(time_of_day : Int64)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#world_age%3AInt64-instance-method" class="signature"><strong>#world_age</strong> : Int64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#world_age%3D%28world_age%3AInt64%29-instance-method" class="signature"><strong>#world_age=</strong>(world_age : Int64)</a>
         
       </li>
     
@@ -2415,15 +2440,15 @@
 
       
 
-  <h3>Class methods inherited from class <code><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></code></h3>
+  <h3>Class methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
   
   
-    <a href="../../Rosegold/Serverbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
+    <a href="../../Rosegold/Clientbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
       <span>new_raw(bytes)</span>
     new_raw</a>, 
     
   
-    <a href="../../Rosegold/Serverbound/Packet.html#state-class-method" class="tooltip">
+    <a href="../../Rosegold/Clientbound/Packet.html#state-class-method" class="tooltip">
       <span>state</span>
     state</a>
     
@@ -2517,18 +2542,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(command:String)-class-method">
+    <div class="entry-detail" id="new(world_age:Int64,time_of_day:Int64,tick_day_time:Bool=true)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(command : String)
+        def self.<strong>new</strong>(world_age : Int64, time_of_day : Int64, tick_day_time : Bool = <span class="n">true</span>)
 
-        <a class="method-permalink" href="#new%28command%3AString%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28world_age%3AInt64%2Ctime_of_day%3AInt64%2Ctick_day_time%3ABool%3Dtrue%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2561,7 +2586,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2582,7 +2607,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2623,23 +2648,23 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="read(io)-class-method">
+    <div class="entry-detail" id="read(packet)-class-method">
       <div class="signature">
         
-        def self.<strong>read</strong>(io)
+        def self.<strong>read</strong>(packet)
 
-        <a class="method-permalink" href="#read%28io%29-class-method">#</a>
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2660,7 +2685,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2681,7 +2706,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2700,34 +2725,114 @@ Use the first protocol's packet ID for registration compatibility</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="command:String-instance-method">
+    <div class="entry-detail" id="callback(client)-instance-method">
       <div class="signature">
         
-        def <strong>command</strong> : String
+        def <strong>callback</strong>(client)
 
-        <a class="method-permalink" href="#command%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="command=(command:String)-instance-method">
+    <div class="entry-detail" id="tick_day_time:Bool-instance-method">
       <div class="signature">
         
-        def <strong>command=</strong>(command : String)
+        def <strong>tick_day_time</strong> : Bool
 
-        <a class="method-permalink" href="#command%3D%28command%3AString%29-instance-method">#</a>
+        <a class="method-permalink" href="#tick_day_time%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="tick_day_time=(tick_day_time:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>tick_day_time=</strong>(tick_day_time : Bool)
+
+        <a class="method-permalink" href="#tick_day_time%3D%28tick_day_time%3ABool%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="time_of_day:Int64-instance-method">
+      <div class="signature">
+        
+        def <strong>time_of_day</strong> : Int64
+
+        <a class="method-permalink" href="#time_of_day%3AInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="time_of_day=(time_of_day:Int64)-instance-method">
+      <div class="signature">
+        
+        def <strong>time_of_day=</strong>(time_of_day : Int64)
+
+        <a class="method-permalink" href="#time_of_day%3D%28time_of_day%3AInt64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="world_age:Int64-instance-method">
+      <div class="signature">
+        
+        def <strong>world_age</strong> : Int64
+
+        <a class="method-permalink" href="#world_age%3AInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L11" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="world_age=(world_age:Int64)-instance-method">
+      <div class="signature">
+        
+        def <strong>world_age=</strong>(world_age : Int64)
+
+        <a class="method-permalink" href="#world_age%3D%28world_age%3AInt64%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2743,7 +2848,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/serverbound/chat_command.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/12ffb9e3b2458d59f46e708b158b395ddafb518b/src/rosegold/packets/clientbound/set_time.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
