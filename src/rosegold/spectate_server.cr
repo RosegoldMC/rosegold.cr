@@ -81,6 +81,7 @@ class Rosegold::SpectateServer
                         Clientbound::UpdateHealth,
                         Clientbound::EntityEffect,
                         Clientbound::RemoveEntityEffect,
+                        Clientbound::SetTime,
                       ] %}
         result[{{klass}}[protocol]] = {{klass.name.split("::").last}}
       {% end %}
@@ -530,6 +531,8 @@ class Rosegold::SpectateConnection
     return unless bot = @client
 
     send_join_game
+    send_set_time
+    send_default_spawn_position
     send_set_ticking_state(false)
     send_player_abilities
     send_player_position
@@ -575,6 +578,23 @@ class Rosegold::SpectateConnection
       enforces_secure_chat: false
     )
 
+    send_packet(packet)
+  end
+
+  private def send_set_time
+    packet = Rosegold::Clientbound::SetTime.new(
+      world_age: 0_i64,
+      time_of_day: 6000_i64, # Noon
+      tick_day_time: false   # Freeze daylight cycle
+    )
+    send_packet(packet)
+  end
+
+  private def send_default_spawn_position
+    return unless bot = @client
+    pos = bot.player.feet
+    spawn_pos = Vec3i.new(pos.x.to_i32, pos.y.to_i32, pos.z.to_i32)
+    packet = Rosegold::Clientbound::SetDefaultSpawnPosition.new(spawn_pos, 0.0_f32)
     send_packet(packet)
   end
 
@@ -626,6 +646,9 @@ class Rosegold::SpectateConnection
 
     # Send chunks from bot's dimension if available
     view_distance = SpectateServer::DEFAULT_RENDER_DISTANCE
+    chunks_sent = 0
+
+    send_packet(Rosegold::Clientbound::ChunkBatchStart.new)
     (-view_distance..view_distance).each do |delta_x|
       (-view_distance..view_distance).each do |delta_z|
         chunk_x = player_chunk_x + delta_x
@@ -633,9 +656,11 @@ class Rosegold::SpectateConnection
 
         if send_chunk_data(chunk_x, chunk_z)
           @loaded_chunks.add({chunk_x, chunk_z})
+          chunks_sent += 1
         end
       end
     end
+    send_packet(Rosegold::Clientbound::ChunkBatchFinished.new(chunks_sent.to_i32)) if chunks_sent > 0
   end
 
   private def start_bot_monitoring
@@ -871,12 +896,16 @@ class Rosegold::SpectateConnection
     end
 
     # Send chunk data for newly loaded chunks
-    successfully_loaded = 0
-    chunks_to_load.each do |load_chunk_x, load_chunk_z|
-      if send_chunk_data(load_chunk_x, load_chunk_z)
-        @loaded_chunks.add({load_chunk_x, load_chunk_z})
-        successfully_loaded += 1
+    if chunks_to_load.size > 0
+      send_packet(Rosegold::Clientbound::ChunkBatchStart.new)
+      successfully_loaded = 0
+      chunks_to_load.each do |load_chunk_x, load_chunk_z|
+        if send_chunk_data(load_chunk_x, load_chunk_z)
+          @loaded_chunks.add({load_chunk_x, load_chunk_z})
+          successfully_loaded += 1
+        end
       end
+      send_packet(Rosegold::Clientbound::ChunkBatchFinished.new(successfully_loaded.to_i32)) if successfully_loaded > 0
     end
   end
 

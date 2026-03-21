@@ -11,6 +11,13 @@ class Rosegold::Clientbound::ChunkBatchFinished < Rosegold::Clientbound::Packet
 
   def initialize(@batch_size : Int32); end
 
+  def write : Bytes
+    Minecraft::IO::Memory.new.tap do |buffer|
+      buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
+      buffer.write batch_size
+    end.to_slice
+  end
+
   def self.read(io)
     batch_size = io.read_var_int.to_i32
     self.new(batch_size)
