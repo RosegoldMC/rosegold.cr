@@ -335,12 +335,7 @@ class Rosegold::Interactions
 
         # If no collision shapes, check if it's an interactive block and use interaction hitbox
         if block_shape.empty?
-          interaction_shape = get_interaction_hitbox(block_state, x, y, z)
-          if interaction_shape
-            [interaction_shape]
-          else
-            Array(AABBd).new 0
-          end
+          get_interaction_hitboxes(block_state, x, y, z)
         else
           block_shape.map &.to_f64.offset(x, y, z)
         end
@@ -348,8 +343,8 @@ class Rosegold::Interactions
     end
   end
 
-  # Returns interaction hitbox for blocks that have no collision shapes but can be interacted with
-  private def get_interaction_hitbox(block_state : UInt16, x : Int32, y : Int32, z : Int32) : AABBd?
+  # Returns interaction hitboxes for blocks that have no collision shapes but can be interacted with
+  private def get_interaction_hitboxes(block_state : UInt16, x : Int32, y : Int32, z : Int32) : Array(AABBd)
     block = Block.from_block_state_id(block_state)
     case block.id_str
     when .includes?("sapling"), .includes?("propagule"),
@@ -357,90 +352,82 @@ class Rosegold::Interactions
          .includes?("dead_bush"), .includes?("bush"), .includes?("fungus"),
          .includes?("roots"), "sugar_cane", "kelp", "seagrass",
          "nether_sprouts", "warped_fungus", "crimson_fungus"
-      # Saplings, flowers, and other small plants: column(12.0, 0.0, 12.0) in vanilla
-      # Pixel coords: box(2, 0, 2, 14, 12, 14) → normalized: 0.125 to 0.875 (x,z), 0.0 to 0.75 (y)
-      AABBd.new(
-        x + 0.125, y + 0.0, z + 0.125, # min corner
-        x + 0.875, y + 0.75, z + 0.875 # max corner
-      )
+      [AABBd.new(
+        x + 0.125, y + 0.0, z + 0.125,
+        x + 0.875, y + 0.75, z + 0.875
+      )]
     when "wheat", "carrots", "potatoes", "beetroots", "melon_stem", "pumpkin_stem"
-      # Basic crops and stems: Block.boxes(7, age -> Block.column(16.0/2.0, 0.0, (2 + age * 2)))
-      # Height in pixels = 2 + age * 2, normalized = (2 + age * 2) / 16
       age = extract_age_property(block_state)
       height = (2 + age * 2) / 16.0
-      AABBd.new(
+      [AABBd.new(
         x + 0.0, y + 0.0, z + 0.0,
         x + 1.0, y + height, z + 1.0
-      )
+      )]
     when "nether_wart"
-      # Nether wart: Block.boxes(3, age -> Block.column(16.0, 0.0, (5 + age * 3)))
-      # Height in pixels = 5 + age * 3, normalized = (5 + age * 3) / 16
       age = extract_age_property(block_state)
       height = (5 + age * 3) / 16.0
-      AABBd.new(
+      [AABBd.new(
         x + 0.0, y + 0.0, z + 0.0,
         x + 1.0, y + height, z + 1.0
-      )
+      )]
     when "torchflower_crop"
-      # Torchflower: Block.boxes(1, age -> Block.column(6.0, 0.0, (6 + age * 4)))
-      # Height in pixels = 6 + age * 4, normalized = (6 + age * 4) / 16
       age = extract_age_property(block_state)
       height = (6 + age * 4) / 16.0
-      AABBd.new(
+      [AABBd.new(
         x + 0.0, y + 0.0, z + 0.0,
         x + 1.0, y + height, z + 1.0
-      )
+      )]
     when "sweet_berry_bush"
-      # Sweet berry bush has special shapes per age
-      # Age 0: column(10.0, 0.0, 8.0) = 0.5 blocks
-      # Age 1-2: column(14.0, 0.0, 16.0) = 1.0 blocks
-      # Age 3: Shapes.block() = 1.0 blocks
       age = extract_age_property(block_state)
       height = age == 0 ? 0.5 : 1.0
-      AABBd.new(
+      [AABBd.new(
         x + 0.0, y + 0.0, z + 0.0,
         x + 1.0, y + height, z + 1.0
-      )
+      )]
     when .includes?("button")
-      # Buttons have a small hitbox depending on their face
-      # For floor buttons (face=floor), use a small hitbox on top of the block
-      if MCData.default.block_state_names[block_state].includes?("face=floor")
-        # Floor button: small hitbox on top surface
-        AABBd.new(
-          x + 0.3125, y + 0.0, z + 0.3125,   # min corner
-          x + 0.6875, y + 0.0625, z + 0.6875 # max corner
-        )
-      elsif MCData.default.block_state_names[block_state].includes?("face=wall")
-        # Wall button: determine which wall and create appropriate hitbox
-        block_state_name = MCData.default.block_state_names[block_state]
-        if block_state_name.includes?("facing=north")
-          AABBd.new(x + 0.3125, y + 0.375, z + 0.875, x + 0.6875, y + 0.625, z + 1.0)
-        elsif block_state_name.includes?("facing=south")
-          AABBd.new(x + 0.3125, y + 0.375, z + 0.0, x + 0.6875, y + 0.625, z + 0.125)
-        elsif block_state_name.includes?("facing=east")
-          AABBd.new(x + 0.0, y + 0.375, z + 0.3125, x + 0.125, y + 0.625, z + 0.6875)
-        elsif block_state_name.includes?("facing=west")
-          AABBd.new(x + 0.875, y + 0.375, z + 0.3125, x + 1.0, y + 0.625, z + 0.6875)
-        else
-          # Default wall button hitbox
-          AABBd.new(x + 0.3125, y + 0.375, z + 0.3125, x + 0.6875, y + 0.625, z + 0.6875)
-        end
-      elsif MCData.default.block_state_names[block_state].includes?("face=ceiling")
-        # Ceiling button: small hitbox on bottom surface
-        AABBd.new(
-          x + 0.3125, y + 0.9375, z + 0.3125, # min corner
-          x + 0.6875, y + 1.0, z + 0.6875     # max corner
-        )
-      else
-        # Default button hitbox (floor)
-        AABBd.new(
-          x + 0.3125, y + 0.0, z + 0.3125,
-          x + 0.6875, y + 0.0625, z + 0.6875
-        )
-      end
+      [get_button_hitbox(block_state, x, y, z)]
+    when "vine"
+      get_vine_hitboxes(block_state, x, y, z)
     else
-      # No interaction hitbox for this block type
-      nil
+      Array(AABBd).new 0
+    end
+  end
+
+  # Returns hitboxes for vine blocks based on which faces are active
+  # Each face is a 1/16-thick slab flush against the attached surface
+  private def get_vine_hitboxes(block_state : UInt16, x : Int32, y : Int32, z : Int32) : Array(AABBd)
+    block_state_name = MCData.default.block_state_names[block_state]
+    hitboxes = Array(AABBd).new
+    hitboxes << AABBd.new(x + 0.0, y + 0.0, z + 0.0, x + 1.0, y + 1.0, z + 0.0625) if block_state_name.includes?("north=true")
+    hitboxes << AABBd.new(x + 0.0, y + 0.0, z + 0.9375, x + 1.0, y + 1.0, z + 1.0) if block_state_name.includes?("south=true")
+    hitboxes << AABBd.new(x + 0.9375, y + 0.0, z + 0.0, x + 1.0, y + 1.0, z + 1.0) if block_state_name.includes?("east=true")
+    hitboxes << AABBd.new(x + 0.0, y + 0.0, z + 0.0, x + 0.0625, y + 1.0, z + 1.0) if block_state_name.includes?("west=true")
+    hitboxes << AABBd.new(x + 0.0, y + 0.9375, z + 0.0, x + 1.0, y + 1.0, z + 1.0) if block_state_name.includes?("up=true")
+    # Faceless vine: thin bottom slab matching vanilla
+    hitboxes << AABBd.new(x + 0.0, y + 0.0, z + 0.0, x + 1.0, y + 0.0625, z + 1.0) if hitboxes.empty?
+    hitboxes
+  end
+
+  private def get_button_hitbox(block_state : UInt16, x : Int32, y : Int32, z : Int32) : AABBd
+    block_state_name = MCData.default.block_state_names[block_state]
+    if block_state_name.includes?("face=floor")
+      AABBd.new(x + 0.3125, y + 0.0, z + 0.3125, x + 0.6875, y + 0.0625, z + 0.6875)
+    elsif block_state_name.includes?("face=wall")
+      if block_state_name.includes?("facing=north")
+        AABBd.new(x + 0.3125, y + 0.375, z + 0.875, x + 0.6875, y + 0.625, z + 1.0)
+      elsif block_state_name.includes?("facing=south")
+        AABBd.new(x + 0.3125, y + 0.375, z + 0.0, x + 0.6875, y + 0.625, z + 0.125)
+      elsif block_state_name.includes?("facing=east")
+        AABBd.new(x + 0.0, y + 0.375, z + 0.3125, x + 0.125, y + 0.625, z + 0.6875)
+      elsif block_state_name.includes?("facing=west")
+        AABBd.new(x + 0.875, y + 0.375, z + 0.3125, x + 1.0, y + 0.625, z + 0.6875)
+      else
+        AABBd.new(x + 0.3125, y + 0.375, z + 0.3125, x + 0.6875, y + 0.625, z + 0.6875)
+      end
+    elsif block_state_name.includes?("face=ceiling")
+      AABBd.new(x + 0.3125, y + 0.9375, z + 0.3125, x + 0.6875, y + 1.0, z + 0.6875)
+    else
+      AABBd.new(x + 0.3125, y + 0.0, z + 0.3125, x + 0.6875, y + 0.0625, z + 0.6875)
     end
   end
 
