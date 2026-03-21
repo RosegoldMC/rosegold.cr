@@ -2,32 +2,20 @@ require "../spec_helper"
 
 Spectator.describe "Rosegold::Bot bed interactions" do
   before_all do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-        # Clear a test area
-        bot.chat "/fill -10 -60 -10 10 -55 10 minecraft:air"
-        # Set bedrock floor
-        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
-        bot.wait_tick
-      end
-    end
+    admin.kill_entities
+    admin.fill -10, -60, -10, 10, -55, 10, "air"
+    admin.fill -10, -61, -10, 10, -61, 10, "bedrock"
+    admin.wait_tick
   end
 
   it "should be able to get in and out of bed successfully" do
+    admin.time_set "night"
+    admin.setblock 0, -60, 0, "red_bed[part=foot,facing=north]"
+    admin.setblock 0, -60, 1, "red_bed[part=head,facing=north]"
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Set time to night to allow sleeping
-        bot.chat "/time set night"
-        bot.wait_tick
-
-        # Place a bed at a specific location
-        bot.chat "/setblock 0 -60 0 minecraft:red_bed[part=foot,facing=north]"
-        bot.chat "/setblock 0 -60 1 minecraft:red_bed[part=head,facing=north]"
-        bot.wait_tick
-
-        # Teleport the bot directly to the bed position
-        bot.chat "/tp 0.5 -60 0.5"
+        admin.tp 0.5, -60, 0.5
         bot.wait_tick
 
         # Interact with the bed to get in (look down at the bed)
@@ -50,19 +38,13 @@ Spectator.describe "Rosegold::Bot bed interactions" do
   end
 
   it "should handle bed interaction during the day" do
+    admin.time_set "day"
+    admin.setblock 2, -60, 0, "blue_bed[part=foot,facing=east]"
+    admin.setblock 3, -60, 0, "blue_bed[part=head,facing=east]"
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Set time to day
-        bot.chat "/time set day"
-        bot.wait_tick
-
-        # Place a bed
-        bot.chat "/setblock 2 -60 0 minecraft:blue_bed[part=foot,facing=east]"
-        bot.chat "/setblock 3 -60 0 minecraft:blue_bed[part=head,facing=east]"
-        bot.wait_tick
-
-        # Teleport the bot to the bed
-        bot.chat "/tp 2.5 -60 0.5"
+        admin.tp 2.5, -60, 0.5
         bot.wait_tick
 
         # Try to interact with the bed during day
@@ -85,19 +67,13 @@ Spectator.describe "Rosegold::Bot bed interactions" do
   end
 
   it "should handle bed interaction at night" do
+    admin.time_set "night"
+    admin.setblock 4, -60, 0, "green_bed[part=foot,facing=west]"
+    admin.setblock 3, -60, 0, "green_bed[part=head,facing=west]"
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Set time to night to allow sleeping
-        bot.chat "/time set night"
-        bot.wait_tick
-
-        # Place a bed
-        bot.chat "/setblock 4 -60 0 minecraft:green_bed[part=foot,facing=west]"
-        bot.chat "/setblock 3 -60 0 minecraft:green_bed[part=head,facing=west]"
-        bot.wait_tick
-
-        # Teleport the bot to the bed
-        bot.chat "/tp 3.5 -60 0.5"
+        admin.tp 3.5, -60, 0.5
         bot.wait_tick
 
         # Interact with the bed at night

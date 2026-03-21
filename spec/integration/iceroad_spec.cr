@@ -2,22 +2,22 @@ require "../spec_helper"
 
 Spectator.describe "Rosegold::Bot ice road physics" do
   it "should achieve high speed ice road movement" do
+    admin.kill_entities
+
+    base_y = -61
+    start_pos = Rosegold::Vec3d.new(20.5, base_y + 1.0, 0.5)
+    test_distance = 30.0
+    end_pos = Rosegold::Vec3d.new(20.5, base_y + 1.0, test_distance)
+
+    admin.fill 20, base_y, 0, 20, base_y, 40, "ice"
+    admin.fill 20, base_y + 1, 0, 20, base_y + 1, 40, "stone_button[face=floor]"
+    admin.fill 20, base_y + 2, 0, 20, base_y + 2, 40, "oak_trapdoor[half=top]"
+    admin.fill 20, base_y + 3, 0, 20, base_y + 3, 40, "obsidian"
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-
-        base_y = -61
-        start_pos = Rosegold::Vec3d.new(20.5, base_y + 1.0, 0.5)
-        test_distance = 30.0
-        end_pos = Rosegold::Vec3d.new(20.5, base_y + 1.0, test_distance)
-
-        bot.chat "/fill 20 #{base_y} 0 20 #{base_y} 40 minecraft:ice"
-        bot.chat "/fill 20 #{base_y + 1} 0 20 #{base_y + 1} 40 minecraft:stone_button[face=floor]"
-        bot.chat "/fill 20 #{base_y + 2} 0 20 #{base_y + 2} 40 minecraft:oak_trapdoor[half=top]"
-        bot.chat "/fill 20 #{base_y + 3} 0 20 #{base_y + 3} 40 minecraft:obsidian"
-
-        bot.chat "/tp #{start_pos.x} #{start_pos.y} #{start_pos.z}"
-        bot.chat "/give @s minecraft:baked_potato 64"
+        admin.tp start_pos.x, start_pos.y, start_pos.z
+        admin.give "baked_potato", 64
         bot.wait_ticks 15
 
         bot.eat!

@@ -2,20 +2,13 @@ require "../spec_helper"
 
 Spectator.describe "Rosegold::Bot movement keys" do
   before_all do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-        bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
-        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
-        bot.wait_tick
-      end
-    end
+    admin.setup_arena
   end
 
   it "moves forward when forward key is pressed" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 0 -60 0"
+        admin.tp 0, -60, 0
         bot.wait_tick
 
         bot.yaw = 0.0 # face south (+Z)
@@ -33,7 +26,7 @@ Spectator.describe "Rosegold::Bot movement keys" do
   it "moves backward when backward key is pressed" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 0 -60 0"
+        admin.tp 0, -60, 0
         bot.wait_tick
 
         bot.yaw = 0.0 # face south (+Z)
@@ -51,7 +44,7 @@ Spectator.describe "Rosegold::Bot movement keys" do
   it "strafes left when left key is pressed" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 0 -60 0"
+        admin.tp 0, -60, 0
         bot.wait_tick
 
         bot.yaw = 0.0 # face south (+Z), left is +X
@@ -69,7 +62,7 @@ Spectator.describe "Rosegold::Bot movement keys" do
   it "moves diagonally with two keys pressed" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 0 -60 0"
+        admin.tp 0, -60, 0
         bot.wait_ticks 3
 
         bot.yaw = 0.0 # face south
@@ -88,7 +81,7 @@ Spectator.describe "Rosegold::Bot movement keys" do
   it "stops moving after release_all" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 0 -60 0"
+        admin.tp 0, -60, 0
         bot.wait_tick
 
         bot.yaw = 0.0
@@ -109,7 +102,7 @@ Spectator.describe "Rosegold::Bot movement keys" do
   it "move_to clears movement keys on completion" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 0 -60 0"
+        admin.tp 0, -60, 0
         bot.wait_tick
 
         bot.keys.press Rosegold::MovementKeys::Key::Left

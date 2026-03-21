@@ -2,28 +2,19 @@ require "../spec_helper"
 
 Spectator.describe "Rosegold::Bot stairs movement" do
   before_all do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-        # Clear a test area
-        bot.chat "/fill -10 -60 -10 10 -55 10 minecraft:air"
-        # Set bedrock floor
-        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
-        bot.wait_tick
-      end
-    end
+    admin.kill_entities
+    admin.fill -10, -60, -10, 10, -55, 10, "air"
+    admin.fill -10, -61, -10, 10, -61, 10, "bedrock"
+    admin.wait_tick
   end
 
   it "should be able to walk up actual stone stairs" do
+    admin.setblock 1, -60, 2, "stone_stairs[facing=south]"
+    admin.setblock 1, -60, 3, "stone"
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/setblock 1 -60 2 minecraft:stone_stairs[facing=south]" # Actual stairs facing north
-        bot.chat "/setblock 1 -60 3 minecraft:stone"                      # Destination block (one level up)
-
-        bot.wait_tick
-
-        # Start the bot at 1,1
-        bot.chat "/tp 1 -60 1"
+        admin.tp 1, -60, 1
         bot.wait_tick
 
         initial_y = bot.location.y

@@ -13,6 +13,7 @@ services:
       SPAWN_PROTECTION: 0
       SPAWN_MONSTERS: "FALSE"
       SPAWN_ANIMALS: "FALSE"
+      EXISTING_OPS_FILE: SKIP
       RCON_CMDS_STARTUP: |-
         gamerule spawn_mobs false
       # TYPE: PAPER

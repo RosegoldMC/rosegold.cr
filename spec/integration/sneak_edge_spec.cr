@@ -2,25 +2,17 @@ require "../spec_helper"
 
 Spectator.describe "Rosegold::Bot sneak edge prevention" do
   before_all do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-        bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
-        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
-        bot.wait_tick
-      end
-    end
+    admin.setup_arena
   end
 
   it "should not fall off edge when sneaking" do
+    admin.fill -2, -60, -2, 4, -56, 4, "air"
+    admin.setblock 0, -57, 0, "stone"
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Build a 1-block pillar with air on all sides at ground level
-        bot.chat "/fill -2 -60 -2 4 -56 4 minecraft:air"
-        bot.chat "/setblock 0 -57 0 minecraft:stone"
-        bot.wait_ticks 3
-        bot.chat "/tp 0 -56 0"
-        bot.wait_tick
+        admin.tp 0, -56, 0
+        bot.wait_ticks 5
         until client.player.on_ground?
           bot.wait_tick
         end
@@ -44,14 +36,13 @@ Spectator.describe "Rosegold::Bot sneak edge prevention" do
   end
 
   it "should fall off edge when not sneaking" do
+    admin.fill -2, -60, -2, 4, -56, 4, "air"
+    admin.setblock 0, -57, 0, "stone"
+    admin.wait_ticks 5
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        # Same setup: 1-block pillar with air around it
-        bot.chat "/fill -2 -60 -2 4 -56 4 minecraft:air"
-        bot.chat "/setblock 0 -57 0 minecraft:stone"
-        bot.wait_ticks 3
-        bot.chat "/tp 0 -56 0"
-        bot.wait_tick
+        admin.tp 0, -56, 0
+        bot.wait_ticks 5
         until client.player.on_ground?
           bot.wait_tick
         end

@@ -2,20 +2,13 @@ require "../spec_helper"
 
 Spectator.describe "Rosegold::Bot movement" do
   before_all do
-    client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/kill @e[type=!minecraft:player]"
-        bot.chat "/fill -10 -60 -10 10 0 10 minecraft:air"
-        bot.chat "/fill -10 -61 -10 10 -61 10 minecraft:bedrock"
-        bot.wait_tick
-      end
-    end
+    admin.setup_arena
   end
 
   it "should fall due to gravity (and get held up by the ground)" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 1.5 -58 1.5"
+        admin.tp 1.5, -58, 1.5
         # Wait for teleport to take effect (bot must be above ground level)
         until bot.location.y > -59 && (bot.location.x - 1.5).abs < 0.5
           bot.wait_tick
@@ -33,7 +26,7 @@ Spectator.describe "Rosegold::Bot movement" do
   it "can move to location successfully" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 1 -60 1"
+        admin.tp 1, -60, 1
         bot.wait_tick
 
         bot.move_to 2, 2
@@ -50,7 +43,7 @@ Spectator.describe "Rosegold::Bot movement" do
     final_pitch = rand(-89..89)
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 1 -60 1"
+        admin.tp 1, -60, 1
 
         yaw = rand(-179..179)
         pitch = rand(-89..89)
@@ -78,7 +71,7 @@ Spectator.describe "Rosegold::Bot movement" do
   it "should jump and fall" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
-        bot.chat "/tp 1 -60 1"
+        admin.tp 1, -60, 1
         bot.wait_tick
 
         initial_feet = bot.location
@@ -100,17 +93,17 @@ Spectator.describe "Rosegold::Bot movement" do
   describe "#move_to" do
     context "when movement is stuck" do
       it "throws Physics::MovementStuck" do
+        admin.fill 1, -60, 2, 1, -60, 2, "stone"
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
-            bot.chat "/fill 1 -60 2 1 -60 2 minecraft:stone"
-            bot.chat "/tp 1 -60 1"
+            admin.tp 1, -60, 1
             bot.wait_tick
 
             expect {
               bot.move_to 1, 2
             }.to raise_error(Rosegold::Physics::MovementStuck)
 
-            bot.chat "/fill 1 -60 2 1 -60 2 minecraft:air"
+            admin.fill 1, -60, 2, 1, -60, 2, "air"
             bot.wait_tick
           end
         end
