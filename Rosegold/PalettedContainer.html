@@ -2307,7 +2307,7 @@ Direct: The long_array stores values directly. The palette is empty.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8c11834f6ee3daf40255e1595b644043496149d/src/rosegold/world/paletted_container.cr#L5" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/4ff211395900579af86df9d74014443b8c32cc96/src/rosegold/world/paletted_container.cr#L5" target="_blank">
         rosegold/world/paletted_container.cr
       </a>
     
@@ -2330,19 +2330,19 @@ Direct: The long_array stores values directly. The palette is empty.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#air_filled%28size%3AIndex%29%3APalettedContainer-class-method" class="signature"><strong>.air_filled</strong>(size : Index) : PalettedContainer</a>
+        <a href="#air_filled%28size%3AIndex%2Cnum_bits_direct%3AUInt8%3D9_u8%29%3APalettedContainer-class-method" class="signature"><strong>.air_filled</strong>(size : Index, num_bits_direct : UInt8 = <span class="n">9_u8</span>) : PalettedContainer</a>
         
           <div class="summary"><p>Creates a container filled with air/default values (ID 0)</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#new%28io%3AMinecraft%3A%3AIO%2Cnum_bits_direct%2Csize%3AUInt32%29-class-method" class="signature"><strong>.new</strong>(io : Minecraft::IO, num_bits_direct, size : UInt32)</a>
+        <a href="#new%28size%3AIndex%2Cnum_bits_direct%3AUInt8%2Cempty%3ABool%29-class-method" class="signature"><strong>.new</strong>(size : Index, num_bits_direct : UInt8, empty : Bool)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#new%28size%3AIndex%2Cempty%3ABool%29-class-method" class="signature"><strong>.new</strong>(size : Index, empty : Bool)</a>
+        <a href="#new%28io%3AMinecraft%3A%3AIO%2Cnum_bits_direct%2Csize%3AUInt32%29-class-method" class="signature"><strong>.new</strong>(io : Minecraft::IO, num_bits_direct, size : UInt32)</a>
         
       </li>
     
@@ -2428,12 +2428,12 @@ Direct: The long_array stores values directly. The palette is empty.</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="air_filled(size:Index):PalettedContainer-class-method">
+    <div class="entry-detail" id="air_filled(size:Index,num_bits_direct:UInt8=9_u8):PalettedContainer-class-method">
       <div class="signature">
         
-        def self.<strong>air_filled</strong>(size : Index) : <a href="../Rosegold/PalettedContainer.html">PalettedContainer</a>
+        def self.<strong>air_filled</strong>(size : Index, num_bits_direct : UInt8 = <span class="n">9_u8</span>) : <a href="../Rosegold/PalettedContainer.html">PalettedContainer</a>
 
-        <a class="method-permalink" href="#air_filled%28size%3AIndex%29%3APalettedContainer-class-method">#</a>
+        <a class="method-permalink" href="#air_filled%28size%3AIndex%2Cnum_bits_direct%3AUInt8%3D9_u8%29%3APalettedContainer-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -2444,7 +2444,23 @@ Direct: The long_array stores values directly. The palette is empty.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8c11834f6ee3daf40255e1595b644043496149d/src/rosegold/world/paletted_container.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4ff211395900579af86df9d74014443b8c32cc96/src/rosegold/world/paletted_container.cr#L21" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(size:Index,num_bits_direct:UInt8,empty:Bool)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(size : Index, num_bits_direct : UInt8, empty : Bool)
+
+        <a class="method-permalink" href="#new%28size%3AIndex%2Cnum_bits_direct%3AUInt8%2Cempty%3ABool%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4ff211395900579af86df9d74014443b8c32cc96/src/rosegold/world/paletted_container.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2460,23 +2476,7 @@ Direct: The long_array stores values directly. The palette is empty.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8c11834f6ee3daf40255e1595b644043496149d/src/rosegold/world/paletted_container.cr#L33" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="new(size:Index,empty:Bool)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(size : Index, empty : Bool)
-
-        <a class="method-permalink" href="#new%28size%3AIndex%2Cempty%3ABool%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8c11834f6ee3daf40255e1595b644043496149d/src/rosegold/world/paletted_container.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4ff211395900579af86df9d74014443b8c32cc96/src/rosegold/world/paletted_container.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2508,7 +2508,7 @@ Direct: The long_array stores values directly. The palette is empty.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8c11834f6ee3daf40255e1595b644043496149d/src/rosegold/world/paletted_container.cr#L72" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4ff211395900579af86df9d74014443b8c32cc96/src/rosegold/world/paletted_container.cr#L74" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2524,7 +2524,7 @@ Direct: The long_array stores values directly. The palette is empty.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8c11834f6ee3daf40255e1595b644043496149d/src/rosegold/world/paletted_container.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4ff211395900579af86df9d74014443b8c32cc96/src/rosegold/world/paletted_container.cr#L96" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2540,7 +2540,7 @@ Direct: The long_array stores values directly. The palette is empty.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8c11834f6ee3daf40255e1595b644043496149d/src/rosegold/world/paletted_container.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4ff211395900579af86df9d74014443b8c32cc96/src/rosegold/world/paletted_container.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2556,7 +2556,7 @@ Direct: The long_array stores values directly. The palette is empty.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8c11834f6ee3daf40255e1595b644043496149d/src/rosegold/world/paletted_container.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4ff211395900579af86df9d74014443b8c32cc96/src/rosegold/world/paletted_container.cr#L59" target="_blank">View source</a>]
         
       </div>
     </div>
