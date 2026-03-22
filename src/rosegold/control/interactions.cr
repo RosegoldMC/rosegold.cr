@@ -265,7 +265,7 @@ class Rosegold::Interactions
   end
 
   private def reach_entity : Rosegold::Entity?
-    client.dimension.raycast_entity client.player.eyes, reach_vec, reach_length
+    client.dimension.raycast_entity client.player.eyes, entity_reach_vec, entity_reach_length
   end
 
   # Unified raytracing that properly handles both entities and blocks
@@ -307,18 +307,28 @@ class Rosegold::Interactions
       block = block_boxes[result.box_nr].min.block
       ReachedBlock.new result.intercept, block, result.face
     else
-      # Hit an entity
+      # Hit an entity - check if within entity reach distance
+      hit_distance = (result.intercept - eyes).length
+      return nil if hit_distance > entity_reach_length
       entity_index = result.box_nr - block_count
       entity_map[entity_index]
     end
   end
 
-  private def reach_length
+  private def block_reach_length
     client.player.gamemode == 1 ? 5.0 : 4.5
   end
 
+  private def entity_reach_length
+    client.player.gamemode == 1 ? 5.0 : 3.0
+  end
+
   private def reach_vec
-    client.player.look.to_vec3 * reach_length
+    client.player.look.to_vec3 * block_reach_length
+  end
+
+  private def entity_reach_vec
+    client.player.look.to_vec3 * entity_reach_length
   end
 
   # Returns all block collision boxes that may intersect from `start` towards `reach`.
