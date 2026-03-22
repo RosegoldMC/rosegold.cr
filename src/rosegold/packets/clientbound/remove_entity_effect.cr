@@ -14,11 +14,7 @@ class Rosegold::Clientbound::RemoveEntityEffect < Rosegold::Clientbound::Packet
   def initialize(@entity_id, @effect_id); end
 
   def self.read(packet)
-    if Client.protocol_version >= 774_u32
-      entity_id = packet.read_var_int.to_u64
-    else
-      entity_id = packet.read_var_long
-    end
+    entity_id = packet.read_var_int.to_u64
     effect_id = packet.read_var_int
 
     self.new(entity_id, effect_id)
