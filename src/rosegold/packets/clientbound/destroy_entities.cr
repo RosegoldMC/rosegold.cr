@@ -14,11 +14,7 @@ class Rosegold::Clientbound::DestroyEntities < Rosegold::Clientbound::Packet
   def self.read(packet)
     entity_ids = [] of UInt64
     count = packet.read_var_int
-    if Client.protocol_version >= 774_u32
-      count.times { entity_ids << packet.read_var_int.to_u64 }
-    else
-      count.times { entity_ids << packet.read_var_long }
-    end
+    count.times { entity_ids << packet.read_var_int.to_u64 }
     self.new entity_ids
   end
 
@@ -26,11 +22,7 @@ class Rosegold::Clientbound::DestroyEntities < Rosegold::Clientbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write entity_ids.size
-      if Client.protocol_version >= 774_u32
-        entity_ids.each { |entity_id| buffer.write entity_id.to_u32 }
-      else
-        entity_ids.each { |entity_id| buffer.write entity_id }
-      end
+      entity_ids.each { |entity_id| buffer.write entity_id.to_u32 }
     end.to_slice
   end
 

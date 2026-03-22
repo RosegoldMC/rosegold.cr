@@ -17,11 +17,7 @@ class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
   def initialize(@entity_id, @effect_id, @amplifier, @duration, @flags); end
 
   def self.read(packet)
-    if Client.protocol_version >= 774_u32
-      entity_id = packet.read_var_int.to_u64
-    else
-      entity_id = packet.read_var_long
-    end
+    entity_id = packet.read_var_int.to_u64
     effect_id = packet.read_var_int
     amplifier = packet.read_var_int
     duration = packet.read_var_int
@@ -33,11 +29,7 @@ class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      if Client.protocol_version >= 774_u32
-        buffer.write entity_id.to_u32
-      else
-        buffer.write entity_id
-      end
+      buffer.write entity_id.to_u32
       buffer.write effect_id
       buffer.write amplifier
       buffer.write duration

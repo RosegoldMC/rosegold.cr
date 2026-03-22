@@ -25,11 +25,7 @@ class Rosegold::Clientbound::EntityPositionSync < Rosegold::Clientbound::Packet
   end
 
   def self.read(packet)
-    if Client.protocol_version >= 774_u32
-      entity_id = packet.read_var_int.to_u64
-    else
-      entity_id = packet.read_var_long
-    end
+    entity_id = packet.read_var_int.to_u64
     x = packet.read_double
     y = packet.read_double
     z = packet.read_double
@@ -46,11 +42,7 @@ class Rosegold::Clientbound::EntityPositionSync < Rosegold::Clientbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      if Client.protocol_version >= 774_u32
-        buffer.write entity_id.to_u32
-      else
-        buffer.write entity_id
-      end
+      buffer.write entity_id.to_u32
       buffer.write_full x
       buffer.write_full y
       buffer.write_full z
