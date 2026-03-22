@@ -25,7 +25,6 @@ class Rosegold::Spectate::Server
     "update_attributes"            => {772_u32 => 0x7C_u32, 774_u32 => 0x81_u32},
     "world_particles"              => {772_u32 => 0x29_u32, 774_u32 => 0x2E_u32},
     "explosion"                    => {772_u32 => 0x20_u32, 774_u32 => 0x24_u32},
-    "boss_bar"                     => {772_u32 => 0x09_u32, 774_u32 => 0x09_u32},
     "scoreboard_objective"         => {772_u32 => 0x63_u32, 774_u32 => 0x68_u32},
     "scoreboard_score"             => {772_u32 => 0x67_u32, 774_u32 => 0x6C_u32},
     "scoreboard_display_objective" => {772_u32 => 0x5B_u32, 774_u32 => 0x60_u32},
