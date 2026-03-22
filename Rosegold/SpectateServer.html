@@ -1372,6 +1372,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/Event/ArmSwing" data-name="rosegold::event::armswing">
+      <a href="../Rosegold/Event/ArmSwing.html">ArmSwing</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Event/Disconnected" data-name="rosegold::event::disconnected">
       <a href="../Rosegold/Event/Disconnected.html">Disconnected</a>
       
@@ -2102,6 +2107,71 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/Spectate" data-name="rosegold::spectate">
+      <a href="../Rosegold/Spectate.html">Spectate</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/Configuration" data-name="rosegold::spectate::configuration">
+      <a href="../Rosegold/Spectate/Configuration.html">Configuration</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/Connection" data-name="rosegold::spectate::connection">
+      <a href="../Rosegold/Spectate/Connection.html">Connection</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/Handshake" data-name="rosegold::spectate::handshake">
+      <a href="../Rosegold/Spectate/Handshake.html">Handshake</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/Lobby" data-name="rosegold::spectate::lobby">
+      <a href="../Rosegold/Spectate/Lobby.html">Lobby</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/Monitoring" data-name="rosegold::spectate::monitoring">
+      <a href="../Rosegold/Spectate/Monitoring.html">Monitoring</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/MonitorState" data-name="rosegold::spectate::monitorstate">
+      <a href="../Rosegold/Spectate/MonitorState.html">MonitorState</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/PacketRelay" data-name="rosegold::spectate::packetrelay">
+      <a href="../Rosegold/Spectate/PacketRelay.html">PacketRelay</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/PlaySession" data-name="rosegold::spectate::playsession">
+      <a href="../Rosegold/Spectate/PlaySession.html">PlaySession</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/Server" data-name="rosegold::spectate::server">
+      <a href="../Rosegold/Spectate/Server.html">Server</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/State" data-name="rosegold::spectate::state">
+      <a href="../Rosegold/Spectate/State.html">State</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/WorldSync" data-name="rosegold::spectate::worldsync">
+      <a href="../Rosegold/Spectate/WorldSync.html">WorldSync</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/SpectateConnection" data-name="rosegold::spectateconnection">
       <a href="../Rosegold/SpectateConnection.html">SpectateConnection</a>
       
@@ -2187,58 +2257,26 @@
 <h1 class="type-name">
 
   <span class="kind">
-    class
+    alias
   </span> Rosegold::<wbr>SpectateServer
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Rosegold/SpectateServer.html">Rosegold::SpectateServer</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
 
 
 
 
   <h2>
-    <a id="overview" class="anchor" href="#overview">
+    <a id="alias-definition" class="anchor" href="#alias-definition">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Overview
+    Alias Definition
   </h2>
-
-  <p>A spectate server that allows Minecraft clients to connect and observe the bot's gameplay in real-time.
-Provides a &quot;headless with headful feel&quot; experience by forwarding packets, synchronizing world state,
-and replicating the bot's perspective including inventory, position, chunk data, and player interactions.</p>
-<p><strong>Note:</strong> This is in early development and not perfect. It provides essential functionality for debugging
-complex headless bots by allowing visual inspection of their behavior, but may have visual glitches,
-missing features, or synchronization issues.</p>
-<h2><a id="usage-example" class="anchor" href="#usage-example">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Usage Example</h2>
-<pre><code class="language-crystal"><span class="c"># Initialize and start the spectate server</span>
-spectate_server <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">SpectateServer</span>.new(<span class="s">&quot;127.0.0.1&quot;</span>, <span class="n">25566</span>)
-spectate_server.start
-
-<span class="c"># Create and attach a Rosegold client to the spectate server</span>
-client <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Client</span>.new(<span class="s">&quot;play.example.com&quot;</span>)
-spectate_server.attach_client(client)
-
-bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.new(client)
-bot.join_game
-
-<span class="c"># Now Minecraft clients can connect to localhost:25566 to spectate the bot</span>
-<span class="c"># The spectator will see everything the bot sees: world, inventory, entities, etc.</span>
-
-<span class="c"># You would do bot logic after joining the game, e.g.:</span>
-bot.move_to <span class="n">10</span>, <span class="n">10</span>
-
-<span class="c"># To stop the spectate server prematurely:</span>
-spectate_server.stop</code></pre>
-
-
+  <code><a href="../Rosegold/Spectate/Server.html">Rosegold::Spectate::Server</a></code>
 
 
 
@@ -2263,7 +2301,7 @@ spectate_server.stop</code></pre>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L42" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/2eb2e903e5cb1e1dcaa76e3d3950b7e18a373873/src/rosegold/spectate_server.cr#L6" target="_blank">
         rosegold/spectate_server.cr
       </a>
     
@@ -2272,601 +2310,28 @@ spectate_server.stop</code></pre>
 
 
 
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-      Constant Summary
-    </h2>
-  
-  <dl>
-    
-      <dt class="entry-const" id="BOT_MONITOR_INTERVAL">
-        <strong>BOT_MONITOR_INTERVAL</strong> = <code><span class="n">50</span>.milliseconds</code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="DEFAULT_RENDER_DISTANCE">
-        <strong>DEFAULT_RENDER_DISTANCE</strong> = <code><span class="n">4</span></code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="DEFAULT_SIMULATION_DISTANCE">
-        <strong>DEFAULT_SIMULATION_DISTANCE</strong> = <code><span class="n">3_u32</span></code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="DEFAULT_SPECTATOR_ENTITY_ID">
-        <strong>DEFAULT_SPECTATOR_ENTITY_ID</strong> = <code><span class="n">2147483647</span></code>
-      </dt>
-      
-      <dd class="entry-const-doc">
-        <p>Configuration constants</p>
-      </dd>
-      
-    
-      <dt class="entry-const" id="DEFAULT_VIEW_DISTANCE">
-        <strong>DEFAULT_VIEW_DISTANCE</strong> = <code><span class="n">10_u32</span></code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="INVENTORY_POLL_INTERVAL">
-        <strong>INVENTORY_POLL_INTERVAL</strong> = <code><span class="n">1</span>.second</code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="KEEP_ALIVE_INTERVAL">
-        <strong>KEEP_ALIVE_INTERVAL</strong> = <code><span class="n">20</span>.seconds</code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="Log">
-        <strong>Log</strong> = <code><span class="t">::</span><span class="t">Log</span>.<span class="k">for</span>(<span class="k">self</span>)</code>
-      </dt>
-      
-    
-      <dt class="entry-const" id="UNIMPLEMENTED_FORWARDED">
-        <strong>UNIMPLEMENTED_FORWARDED</strong> = <code>{<span class="s">&quot;set_entity_motion&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">94_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">99_u32</span>}, <span class="s">&quot;set_entity_data&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">92_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">97_u32</span>}, <span class="s">&quot;sound&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">110_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">115_u32</span>}, <span class="s">&quot;update_attributes&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">124_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">129_u32</span>}}</code>
-      </dt>
-      
-      <dd class="entry-const-doc">
-        <p>Packets without a Crystal class that we still forward by raw ID</p>
-      </dd>
-      
-    
-  </dl>
-
 
 
   
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28host%3AString%3D%22127.0.0.1%22%2Cport%3AInt32%3D25566%29-class-method" class="signature"><strong>.new</strong>(host : String = <span class="s">&quot;127.0.0.1&quot;</span>, port : Int32 = <span class="n">25566</span>)</a>
-        
-          <div class="summary"><p>Creates a new SpectateServer.</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#forwarded_packets%28protocol%3AUInt32%29%3AHash%28UInt32%2CString%29-class-method" class="signature"><strong>.forwarded_packets</strong>(protocol : UInt32) : Hash(UInt32, String)</a>
-        
-      </li>
-    
-  </ul>
-
 
   
-  <h2>
-    <a id="macro-summary" class="anchor" href="#macro-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Macro Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#build_forwarded_packets_method-macro" class="signature"><strong>build_forwarded_packets_method</strong></a>
-        
-          <div class="summary"><p>Build forwarded packet map at compile time to avoid runtime union types</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#attach_client%28client%3ARosegold%3A%3AClient%29-instance-method" class="signature"><strong>#attach_client</strong>(client : Rosegold::Client)</a>
-        
-          <div class="summary"><p>Attaches a Rosegold client so spectators can observe its gameplay.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#client%3ARosegold%3A%3AClient%7CNil-instance-method" class="signature"><strong>#client</strong> : Rosegold::Client | Nil</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#client%3D%28client%3ARosegold%3A%3AClient%7CNil%29-instance-method" class="signature"><strong>#client=</strong>(client : Rosegold::Client | Nil)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#connections%3AArray%28Rosegold%3A%3ASpectateConnection%29-instance-method" class="signature"><strong>#connections</strong> : Array(Rosegold::SpectateConnection)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#connections%3D%28connections%3AArray%28Rosegold%3A%3ASpectateConnection%29%29-instance-method" class="signature"><strong>#connections=</strong>(connections : Array(Rosegold::SpectateConnection))</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#detach_client-instance-method" class="signature"><strong>#detach_client</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#host%3AString-instance-method" class="signature"><strong>#host</strong> : String</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#host%3D%28host%3AString%29-instance-method" class="signature"><strong>#host=</strong>(host : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#port%3AInt32-instance-method" class="signature"><strong>#port</strong> : Int32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#port%3D%28port%3AInt32%29-instance-method" class="signature"><strong>#port=</strong>(port : Int32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#server%3ATCPServer%7CNil-instance-method" class="signature"><strong>#server</strong> : TCPServer | Nil</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#server%3D%28server%3ATCPServer%7CNil%29-instance-method" class="signature"><strong>#server=</strong>(server : TCPServer | Nil)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#start-instance-method" class="signature"><strong>#start</strong></a>
-        
-          <div class="summary"><p>Starts the spectate server and begins listening for connections.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#stop-instance-method" class="signature"><strong>#stop</strong></a>
-        
-      </li>
-    
-  </ul>
-
 
 
   <div class="methods-inherited">
     
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(host:String=&quot;127.0.0.1&quot;,port:Int32=25566)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(host : String = <span class="s">&quot;127.0.0.1&quot;</span>, port : <a href="../Int32.html">Int32</a> = <span class="n">25566</span>)
-
-        <a class="method-permalink" href="#new%28host%3AString%3D%22127.0.0.1%22%2Cport%3AInt32%3D25566%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new SpectateServer.</p>
-<ul>
-<li><code><a href="../Rosegold/SpectateServer.html#host%3AString-instance-method">#host</a></code>: IP address to bind to (default: &quot;127.0.0.1&quot;)</li>
-<li><code><a href="../Rosegold/SpectateServer.html#port%3AInt32-instance-method">#port</a></code>: Port to listen on (default: 25566)</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L113" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="forwarded_packets(protocol:UInt32):Hash(UInt32,String)-class-method">
-      <div class="signature">
-        
-        def self.<strong>forwarded_packets</strong>(protocol : UInt32) : Hash(UInt32, String)
-
-        <a class="method-permalink" href="#forwarded_packets%28protocol%3AUInt32%29%3AHash%28UInt32%2CString%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L99" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
-  <h2>
-    <a id="macro-detail" class="anchor" href="#macro-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Macro Detail
-  </h2>
-  
-    <div class="entry-detail" id="build_forwarded_packets_method-macro">
-      <div class="signature">
-        
-        macro <strong>build_forwarded_packets_method</strong>
-
-        <a class="method-permalink" href="#build_forwarded_packets_method-macro">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Build forwarded packet map at compile time to avoid runtime union types</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L61" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="attach_client(client:Rosegold::Client)-instance-method">
-      <div class="signature">
-        
-        def <strong>attach_client</strong>(client : <a href="../Rosegold/Client.html">Rosegold::Client</a>)
-
-        <a class="method-permalink" href="#attach_client%28client%3ARosegold%3A%3AClient%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Attaches a Rosegold client so spectators can observe its gameplay.
-Only one client can be attached at a time.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L156" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="client:Rosegold::Client|Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>client</strong> : <a href="../Rosegold/Client.html">Rosegold::Client</a> | Nil
-
-        <a class="method-permalink" href="#client%3ARosegold%3A%3AClient%7CNil-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L105" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="client=(client:Rosegold::Client|Nil)-instance-method">
-      <div class="signature">
-        
-        def <strong>client=</strong>(client : <a href="../Rosegold/Client.html">Rosegold::Client</a> | Nil)
-
-        <a class="method-permalink" href="#client%3D%28client%3ARosegold%3A%3AClient%7CNil%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L105" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="connections:Array(Rosegold::SpectateConnection)-instance-method">
-      <div class="signature">
-        
-        def <strong>connections</strong> : Array(<a href="../Rosegold/SpectateConnection.html">Rosegold::SpectateConnection</a>)
-
-        <a class="method-permalink" href="#connections%3AArray%28Rosegold%3A%3ASpectateConnection%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L107" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="connections=(connections:Array(Rosegold::SpectateConnection))-instance-method">
-      <div class="signature">
-        
-        def <strong>connections=</strong>(connections : Array(<a href="../Rosegold/SpectateConnection.html">Rosegold::SpectateConnection</a>))
-
-        <a class="method-permalink" href="#connections%3D%28connections%3AArray%28Rosegold%3A%3ASpectateConnection%29%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L107" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="detach_client-instance-method">
-      <div class="signature">
-        
-        def <strong>detach_client</strong>
-
-        <a class="method-permalink" href="#detach_client-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L160" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="host:String-instance-method">
-      <div class="signature">
-        
-        def <strong>host</strong> : String
-
-        <a class="method-permalink" href="#host%3AString-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L103" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="host=(host:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>host=</strong>(host : String)
-
-        <a class="method-permalink" href="#host%3D%28host%3AString%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L103" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="port:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>port</strong> : <a href="../Int32.html">Int32</a>
-
-        <a class="method-permalink" href="#port%3AInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L104" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="port=(port:Int32)-instance-method">
-      <div class="signature">
-        
-        def <strong>port=</strong>(port : <a href="../Int32.html">Int32</a>)
-
-        <a class="method-permalink" href="#port%3D%28port%3AInt32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L104" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="server:TCPServer|Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>server</strong> : TCPServer | Nil
-
-        <a class="method-permalink" href="#server%3ATCPServer%7CNil-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L106" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="server=(server:TCPServer|Nil)-instance-method">
-      <div class="signature">
-        
-        def <strong>server=</strong>(server : TCPServer | Nil)
-
-        <a class="method-permalink" href="#server%3D%28server%3ATCPServer%7CNil%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L106" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="start-instance-method">
-      <div class="signature">
-        
-        def <strong>start</strong>
-
-        <a class="method-permalink" href="#start-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Starts the spectate server and begins listening for connections.
-Spawns a fiber to handle connections asynchronously.
-Multiple spectators can connect simultaneously.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L119" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="stop-instance-method">
-      <div class="signature">
-        
-        def <strong>stop</strong>
-
-        <a class="method-permalink" href="#stop-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/25b865fc928dee2e690c2ad24b7b3fbceb75c084/src/rosegold/spectate_server.cr#L148" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
 
 </div>
