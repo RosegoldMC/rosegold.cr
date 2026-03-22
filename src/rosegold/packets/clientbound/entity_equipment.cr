@@ -21,6 +21,33 @@ class Rosegold::Clientbound::EntityEquipment < Rosegold::Clientbound::Packet
 
   def initialize(@entity_id); end
 
+  def self.read(packet)
+    entity_id = packet.read_var_int.to_i32
+    equipment = self.new(entity_id)
+    loop do
+      raw_slot = packet.read_byte
+      slot_index = raw_slot & 0x7F
+      has_next = (raw_slot & 0x80) != 0
+      begin
+        item = Slot.read(packet)
+      rescue ex : UnknownComponentError
+        Log.warn { "#{ex.message} in EntityEquipment (entity #{entity_id}, slot #{slot_index})" }
+        item = Slot.new
+      end
+      case slot_index
+      when 0 then equipment.main_hand = item
+      when 1 then equipment.off_hand = item
+      when 2 then equipment.boots = item
+      when 3 then equipment.leggings = item
+      when 4 then equipment.chestplate = item
+      when 5 then equipment.helmet = item
+      else        Log.debug { "Ignoring equipment slot #{slot_index} for entity #{entity_id}" }
+      end
+      break unless has_next
+    end
+    equipment
+  end
+
   def valid?
     slots = [main_hand, off_hand, boots, leggings, chestplate, helmet]
       .select &.try &.present?
