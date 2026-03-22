@@ -137,6 +137,7 @@ class Rosegold::Clientbound::Login < Rosegold::Clientbound::Packet
     # Set dimension based on dimension_name
     # TODO: set dimension based on dimension_type via registry
     client.dimension = Dimension.for_dimension_name(dimension_name)
+    client.dimension.dimension_type = dimension_type
 
     Log.debug { "Ingame. #{dimension_name} gamemode=#{gamemode} entity_id=#{entity_id}" }
   end

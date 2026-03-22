@@ -31,6 +31,8 @@ class Rosegold::Clientbound::SetTime < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    client.dimension.time_of_day = time_of_day
+    client.dimension.world_age = world_age
     Log.debug { "SetTime: world_age=#{world_age}, time_of_day=#{time_of_day}, tick_day_time=#{tick_day_time}" }
   end
 end

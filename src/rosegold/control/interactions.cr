@@ -13,11 +13,11 @@ class Rosegold::Interactions
   @using_hand = nil
   @queue_using_hand = nil
   @using_hand_delay = 0_i32
-  @digging_block : ReachedBlock?
+  getter digging_block : ReachedBlock?
   @dig_hand_swing_countdown = 0_i8
   @attack_queued = false
   @digging = false
-  @block_damage_progress = 0_f32
+  getter block_damage_progress = 0_f32
   @last_tick_held_item : Slot = Slot.new
   @sent_held_item_index : UInt32?
 
@@ -88,6 +88,7 @@ class Rosegold::Interactions
     when Entity
       send_packet Serverbound::InteractEntity.new reached.entity_id, :attack
       send_packet Serverbound::SwingArm.new
+      client.emit_event Event::ArmSwing.new
     when ReachedBlock
       start_digging reached
     end
@@ -144,6 +145,7 @@ class Rosegold::Interactions
       if @dig_hand_swing_countdown <= 0
         @dig_hand_swing_countdown = 6
         send_packet Serverbound::SwingArm.new
+        client.emit_event Event::ArmSwing.new
       end
     end
   end
@@ -202,6 +204,7 @@ class Rosegold::Interactions
     send_packet Serverbound::PlayerBlockPlacement.new \
       hand, reached.block, reached.face, cursor, inside_block, sequence
     send_packet Serverbound::SwingArm.new hand
+    client.emit_event Event::ArmSwing.new(hand)
   end
 
   private def start_digging(reached : ReachedBlock)
@@ -215,6 +218,7 @@ class Rosegold::Interactions
     send_packet Serverbound::PlayerAction.new \
       :start, reached.block, reached.face, sequence
     send_packet Serverbound::SwingArm.new
+    client.emit_event Event::ArmSwing.new
   end
 
   private def finish_digging
