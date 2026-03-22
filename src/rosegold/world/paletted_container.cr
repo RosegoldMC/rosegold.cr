@@ -8,6 +8,7 @@ class Rosegold::PalettedContainer
   private alias Long = UInt64
 
   getter size : Index
+  private getter num_bits_direct : UInt8
   private getter bits_per_entry : UInt8
   private getter entries_per_long : UInt8
   private getter entry_mask : Long
@@ -17,11 +18,11 @@ class Rosegold::PalettedContainer
   # TODO read+write lock
 
   # Creates a container filled with air/default values (ID 0)
-  def self.air_filled(size : Index) : PalettedContainer
-    new(size: size, empty: true)
+  def self.air_filled(size : Index, num_bits_direct : UInt8 = 9_u8) : PalettedContainer
+    new(size: size, num_bits_direct: num_bits_direct, empty: true)
   end
 
-  def initialize(size : Index, empty : Bool)
+  def initialize(size : Index, @num_bits_direct : UInt8, empty : Bool)
     @size = size
     @bits_per_entry = 0_u8 # single state mode
     @palette = [0_u16]     # air block/biome (ID 0)
@@ -31,6 +32,7 @@ class Rosegold::PalettedContainer
   end
 
   def initialize(io : Minecraft::IO, num_bits_direct, @size)
+    @num_bits_direct = num_bits_direct.to_u8
     @bits_per_entry = io.read_byte
     if bits_per_entry == 0 # single state mode
       @palette = [io.read_var_int.to_u16]
@@ -128,7 +130,10 @@ class Rosegold::PalettedContainer
   end
 
   private def grow_from_single_state : Nil
-    @bits_per_entry = 4_u8
+    # Java clamps blocks (num_bits_direct=9) to min 4 bits.
+    # Biomes (num_bits_direct=4) must use fewer bits to stay in indirect mode,
+    # otherwise bits_per_entry >= num_bits_direct triggers direct mode on re-read.
+    @bits_per_entry = num_bits_direct > 4 ? 4_u8 : 1_u8
     @entries_per_long = 64_u8 // bits_per_entry
     @entry_mask = (1_u64 << bits_per_entry) - 1
     num_longs = (size + entries_per_long - 1) // entries_per_long
@@ -138,26 +143,27 @@ class Rosegold::PalettedContainer
 
   private def grow_palette : Nil
     new_bits_per_entry = bits_per_entry + 1
+
+    if new_bits_per_entry >= num_bits_direct
+      transition_to_direct_mode
+      return
+    end
+
     new_entries_per_long = 64_u8 // new_bits_per_entry
     new_entry_mask = (1_u64 << new_bits_per_entry) - 1
     new_num_longs = (size + new_entries_per_long - 1) // new_entries_per_long
     new_long_array = Array(Long).new(new_num_longs, 0_u64)
 
-    # Java copyFrom implementation: iterate through the actual storage size (which is always `size`)
-    # and use the accessor methods to handle bit manipulation
     (0_u32...size).each do |i|
-      # Get the encoded value using our current accessor (which handles the bit manipulation)
-      # Note: we can't use self[i] because that returns the decoded value if the palette is in effect
       old_long_index = i // entries_per_long
-      break if old_long_index >= long_array.size # Safety check
+      break if old_long_index >= long_array.size
 
       old_bit_offset_in_long = (i % entries_per_long) * bits_per_entry
       encoded_value = long_array[old_long_index] >> old_bit_offset_in_long
       encoded_value = (encoded_value & entry_mask).to_u16
 
-      # Store in new array using similar bit manipulation
       new_long_index = i // new_entries_per_long
-      break if new_long_index >= new_long_array.size # Safety check
+      break if new_long_index >= new_long_array.size
 
       new_bit_offset_in_long = (i % new_entries_per_long) * new_bits_per_entry
       new_long_array[new_long_index] |= (encoded_value.to_u64 & new_entry_mask) << new_bit_offset_in_long
@@ -167,5 +173,34 @@ class Rosegold::PalettedContainer
     @entries_per_long = new_entries_per_long
     @entry_mask = new_entry_mask
     @long_array = new_long_array
+  end
+
+  private def transition_to_direct_mode : Nil
+    new_bits_per_entry = num_bits_direct
+    new_entries_per_long = 64_u8 // new_bits_per_entry
+    new_entry_mask = (1_u64 << new_bits_per_entry) - 1
+    new_num_longs = (size + new_entries_per_long - 1) // new_entries_per_long
+    new_long_array = Array(Long).new(new_num_longs, 0_u64)
+
+    (0_u32...size).each do |i|
+      old_long_index = i // entries_per_long
+      break if old_long_index >= long_array.size
+
+      old_bit_offset = (i % entries_per_long) * bits_per_entry
+      palette_index = ((long_array[old_long_index] >> old_bit_offset) & entry_mask).to_u16
+      actual_value = palette_index < palette.size ? palette[palette_index] : 0_u16
+
+      new_long_index = i // new_entries_per_long
+      break if new_long_index >= new_long_array.size
+
+      new_bit_offset = (i % new_entries_per_long) * new_bits_per_entry
+      new_long_array[new_long_index] |= (actual_value.to_u64 & new_entry_mask) << new_bit_offset
+    end
+
+    @bits_per_entry = new_bits_per_entry
+    @entries_per_long = new_entries_per_long
+    @entry_mask = new_entry_mask
+    @long_array = new_long_array
+    @palette = [] of Entry
   end
 end

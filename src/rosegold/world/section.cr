@@ -22,8 +22,8 @@ class Rosegold::Section
 
   def initialize(empty : Bool)
     @block_count = 0_i16
-    @blocks = PalettedContainer.air_filled(4096)
-    @biomes = PalettedContainer.air_filled(64)
+    @blocks = PalettedContainer.air_filled(4096, 9_u8)
+    @biomes = PalettedContainer.air_filled(64, 4_u8)
   end
 
   def write(io)
