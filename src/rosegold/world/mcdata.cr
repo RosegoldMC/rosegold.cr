@@ -32,6 +32,9 @@ class Rosegold::MCData
   # block state nr -> "oak_slab[type=top, waterlogged=true]"
   getter block_state_names : Array(String)
 
+  # Set of block state IDs that are air (air, cave_air, void_air)
+  getter air_states : Set(UInt16)
+
   # block state nr -> array of AABBs that combine to make up that block state shape
   # TODO: more compact memory layout: only store one Shape if it's the same for all variants of a block
   getter block_state_collision_shapes : Array(Array(AABBf))
@@ -74,6 +77,13 @@ class Rosegold::MCData
     block_collision_shapes_json = BlockCollisionShapes.from_json(collision_shapes_json)
 
     max_block_state = blocks.flat_map(&.max_state_id).max
+
+    @air_states = Set(UInt16).new
+    blocks.each do |block|
+      if block.id_str.in?("air", "cave_air", "void_air")
+        (block.min_state_id..block.max_state_id).each { |state| @air_states << state }
+      end
+    end
 
     @block_state_names = Array(String).new(max_block_state + 1, "")
     blocks.each do |block|

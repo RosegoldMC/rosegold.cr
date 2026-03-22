@@ -40,11 +40,12 @@ class Rosegold::Section
     previous_state = @blocks[index]
     @blocks[index] = block_state
 
-    # Update block count based on air transitions (0 = air)
-    if previous_state != 0_u16 # was not air
+    # Update block count based on air transitions (air, cave_air, void_air)
+    air_states = MCData.default.air_states
+    if !air_states.includes?(previous_state) # was not air
       @block_count -= 1
     end
-    if block_state != 0_u16 # is not air
+    if !air_states.includes?(block_state) # is not air
       @block_count += 1
     end
 

@@ -41,7 +41,7 @@ class Rosegold::Chunk
     section = sections[section_index]
 
     # Java client optimization: if setting air to air in an air-only section, return nil
-    if section.has_only_air? && block_state == 0_u16
+    if section.has_only_air? && MCData.default.air_states.includes?(block_state)
       return nil
     end
 
