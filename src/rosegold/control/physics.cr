@@ -768,8 +768,7 @@ class Rosegold::Physics
     velocity
   end
 
-  # Returns all block collision boxes that may intersect `entity_aabb` during the movement from `start` by `vec`,
-  # including boxes 0.5m higher for stepping.
+  # Returns all block collision boxes that may intersect `entity_aabb` during the movement from `start` by `vec`.
   # `entity_aabb` is at 0,0,0; the returned AABBs are grown by `entity_aabb` so collision checks are just raytracing.
   def self.get_grown_obstacles(
     start : Vec3d, movement : Vec3d, entity_aabb : AABBf, dimension : Dimension,
