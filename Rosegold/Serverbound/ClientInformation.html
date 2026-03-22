@@ -2307,7 +2307,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L3" target="_blank">
         rosegold/packets/serverbound/client_information.cr
       </a>
     
@@ -2353,7 +2353,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28locale%3AString%3D%22en_US%22%2Cview_distance%3AUInt8%3D10_u8%2Cchat_mode%3AUInt8%3D0_u8%2Cchat_colors%3ABool%3Dtrue%2Cdisplayed_skin_parts%3AUInt8%3D127_u8%2Cmain_hand%3AUInt8%3D1_u8%2Cenable_text_filtering%3ABool%3Dfalse%2Callow_server_listings%3ABool%3Dtrue%29-class-method" class="signature"><strong>.new</strong>(locale : String = <span class="s">&quot;en_US&quot;</span>, view_distance : UInt8 = <span class="n">10_u8</span>, chat_mode : UInt8 = <span class="n">0_u8</span>, chat_colors : Bool = <span class="n">true</span>, displayed_skin_parts : UInt8 = <span class="n">127_u8</span>, main_hand : UInt8 = <span class="n">1_u8</span>, enable_text_filtering : Bool = <span class="n">false</span>, allow_server_listings : Bool = <span class="n">true</span>)</a>
+        <a href="#new%28locale%3AString%3D%22en_US%22%2Cview_distance%3AUInt8%3D10_u8%2Cchat_mode%3AUInt32%3D0_u32%2Cchat_colors%3ABool%3Dtrue%2Cdisplayed_skin_parts%3AUInt8%3D127_u8%2Cmain_hand%3AUInt32%3D1_u32%2Cenable_text_filtering%3ABool%3Dfalse%2Callow_server_listings%3ABool%3Dtrue%2Cparticle_status%3AUInt32%3D0_u32%29-class-method" class="signature"><strong>.new</strong>(locale : String = <span class="s">&quot;en_US&quot;</span>, view_distance : UInt8 = <span class="n">10_u8</span>, chat_mode : UInt32 = <span class="n">0_u32</span>, chat_colors : Bool = <span class="n">true</span>, displayed_skin_parts : UInt8 = <span class="n">127_u8</span>, main_hand : UInt32 = <span class="n">1_u32</span>, enable_text_filtering : Bool = <span class="n">false</span>, allow_server_listings : Bool = <span class="n">true</span>, particle_status : UInt32 = <span class="n">0_u32</span>)</a>
         
       </li>
     
@@ -2460,12 +2460,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#chat_mode%3AUInt8-instance-method" class="signature"><strong>#chat_mode</strong> : UInt8</a>
+        <a href="#chat_mode%3AUInt32-instance-method" class="signature"><strong>#chat_mode</strong> : UInt32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#chat_mode%3D%28chat_mode%3AUInt8%29-instance-method" class="signature"><strong>#chat_mode=</strong>(chat_mode : UInt8)</a>
+        <a href="#chat_mode%3D%28chat_mode%3AUInt32%29-instance-method" class="signature"><strong>#chat_mode=</strong>(chat_mode : UInt32)</a>
         
       </li>
     
@@ -2500,12 +2500,22 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#main_hand%3AUInt8-instance-method" class="signature"><strong>#main_hand</strong> : UInt8</a>
+        <a href="#main_hand%3AUInt32-instance-method" class="signature"><strong>#main_hand</strong> : UInt32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#main_hand%3D%28main_hand%3AUInt8%29-instance-method" class="signature"><strong>#main_hand=</strong>(main_hand : UInt8)</a>
+        <a href="#main_hand%3D%28main_hand%3AUInt32%29-instance-method" class="signature"><strong>#main_hand=</strong>(main_hand : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#particle_status%3AUInt32-instance-method" class="signature"><strong>#particle_status</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#particle_status%3D%28particle_status%3AUInt32%29-instance-method" class="signature"><strong>#particle_status=</strong>(particle_status : UInt32)</a>
         
       </li>
     
@@ -2662,18 +2672,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(locale:String=&quot;en_US&quot;,view_distance:UInt8=10_u8,chat_mode:UInt8=0_u8,chat_colors:Bool=true,displayed_skin_parts:UInt8=127_u8,main_hand:UInt8=1_u8,enable_text_filtering:Bool=false,allow_server_listings:Bool=true)-class-method">
+    <div class="entry-detail" id="new(locale:String=&quot;en_US&quot;,view_distance:UInt8=10_u8,chat_mode:UInt32=0_u32,chat_colors:Bool=true,displayed_skin_parts:UInt8=127_u8,main_hand:UInt32=1_u32,enable_text_filtering:Bool=false,allow_server_listings:Bool=true,particle_status:UInt32=0_u32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(locale : String = <span class="s">&quot;en_US&quot;</span>, view_distance : UInt8 = <span class="n">10_u8</span>, chat_mode : UInt8 = <span class="n">0_u8</span>, chat_colors : Bool = <span class="n">true</span>, displayed_skin_parts : UInt8 = <span class="n">127_u8</span>, main_hand : UInt8 = <span class="n">1_u8</span>, enable_text_filtering : Bool = <span class="n">false</span>, allow_server_listings : Bool = <span class="n">true</span>)
+        def self.<strong>new</strong>(locale : String = <span class="s">&quot;en_US&quot;</span>, view_distance : UInt8 = <span class="n">10_u8</span>, chat_mode : UInt32 = <span class="n">0_u32</span>, chat_colors : Bool = <span class="n">true</span>, displayed_skin_parts : UInt8 = <span class="n">127_u8</span>, main_hand : UInt32 = <span class="n">1_u32</span>, enable_text_filtering : Bool = <span class="n">false</span>, allow_server_listings : Bool = <span class="n">true</span>, particle_status : UInt32 = <span class="n">0_u32</span>)
 
-        <a class="method-permalink" href="#new%28locale%3AString%3D%22en_US%22%2Cview_distance%3AUInt8%3D10_u8%2Cchat_mode%3AUInt8%3D0_u8%2Cchat_colors%3ABool%3Dtrue%2Cdisplayed_skin_parts%3AUInt8%3D127_u8%2Cmain_hand%3AUInt8%3D1_u8%2Cenable_text_filtering%3ABool%3Dfalse%2Callow_server_listings%3ABool%3Dtrue%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28locale%3AString%3D%22en_US%22%2Cview_distance%3AUInt8%3D10_u8%2Cchat_mode%3AUInt32%3D0_u32%2Cchat_colors%3ABool%3Dtrue%2Cdisplayed_skin_parts%3AUInt8%3D127_u8%2Cmain_hand%3AUInt32%3D1_u32%2Cenable_text_filtering%3ABool%3Dfalse%2Callow_server_listings%3ABool%3Dtrue%2Cparticle_status%3AUInt32%3D0_u32%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2706,7 +2716,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2727,7 +2737,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2768,7 +2778,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2784,7 +2794,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2800,7 +2810,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2821,7 +2831,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2842,7 +2852,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2872,7 +2882,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2888,7 +2898,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2904,7 +2914,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2920,39 +2930,39 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="chat_mode:UInt8-instance-method">
+    <div class="entry-detail" id="chat_mode:UInt32-instance-method">
       <div class="signature">
         
-        def <strong>chat_mode</strong> : UInt8
+        def <strong>chat_mode</strong> : UInt32
 
-        <a class="method-permalink" href="#chat_mode%3AUInt8-instance-method">#</a>
+        <a class="method-permalink" href="#chat_mode%3AUInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="chat_mode=(chat_mode:UInt8)-instance-method">
+    <div class="entry-detail" id="chat_mode=(chat_mode:UInt32)-instance-method">
       <div class="signature">
         
-        def <strong>chat_mode=</strong>(chat_mode : UInt8)
+        def <strong>chat_mode=</strong>(chat_mode : UInt32)
 
-        <a class="method-permalink" href="#chat_mode%3D%28chat_mode%3AUInt8%29-instance-method">#</a>
+        <a class="method-permalink" href="#chat_mode%3D%28chat_mode%3AUInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2968,7 +2978,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2984,7 +2994,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3000,7 +3010,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3016,7 +3026,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3032,7 +3042,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3048,39 +3058,71 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="main_hand:UInt8-instance-method">
+    <div class="entry-detail" id="main_hand:UInt32-instance-method">
       <div class="signature">
         
-        def <strong>main_hand</strong> : UInt8
+        def <strong>main_hand</strong> : UInt32
 
-        <a class="method-permalink" href="#main_hand%3AUInt8-instance-method">#</a>
+        <a class="method-permalink" href="#main_hand%3AUInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="main_hand=(main_hand:UInt8)-instance-method">
+    <div class="entry-detail" id="main_hand=(main_hand:UInt32)-instance-method">
       <div class="signature">
         
-        def <strong>main_hand=</strong>(main_hand : UInt8)
+        def <strong>main_hand=</strong>(main_hand : UInt32)
 
-        <a class="method-permalink" href="#main_hand%3D%28main_hand%3AUInt8%29-instance-method">#</a>
+        <a class="method-permalink" href="#main_hand%3D%28main_hand%3AUInt32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="particle_status:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>particle_status</strong> : UInt32
+
+        <a class="method-permalink" href="#particle_status%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="particle_status=(particle_status:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>particle_status=</strong>(particle_status : UInt32)
+
+        <a class="method-permalink" href="#particle_status%3D%28particle_status%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3096,7 +3138,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3112,7 +3154,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3128,7 +3170,7 @@ Use the first protocol's packet ID for registration compatibility</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bf7a8a72a8334ecefc28529de895f3947db1dc79/src/rosegold/packets/serverbound/client_information.cr#L42" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6e8ed3445c3c45535861adf04d71715b933b9806/src/rosegold/packets/serverbound/client_information.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
