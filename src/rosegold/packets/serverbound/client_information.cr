@@ -13,30 +13,33 @@ class Rosegold::Serverbound::ClientInformation < Rosegold::Serverbound::Packet
   property \
     locale : String,
     view_distance : UInt8,
-    chat_mode : UInt8,
+    chat_mode : UInt32,
     chat_colors : Bool,
     displayed_skin_parts : UInt8,
-    main_hand : UInt8,
+    main_hand : UInt32,
     enable_text_filtering : Bool,
-    allow_server_listings : Bool
+    allow_server_listings : Bool,
+    particle_status : UInt32
 
-  def initialize(@locale = "en_US", @view_distance = 10_u8, @chat_mode = 0_u8,
-                 @chat_colors = true, @displayed_skin_parts = 0x7F_u8, @main_hand = 1_u8,
-                 @enable_text_filtering = false, @allow_server_listings = true)
+  def initialize(@locale = "en_US", @view_distance = 10_u8, @chat_mode = 0_u32,
+                 @chat_colors = true, @displayed_skin_parts = 0x7F_u8, @main_hand = 1_u32,
+                 @enable_text_filtering = false, @allow_server_listings = true,
+                 @particle_status = 0_u32)
   end
 
   def self.read(packet)
     locale = packet.read_var_string
     view_distance = packet.read_byte || 0_u8
-    chat_mode = packet.read_byte || 0_u8
+    chat_mode = packet.read_var_int
     chat_colors = packet.read_bool
     displayed_skin_parts = packet.read_byte || 0_u8
-    main_hand = packet.read_byte || 0_u8
+    main_hand = packet.read_var_int
     enable_text_filtering = packet.read_bool
     allow_server_listings = packet.read_bool
+    particle_status = packet.read_var_int
 
     self.new(locale, view_distance, chat_mode, chat_colors, displayed_skin_parts,
-      main_hand, enable_text_filtering, allow_server_listings)
+      main_hand, enable_text_filtering, allow_server_listings, particle_status)
   end
 
   def write : Bytes
@@ -50,6 +53,7 @@ class Rosegold::Serverbound::ClientInformation < Rosegold::Serverbound::Packet
       buffer.write main_hand
       buffer.write enable_text_filtering
       buffer.write allow_server_listings
+      buffer.write particle_status
     end.to_slice
   end
 end
