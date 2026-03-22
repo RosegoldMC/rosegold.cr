@@ -129,11 +129,11 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   # Calculate tick interval based on current tick rate
+  # Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMillis)
   def tick_interval : Time::Span
-    # Convert TPS to milliseconds per tick
-    # 20 TPS = 50ms per tick, so: 1000ms / tick_rate
-    millis_per_tick = (1000.0 / @tick_rate).to_i
-    millis_per_tick.milliseconds
+    rate = @tick_rate > 0 ? @tick_rate : 20.0_f32
+    millis_per_tick = (1000.0 / rate).to_i
+    {millis_per_tick.milliseconds, 50.milliseconds}.max
   end
 
   def average_millis_per_chunk : Float64
@@ -226,29 +226,25 @@ class Rosegold::Client < Rosegold::EventEmitter
   def start_ticker
     @ticker_done = Channel(Nil).new
     spawn do
-      target_interval_ns = 50_000_000_u64
-      tick_counter = 0_u64
-
-      start_time = Time.instant
+      next_tick_time = Time.instant
 
       loop do
         break unless connected?
 
-        target_elapsed_ns = tick_counter * target_interval_ns
-        current_elapsed_ns = (Time.instant - start_time).total_nanoseconds.to_u64
+        next_tick_time = {next_tick_time + tick_interval, Time.instant}.max
 
-        if current_elapsed_ns < target_elapsed_ns
-          sleep_ns = target_elapsed_ns - current_elapsed_ns
+        if Time.instant < next_tick_time
+          remaining_ns = (next_tick_time - Time.instant).total_nanoseconds.to_i64
 
-          if sleep_ns > 1_000_000
-            rough_sleep_ns = sleep_ns - 500_000
-            sleep Time::Span.new(nanoseconds: rough_sleep_ns.to_i64)
+          if remaining_ns > 1_000_000
+            rough_sleep_ns = remaining_ns - 500_000
+            sleep Time::Span.new(nanoseconds: rough_sleep_ns)
 
-            while (Time.instant - start_time).total_nanoseconds.to_u64 < target_elapsed_ns
+            while Time.instant < next_tick_time
               Fiber.yield
             end
           else
-            while (Time.instant - start_time).total_nanoseconds.to_u64 < target_elapsed_ns
+            while Time.instant < next_tick_time
               Fiber.yield
             end
           end
@@ -276,14 +272,8 @@ class Rosegold::Client < Rosegold::EventEmitter
           end
         end
 
-        tick_counter += 1
-
-        if tick_counter % 100 == 0
-          actual_elapsed_ns = (Time.instant - start_time).total_nanoseconds.to_u64
-          expected_elapsed_ns = tick_counter * target_interval_ns
-          drift_ms = (actual_elapsed_ns.to_i64 - expected_elapsed_ns.to_i64) / 1_000_000.0
-          Log.trace { "Tick #{tick_counter}: drift #{drift_ms.round(2)}ms" }
-        end
+        drift_ms = (Time.instant - next_tick_time).total_nanoseconds / 1_000_000.0
+        Log.trace { "Tick drift: #{drift_ms.round(2)}ms (rate: #{@tick_rate} TPS)" } if drift_ms.abs > 5
       end
 
       @ticker_done.send nil
