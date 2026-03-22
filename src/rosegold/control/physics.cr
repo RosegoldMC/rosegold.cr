@@ -408,6 +408,10 @@ class Rosegold::Physics
     movement, post_collision_velocity = Physics.predict_movement_collision(
       player.feet, input_velocity, current_player_aabb, dimension)
 
+    # Apply gravity AFTER collision, matching Minecraft's LivingEntity.travel() order:
+    # 1. moveRelative (input) → 2. move (collision) → 3. gravity → 4. drag
+    post_collision_velocity = post_collision_velocity - Vec3d.new(0, GRAVITY, 0)
+
     if player.on_ground?
       slip = block_slip
       drag_factor = slip * 0.91
@@ -487,7 +491,7 @@ class Rosegold::Physics
 
               JUMP_FORCE
             else
-              combined_velocity.y - 0.08
+              combined_velocity.y
             end
 
     horiz_length = Vec3d.new(combined_velocity.x, 0, combined_velocity.z).length
@@ -724,7 +728,7 @@ class Rosegold::Physics
     collided_z = (movement.z - velocity.z).abs > EPSILON_COLLISION
 
     if collided_x || collided_z
-      step_up_movement = slide start, Vec3d.new(0, 0.5, 0), obstacles
+      step_up_movement = slide start, Vec3d.new(0, MAX_UP_STEP, 0), obstacles
       step_up = start + step_up_movement
       # gravity would pull us into the step, preventing stepping
       over_velocity = velocity.with_y 0
@@ -778,8 +782,8 @@ class Rosegold::Physics
       entity_aabb.offset(start + movement))
     # fences are 1.5m tall
     min_block = bounds.min.down(0.5).block
-    # add maximum stepping height (0.5) so we can reuse the obstacles when stepping
-    max_block = bounds.max.up(0.5).block
+    # add maximum stepping height so we can reuse the obstacles when stepping
+    max_block = bounds.max.up(MAX_UP_STEP).block
     blocks_coords = Indexable.cartesian_product({
       (min_block.x..max_block.x).to_a,
       (min_block.y..max_block.y).to_a,
