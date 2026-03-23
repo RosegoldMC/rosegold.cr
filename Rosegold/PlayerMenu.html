@@ -2306,7 +2306,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L6" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L6" target="_blank">
         rosegold/inventory/menus/player_menu.cr
       </a>
     
@@ -2488,7 +2488,21 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       </li>
     
       <li class="entry-summary">
+        <a href="#crafting_grid_range%3ARange%28Int32%2CInt32%29-instance-method" class="signature"><strong>#crafting_grid_range</strong> : Range(Int32, Int32)</a>
+        
+          <div class="summary"><p>Slot indices for the crafting grid (1..9 for crafting table, 1..4 for player inventory).</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#crafting_result%3ARosegold%3A%3ASlot-instance-method" class="signature"><strong>#crafting_result</strong> : Rosegold::Slot</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#crafting_result_move_end%3AInt32-instance-method" class="signature"><strong>#crafting_result_move_end</strong> : Int32</a>
+        
+          <div class="summary"><p>Exclude offhand slot (45) from crafting result targets.</p></div>
         
       </li>
     
@@ -2644,6 +2658,16 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
     <a href="../Rosegold/Menu.html#copy_slot%28slot%3ARosegold%3A%3ASlot%29%3ARosegold%3A%3ASlot-instance-method" class="tooltip">
       <span>copy_slot(slot : Rosegold::Slot) : Rosegold::Slot</span>
     copy_slot</a>, 
+    
+  
+    <a href="../Rosegold/Menu.html#crafting_grid_range%3ARange%28Int32%2CInt32%29-instance-method" class="tooltip">
+      <span>crafting_grid_range : Range(Int32, Int32)</span>
+    crafting_grid_range</a>, 
+    
+  
+    <a href="../Rosegold/Menu.html#crafting_result_move_end%3AInt32-instance-method" class="tooltip">
+      <span>crafting_result_move_end : Int32</span>
+    crafting_result_move_end</a>, 
     
   
     <a href="../Rosegold/Menu.html#cursor%3ARosegold%3A%3ASlot-instance-method" class="tooltip">
@@ -2931,7 +2955,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2972,7 +2996,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2988,7 +3012,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L62" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L62" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3004,7 +3028,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L170" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L170" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3020,7 +3044,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3036,7 +3060,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L97" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L97" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3052,7 +3076,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L89" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L89" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3068,7 +3092,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L241" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L250" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3084,7 +3108,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L127" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L127" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3100,7 +3124,32 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L81" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="crafting_grid_range:Range(Int32,Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>crafting_grid_range</strong> : Range(<a href="../Int32.html">Int32</a>, <a href="../Int32.html">Int32</a>)
+
+        <a class="method-permalink" href="#crafting_grid_range%3ARange%28Int32%2CInt32%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class <a href="../Rosegold/Menu.html">Rosegold::Menu</a>
+            </div>
+          
+          <p>Slot indices for the crafting grid (1..9 for crafting table, 1..4 for player inventory).</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L183" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3116,7 +3165,28 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L77" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="crafting_result_move_end:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>crafting_result_move_end</strong> : <a href="../Int32.html">Int32</a>
+
+        <a class="method-permalink" href="#crafting_result_move_end%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Exclude offhand slot (45) from crafting result targets.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L188" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3132,7 +3202,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L105" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L105" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3148,7 +3218,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L176" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L176" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3164,7 +3234,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L245" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L254" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3180,7 +3250,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L85" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3196,7 +3266,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L123" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L123" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3212,7 +3282,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L139" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L139" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3228,7 +3298,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L131" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L131" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3244,7 +3314,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3260,7 +3330,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L166" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L166" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3285,7 +3355,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L153" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L153" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3301,7 +3371,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3317,7 +3387,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L109" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3333,7 +3403,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L147" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L147" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3358,7 +3428,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L119" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L119" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3374,7 +3444,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L113" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3399,7 +3469,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3424,7 +3494,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L185" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L194" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3440,7 +3510,7 @@ Layout: crafting_result(0), crafting(1-4), armor(5-8), main(9-35), hotbar(36-44)
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/61f7cdfb7fe4dd1636ba34df5251bb8ae94dae0b/src/rosegold/inventory/menus/player_menu.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/e8937a341e932b360e9065bf773b838e3639e6f5/src/rosegold/inventory/menus/player_menu.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
