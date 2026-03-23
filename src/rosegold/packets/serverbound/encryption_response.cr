@@ -37,7 +37,7 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
 
   def send_join_request!
     response = send_join_request
-    raise "Join Request Failed: #{response.inspect}" unless response.status_code == 204
+    raise "Session join request failed (HTTP #{response.status_code})" unless response.status_code == 204
   end
 
   private def send_join_request
@@ -55,7 +55,9 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
   end
 
   def write : Bytes
-    send_join_request!
+    if encryption_request.should_authenticate
+      send_join_request!
+    end
 
     OpenSSL::PKey::RSA.new(IO::Memory.new("-----BEGIN PUBLIC KEY-----\n" + Base64.encode(encryption_request.public_key) + "-----END PUBLIC KEY-----\n")).try do |key|
       Minecraft::IO::Memory.new.tap do |buffer|

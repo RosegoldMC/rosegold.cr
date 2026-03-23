@@ -1,5 +1,6 @@
 require "http/client"
 require "json"
+require "uri"
 require "../rosegold/config"
 
 module Microsoft::MobileOAuth
@@ -26,20 +27,22 @@ module Microsoft::MobileOAuth
     end
 
     def refresh!
-      HTTP::Client.post(
+      response = HTTP::Client.post(
         "https://login.microsoftonline.com/consumers/oauth2/v2.0/token",
-        form: "client_id=#{CLIENT_ID}&scope=XboxLive.signin offline_access&refresh_token=#{refresh_token}&grant_type=refresh_token"
+        form: "client_id=#{CLIENT_ID}&scope=XboxLive.signin+offline_access&refresh_token=#{URI.encode_www_form(refresh_token)}&grant_type=refresh_token"
       ).body
-        .try do |json|
-          Token.from_json(json).tap do |token|
-            token.expires_at = Time.local.to_unix + token.expires_in
-            token.save
-          end
-        end
+      json = JSON.parse(response)
+      if error = json["error"]?.try(&.as_s)
+        raise "Token refresh failed: #{json["error_description"]?.try(&.as_s) || error}"
+      end
+      Token.from_json(response).tap do |token|
+        token.expires_at = Time.local.to_unix + token.expires_in
+        token.save
+      end
     end
 
     def expired?
-      Time.local.to_unix > expires_at
+      Time.local.to_unix > expires_at - 60
     end
 
     def self.load
@@ -47,46 +50,77 @@ module Microsoft::MobileOAuth
     end
 
     def save
-      File.write(Rosegold::Config.directory_for("auth") + "/microsoft_token.json", to_json)
+      path = Rosegold::Config.directory_for("auth") + "/microsoft_token.json"
+      File.write(path, to_json)
+      File.chmod(path, 0o600)
     end
   end
 
   def self.login! : Token
     if File.exists?(Rosegold::Config.directory_for("auth") + "/microsoft_token.json")
-      Token.load.refresh
-    else
-      prompt_for_login!.tap &.save
+      begin
+        return Token.load.refresh
+      rescue ex
+        STDERR.puts ex.message
+        STDERR.puts "Requesting new login..."
+      end
     end
+    prompt_for_login!.tap &.save
   end
 
   # Prompts the user to follow Microsoft's Device Flow for OAuth.
   # https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-device-code
   # Returns the access token as a String
   def self.prompt_for_login! : Token
-    JSON.parse(
+    device_response = JSON.parse(
       HTTP::Client.post(
         "https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode",
-        form: "client_id=#{CLIENT_ID}&scope=XboxLive.signin offline_access"
+        form: "client_id=#{CLIENT_ID}&scope=XboxLive.signin+offline_access"
       ).body
-    ).try do |json|
-      STDERR.puts json["message"]
+    )
 
-      loop do
-        sleep 5.seconds
-        HTTP::Client.post(
-          "https://login.microsoftonline.com/consumers/oauth2/v2.0/token",
-          form: "client_id=#{CLIENT_ID}&scope=XboxLive.signin offline_access&code=#{json["device_code"]}&grant_type=urn:ietf:params:oauth:grant-type:device_code"
-        ).body.try do |token_string|
-          next if JSON.parse(token_string)["error"]?
+    STDERR.puts device_response["message"]
 
-          token = Token.from_json(token_string)
-          token.expires_at = Time.local.to_unix + token.expires_in
+    device_code = device_response["device_code"].as_s
+    interval = (device_response["interval"]?.try(&.as_i) || 5).seconds
+    expires_in = device_response["expires_in"]?.try(&.as_i) || 600
+    deadline = Time.monotonic + expires_in.seconds
 
-          STDERR.puts "Login successful!"
+    loop do
+      raise "Device code expired. Please try again." if Time.monotonic >= deadline
 
-          return token
+      sleep interval
+
+      token_string = HTTP::Client.post(
+        "https://login.microsoftonline.com/consumers/oauth2/v2.0/token",
+        form: "client_id=#{CLIENT_ID}&scope=XboxLive.signin+offline_access&device_code=#{URI.encode_www_form(device_code)}&grant_type=urn:ietf:params:oauth:grant-type:device_code"
+      ).body
+
+      json = JSON.parse(token_string)
+
+      if error = json["error"]?.try(&.as_s)
+        case error
+        when "authorization_pending"
+          next
+        when "slow_down"
+          interval += 5.seconds
+          next
+        when "access_denied", "authorization_declined"
+          raise "User declined authorization."
+        when "expired_token"
+          raise "Device code expired. Please try again."
+        else
+          description = json["error_description"]?.try(&.as_s) || error
+          raise "Authentication failed: #{description}"
         end
       end
+
+      token = Token.from_json(token_string)
+      token.expires_at = Time.local.to_unix + token.expires_in
+
+      STDERR.puts "Login successful!"
+
+      return token
     end
   end
 end

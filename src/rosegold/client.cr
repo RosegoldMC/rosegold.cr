@@ -354,11 +354,10 @@ class Rosegold::Client < Rosegold::EventEmitter
       return
     end
 
-    Minecraft::Auth.new.authenticate.try do |auth|
-      player.uuid = UUID.new auth["uuid"] || "00000000-0000-0000-0000-000000000000"
-      player.username = auth["mc_name"] || "Player"
-      self.access_token = auth["access_token"] || ""
-    end
+    auth = Minecraft::Auth.authenticate
+    player.uuid = UUID.new auth[:uuid]
+    player.username = auth[:mc_name]
+    self.access_token = auth[:access_token]
   end
 
   private def detect_protocol_version
