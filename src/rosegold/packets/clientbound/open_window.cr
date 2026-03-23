@@ -110,6 +110,7 @@ class Rosegold::Clientbound::OpenWindow < Rosegold::Clientbound::Packet
   def callback(client)
     clamped_id = window_id > 255 ? 255_u8 : window_id.to_u8
     MenuFactory.open(client, clamped_id, window_title, window_type)
+    client.emit_event Event::ContainerOpened.new(window_type, window_title.to_s, client.container_menu)
     Log.debug { "Server opened window id=#{window_id} type=#{window_type} title: #{window_title}" }
   end
 end

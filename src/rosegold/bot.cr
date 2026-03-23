@@ -15,6 +15,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
     subscribe Event::Tick
     subscribe Rosegold::Clientbound::SetContainerContent
     subscribe Rosegold::Clientbound::SetSlot
+    subscribe Event::ContainerOpened
   end
 
   def subscribe(event_class : Class)
@@ -40,6 +41,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
   delegate stop_using_hand, stop_digging, to: client.interactions
   delegate x, y, z, to: location
   delegate recipe_registry, to: client
+
+  def container_type : Menu.class | Nil
+    menu = client.container_menu
+    menu == client.inventory_menu ? nil : menu.class
+  end
 
   def location
     client.player.feet
@@ -297,6 +303,17 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Caller must already be looking at the container block.
   def open_container_handle(timeout : Time::Span = 5.seconds, &)
     wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
+    handle = ContainerHandle.new(client, client.container_menu)
+    begin
+      yield handle
+    ensure
+      wait_tick
+      handle.close
+    end
+  end
+
+  def open_container_handle(command : String, timeout : Time::Span = 5.seconds, &)
+    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { chat(command) }
     handle = ContainerHandle.new(client, client.container_menu)
     begin
       yield handle
