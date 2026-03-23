@@ -408,9 +408,21 @@ class Rosegold::Physics
     movement, post_collision_velocity = Physics.predict_movement_collision(
       player.feet, input_velocity, current_player_aabb, dimension)
 
-    # Apply gravity AFTER collision, matching Minecraft's LivingEntity.travel() order:
-    # 1. moveRelative (input) → 2. move (collision) → 3. gravity → 4. drag
-    post_collision_velocity = post_collision_velocity - Vec3d.new(0, GRAVITY, 0)
+    # Apply gravity/levitation AFTER collision, matching Minecraft's LivingEntity.travel() order:
+    # 1. moveRelative (input) → 2. move (collision) → 3. gravity/levitation → 4. drag
+    levitation = player.levitation_level
+    if levitation > 0
+      target_vel = 0.05 * levitation
+      new_y = post_collision_velocity.y + (target_vel - post_collision_velocity.y) * 0.2
+      post_collision_velocity = Vec3d.new(post_collision_velocity.x, new_y, post_collision_velocity.z)
+    else
+      gravity = if player.has_slow_falling? && post_collision_velocity.y <= 0
+                  0.01
+                else
+                  GRAVITY
+                end
+      post_collision_velocity = post_collision_velocity - Vec3d.new(0, gravity, 0)
+    end
 
     if player.on_ground?
       slip = block_slip
@@ -444,7 +456,9 @@ class Rosegold::Physics
       slip = block_slip
       friction_cubed = slip * slip * slip
       # Correct Minecraft formula: base_speed * (friction_constant / friction³)
-      movement_multiplier = BASE_MOVEMENT_SPEED * (FRICTION_CONSTANT / friction_cubed)
+      # Apply Speed and Slowness potion effects to base movement speed
+      effective_speed = Math.max(0.0, BASE_MOVEMENT_SPEED * (1.0 + 0.2 * player.speed_level) * (1.0 - 0.15 * player.slowness_level))
+      movement_multiplier = effective_speed * (FRICTION_CONSTANT / friction_cubed)
 
       # Apply movement state modifiers
       if player.sneaking?
@@ -489,7 +503,7 @@ class Rosegold::Physics
                 )
               end
 
-              JUMP_FORCE
+              JUMP_FORCE + 0.1 * player.jump_boost_level
             else
               combined_velocity.y
             end

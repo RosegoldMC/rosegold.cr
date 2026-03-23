@@ -78,6 +78,26 @@ class Rosegold::Player
   def effect_by_name(name)
     effects.find { |effect| effect.effect.name == name.downcase.gsub(' ', '_') }
   end
+
+  def speed_level : Int32
+    effects.find { |e| e.effect == EntityEffect::Effect::Speed }.try { |e| e.amplifier.to_i32 + 1 } || 0
+  end
+
+  def slowness_level : Int32
+    effects.find { |e| e.effect == EntityEffect::Effect::Slowness }.try { |e| e.amplifier.to_i32 + 1 } || 0
+  end
+
+  def jump_boost_level : Int32
+    effects.find { |e| e.effect == EntityEffect::Effect::JumpBoost }.try { |e| e.amplifier.to_i32 + 1 } || 0
+  end
+
+  def has_slow_falling? : Bool
+    effects.any? { |e| e.effect == EntityEffect::Effect::SlowFalling }
+  end
+
+  def levitation_level : Int32
+    effects.find { |e| e.effect == EntityEffect::Effect::Levitation }.try { |e| e.amplifier.to_i32 + 1 } || 0
+  end
 end
 
 enum Rosegold::Hand
