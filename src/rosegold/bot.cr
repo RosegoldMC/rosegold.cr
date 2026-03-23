@@ -510,20 +510,23 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   private def place_recipe_loop(menu : Menu, recipe : RecipeDisplayEntry, count : Int32, use_max : Bool)
-    count.times do
+    rounds = use_max ? Int32::MAX : count
+    grid = menu.crafting_grid_range
+    rounds.times do
       client.send_packet! Serverbound::PlaceRecipe.new(
         container_id: menu.menu_id.to_u32,
         recipe: recipe.id,
         use_max_items: use_max
       )
-      # Wait for result slot to be populated before collecting
-      3.times do
+      10.times do
         break unless menu[0].empty?
         wait_tick
       end
+      break if menu[0].empty?
       menu.send_click(0, 0, :shift)
+      # Grid has items = inventory full, shift-click couldn't consume all ingredients
+      break if grid.any? { |i| !menu[i].empty? }
       wait_tick
-      break if use_max
     end
   end
 

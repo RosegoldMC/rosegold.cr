@@ -27,6 +27,16 @@ abstract class Rosegold::Menu
   abstract def allow_modification?(slot_index : Int32) : Bool
   abstract def get_slot_max_stack_size(slot_index : Int32, item_slot : Rosegold::Slot) : Int32
 
+  # Slot indices for the crafting grid (1..9 for crafting table, 1..4 for player inventory).
+  def crafting_grid_range : Range(Int32, Int32)
+    0..0
+  end
+
+  # Exclusive end index for moving crafting results into player inventory.
+  def crafting_result_move_end : Int32
+    total_slots
+  end
+
   # Slot group accessors
   abstract def offhand_slot_index : Int32
   abstract def hotbar_slot_index(hotbar_nr : Int32) : Int32
@@ -406,6 +416,12 @@ abstract class Rosegold::Menu
   def perform_shift_click(slot_index : Int32)
     return if slot_index < 0 || slot_index >= total_slots
 
+    grid = crafting_grid_range
+    if slot_index == 0 && grid.size > 1
+      perform_crafting_result_shift_click(grid)
+      return
+    end
+
     clicked_slot = self[slot_index]
     return if clicked_slot.empty?
     return unless may_pickup?(slot_index)
@@ -419,6 +435,41 @@ abstract class Rosegold::Menu
       clicked_slot = current_slot
       moved_item = quick_move_stack(slot_index)
     end
+  end
+
+  private def perform_crafting_result_shift_click(grid : Range(Int32, Int32))
+    result_slot = self[0]
+    return if result_slot.empty?
+
+    result_template = copy_slot(result_slot)
+    crafts = grid_craft_count(grid)
+    return if crafts == 0
+
+    crafts.times do
+      self[0] = copy_slot(result_template) if self[0].empty?
+      original = copy_slot(self[0])
+      move_item_stack_to(0, player_inventory_start, crafting_result_move_end, true)
+      break if self[0].count == original.count
+      grid.each do |i|
+        slot = self[i]
+        next if slot.empty?
+        if slot.count <= 1
+          self[i] = Rosegold::Slot.new
+        else
+          slot.count -= 1
+        end
+      end
+    end
+  end
+
+  private def grid_craft_count(grid : Range(Int32, Int32)) : Int32
+    min = Int32::MAX
+    grid.each do |i|
+      slot = self[i]
+      next if slot.empty?
+      min = slot.count.to_i if slot.count.to_i < min
+    end
+    min == Int32::MAX ? 0 : min
   end
 
   def perform_drop_operation(slot_index : Int32, button : Int32)

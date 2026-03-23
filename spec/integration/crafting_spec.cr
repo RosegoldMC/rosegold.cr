@@ -195,6 +195,50 @@ Spectator.describe "Rosegold::Bot crafting" do
         end
       end
     end
+
+    it "crafts all hay_blocks from 12 stacks of wheat" do
+      admin.setblock 2, -59, 0, "crafting_table"
+      admin.wait_ticks 5
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          wait_for_recipes(bot)
+          admin.clear
+          admin.wait_ticks 5
+          admin.tp 0, -59, 0
+          bot.wait_ticks 10
+          admin.give "wheat", 12*64
+          bot.wait_ticks 10
+
+          bot.craft_all("hay_block", table: Rosegold::Vec3i.new(2, -59, 0))
+          bot.wait_ticks 20
+
+          # floor(768/9) = 85 hay_blocks
+          expect(bot.inventory.count("hay_block")).to eq 85
+        end
+      end
+    end
+
+    it "crafts hay_blocks from less than a full grid fill" do
+      admin.setblock 2, -59, 0, "crafting_table"
+      admin.wait_ticks 5
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          wait_for_recipes(bot)
+          admin.clear
+          admin.wait_ticks 5
+          admin.tp 0, -59, 0
+          bot.wait_ticks 10
+          admin.give "wheat", 18
+          bot.wait_ticks 10
+
+          bot.craft_all("hay_block", table: Rosegold::Vec3i.new(2, -59, 0))
+          bot.wait_ticks 20
+
+          # floor(18/9) = 2 hay_blocks
+          expect(bot.inventory.count("hay_block")).to eq 2
+        end
+      end
+    end
   end
 
   describe "error cases" do

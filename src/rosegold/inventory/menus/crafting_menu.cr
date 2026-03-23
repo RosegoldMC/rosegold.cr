@@ -14,6 +14,10 @@ class Rosegold::CraftingMenu < Rosegold::ContainerMenu
     @container_slots_array[1..9]
   end
 
+  def crafting_grid_range : Range(Int32, Int32)
+    1..9
+  end
+
   def may_place?(slot_index : Int32, item_slot : Rosegold::Slot) : Bool
     slot_index != 0
   end

@@ -180,6 +180,15 @@ class Rosegold::PlayerMenu < Rosegold::Menu
     end
   end
 
+  def crafting_grid_range : Range(Int32, Int32)
+    1..4
+  end
+
+  # Exclude offhand slot (45) from crafting result targets.
+  def crafting_result_move_end : Int32
+    OFF_HAND
+  end
+
   # --- Shift-click (quickMoveStack from InventoryMenu.java) ---
 
   def quick_move_stack(slot_index : Int32) : Rosegold::Slot
