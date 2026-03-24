@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Spectate::Lobby - rosegold main</title>
+  <title>Rosegold::Event::HealthChanged - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -1367,7 +1367,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
+  <li class="parent open current" data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
       <a href="../../Rosegold/Event.html">Event</a>
       
         <ul>
@@ -1392,7 +1392,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Event/HealthChanged" data-name="rosegold::event::healthchanged">
+  <li class=" current" data-id="rosegold/Rosegold/Event/HealthChanged" data-name="rosegold::event::healthchanged">
       <a href="../../Rosegold/Event/HealthChanged.html">HealthChanged</a>
       
     </li>
@@ -2122,7 +2122,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Spectate" data-name="rosegold::spectate">
+  <li class="parent " data-id="rosegold/Rosegold/Spectate" data-name="rosegold::spectate">
       <a href="../../Rosegold/Spectate.html">Spectate</a>
       
         <ul>
@@ -2142,7 +2142,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Spectate/Lobby" data-name="rosegold::spectate::lobby">
+  <li class=" " data-id="rosegold/Rosegold/Spectate/Lobby" data-name="rosegold::spectate::lobby">
       <a href="../../Rosegold/Spectate/Lobby.html">Lobby</a>
       
     </li>
@@ -2272,12 +2272,13 @@
 <h1 class="type-name">
 
   <span class="kind">
-    module
-  </span> Rosegold::<wbr>Spectate::<wbr>Lobby
+    class
+  </span> Rosegold::<wbr>Event::<wbr>HealthChanged
 
 </h1>
 
 
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Event/HealthChanged.html">Rosegold::Event::HealthChanged</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -2293,19 +2294,6 @@
 
 
 
-  <h2>
-    <a id="direct-including-types" class="anchor" href="#direct-including-types">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Direct including types
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../../Rosegold/Spectate/Connection.html">Rosegold::Spectate::Connection</a></li>
-    
-  </ul>
 
 
 
@@ -2320,8 +2308,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/5747541f1a3ac252dc9d3f359a3580ad6f9315b9/src/rosegold/spectate/lobby.cr#L1" target="_blank">
-        rosegold/spectate/lobby.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/5747541f1a3ac252dc9d3f359a3580ad6f9315b9/src/rosegold/events/health_changed.cr#L3" target="_blank">
+        rosegold/events/health_changed.cr
       </a>
     
     <br/>
@@ -2332,25 +2320,213 @@
 
 
   
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28old_health%3AFloat32%2Chealth%3AFloat32%2Cfood%3AUInt32%2Csaturation%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(old_health : Float32, health : Float32, food : UInt32, saturation : Float32)</a>
+        
+      </li>
+    
+  </ul>
+
 
   
 
   
 
   
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#food%3AUInt32-instance-method" class="signature"><strong>#food</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#health%3AFloat32-instance-method" class="signature"><strong>#health</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#old_health%3AFloat32-instance-method" class="signature"><strong>#old_health</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#saturation%3AFloat32-instance-method" class="signature"><strong>#saturation</strong> : Float32</a>
+        
+      </li>
+    
+  </ul>
+
 
 
   <div class="methods-inherited">
     
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
+    
   </div>
 
   
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(old_health:Float32,health:Float32,food:UInt32,saturation:Float32)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(old_health : Float32, health : Float32, food : UInt32, saturation : Float32)
+
+        <a class="method-permalink" href="#new%28old_health%3AFloat32%2Chealth%3AFloat32%2Cfood%3AUInt32%2Csaturation%3AFloat32%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5747541f1a3ac252dc9d3f359a3580ad6f9315b9/src/rosegold/events/health_changed.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
   
 
   
 
   
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="food:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>food</strong> : UInt32
+
+        <a class="method-permalink" href="#food%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5747541f1a3ac252dc9d3f359a3580ad6f9315b9/src/rosegold/events/health_changed.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="health:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>health</strong> : Float32
+
+        <a class="method-permalink" href="#health%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5747541f1a3ac252dc9d3f359a3580ad6f9315b9/src/rosegold/events/health_changed.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="old_health:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>old_health</strong> : Float32
+
+        <a class="method-permalink" href="#old_health%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5747541f1a3ac252dc9d3f359a3580ad6f9315b9/src/rosegold/events/health_changed.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="saturation:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>saturation</strong> : Float32
+
+        <a class="method-permalink" href="#saturation%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/5747541f1a3ac252dc9d3f359a3580ad6f9315b9/src/rosegold/events/health_changed.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
 
 </div>
