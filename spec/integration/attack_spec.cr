@@ -41,17 +41,17 @@ Spectator.describe "Rosegold::Bot attack" do
 
         # Wait for zombie entity to appear in client's entity list
         20.times do
-          break if client.dimension.entities.any? { |_, e| e.entity_type == zombie_entity_type }
+          break if client.dimension_for_test.entities.any? { |_, e| e.entity_type == zombie_entity_type }
           bot.wait_ticks 2
         end
 
         30.times do
-          break if client.dimension.entities.select { |_, e| e.entity_type == zombie_entity_type }.empty?
+          break if client.dimension_for_test.entities.select { |_, e| e.entity_type == zombie_entity_type }.empty?
           bot.attack
           bot.wait_ticks 13
         end
         # no zombies left
-        expect(client.dimension.entities.select { |_, e| e.entity_type == zombie_entity_type }).to be_empty
+        expect(client.dimension_for_test.entities.select { |_, e| e.entity_type == zombie_entity_type }).to be_empty
       end
     end
   end
@@ -86,12 +86,12 @@ Spectator.describe "Rosegold::Bot attack" do
 
         # Wait for zombie SpawnEntity packet to arrive
         20.times do
-          break if client.dimension.entities.any? { |_, e| e.entity_type == zombie_entity_type }
+          break if client.dimension_for_test.entities.any? { |_, e| e.entity_type == zombie_entity_type }
           bot.wait_ticks 2
         end
 
         # Additional verification: count zombies before attack
-        zombies_before = client.dimension.entities.count { |_, e| e.entity_type == zombie_entity_type }
+        zombies_before = client.dimension_for_test.entities.count { |_, e| e.entity_type == zombie_entity_type }
         expect(zombies_before).to eq(1) # Ensure zombie is present
 
         # Try to attack multiple times - should not hit the zombie through the block
@@ -104,7 +104,7 @@ Spectator.describe "Rosegold::Bot attack" do
         bot.wait_ticks 10
 
         # Count zombies after attack - should be the same (zombie should still be alive)
-        zombies_after = client.dimension.entities.count { |_, e| e.entity_type == zombie_entity_type }
+        zombies_after = client.dimension_for_test.entities.count { |_, e| e.entity_type == zombie_entity_type }
 
         # The zombie should still be alive because the block prevented the attack
         expect(zombies_after).to eq(zombies_before)

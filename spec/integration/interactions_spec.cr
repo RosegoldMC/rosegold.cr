@@ -37,7 +37,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         # Record initial block states
         initial_blocks = [] of (UInt16 | Nil)
         3.times do |i|
-          block = client.dimension.block_state(9, (-58 - i), 10)
+          block = client.dimension_for_test.block_state(9, (-58 - i), 10)
           initial_blocks << block
         end
 
@@ -60,7 +60,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         # Check that multiple blocks were broken
         broken_blocks = 0
         3.times do |i|
-          current_block = client.dimension.block_state(9, (-58 - i), 10)
+          current_block = client.dimension_for_test.block_state(9, (-58 - i), 10)
           if current_block != initial_blocks[i]
             broken_blocks += 1
           end
@@ -110,7 +110,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.wait_ticks 5
 
         # Record initial state
-        initial_block = client.dimension.block_state(8, -60, 8)
+        initial_block = client.dimension_for_test.block_state(8, -60, 8)
 
         # Verify we have stone block (state ID should be 1)
         expect(initial_block).to eq(1)
@@ -126,13 +126,13 @@ Spectator.describe "Rosegold::Bot interactions" do
         until current_block != initial_block || ticks_waited >= timeout
           bot.wait_tick
           ticks_waited += 1
-          current_block = client.dimension.block_state(8, -60, 8)
+          current_block = client.dimension_for_test.block_state(8, -60, 8)
         end
 
         bot.stop_digging
 
         # Check that stone block was broken
-        final_block = client.dimension.block_state(8, -60, 8)
+        final_block = client.dimension_for_test.block_state(8, -60, 8)
         expect(final_block).to_not eq(initial_block)
 
         # Verify mining completed within expected timeframe (should be ~6 ticks)
@@ -161,7 +161,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.wait_ticks 5
 
         # Record initial state
-        initial_block = client.dimension.block_state(9, -60, 9)
+        initial_block = client.dimension_for_test.block_state(9, -60, 9)
 
         # Verify we have obsidian block
         obsidian = Rosegold::MCData.default.blocks.find! { |blk| blk.id_str == "obsidian" }
@@ -179,13 +179,13 @@ Spectator.describe "Rosegold::Bot interactions" do
         until current_block != initial_block || ticks_waited >= timeout
           bot.wait_tick
           ticks_waited += 1
-          current_block = client.dimension.block_state(9, -60, 9)
+          current_block = client.dimension_for_test.block_state(9, -60, 9)
         end
 
         bot.stop_digging
 
         # Check that obsidian block was broken
-        final_block = client.dimension.block_state(9, -60, 9)
+        final_block = client.dimension_for_test.block_state(9, -60, 9)
         expect(final_block).to_not eq(initial_block)
 
         # Verify mining completed within reasonable timeframe
@@ -210,7 +210,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.wait_ticks 5
 
         starting_y = bot.location.y
-        before = client.dimension.block_state(10, -60, 10)
+        before = client.dimension_for_test.block_state(10, -60, 10)
 
         bot.pitch = 90
         bot.start_using_hand
@@ -219,7 +219,7 @@ Spectator.describe "Rosegold::Bot interactions" do
           15.times { bot.wait_tick }
         end
 
-        expect(client.dimension.block_state(10, -60, 10)).to_not eq(before)
+        expect(client.dimension_for_test.block_state(10, -60, 10)).to_not eq(before)
         expect(bot.location.y).to be > starting_y
       end
     end
@@ -233,7 +233,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         admin.setblock 5, -60, 6, "vine[west=true]"
         admin.wait_ticks 10
 
-        vine_state = client.dimension.block_state(5, -60, 6)
+        vine_state = client.dimension_for_test.block_state(5, -60, 6)
         vine_name = Rosegold::MCData.default.block_state_names[vine_state.as(UInt16)]
         expect(vine_name).to contain("vine")
         expect(vine_name).to contain("west=true")
@@ -261,12 +261,12 @@ Spectator.describe "Rosegold::Bot interactions" do
         until current_state != vine_state || ticks_waited >= timeout
           bot.wait_tick
           ticks_waited += 1
-          current_state = client.dimension.block_state(5, -60, 6)
+          current_state = client.dimension_for_test.block_state(5, -60, 6)
         end
 
         bot.stop_digging
 
-        final_state = client.dimension.block_state(5, -60, 6)
+        final_state = client.dimension_for_test.block_state(5, -60, 6)
         expect(final_state).to_not eq(vine_state)
         expect(ticks_waited).to be_lt(timeout)
       end
@@ -284,7 +284,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.wait_ticks 5
 
         # Verify wheat was created at age 0
-        wheat_age_0 = client.dimension.block_state(6, -59, 6)
+        wheat_age_0 = client.dimension_for_test.block_state(6, -59, 6)
         expect(wheat_age_0).to_not be_nil
         age_0_name = Rosegold::MCData.default.block_state_names[wheat_age_0.as(UInt16)]
         expect(age_0_name).to eq("wheat[age=0]")
@@ -307,7 +307,7 @@ Spectator.describe "Rosegold::Bot interactions" do
 
         # Verify bonemeal was NOT consumed (ray passed above tiny wheat)
         expect(bot.main_hand.count).to eq(initial_bonemeal)
-        wheat_after_miss = client.dimension.block_state(6, -59, 6)
+        wheat_after_miss = client.dimension_for_test.block_state(6, -59, 6)
         expect(wheat_after_miss).to eq(wheat_age_0)
 
         # Now look down at an angle that should hit the wheat
@@ -324,7 +324,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         expect(bot.main_hand.count).to be < initial_bonemeal
 
         # Verify wheat grew (bonemeal actually worked)
-        wheat_after_growth = client.dimension.block_state(6, -59, 6)
+        wheat_after_growth = client.dimension_for_test.block_state(6, -59, 6)
         expect(wheat_after_growth).to_not eq(wheat_age_0)
       end
     end

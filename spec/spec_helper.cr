@@ -2,6 +2,16 @@ require "../src/rosegold"
 require "spectator"
 require "./support/admin_bot"
 
+# Test helper: access protected dimension from outside Rosegold:: namespace.
+# Production code should use Bot (which hides Client.dimension).
+module Rosegold
+  class Client
+    def dimension_for_test
+      dimension
+    end
+  end
+end
+
 MC_TEST_HOST = ENV["MC_TEST_HOST"]? || "localhost"
 MC_TEST_PORT = (ENV["MC_TEST_PORT"]? || "25565").to_i
 
