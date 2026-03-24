@@ -8,10 +8,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 # Build the project
 crystal build src/rosegold.cr
-
-# Run example bots
-crystal run examples/bot_example.cr
-crystal run examples/proxy_example.cr
 ```
 
 ### Testing

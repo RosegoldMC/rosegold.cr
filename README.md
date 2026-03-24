@@ -24,32 +24,15 @@ Minecraft client written in [Crystal](http://crystal-lang.org/), following the [
    ```yaml
    dependencies:
      rosegold:
-       github: grepsedawk/rosegold.cr
+       github: RosegoldMC/rosegold.cr
        version: ~> 0.7
    ```
 1. Run `shards install`
-1. Start with a basic example by writing a file in `src/`, something like...
-
-   ```crystal
-   require "rosegold"
-   bot = Rosegold::Bot.join_game("play.civmc.net")
-   sleep 3
-
-   while bot.connected?
-     bot.eat!
-     bot.yaw = -90
-     bot.pitch = -10
-     bot.inventory.pick! "diamond_sword"
-     bot.attack
-     bot.wait_ticks 20
-     puts bot.feet
-     puts "Tool durability: #{bot.main_hand.durability} / #{bot.main_hand.max_durability}"
-   end
-    ```
+1. See [RosegoldMC/example](https://github.com/RosegoldMC/example) for a working example to get started
 
 ## Contributing
 
-1. Fork it (<https://github.com/grepsedawk/rosegold.cr/fork>)
+1. Fork it (<https://github.com/RosegoldMC/rosegold.cr/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
