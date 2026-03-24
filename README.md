@@ -28,7 +28,7 @@ Follow the [official Crystal installation guide](https://crystal-lang.org/instal
 
 The fastest way to start is with the [example template](https://github.com/RosegoldMC/example):
 
-1. Click **[Use this template](https://github.com/new?template_name=example&template_owner=RosegoldMC)** to create your own repo
+1. Click **[Use this template](https://github.com/new?template_name=example&template_owner=RosegoldMC)** to create your own repo — it includes GitHub Actions that build Linux and Windows binaries automatically
 2. Clone your new repo and install dependencies:
 
 ```bash
@@ -54,7 +54,7 @@ Open that URL, enter the code, and sign in with the Microsoft account that owns 
 
 ### 4. Watch Your Bot (SpectateServer)
 
-Both example bots start a [SpectateServer](https://rosegoldmc.github.io/rosegold.cr/Rosegold/SpectateServer.html) on `localhost:25566`. Open Minecraft, add a server with that address, and connect to see through your bot's eyes in real time — its position, inventory, health, and everything happening around it. No auth required.
+All the examples start a [SpectateServer](https://rosegoldmc.github.io/rosegold.cr/Rosegold/SpectateServer.html) on `localhost:25566`. Open Minecraft, add a server with that address, and connect to see through your bot's eyes in real time — its position, inventory, health, and everything happening around it. No auth required.
 
 ## API Quick Reference
 
