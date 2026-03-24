@@ -24,12 +24,15 @@ Follow the [official Crystal installation guide](https://crystal-lang.org/instal
 
 `shards` (Crystal's package manager, like npm) is included with Crystal.
 
-### 2. Clone the Template
+### 2. Use the Template
 
-The fastest way to start is with the [example repo](https://github.com/RosegoldMC/example):
+The fastest way to start is with the [example template](https://github.com/RosegoldMC/example):
+
+1. Click **[Use this template](https://github.com/new?template_name=example&template_owner=RosegoldMC)** to create your own repo
+2. Clone your new repo and install dependencies:
 
 ```bash
-git clone https://github.com/RosegoldMC/example.git my-bot
+git clone https://github.com/YOUR_USERNAME/my-bot.git
 cd my-bot
 shards install
 ```
