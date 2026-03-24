@@ -35,13 +35,18 @@ class Rosegold::Clientbound::UpdateHealth < Rosegold::Clientbound::Packet
   def callback(client)
     Log.debug { "health=#{health/2}❤ food=#{food*5}% saturation=#{saturation}" }
 
+    old_health = client.player.health
+
     client.player.health = health
     client.player.food = food
     client.player.saturation = saturation
 
-    # auto-respawn for now. we could also stay dead if user wishes it
-    if health <= 0
-      client.queue_packet Serverbound::ClientStatus.new :respawn
+    if health != old_health
+      client.emit_event Event::HealthChanged.new(old_health, health, food, saturation)
+    end
+
+    if health <= 0 && old_health > 0
+      client.emit_event Event::Died.new
     end
   end
 end

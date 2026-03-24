@@ -5,6 +5,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   private getter client : Client
 
   getter inventory : Inventory
+  property? auto_respawn : Bool = true
 
   def initialize(@client)
     @inventory = Inventory.new client
@@ -13,9 +14,15 @@ class Rosegold::Bot < Rosegold::EventEmitter
     subscribe Rosegold::Clientbound::PlayerChatMessage
     subscribe Rosegold::Clientbound::DisguisedChatMessage
     subscribe Event::Tick
+    subscribe Event::HealthChanged
+    subscribe Event::Died
     subscribe Rosegold::Clientbound::SetContainerContent
     subscribe Rosegold::Clientbound::SetSlot
     subscribe Event::ContainerOpened
+
+    on Event::Died do |_event|
+      spawn { respawn } if auto_respawn?
+    end
   end
 
   def subscribe(event_class : Class)
