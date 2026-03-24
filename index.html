@@ -2294,28 +2294,14 @@
 <p>Add the dependency to your <code>shard.yml</code>:</p>
 <pre><code class="language-yaml">dependencies:
   rosegold:
-    github: grepsedawk/rosegold.cr
+    github: RosegoldMC/rosegold.cr
     version: ~&gt; 0.7</code></pre>
 </li>
 <li>
 <p>Run <code>shards install</code></p>
 </li>
 <li>
-<p>Start with a basic example by writing a file in <code>src/</code>, something like...</p>
-<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;rosegold&quot;</span>
-bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.join_game(<span class="s">&quot;play.civmc.net&quot;</span>)
-sleep <span class="n">3</span>
-
-<span class="k">while</span> bot.connected?
-  bot.eat!
-  bot.yaw <span class="o">=</span> <span class="n">-90</span>
-  bot.pitch <span class="o">=</span> <span class="n">-10</span>
-  bot.inventory.pick! <span class="s">&quot;diamond_sword&quot;</span>
-  bot.attack
-  bot.wait_ticks <span class="n">20</span>
-  puts bot.feet
-  puts <span class="s">&quot;Tool durability: </span><span class="i">#{</span>bot.main_hand.durability<span class="i">}</span><span class="s"> / </span><span class="i">#{</span>bot.main_hand.max_durability<span class="i">}</span><span class="s">&quot;</span>
-<span class="k">end</span></code></pre>
+<p>See <a href="https://github.com/RosegoldMC/example">RosegoldMC/example</a> for a working example to get started</p>
 </li>
 </ol>
 <h2><a id="contributing" class="anchor" href="#contributing">
@@ -2324,7 +2310,7 @@ sleep <span class="n">3</span>
   </svg>
 </a>Contributing</h2>
 <ol>
-<li>Fork it (<a href="https://github.com/grepsedawk/rosegold.cr/fork">https://github.com/grepsedawk/rosegold.cr/fork</a>)</li>
+<li>Fork it (<a href="https://github.com/RosegoldMC/rosegold.cr/fork">https://github.com/RosegoldMC/rosegold.cr/fork</a>)</li>
 <li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
 <li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
 <li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
