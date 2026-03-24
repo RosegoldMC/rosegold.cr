@@ -40,7 +40,7 @@ Spectator.describe "SpectateServer Integration" do
 
         # Verify basic play state was received
         expect(spectator.player.entity_id).not_to eq(0_u64)
-        expect(spectator.dimension.chunks.size).to be > 0
+        expect(spectator.dimension_for_test.chunks.size).to be > 0
       ensure
         spectator.connection?.try(&.disconnect("test done"))
         spectate_server.stop

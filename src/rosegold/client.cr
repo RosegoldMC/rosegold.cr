@@ -36,17 +36,21 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   property host : String, port : Int32
-  property connection : Connection::Client?
   property current_protocol_state : ProtocolState = ProtocolState::HANDSHAKING
 
   delegate disconnect, to: connection
 
+  # Internal engine state — not exposed through Bot API.
+  # Protected: accessible within Rosegold:: namespace only.
+  protected property \
+    connection : Connection::Client?,
+    dimension : Dimension = Dimension.new,
+    physics : Physics,
+    interactions : Interactions
+
   property \
     player : Player = Player.new,
     access_token : String = "",
-    dimension : Dimension = Dimension.new,
-    physics : Physics,
-    interactions : Interactions,
     player_inventory : PlayerInventory,
     inventory_menu : PlayerMenu,
     container_menu : Menu,
