@@ -84,8 +84,6 @@ class Rosegold::Spectate::Server
                         Clientbound::EntityAnimation,
                         Clientbound::GameEvent,
                         Clientbound::SetPassengers,
-                        Clientbound::SetContainerContent,
-                        Clientbound::SetSlot,
                       ] %}
         result[{{klass}}[protocol]] = {{klass.name.split("::").last}}
       {% end %}

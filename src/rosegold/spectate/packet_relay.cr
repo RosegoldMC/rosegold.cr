@@ -75,6 +75,24 @@ module Rosegold::Spectate::PacketRelay
     end
   end
 
+  private def setup_inventory_event_listeners
+    return unless bot = @client
+
+    @inventory_content_handler_id = bot.on(Rosegold::Clientbound::SetContainerContent) do |event|
+      next unless @connected
+      next unless @spectate_state.spectating?
+      next unless event.window_id == 0
+      send_inventory_content
+    end
+
+    @inventory_slot_handler_id = bot.on(Rosegold::Clientbound::SetSlot) do |event|
+      next unless @connected
+      next unless @spectate_state.spectating?
+      next unless event.window_id == 0
+      send_inventory_content
+    end
+  end
+
   private def setup_arm_swing_listener
     return unless bot = @client
 

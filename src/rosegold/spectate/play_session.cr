@@ -19,6 +19,7 @@ module Rosegold::Spectate::PlaySession
     start_bot_monitoring
     setup_position_event_listener
     setup_arm_swing_listener
+    setup_inventory_event_listeners
     setup_raw_packet_relay
     start_keep_alive_sender
   end
