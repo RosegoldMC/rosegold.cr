@@ -6,6 +6,7 @@ class Rosegold::Clientbound::PlaceGhostRecipe < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x38_u32, # MC 1.21.8
     774_u32 => 0x3D_u32, # MC 1.21.11
+    775_u32 => 0x3F_u32, # MC 26.1
   })
 
   property container_id : UInt32

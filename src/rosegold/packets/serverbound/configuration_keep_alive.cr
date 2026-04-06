@@ -7,6 +7,7 @@ class Rosegold::Serverbound::ConfigurationKeepAlive < Rosegold::Serverbound::Pac
   packet_ids({
     772_u32 => 0x04_u32, # MC 1.21.8
     774_u32 => 0x04_u32, # MC 1.21.11
+    775_u32 => 0x04_u32, # MC 26.1
   })
 
   property keep_alive_id : Int64

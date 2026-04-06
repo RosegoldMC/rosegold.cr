@@ -5,6 +5,7 @@ class Rosegold::Clientbound::MultiBlockChange < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x4d_u32, # MC 1.21.8 (Update Section Blocks)
     774_u32 => 0x52_u32, # MC 1.21.11
+    775_u32 => 0x54_u32, # MC 26.1
   })
 
   property \

@@ -15,6 +15,7 @@ class Rosegold::Serverbound::PlayerLoaded < Rosegold::Serverbound::Packet
   packet_ids({
     772_u32 => 0x2B_u32, # MC 1.21.8
     774_u32 => 0x2B_u32, # MC 1.21.11
+    775_u32 => 0x2C_u32, # MC 26.1
   })
 
   def initialize

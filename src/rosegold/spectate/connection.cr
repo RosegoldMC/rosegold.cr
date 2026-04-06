@@ -54,6 +54,7 @@ class Rosegold::Spectate::Connection
   PROTOCOL_VERSION_NAMES = {
     772_u32 => "1.21.8",
     774_u32 => "1.21.11",
+    775_u32 => "26.1",
   }
 
   def protocol_version : UInt32

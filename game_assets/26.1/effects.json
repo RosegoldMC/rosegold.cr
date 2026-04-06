@@ -1,0 +1,242 @@
+[
+  {
+    "id": 0,
+    "name": "speed",
+    "displayName": "Speed",
+    "type": "neutral"
+  },
+  {
+    "id": 1,
+    "name": "slowness",
+    "displayName": "Slowness",
+    "type": "neutral"
+  },
+  {
+    "id": 2,
+    "name": "haste",
+    "displayName": "Haste",
+    "type": "neutral"
+  },
+  {
+    "id": 3,
+    "name": "mining_fatigue",
+    "displayName": "Mining Fatigue",
+    "type": "neutral"
+  },
+  {
+    "id": 4,
+    "name": "strength",
+    "displayName": "Strength",
+    "type": "neutral"
+  },
+  {
+    "id": 5,
+    "name": "instant_health",
+    "displayName": "Instant Health",
+    "type": "neutral"
+  },
+  {
+    "id": 6,
+    "name": "instant_damage",
+    "displayName": "Instant Damage",
+    "type": "neutral"
+  },
+  {
+    "id": 7,
+    "name": "jump_boost",
+    "displayName": "Jump Boost",
+    "type": "neutral"
+  },
+  {
+    "id": 8,
+    "name": "nausea",
+    "displayName": "Nausea",
+    "type": "neutral"
+  },
+  {
+    "id": 9,
+    "name": "regeneration",
+    "displayName": "Regeneration",
+    "type": "neutral"
+  },
+  {
+    "id": 10,
+    "name": "resistance",
+    "displayName": "Resistance",
+    "type": "neutral"
+  },
+  {
+    "id": 11,
+    "name": "fire_resistance",
+    "displayName": "Fire Resistance",
+    "type": "neutral"
+  },
+  {
+    "id": 12,
+    "name": "water_breathing",
+    "displayName": "Water Breathing",
+    "type": "neutral"
+  },
+  {
+    "id": 13,
+    "name": "invisibility",
+    "displayName": "Invisibility",
+    "type": "neutral"
+  },
+  {
+    "id": 14,
+    "name": "blindness",
+    "displayName": "Blindness",
+    "type": "neutral"
+  },
+  {
+    "id": 15,
+    "name": "night_vision",
+    "displayName": "Night Vision",
+    "type": "neutral"
+  },
+  {
+    "id": 16,
+    "name": "hunger",
+    "displayName": "Hunger",
+    "type": "neutral"
+  },
+  {
+    "id": 17,
+    "name": "weakness",
+    "displayName": "Weakness",
+    "type": "neutral"
+  },
+  {
+    "id": 18,
+    "name": "poison",
+    "displayName": "Poison",
+    "type": "neutral"
+  },
+  {
+    "id": 19,
+    "name": "wither",
+    "displayName": "Wither",
+    "type": "neutral"
+  },
+  {
+    "id": 20,
+    "name": "health_boost",
+    "displayName": "Health Boost",
+    "type": "neutral"
+  },
+  {
+    "id": 21,
+    "name": "absorption",
+    "displayName": "Absorption",
+    "type": "neutral"
+  },
+  {
+    "id": 22,
+    "name": "saturation",
+    "displayName": "Saturation",
+    "type": "neutral"
+  },
+  {
+    "id": 23,
+    "name": "glowing",
+    "displayName": "Glowing",
+    "type": "neutral"
+  },
+  {
+    "id": 24,
+    "name": "levitation",
+    "displayName": "Levitation",
+    "type": "neutral"
+  },
+  {
+    "id": 25,
+    "name": "luck",
+    "displayName": "Luck",
+    "type": "neutral"
+  },
+  {
+    "id": 26,
+    "name": "unluck",
+    "displayName": "Unluck",
+    "type": "neutral"
+  },
+  {
+    "id": 27,
+    "name": "slow_falling",
+    "displayName": "Slow Falling",
+    "type": "neutral"
+  },
+  {
+    "id": 28,
+    "name": "conduit_power",
+    "displayName": "Conduit Power",
+    "type": "neutral"
+  },
+  {
+    "id": 29,
+    "name": "dolphins_grace",
+    "displayName": "Dolphins Grace",
+    "type": "neutral"
+  },
+  {
+    "id": 30,
+    "name": "bad_omen",
+    "displayName": "Bad Omen",
+    "type": "neutral"
+  },
+  {
+    "id": 31,
+    "name": "hero_of_the_village",
+    "displayName": "Hero Of The Village",
+    "type": "neutral"
+  },
+  {
+    "id": 32,
+    "name": "darkness",
+    "displayName": "Darkness",
+    "type": "neutral"
+  },
+  {
+    "id": 33,
+    "name": "trial_omen",
+    "displayName": "Trial Omen",
+    "type": "neutral"
+  },
+  {
+    "id": 34,
+    "name": "raid_omen",
+    "displayName": "Raid Omen",
+    "type": "neutral"
+  },
+  {
+    "id": 35,
+    "name": "wind_charged",
+    "displayName": "Wind Charged",
+    "type": "neutral"
+  },
+  {
+    "id": 36,
+    "name": "weaving",
+    "displayName": "Weaving",
+    "type": "neutral"
+  },
+  {
+    "id": 37,
+    "name": "oozing",
+    "displayName": "Oozing",
+    "type": "neutral"
+  },
+  {
+    "id": 38,
+    "name": "infested",
+    "displayName": "Infested",
+    "type": "neutral"
+  },
+  {
+    "id": 39,
+    "name": "breath_of_the_nautilus",
+    "displayName": "Breath Of The Nautilus",
+    "type": "neutral"
+  }
+]

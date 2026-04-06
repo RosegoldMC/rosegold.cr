@@ -2,12 +2,12 @@ version: "3"
 
 services:
   mc:
-    image: itzg/minecraft-server
+    image: itzg/minecraft-server:java25
     ports:
       - 25565:25565
     environment:
       EULA: "TRUE"
-      VERSION: ${MC_VERSION:-1.21.11}
+      VERSION: ${MC_VERSION:-26.1}
       ONLINE_MODE: "FALSE"
       LEVEL_TYPE: flat
       SPAWN_PROTECTION: 0

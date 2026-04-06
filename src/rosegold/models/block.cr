@@ -3,19 +3,12 @@ require "json"
 class Rosegold::Block
   include JSON::Serializable
 
-  getter id : UInt16
   @[JSON::Field(key: "name")]
   getter id_str : String
-  @[JSON::Field(key: "displayName")]
-  getter display_name : String
-  @[JSON::Field(key: "stackSize")]
-  getter stack_size : UInt8
   @[JSON::Field(key: "minStateId")]
   getter min_state_id : UInt16
   @[JSON::Field(key: "maxStateId")]
   getter max_state_id : UInt16
-  @[JSON::Field(key: "defaultState")]
-  getter default_state : UInt16
   getter hardness : Float32 = -1.0
   @[JSON::Field(key: "harvestTools")]
   getter harvest_tools : Hash(String, Bool)?
@@ -63,17 +56,18 @@ class Rosegold::Block
     speed_multiplier = 1.0
     if best_tool?(main_hand)
       speed_multiplier = material_tool_multipliers[main_hand.item_id_int.to_s].as_f
-      speed_multiplier += main_hand.efficiency ** 2 + 1 if main_hand.efficiency > 0
     elsif tool_speed = main_hand.tool_speed_for_tag(material)
       speed_multiplier = tool_speed.to_f64
-      speed_multiplier += main_hand.efficiency ** 2 + 1 if main_hand.efficiency > 0
-    elsif can_harvest?(main_hand)
+    elsif harvest_tools.try &.has_key?(main_hand.item_id_int.to_s)
       if speed = tool_speed_from_any_material(main_hand)
         speed_multiplier = speed
       elsif tc = main_hand.tool_component
         speed_multiplier = tc.default_mining_speed.to_f64
       end
-      speed_multiplier += main_hand.efficiency ** 2 + 1 if main_hand.efficiency > 0
+    end
+
+    if speed_multiplier > 1.0 && main_hand.efficiency > 0
+      speed_multiplier += main_hand.efficiency ** 2 + 1
     end
 
     # TODO: Implement calculations for the following factors:

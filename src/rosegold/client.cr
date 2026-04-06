@@ -13,8 +13,8 @@ require "./chat_manager"
 # and control state (physics, open window, etc.).
 # Can be reconnected.
 class Rosegold::Client < Rosegold::EventEmitter
-  SUPPORTED_PROTOCOLS = {772_u32, 774_u32}
-  LATEST_PROTOCOL     = 774_u32
+  SUPPORTED_PROTOCOLS = {772_u32, 774_u32, 775_u32}
+  LATEST_PROTOCOL     = 775_u32
 
   # TODO: @@protocol_version is global state shared across all Client instances.
   # This prevents connecting to servers with different protocol versions concurrently.

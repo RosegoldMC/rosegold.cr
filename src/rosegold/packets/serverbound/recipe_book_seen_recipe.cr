@@ -5,6 +5,7 @@ class Rosegold::Serverbound::RecipeBookSeenRecipe < Rosegold::Serverbound::Packe
   packet_ids({
     772_u32 => 0x2E_u32, # MC 1.21.8
     774_u32 => 0x2E_u32, # MC 1.21.11
+    775_u32 => 0x2F_u32, # MC 26.1
   })
 
   property recipe : UInt32

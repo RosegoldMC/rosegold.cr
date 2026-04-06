@@ -15,7 +15,7 @@ Spectator.describe "MCData block collision shapes" do
 
     it "has correct collision shapes for solid blocks like stone" do
       stone_block = Rosegold::MCData.default.blocks.find { |b| b.id_str == "stone" }
-      stone_state = stone_block.not_nil!.default_state
+      stone_state = stone_block.not_nil!.min_state_id
       shapes = Rosegold::MCData.default.block_state_collision_shapes[stone_state]
 
       expect(shapes.size).to eq(1)
@@ -30,7 +30,7 @@ Spectator.describe "MCData block collision shapes" do
 
     it "has collision shapes for cobblestone" do
       cobblestone_block = Rosegold::MCData.default.blocks.find { |b| b.id_str == "cobblestone" }
-      cobblestone_state = cobblestone_block.not_nil!.default_state
+      cobblestone_state = cobblestone_block.not_nil!.min_state_id
       shapes = Rosegold::MCData.default.block_state_collision_shapes[cobblestone_state]
 
       expect(shapes.size).to eq(1)
@@ -45,7 +45,7 @@ Spectator.describe "MCData block collision shapes" do
 
     it "has collision shapes for dirt" do
       dirt_block = Rosegold::MCData.default.blocks.find { |b| b.id_str == "dirt" }
-      dirt_state = dirt_block.not_nil!.default_state
+      dirt_state = dirt_block.not_nil!.min_state_id
       shapes = Rosegold::MCData.default.block_state_collision_shapes[dirt_state]
 
       expect(shapes.size).to eq(1)
@@ -79,7 +79,7 @@ Spectator.describe "MCData block collision shapes" do
         block = Rosegold::MCData.default.blocks.find { |b| b.id_str == block_name }
         next unless block # Skip if block doesn't exist
 
-        shapes = Rosegold::MCData.default.block_state_collision_shapes[block.default_state]
+        shapes = Rosegold::MCData.default.block_state_collision_shapes[block.min_state_id]
         expect(shapes).not_to be_empty, "#{block_name} should have collision shapes"
 
         # All solid blocks should have at least one collision box
@@ -94,7 +94,7 @@ Spectator.describe "MCData block collision shapes" do
         block = Rosegold::MCData.default.blocks.find { |b| b.id_str == block_name }
         next unless block # Skip if block doesn't exist
 
-        shapes = Rosegold::MCData.default.block_state_collision_shapes[block.default_state]
+        shapes = Rosegold::MCData.default.block_state_collision_shapes[block.min_state_id]
         expect(shapes).to be_empty, "#{block_name} should have no collision shapes"
       end
     end
@@ -104,7 +104,7 @@ Spectator.describe "MCData block collision shapes" do
       sample_blocks = Rosegold::MCData.default.blocks.sample(10)
 
       sample_blocks.each do |block|
-        shapes = Rosegold::MCData.default.block_state_collision_shapes[block.default_state]
+        shapes = Rosegold::MCData.default.block_state_collision_shapes[block.min_state_id]
 
         shapes.each do |aabb|
           expect(aabb.min.x).to be <= aabb.max.x, "#{block.id_str}: min.x should be <= max.x"
@@ -121,7 +121,7 @@ Spectator.describe "MCData block collision shapes" do
       expect(high_state_blocks).not_to be_empty, "Should have blocks with high state IDs"
 
       high_state_blocks.first(3).each do |block|
-        shapes = Rosegold::MCData.default.block_state_collision_shapes[block.default_state]
+        shapes = Rosegold::MCData.default.block_state_collision_shapes[block.min_state_id]
         expect(shapes).not_to be_nil, "#{block.id_str} should have collision shapes array"
       end
     end

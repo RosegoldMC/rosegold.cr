@@ -17,6 +17,7 @@ module Rosegold::Spectate::Configuration
   VANILLA_KNOWN_PACKS = {
     772_u32 => [{namespace: "minecraft", id: "core", version: "1.21.8"}],
     774_u32 => [{namespace: "minecraft", id: "core", version: "1.21.11"}],
+    775_u32 => [{namespace: "minecraft", id: "core", version: "26.1"}],
   }
 
   private def send_configuration_packets

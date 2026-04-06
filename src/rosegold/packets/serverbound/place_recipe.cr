@@ -5,6 +5,7 @@ class Rosegold::Serverbound::PlaceRecipe < Rosegold::Serverbound::Packet
   packet_ids({
     772_u32 => 0x26_u32, # MC 1.21.8
     774_u32 => 0x26_u32, # MC 1.21.11
+    775_u32 => 0x27_u32, # MC 26.1
   })
 
   property container_id : UInt32
