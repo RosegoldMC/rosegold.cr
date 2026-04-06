@@ -8,17 +8,19 @@ class Rosegold::MCData
 
   MC1218  = Rosegold::MCData.new "1.21.8"
   MC12111 = Rosegold::MCData.new "1.21.11"
+  MC261   = Rosegold::MCData.new "26.1"
 
   PROTOCOL_VERSION_MAP = {
     772_u32 => MC1218,
     774_u32 => MC12111,
+    775_u32 => MC261,
   }
 
   @[Deprecated("Use MCData.default instead for version-aware data")]
-  DEFAULT = MC12111
+  DEFAULT = MC261
 
   def self.default : MCData
-    PROTOCOL_VERSION_MAP[Client.protocol_version]? || MC12111
+    PROTOCOL_VERSION_MAP[Client.protocol_version]? || MC261
   end
 
   getter items : Array(Item)
@@ -39,7 +41,7 @@ class Rosegold::MCData
   # TODO: more compact memory layout: only store one Shape if it's the same for all variants of a block
   getter block_state_collision_shapes : Array(Array(AABBf))
 
-  SUPPORTED_VERSIONS = ["1.21.8", "1.21.11"]
+  SUPPORTED_VERSIONS = ["1.21.8", "1.21.11", "26.1"]
 
   # Must use string literals — read_game_asset is a compile-time macro
   protected def self.assets_for(mc_version : String)
@@ -59,6 +61,14 @@ class Rosegold::MCData
         Rosegold.read_game_asset("1.21.11/materials.json"),
         Rosegold.read_game_asset("1.21.11/enchantments.json"),
         Rosegold.read_game_asset("1.21.11/blockCollisionShapes.json"),
+      }
+    when "26.1"
+      {
+        Rosegold.read_game_asset("26.1/items.json"),
+        Rosegold.read_game_asset("26.1/blocks.json"),
+        Rosegold.read_game_asset("26.1/materials.json"),
+        Rosegold.read_game_asset("26.1/enchantments.json"),
+        Rosegold.read_game_asset("26.1/blockCollisionShapes.json"),
       }
     else
       raise "Unsupported version: #{mc_version}"
@@ -128,43 +138,27 @@ class Rosegold::MCData
   class Enchantment
     include JSON::Serializable
 
-    def initialize(@id : UInt32, @name : String, @display_name : String, @max_level : UInt8, @treasure_only : Bool, @curse : Bool, @category : String, @weight : UInt8, @tradeable : Bool, @discoverable : Bool)
+    def initialize(@id : UInt32, @name : String)
     end
 
     getter id : UInt32
-    @[JSON::Field(key: "name")]
     getter name : String
-    @[JSON::Field(key: "displayName")]
-    getter display_name : String
-    @[JSON::Field(key: "maxLevel")]
-    getter max_level : UInt8
-    @[JSON::Field(key: "treasureOnly")]
-    getter? treasure_only : Bool
-    getter? curse : Bool
-    getter category : String
-    getter weight : UInt8
-    getter? tradeable : Bool
-    getter? discoverable : Bool
   end
 
   # entries of items.json
   class Item
     include JSON::Serializable
 
-    def initialize(@id : UInt32, @name : String, @display_name : String, @stack_size : UInt8, @max_durability : UInt16? = nil, @repair_with : Array(String)? = nil, @enchant_categories : Array(String)? = nil)
+    def initialize(@id : UInt32, @name : String, @stack_size : UInt8, @max_durability : UInt16? = nil, @enchant_categories : Array(String)? = nil)
     end
 
     getter id : UInt32
     @[JSON::Field(key: "name")]
     getter name : String
-    @[JSON::Field(key: "displayName")]
-    getter display_name : String
     @[JSON::Field(key: "stackSize")]
     getter stack_size : UInt8
     @[JSON::Field(key: "maxDurability")]
     getter max_durability : UInt16?
-    @[JSON::Field(key: "repairWith")]
-    getter repair_with : Array(String)?
     @[JSON::Field(key: "enchantCategories")]
     getter enchant_categories : Array(String)?
   end

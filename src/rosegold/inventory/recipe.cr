@@ -2,35 +2,59 @@ module Rosegold
   abstract class SlotDisplay
     def self.read(io) : SlotDisplay
       type_id = io.read_var_int
-      case type_id
-      when 0 then SlotDisplayEmpty.new
-      when 1 then SlotDisplayAnyFuel.new
-      when 2 then SlotDisplayItem.read(io)
-      when 3 then SlotDisplayItemStack.read(io)
-      when 4 then SlotDisplayTag.read(io)
-      when 5 then SlotDisplaySmithingTrimDemo.read(io)
-      when 6 then SlotDisplayWithRemainder.read(io)
-      when 7 then SlotDisplayComposite.read(io)
-      else        raise "Unknown SlotDisplay type: #{type_id}"
+      if Client.protocol_version >= 775_u32
+        # 26.1: 3 new types inserted — with_any_potion(2), only_with_component(3), dyed(7)
+        case type_id
+        when  0 then SlotDisplayEmpty.new
+        when  1 then SlotDisplayAnyFuel.new
+        when  2 then SlotDisplayWithAnyPotion.read(io)
+        when  3 then SlotDisplayOnlyWithComponent.read(io)
+        when  4 then SlotDisplayItem.read(io)
+        when  5 then SlotDisplayItemStack.read(io)
+        when  6 then SlotDisplayTag.read(io)
+        when  7 then SlotDisplayDyed.read(io)
+        when  8 then SlotDisplaySmithingTrimDemo.read(io)
+        when  9 then SlotDisplayWithRemainder.read(io)
+        when 10 then SlotDisplayComposite.read(io)
+        else         raise "Unknown SlotDisplay type: #{type_id} (protocol 775)"
+        end
+      else
+        case type_id
+        when 0 then SlotDisplayEmpty.new
+        when 1 then SlotDisplayAnyFuel.new
+        when 2 then SlotDisplayItem.read(io)
+        when 3 then SlotDisplayItemStack.read(io)
+        when 4 then SlotDisplayTag.read(io)
+        when 5 then SlotDisplaySmithingTrimDemo.read(io)
+        when 6 then SlotDisplayWithRemainder.read(io)
+        when 7 then SlotDisplayComposite.read(io)
+        else        raise "Unknown SlotDisplay type: #{type_id}"
+        end
       end
     end
 
     def item_id : UInt32?
       case display = self
-      when SlotDisplayItem          then display.item_id
-      when SlotDisplayItemStack     then display.slot.item_id_int.to_u32
-      when SlotDisplayComposite     then display.options.first?.try &.item_id
-      when SlotDisplayWithRemainder then display.ingredient.item_id
+      when SlotDisplayItem              then display.item_id
+      when SlotDisplayItemStack         then display.slot.item_id_int.to_u32
+      when SlotDisplayComposite         then display.options.first?.try &.item_id
+      when SlotDisplayWithRemainder     then display.ingredient.item_id
+      when SlotDisplayWithAnyPotion     then display.display.item_id
+      when SlotDisplayOnlyWithComponent then display.source.item_id
+      when SlotDisplayDyed              then display.target.item_id
       end
     end
 
     def all_item_ids : Array(UInt32)
       case display = self
-      when SlotDisplayItem          then [display.item_id]
-      when SlotDisplayItemStack     then [display.slot.item_id_int.to_u32]
-      when SlotDisplayComposite     then display.options.compact_map(&.item_id)
-      when SlotDisplayWithRemainder then display.ingredient.all_item_ids
-      else                               id = item_id; id ? [id] : [] of UInt32
+      when SlotDisplayItem              then [display.item_id]
+      when SlotDisplayItemStack         then [display.slot.item_id_int.to_u32]
+      when SlotDisplayComposite         then display.options.compact_map(&.item_id)
+      when SlotDisplayWithRemainder     then display.ingredient.all_item_ids
+      when SlotDisplayWithAnyPotion     then display.display.all_item_ids
+      when SlotDisplayOnlyWithComponent then display.source.all_item_ids
+      when SlotDisplayDyed              then display.target.all_item_ids
+      else                                   id = item_id; id ? [id] : [] of UInt32
       end
     end
   end
@@ -55,7 +79,31 @@ module Rosegold
     def initialize(@slot); end
 
     def self.read(io) : self
-      new(Slot.read(io))
+      if Client.protocol_version >= 775_u32
+        # 26.1: ItemStackTemplate = item_holder, count, component_patch
+        # Different field order from Slot: item first, then count (Slot has count first)
+        item_id = io.read_var_int
+        count = io.read_var_int
+        # Component patch uses same format as Slot: add_count + remove_count + components
+        components_to_add_count = io.read_var_int
+        components_to_remove_count = io.read_var_int
+        components_to_add = Hash(String, DataComponent).new
+        components_to_add_count.times do
+          component_type = io.read_var_int
+          name = DataComponentTypes.name_for(component_type, Client.protocol_version) || "unknown_#{component_type}"
+          structured_component = DataComponent.create_component(component_type, io)
+          components_to_add[name] = structured_component
+        end
+        components_to_remove = Set(String).new
+        components_to_remove_count.times do
+          component_type = io.read_var_int
+          name = DataComponentTypes.name_for(component_type, Client.protocol_version) || "unknown_#{component_type}"
+          components_to_remove.add(name)
+        end
+        new(Slot.new(count: count, item_id_int: item_id, components_to_add: components_to_add, components_to_remove: components_to_remove))
+      else
+        new(Slot.read(io))
+      end
     end
   end
 
@@ -114,6 +162,43 @@ module Rosegold
       options = Array(SlotDisplay).new(count.to_i)
       count.times { options << SlotDisplay.read(io) }
       new(options)
+    end
+  end
+
+  # 26.1+ new SlotDisplay types
+  class SlotDisplayWithAnyPotion < SlotDisplay
+    getter display : SlotDisplay
+
+    def initialize(@display); end
+
+    def self.read(io) : self
+      new(SlotDisplay.read(io))
+    end
+  end
+
+  class SlotDisplayOnlyWithComponent < SlotDisplay
+    getter source : SlotDisplay
+    getter component_type_id : UInt32
+
+    def initialize(@source, @component_type_id); end
+
+    def self.read(io) : self
+      source = SlotDisplay.read(io)
+      component_type_id = io.read_var_int
+      new(source, component_type_id)
+    end
+  end
+
+  class SlotDisplayDyed < SlotDisplay
+    getter dye : SlotDisplay
+    getter target : SlotDisplay
+
+    def initialize(@dye, @target); end
+
+    def self.read(io) : self
+      dye = SlotDisplay.read(io)
+      target = SlotDisplay.read(io)
+      new(dye, target)
     end
   end
 
@@ -245,6 +330,7 @@ module Rosegold
       has_requirements = io.read_bool
       crafting_requirements = if has_requirements
                                 req_count = io.read_var_int
+                                raise ArgumentError.new("Invalid crafting requirement count: #{req_count} (max 1000)") if req_count > 1000_u32
                                 Array(Array(UInt32)).new(req_count.to_i).tap do |reqs|
                                   req_count.times do
                                     reqs << read_ingredient(io)

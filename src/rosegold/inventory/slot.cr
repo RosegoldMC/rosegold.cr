@@ -88,9 +88,61 @@ module Rosegold::DataComponentTypes
     101_u32 => "cat/collar", 102_u32 => "sheep/color", 103_u32 => "shulker/color",
   }
 
+  # Protocol 775 (MC 26.1) — 110 component types (6 new: additional_trade_cost, dye, pig/sound_variant, cow/sound_variant, chicken/sound_variant, cat/sound_variant)
+  PROTOCOL_775 = {
+    0_u32 => "custom_data", 1_u32 => "max_stack_size", 2_u32 => "max_damage",
+    3_u32 => "damage", 4_u32 => "unbreakable", 5_u32 => "use_effects",
+    6_u32 => "custom_name", 7_u32 => "minimum_attack_charge", 8_u32 => "damage_type",
+    9_u32 => "item_name", 10_u32 => "item_model", 11_u32 => "lore",
+    12_u32 => "rarity", 13_u32 => "enchantments", 14_u32 => "can_place_on",
+    15_u32 => "can_break", 16_u32 => "attribute_modifiers", 17_u32 => "custom_model_data",
+    18_u32 => "tooltip_display", 19_u32 => "repair_cost", 20_u32 => "creative_slot_lock",
+    21_u32 => "enchantment_glint_override", 22_u32 => "intangible_projectile",
+    23_u32 => "food", 24_u32 => "consumable", 25_u32 => "use_remainder",
+    26_u32 => "use_cooldown", 27_u32 => "damage_resistant", 28_u32 => "tool",
+    29_u32 => "weapon", 30_u32 => "attack_range", 31_u32 => "enchantable",
+    32_u32 => "equippable", 33_u32 => "repairable", 34_u32 => "glider",
+    35_u32 => "tooltip_style", 36_u32 => "death_protection", 37_u32 => "blocks_attacks",
+    38_u32 => "piercing_weapon", 39_u32 => "kinetic_weapon", 40_u32 => "swing_animation",
+    41_u32 => "additional_trade_cost", # NEW in 26.1
+    42_u32 => "stored_enchantments",
+    43_u32 => "dye", # NEW in 26.1
+    44_u32 => "dyed_color", 45_u32 => "map_color",
+    46_u32 => "map_id", 47_u32 => "map_decorations", 48_u32 => "map_post_processing",
+    49_u32 => "charged_projectiles", 50_u32 => "bundle_contents",
+    51_u32 => "potion_contents", 52_u32 => "potion_duration_scale",
+    53_u32 => "suspicious_stew_effects", 54_u32 => "writable_book_content",
+    55_u32 => "written_book_content", 56_u32 => "trim", 57_u32 => "debug_stick_state",
+    58_u32 => "entity_data", 59_u32 => "bucket_entity_data",
+    60_u32 => "block_entity_data", 61_u32 => "instrument",
+    62_u32 => "provides_trim_material", 63_u32 => "ominous_bottle_amplifier",
+    64_u32 => "jukebox_playable", 65_u32 => "provides_banner_patterns",
+    66_u32 => "recipes", 67_u32 => "lodestone_tracker", 68_u32 => "firework_explosion",
+    69_u32 => "fireworks", 70_u32 => "profile", 71_u32 => "note_block_sound",
+    72_u32 => "banner_patterns", 73_u32 => "base_color", 74_u32 => "pot_decorations",
+    75_u32 => "container", 76_u32 => "block_state", 77_u32 => "bees",
+    78_u32 => "lock", 79_u32 => "container_loot", 80_u32 => "break_sound",
+    81_u32 => "villager/variant", 82_u32 => "wolf/variant", 83_u32 => "wolf/sound_variant",
+    84_u32 => "wolf/collar", 85_u32 => "fox/variant", 86_u32 => "salmon/size",
+    87_u32 => "parrot/variant", 88_u32 => "tropical_fish/pattern",
+    89_u32 => "tropical_fish/base_color", 90_u32 => "tropical_fish/pattern_color",
+    91_u32 => "mooshroom/variant", 92_u32 => "rabbit/variant", 93_u32 => "pig/variant",
+    94_u32 => "pig/sound_variant", # NEW in 26.1
+    95_u32 => "cow/variant",
+    96_u32 => "cow/sound_variant", # NEW in 26.1
+    97_u32 => "chicken/variant",
+    98_u32 => "chicken/sound_variant", # NEW in 26.1
+    99_u32 => "zombie_nautilus/variant",
+    100_u32 => "frog/variant", 101_u32 => "horse/variant", 102_u32 => "painting/variant",
+    103_u32 => "llama/variant", 104_u32 => "axolotl/variant", 105_u32 => "cat/variant",
+    106_u32 => "cat/sound_variant", # NEW in 26.1
+    107_u32 => "cat/collar", 108_u32 => "sheep/color", 109_u32 => "shulker/color",
+  }
+
   PROTOCOL_MAP = {
     772_u32 => PROTOCOL_772,
     774_u32 => PROTOCOL_774,
+    775_u32 => PROTOCOL_775,
   }
 
   def self.name_for(component_type : UInt32, protocol_version : UInt32) : String?
@@ -172,8 +224,7 @@ abstract class Rosegold::DataComponent
     when "suspicious_stew_effects" then DataComponents::SuspiciousStewEffects.read(io)
     when "writable_book_content"   then DataComponents::WritableBookContent.read(io)
     when "written_book_content"    then DataComponents::WrittenBookContent.read(io)
-    when "bucket_entity_data"
-      Client.protocol_version >= 774_u32 ? DataComponents::TypedEntityData.read(io) : DataComponents::EntityData.read(io)
+    when "bucket_entity_data"      then DataComponents::EntityData.read(io)
     when "block_entity_data"
       Client.protocol_version >= 774_u32 ? DataComponents::TypedEntityData.read(io) : DataComponents::EntityData.read(io)
     when "debug_stick_state"        then DataComponents::EntityData.read(io) # NBT compound
@@ -208,6 +259,9 @@ abstract class Rosegold::DataComponent
     when "piercing_weapon"       then DataComponents::PiercingWeapon.read(io)
     when "kinetic_weapon"        then DataComponents::KineticWeapon.read(io)
     when "swing_animation"       then DataComponents::SwingAnimation.read(io)
+      # New 26.1 component types
+    when "additional_trade_cost" then DataComponents::VarIntComponent.read(io)
+    when "dye"                   then DataComponents::VarIntComponent.read(io)
       # Entity variant components (most are simple VarInt)
     when "villager/variant"            then DataComponents::VarIntComponent.read(io)
     when "wolf/variant"                then DataComponents::HolderComponent.read(io)
@@ -222,18 +276,24 @@ abstract class Rosegold::DataComponent
     when "mooshroom/variant"           then DataComponents::VarIntComponent.read(io)
     when "rabbit/variant"              then DataComponents::VarIntComponent.read(io)
     when "pig/variant"                 then DataComponents::HolderComponent.read(io)
+    when "pig/sound_variant"           then DataComponents::HolderComponent.read(io)
     when "cow/variant"                 then DataComponents::HolderComponent.read(io)
-    when "chicken/variant"             then DataComponents::EitherHolderComponent.read(io)
-    when "zombie_nautilus/variant"     then DataComponents::EitherHolderComponent.read(io)
-    when "frog/variant"                then DataComponents::HolderComponent.read(io)
-    when "horse/variant"               then DataComponents::VarIntComponent.read(io)
-    when "painting/variant"            then DataComponents::HolderComponent.read(io)
-    when "llama/variant"               then DataComponents::VarIntComponent.read(io)
-    when "axolotl/variant"             then DataComponents::VarIntComponent.read(io)
-    when "cat/variant"                 then DataComponents::HolderComponent.read(io)
-    when "cat/collar"                  then DataComponents::VarIntComponent.read(io)
-    when "sheep/color"                 then DataComponents::VarIntComponent.read(io)
-    when "shulker/color"               then DataComponents::VarIntComponent.read(io)
+    when "cow/sound_variant"           then DataComponents::HolderComponent.read(io)
+    when "chicken/variant"
+      Client.protocol_version >= 775_u32 ? DataComponents::VarIntComponent.read(io) : DataComponents::EitherHolderComponent.read(io)
+    when "chicken/sound_variant" then DataComponents::HolderComponent.read(io)
+    when "zombie_nautilus/variant"
+      Client.protocol_version >= 775_u32 ? DataComponents::VarIntComponent.read(io) : DataComponents::EitherHolderComponent.read(io)
+    when "frog/variant"      then DataComponents::HolderComponent.read(io)
+    when "horse/variant"     then DataComponents::VarIntComponent.read(io)
+    when "painting/variant"  then DataComponents::HolderComponent.read(io)
+    when "llama/variant"     then DataComponents::VarIntComponent.read(io)
+    when "axolotl/variant"   then DataComponents::VarIntComponent.read(io)
+    when "cat/variant"       then DataComponents::HolderComponent.read(io)
+    when "cat/collar"        then DataComponents::VarIntComponent.read(io)
+    when "cat/sound_variant" then DataComponents::HolderComponent.read(io)
+    when "sheep/color"       then DataComponents::VarIntComponent.read(io)
+    when "shulker/color"     then DataComponents::VarIntComponent.read(io)
     else
       raise UnknownComponentError.new("Unknown data component type: #{component_type} (#{name || "unmapped"})")
     end

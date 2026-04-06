@@ -86,7 +86,11 @@ class Rosegold::Interactions
 
     case reached = reach_block_or_entity
     when Entity
-      send_packet Serverbound::InteractEntity.new reached.entity_id, :attack
+      if Client.protocol_version >= 775_u32
+        send_packet Serverbound::Attack.new reached.entity_id
+      else
+        send_packet Serverbound::InteractEntity.new reached.entity_id, :attack
+      end
       send_packet Serverbound::SwingArm.new
       client.emit_event Event::ArmSwing.new
     when ReachedBlock

@@ -3,6 +3,7 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x01_u32, # MC 1.21.8
     774_u32 => 0x01_u32, # MC 1.21.11
+    775_u32 => 0x01_u32, # MC 26.1
   })
   class_getter state = ProtocolState::PLAY
 
@@ -99,6 +100,7 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
   ENTITY_TYPE_PLAYER_BY_PROTOCOL = {
     772_u32 => 149_u32, # MC 1.21.8
     774_u32 => 155_u32, # MC 1.21.11
+    775_u32 => 155_u32, # MC 26.1
   }
 
   def self.entity_type_player : UInt32

@@ -43,6 +43,10 @@ class Rosegold::PalettedContainer
       return
     end
 
+    if bits_per_entry > 63
+      raise "Invalid bits_per_entry=#{bits_per_entry} (num_bits_direct=#{num_bits_direct}, size=#{size}) — likely stream misalignment"
+    end
+
     if bits_per_entry >= num_bits_direct # direct mode
       @palette = [] of Entry
     else # linear

@@ -7,9 +7,9 @@ module Rosegold::Spectate::PacketRelay
     ids = Set(UInt32).new
     # Raw packets
     {
-      {772_u32 => 0x5C_u32, 774_u32 => 0x61_u32}, # set_entity_data
-      {772_u32 => 0x5E_u32, 774_u32 => 0x63_u32}, # set_entity_motion
-      {772_u32 => 0x7C_u32, 774_u32 => 0x81_u32}, # update_attributes
+      {772_u32 => 0x5C_u32, 774_u32 => 0x61_u32, 775_u32 => 0x63_u32}, # set_entity_data
+      {772_u32 => 0x5E_u32, 774_u32 => 0x63_u32, 775_u32 => 0x65_u32}, # set_entity_motion
+      {772_u32 => 0x7C_u32, 774_u32 => 0x81_u32, 775_u32 => 0x83_u32}, # update_attributes
     }.each do |id_map|
       id_map[protocol]?.try { |id| ids << id }
     end

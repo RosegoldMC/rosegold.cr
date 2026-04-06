@@ -1,29 +1,25 @@
 class Rosegold::Entity
   METADATA_1218  = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.8/entities.json")
   METADATA_12111 = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.11/entities.json")
+  METADATA_261   = Array(Metadata).from_json(Rosegold.read_game_asset "26.1/entities.json")
 
   METADATA_BY_PROTOCOL = {
     772_u32 => METADATA_1218,
     774_u32 => METADATA_12111,
+    775_u32 => METADATA_261,
   }
 
   def self.metadata_for_protocol : Array(Metadata)
-    METADATA_BY_PROTOCOL[Client.protocol_version]? || METADATA_12111
+    METADATA_BY_PROTOCOL[Client.protocol_version]? || METADATA_261
   end
 
   class Metadata
     include JSON::Serializable
 
     property id : Int32
-    @[JSON::Field(key: "internalId")]
-    property internal_id : Int32
     property name : String
-    @[JSON::Field(key: "displayName")]
-    property display_name : String
     property width : Float64
     property height : Float64
-    property type : String
-    property category : String
   end
 
   property \

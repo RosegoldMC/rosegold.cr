@@ -50,6 +50,7 @@ jobs:
         minecraft_version:
           - "1.21.8"
           - "1.21.11"
+          - "26.1"
         experimental:
           - false
 

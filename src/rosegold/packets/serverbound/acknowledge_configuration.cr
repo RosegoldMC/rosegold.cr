@@ -6,6 +6,7 @@ class Rosegold::Serverbound::AcknowledgeConfiguration < Rosegold::Serverbound::P
   packet_ids({
     772_u32 => 0x0F_u32, # MC 1.21.8
     774_u32 => 0x0F_u32, # MC 1.21.11
+    775_u32 => 0x10_u32, # MC 26.1
   })
 
   class_getter state = ProtocolState::PLAY

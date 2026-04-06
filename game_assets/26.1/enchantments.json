@@ -1,0 +1,174 @@
+[
+  {
+    "id": 0,
+    "name": "aqua_affinity"
+  },
+  {
+    "id": 1,
+    "name": "bane_of_arthropods"
+  },
+  {
+    "id": 2,
+    "name": "binding_curse"
+  },
+  {
+    "id": 3,
+    "name": "blast_protection"
+  },
+  {
+    "id": 4,
+    "name": "breach"
+  },
+  {
+    "id": 5,
+    "name": "channeling"
+  },
+  {
+    "id": 6,
+    "name": "density"
+  },
+  {
+    "id": 7,
+    "name": "depth_strider"
+  },
+  {
+    "id": 8,
+    "name": "efficiency"
+  },
+  {
+    "id": 9,
+    "name": "feather_falling"
+  },
+  {
+    "id": 10,
+    "name": "fire_aspect"
+  },
+  {
+    "id": 11,
+    "name": "fire_protection"
+  },
+  {
+    "id": 12,
+    "name": "flame"
+  },
+  {
+    "id": 13,
+    "name": "fortune"
+  },
+  {
+    "id": 14,
+    "name": "frost_walker"
+  },
+  {
+    "id": 15,
+    "name": "impaling"
+  },
+  {
+    "id": 16,
+    "name": "infinity"
+  },
+  {
+    "id": 17,
+    "name": "knockback"
+  },
+  {
+    "id": 18,
+    "name": "looting"
+  },
+  {
+    "id": 19,
+    "name": "loyalty"
+  },
+  {
+    "id": 20,
+    "name": "luck_of_the_sea"
+  },
+  {
+    "id": 21,
+    "name": "lunge"
+  },
+  {
+    "id": 22,
+    "name": "lure"
+  },
+  {
+    "id": 23,
+    "name": "mending"
+  },
+  {
+    "id": 24,
+    "name": "multishot"
+  },
+  {
+    "id": 25,
+    "name": "piercing"
+  },
+  {
+    "id": 26,
+    "name": "power"
+  },
+  {
+    "id": 27,
+    "name": "projectile_protection"
+  },
+  {
+    "id": 28,
+    "name": "protection"
+  },
+  {
+    "id": 29,
+    "name": "punch"
+  },
+  {
+    "id": 30,
+    "name": "quick_charge"
+  },
+  {
+    "id": 31,
+    "name": "respiration"
+  },
+  {
+    "id": 32,
+    "name": "riptide"
+  },
+  {
+    "id": 33,
+    "name": "sharpness"
+  },
+  {
+    "id": 34,
+    "name": "silk_touch"
+  },
+  {
+    "id": 35,
+    "name": "smite"
+  },
+  {
+    "id": 36,
+    "name": "soul_speed"
+  },
+  {
+    "id": 37,
+    "name": "sweeping_edge"
+  },
+  {
+    "id": 38,
+    "name": "swift_sneak"
+  },
+  {
+    "id": 39,
+    "name": "thorns"
+  },
+  {
+    "id": 40,
+    "name": "unbreaking"
+  },
+  {
+    "id": 41,
+    "name": "vanishing_curse"
+  },
+  {
+    "id": 42,
+    "name": "wind_burst"
+  }
+]

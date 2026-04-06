@@ -5,6 +5,7 @@ class Rosegold::Serverbound::InteractEntity < Rosegold::Serverbound::Packet
   packet_ids({
     772_u32 => 0x19_u32, # MC 1.21.8
     774_u32 => 0x19_u32, # MC 1.21.11
+    775_u32 => 0x1A_u32, # MC 26.1
   })
 
   enum Action
@@ -39,19 +40,31 @@ class Rosegold::Serverbound::InteractEntity < Rosegold::Serverbound::Packet
       else
         buffer.write entity_id
       end
-      buffer.write action.value
 
-      if action == Action::InteractAt
-        buffer.write target_x.not_nil! # ameba:disable Lint/NotNil
-        buffer.write target_y.not_nil! # ameba:disable Lint/NotNil
-        buffer.write target_z.not_nil! # ameba:disable Lint/NotNil
+      if Client.protocol_version >= 775_u32
+        # 26.1: flat format — hand + location + usingSecondaryAction (no action enum)
+        buffer.write (hand || Hand::MainHand).value
+        buffer.write_lp_vec3(
+          (target_x || 0.0_f32).to_f64,
+          (target_y || 0.0_f32).to_f64,
+          (target_z || 0.0_f32).to_f64,
+        )
+        buffer.write sneaking?
+      else
+        buffer.write action.value
+
+        if action == Action::InteractAt
+          buffer.write target_x.not_nil! # ameba:disable Lint/NotNil
+          buffer.write target_y.not_nil! # ameba:disable Lint/NotNil
+          buffer.write target_z.not_nil! # ameba:disable Lint/NotNil
+        end
+
+        if action == Action::Interact || action == Action::InteractAt
+          buffer.write hand.not_nil!.value # ameba:disable Lint/NotNil
+        end
+
+        buffer.write sneaking?
       end
-
-      if action == Action::Interact || action == Action::InteractAt
-        buffer.write hand.not_nil!.value # ameba:disable Lint/NotNil
-      end
-
-      buffer.write sneaking?
     end.to_slice
   end
 end

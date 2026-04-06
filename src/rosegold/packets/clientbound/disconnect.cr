@@ -6,6 +6,7 @@ class Rosegold::Clientbound::Disconnect < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x1c_u32, # MC 1.21.8
     774_u32 => 0x20_u32, # MC 1.21.11
+    775_u32 => 0x20_u32, # MC 26.1
   })
 
   property reason : TextComponent

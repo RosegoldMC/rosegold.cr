@@ -3,6 +3,7 @@ class Rosegold::Clientbound::EntityPosition < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x2E_u32, # MC 1.21.8
     774_u32 => 0x33_u32, # MC 1.21.11
+    775_u32 => 0x35_u32, # MC 26.1
   })
 
   property \

@@ -45,6 +45,10 @@ private def write_slot_display_item_stack(io, item_id : UInt32, count : UInt32 =
 end
 
 Spectator.describe Rosegold::SlotDisplay do
+  # These unit tests use hardcoded 1.21.x wire format type IDs (pre-26.1)
+  before_each { Rosegold::Client.protocol_version = 774_u32 }
+  after_each { Rosegold::Client.reset_protocol_version! }
+
   describe ".read" do
     it "parses Empty (type 0)" do
       io = build_io { |writer| write_slot_display_empty(writer) }
@@ -148,6 +152,9 @@ Spectator.describe Rosegold::SlotDisplay do
 end
 
 Spectator.describe Rosegold::RecipeDisplay do
+  before_each { Rosegold::Client.protocol_version = 774_u32 }
+  after_each { Rosegold::Client.reset_protocol_version! }
+
   describe ".read" do
     it "parses ShapedCrafting (type 1)" do
       io = build_io do |writer|
@@ -286,6 +293,9 @@ Spectator.describe Rosegold::RecipeDisplay do
 end
 
 Spectator.describe Rosegold::RecipeDisplayEntry do
+  before_each { Rosegold::Client.protocol_version = 774_u32 }
+  after_each { Rosegold::Client.reset_protocol_version! }
+
   describe ".read" do
     it "parses entry with no group and no crafting requirements" do
       io = build_io do |writer|

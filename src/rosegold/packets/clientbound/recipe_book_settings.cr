@@ -5,6 +5,7 @@ class Rosegold::Clientbound::RecipeBookSettings < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x45_u32, # MC 1.21.8
     774_u32 => 0x4A_u32, # MC 1.21.11
+    775_u32 => 0x4C_u32, # MC 26.1
   })
 
   property? crafting_open : Bool
