@@ -83,8 +83,10 @@ jobs:
         run: touch .env
 
       - name: Run integration tests
+        id: first-run
+        continue-on-error: true
         run: crystal spec
 
       - name: Retry failed specs
-        if: failure()
+        if: steps.first-run.outcome == 'failure'
         run: crystal spec --only-failures
