@@ -20,6 +20,9 @@ class Rosegold::Entity
     property name : String
     property width : Float64
     property height : Float64
+    @[JSON::Field(key: "type")]
+    property entity_type : String = ""
+    property category : String = ""
   end
 
   property \
@@ -37,6 +40,19 @@ class Rosegold::Entity
   property? \
     on_ground : Bool = true,
     living : Bool = false
+
+  # Matches vanilla MC's Entity.isPickable() = false. Default is pickable; only these are excluded.
+  NON_PICKABLE_ENTITIES = Set{
+    "item", "experience_orb", "area_effect_cloud", "marker",
+    "block_display", "item_display", "text_display",
+    "lightning_bolt", "evoker_fangs", "ominous_item_spawner",
+    "eye_of_ender", "arrow", "spectral_arrow", "trident",
+    "fireball", "small_fireball", "dragon_fireball", "wither_skull",
+    "snowball", "egg", "ender_pearl", "experience_bottle",
+    "splash_potion", "lingering_potion", "llama_spit",
+    "wind_charge", "breeze_wind_charge", "firework_rocket",
+    "fishing_bobber",
+  }
 
   def initialize(@entity_id, @uuid, @entity_type, @position, @pitch, @yaw, @head_yaw, @velocity, @on_ground = true, @living = false)
   end
@@ -61,6 +77,13 @@ class Rosegold::Entity
 
       AABBd.new(min, max)
     end
+  end
+
+  # Mirrors vanilla MC's Entity.isPickable().
+  def pickable?
+    meta = metadata
+    return false unless meta
+    !NON_PICKABLE_ENTITIES.includes?(meta.name)
   end
 
   def update_passengers(client)

@@ -85,6 +85,11 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
 
   def callback(client)
     Log.debug { "Received spawn entity packet for entity ID #{entity_id}, UUID #{uuid}, type #{entity_type}" }
+    entity_meta = Entity.metadata_for_protocol.find { |data| data.id == entity_type }
+    is_living = entity_meta.try { |meta|
+      meta.entity_type.in?("mob", "animal", "hostile", "passive", "ambient", "living", "player")
+    } || false
+
     client.dimension.entities[entity_id] = Rosegold::Entity.new \
       entity_id.to_u32,
       uuid,
@@ -94,7 +99,7 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
       yaw.to_f32,
       head_yaw.to_f32,
       Vec3d.new(velocity_x, velocity_y, velocity_z),
-      living: true
+      living: is_living
   end
 
   ENTITY_TYPE_PLAYER_BY_PROTOCOL = {
