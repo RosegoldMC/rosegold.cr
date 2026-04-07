@@ -163,7 +163,10 @@ class Rosegold::Interactions
       @queue_using_hand = nil
       case reached = reach_block_or_entity
       when Entity
-        Log.warn { "Rosegold does not support using items on entities yet" }
+        Log.debug { "Interacting with entity #{reached.entity_id}" }
+        send_packet Serverbound::InteractEntity.new reached.entity_id.to_u64, :interact, hand: using_hand
+        send_packet Serverbound::SwingArm.new using_hand
+        client.emit_event Event::ArmSwing.new(using_hand)
       when ReachedBlock
         Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
         place_block using_hand, reached
@@ -281,13 +284,13 @@ class Rosegold::Interactions
     # Get all block collision boxes
     block_boxes = get_block_hitboxes(eyes, reach_vector)
 
-    # Get all entity bounding boxes for living entities within reach
+    # Get all entity bounding boxes for pickable entities within reach
     entity_boxes = [] of AABBd
     entity_map = [] of Rosegold::Entity
 
     reach_aabb = AABBd.new(eyes, eyes + reach_vector)
     client.dimension.entities.each_value do |entity|
-      next unless entity.living?
+      next unless entity.pickable?
 
       entity_bounding_box = entity.bounding_box
       # Only include entities that could potentially be hit
