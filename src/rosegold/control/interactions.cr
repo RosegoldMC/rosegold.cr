@@ -51,6 +51,7 @@ class Rosegold::Interactions
   # Activates the "attack" button.
   def start_digging
     return if digging?
+    return if @using_hand || @queue_using_hand # Vanilla: suppress attacks while using item
 
     self.digging = true
     @attack_queued = true
