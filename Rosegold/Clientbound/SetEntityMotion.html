@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::DataComponents::PotionContents - rosegold main</title>
+  <title>Rosegold::Clientbound::SetEntityMotion - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -372,7 +372,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
@@ -697,7 +697,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/SetEntityMotion" data-name="rosegold::clientbound::setentitymotion">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/SetEntityMotion" data-name="rosegold::clientbound::setentitymotion">
       <a href="../../Rosegold/Clientbound/SetEntityMotion.html">SetEntityMotion</a>
       
     </li>
@@ -847,7 +847,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
+  <li class="parent " data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
       <a href="../../Rosegold/DataComponents.html">DataComponents</a>
       
         <ul>
@@ -1137,7 +1137,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/DataComponents/PotionContents" data-name="rosegold::datacomponents::potioncontents">
+  <li class="parent " data-id="rosegold/Rosegold/DataComponents/PotionContents" data-name="rosegold::datacomponents::potioncontents">
       <a href="../../Rosegold/DataComponents/PotionContents.html">PotionContents</a>
       
         <ul>
@@ -2323,32 +2323,35 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>DataComponents::<wbr>PotionContents
+  </span> Rosegold::<wbr>Clientbound::<wbr>SetEntityMotion
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/DataComponents/PotionContents.html">Rosegold::DataComponents::PotionContents</a></li><li class="superclass"><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/SetEntityMotion.html">Rosegold::Clientbound::SetEntityMotion</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+
+
 
 
 
 
   <h2>
-    <a id="overview" class="anchor" href="#overview">
+    <a id="included-modules" class="anchor" href="#included-modules">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Overview
+    Included Modules
   </h2>
-
-  <p>Component for potion contents (visual and effects of a potion item)</p>
-
-
-
-
-
-
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></li>
+    
+  </ul>
 
 
 
@@ -2369,14 +2372,37 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L940" target="_blank">
-        rosegold/inventory/slot.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L1" target="_blank">
+        rosegold/packets/clientbound/set_entity_motion.cr
       </a>
     
     <br/>
   
 
 
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="PROTOCOL_PACKET_IDS">
+        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">94_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">99_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">101_u32</span>}</code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Store the protocol mappings as a constant</p>
+      </dd>
+      
+    
+  </dl>
 
 
 
@@ -2392,12 +2418,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28has_potion_id%3ABool%3Dfalse%2Cpotion_id%3AUInt32%7CNil%3Dnil%2Chas_custom_color%3ABool%3Dfalse%2Ccustom_color%3AUInt32%7CNil%3Dnil%2Ccustom_effects%3AArray%28Rosegold%3A%3ADataComponents%3A%3APotionContents%3A%3APotionEffect%29%3D%5B%5DofPotionEffect%2Ccustom_name%3AString%3D%22%22%29-class-method" class="signature"><strong>.new</strong>(has_potion_id : Bool = <span class="n">false</span>, potion_id : UInt32 | Nil = <span class="n">nil</span>, has_custom_color : Bool = <span class="n">false</span>, custom_color : UInt32 | Nil = <span class="n">nil</span>, custom_effects : Array(Rosegold::DataComponents::PotionContents::PotionEffect) = <span class="o">[]</span> <span class="k">of</span> <span class="t">PotionEffect</span>, custom_name : String = <span class="s">&quot;&quot;</span>)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read%28io%29%3APotionContents-class-method" class="signature"><strong>.read</strong>(io) : PotionContents</a>
+        <a href="#new%28entity_id%3AUInt64%2Cvelocity_x%3AFloat64%2Cvelocity_y%3AFloat64%2Cvelocity_z%3AFloat64%29-class-method" class="signature"><strong>.new</strong>(entity_id : UInt64, velocity_x : Float64, velocity_y : Float64, velocity_z : Float64)</a>
         
       </li>
     
@@ -2405,6 +2426,70 @@
 
 
   
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt32-class-method" class="signature"><strong>.[]</strong>(protocol_version : UInt32) : UInt32</a>
+        
+          <div class="summary"><p>Generate the <a href="protocol_version"></a> method for elegant access</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#default_packet_id%3AUInt32-class-method" class="signature"><strong>.default_packet_id</strong> : UInt32</a>
+        
+          <div class="summary"><p>Define default packet ID (typically the latest/most common version)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#packet_id%3AUInt32-class-method" class="signature"><strong>.packet_id</strong> : UInt32</a>
+        
+          <div class="summary"><p>Provide backward compatibility with existing packet_id class getter Use the first protocol's packet ID for registration compatibility</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt32-class-method" class="signature"><strong>.packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt32</a>
+        
+          <div class="summary"><p>Get packet ID for specific protocol version (returns UInt32 for VarInt encoding in write methods)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#state-class-method" class="signature"><strong>.state</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#supported_protocols%3AArray%28UInt32%29-class-method" class="signature"><strong>.supported_protocols</strong> : Array(UInt32)</a>
+        
+          <div class="summary"><p>Helper method to get all supported protocols</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method" class="signature"><strong>.supports_protocol?</strong>(protocol_version : UInt32) : Bool</a>
+        
+          <div class="summary"><p>Helper method to check if a protocol is supported</p></div>
+        
+      </li>
+    
+  </ul>
+
 
   
 
@@ -2420,67 +2505,52 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#custom_color%3AUInt32%7CNil-instance-method" class="signature"><strong>#custom_color</strong> : UInt32 | Nil</a>
+        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#custom_color%3D%28custom_color%3AUInt32%7CNil%29-instance-method" class="signature"><strong>#custom_color=</strong>(custom_color : UInt32 | Nil)</a>
+        <a href="#entity_id%3AUInt64-instance-method" class="signature"><strong>#entity_id</strong> : UInt64</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#custom_effects%3AArray%28PotionEffect%29-instance-method" class="signature"><strong>#custom_effects</strong> : Array(PotionEffect)</a>
+        <a href="#entity_id%3D%28entity_id%3AUInt64%29-instance-method" class="signature"><strong>#entity_id=</strong>(entity_id : UInt64)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#custom_effects%3D%28custom_effects%3AArray%28PotionEffect%29%29-instance-method" class="signature"><strong>#custom_effects=</strong>(custom_effects : Array(PotionEffect))</a>
+        <a href="#velocity_x%3AFloat64-instance-method" class="signature"><strong>#velocity_x</strong> : Float64</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#custom_name%3AString-instance-method" class="signature"><strong>#custom_name</strong> : String</a>
+        <a href="#velocity_x%3D%28velocity_x%3AFloat64%29-instance-method" class="signature"><strong>#velocity_x=</strong>(velocity_x : Float64)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#custom_name%3D%28custom_name%3AString%29-instance-method" class="signature"><strong>#custom_name=</strong>(custom_name : String)</a>
+        <a href="#velocity_y%3AFloat64-instance-method" class="signature"><strong>#velocity_y</strong> : Float64</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#has_custom_color%3D%28has_custom_color%3ABool%29-instance-method" class="signature"><strong>#has_custom_color=</strong>(has_custom_color : Bool)</a>
+        <a href="#velocity_y%3D%28velocity_y%3AFloat64%29-instance-method" class="signature"><strong>#velocity_y=</strong>(velocity_y : Float64)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#has_custom_color%3F%3ABool-instance-method" class="signature"><strong>#has_custom_color?</strong> : Bool</a>
+        <a href="#velocity_z%3AFloat64-instance-method" class="signature"><strong>#velocity_z</strong> : Float64</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#has_potion_id%3D%28has_potion_id%3ABool%29-instance-method" class="signature"><strong>#has_potion_id=</strong>(has_potion_id : Bool)</a>
+        <a href="#velocity_z%3D%28velocity_z%3AFloat64%29-instance-method" class="signature"><strong>#velocity_z=</strong>(velocity_z : Float64)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#has_potion_id%3F%3ABool-instance-method" class="signature"><strong>#has_potion_id?</strong> : Bool</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#potion_id%3AUInt32%7CNil-instance-method" class="signature"><strong>#potion_id</strong> : UInt32 | Nil</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#potion_id%3D%28potion_id%3AUInt32%7CNil%29-instance-method" class="signature"><strong>#potion_id=</strong>(potion_id : UInt32 | Nil)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%28io%29%3ANil-instance-method" class="signature"><strong>#write</strong>(io) : Nil</a>
+        <a href="#write%3ABytes-instance-method" class="signature"><strong>#write</strong> : Bytes</a>
         
       </li>
     
@@ -2492,11 +2562,70 @@
     
       
 
-  <h3>Instance methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
+
+      
+
+
+      
+
+
+      
+
+  <h3>Macros inherited from module <code><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></code></h3>
   
   
-    <a href="../../Rosegold/DataComponent.html#write%28io%29%3ANil-instance-method" class="tooltip">
-      <span>write(io) : Nil</span>
+    <a href="../../Rosegold/Packets/ProtocolMapping.html#packet_ids%28mappings%29-macro" class="tooltip">
+      <span>packet_ids(mappings)</span>
+    packet_ids</a>
+    
+  
+
+
+    
+      
+
+
+      
+
+
+      
+
+  <h3>Class methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
+      <span>new_raw(bytes)</span>
+    new_raw</a>, 
+    
+  
+    <a href="../../Rosegold/Clientbound/Packet.html#state-class-method" class="tooltip">
+      <span>state</span>
+    state</a>
+    
+  
+
+
+      
+
+
+    
+      
+
+  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
+      <span>callback(client_or_server)</span>
+    callback</a>, 
+    
+  
+    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
+      <span>to_s(io)</span>
+    to_s</a>, 
+    
+  
+    <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
+      <span>write : Bytes</span>
     write</a>
     
   
@@ -2504,19 +2633,18 @@
 
       
 
-  <h3>Constructor methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
-  
-  
-    <a href="../../Rosegold/DataComponent.html#create_component%28component_type%3AUInt32%2Cio%29%3ADataComponent-class-method" class="tooltip">
-      <span>create_component(component_type : UInt32, io) : DataComponent</span>
-    create_component</a>, 
+
+      
+
+
+      
+
+
     
-  
-    <a href="../../Rosegold/DataComponent.html#create_component_by_name%28name%3AString%7CNil%2Ccomponent_type%3AUInt32%2Cio%29%3ADataComponent-class-method" class="tooltip">
-      <span>create_component_by_name(name : String | Nil, component_type : UInt32, io) : DataComponent</span>
-    create_component_by_name</a>
-    
-  
+      
+
+
+      
 
 
       
@@ -2564,34 +2692,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(has_potion_id:Bool=false,potion_id:UInt32|Nil=nil,has_custom_color:Bool=false,custom_color:UInt32|Nil=nil,custom_effects:Array(Rosegold::DataComponents::PotionContents::PotionEffect)=[]ofPotionEffect,custom_name:String=&quot;&quot;)-class-method">
+    <div class="entry-detail" id="new(entity_id:UInt64,velocity_x:Float64,velocity_y:Float64,velocity_z:Float64)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(has_potion_id : Bool = <span class="n">false</span>, potion_id : UInt32 | Nil = <span class="n">nil</span>, has_custom_color : Bool = <span class="n">false</span>, custom_color : UInt32 | Nil = <span class="n">nil</span>, custom_effects : Array(<a href="../../Rosegold/DataComponents/PotionContents/PotionEffect.html">Rosegold::DataComponents::PotionContents::PotionEffect</a>) = <span class="o">[]</span> <span class="k">of</span> <span class="t">PotionEffect</span>, custom_name : String = <span class="s">&quot;&quot;</span>)
+        def self.<strong>new</strong>(entity_id : UInt64, velocity_x : Float64, velocity_y : Float64, velocity_z : Float64)
 
-        <a class="method-permalink" href="#new%28has_potion_id%3ABool%3Dfalse%2Cpotion_id%3AUInt32%7CNil%3Dnil%2Chas_custom_color%3ABool%3Dfalse%2Ccustom_color%3AUInt32%7CNil%3Dnil%2Ccustom_effects%3AArray%28Rosegold%3A%3ADataComponents%3A%3APotionContents%3A%3APotionEffect%29%3D%5B%5DofPotionEffect%2Ccustom_name%3AString%3D%22%22%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28entity_id%3AUInt64%2Cvelocity_x%3AFloat64%2Cvelocity_y%3AFloat64%2Cvelocity_z%3AFloat64%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L948" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read(io):PotionContents-class-method">
-      <div class="signature">
-        
-        def self.<strong>read</strong>(io) : <a href="../../Rosegold/DataComponents/PotionContents.html">PotionContents</a>
-
-        <a class="method-permalink" href="#read%28io%29%3APotionContents-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L951" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2599,6 +2711,173 @@
 
 
   
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="[](protocol_version:UInt32):UInt32-class-method">
+      <div class="signature">
+        
+        def self.<strong>[]</strong>(protocol_version : UInt32) : UInt32
+
+        <a class="method-permalink" href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt32-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Generate the <a href="protocol_version"></a> method for elegant access</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="default_packet_id:UInt32-class-method">
+      <div class="signature">
+        
+        def self.<strong>default_packet_id</strong> : UInt32
+
+        <a class="method-permalink" href="#default_packet_id%3AUInt32-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Define default packet ID (typically the latest/most common version)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="packet_id:UInt32-class-method">
+      <div class="signature">
+        
+        def self.<strong>packet_id</strong> : UInt32
+
+        <a class="method-permalink" href="#packet_id%3AUInt32-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Provide backward compatibility with existing packet_id class getter
+Use the first protocol's packet ID for registration compatibility</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="packet_id_for_protocol(protocol_version:UInt32):UInt32-class-method">
+      <div class="signature">
+        
+        def self.<strong>packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt32
+
+        <a class="method-permalink" href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt32-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Get packet ID for specific protocol version (returns UInt32 for VarInt encoding in write methods)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(packet)-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(packet)
+
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L19" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="state-class-method">
+      <div class="signature">
+        
+        def self.<strong>state</strong>
+
+        <a class="method-permalink" href="#state-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="supported_protocols:Array(UInt32)-class-method">
+      <div class="signature">
+        
+        def self.<strong>supported_protocols</strong> : Array(UInt32)
+
+        <a class="method-permalink" href="#supported_protocols%3AArray%28UInt32%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Helper method to get all supported protocols</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="supports_protocol?(protocol_version:UInt32):Bool-class-method">
+      <div class="signature">
+        
+        def self.<strong>supports_protocol?</strong>(protocol_version : UInt32) : Bool
+
+        <a class="method-permalink" href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Helper method to check if a protocol is supported</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L3" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
   
 
@@ -2612,210 +2891,162 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="custom_color:UInt32|Nil-instance-method">
+    <div class="entry-detail" id="callback(client)-instance-method">
       <div class="signature">
         
-        def <strong>custom_color</strong> : UInt32 | Nil
+        def <strong>callback</strong>(client)
 
-        <a class="method-permalink" href="#custom_color%3AUInt32%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L944" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="custom_color=(custom_color:UInt32|Nil)-instance-method">
+    <div class="entry-detail" id="entity_id:UInt64-instance-method">
       <div class="signature">
         
-        def <strong>custom_color=</strong>(custom_color : UInt32 | Nil)
+        def <strong>entity_id</strong> : UInt64
 
-        <a class="method-permalink" href="#custom_color%3D%28custom_color%3AUInt32%7CNil%29-instance-method">#</a>
+        <a class="method-permalink" href="#entity_id%3AUInt64-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L944" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="custom_effects:Array(PotionEffect)-instance-method">
+    <div class="entry-detail" id="entity_id=(entity_id:UInt64)-instance-method">
       <div class="signature">
         
-        def <strong>custom_effects</strong> : Array(<a href="../../Rosegold/DataComponents/PotionContents/PotionEffect.html">PotionEffect</a>)
+        def <strong>entity_id=</strong>(entity_id : UInt64)
 
-        <a class="method-permalink" href="#custom_effects%3AArray%28PotionEffect%29-instance-method">#</a>
+        <a class="method-permalink" href="#entity_id%3D%28entity_id%3AUInt64%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L945" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="custom_effects=(custom_effects:Array(PotionEffect))-instance-method">
+    <div class="entry-detail" id="velocity_x:Float64-instance-method">
       <div class="signature">
         
-        def <strong>custom_effects=</strong>(custom_effects : Array(<a href="../../Rosegold/DataComponents/PotionContents/PotionEffect.html">PotionEffect</a>))
+        def <strong>velocity_x</strong> : Float64
 
-        <a class="method-permalink" href="#custom_effects%3D%28custom_effects%3AArray%28PotionEffect%29%29-instance-method">#</a>
+        <a class="method-permalink" href="#velocity_x%3AFloat64-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L945" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="custom_name:String-instance-method">
+    <div class="entry-detail" id="velocity_x=(velocity_x:Float64)-instance-method">
       <div class="signature">
         
-        def <strong>custom_name</strong> : String
+        def <strong>velocity_x=</strong>(velocity_x : Float64)
 
-        <a class="method-permalink" href="#custom_name%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#velocity_x%3D%28velocity_x%3AFloat64%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L946" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="custom_name=(custom_name:String)-instance-method">
+    <div class="entry-detail" id="velocity_y:Float64-instance-method">
       <div class="signature">
         
-        def <strong>custom_name=</strong>(custom_name : String)
+        def <strong>velocity_y</strong> : Float64
 
-        <a class="method-permalink" href="#custom_name%3D%28custom_name%3AString%29-instance-method">#</a>
+        <a class="method-permalink" href="#velocity_y%3AFloat64-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L946" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="has_custom_color=(has_custom_color:Bool)-instance-method">
+    <div class="entry-detail" id="velocity_y=(velocity_y:Float64)-instance-method">
       <div class="signature">
         
-        def <strong>has_custom_color=</strong>(has_custom_color : Bool)
+        def <strong>velocity_y=</strong>(velocity_y : Float64)
 
-        <a class="method-permalink" href="#has_custom_color%3D%28has_custom_color%3ABool%29-instance-method">#</a>
+        <a class="method-permalink" href="#velocity_y%3D%28velocity_y%3AFloat64%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L943" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="has_custom_color?:Bool-instance-method">
+    <div class="entry-detail" id="velocity_z:Float64-instance-method">
       <div class="signature">
         
-        def <strong>has_custom_color?</strong> : Bool
+        def <strong>velocity_z</strong> : Float64
 
-        <a class="method-permalink" href="#has_custom_color%3F%3ABool-instance-method">#</a>
+        <a class="method-permalink" href="#velocity_z%3AFloat64-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L943" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="has_potion_id=(has_potion_id:Bool)-instance-method">
+    <div class="entry-detail" id="velocity_z=(velocity_z:Float64)-instance-method">
       <div class="signature">
         
-        def <strong>has_potion_id=</strong>(has_potion_id : Bool)
+        def <strong>velocity_z=</strong>(velocity_z : Float64)
 
-        <a class="method-permalink" href="#has_potion_id%3D%28has_potion_id%3ABool%29-instance-method">#</a>
+        <a class="method-permalink" href="#velocity_z%3D%28velocity_z%3AFloat64%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L941" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="has_potion_id?:Bool-instance-method">
+    <div class="entry-detail" id="write:Bytes-instance-method">
       <div class="signature">
         
-        def <strong>has_potion_id?</strong> : Bool
+        def <strong>write</strong> : Bytes
 
-        <a class="method-permalink" href="#has_potion_id%3F%3ABool-instance-method">#</a>
+        <a class="method-permalink" href="#write%3ABytes-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L941" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="potion_id:UInt32|Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>potion_id</strong> : UInt32 | Nil
-
-        <a class="method-permalink" href="#potion_id%3AUInt32%7CNil-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L942" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="potion_id=(potion_id:UInt32|Nil)-instance-method">
-      <div class="signature">
-        
-        def <strong>potion_id=</strong>(potion_id : UInt32 | Nil)
-
-        <a class="method-permalink" href="#potion_id%3D%28potion_id%3AUInt32%7CNil%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L942" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write(io):Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong>(io) : Nil
-
-        <a class="method-permalink" href="#write%28io%29%3ANil-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/inventory/slot.cr#L971" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/aadb49ce1286728deb3da1f1c40612b35f3818b1/src/rosegold/packets/clientbound/set_entity_motion.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
