@@ -1,6 +1,7 @@
 require "../client"
 require "./action"
 require "./raytrace"
+require "./rotation"
 require "../events/**"
 
 class Rosegold::Event::PhysicsTick < Rosegold::Event
@@ -30,6 +31,10 @@ end
 class Rosegold::Physics
   DRAG    = 0.98 # y velocity multiplicator per tick when not on ground
   GRAVITY = 0.08 # m/t/t; subtracted from y velocity each tick when not on ground
+
+  WATER_DRAG          =   0.8 # velocity multiplier per tick in water (all axes)
+  WATER_GRAVITY       = 0.005 # reduced gravity in water (0.08 / 16)
+  WATER_SWIM_UP_SPEED =  0.04 # upward velocity per tick when pressing jump in water
 
   BASE_MOVEMENT_SPEED =        0.1 # Actual player movement attribute
   FRICTION_CONSTANT   = 0.21600002 # The magic number for friction calculation
@@ -242,6 +247,25 @@ class Rosegold::Physics
     end
   end
 
+  private def player_in_water? : Bool
+    feet_pos = player.feet
+    block_names = MCData.default.block_state_names
+
+    # Check blocks at feet and body level
+    return true if water_block_at?(block_names, feet_pos.x.floor.to_i, feet_pos.y.floor.to_i, feet_pos.z.floor.to_i)
+    return true if water_block_at?(block_names, feet_pos.x.floor.to_i, (feet_pos.y + 0.4).floor.to_i, feet_pos.z.floor.to_i)
+    false
+  end
+
+  private def water_block_at?(block_names, block_x : Int32, block_y : Int32, block_z : Int32) : Bool
+    block_state = client.dimension.block_state(block_x, block_y, block_z)
+    return false unless block_state
+    name = block_names[block_state]
+    base_name = name.split('[').first
+    return true if base_name == "water" || base_name == "bubble_column"
+    name.includes?("waterlogged=true")
+  end
+
   private def player
     client.player
   end
@@ -310,11 +334,15 @@ class Rosegold::Physics
         keys.press MovementKeys::Key::Forward
         target_yaw = Math.atan2(-move_direction.x, move_direction.z) * (180.0 / Math::PI)
         target_look = Look.new(target_yaw.to_f32, player.look.pitch)
-        player.look = target_look
+        # Movement auto-look: quantize for GCD but allow fast convergence
+        # (rate limiting is mainly needed for look_at combat rotations)
+        delta_yaw = RotationSimulator.normalize_angle(target_look.yaw - player.look.yaw)
+        quantized_yaw = RotationSimulator.quantize(delta_yaw)
+        player.look = Look.new(player.look.yaw + quantized_yaw.to_f32, player.look.pitch)
       end
     end
 
-    jump = jump_queued? && player.on_ground?
+    jump = jump_queued? && (player.on_ground? || player.in_water?)
     sneak = player.sneaking?
     sprint = @sprint_requested && !sneak
 
@@ -347,7 +375,11 @@ class Rosegold::Physics
     process_input_timing
 
     @movement_input = calculate_movement_vector(input)
-    @jumping_input = input.jump? && can_jump?
+    @jumping_input = if player.in_water?
+                       jump_queued?
+                     else
+                       input.jump? && can_jump?
+                     end
 
     handle_sprint_mechanics(input)
 
@@ -401,40 +433,104 @@ class Rosegold::Physics
     end
   end
 
+  private def velocity_multiplier : Float64
+    feet_pos = player.feet
+    block_x = feet_pos.x.floor.to_i
+    block_y = (feet_pos.y - 0.5).floor.to_i
+    block_z = feet_pos.z.floor.to_i
+
+    block_state = client.dimension.block_state(block_x, block_y, block_z)
+    return 1.0 unless block_state
+
+    block_name = MCData.default.block_state_names[block_state]
+    base_block_name = block_name.split('[').first
+
+    case base_block_name
+    when "soul_sand", "honey_block"
+      0.4
+    else
+      1.0
+    end
+  end
+
+  private def in_cobweb? : Bool
+    feet_pos = player.feet
+    body_pos = feet_pos.up(0.9)
+
+    [feet_pos, body_pos].any? do |pos|
+      bx = pos.x.floor.to_i
+      by = pos.y.floor.to_i
+      bz = pos.z.floor.to_i
+      block_state = client.dimension.block_state(bx, by, bz)
+      next false unless block_state
+      block_name = MCData.default.block_state_names[block_state]
+      block_name.split('[').first == "cobweb"
+    end
+  end
+
   private def execute_movement_physics : {Vec3d, Vec3d, Vec3d, Bool}
     input_velocity = velocity_from_movement_input
+
+    # Apply velocity multiplier (soul sand, honey block)
+    vel_mult = velocity_multiplier
+    if vel_mult < 1.0
+      input_velocity = Vec3d.new(input_velocity.x * vel_mult, input_velocity.y, input_velocity.z * vel_mult)
+    end
+
     input_velocity = maybe_back_off_from_edge(input_velocity)
 
     movement, post_collision_velocity = Physics.predict_movement_collision(
       player.feet, input_velocity, current_player_aabb, dimension)
 
-    # Apply gravity/levitation AFTER collision, matching Minecraft's LivingEntity.travel() order:
-    # 1. moveRelative (input) → 2. move (collision) → 3. gravity/levitation → 4. drag
-    levitation = player.levitation_level
-    if levitation > 0
-      target_vel = 0.05 * levitation
-      new_y = post_collision_velocity.y + (target_vel - post_collision_velocity.y) * 0.2
-      post_collision_velocity = Vec3d.new(post_collision_velocity.x, new_y, post_collision_velocity.z)
-    else
-      gravity = if player.has_slow_falling? && post_collision_velocity.y <= 0
-                  0.01
-                else
-                  GRAVITY
-                end
-      post_collision_velocity = post_collision_velocity - Vec3d.new(0, gravity, 0)
-    end
+    in_water = player_in_water?
+    player.in_water = in_water
 
-    if player.on_ground?
-      slip = block_slip
-      drag_factor = slip * 0.91
+    if in_water
+      # Water physics: drag first (0.8 all axes), then reduced gravity (0.005)
+      # Vanilla: LivingEntity.travelInWater — multiply by drag, subtract gravity/16
       final_velocity = Vec3d.new(
-        post_collision_velocity.x * drag_factor,
-        post_collision_velocity.y * 0.98, post_collision_velocity.z * drag_factor
+        post_collision_velocity.x * WATER_DRAG,
+        post_collision_velocity.y * 0.8 - WATER_GRAVITY,
+        post_collision_velocity.z * WATER_DRAG
       )
     else
+      # Apply gravity/levitation AFTER collision, matching Minecraft's LivingEntity.travel() order:
+      # 1. moveRelative (input) → 2. move (collision) → 3. gravity/levitation → 4. drag
+      levitation = player.levitation_level
+      if levitation > 0
+        target_vel = 0.05 * levitation
+        new_y = post_collision_velocity.y + (target_vel - post_collision_velocity.y) * 0.2
+        post_collision_velocity = Vec3d.new(post_collision_velocity.x, new_y, post_collision_velocity.z)
+      else
+        gravity = if player.has_slow_falling? && post_collision_velocity.y <= 0
+                    0.01
+                  else
+                    GRAVITY
+                  end
+        post_collision_velocity = post_collision_velocity - Vec3d.new(0, gravity, 0)
+      end
+
+      if player.on_ground?
+        slip = block_slip
+        drag_factor = slip * 0.91
+        final_velocity = Vec3d.new(
+          post_collision_velocity.x * drag_factor,
+          post_collision_velocity.y * 0.98, post_collision_velocity.z * drag_factor
+        )
+      else
+        final_velocity = Vec3d.new(
+          post_collision_velocity.x * 0.91,
+          post_collision_velocity.y * 0.98, post_collision_velocity.z * 0.91
+        )
+      end
+    end
+
+    # Apply cobweb slowdown
+    if in_cobweb?
       final_velocity = Vec3d.new(
-        post_collision_velocity.x * 0.91,
-        post_collision_velocity.y * 0.98, post_collision_velocity.z * 0.91
+        final_velocity.x * 0.25,
+        final_velocity.y * 0.05,
+        final_velocity.z * 0.25
       )
     end
 
@@ -452,7 +548,9 @@ class Rosegold::Physics
     existing_velocity = player.velocity
 
     # 1. Calculate friction-influenced speed (like getFrictionInfluencedSpeed)
-    if player.on_ground?
+    if player.in_water?
+      movement_multiplier = 0.02 # Water movement (same base as air, drag handles the rest)
+    elsif player.on_ground?
       slip = block_slip
       friction_cubed = slip * slip * slip
       # Correct Minecraft formula: base_speed * (friction_constant / friction³)
@@ -493,7 +591,10 @@ class Rosegold::Physics
 
     combined_velocity = existing_velocity + input_velocity
 
-    vel_y = if @jumping_input && player.on_ground?
+    vel_y = if player.in_water? && @jumping_input
+              # Swimming upward in water — no jump force, just steady upward push
+              combined_velocity.y + WATER_SWIM_UP_SPEED
+            elsif @jumping_input && player.on_ground?
               if player.sprinting? && combined_velocity.length > 0
                 direction = Vec3d.new(combined_velocity.x, 0, combined_velocity.z).normed
                 combined_velocity = Vec3d.new(
@@ -628,7 +729,7 @@ class Rosegold::Physics
 
   private def sync_with_server
     if look_action = @look_action
-      player.look = look_action.target
+      player.look = RotationSimulator.step_toward(player.look, look_action.target)
     end
 
     should_send_packet = movement_changed? || ticks_since_last_packet >= MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL
@@ -654,8 +755,12 @@ class Rosegold::Physics
         end
       end
 
-      @look_action.try(&.succeed)
-      @look_action = nil
+      @look_action.try do |look_act|
+        if RotationSimulator.close_enough?(player.look, look_act.target)
+          look_act.succeed
+          @look_action = nil
+        end
+      end
     end
   end
 
