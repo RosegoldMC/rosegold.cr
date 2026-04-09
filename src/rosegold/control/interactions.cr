@@ -10,6 +10,8 @@ class Rosegold::Interactions
     def initialize(@intercept, @block, @face); end
   end
 
+  ATTACK_COOLDOWN_BASE = 4 # ticks (~5 attacks/sec, under CivMC 8 CPS cap)
+
   @using_hand = nil
   @queue_using_hand = nil
   @using_hand_delay = 0_i32
@@ -17,6 +19,7 @@ class Rosegold::Interactions
   @dig_hand_swing_countdown = 0_i8
   @attack_queued = false
   @digging = false
+  @attack_cooldown_ticks : Int32 = 0
   getter block_damage_progress = 0_f32
   @last_tick_held_item : Slot = Slot.new
   @sent_held_item_index : UInt32?
@@ -81,8 +84,12 @@ class Rosegold::Interactions
   end
 
   private def tick_attack
-    return unless @attack_queued
+    if @attack_cooldown_ticks > 0
+      @attack_cooldown_ticks -= 1
+      return
+    end
 
+    return unless @attack_queued
     @attack_queued = false
 
     case reached = reach_block_or_entity
@@ -94,9 +101,15 @@ class Rosegold::Interactions
       end
       send_packet Serverbound::SwingArm.new
       client.emit_event Event::ArmSwing.new
+      @attack_cooldown_ticks = attack_cooldown_with_jitter
     when ReachedBlock
       start_digging reached
     end
+  end
+
+  private def attack_cooldown_with_jitter : Int32
+    jitter = rand(-3..3)
+    (ATTACK_COOLDOWN_BASE + jitter).clamp(3, 6)
   end
 
   private def tick_digging
