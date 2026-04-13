@@ -8,19 +8,9 @@ class Rosegold::RotationSimulator
   F        = SENSITIVITY * 0.6_f32 + 0.2_f32
   GCD_UNIT = (F * F * F * 1.2_f32).to_f64
 
-  # Max rotation per tick (degrees) — prevents head snap detection
-  MAX_YAW_PER_TICK   = 20.0
-  MAX_PITCH_PER_TICK = 15.0
-
   def self.step_toward(current : Look, target : Look) : Look
-    delta_yaw = normalize_angle(target.yaw - current.yaw)
-    delta_pitch = (target.pitch - current.pitch).to_f64
-
-    delta_yaw = delta_yaw.clamp(-MAX_YAW_PER_TICK, MAX_YAW_PER_TICK)
-    delta_pitch = delta_pitch.clamp(-MAX_PITCH_PER_TICK, MAX_PITCH_PER_TICK)
-
-    delta_yaw = quantize(delta_yaw)
-    delta_pitch = quantize(delta_pitch)
+    delta_yaw = quantize(normalize_angle(target.yaw - current.yaw))
+    delta_pitch = quantize((target.pitch - current.pitch).to_f64)
 
     new_yaw = current.yaw + delta_yaw.to_f32
     new_pitch = (current.pitch + delta_pitch.to_f32).clamp(-90.0_f32, 90.0_f32)
