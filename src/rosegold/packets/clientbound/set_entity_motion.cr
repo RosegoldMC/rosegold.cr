@@ -43,11 +43,12 @@ class Rosegold::Clientbound::SetEntityMotion < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    velocity = Vec3d.new(velocity_x, velocity_y, velocity_z)
     if entity_id == client.player.entity_id
       Log.debug { "Received velocity for self: #{velocity_x}, #{velocity_y}, #{velocity_z}" }
-      client.player.velocity = Vec3d.new(velocity_x, velocity_y, velocity_z)
+      client.physics.pending_velocity = velocity
     elsif entity = client.dimension.entities[entity_id]?
-      entity.velocity = Vec3d.new(velocity_x, velocity_y, velocity_z)
+      entity.velocity = velocity
     end
   end
 end

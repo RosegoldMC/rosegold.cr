@@ -109,21 +109,33 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     Look.new yaw, pitch
   end
 
+  def velocity(previous_velocity : Vec3d) : Vec3d
+    vx = velocity_x
+    vy = velocity_y
+    vz = velocity_z
+
+    vx += previous_velocity.x if relative_flags & 0x20 != 0
+    vy += previous_velocity.y if relative_flags & 0x40 != 0
+    vz += previous_velocity.z if relative_flags & 0x80 != 0
+
+    Vec3d.new(vx, vy, vz)
+  end
+
   def callback(client)
     player = client.player
+
+    # Vanilla order: compute all absolute values, apply them, then confirm.
+    # See ClientPacketListener.java:741 — setValuesFromPositionPacket before AcceptTeleportation.
     player.feet = feet player.feet
     player.look = look player.look
-
-    # Set velocity from packet for MC 1.21.6+
-    player.velocity = Vec3d.new(velocity_x, velocity_y, velocity_z)
+    player.velocity = velocity player.velocity
 
     client.queue_packet Serverbound::TeleportConfirm.new teleport_id
 
-    # Emit player position update event
+    client.physics.handle_reset # Resets physics tracking, unpauses
+
     client.emit_event Event::PlayerPositionUpdate.new(player.feet, player.look)
 
     Log.debug { "Position synchronized: #{player.feet} #{player.look} flags=#{relative_flags}" }
-
-    client.physics.handle_reset # This unpauses physics!
   end
 end

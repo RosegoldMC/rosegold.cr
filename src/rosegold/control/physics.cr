@@ -94,6 +94,11 @@ class Rosegold::Physics
   # Input state tracking for PlayerInput packet
   private property last_sent_input_flags : Serverbound::PlayerInput::Flag = Serverbound::PlayerInput::Flag::None
 
+  # Queued velocity from SetEntityMotion, applied at tick start to avoid race conditions.
+  # Vanilla processes packets on the main thread between ticks; this emulates that.
+  @pending_velocity : Vec3d? = nil
+  @pending_velocity_mutex : Mutex = Mutex.new
+
   def movement_target
     movement_action.try &.target
   end
@@ -103,6 +108,12 @@ class Rosegold::Physics
   end
 
   def initialize(@client : Rosegold::Client); end
+
+  # Queue a velocity replacement from a packet callback (e.g., SetEntityMotion).
+  # Applied at the start of the next tick to avoid mid-tick overwrites.
+  def pending_velocity=(velocity : Vec3d)
+    @pending_velocity_mutex.synchronize { @pending_velocity = velocity }
+  end
 
   def look=(target : Look)
     if paused?
@@ -141,9 +152,12 @@ class Rosegold::Physics
       Log.debug { "Physics remains paused - waiting for spawn chunk (#{spawn_chunk_x}, #{spawn_chunk_z}) to load" }
     end
 
-    player.velocity = Vec3d::ORIGIN
     player.on_ground = false
     player.fall_distance = 0.0
+
+    # Clear any queued velocity from SetEntityMotion to prevent stale
+    # knockback from being applied after respawn/dimension change
+    @pending_velocity_mutex.synchronize { @pending_velocity = nil }
 
     @last_sent_feet = player.feet
     @last_sent_on_ground = player.on_ground?
@@ -296,6 +310,14 @@ class Rosegold::Physics
 
   def tick
     return if paused? || !client.connected?
+
+    # Apply queued velocity from packet callbacks before physics runs
+    @pending_velocity_mutex.synchronize do
+      if pv = @pending_velocity
+        player.velocity = pv
+        @pending_velocity = nil
+      end
+    end
 
     input = convert_movement_goals_to_input
     process_virtual_input(input)
