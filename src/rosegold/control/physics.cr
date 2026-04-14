@@ -1,7 +1,6 @@
 require "../client"
 require "./action"
 require "./raytrace"
-require "./rotation"
 require "../events/**"
 
 class Rosegold::Event::PhysicsTick < Rosegold::Event
@@ -356,11 +355,7 @@ class Rosegold::Physics
         keys.press MovementKeys::Key::Forward
         target_yaw = Math.atan2(-move_direction.x, move_direction.z) * (180.0 / Math::PI)
         target_look = Look.new(target_yaw.to_f32, player.look.pitch)
-        # Movement auto-look: quantize for GCD but allow fast convergence
-        # (rate limiting is mainly needed for look_at combat rotations)
-        delta_yaw = RotationSimulator.normalize_angle(target_look.yaw - player.look.yaw)
-        quantized_yaw = RotationSimulator.quantize(delta_yaw)
-        player.look = Look.new(player.look.yaw + quantized_yaw.to_f32, player.look.pitch)
+        player.look = target_look
       end
     end
 
@@ -751,7 +746,7 @@ class Rosegold::Physics
 
   private def sync_with_server
     if look_action = @look_action
-      player.look = RotationSimulator.step_toward(player.look, look_action.target)
+      player.look = look_action.target
     end
 
     should_send_packet = movement_changed? || ticks_since_last_packet >= MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL
@@ -778,7 +773,7 @@ class Rosegold::Physics
       end
 
       @look_action.try do |look_act|
-        if RotationSimulator.close_enough?(player.look, look_act.target)
+        if player.look == look_act.target
           look_act.succeed
           @look_action = nil
         end
