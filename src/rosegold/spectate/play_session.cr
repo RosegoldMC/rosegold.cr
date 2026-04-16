@@ -153,6 +153,7 @@ module Rosegold::Spectate::PlaySession
       cursor: cursor_slot
     )
     send_packet(packet)
+    send_hotbar_selection(bot.player.hotbar_selection)
   end
 
   private def send_update_health(bot : Rosegold::Client)
