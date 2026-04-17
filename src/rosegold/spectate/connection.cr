@@ -44,6 +44,7 @@ class Rosegold::Spectate::Connection
   @raw_packet_handler_id : UUID? = nil
   @position_handler_id : UUID? = nil
   @arm_swing_handler_id : UUID? = nil
+  @container_closed_handler_id : UUID? = nil
 
   def initialize(raw_socket : TCPSocket, @spectate_server : Server)
     @socket = Minecraft::IO::Wrap.new(raw_socket)
@@ -154,10 +155,12 @@ class Rosegold::Spectate::Connection
     @raw_packet_handler_id.try { |id| bot.off(Event::RawPacket, id) }
     @position_handler_id.try { |id| bot.off(Event::PlayerPositionUpdate, id) }
     @arm_swing_handler_id.try { |id| bot.off(Event::ArmSwing, id) }
+    @container_closed_handler_id.try { |id| bot.off(Event::ContainerClosed, id) }
 
     @raw_packet_handler_id = nil
     @position_handler_id = nil
     @arm_swing_handler_id = nil
+    @container_closed_handler_id = nil
   end
 
   def client_ready?

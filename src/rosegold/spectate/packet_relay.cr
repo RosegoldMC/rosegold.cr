@@ -87,6 +87,17 @@ module Rosegold::Spectate::PacketRelay
     end
   end
 
+  private def setup_container_closed_listener
+    return unless bot = @client
+
+    @container_closed_handler_id = bot.on(Rosegold::Event::ContainerClosed) do |event|
+      next unless @connected
+      next unless @spectate_state.spectating?
+      packet = Rosegold::Clientbound::CloseWindow.new(event.window_id)
+      send_packet(packet)
+    end
+  end
+
   # Remap entity ID in a self-targeted packet if it targets the bot
   # Returns remapped bytes if the packet targets the bot, nil otherwise
   private def try_remap_entity_id(raw_bytes : Bytes, pkt_id : UInt32, bot_entity_id : UInt64) : Bytes?

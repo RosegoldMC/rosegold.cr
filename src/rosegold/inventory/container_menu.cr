@@ -104,6 +104,7 @@ abstract class Rosegold::ContainerMenu < Rosegold::Menu
 
   def close
     @client.send_packet!(Serverbound::CloseWindow.new(menu_id.to_u16))
+    @client.emit_event Event::ContainerClosed.new(menu_id.to_u32)
     handle_close
   end
 

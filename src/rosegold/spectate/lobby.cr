@@ -104,6 +104,7 @@ module Rosegold::Spectate::Lobby
       start_bot_monitoring
       setup_position_event_listener
       setup_arm_swing_listener
+      setup_container_closed_listener
       setup_raw_packet_relay
 
       Log.info { "#{@username} is now spectating" }
