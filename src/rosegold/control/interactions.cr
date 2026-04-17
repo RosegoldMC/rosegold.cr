@@ -10,7 +10,8 @@ class Rosegold::Interactions
     def initialize(@intercept, @block, @face); end
   end
 
-  ATTACK_COOLDOWN_BASE = 4 # ticks (~5 attacks/sec, under CivMC 8 CPS cap)
+  # Random 3-6 ticks between attacks (~3.3-6.7 CPS), under CivMC 8 CPS cap.
+  ATTACK_COOLDOWN_RANGE = 3..6
 
   @using_hand = nil
   @queue_using_hand = nil
@@ -101,15 +102,10 @@ class Rosegold::Interactions
       end
       send_packet Serverbound::SwingArm.new
       client.emit_event Event::ArmSwing.new
-      @attack_cooldown_ticks = attack_cooldown_with_jitter
+      @attack_cooldown_ticks = rand(ATTACK_COOLDOWN_RANGE)
     when ReachedBlock
       start_digging reached
     end
-  end
-
-  private def attack_cooldown_with_jitter : Int32
-    jitter = rand(-3..3)
-    (ATTACK_COOLDOWN_BASE + jitter).clamp(3, 6)
   end
 
   private def tick_digging

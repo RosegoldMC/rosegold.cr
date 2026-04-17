@@ -93,8 +93,8 @@ class Rosegold::Physics
   # Input state tracking for PlayerInput packet
   private property last_sent_input_flags : Serverbound::PlayerInput::Flag = Serverbound::PlayerInput::Flag::None
 
-  # Queued velocity from SetEntityMotion, applied at tick start to avoid race conditions.
-  # Vanilla processes packets on the main thread between ticks; this emulates that.
+  # Vanilla processes packets on the main thread between ticks; we queue and apply at tick start
+  # to avoid packet-thread writes racing with physics-thread velocity reads.
   @pending_velocity : Vec3d? = nil
   @pending_velocity_mutex : Mutex = Mutex.new
 
@@ -108,8 +108,6 @@ class Rosegold::Physics
 
   def initialize(@client : Rosegold::Client); end
 
-  # Queue a velocity replacement from a packet callback (e.g., SetEntityMotion).
-  # Applied at the start of the next tick to avoid mid-tick overwrites.
   def pending_velocity=(velocity : Vec3d)
     @pending_velocity_mutex.synchronize { @pending_velocity = velocity }
   end
@@ -154,8 +152,7 @@ class Rosegold::Physics
     player.on_ground = false
     player.fall_distance = 0.0
 
-    # Clear any queued velocity from SetEntityMotion to prevent stale
-    # knockback from being applied after respawn/dimension change
+    # Drop queued knockback so respawn/dimension change doesn't inherit pre-reset velocity
     @pending_velocity_mutex.synchronize { @pending_velocity = nil }
 
     @last_sent_feet = player.feet
@@ -237,23 +234,14 @@ class Rosegold::Physics
   end
 
   def block_slip : Float64
-    feet_pos = player.feet
-    block_x = feet_pos.x.floor.to_i
-    block_y = (feet_pos.y - 0.5).floor.to_i
-    block_z = feet_pos.z.floor.to_i
-
-    block_state = client.dimension.block_state(block_x, block_y, block_z)
+    block_state = block_state_at(player.feet.down(0.5))
     return DEFAULT_SLIP unless block_state
 
-    block_name = MCData.default.block_state_names[block_state]
-    base_block_name = block_name.split('[').first
-
-    case base_block_name
-    when "blue_ice"
+    if block_base_name_in?(block_state, "blue_ice")
       BLUE_ICE_SLIP
-    when "ice", "packed_ice", "frosted_ice"
+    elsif block_base_name_in?(block_state, "ice", "packed_ice", "frosted_ice")
       ICE_SLIP
-    when "slime_block"
+    elsif block_base_name_in?(block_state, "slime_block")
       SLIME_SLIP
     else
       DEFAULT_SLIP
@@ -262,21 +250,29 @@ class Rosegold::Physics
 
   private def player_in_water? : Bool
     feet_pos = player.feet
-    block_names = MCData.default.block_state_names
-
-    # Check blocks at feet and body level
-    return true if water_block_at?(block_names, feet_pos.x.floor.to_i, feet_pos.y.floor.to_i, feet_pos.z.floor.to_i)
-    return true if water_block_at?(block_names, feet_pos.x.floor.to_i, (feet_pos.y + 0.4).floor.to_i, feet_pos.z.floor.to_i)
-    false
+    water_block_at?(feet_pos) || water_block_at?(feet_pos.up(0.4))
   end
 
-  private def water_block_at?(block_names, block_x : Int32, block_y : Int32, block_z : Int32) : Bool
-    block_state = client.dimension.block_state(block_x, block_y, block_z)
+  private def water_block_at?(pos : Vec3d) : Bool
+    block_state = block_state_at(pos)
     return false unless block_state
-    name = block_names[block_state]
-    base_name = name.split('[').first
-    return true if base_name == "water" || base_name == "bubble_column"
-    name.includes?("waterlogged=true")
+    return true if block_base_name_in?(block_state, "water", "bubble_column")
+    MCData.default.block_state_names[block_state].includes?("waterlogged=true")
+  end
+
+  private def block_state_at(pos : Vec3d) : UInt16?
+    client.dimension.block_state(pos)
+  end
+
+  # Zero-alloc check for a block state's base name (portion before `[properties]`).
+  private def block_base_name_in?(block_state : UInt16, *bases : String) : Bool
+    full_name = MCData.default.block_state_names[block_state]
+    bases.any? { |base| base_matches?(full_name, base) }
+  end
+
+  private def base_matches?(full_name : String, base : String) : Bool
+    return false unless full_name.starts_with?(base)
+    full_name.bytesize == base.bytesize || full_name.byte_at(base.bytesize) == '['.ord
   end
 
   private def player
@@ -310,11 +306,12 @@ class Rosegold::Physics
   def tick
     return if paused? || !client.connected?
 
-    # Apply queued velocity from packet callbacks before physics runs
-    @pending_velocity_mutex.synchronize do
-      if pv = @pending_velocity
-        player.velocity = pv
-        @pending_velocity = nil
+    if @pending_velocity
+      @pending_velocity_mutex.synchronize do
+        if pv = @pending_velocity
+          player.velocity = pv
+          @pending_velocity = nil
+        end
       end
     end
 
@@ -451,19 +448,10 @@ class Rosegold::Physics
   end
 
   private def velocity_multiplier : Float64
-    feet_pos = player.feet
-    block_x = feet_pos.x.floor.to_i
-    block_y = (feet_pos.y - 0.5).floor.to_i
-    block_z = feet_pos.z.floor.to_i
-
-    block_state = client.dimension.block_state(block_x, block_y, block_z)
+    block_state = block_state_at(player.feet.down(0.5))
     return 1.0 unless block_state
 
-    block_name = MCData.default.block_state_names[block_state]
-    base_block_name = block_name.split('[').first
-
-    case base_block_name
-    when "soul_sand", "honey_block"
+    if block_base_name_in?(block_state, "soul_sand", "honey_block")
       0.4
     else
       1.0
@@ -472,16 +460,9 @@ class Rosegold::Physics
 
   private def in_cobweb? : Bool
     feet_pos = player.feet
-    body_pos = feet_pos.up(0.9)
-
-    [feet_pos, body_pos].any? do |pos|
-      bx = pos.x.floor.to_i
-      by = pos.y.floor.to_i
-      bz = pos.z.floor.to_i
-      block_state = client.dimension.block_state(bx, by, bz)
-      next false unless block_state
-      block_name = MCData.default.block_state_names[block_state]
-      block_name.split('[').first == "cobweb"
+    [feet_pos, feet_pos.up(0.9)].any? do |pos|
+      block_state = block_state_at(pos)
+      block_state && block_base_name_in?(block_state, "cobweb")
     end
   end
 
@@ -503,8 +484,7 @@ class Rosegold::Physics
     player.in_water = in_water
 
     if in_water
-      # Water physics: drag first (0.8 all axes), then reduced gravity (0.005)
-      # Vanilla: LivingEntity.travelInWater — multiply by drag, subtract gravity/16
+      # Vanilla LivingEntity.travelInWater: drag first (0.8 all axes), then reduced gravity (0.005)
       final_velocity = Vec3d.new(
         post_collision_velocity.x * WATER_DRAG,
         post_collision_velocity.y * 0.8 - WATER_GRAVITY,
@@ -566,7 +546,7 @@ class Rosegold::Physics
 
     # 1. Calculate friction-influenced speed (like getFrictionInfluencedSpeed)
     if player.in_water?
-      movement_multiplier = 0.02 # Water movement (same base as air, drag handles the rest)
+      movement_multiplier = 0.02
     elsif player.on_ground?
       slip = block_slip
       friction_cubed = slip * slip * slip
@@ -609,7 +589,6 @@ class Rosegold::Physics
     combined_velocity = existing_velocity + input_velocity
 
     vel_y = if player.in_water? && @jumping_input
-              # Swimming upward in water — no jump force, just steady upward push
               combined_velocity.y + WATER_SWIM_UP_SPEED
             elsif @jumping_input && player.on_ground?
               if player.sprinting? && combined_velocity.length > 0
