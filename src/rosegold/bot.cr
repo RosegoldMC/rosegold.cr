@@ -16,6 +16,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
     subscribe Event::Tick
     subscribe Event::HealthChanged
     subscribe Event::Died
+    subscribe Event::PlayerJoined
+    subscribe Event::PlayerLeft
     subscribe Rosegold::Clientbound::SetContainerContent
     subscribe Rosegold::Clientbound::SetSlot
     subscribe Event::ContainerOpened

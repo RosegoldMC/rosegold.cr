@@ -193,10 +193,9 @@ class Rosegold::Clientbound::PlayerInfoUpdate < Rosegold::Clientbound::Packet
   def callback(client)
     Log.debug { "Player info update: actions=0x#{actions.to_s(16).upcase.rjust(2, '0')}, #{players.size} players" }
     players.each do |player|
-      # Get or create player list entry
-      entry = client.player_list[player.uuid]? || Rosegold::PlayerList::Entry.new(player.uuid)
+      existing = client.player_list[player.uuid]?
+      entry = existing || Rosegold::PlayerList::Entry.new(player.uuid)
 
-      # Update fields based on action flags
       if (actions & ADD_PLAYER) != 0
         entry.name = player.name
         if props = player.properties
@@ -219,8 +218,9 @@ class Rosegold::Clientbound::PlayerInfoUpdate < Rosegold::Clientbound::Packet
         entry.display_name = player.display_name
       end
 
-      # Store/update the entry in player list
       client.player_list[player.uuid] = entry
+
+      client.emit_event Rosegold::Event::PlayerJoined.new(entry) if existing.nil? && (actions & ADD_PLAYER) != 0
     end
   end
 

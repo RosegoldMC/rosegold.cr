@@ -31,6 +31,7 @@ class Rosegold::Clientbound::PlayerInfoRemove < Rosegold::Clientbound::Packet
     uuids.each do |uuid|
       if removed_player = client.player_list.delete(uuid)
         Log.debug { "  Removed player: #{removed_player.name} (#{uuid})" }
+        client.emit_event Rosegold::Event::PlayerLeft.new(removed_player)
       end
     end
   end
