@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::DataComponents::TooltipDisplay - rosegold main</title>
+  <title>Rosegold::Event::PlayerLeft - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -847,7 +847,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
+  <li class="parent " data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
       <a href="../../Rosegold/DataComponents.html">DataComponents</a>
       
         <ul>
@@ -1227,7 +1227,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/DataComponents/TooltipDisplay" data-name="rosegold::datacomponents::tooltipdisplay">
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/TooltipDisplay" data-name="rosegold::datacomponents::tooltipdisplay">
       <a href="../../Rosegold/DataComponents/TooltipDisplay.html">TooltipDisplay</a>
       
     </li>
@@ -1382,7 +1382,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
+  <li class="parent open current" data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
       <a href="../../Rosegold/Event.html">Event</a>
       
         <ul>
@@ -1422,7 +1422,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Event/PlayerLeft" data-name="rosegold::event::playerleft">
+  <li class=" current" data-id="rosegold/Rosegold/Event/PlayerLeft" data-name="rosegold::event::playerleft">
       <a href="../../Rosegold/Event/PlayerLeft.html">PlayerLeft</a>
       
     </li>
@@ -2278,26 +2278,15 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>DataComponents::<wbr>TooltipDisplay
+  </span> Rosegold::<wbr>Event::<wbr>PlayerLeft
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/DataComponents/TooltipDisplay.html">Rosegold::DataComponents::TooltipDisplay</a></li><li class="superclass"><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Event/PlayerLeft.html">Rosegold::Event::PlayerLeft</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>Component for tooltip_display (Hide all or parts of the item tooltip)</p>
 
 
 
@@ -2324,8 +2313,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/inventory/slot.cr#L604" target="_blank">
-        rosegold/inventory/slot.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L3" target="_blank">
+        rosegold/events/player_left.cr
       </a>
     
     <br/>
@@ -2347,12 +2336,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28hide_tooltip%3ABool%2Chidden_components%3AArray%28UInt32%29%3D%5B%5DofUInt32%29-class-method" class="signature"><strong>.new</strong>(hide_tooltip : Bool, hidden_components : Array(UInt32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">UInt32</span>)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read%28io%29%3Aself-class-method" class="signature"><strong>.read</strong>(io) : <span class="k">self</span></a>
+        <a href="#new%28entry%3ARosegold%3A%3APlayerList%3A%3AEntry%29-class-method" class="signature"><strong>.new</strong>(entry : Rosegold::PlayerList::Entry)</a>
         
       </li>
     
@@ -2375,27 +2359,67 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#hidden_components%3AArray%28UInt32%29-instance-method" class="signature"><strong>#hidden_components</strong> : Array(UInt32)</a>
+        <a href="#display_name%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#display_name</strong>(*args, **options)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hidden_components%3D%28hidden_components%3AArray%28UInt32%29%29-instance-method" class="signature"><strong>#hidden_components=</strong>(hidden_components : Array(UInt32))</a>
+        <a href="#display_name%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#display_name</strong>(*args, **options, &)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hide_tooltip%3D%28hide_tooltip%3ABool%29-instance-method" class="signature"><strong>#hide_tooltip=</strong>(hide_tooltip : Bool)</a>
+        <a href="#entry%3ARosegold%3A%3APlayerList%3A%3AEntry-instance-method" class="signature"><strong>#entry</strong> : Rosegold::PlayerList::Entry</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hide_tooltip%3F%3ABool-instance-method" class="signature"><strong>#hide_tooltip?</strong> : Bool</a>
+        <a href="#gamemode%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#gamemode</strong>(*args, **options)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#write%28io%29%3ANil-instance-method" class="signature"><strong>#write</strong>(io) : Nil</a>
+        <a href="#gamemode%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#gamemode</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#name%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#name</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#name%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#name</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ping%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#ping</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#ping%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#ping</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#properties%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#properties</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#properties%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#properties</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#uuid%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#uuid</strong>(*args, **options)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#uuid%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#uuid</strong>(*args, **options, &)</a>
         
       </li>
     
@@ -2407,31 +2431,8 @@
     
       
 
-  <h3>Instance methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
-  
-  
-    <a href="../../Rosegold/DataComponent.html#write%28io%29%3ANil-instance-method" class="tooltip">
-      <span>write(io) : Nil</span>
-    write</a>
-    
-  
-
 
       
-
-  <h3>Constructor methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
-  
-  
-    <a href="../../Rosegold/DataComponent.html#create_component%28component_type%3AUInt32%2Cio%29%3ADataComponent-class-method" class="tooltip">
-      <span>create_component(component_type : UInt32, io) : DataComponent</span>
-    create_component</a>, 
-    
-  
-    <a href="../../Rosegold/DataComponent.html#create_component_by_name%28name%3AString%7CNil%2Ccomponent_type%3AUInt32%2Cio%29%3ADataComponent-class-method" class="tooltip">
-      <span>create_component_by_name(name : String | Nil, component_type : UInt32, io) : DataComponent</span>
-    create_component_by_name</a>
-    
-  
 
 
       
@@ -2479,34 +2480,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(hide_tooltip:Bool,hidden_components:Array(UInt32)=[]ofUInt32)-class-method">
+    <div class="entry-detail" id="new(entry:Rosegold::PlayerList::Entry)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(hide_tooltip : Bool, hidden_components : Array(UInt32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">UInt32</span>)
+        def self.<strong>new</strong>(entry : <a href="../../Rosegold/PlayerList/Entry.html">Rosegold::PlayerList::Entry</a>)
 
-        <a class="method-permalink" href="#new%28hide_tooltip%3ABool%2Chidden_components%3AArray%28UInt32%29%3D%5B%5DofUInt32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28entry%3ARosegold%3A%3APlayerList%3A%3AEntry%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/inventory/slot.cr#L608" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read(io):self-class-method">
-      <div class="signature">
-        
-        def self.<strong>read</strong>(io) : <span class="k">self</span>
-
-        <a class="method-permalink" href="#read%28io%29%3Aself-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/inventory/slot.cr#L610" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2527,82 +2512,210 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="hidden_components:Array(UInt32)-instance-method">
+    <div class="entry-detail" id="display_name(*args,**options)-instance-method">
       <div class="signature">
         
-        def <strong>hidden_components</strong> : Array(UInt32)
+        def <strong>display_name</strong>(*args, **options)
 
-        <a class="method-permalink" href="#hidden_components%3AArray%28UInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#display_name%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/inventory/slot.cr#L606" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hidden_components=(hidden_components:Array(UInt32))-instance-method">
+    <div class="entry-detail" id="display_name(*args,**options,&amp;)-instance-method">
       <div class="signature">
         
-        def <strong>hidden_components=</strong>(hidden_components : Array(UInt32))
+        def <strong>display_name</strong>(*args, **options, &)
 
-        <a class="method-permalink" href="#hidden_components%3D%28hidden_components%3AArray%28UInt32%29%29-instance-method">#</a>
+        <a class="method-permalink" href="#display_name%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/inventory/slot.cr#L606" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hide_tooltip=(hide_tooltip:Bool)-instance-method">
+    <div class="entry-detail" id="entry:Rosegold::PlayerList::Entry-instance-method">
       <div class="signature">
         
-        def <strong>hide_tooltip=</strong>(hide_tooltip : Bool)
+        def <strong>entry</strong> : <a href="../../Rosegold/PlayerList/Entry.html">Rosegold::PlayerList::Entry</a>
 
-        <a class="method-permalink" href="#hide_tooltip%3D%28hide_tooltip%3ABool%29-instance-method">#</a>
+        <a class="method-permalink" href="#entry%3ARosegold%3A%3APlayerList%3A%3AEntry-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/inventory/slot.cr#L605" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hide_tooltip?:Bool-instance-method">
+    <div class="entry-detail" id="gamemode(*args,**options)-instance-method">
       <div class="signature">
         
-        def <strong>hide_tooltip?</strong> : Bool
+        def <strong>gamemode</strong>(*args, **options)
 
-        <a class="method-permalink" href="#hide_tooltip%3F%3ABool-instance-method">#</a>
+        <a class="method-permalink" href="#gamemode%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/inventory/slot.cr#L605" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="write(io):Nil-instance-method">
+    <div class="entry-detail" id="gamemode(*args,**options,&amp;)-instance-method">
       <div class="signature">
         
-        def <strong>write</strong>(io) : Nil
+        def <strong>gamemode</strong>(*args, **options, &)
 
-        <a class="method-permalink" href="#write%28io%29%3ANil-instance-method">#</a>
+        <a class="method-permalink" href="#gamemode%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/inventory/slot.cr#L624" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="name(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>name</strong>(*args, **options)
+
+        <a class="method-permalink" href="#name%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="name(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>name</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#name%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ping(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>ping</strong>(*args, **options)
+
+        <a class="method-permalink" href="#ping%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="ping(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>ping</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#ping%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="properties(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>properties</strong>(*args, **options)
+
+        <a class="method-permalink" href="#properties%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="properties(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>properties</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#properties%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="uuid(*args,**options)-instance-method">
+      <div class="signature">
+        
+        def <strong>uuid</strong>(*args, **options)
+
+        <a class="method-permalink" href="#uuid%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="uuid(*args,**options,&amp;)-instance-method">
+      <div class="signature">
+        
+        def <strong>uuid</strong>(*args, **options, &)
+
+        <a class="method-permalink" href="#uuid%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9936bce2ff2be6e6996c730f7d3d9cdc24be9901/src/rosegold/events/player_left.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
