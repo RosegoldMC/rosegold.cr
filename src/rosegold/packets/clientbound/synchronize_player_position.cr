@@ -132,7 +132,7 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
 
     client.queue_packet Serverbound::TeleportConfirm.new teleport_id
 
-    client.physics.handle_reset # Resets physics tracking, unpauses
+    client.physics.handle_reset
 
     client.emit_event Event::PlayerPositionUpdate.new(player.feet, player.look)
 
