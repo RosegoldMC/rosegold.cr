@@ -47,8 +47,7 @@ class Rosegold::Clientbound::EntityPosition < Rosegold::Clientbound::Packet
       return
     end
 
-    new_pos = entity.position.plus(delta_x / 128.0 / 32.0, delta_y / 128.0 / 32.0, delta_z / 128.0 / 32.0)
-
-    entity.position = new_pos
+    entity.position = entity.position.plus(delta_x / 128.0 / 32.0, delta_y / 128.0 / 32.0, delta_z / 128.0 / 32.0)
+    entity.velocity = Vec3d.new(delta_x / 128.0 / 32.0, delta_y / 128.0 / 32.0, delta_z / 128.0 / 32.0)
   end
 end
