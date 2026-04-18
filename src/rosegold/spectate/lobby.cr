@@ -12,7 +12,6 @@ module Rosegold::Spectate::Lobby
 
   private def send_lobby_packets
     send_lobby_join_game
-    send_set_ticking_state(false)
 
     # Position at (0, 100, 0)
     spawn_pos = Vec3i.new(0, 100, 0)
@@ -88,7 +87,6 @@ module Rosegold::Spectate::Lobby
       # Unload lobby chunk
       send_packet(Rosegold::Clientbound::UnloadChunk.new(0, 0))
 
-      send_set_ticking_state(false)
       send_player_abilities
       send_default_spawn_position(bot)
       send_player_position(bot)
@@ -144,8 +142,6 @@ module Rosegold::Spectate::Lobby
       send_packet(respawn)
 
       @spectate_state = State::LOBBY
-
-      send_set_ticking_state(false)
 
       spawn_pos = Vec3i.new(0, 100, 0)
       send_packet(Rosegold::Clientbound::SetDefaultSpawnPosition.new(spawn_pos, 0.0_f32, "minecraft:overworld"))

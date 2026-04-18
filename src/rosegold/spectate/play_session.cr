@@ -5,7 +5,6 @@ module Rosegold::Spectate::PlaySession
     send_join_game(bot)
     send_set_time(bot)
     send_default_spawn_position(bot)
-    send_set_ticking_state(false)
     send_player_abilities
     send_player_position(bot)
     send_update_health(bot)
@@ -95,13 +94,6 @@ module Rosegold::Spectate::PlaySession
     pos = bot.player.feet
     spawn_pos = Vec3i.new(pos.x.to_i32, pos.y.to_i32, pos.z.to_i32)
     packet = Rosegold::Clientbound::SetDefaultSpawnPosition.new(spawn_pos, 0.0_f32, bot.dimension.name)
-    send_packet(packet)
-  end
-
-  private def send_set_ticking_state(enabled : Bool)
-    tick_rate = enabled ? 20.0_f32 : 0.0_f32
-    is_frozen = !enabled
-    packet = Rosegold::Clientbound::TickingState.new(tick_rate, is_frozen)
     send_packet(packet)
   end
 

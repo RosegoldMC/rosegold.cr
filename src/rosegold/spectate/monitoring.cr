@@ -71,7 +71,6 @@ module Rosegold::Spectate::Monitoring
     send_packet(respawn)
 
     send_player_abilities
-    send_set_ticking_state(false)
     send_set_time(bot)
 
     send_default_spawn_position(bot)
