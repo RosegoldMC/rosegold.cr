@@ -78,6 +78,7 @@ class Rosegold::Spectate::Server
                         Clientbound::PlayerInfoRemove,
                         Clientbound::SetBlockDestroyStage,
                         Clientbound::UpdateHealth,
+                        Clientbound::SetExperience,
                         Clientbound::EntityEffect,
                         Clientbound::RemoveEntityEffect,
                         Clientbound::SetTime,

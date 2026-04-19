@@ -92,6 +92,7 @@ module Rosegold::Spectate::Lobby
       send_player_position(bot)
       send_set_time(bot)
       send_update_health(bot)
+      send_set_experience(bot)
       start_inventory_polling
       send_hotbar_selection(bot.player.hotbar_selection)
       send_start_waiting_for_chunks

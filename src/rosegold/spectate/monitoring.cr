@@ -80,6 +80,7 @@ module Rosegold::Spectate::Monitoring
     send_existing_entities
     send_existing_entity_effects
     send_update_health(bot)
+    send_set_experience(bot)
     send_inventory_content
   end
 

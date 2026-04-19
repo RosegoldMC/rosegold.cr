@@ -8,6 +8,7 @@ module Rosegold::Spectate::PlaySession
     send_player_abilities
     send_player_position(bot)
     send_update_health(bot)
+    send_set_experience(bot)
     start_inventory_polling
     send_hotbar_selection(bot.player.hotbar_selection)
     send_start_waiting_for_chunks
@@ -154,6 +155,15 @@ module Rosegold::Spectate::PlaySession
       bot.player.health,
       bot.player.food,
       bot.player.saturation
+    )
+    send_packet(packet)
+  end
+
+  private def send_set_experience(bot : Rosegold::Client)
+    packet = Rosegold::Clientbound::SetExperience.new(
+      bot.player.experience_progress,
+      bot.player.experience_level,
+      bot.player.total_experience
     )
     send_packet(packet)
   end
