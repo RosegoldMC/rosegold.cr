@@ -2331,6 +2331,7 @@ end
 
 class Rosegold::Slot
   class_property enchantment_registry : Array(String) = [] of String
+  class_property max_repair_cost : Int32 = 31
 
   property count : UInt32
   property components_to_add : Hash(String, DataComponent) # Component name -> structured component
@@ -2502,7 +2503,7 @@ class Rosegold::Slot
   def worth_repairing? : Bool
     return false unless name.includes?("diamond") || name.includes?("netherite")
 
-    enchanted? && repair_cost <= 31
+    enchanted? && repair_cost <= Slot.max_repair_cost
   end
 
   def repair_cost : Int32
