@@ -17,7 +17,7 @@ Spectator.describe "Rosegold::Bot container API" do
           admin.tp 30, -60, 30
           admin.setblock 30, -61, 30, "chest"
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           bot.pitch = 90
           bot.wait_ticks 20
 
@@ -37,7 +37,7 @@ Spectator.describe "Rosegold::Bot container API" do
           admin.tp 30, -60, 30
           admin.setblock 30, -61, 30, "chest{Items:[{Slot:0b, id: \"minecraft:diamond\",count:3b}]}"
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           bot.pitch = 90
           bot.wait_ticks 20
 
@@ -56,7 +56,7 @@ Spectator.describe "Rosegold::Bot container API" do
         Rosegold::Bot.new(client).try do |bot|
           admin.tp 30, -60, 30
           admin.setblock 30, -61, 30, "chest"
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           bot.pitch = 90
           bot.wait_ticks 20
 

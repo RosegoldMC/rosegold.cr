@@ -6,9 +6,9 @@ Spectator.describe "Rosegold::Bot button interactions" do
   end
   it "should be able to push a stone button on the ground" do
     admin.fill 5, -61, 5, 7, -59, 5, "air"
-    admin.wait_ticks 5
+    admin.wait_tick
     admin.setblock 5, -61, 5, "stone_button[face=floor]"
-    admin.wait_ticks 5
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp 5.5, -60, 5.5
@@ -51,7 +51,7 @@ Spectator.describe "Rosegold::Bot button interactions" do
   it "should be able to push a stone button on the wall" do
     admin.setblock 3, -60, 3, "stone"
     admin.setblock 4, -60, 3, "stone_button[face=wall,facing=east]"
-    admin.wait_ticks 5
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp 5, -60, 3.5

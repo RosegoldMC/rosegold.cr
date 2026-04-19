@@ -3,12 +3,10 @@ require "../spec_helper"
 Spectator.describe "Chunk Batch Timing Integration" do
   it "should handle chunk batch timing correctly" do
     client.join_game do |client|
-      Rosegold::Bot.new(client).try do |bot|
-        admin.tp 100, -60, 100
-        bot.wait_tick
-
-        # Wait a bit for chunk batches to be processed
-        sleep 2.seconds
+      Rosegold::Bot.new(client).try do |_bot|
+        client.wait_for(Rosegold::Clientbound::ChunkBatchFinished, timeout: 3.seconds) do
+          admin.tp 100, -60, 100
+        end
 
         # Check that chunk batch samples were collected
         expect(client.chunk_batch_samples.size).to be > 0

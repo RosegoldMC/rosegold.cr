@@ -31,8 +31,11 @@ Spectator.describe "SpectateServer Integration" do
       begin
         spectator.connect
 
-        # Give enough time for all packets to arrive
-        sleep 2.seconds
+        # Wait until basic play state has arrived
+        deadline = Time.instant + 5.seconds
+        until (spectator.player.entity_id != 0_u64 && spectator.dimension_for_test.chunks.size > 0) || Time.instant > deadline
+          sleep 10.milliseconds
+        end
 
         unless spectator.connected?
           fail("Spectator disconnected: #{spectator.connection?.try(&.close_reason)}")

@@ -78,9 +78,9 @@ Spectator.describe "Rosegold::Bot crafting" do
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.give "oak_log", 1
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           recipes = bot.recipes_for("oak_planks")
           expect(recipes).to_not be_empty
@@ -94,7 +94,7 @@ Spectator.describe "Rosegold::Bot crafting" do
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           recipes = bot.recipes_for("oak_planks")
           expect(recipes).to_not be_empty
@@ -110,9 +110,9 @@ Spectator.describe "Rosegold::Bot crafting" do
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.give "oak_log", 4
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.craft("oak_planks", 4)
           bot.wait_ticks 10
@@ -127,9 +127,9 @@ Spectator.describe "Rosegold::Bot crafting" do
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.give "oak_planks", 2
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.craft("stick")
           bot.wait_ticks 10
@@ -144,9 +144,9 @@ Spectator.describe "Rosegold::Bot crafting" do
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.give "oak_log", 8
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.craft("oak_planks", 8)
           bot.wait_ticks 10
@@ -158,16 +158,16 @@ Spectator.describe "Rosegold::Bot crafting" do
 
     it "crafts with a crafting table for 3x3 recipes" do
       admin.setblock 2, -59, 0, "crafting_table"
-      admin.wait_ticks 5
+      admin.wait_tick
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.tp 0, -59, 0
-          bot.wait_ticks 10
+          bot.wait_ticks 3
           admin.give "cobblestone", 8
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.craft("furnace", table: Rosegold::Vec3i.new(2, -59, 0))
           bot.wait_ticks 10
@@ -184,9 +184,9 @@ Spectator.describe "Rosegold::Bot crafting" do
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.give "oak_log", 4
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.craft_all("oak_planks")
           bot.wait_ticks 10
@@ -198,16 +198,16 @@ Spectator.describe "Rosegold::Bot crafting" do
 
     it "crafts all hay_blocks from 12 stacks of wheat" do
       admin.setblock 2, -59, 0, "crafting_table"
-      admin.wait_ticks 5
+      admin.wait_tick
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.tp 0, -59, 0
-          bot.wait_ticks 10
+          bot.wait_ticks 3
           admin.give "wheat", 12*64
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.craft_all("hay_block", table: Rosegold::Vec3i.new(2, -59, 0))
           bot.wait_ticks 20
@@ -220,16 +220,16 @@ Spectator.describe "Rosegold::Bot crafting" do
 
     it "crafts hay_blocks from less than a full grid fill" do
       admin.setblock 2, -59, 0, "crafting_table"
-      admin.wait_ticks 5
+      admin.wait_tick
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.tp 0, -59, 0
-          bot.wait_ticks 10
+          bot.wait_ticks 3
           admin.give "wheat", 18
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.craft_all("hay_block", table: Rosegold::Vec3i.new(2, -59, 0))
           bot.wait_ticks 20
@@ -247,7 +247,7 @@ Spectator.describe "Rosegold::Bot crafting" do
         Rosegold::Bot.new(client).try do |bot|
           wait_for_recipes(bot)
           admin.clear
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           expect { bot.craft("diamond_sword") }.to raise_error(Rosegold::Bot::CraftingError)
         end
@@ -270,9 +270,9 @@ Spectator.describe "Rosegold::Bot crafting" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.give "oak_log", 1
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.craft_pattern([["oak_log"]])
           bot.wait_ticks 10
@@ -286,9 +286,9 @@ Spectator.describe "Rosegold::Bot crafting" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           admin.clear
-          admin.wait_ticks 5
+          admin.wait_tick
           admin.give "oak_planks", 4
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.craft_pattern([
             ["oak_planks", "oak_planks"],
@@ -305,7 +305,7 @@ Spectator.describe "Rosegold::Bot crafting" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           admin.clear
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           expect { bot.craft_pattern([["diamond", "diamond", "diamond"]]) }.to raise_error(Rosegold::Bot::CraftingError)
         end

@@ -45,7 +45,7 @@ class Rosegold::EventEmitter
 
     until ran_event
       return nil if (Time.utc - time_start) > timeout
-      sleep 0.01.seconds
+      sleep 1.milliseconds
     end
 
     ran_event
@@ -64,7 +64,7 @@ class Rosegold::EventEmitter
 
     until ran_event
       raise "Timed out waiting for #{event_type} after #{timeout}" if (Time.utc - time_start) > timeout
-      sleep 0.01.seconds
+      sleep 1.milliseconds
     end
 
     ran_event.as(T)
