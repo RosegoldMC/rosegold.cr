@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Clientbound::RawPacket - rosegold main</title>
+  <title>Rosegold::Clientbound::SetExperience - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -622,7 +622,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
       <a href="../../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
       
     </li>
@@ -702,7 +702,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Clientbound/SetExperience" data-name="rosegold::clientbound::setexperience">
+  <li class=" current" data-id="rosegold/Rosegold/Clientbound/SetExperience" data-name="rosegold::clientbound::setexperience">
       <a href="../../Rosegold/Clientbound/SetExperience.html">SetExperience</a>
       
     </li>
@@ -2293,26 +2293,15 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>Clientbound::<wbr>RawPacket
+  </span> Rosegold::<wbr>Clientbound::<wbr>SetExperience
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/RawPacket.html">Rosegold::Clientbound::RawPacket</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/SetExperience.html">Rosegold::Clientbound::SetExperience</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>not decoded eg. because unknown packet_id</p>
 
 
 
@@ -2330,7 +2319,7 @@
   </h2>
   <ul class="other-types-list">
     
-      <li class="other-type"><a href="../../Rosegold/RawPacket.html">Rosegold::RawPacket</a></li>
+      <li class="other-type"><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></li>
     
   </ul>
 
@@ -2353,14 +2342,37 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/packet.cr#L60" target="_blank">
-        rosegold/packets/packet.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L3" target="_blank">
+        rosegold/packets/clientbound/set_experience.cr
       </a>
     
     <br/>
   
 
 
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="PROTOCOL_PACKET_IDS">
+        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">96_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">101_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">103_u32</span>}</code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Store the protocol mappings as a constant</p>
+      </dd>
+      
+    
+  </dl>
 
 
 
@@ -2376,7 +2388,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28bytes%3ASlice%28UInt8%29%29-class-method" class="signature"><strong>.new</strong>(bytes : Slice(UInt8))</a>
+        <a href="#new%28experience_progress%3AFloat32%2Cexperience_level%3AUInt32%2Ctotal_experience%3AUInt32%29-class-method" class="signature"><strong>.new</strong>(experience_progress : Float32, experience_level : UInt32, total_experience : UInt32)</a>
         
       </li>
     
@@ -2395,7 +2407,49 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#packet_id-class-method" class="signature"><strong>.packet_id</strong></a>
+        <a href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt32-class-method" class="signature"><strong>.[]</strong>(protocol_version : UInt32) : UInt32</a>
+        
+          <div class="summary"><p>Generate the <a href="protocol_version"></a> method for elegant access</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#default_packet_id%3AUInt32-class-method" class="signature"><strong>.default_packet_id</strong> : UInt32</a>
+        
+          <div class="summary"><p>Define default packet ID (typically the latest/most common version)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#packet_id%3AUInt32-class-method" class="signature"><strong>.packet_id</strong> : UInt32</a>
+        
+          <div class="summary"><p>Provide backward compatibility with existing packet_id class getter Use the first protocol's packet ID for registration compatibility</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt32-class-method" class="signature"><strong>.packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt32</a>
+        
+          <div class="summary"><p>Get packet ID for specific protocol version (returns UInt32 for VarInt encoding in write methods)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#read%28packet%29-class-method" class="signature"><strong>.read</strong>(packet)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#supported_protocols%3AArray%28UInt32%29-class-method" class="signature"><strong>.supported_protocols</strong> : Array(UInt32)</a>
+        
+          <div class="summary"><p>Helper method to get all supported protocols</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method" class="signature"><strong>.supports_protocol?</strong>(protocol_version : UInt32) : Bool</a>
+        
+          <div class="summary"><p>Helper method to check if a protocol is supported</p></div>
         
       </li>
     
@@ -2405,31 +2459,64 @@
   
 
   
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#callback%28client%29-instance-method" class="signature"><strong>#callback</strong>(client)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#experience_level%3AUInt32-instance-method" class="signature"><strong>#experience_level</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#experience_level%3D%28experience_level%3AUInt32%29-instance-method" class="signature"><strong>#experience_level=</strong>(experience_level : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#experience_progress%3AFloat32-instance-method" class="signature"><strong>#experience_progress</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#experience_progress%3D%28experience_progress%3AFloat32%29-instance-method" class="signature"><strong>#experience_progress=</strong>(experience_progress : Float32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#total_experience%3AUInt32-instance-method" class="signature"><strong>#total_experience</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#total_experience%3D%28total_experience%3AUInt32%29-instance-method" class="signature"><strong>#total_experience=</strong>(total_experience : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#write%3ABytes-instance-method" class="signature"><strong>#write</strong> : Bytes</a>
+        
+      </li>
+    
+  </ul>
+
 
 
   <div class="methods-inherited">
     
       
 
-  <h3>Instance methods inherited from module <code><a href="../../Rosegold/RawPacket.html">Rosegold::RawPacket</a></code></h3>
-  
-  
-    <a href="../../Rosegold/RawPacket.html#bytes%3ABytes-instance-method" class="tooltip">
-      <span>bytes : Bytes</span>
-    bytes</a>, 
-    
-  
-    <a href="../../Rosegold/RawPacket.html#packet_id%3AUInt32-instance-method" class="tooltip">
-      <span>packet_id : UInt32</span>
-    packet_id</a>, 
-    
-  
-    <a href="../../Rosegold/RawPacket.html#write%3ABytes-instance-method" class="tooltip">
-      <span>write : Bytes</span>
-    write</a>
-    
-  
-
 
       
 
@@ -2438,6 +2525,15 @@
 
 
       
+
+  <h3>Macros inherited from module <code><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></code></h3>
+  
+  
+    <a href="../../Rosegold/Packets/ProtocolMapping.html#packet_ids%28mappings%29-macro" class="tooltip">
+      <span>packet_ids(mappings)</span>
+    packet_ids</a>
+    
+  
 
 
     
@@ -2551,18 +2647,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(bytes:Slice(UInt8))-class-method">
+    <div class="entry-detail" id="new(experience_progress:Float32,experience_level:UInt32,total_experience:UInt32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(bytes : Slice(UInt8))
+        def self.<strong>new</strong>(experience_progress : Float32, experience_level : UInt32, total_experience : UInt32)
 
-        <a class="method-permalink" href="#new%28bytes%3ASlice%28UInt8%29%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28experience_progress%3AFloat32%2Cexperience_level%3AUInt32%2Ctotal_experience%3AUInt32%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/packet.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2579,18 +2675,143 @@
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="packet_id-class-method">
+    <div class="entry-detail" id="[](protocol_version:UInt32):UInt32-class-method">
       <div class="signature">
         
-        def self.<strong>packet_id</strong>
+        def self.<strong>[]</strong>(protocol_version : UInt32) : UInt32
 
-        <a class="method-permalink" href="#packet_id-class-method">#</a>
+        <a class="method-permalink" href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt32-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Generate the <a href="protocol_version"></a> method for elegant access</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="default_packet_id:UInt32-class-method">
+      <div class="signature">
+        
+        def self.<strong>default_packet_id</strong> : UInt32
+
+        <a class="method-permalink" href="#default_packet_id%3AUInt32-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Define default packet ID (typically the latest/most common version)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="packet_id:UInt32-class-method">
+      <div class="signature">
+        
+        def self.<strong>packet_id</strong> : UInt32
+
+        <a class="method-permalink" href="#packet_id%3AUInt32-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Provide backward compatibility with existing packet_id class getter
+Use the first protocol's packet ID for registration compatibility</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="packet_id_for_protocol(protocol_version:UInt32):UInt32-class-method">
+      <div class="signature">
+        
+        def self.<strong>packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt32
+
+        <a class="method-permalink" href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt32-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Get packet ID for specific protocol version (returns UInt32 for VarInt encoding in write methods)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="read(packet)-class-method">
+      <div class="signature">
+        
+        def self.<strong>read</strong>(packet)
+
+        <a class="method-permalink" href="#read%28packet%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/packet.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L19" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="supported_protocols:Array(UInt32)-class-method">
+      <div class="signature">
+        
+        def self.<strong>supported_protocols</strong> : Array(UInt32)
+
+        <a class="method-permalink" href="#supported_protocols%3AArray%28UInt32%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Helper method to get all supported protocols</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="supports_protocol?(protocol_version:UInt32):Bool-class-method">
+      <div class="signature">
+        
+        def self.<strong>supports_protocol?</strong>(protocol_version : UInt32) : Bool
+
+        <a class="method-permalink" href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Helper method to check if a protocol is supported</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2600,6 +2821,144 @@
   
 
   
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="callback(client)-instance-method">
+      <div class="signature">
+        
+        def <strong>callback</strong>(client)
+
+        <a class="method-permalink" href="#callback%28client%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L36" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="experience_level:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>experience_level</strong> : UInt32
+
+        <a class="method-permalink" href="#experience_level%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="experience_level=(experience_level:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>experience_level=</strong>(experience_level : UInt32)
+
+        <a class="method-permalink" href="#experience_level%3D%28experience_level%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="experience_progress:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>experience_progress</strong> : Float32
+
+        <a class="method-permalink" href="#experience_progress%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="experience_progress=(experience_progress:Float32)-instance-method">
+      <div class="signature">
+        
+        def <strong>experience_progress=</strong>(experience_progress : Float32)
+
+        <a class="method-permalink" href="#experience_progress%3D%28experience_progress%3AFloat32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="total_experience:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>total_experience</strong> : UInt32
+
+        <a class="method-permalink" href="#total_experience%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="total_experience=(total_experience:UInt32)-instance-method">
+      <div class="signature">
+        
+        def <strong>total_experience=</strong>(total_experience : UInt32)
+
+        <a class="method-permalink" href="#total_experience%3D%28total_experience%3AUInt32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="write:Bytes-instance-method">
+      <div class="signature">
+        
+        def <strong>write</strong> : Bytes
+
+        <a class="method-permalink" href="#write%3ABytes-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/clientbound/set_experience.cr#L27" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
 
 </div>

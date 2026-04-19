@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Clientbound::RawPacket - rosegold main</title>
+  <title>Rosegold::Event::ExperienceChanged - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -372,7 +372,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound" data-name="rosegold::clientbound">
       <a href="../../Rosegold/Clientbound.html">Clientbound</a>
       
         <ul>
@@ -622,7 +622,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/RawPacket" data-name="rosegold::clientbound::rawpacket">
       <a href="../../Rosegold/Clientbound/RawPacket.html">RawPacket</a>
       
     </li>
@@ -1387,7 +1387,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
+  <li class="parent open current" data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
       <a href="../../Rosegold/Event.html">Event</a>
       
         <ul>
@@ -1417,7 +1417,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Event/ExperienceChanged" data-name="rosegold::event::experiencechanged">
+  <li class=" current" data-id="rosegold/Rosegold/Event/ExperienceChanged" data-name="rosegold::event::experiencechanged">
       <a href="../../Rosegold/Event/ExperienceChanged.html">ExperienceChanged</a>
       
     </li>
@@ -2293,26 +2293,12 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>Clientbound::<wbr>RawPacket
+  </span> Rosegold::<wbr>Event::<wbr>ExperienceChanged
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Clientbound/RawPacket.html">Rosegold::Clientbound::RawPacket</a></li><li class="superclass"><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
-
-
-
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>not decoded eg. because unknown packet_id</p>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Event/ExperienceChanged.html">Rosegold::Event::ExperienceChanged</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -2320,19 +2306,8 @@
 
 
 
-  <h2>
-    <a id="included-modules" class="anchor" href="#included-modules">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Included Modules
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../../Rosegold/RawPacket.html">Rosegold::RawPacket</a></li>
-    
-  </ul>
+
+
 
 
 
@@ -2353,8 +2328,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/packet.cr#L60" target="_blank">
-        rosegold/packets/packet.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/events/experience_changed.cr#L3" target="_blank">
+        rosegold/events/experience_changed.cr
       </a>
     
     <br/>
@@ -2376,7 +2351,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28bytes%3ASlice%28UInt8%29%29-class-method" class="signature"><strong>.new</strong>(bytes : Slice(UInt8))</a>
+        <a href="#new%28old_experience_level%3AUInt32%2Cexperience_level%3AUInt32%2Cold_total_experience%3AUInt32%2Ctotal_experience%3AUInt32%2Cold_experience_progress%3AFloat32%2Cexperience_progress%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(old_experience_level : UInt32, experience_level : UInt32, old_total_experience : UInt32, total_experience : UInt32, old_experience_progress : Float32, experience_progress : Float32)</a>
         
       </li>
     
@@ -2384,121 +2359,55 @@
 
 
   
+
+  
+
+  
   <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Class Method Summary
+    Instance Method Summary
   </h2>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#packet_id-class-method" class="signature"><strong>.packet_id</strong></a>
+        <a href="#experience_level%3AUInt32-instance-method" class="signature"><strong>#experience_level</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#experience_progress%3AFloat32-instance-method" class="signature"><strong>#experience_progress</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#old_experience_level%3AUInt32-instance-method" class="signature"><strong>#old_experience_level</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#old_experience_progress%3AFloat32-instance-method" class="signature"><strong>#old_experience_progress</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#old_total_experience%3AUInt32-instance-method" class="signature"><strong>#old_total_experience</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#total_experience%3AUInt32-instance-method" class="signature"><strong>#total_experience</strong> : UInt32</a>
         
       </li>
     
   </ul>
 
 
-  
-
-  
-
 
   <div class="methods-inherited">
-    
-      
-
-  <h3>Instance methods inherited from module <code><a href="../../Rosegold/RawPacket.html">Rosegold::RawPacket</a></code></h3>
-  
-  
-    <a href="../../Rosegold/RawPacket.html#bytes%3ABytes-instance-method" class="tooltip">
-      <span>bytes : Bytes</span>
-    bytes</a>, 
-    
-  
-    <a href="../../Rosegold/RawPacket.html#packet_id%3AUInt32-instance-method" class="tooltip">
-      <span>packet_id : UInt32</span>
-    packet_id</a>, 
-    
-  
-    <a href="../../Rosegold/RawPacket.html#write%3ABytes-instance-method" class="tooltip">
-      <span>write : Bytes</span>
-    write</a>
-    
-  
-
-
-      
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-  <h3>Class methods inherited from class <code><a href="../../Rosegold/Clientbound/Packet.html">Rosegold::Clientbound::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Clientbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
-      <span>new_raw(bytes)</span>
-    new_raw</a>, 
-    
-  
-    <a href="../../Rosegold/Clientbound/Packet.html#state-class-method" class="tooltip">
-      <span>state</span>
-    state</a>
-    
-  
-
-
-      
-
-
-    
-      
-
-  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
-      <span>callback(client_or_server)</span>
-    callback</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
-      <span>to_s(io)</span>
-    to_s</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
-      <span>write : Bytes</span>
-    write</a>
-    
-  
-
-
-      
-
-
-      
-
-
-      
-
-
     
       
 
@@ -2551,18 +2460,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(bytes:Slice(UInt8))-class-method">
+    <div class="entry-detail" id="new(old_experience_level:UInt32,experience_level:UInt32,old_total_experience:UInt32,total_experience:UInt32,old_experience_progress:Float32,experience_progress:Float32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(bytes : Slice(UInt8))
+        def self.<strong>new</strong>(old_experience_level : UInt32, experience_level : UInt32, old_total_experience : UInt32, total_experience : UInt32, old_experience_progress : Float32, experience_progress : Float32)
 
-        <a class="method-permalink" href="#new%28bytes%3ASlice%28UInt8%29%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28old_experience_level%3AUInt32%2Cexperience_level%3AUInt32%2Cold_total_experience%3AUInt32%2Ctotal_experience%3AUInt32%2Cold_experience_progress%3AFloat32%2Cexperience_progress%3AFloat32%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/packet.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/events/experience_changed.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2570,36 +2479,116 @@
 
 
   
+
+  
+
+  
   <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Class Method Detail
+    Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="packet_id-class-method">
+    <div class="entry-detail" id="experience_level:UInt32-instance-method">
       <div class="signature">
         
-        def self.<strong>packet_id</strong>
+        def <strong>experience_level</strong> : UInt32
 
-        <a class="method-permalink" href="#packet_id-class-method">#</a>
+        <a class="method-permalink" href="#experience_level%3AUInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/packets/packet.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/events/experience_changed.cr#L5" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="experience_progress:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>experience_progress</strong> : Float32
+
+        <a class="method-permalink" href="#experience_progress%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/events/experience_changed.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="old_experience_level:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>old_experience_level</strong> : UInt32
+
+        <a class="method-permalink" href="#old_experience_level%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/events/experience_changed.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="old_experience_progress:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>old_experience_progress</strong> : Float32
+
+        <a class="method-permalink" href="#old_experience_progress%3AFloat32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/events/experience_changed.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="old_total_experience:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>old_total_experience</strong> : UInt32
+
+        <a class="method-permalink" href="#old_total_experience%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/events/experience_changed.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="total_experience:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>total_experience</strong> : UInt32
+
+        <a class="method-permalink" href="#total_experience%3AUInt32-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/6c6097c05420c1421affb69211258c57fd851eed/src/rosegold/events/experience_changed.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
-
-  
-
-  
 
 
 </div>
