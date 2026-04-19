@@ -3,7 +3,7 @@ require "../spec_helper"
 Spectator.describe "Rosegold::Bot movement speeds" do
   before_all do
     admin.setup_arena
-    admin.wait_ticks 19
+    admin.wait_tick
   end
 
   it "should have correct movement speeds for sneak, walk, and sprint" do
@@ -11,7 +11,7 @@ Spectator.describe "Rosegold::Bot movement speeds" do
       Rosegold::Bot.new(client).try do |bot|
         bot.wait_ticks 5
         admin.tp 0, -60, 0
-        bot.wait_ticks 10
+        bot.wait_ticks 3
 
         bot.sneak(true)
         bot.wait_ticks 2
@@ -21,7 +21,7 @@ Spectator.describe "Rosegold::Bot movement speeds" do
         sneak_speed = 5.0 / sneak_time.total_seconds
 
         admin.tp 0, -60, 0
-        bot.wait_ticks 10
+        bot.wait_ticks 3
         bot.sneak(false)
         bot.wait_ticks 2
 
@@ -31,7 +31,7 @@ Spectator.describe "Rosegold::Bot movement speeds" do
         walk_speed = 5.0 / walk_time.total_seconds
 
         admin.tp 0, -60, 0
-        bot.wait_ticks 10
+        bot.wait_ticks 3
 
         bot.sprint(true)
         bot.wait_ticks 2

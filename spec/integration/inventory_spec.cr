@@ -7,7 +7,7 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             expect(bot.inventory.count("bucket")).to eq 0
           end
@@ -20,12 +20,12 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             admin.give "bucket", 16
             admin.give "bucket", 1
             admin.give "bucket", 5
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             expect(bot.inventory.count("bucket")).to eq 16 + 1 + 5
           end
@@ -38,10 +38,10 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             admin.give "bucket", 513
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             expect(bot.inventory.count("bucket")).to eq 513
           end
@@ -56,7 +56,7 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             expect(bot.inventory.pick("diamond_pickaxe")).to eq false
             expect(bot.inventory.pick("stone")).to eq false
@@ -71,11 +71,11 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.give "stone", 42
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.give "grass_block", 43
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             expect(bot.inventory.pick("stone")).to eq true
             expect(bot.inventory.main_hand.name).to eq "stone"
@@ -91,11 +91,11 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.give "stone", 64*9
-            bot.wait_ticks 10
+            bot.wait_ticks 3
             admin.give "grass_block"
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             expect(bot.inventory.pick("grass_block")).to eq true
             expect(bot.inventory.main_hand.name).to eq "grass_block"
@@ -109,13 +109,13 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             # Give undamaged diamond pickaxe first (will go to hotbar slot 0)
             admin.give "diamond_pickaxe"
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             # Give damaged diamond pickaxe (will go to hotbar slot 1)
             admin.give "diamond_pickaxe[damage=1400]"
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Switch away from the pickaxes first
             bot.hotbar_selection = 3_u8
@@ -140,7 +140,7 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             expect { bot.inventory.pick!("diamond_pickaxe") }.to raise_error(Rosegold::Inventory::ItemNotFoundError)
           end
         end
@@ -152,9 +152,9 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.give "diamond_pickaxe[damage=1550,enchantments={\"minecraft:efficiency\":1}]"
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             expect { bot.inventory.pick!("diamond_pickaxe") }.to raise_error(Rosegold::Inventory::ItemNotFoundError)
           end
         end
@@ -171,7 +171,7 @@ Spectator.describe "Rosegold::Bot inventory" do
           bot.wait_tick
           admin.setblock 30, -61, 30, "chest{Items:[{Slot:7b, id: \"minecraft:diamond_sword\",count:1b},{Slot:6b, id: \"minecraft:diamond_sword\",count:1b,components:{\"minecraft:damage\":100}}]}"
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           bot.pitch = 90
           bot.wait_ticks 20
 
@@ -216,7 +216,7 @@ Spectator.describe "Rosegold::Bot inventory" do
           # Create chest with two diamond pickaxes: one undamaged, one heavily damaged
           admin.setblock 30, -61, 30, "chest{Items:[{Slot:0b, id: \"minecraft:diamond_pickaxe\",count:1b},{Slot:1b, id: \"minecraft:diamond_pickaxe\",count:1b,components:{\"minecraft:damage\":1400}}]}"
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           bot.wait_tick
 
           bot.pitch = 90
@@ -255,7 +255,7 @@ Spectator.describe "Rosegold::Bot inventory" do
           # Create chest with multiple diamond swords of varying durability
           admin.setblock 30, -61, 30, "chest{Items:[{Slot:0b, id: \"minecraft:diamond_sword\",count:1b},{Slot:1b, id: \"minecraft:diamond_sword\",count:1b,components:{\"minecraft:damage\":800}},{Slot:2b, id: \"minecraft:diamond_sword\",count:1b,components:{\"minecraft:damage\":1200}},{Slot:3b, id: \"minecraft:diamond_sword\",count:1b,components:{\"minecraft:damage\":400}}]}"
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           bot.wait_tick
 
           bot.pitch = 90
@@ -297,7 +297,7 @@ Spectator.describe "Rosegold::Bot inventory" do
           admin.setblock 30, -61, 30, "chest{Items:[#{items_array.join(",")}]}", "replace"
           bot.wait_tick
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
 
           # Open the chest
           bot.pitch = 90
@@ -339,11 +339,11 @@ Spectator.describe "Rosegold::Bot inventory" do
           admin.setblock 30, -61, 30, "chest{Items:[]}", "replace"
           bot.wait_tick
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
 
           # Give player exactly 20 stacks of cobblestone (1280 items)
           admin.give "cobblestone", 1280
-          bot.wait_ticks 5
+          bot.wait_ticks 2
 
           # Open the chest
           bot.pitch = 90
@@ -408,9 +408,9 @@ Spectator.describe "Rosegold::Bot inventory" do
           bot.wait_tick
           admin.setblock 30, -61, 30, "chest{Items:[]}"
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           admin.give "diamond_sword"
-          bot.wait_ticks 5
+          bot.wait_ticks 2
 
           bot.pitch = 90
           bot.use_hand
@@ -481,11 +481,11 @@ Spectator.describe "Rosegold::Bot inventory" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           admin.give "diamond_sword", 4
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           admin.give "stone", 200
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.look = Rosegold::Look.new 0, 0
           expect(bot.inventory.throw_all_of "diamond_sword").to eq 4
@@ -506,9 +506,9 @@ Spectator.describe "Rosegold::Bot inventory" do
       client.join_game do |client|
         Rosegold::Bot.new(client).try do |bot|
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
           admin.give "lava_bucket", 33
-          bot.wait_ticks 10
+          bot.wait_ticks 3
 
           bot.look = Rosegold::Look.new 0, 0
           expect(bot.inventory.throw_all_of "lava_bucket").to eq 33
@@ -542,7 +542,7 @@ Spectator.describe "Rosegold::Bot inventory" do
           bot.wait_tick
 
           admin.clear
-          bot.wait_ticks 5
+          bot.wait_ticks 2
 
           # Open the chest
           bot.pitch = 90
@@ -586,11 +586,11 @@ Spectator.describe "Rosegold::Bot inventory" do
             admin.setblock 30, -61, 30, "chest{Items:[#{items_array}]}", "replace"
             bot.wait_tick
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Give player diamond swords to try to deposit into the full chest
             admin.give "diamond_sword", 3
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Open the chest
             bot.pitch = 90
@@ -642,13 +642,13 @@ Spectator.describe "Rosegold::Bot inventory" do
             admin.setblock 30, -61, 30, "chest{Items:[#{items_array.join(",")}]}", "replace"
             bot.wait_tick
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Give player diamond swords and cobblestone to deposit
             admin.give "diamond_sword", 10
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.give "cobblestone", 64
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Open the chest
             bot.pitch = 90
@@ -710,9 +710,9 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.give "stone", 15
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             result = bot.inventory.replenish 10, "stone"
             expect(result).to eq 15
@@ -733,9 +733,9 @@ Spectator.describe "Rosegold::Bot inventory" do
             admin.clear
             admin.wait_tick
             admin.give "stone", 2
-            admin.wait_ticks 5
+            admin.wait_tick
             bot.pitch = 90
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             bot.use_hand
             bot.wait_for Rosegold::Clientbound::SetContainerContent
 
@@ -756,7 +756,7 @@ Spectator.describe "Rosegold::Bot inventory" do
             admin.wait_tick
             admin.chat "/execute at #{AdminBot::TEST_PLAYER} run setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:diamond\",count:5b}]}"
             admin.clear
-            admin.wait_ticks 5
+            admin.wait_tick
 
             bot.pitch = 90
             bot.use_hand
@@ -778,9 +778,9 @@ Spectator.describe "Rosegold::Bot inventory" do
             admin.wait_tick
             admin.chat "/execute at #{AdminBot::TEST_PLAYER} run setblock ~ ~ ~ minecraft:chest{Items:[{Slot:0b, id: \"minecraft:gold_ingot\",count:2b}]}"
             admin.clear
-            admin.wait_ticks 5
+            admin.wait_tick
             admin.give "gold_ingot"
-            admin.wait_ticks 5
+            admin.wait_tick
 
             bot.pitch = 90
             bot.use_hand
@@ -803,7 +803,7 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Give one full set of diamond armor and shield
             admin.give "diamond_helmet"
@@ -811,7 +811,7 @@ Spectator.describe "Rosegold::Bot inventory" do
             admin.give "diamond_leggings"
             admin.give "diamond_boots"
             admin.give "shield"
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Find equipment items in inventory
             helmet_slot = (bot.inventory.inventory + bot.inventory.hotbar).find { |slot| slot.name == "diamond_helmet" }
@@ -861,7 +861,7 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             expect(bot.inventory.refill_hand).to eq 0
           end
@@ -874,14 +874,14 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Set up: 16 stone in main hand, 32 stone in main inventory
             bot.hotbar_selection = 1_u8
             admin.item_replace "hotbar.0", "stone", 16
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.item_replace "inventory.0", "stone", 32
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Test refill functionality - document current behavior
             initial_count = bot.inventory.main_hand.count
@@ -913,14 +913,14 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Set up: 10 diamond in main hand, 20 diamond in another hotbar slot, NO diamond in main inventory
             bot.hotbar_selection = 1_u8
             admin.item_replace "hotbar.0", "diamond", 10
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.item_replace "hotbar.1", "diamond", 20
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Test refill_hand functionality - should combine 10 + 20 = 30 total
             initial_count = bot.inventory.main_hand.count
@@ -951,17 +951,17 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Set up: 32 stone in main hand, 64 stone in inventory, 32 stone in hotbar
             # Total: 128 stone, but max stack is 64
             bot.hotbar_selection = 1_u8
             admin.item_replace "hotbar.0", "stone", 32
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.item_replace "inventory.0", "stone", 64
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.item_replace "hotbar.1", "stone", 32
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Test that refill stops at max stack size (64)
             initial_count = bot.inventory.main_hand.count
@@ -981,11 +981,11 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Give exactly 64 stone (max stack)
             admin.give "stone", 64
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Should return 64 without doing anything
             expect(bot.inventory.main_hand.count).to eq 64
@@ -1000,13 +1000,13 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Give 32 stone in hand and dirt in inventory (no matching items)
             admin.give "stone", 32
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.give "dirt", 64
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Should return current count since no more stone available
             expect(bot.inventory.main_hand.count).to eq 32
@@ -1023,7 +1023,7 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Teleport to known location and create chest
             admin.tp 30.5, -60, 30.5
@@ -1033,9 +1033,9 @@ Spectator.describe "Rosegold::Bot inventory" do
 
             # Give stone - first to main hand, second to inventory
             admin.give "stone", 32
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.give "stone", 32
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             main_hand_count_before_container = bot.inventory.main_hand.count
 
@@ -1067,13 +1067,13 @@ Spectator.describe "Rosegold::Bot inventory" do
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
             admin.clear
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Give sword (non-stackable item)
             admin.give "diamond_sword"
-            bot.wait_ticks 5
+            bot.wait_ticks 2
             admin.give "diamond_sword"
-            bot.wait_ticks 5
+            bot.wait_ticks 2
 
             # Should return 1 since swords don't stack
             expect(bot.inventory.main_hand.count).to eq 1

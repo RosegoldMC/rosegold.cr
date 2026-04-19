@@ -8,11 +8,11 @@ Spectator.describe "Rosegold::Bot sneak edge prevention" do
   it "should not fall off edge when sneaking" do
     admin.fill -2, -60, -2, 4, -56, 4, "air"
     admin.setblock 0, -57, 0, "stone"
-    admin.wait_ticks 5
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp 0, -56, 0
-        bot.wait_ticks 5
+        bot.wait_ticks 2
         until client.player.on_ground?
           bot.wait_tick
         end
@@ -38,11 +38,11 @@ Spectator.describe "Rosegold::Bot sneak edge prevention" do
   it "should fall off edge when not sneaking" do
     admin.fill -2, -60, -2, 4, -56, 4, "air"
     admin.setblock 0, -57, 0, "stone"
-    admin.wait_ticks 5
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp 0, -56, 0
-        bot.wait_ticks 5
+        bot.wait_ticks 2
         until client.player.on_ground?
           bot.wait_tick
         end

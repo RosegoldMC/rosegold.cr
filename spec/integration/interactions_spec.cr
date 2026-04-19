@@ -4,7 +4,7 @@ Spectator.describe "Rosegold::Bot interactions" do
   before_all do
     admin.kill_entities
     admin.fill -10, -60, -10, 10, 0, 10, "air"
-    admin.wait_ticks 20
+    admin.wait_ticks 3
   end
 
   it "should be able to chat" do
@@ -19,11 +19,10 @@ Spectator.describe "Rosegold::Bot interactions" do
 
   it "should be able to dig continuously through 3 blocks" do
     admin.fill 9, -60, 10, 9, -58, 10, "dirt"
-    admin.wait_ticks 5
+    admin.wait_ticks 3
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.clear
-        admin.wait_ticks 5
         admin.tp 9, -57, 10
         bot.wait_ticks 10
 
@@ -73,7 +72,7 @@ Spectator.describe "Rosegold::Bot interactions" do
 
   it "should stop digging when bot.stop_digging is called" do
     admin.fill 10, -60, 9, 10, -57, 9, "dirt"
-    admin.wait_ticks 5
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp 10, -56, 9
@@ -84,7 +83,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         bot.start_digging
         bot.stop_digging
 
-        sleep 1.second # long enough to dig 1 block, if it didn't stop
+        bot.wait_ticks 20 # long enough to dig 1 block, if it didn't stop
 
         expect(bot.location.y).to be >= -56
       end
@@ -96,9 +95,7 @@ Spectator.describe "Rosegold::Bot interactions" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.clear
-        admin.wait_ticks 5
         admin.give "diamond_pickaxe"
-        admin.wait_ticks 10
         admin.tp 8, -59, 8
         bot.wait_ticks 10
 
@@ -143,13 +140,11 @@ Spectator.describe "Rosegold::Bot interactions" do
 
   it "should be able to dig obsidian with diamond pickaxe and efficiency" do
     admin.fill 9, -60, 9, 9, -60, 9, "obsidian"
-    admin.wait_ticks 5
+    admin.wait_ticks 3
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.clear
-        admin.wait_ticks 5
         admin.give "diamond_pickaxe[enchantments={\"minecraft:efficiency\":5}]"
-        admin.wait_ticks 5
         admin.tp 9, -59, 9
         bot.wait_ticks 10
 
@@ -196,15 +191,14 @@ Spectator.describe "Rosegold::Bot interactions" do
 
   it "should be able to place blocks" do
     admin.kill_entities
-    admin.wait_ticks 5
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp 10, -60, 10
         bot.wait_ticks 10
         admin.clear
-        admin.wait_ticks 10
         admin.give "obsidian", 64
-        bot.wait_ticks 10
+        bot.wait_ticks 3
 
         bot.inventory.pick! "obsidian"
         bot.wait_ticks 5
@@ -231,7 +225,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         # Mimic vine farm: stone above, vine hangs below with inherited face
         admin.setblock 5, -59, 6, "stone"
         admin.setblock 5, -60, 6, "vine[west=true]"
-        admin.wait_ticks 10
+        admin.wait_ticks 5
 
         vine_state = client.dimension_for_test.block_state(5, -60, 6)
         vine_name = Rosegold::MCData.default.block_state_names[vine_state.as(UInt16)]
@@ -244,7 +238,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         admin.tp 3.5, -60, 6.5
         admin.clear
         admin.give "shears"
-        admin.wait_ticks 10
+        bot.wait_ticks 10
 
         bot.inventory.pick! "shears"
         bot.wait_ticks 5
@@ -281,7 +275,7 @@ Spectator.describe "Rosegold::Bot interactions" do
         admin.tp 6.5, -60, 7.5
         admin.clear
         admin.give "bone_meal", 10
-        bot.wait_ticks 5
+        bot.wait_ticks 10
 
         # Verify wheat was created at age 0
         wheat_age_0 = client.dimension_for_test.block_state(6, -59, 6)

@@ -13,7 +13,7 @@ Spectator.describe "Rosegold::Bot ice road physics" do
     admin.fill 20, base_y + 1, 0, 20, base_y + 1, 40, "stone_button[face=floor]"
     admin.fill 20, base_y + 2, 0, 20, base_y + 2, 40, "oak_trapdoor[half=top]"
     admin.fill 20, base_y + 3, 0, 20, base_y + 3, 40, "obsidian"
-    admin.wait_ticks 5
+    admin.wait_tick
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp start_pos.x, start_pos.y, start_pos.z
