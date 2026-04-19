@@ -4,22 +4,12 @@ require "log/spec"
 Spectator.describe "Rosegold::Client disconnection" do
   it "should handle disconnection via kick command" do
     client.join_game do |client|
-      disconnected = false
-      disconnect_reason : Rosegold::TextComponent? = nil
-
-      client.on(Rosegold::Event::Disconnected) do |event|
-        disconnected = true
-        disconnect_reason = event.reason
-      end
-
-      Rosegold::Bot.new(client).try do |bot|
-        bot.wait_ticks 5
+      disconnect_event = client.wait_for(Rosegold::Event::Disconnected, timeout: 5.seconds) do
         admin.chat "/kick #{AdminBot::TEST_PLAYER}"
-        bot.wait_ticks 10
-
-        expect(disconnected).to be_true
-        expect(disconnect_reason).to_not be_nil
       end
+
+      expect(disconnect_event).to_not be_nil
+      expect(disconnect_event.try(&.reason)).to_not be_nil
     end
   end
 
@@ -27,10 +17,8 @@ Spectator.describe "Rosegold::Client disconnection" do
     Log.capture("rosegold") do |logs|
       begin
         client.join_game do |client|
-          Rosegold::Bot.new(client).try do |bot|
-            bot.wait_ticks 5
+          client.wait_for(Rosegold::Event::Disconnected, timeout: 5.seconds) do
             admin.chat "/kick #{AdminBot::TEST_PLAYER}"
-            bot.wait_ticks 10
           end
         end
       rescue Rosegold::Client::NotConnected
