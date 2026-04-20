@@ -138,6 +138,9 @@ bot.eat!
 # Select an item by name
 bot.inventory.pick! "diamond_sword"
 
+# ...or by predicate — pick the most-damaged usable axe
+bot.inventory.pick! { |s| s.name.ends_with?("_axe") }
+
 # Count items
 bot.inventory.count("diamond")
 
@@ -154,6 +157,15 @@ bot.inventory.throw_all_of("cobblestone")
 bot.inventory.helmet
 bot.inventory.chestplate
 ```
+
+`pick` is durability-aware: it cycles through matching tools from most-damaged
+to least-damaged and refuses to hand you an enchanted diamond/netherite tool
+that's about to break, so looping over `pick` will auto-rotate fresh tools in
+from your inventory. Tune `Rosegold::Slot.max_repair_cost` to control when
+heavily-repaired tools get retired. See the [`Inventory#pick` docs][pick-docs]
+for details.
+
+[pick-docs]: https://rosegoldmc.github.io/rosegold.cr/Rosegold/Inventory.html#pick(spec)-instance-method
 
 ### Containers (Chests, Furnaces, etc.)
 

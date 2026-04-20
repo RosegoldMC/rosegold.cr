@@ -21,13 +21,50 @@ class Rosegold::Inventory
     count(spec)
   end
 
-  # Picks a matching slot, if it exists in the inventory.
-  # Returns true if the item was picked, false otherwise.
+  # Selects a matching item into the main hand, if one exists in the inventory.
+  # Returns true if an item was picked, false otherwise.
   #
   # Example:
   #   inventory.pick "diamond_pickaxe" # => true
   #   inventory.pick &.empty? # => true
   #   inventory.pick { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => false
+  #
+  # ### Durability-aware selection
+  #
+  # `pick` is smarter than a plain find-and-equip. For each call it:
+  #
+  # 1. Keeps the main hand if it already matches and is not close to breaking.
+  # 2. Otherwise searches the hotbar, picking the **most-damaged usable** tool
+  #    first so tools wear out evenly instead of leaving partially-damaged
+  #    leftovers.
+  # 3. Falls back to the rest of the inventory, swapping the chosen slot into
+  #    the hotbar.
+  #
+  # Because the most-damaged usable tool is chosen each time, calling `pick`
+  # regularly in a loop will automatically rotate in fresh tools from the
+  # inventory as the hotbar wears down — no manual reselection needed.
+  #
+  # ### Avoiding tool destruction
+  #
+  # Slots that `needs_repair?` are treated as if they don't match, so `pick`
+  # will not hand you a tool that's about to shatter. "Needs repair" means an
+  # **enchanted diamond or netherite tool** with fewer than 12 uses left whose
+  # `repair_cost` is still below the cutoff (see below). Such tools are
+  # preserved for the anvil.
+  #
+  # Tools that are **not** worth repairing — unenchanted tools, wood/stone/
+  # iron/gold tools, or diamond/netherite tools whose repair cost has climbed
+  # above the cutoff — are still selected and will be used until they break.
+  # The rationale: if repairing costs too many levels, it's cheaper to craft a
+  # fresh one.
+  #
+  # ### Tuning the repair cutoff
+  #
+  # The cutoff is `Rosegold::Slot.max_repair_cost` (default `31`). Raise it to
+  # keep babying heavily-repaired tools, or lower it to retire them sooner:
+  #
+  #   Rosegold::Slot.max_repair_cost = 15  # retire tools past "Prior Work: 15"
+  #   Rosegold::Slot.max_repair_cost = 0   # never preserve — use everything to breakage
   def pick(spec)
     return true if main_hand.matches?(spec) && !main_hand.needs_repair?
 
