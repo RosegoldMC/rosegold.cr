@@ -172,6 +172,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Minecraft/NBT/DecodeError" data-name="minecraft::nbt::decodeerror">
+      <a href="../../../../Minecraft/NBT/DecodeError.html">DecodeError</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Minecraft/NBT/DoubleTag" data-name="minecraft::nbt::doubletag">
       <a href="../../../../Minecraft/NBT/DoubleTag.html">DoubleTag</a>
       
@@ -917,6 +922,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet" data-name="rosegold::datacomponents::blocksattacks::damagetypeholderset">
+      <a href="../../../../Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet.html">DamageTypeHolderSet</a>
+      
+    </li>
+  
 </ul>
 
       
@@ -1317,8 +1327,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
+  <li class="parent " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
       <a href="../../../../Rosegold/DataComponents/WritableBookContent.html">WritableBookContent</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent/Page" data-name="rosegold::datacomponents::writablebookcontent::page">
+      <a href="../../../../Rosegold/DataComponents/WritableBookContent/Page.html">Page</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -2312,7 +2332,10 @@
     Overview
   </h2>
 
-  <p>Placeholder for inline trim material data</p>
+  <p>Inline TrimMaterial (1.21.8/1.21.11 DIRECT_STREAM_CODEC):
+AssetInfo base  (String suffix)
+Map&lt;ResourceKey<EquipmentAsset>, AssetInfo&gt;  (prefixed array of (Identifier key, String suffix))
+TextComponent description</p>
 
 
 
@@ -2339,7 +2362,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L745" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L713" target="_blank">
         rosegold/inventory/slot.cr
       </a>
     
@@ -2362,7 +2385,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28asset_name%3AString%3D%22%22%2Cingredient%3AUInt32%3D0_u32%2Citem_model_index%3AFloat32%3D0.0_f32%2Coverride_armor_materials%3AHash%28String%2CString%29%3DHash%28String%2CString%29.new%2Cdescription%3AString%3D%22%22%29-class-method" class="signature"><strong>.new</strong>(asset_name : String = <span class="s">&quot;&quot;</span>, ingredient : UInt32 = <span class="n">0_u32</span>, item_model_index : Float32 = <span class="n">0.0_f32</span>, override_armor_materials : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).new, description : String = <span class="s">&quot;&quot;</span>)</a>
+        <a href="#new%28asset_name%3AString%3D%22%22%2Coverride_armor_materials%3AHash%28String%2CString%29%3DHash%28String%2CString%29.new%2Cdescription%3ARosegold%3A%3ATextComponent%3DRosegold%3A%3ATextComponent.new%28%22%22%29%29-class-method" class="signature"><strong>.new</strong>(asset_name : String = <span class="s">&quot;&quot;</span>, override_armor_materials : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).new, description : Rosegold::TextComponent = <span class="t">Rosegold</span><span class="t">::</span><span class="t">TextComponent</span>.new(<span class="s">&quot;&quot;</span>))</a>
         
       </li>
     
@@ -2400,32 +2423,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#description%3AString-instance-method" class="signature"><strong>#description</strong> : String</a>
+        <a href="#description%3ARosegold%3A%3ATextComponent-instance-method" class="signature"><strong>#description</strong> : Rosegold::TextComponent</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#description%3D%28description%3AString%29-instance-method" class="signature"><strong>#description=</strong>(description : String)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#ingredient%3AUInt32-instance-method" class="signature"><strong>#ingredient</strong> : UInt32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#ingredient%3D%28ingredient%3AUInt32%29-instance-method" class="signature"><strong>#ingredient=</strong>(ingredient : UInt32)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#item_model_index%3AFloat32-instance-method" class="signature"><strong>#item_model_index</strong> : Float32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#item_model_index%3D%28item_model_index%3AFloat32%29-instance-method" class="signature"><strong>#item_model_index=</strong>(item_model_index : Float32)</a>
+        <a href="#description%3D%28description%3ARosegold%3A%3ATextComponent%29-instance-method" class="signature"><strong>#description=</strong>(description : Rosegold::TextComponent)</a>
         
       </li>
     
@@ -2501,18 +2504,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(asset_name:String=&quot;&quot;,ingredient:UInt32=0_u32,item_model_index:Float32=0.0_f32,override_armor_materials:Hash(String,String)=Hash(String,String).new,description:String=&quot;&quot;)-class-method">
+    <div class="entry-detail" id="new(asset_name:String=&quot;&quot;,override_armor_materials:Hash(String,String)=Hash(String,String).new,description:Rosegold::TextComponent=Rosegold::TextComponent.new(&quot;&quot;))-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(asset_name : String = <span class="s">&quot;&quot;</span>, ingredient : UInt32 = <span class="n">0_u32</span>, item_model_index : Float32 = <span class="n">0.0_f32</span>, override_armor_materials : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).new, description : String = <span class="s">&quot;&quot;</span>)
+        def self.<strong>new</strong>(asset_name : String = <span class="s">&quot;&quot;</span>, override_armor_materials : Hash(String, String) = <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).new, description : <a href="../../../../Rosegold/TextComponent.html">Rosegold::TextComponent</a> = <span class="t">Rosegold</span><span class="t">::</span><span class="t">TextComponent</span>.new(<span class="s">&quot;&quot;</span>))
 
-        <a class="method-permalink" href="#new%28asset_name%3AString%3D%22%22%2Cingredient%3AUInt32%3D0_u32%2Citem_model_index%3AFloat32%3D0.0_f32%2Coverride_armor_materials%3AHash%28String%2CString%29%3DHash%28String%2CString%29.new%2Cdescription%3AString%3D%22%22%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28asset_name%3AString%3D%22%22%2Coverride_armor_materials%3AHash%28String%2CString%29%3DHash%28String%2CString%29.new%2Cdescription%3ARosegold%3A%3ATextComponent%3DRosegold%3A%3ATextComponent.new%28%22%22%29%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L752" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L718" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2528,7 +2531,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L755" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L721" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2560,7 +2563,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L746" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L714" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2576,103 +2579,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L746" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L714" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="description:String-instance-method">
+    <div class="entry-detail" id="description:Rosegold::TextComponent-instance-method">
       <div class="signature">
         
-        def <strong>description</strong> : String
+        def <strong>description</strong> : <a href="../../../../Rosegold/TextComponent.html">Rosegold::TextComponent</a>
 
-        <a class="method-permalink" href="#description%3AString-instance-method">#</a>
+        <a class="method-permalink" href="#description%3ARosegold%3A%3ATextComponent-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L750" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L716" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="description=(description:String)-instance-method">
+    <div class="entry-detail" id="description=(description:Rosegold::TextComponent)-instance-method">
       <div class="signature">
         
-        def <strong>description=</strong>(description : String)
+        def <strong>description=</strong>(description : <a href="../../../../Rosegold/TextComponent.html">Rosegold::TextComponent</a>)
 
-        <a class="method-permalink" href="#description%3D%28description%3AString%29-instance-method">#</a>
+        <a class="method-permalink" href="#description%3D%28description%3ARosegold%3A%3ATextComponent%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L750" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="ingredient:UInt32-instance-method">
-      <div class="signature">
-        
-        def <strong>ingredient</strong> : UInt32
-
-        <a class="method-permalink" href="#ingredient%3AUInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L747" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="ingredient=(ingredient:UInt32)-instance-method">
-      <div class="signature">
-        
-        def <strong>ingredient=</strong>(ingredient : UInt32)
-
-        <a class="method-permalink" href="#ingredient%3D%28ingredient%3AUInt32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L747" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="item_model_index:Float32-instance-method">
-      <div class="signature">
-        
-        def <strong>item_model_index</strong> : Float32
-
-        <a class="method-permalink" href="#item_model_index%3AFloat32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L748" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="item_model_index=(item_model_index:Float32)-instance-method">
-      <div class="signature">
-        
-        def <strong>item_model_index=</strong>(item_model_index : Float32)
-
-        <a class="method-permalink" href="#item_model_index%3D%28item_model_index%3AFloat32%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L748" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L716" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2688,7 +2627,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L749" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L715" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2704,7 +2643,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L749" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L715" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2720,7 +2659,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L777" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L736" target="_blank">View source</a>]
         
       </div>
     </div>

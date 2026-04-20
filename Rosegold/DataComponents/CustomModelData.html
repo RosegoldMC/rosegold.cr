@@ -172,6 +172,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Minecraft/NBT/DecodeError" data-name="minecraft::nbt::decodeerror">
+      <a href="../../Minecraft/NBT/DecodeError.html">DecodeError</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Minecraft/NBT/DoubleTag" data-name="minecraft::nbt::doubletag">
       <a href="../../Minecraft/NBT/DoubleTag.html">DoubleTag</a>
       
@@ -917,6 +922,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet" data-name="rosegold::datacomponents::blocksattacks::damagetypeholderset">
+      <a href="../../Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet.html">DamageTypeHolderSet</a>
+      
+    </li>
+  
 </ul>
 
       
@@ -1317,8 +1327,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
+  <li class="parent " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
       <a href="../../Rosegold/DataComponents/WritableBookContent.html">WritableBookContent</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent/Page" data-name="rosegold::datacomponents::writablebookcontent::page">
+      <a href="../../Rosegold/DataComponents/WritableBookContent/Page.html">Page</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -2312,7 +2332,7 @@
     Overview
   </h2>
 
-  <p>CustomModelData</p>
+  <p>CustomModelData - four prefixed arrays: floats, booleans, strings, colors (Int).</p>
 
 
 
@@ -2339,7 +2359,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L2061" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2182" target="_blank">
         rosegold/inventory/slot.cr
       </a>
     
@@ -2362,7 +2382,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
+        <a href="#new%28floats%3AArray%28Float32%29%3D%5B%5DofFloat32%2Cbooleans%3AArray%28Bool%29%3D%5B%5DofBool%2Cstrings%3AArray%28String%29%3D%5B%5DofString%2Ccolors%3AArray%28Int32%29%3D%5B%5DofInt32%29-class-method" class="signature"><strong>.new</strong>(floats : Array(Float32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Float32</span>, booleans : Array(Bool) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Bool</span>, strings : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, colors : Array(Int32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Int32</span>)</a>
         
       </li>
     
@@ -2388,6 +2408,46 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#booleans%3AArray%28Bool%29-instance-method" class="signature"><strong>#booleans</strong> : Array(Bool)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#booleans%3D%28booleans%3AArray%28Bool%29%29-instance-method" class="signature"><strong>#booleans=</strong>(booleans : Array(Bool))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#colors%3AArray%28Int32%29-instance-method" class="signature"><strong>#colors</strong> : Array(Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#colors%3D%28colors%3AArray%28Int32%29%29-instance-method" class="signature"><strong>#colors=</strong>(colors : Array(Int32))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#floats%3AArray%28Float32%29-instance-method" class="signature"><strong>#floats</strong> : Array(Float32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#floats%3D%28floats%3AArray%28Float32%29%29-instance-method" class="signature"><strong>#floats=</strong>(floats : Array(Float32))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#strings%3AArray%28String%29-instance-method" class="signature"><strong>#strings</strong> : Array(String)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#strings%3D%28strings%3AArray%28String%29%29-instance-method" class="signature"><strong>#strings=</strong>(strings : Array(String))</a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#write%28io%29%3ANil-instance-method" class="signature"><strong>#write</strong>(io) : Nil</a>
@@ -2474,18 +2534,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new-class-method">
+    <div class="entry-detail" id="new(floats:Array(Float32)=[]ofFloat32,booleans:Array(Bool)=[]ofBool,strings:Array(String)=[]ofString,colors:Array(Int32)=[]ofInt32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>
+        def self.<strong>new</strong>(floats : Array(Float32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Float32</span>, booleans : Array(Bool) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Bool</span>, strings : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, colors : Array(<a href="../../Int32.html">Int32</a>) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Int32</span>)
 
-        <a class="method-permalink" href="#new-class-method">#</a>
+        <a class="method-permalink" href="#new%28floats%3AArray%28Float32%29%3D%5B%5DofFloat32%2Cbooleans%3AArray%28Bool%29%3D%5B%5DofBool%2Cstrings%3AArray%28String%29%3D%5B%5DofString%2Ccolors%3AArray%28Int32%29%3D%5B%5DofInt32%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L2062" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2188" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2501,7 +2561,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L2064" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2191" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2522,6 +2582,134 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="booleans:Array(Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>booleans</strong> : Array(Bool)
+
+        <a class="method-permalink" href="#booleans%3AArray%28Bool%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2184" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="booleans=(booleans:Array(Bool))-instance-method">
+      <div class="signature">
+        
+        def <strong>booleans=</strong>(booleans : Array(Bool))
+
+        <a class="method-permalink" href="#booleans%3D%28booleans%3AArray%28Bool%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2184" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="colors:Array(Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>colors</strong> : Array(<a href="../../Int32.html">Int32</a>)
+
+        <a class="method-permalink" href="#colors%3AArray%28Int32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2186" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="colors=(colors:Array(Int32))-instance-method">
+      <div class="signature">
+        
+        def <strong>colors=</strong>(colors : Array(<a href="../../Int32.html">Int32</a>))
+
+        <a class="method-permalink" href="#colors%3D%28colors%3AArray%28Int32%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2186" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="floats:Array(Float32)-instance-method">
+      <div class="signature">
+        
+        def <strong>floats</strong> : Array(Float32)
+
+        <a class="method-permalink" href="#floats%3AArray%28Float32%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2183" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="floats=(floats:Array(Float32))-instance-method">
+      <div class="signature">
+        
+        def <strong>floats=</strong>(floats : Array(Float32))
+
+        <a class="method-permalink" href="#floats%3D%28floats%3AArray%28Float32%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2183" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="strings:Array(String)-instance-method">
+      <div class="signature">
+        
+        def <strong>strings</strong> : Array(String)
+
+        <a class="method-permalink" href="#strings%3AArray%28String%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2185" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="strings=(strings:Array(String))-instance-method">
+      <div class="signature">
+        
+        def <strong>strings=</strong>(strings : Array(String))
+
+        <a class="method-permalink" href="#strings%3D%28strings%3AArray%28String%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2185" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="write(io):Nil-instance-method">
       <div class="signature">
         
@@ -2533,7 +2721,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L2080" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L2203" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -172,6 +172,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Minecraft/NBT/DecodeError" data-name="minecraft::nbt::decodeerror">
+      <a href="../../Minecraft/NBT/DecodeError.html">DecodeError</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Minecraft/NBT/DoubleTag" data-name="minecraft::nbt::doubletag">
       <a href="../../Minecraft/NBT/DoubleTag.html">DoubleTag</a>
       
@@ -917,6 +922,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet" data-name="rosegold::datacomponents::blocksattacks::damagetypeholderset">
+      <a href="../../Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet.html">DamageTypeHolderSet</a>
+      
+    </li>
+  
 </ul>
 
       
@@ -1317,8 +1327,18 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
+  <li class="parent open current" data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
       <a href="../../Rosegold/DataComponents/WritableBookContent.html">WritableBookContent</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent/Page" data-name="rosegold::datacomponents::writablebookcontent::page">
+      <a href="../../Rosegold/DataComponents/WritableBookContent/Page.html">Page</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -2339,7 +2359,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1571" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1584" target="_blank">
         rosegold/inventory/slot.cr
       </a>
     
@@ -2362,7 +2382,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
+        <a href="#new%28pages%3AArray%28Page%29%3D%5B%5DofPage%29-class-method" class="signature"><strong>.new</strong>(pages : Array(Page) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Page</span>)</a>
         
       </li>
     
@@ -2388,6 +2408,16 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#pages%3AArray%28Page%29-instance-method" class="signature"><strong>#pages</strong> : Array(Page)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pages%3D%28pages%3AArray%28Page%29%29-instance-method" class="signature"><strong>#pages=</strong>(pages : Array(Page))</a>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#write%28io%29%3ANil-instance-method" class="signature"><strong>#write</strong>(io) : Nil</a>
@@ -2474,18 +2504,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new-class-method">
+    <div class="entry-detail" id="new(pages:Array(Page)=[]ofPage)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>
+        def self.<strong>new</strong>(pages : Array(<a href="../../Rosegold/DataComponents/WritableBookContent/Page.html">Page</a>) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Page</span>)
 
-        <a class="method-permalink" href="#new-class-method">#</a>
+        <a class="method-permalink" href="#new%28pages%3AArray%28Page%29%3D%5B%5DofPage%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1572" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1589" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2501,7 +2531,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1574" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1591" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2522,6 +2552,38 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="pages:Array(Page)-instance-method">
+      <div class="signature">
+        
+        def <strong>pages</strong> : Array(<a href="../../Rosegold/DataComponents/WritableBookContent/Page.html">Page</a>)
+
+        <a class="method-permalink" href="#pages%3AArray%28Page%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1587" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pages=(pages:Array(Page))-instance-method">
+      <div class="signature">
+        
+        def <strong>pages=</strong>(pages : Array(<a href="../../Rosegold/DataComponents/WritableBookContent/Page.html">Page</a>))
+
+        <a class="method-permalink" href="#pages%3D%28pages%3AArray%28Page%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1587" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="write(io):Nil-instance-method">
       <div class="signature">
         
@@ -2533,7 +2595,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1584" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1603" target="_blank">View source</a>]
         
       </div>
     </div>

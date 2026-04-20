@@ -172,6 +172,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Minecraft/NBT/DecodeError" data-name="minecraft::nbt::decodeerror">
+      <a href="../../Minecraft/NBT/DecodeError.html">DecodeError</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Minecraft/NBT/DoubleTag" data-name="minecraft::nbt::doubletag">
       <a href="../../Minecraft/NBT/DoubleTag.html">DoubleTag</a>
       
@@ -917,6 +922,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet" data-name="rosegold::datacomponents::blocksattacks::damagetypeholderset">
+      <a href="../../Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet.html">DamageTypeHolderSet</a>
+      
+    </li>
+  
 </ul>
 
       
@@ -1317,8 +1327,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
+  <li class="parent " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
       <a href="../../Rosegold/DataComponents/WritableBookContent.html">WritableBookContent</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent/Page" data-name="rosegold::datacomponents::writablebookcontent::page">
+      <a href="../../Rosegold/DataComponents/WritableBookContent/Page.html">Page</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -2328,7 +2348,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/models/text_component.cr#L378" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/models/text_component.cr#L459" target="_blank">
         rosegold/models/text_component.cr
       </a>
     
@@ -2351,7 +2371,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28action%3AString%2Ccontents%3AMinecraft%3A%3ANBT%3A%3ATag%29-class-method" class="signature"><strong>.new</strong>(action : String, contents : Minecraft::NBT::Tag)</a>
+        <a href="#new%28action%3AString%2Cfields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29%3D%7B%7DofString%3D%3EMinecraft%3A%3ANBT%3A%3ATag%29-class-method" class="signature"><strong>.new</strong>(action : String, fields : Hash(String, Minecraft::NBT::Tag) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">Minecraft</span><span class="t">::</span><span class="t">NBT</span><span class="t">::</span><span class="t">Tag</span>)</a>
         
       </li>
     
@@ -2359,23 +2379,6 @@
 
 
   
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#from_json%28json%3AJSON%3A%3APullParser%29-class-method" class="signature"><strong>.from_json</strong>(json : JSON::PullParser)</a>
-        
-      </li>
-    
-  </ul>
-
 
   
 
@@ -2401,17 +2404,17 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#contents%3AMinecraft%3A%3ANBT%3A%3ATag-instance-method" class="signature"><strong>#contents</strong> : Minecraft::NBT::Tag</a>
+        <a href="#fields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29-instance-method" class="signature"><strong>#fields</strong> : Hash(String, Minecraft::NBT::Tag)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#contents%3D%28contents%3AMinecraft%3A%3ANBT%3A%3ATag%29-instance-method" class="signature"><strong>#contents=</strong>(contents : Minecraft::NBT::Tag)</a>
+        <a href="#fields%3D%28fields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29%29-instance-method" class="signature"><strong>#fields=</strong>(fields : Hash(String, Minecraft::NBT::Tag))</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#to_json%28builder%3AJSON%3A%3ABuilder%29-instance-method" class="signature"><strong>#to_json</strong>(builder : JSON::Builder)</a>
+        <a href="#to_nbt%3AMinecraft%3A%3ANBT%3A%3ACompoundTag-instance-method" class="signature"><strong>#to_nbt</strong> : Minecraft::NBT::CompoundTag</a>
         
       </li>
     
@@ -2459,18 +2462,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(action:String,contents:Minecraft::NBT::Tag)-class-method">
+    <div class="entry-detail" id="new(action:String,fields:Hash(String,Minecraft::NBT::Tag)={}ofString=&gt;Minecraft::NBT::Tag)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(action : String, contents : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>)
+        def self.<strong>new</strong>(action : String, fields : Hash(String, <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>) = {} <span class="k">of</span> <span class="t">String</span> <span class="o">=&gt;</span> <span class="t">Minecraft</span><span class="t">::</span><span class="t">NBT</span><span class="t">::</span><span class="t">Tag</span>)
 
-        <a class="method-permalink" href="#new%28action%3AString%2Ccontents%3AMinecraft%3A%3ANBT%3A%3ATag%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28action%3AString%2Cfields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29%3D%7B%7DofString%3D%3EMinecraft%3A%3ANBT%3A%3ATag%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/models/text_component.cr#L382" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/models/text_component.cr#L463" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2478,32 +2481,6 @@
 
 
   
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="from_json(json:JSON::PullParser)-class-method">
-      <div class="signature">
-        
-        def self.<strong>from_json</strong>(json : JSON::PullParser)
-
-        <a class="method-permalink" href="#from_json%28json%3AJSON%3A%3APullParser%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/models/text_component.cr#L392" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
@@ -2528,7 +2505,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/models/text_component.cr#L379" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/models/text_component.cr#L460" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2544,55 +2521,55 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/models/text_component.cr#L379" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/models/text_component.cr#L460" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="contents:Minecraft::NBT::Tag-instance-method">
+    <div class="entry-detail" id="fields:Hash(String,Minecraft::NBT::Tag)-instance-method">
       <div class="signature">
         
-        def <strong>contents</strong> : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>
+        def <strong>fields</strong> : Hash(String, <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>)
 
-        <a class="method-permalink" href="#contents%3AMinecraft%3A%3ANBT%3A%3ATag-instance-method">#</a>
+        <a class="method-permalink" href="#fields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/models/text_component.cr#L380" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/models/text_component.cr#L461" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="contents=(contents:Minecraft::NBT::Tag)-instance-method">
+    <div class="entry-detail" id="fields=(fields:Hash(String,Minecraft::NBT::Tag))-instance-method">
       <div class="signature">
         
-        def <strong>contents=</strong>(contents : <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>)
+        def <strong>fields=</strong>(fields : Hash(String, <a href="../../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>))
 
-        <a class="method-permalink" href="#contents%3D%28contents%3AMinecraft%3A%3ANBT%3A%3ATag%29-instance-method">#</a>
+        <a class="method-permalink" href="#fields%3D%28fields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/models/text_component.cr#L380" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/models/text_component.cr#L461" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="to_json(builder:JSON::Builder)-instance-method">
+    <div class="entry-detail" id="to_nbt:Minecraft::NBT::CompoundTag-instance-method">
       <div class="signature">
         
-        def <strong>to_json</strong>(builder : JSON::Builder)
+        def <strong>to_nbt</strong> : <a href="../../Minecraft/NBT/CompoundTag.html">Minecraft::NBT::CompoundTag</a>
 
-        <a class="method-permalink" href="#to_json%28builder%3AJSON%3A%3ABuilder%29-instance-method">#</a>
+        <a class="method-permalink" href="#to_nbt%3AMinecraft%3A%3ANBT%3A%3ACompoundTag-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/models/text_component.cr#L385" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/models/text_component.cr#L466" target="_blank">View source</a>]
         
       </div>
     </div>

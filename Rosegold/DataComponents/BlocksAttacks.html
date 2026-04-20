@@ -172,6 +172,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Minecraft/NBT/DecodeError" data-name="minecraft::nbt::decodeerror">
+      <a href="../../Minecraft/NBT/DecodeError.html">DecodeError</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Minecraft/NBT/DoubleTag" data-name="minecraft::nbt::doubletag">
       <a href="../../Minecraft/NBT/DoubleTag.html">DoubleTag</a>
       
@@ -917,6 +922,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet" data-name="rosegold::datacomponents::blocksattacks::damagetypeholderset">
+      <a href="../../Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet.html">DamageTypeHolderSet</a>
+      
+    </li>
+  
 </ul>
 
       
@@ -1317,8 +1327,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
+  <li class="parent " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
       <a href="../../Rosegold/DataComponents/WritableBookContent.html">WritableBookContent</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent/Page" data-name="rosegold::datacomponents::writablebookcontent::page">
+      <a href="../../Rosegold/DataComponents/WritableBookContent/Page.html">Page</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -2339,7 +2359,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1464" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1427" target="_blank">
         rosegold/inventory/slot.cr
       </a>
     
@@ -2362,7 +2382,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28block_delay_seconds%3AFloat32%3D0.0_f32%2Cdisable_cooldown_scale%3AFloat32%3D1.0_f32%2Cdamage_reductions%3AArray%28Rosegold%3A%3ADataComponents%3A%3ABlocksAttacks%3A%3ADamageReduction%29%3D%5B%5DofDamageReduction%2Citem_damage_threshold%3AFloat32%3D0.0_f32%2Citem_damage_base%3AFloat32%3D0.0_f32%2Citem_damage_factor%3AFloat32%3D0.0_f32%2Cbypassed_by%3ANil%7CString%3Dnil%29-class-method" class="signature"><strong>.new</strong>(block_delay_seconds : Float32 = <span class="n">0.0_f32</span>, disable_cooldown_scale : Float32 = <span class="n">1.0_f32</span>, damage_reductions : Array(Rosegold::DataComponents::BlocksAttacks::DamageReduction) = <span class="o">[]</span> <span class="k">of</span> <span class="t">DamageReduction</span>, item_damage_threshold : Float32 = <span class="n">0.0_f32</span>, item_damage_base : Float32 = <span class="n">0.0_f32</span>, item_damage_factor : Float32 = <span class="n">0.0_f32</span>, bypassed_by : Nil | String = <span class="n">nil</span>)</a>
+        <a href="#new%28block_delay_seconds%3AFloat32%3D0.0_f32%2Cdisable_cooldown_scale%3AFloat32%3D1.0_f32%2Cdamage_reductions%3AArray%28Rosegold%3A%3ADataComponents%3A%3ABlocksAttacks%3A%3ADamageReduction%29%3D%5B%5DofDamageReduction%2Citem_damage_threshold%3AFloat32%3D0.0_f32%2Citem_damage_base%3AFloat32%3D0.0_f32%2Citem_damage_factor%3AFloat32%3D0.0_f32%2Cbypassed_by%3ANil%7CString%3Dnil%2Cblock_sound_raw%3ASlice%28UInt8%29%7CNil%3Dnil%2Cdisable_sound_raw%3ASlice%28UInt8%29%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(block_delay_seconds : Float32 = <span class="n">0.0_f32</span>, disable_cooldown_scale : Float32 = <span class="n">1.0_f32</span>, damage_reductions : Array(Rosegold::DataComponents::BlocksAttacks::DamageReduction) = <span class="o">[]</span> <span class="k">of</span> <span class="t">DamageReduction</span>, item_damage_threshold : Float32 = <span class="n">0.0_f32</span>, item_damage_base : Float32 = <span class="n">0.0_f32</span>, item_damage_factor : Float32 = <span class="n">0.0_f32</span>, bypassed_by : Nil | String = <span class="n">nil</span>, block_sound_raw : Slice(UInt8) | Nil = <span class="n">nil</span>, disable_sound_raw : Slice(UInt8) | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -2400,6 +2420,16 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#block_sound_raw%3ABytes%7CNil-instance-method" class="signature"><strong>#block_sound_raw</strong> : Bytes | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#block_sound_raw%3D%28block_sound_raw%3ABytes%7CNil%29-instance-method" class="signature"><strong>#block_sound_raw=</strong>(block_sound_raw : Bytes | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#bypassed_by%3AString%7CNil-instance-method" class="signature"><strong>#bypassed_by</strong> : String | Nil</a>
         
       </li>
@@ -2426,6 +2456,16 @@
     
       <li class="entry-summary">
         <a href="#disable_cooldown_scale%3D%28disable_cooldown_scale%3AFloat32%29-instance-method" class="signature"><strong>#disable_cooldown_scale=</strong>(disable_cooldown_scale : Float32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#disable_sound_raw%3ABytes%7CNil-instance-method" class="signature"><strong>#disable_sound_raw</strong> : Bytes | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#disable_sound_raw%3D%28disable_sound_raw%3ABytes%7CNil%29-instance-method" class="signature"><strong>#disable_sound_raw=</strong>(disable_sound_raw : Bytes | Nil)</a>
         
       </li>
     
@@ -2544,18 +2584,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(block_delay_seconds:Float32=0.0_f32,disable_cooldown_scale:Float32=1.0_f32,damage_reductions:Array(Rosegold::DataComponents::BlocksAttacks::DamageReduction)=[]ofDamageReduction,item_damage_threshold:Float32=0.0_f32,item_damage_base:Float32=0.0_f32,item_damage_factor:Float32=0.0_f32,bypassed_by:Nil|String=nil)-class-method">
+    <div class="entry-detail" id="new(block_delay_seconds:Float32=0.0_f32,disable_cooldown_scale:Float32=1.0_f32,damage_reductions:Array(Rosegold::DataComponents::BlocksAttacks::DamageReduction)=[]ofDamageReduction,item_damage_threshold:Float32=0.0_f32,item_damage_base:Float32=0.0_f32,item_damage_factor:Float32=0.0_f32,bypassed_by:Nil|String=nil,block_sound_raw:Slice(UInt8)|Nil=nil,disable_sound_raw:Slice(UInt8)|Nil=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(block_delay_seconds : Float32 = <span class="n">0.0_f32</span>, disable_cooldown_scale : Float32 = <span class="n">1.0_f32</span>, damage_reductions : Array(<a href="../../Rosegold/DataComponents/BlocksAttacks/DamageReduction.html">Rosegold::DataComponents::BlocksAttacks::DamageReduction</a>) = <span class="o">[]</span> <span class="k">of</span> <span class="t">DamageReduction</span>, item_damage_threshold : Float32 = <span class="n">0.0_f32</span>, item_damage_base : Float32 = <span class="n">0.0_f32</span>, item_damage_factor : Float32 = <span class="n">0.0_f32</span>, bypassed_by : Nil | String = <span class="n">nil</span>)
+        def self.<strong>new</strong>(block_delay_seconds : Float32 = <span class="n">0.0_f32</span>, disable_cooldown_scale : Float32 = <span class="n">1.0_f32</span>, damage_reductions : Array(<a href="../../Rosegold/DataComponents/BlocksAttacks/DamageReduction.html">Rosegold::DataComponents::BlocksAttacks::DamageReduction</a>) = <span class="o">[]</span> <span class="k">of</span> <span class="t">DamageReduction</span>, item_damage_threshold : Float32 = <span class="n">0.0_f32</span>, item_damage_base : Float32 = <span class="n">0.0_f32</span>, item_damage_factor : Float32 = <span class="n">0.0_f32</span>, bypassed_by : Nil | String = <span class="n">nil</span>, block_sound_raw : Slice(UInt8) | Nil = <span class="n">nil</span>, disable_sound_raw : Slice(UInt8) | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28block_delay_seconds%3AFloat32%3D0.0_f32%2Cdisable_cooldown_scale%3AFloat32%3D1.0_f32%2Cdamage_reductions%3AArray%28Rosegold%3A%3ADataComponents%3A%3ABlocksAttacks%3A%3ADamageReduction%29%3D%5B%5DofDamageReduction%2Citem_damage_threshold%3AFloat32%3D0.0_f32%2Citem_damage_base%3AFloat32%3D0.0_f32%2Citem_damage_factor%3AFloat32%3D0.0_f32%2Cbypassed_by%3ANil%7CString%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28block_delay_seconds%3AFloat32%3D0.0_f32%2Cdisable_cooldown_scale%3AFloat32%3D1.0_f32%2Cdamage_reductions%3AArray%28Rosegold%3A%3ADataComponents%3A%3ABlocksAttacks%3A%3ADamageReduction%29%3D%5B%5DofDamageReduction%2Citem_damage_threshold%3AFloat32%3D0.0_f32%2Citem_damage_base%3AFloat32%3D0.0_f32%2Citem_damage_factor%3AFloat32%3D0.0_f32%2Cbypassed_by%3ANil%7CString%3Dnil%2Cblock_sound_raw%3ASlice%28UInt8%29%7CNil%3Dnil%2Cdisable_sound_raw%3ASlice%28UInt8%29%7CNil%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1482" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1477" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2571,7 +2611,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1487" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1483" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2603,7 +2643,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1465" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1428" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2619,7 +2659,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1465" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1428" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block_sound_raw:Bytes|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>block_sound_raw</strong> : Bytes | Nil
+
+        <a class="method-permalink" href="#block_sound_raw%3ABytes%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1474" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block_sound_raw=(block_sound_raw:Bytes|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>block_sound_raw=</strong>(block_sound_raw : Bytes | Nil)
+
+        <a class="method-permalink" href="#block_sound_raw%3D%28block_sound_raw%3ABytes%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1474" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2635,7 +2707,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1471" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1434" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2651,7 +2723,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1471" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1434" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2667,7 +2739,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1467" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1430" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2683,7 +2755,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1467" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1430" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2699,7 +2771,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1466" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1429" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2715,7 +2787,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1466" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1429" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="disable_sound_raw:Bytes|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>disable_sound_raw</strong> : Bytes | Nil
+
+        <a class="method-permalink" href="#disable_sound_raw%3ABytes%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1475" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="disable_sound_raw=(disable_sound_raw:Bytes|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>disable_sound_raw=</strong>(disable_sound_raw : Bytes | Nil)
+
+        <a class="method-permalink" href="#disable_sound_raw%3D%28disable_sound_raw%3ABytes%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1475" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2731,7 +2835,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1469" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1432" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2747,7 +2851,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1469" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1432" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2763,7 +2867,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1470" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1433" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2779,7 +2883,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1470" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1433" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2795,7 +2899,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1468" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1431" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2811,7 +2915,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1468" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1431" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2827,7 +2931,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L1523" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L1513" target="_blank">View source</a>]
         
       </div>
     </div>

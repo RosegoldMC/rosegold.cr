@@ -172,6 +172,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Minecraft/NBT/DecodeError" data-name="minecraft::nbt::decodeerror">
+      <a href="../../../Minecraft/NBT/DecodeError.html">DecodeError</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Minecraft/NBT/DoubleTag" data-name="minecraft::nbt::doubletag">
       <a href="../../../Minecraft/NBT/DoubleTag.html">DoubleTag</a>
       
@@ -917,6 +922,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet" data-name="rosegold::datacomponents::blocksattacks::damagetypeholderset">
+      <a href="../../../Rosegold/DataComponents/BlocksAttacks/DamageTypeHolderSet.html">DamageTypeHolderSet</a>
+      
+    </li>
+  
 </ul>
 
       
@@ -1317,8 +1327,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
+  <li class="parent " data-id="rosegold/Rosegold/DataComponents/WritableBookContent" data-name="rosegold::datacomponents::writablebookcontent">
       <a href="../../../Rosegold/DataComponents/WritableBookContent.html">WritableBookContent</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/WritableBookContent/Page" data-name="rosegold::datacomponents::writablebookcontent::page">
+      <a href="../../../Rosegold/DataComponents/WritableBookContent/Page.html">Page</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -2303,6 +2323,18 @@
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Display = {type: VarInt, body: depends on type}
+0 = DEFAULT (no body), 1 = HIDDEN (no body), 2 = OVERRIDE (Text Component body)</p>
+
 
 
 
@@ -2328,7 +2360,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L367" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L369" target="_blank">
         rosegold/inventory/slot.cr
       </a>
     
@@ -2351,7 +2383,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28attribute_id%3AUInt32%2Cmodifier_id%3AString%2Cvalue%3AFloat64%2Coperation%3AUInt32%2Cslot%3AUInt32%2Cdisplay%3AUInt32%3D0_u32%29-class-method" class="signature"><strong>.new</strong>(attribute_id : UInt32, modifier_id : String, value : Float64, operation : UInt32, slot : UInt32, display : UInt32 = <span class="n">0_u32</span>)</a>
+        <a href="#new%28attribute_id%3AUInt32%2Cmodifier_id%3AString%2Cvalue%3AFloat64%2Coperation%3AUInt32%2Cslot%3AUInt32%2Cdisplay%3AUInt32%3D0_u32%2Cdisplay_override%3ARosegold%3A%3ATextComponent%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(attribute_id : UInt32, modifier_id : String, value : Float64, operation : UInt32, slot : UInt32, display : UInt32 = <span class="n">0_u32</span>, display_override : Rosegold::TextComponent | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -2390,6 +2422,16 @@
     
       <li class="entry-summary">
         <a href="#display%3D%28display%3AUInt32%29-instance-method" class="signature"><strong>#display=</strong>(display : UInt32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#display_override%3ARosegold%3A%3ATextComponent%7CNil-instance-method" class="signature"><strong>#display_override</strong> : Rosegold::TextComponent | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#display_override%3D%28display_override%3ARosegold%3A%3ATextComponent%7CNil%29-instance-method" class="signature"><strong>#display_override=</strong>(display_override : Rosegold::TextComponent | Nil)</a>
         
       </li>
     
@@ -2490,18 +2532,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(attribute_id:UInt32,modifier_id:String,value:Float64,operation:UInt32,slot:UInt32,display:UInt32=0_u32)-class-method">
+    <div class="entry-detail" id="new(attribute_id:UInt32,modifier_id:String,value:Float64,operation:UInt32,slot:UInt32,display:UInt32=0_u32,display_override:Rosegold::TextComponent|Nil=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(attribute_id : UInt32, modifier_id : String, value : Float64, operation : UInt32, slot : UInt32, display : UInt32 = <span class="n">0_u32</span>)
+        def self.<strong>new</strong>(attribute_id : UInt32, modifier_id : String, value : Float64, operation : UInt32, slot : UInt32, display : UInt32 = <span class="n">0_u32</span>, display_override : <a href="../../../Rosegold/TextComponent.html">Rosegold::TextComponent</a> | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28attribute_id%3AUInt32%2Cmodifier_id%3AString%2Cvalue%3AFloat64%2Coperation%3AUInt32%2Cslot%3AUInt32%2Cdisplay%3AUInt32%3D0_u32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28attribute_id%3AUInt32%2Cmodifier_id%3AString%2Cvalue%3AFloat64%2Coperation%3AUInt32%2Cslot%3AUInt32%2Cdisplay%3AUInt32%3D0_u32%2Cdisplay_override%3ARosegold%3A%3ATextComponent%7CNil%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L375" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L378" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2533,7 +2575,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L368" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L370" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2549,7 +2591,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L368" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L370" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2565,7 +2607,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L373" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L375" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2581,7 +2623,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L373" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L375" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="display_override:Rosegold::TextComponent|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>display_override</strong> : <a href="../../../Rosegold/TextComponent.html">Rosegold::TextComponent</a> | Nil
+
+        <a class="method-permalink" href="#display_override%3ARosegold%3A%3ATextComponent%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L376" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="display_override=(display_override:Rosegold::TextComponent|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>display_override=</strong>(display_override : <a href="../../../Rosegold/TextComponent.html">Rosegold::TextComponent</a> | Nil)
+
+        <a class="method-permalink" href="#display_override%3D%28display_override%3ARosegold%3A%3ATextComponent%7CNil%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L376" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2597,7 +2671,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L369" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L371" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2613,7 +2687,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L369" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L371" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2629,7 +2703,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L371" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L373" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2645,7 +2719,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L371" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L373" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2661,7 +2735,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L372" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L374" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2677,7 +2751,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L372" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L374" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2693,7 +2767,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L370" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L372" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2709,7 +2783,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b9ce5f6e062ddb4baa9febf230b06129b51a7645/src/rosegold/inventory/slot.cr#L370" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7024bcc7075c4557a11db1ea899e637a7a2c704d/src/rosegold/inventory/slot.cr#L372" target="_blank">View source</a>]
         
       </div>
     </div>
