@@ -74,11 +74,9 @@ class Rosegold::Inventory
       slot = slot_index_pair[0]
       max_durability = slot.max_durability
       if max_durability > 0
-        # Item has durability - prioritize lower durability (higher damage)
-        [slot.durability, -slot.count.to_i8]
+        [slot.durability, slot.count.to_i8]
       else
-        # Item has no durability - use original logic (large stacks first)
-        [Int32::MAX, -slot.count.to_i8]
+        [Int32::MAX, slot.count.to_i8]
       end
     }
 
@@ -280,16 +278,14 @@ class Rosegold::Inventory
     quantity
   end
 
-  # Helper method to sort slots by durability (lower durability first), then by stack size
+  # Helper method to sort slots by durability (lower durability first), then by stack size (smaller stacks first)
   private def sort_by_durability_and_count(slots : Array(WindowSlot))
     slots.sort_by { |slot|
       max_durability = slot.max_durability
       if max_durability > 0
-        # Item has durability - prioritize lower durability (higher damage)
-        [slot.durability, -slot.count.to_i8]
+        [slot.durability, slot.count.to_i8]
       else
-        # Item has no durability - use original logic (large stacks first)
-        [Int32::MAX, -slot.count.to_i8]
+        [Int32::MAX, slot.count.to_i8]
       end
     }
   end
