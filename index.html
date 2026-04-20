@@ -2431,6 +2431,9 @@ bot.eat!</code></pre>
 <pre><code class="language-crystal"><span class="c"># Select an item by name</span>
 bot.inventory.pick! <span class="s">&quot;diamond_sword&quot;</span>
 
+<span class="c"># ...or by predicate — pick the most-damaged usable axe</span>
+bot.inventory.pick! { <span class="o">|</span>s<span class="o">|</span> s.name.ends_with?(<span class="s">&quot;_axe&quot;</span>) }
+
 <span class="c"># Count items</span>
 bot.inventory.count(<span class="s">&quot;diamond&quot;</span>)
 
@@ -2446,6 +2449,12 @@ bot.inventory.throw_all_of(<span class="s">&quot;cobblestone&quot;</span>)
 <span class="c"># Equipment</span>
 bot.inventory.helmet
 bot.inventory.chestplate</code></pre>
+<p><code>pick</code> is durability-aware: it cycles through matching tools from most-damaged
+to least-damaged and refuses to hand you an enchanted diamond/netherite tool
+that's about to break, so looping over <code>pick</code> will auto-rotate fresh tools in
+from your inventory. Tune <code>Rosegold::Slot.max_repair_cost</code> to control when
+heavily-repaired tools get retired. See the <a href="https://rosegoldmc.github.io/rosegold.cr/Rosegold/Inventory.html#pick(spec)-instance-method"><code>Inventory#pick</code> docs</a>
+for details.</p>
 <h3><a id="containers-chests-furnaces-etc." class="anchor" href="#containers-chests-furnaces-etc.">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
