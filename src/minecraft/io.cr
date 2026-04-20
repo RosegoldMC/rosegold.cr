@@ -299,6 +299,9 @@ module Minecraft::IO
 
   def read_text_component : Rosegold::TextComponent
     Rosegold::TextComponent.read(self)
+  rescue ex : Minecraft::NBT::DecodeError
+    Log.warn { "Malformed text component NBT (#{ex.message}); substituting placeholder" }
+    Rosegold::TextComponent.new("")
   end
 end
 

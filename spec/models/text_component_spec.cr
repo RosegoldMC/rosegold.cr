@@ -106,14 +106,14 @@ Spectator.describe Rosegold::TextComponent do
     end
 
     describe "list NBT" do
-      it "parses list of text components" do
+      it "uses the first element as parent and appends the rest as extras" do
         list_array = [Minecraft::NBT::StringTag.new("First"), Minecraft::NBT::StringTag.new("Second")] of Minecraft::NBT::Tag
         list = Minecraft::NBT::ListTag.new(list_array)
 
         component = Rosegold::TextComponent.from_nbt(list)
-        expect(component.text).to eq("")
+        expect(component.text).to eq("First")
         expect(component.extra).to_not be_nil
-        expect(component.extra.try(&.size)).to eq(2)
+        expect(component.extra.try(&.size)).to eq(1)
         expect(component.to_s).to eq("FirstSecond")
       end
     end
@@ -180,6 +180,51 @@ Spectator.describe Rosegold::TextComponent do
       expect(restored.italic).to eq(original.italic)
       expect(restored.color).to eq(original.color)
       expect(restored.to_s).to eq(original.to_s)
+    end
+
+    it "round-trips translate with fallback" do
+      original = Rosegold::TextComponent.new
+      original.translate = "custom.missing.key"
+      original.fallback = "Default text"
+
+      restored = Rosegold::TextComponent.from_nbt(original.to_nbt)
+
+      expect(restored.translate).to eq("custom.missing.key")
+      expect(restored.fallback).to eq("Default text")
+    end
+
+    it "round-trips shadow_color via packed IntTag" do
+      compound = Minecraft::NBT::CompoundTag.new
+      compound.value["text"] = Minecraft::NBT::StringTag.new("shadowed")
+      compound.value["shadow_color"] = Minecraft::NBT::IntTag.new(0x7FABCDEF)
+
+      component = Rosegold::TextComponent.from_nbt(compound)
+      expect(component.shadow_color).to eq(0x7FABCDEF)
+
+      restored = Rosegold::TextComponent.from_nbt(component.to_nbt)
+      expect(restored.shadow_color).to eq(0x7FABCDEF)
+    end
+
+    it "renders numeric `with` arguments as strings" do
+      compound = Minecraft::NBT::CompoundTag.new
+      compound.value["translate"] = Minecraft::NBT::StringTag.new("some.key")
+      with_array = [Minecraft::NBT::IntTag.new(3_i32)] of Minecraft::NBT::Tag
+      compound.value["with"] = Minecraft::NBT::ListTag.new(with_array)
+
+      component = Rosegold::TextComponent.from_nbt(compound)
+      expect(component.with.try(&.first)).to eq("3")
+    end
+
+    it "round-trips click_event compound" do
+      original = Rosegold::TextComponent.new("click me")
+      fields = {} of String => Minecraft::NBT::Tag
+      fields["url"] = Minecraft::NBT::StringTag.new("https://example.com")
+      original.click_event = Rosegold::TextComponent::ClickEventComponent.new("open_url", fields)
+
+      restored = Rosegold::TextComponent.from_nbt(original.to_nbt)
+      expect(restored.click_event).to_not be_nil
+      expect(restored.click_event.try(&.action)).to eq("open_url")
+      expect(restored.click_event.try(&.value)).to eq("https://example.com")
     end
   end
 

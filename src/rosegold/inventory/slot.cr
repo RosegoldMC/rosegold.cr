@@ -364,6 +364,8 @@ end
 class Rosegold::DataComponents::AttributeModifiers < Rosegold::DataComponent
   property modifiers : Array(AttributeModifier)
 
+  # Display = {type: VarInt, body: depends on type}
+  # 0 = DEFAULT (no body), 1 = HIDDEN (no body), 2 = OVERRIDE (Text Component body)
   struct AttributeModifier
     property attribute_id : UInt32
     property modifier_id : String
@@ -371,8 +373,9 @@ class Rosegold::DataComponents::AttributeModifiers < Rosegold::DataComponent
     property operation : UInt32
     property slot : UInt32
     property display : UInt32
+    property display_override : Rosegold::TextComponent?
 
-    def initialize(@attribute_id : UInt32, @modifier_id : String, @value : Float64, @operation : UInt32, @slot : UInt32, @display : UInt32 = 0_u32)
+    def initialize(@attribute_id : UInt32, @modifier_id : String, @value : Float64, @operation : UInt32, @slot : UInt32, @display : UInt32 = 0_u32, @display_override : Rosegold::TextComponent? = nil)
     end
   end
 
@@ -388,7 +391,8 @@ class Rosegold::DataComponents::AttributeModifiers < Rosegold::DataComponent
       operation = io.read_var_int
       slot = io.read_var_int
       display = io.read_var_int
-      modifiers << AttributeModifier.new(attribute_id, modifier_id, value, operation, slot, display)
+      display_override = display == 2 ? Rosegold::TextComponent.read(io) : nil
+      modifiers << AttributeModifier.new(attribute_id, modifier_id, value, operation, slot, display, display_override)
     end
     new(modifiers)
   end
@@ -402,6 +406,10 @@ class Rosegold::DataComponents::AttributeModifiers < Rosegold::DataComponent
       io.write modifier.operation
       io.write modifier.slot
       io.write modifier.display
+      if modifier.display == 2
+        override = modifier.display_override || Rosegold::TextComponent.new("")
+        override.write(io)
+      end
     end
   end
 end
@@ -434,31 +442,20 @@ end
 
 # Component for custom name (Text Component)
 class Rosegold::DataComponents::CustomName < Rosegold::DataComponent
-  property value : String
+  property value : Rosegold::TextComponent
 
-  def initialize(@value : String); end
+  def initialize(@value : Rosegold::TextComponent); end
+
+  def self.new(text : String)
+    new(Rosegold::TextComponent.new(text))
+  end
 
   def self.read(io) : self
-    # Read as NBT Text Component
-    nbt_data = io.read_nbt_unamed
-
-    # Extract text from NBT
-    text = case nbt_data
-           when Minecraft::NBT::StringTag
-             nbt_data.value
-           when Minecraft::NBT::CompoundTag
-             nbt_data["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || "Unknown"
-           else
-             "Unknown"
-           end
-
-    new(text)
+    new(Rosegold::TextComponent.read(io))
   end
 
   def write(io) : Nil
-    # Use TextComponent class for proper NBT serialization
-    text_component = TextComponent.new(value)
-    text_component.write(io)
+    value.write(io)
   end
 end
 
@@ -469,14 +466,12 @@ class Rosegold::DataComponents::CustomData < Rosegold::DataComponent
   def initialize(@data : Minecraft::NBT::Tag); end
 
   def self.read(io) : self
-    # Read NBT compound using the standard NBT reading approach
-    # The CustomData component contains a full NBT compound tag
-    nbt_data = io.read_nbt_unamed
-    new(nbt_data)
+    new(io.read_nbt_unamed)
   end
 
   def write(io) : Nil
-    io.write data
+    io.write_byte data.tag_type
+    data.write(io)
   end
 end
 
@@ -495,20 +490,20 @@ end
 
 # Component for item_name (Text Component)
 class Rosegold::DataComponents::ItemName < Rosegold::DataComponent
-  property value : String
+  property value : Rosegold::TextComponent
 
-  def initialize(@value : String); end
+  def initialize(@value : Rosegold::TextComponent); end
+
+  def self.new(text : String)
+    new(Rosegold::TextComponent.new(text))
+  end
 
   def self.read(io) : self
-    # Read as NBT Text Component
-    text_component = TextComponent.read(io)
-    new(text_component.to_s)
+    new(Rosegold::TextComponent.read(io))
   end
 
   def write(io) : Nil
-    # Use TextComponent class for proper NBT serialization
-    text_component = TextComponent.new(value)
-    text_component.write(io)
+    value.write(io)
   end
 end
 
@@ -528,47 +523,20 @@ class Rosegold::DataComponents::ItemModel < Rosegold::DataComponent
 end
 
 class Rosegold::DataComponents::Lore < Rosegold::DataComponent
-  property lore : Array(String) # Array of Text Components
+  property lore : Array(Rosegold::TextComponent)
 
-  def initialize(@lore : Array(String) = [] of String); end
+  def initialize(@lore : Array(Rosegold::TextComponent) = [] of Rosegold::TextComponent); end
 
   def self.read(io) : self
     lore_count = io.read_var_int
-    lore = Array(String).new
-    lore_count.times do
-      nbt = io.read_nbt_unamed
-
-      lore_text = case nbt
-                  when Minecraft::NBT::StringTag
-                    nbt.value
-                  when Minecraft::NBT::CompoundTag
-                    text = nbt["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || ""
-                    extra_text = ""
-                    if extra = nbt["extra"]?
-                      if extra.is_a?(Minecraft::NBT::ListTag)
-                        extra.value.each do |item|
-                          if item.is_a?(Minecraft::NBT::CompoundTag)
-                            extra_text += item["text"]?.try(&.as(Minecraft::NBT::StringTag).value) || ""
-                          end
-                        end
-                      end
-                    end
-                    text + extra_text
-                  else
-                    "Unknown"
-                  end
-      lore << lore_text
-    end
-    new(lore)
+    lines = Array(Rosegold::TextComponent).new(lore_count)
+    lore_count.times { lines << Rosegold::TextComponent.read(io) }
+    new(lines)
   end
 
   def write(io) : Nil
     io.write lore.size
-    lore.each do |text|
-      # Use TextComponent class for proper NBT serialization
-      text_component = TextComponent.new(text)
-      text_component.write(io)
-    end
+    lore.each(&.write(io))
   end
 end
 
@@ -671,7 +639,7 @@ class Rosegold::DataComponents::MapColor < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write color
+    io.write_full color
   end
 end
 
@@ -719,11 +687,8 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
     def self.read(io) : self
       id = io.read_var_int
       if id == 0
-        # Inline definition (not implemented yet - would need full material structure)
-        inline_data = InlineTrimMaterial.read(io)
-        new(nil, inline_data)
+        new(nil, InlineTrimMaterial.read(io))
       else
-        # Registry ID (id - 1 since 0 means inline)
         new(id - 1, nil)
       end
     end
@@ -741,24 +706,21 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
       end
     end
 
-    # Placeholder for inline trim material data
+    # Inline TrimMaterial (1.21.8/1.21.11 DIRECT_STREAM_CODEC):
+    #   AssetInfo base  (String suffix)
+    #   Map<ResourceKey<EquipmentAsset>, AssetInfo>  (prefixed array of (Identifier key, String suffix))
+    #   TextComponent description
     struct InlineTrimMaterial
       property asset_name : String
-      property ingredient : UInt32
-      property item_model_index : Float32
       property override_armor_materials : Hash(String, String)
-      property description : String
+      property description : Rosegold::TextComponent
 
-      def initialize(@asset_name = "", @ingredient = 0_u32, @item_model_index = 0.0_f32, @override_armor_materials = Hash(String, String).new, @description = "")
+      def initialize(@asset_name = "", @override_armor_materials = Hash(String, String).new, @description = Rosegold::TextComponent.new(""))
       end
 
       def self.read(io) : self
-        # Read trim material structure
         asset_name = io.read_var_string
-        ingredient = io.read_var_int
-        item_model_index = io.read_float
 
-        # Override armor materials (map of string->string)
         material_count = io.read_var_int
         override_materials = Hash(String, String).new
         material_count.times do
@@ -767,23 +729,18 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
           override_materials[key] = value
         end
 
-        # Description as Text Component
-        description_component = TextComponent.read(io)
-        description = description_component.to_s
-
-        new(asset_name, ingredient, item_model_index, override_materials, description)
+        description = Rosegold::TextComponent.read(io)
+        new(asset_name, override_materials, description)
       end
 
       def write(io) : Nil
         io.write asset_name
-        io.write ingredient
-        io.write item_model_index
         io.write override_armor_materials.size
         override_armor_materials.each do |key, value|
           io.write key
           io.write value
         end
-        io.write Minecraft::NBT::StringTag.new(description)
+        description.write(io)
       end
     end
   end
@@ -799,11 +756,8 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
     def self.read(io) : self
       id = io.read_var_int
       if id == 0
-        # Inline definition
-        inline_data = InlineTrimPattern.read(io)
-        new(nil, inline_data)
+        new(nil, InlineTrimPattern.read(io))
       else
-        # Registry ID (id - 1 since 0 means inline)
         new(id - 1, nil)
       end
     end
@@ -821,7 +775,6 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
       end
     end
 
-    # Inline trim pattern structure
     struct InlineTrimPattern
       property asset_name : String
       property template_item : UInt32
@@ -834,9 +787,7 @@ class Rosegold::DataComponents::Trim < Rosegold::DataComponent
       def self.read(io) : self
         asset_name = io.read_var_string
         template_item = io.read_var_int
-        # Description is a Text Component - for now read as simple string
-        description_component = TextComponent.read(io)
-        description = description_component.to_s
+        description = TextComponent.read(io).to_s
         decal = io.read_bool
         new(asset_name, template_item, description, decal)
       end
@@ -1003,21 +954,33 @@ class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
     def initialize(@type_id, @amplifier, @duration, @ambient = false, @show_particles = true, @show_icon = true, @has_hidden_effect = false, @hidden_effect = nil)
     end
 
+    # Outer PotionEffect wire format = MobEffect Holder (VarInt) + Details.
+    # Details recursion on `hidden_effect` is into Details only (no repeat of the
+    # leading MobEffect VarInt). See MobEffectInstance.java Details.STREAM_CODEC.
     def self.read(io) : PotionEffect
       type_id = io.read_var_int
+      read_details(io, type_id)
+    end
+
+    def self.read_details(io, type_id : UInt32) : PotionEffect
       amplifier = io.read_var_int
       duration = io.read_var_int.to_i32
       ambient = io.read_bool
       show_particles = io.read_bool
       show_icon = io.read_bool
       has_hidden_effect = io.read_bool
-      hidden_effect = has_hidden_effect ? PotionEffect.read(io) : nil
+      # hidden_effect uses the *outer* effect's type_id; Details alone carries no type_id.
+      hidden_effect = has_hidden_effect ? read_details(io, type_id) : nil
 
       new(type_id, amplifier, duration, ambient, show_particles, show_icon, has_hidden_effect, hidden_effect)
     end
 
     def write(io) : Nil
       io.write type_id
+      write_details(io)
+    end
+
+    def write_details(io) : Nil
       io.write amplifier
       io.write duration
       io.write ambient?
@@ -1025,7 +988,7 @@ class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
       io.write show_icon?
       io.write has_hidden_effect?
       if has_hidden_effect?
-        hidden_effect.not_nil!.write(io) # ameba:disable Lint/NotNil
+        hidden_effect.not_nil!.write_details(io) # ameba:disable Lint/NotNil
       end
     end
   end
@@ -1042,7 +1005,7 @@ class Rosegold::DataComponents::DyedColor < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write color
+    io.write_full color
   end
 end
 
@@ -1470,19 +1433,52 @@ class Rosegold::DataComponents::BlocksAttacks < Rosegold::DataComponent
   property item_damage_factor : Float32
   property bypassed_by : String?
 
+  # Optional HolderSet<DamageType>: bool has_type + (VarInt set_type + body).
+  # set_type == 0 ⇒ tag name (Identifier string). set_type >= 1 ⇒ (set_type - 1) inline VarInt ids.
+  struct DamageTypeHolderSet
+    property set_type : UInt32
+    property tag : String?
+    property ids : Array(UInt32)
+
+    def initialize(@set_type = 0_u32, @tag = nil, @ids = [] of UInt32); end
+
+    def self.read(io) : self
+      set_type = io.read_var_int
+      if set_type == 0
+        new(set_type, io.read_var_string, [] of UInt32)
+      else
+        ids = Array(UInt32).new(set_type - 1) { io.read_var_int }
+        new(set_type, nil, ids)
+      end
+    end
+
+    def write(io) : Nil
+      io.write set_type
+      if set_type == 0
+        io.write(tag || "")
+      else
+        ids.each { |id| io.write id }
+      end
+    end
+  end
+
   struct DamageReduction
     property horizontal_blocking_angle : Float32
-    property type : String? # optional tag string for damage type filter
+    property type : DamageTypeHolderSet?
     property base_value : Float32
     property factor : Float32
 
     def initialize(@horizontal_blocking_angle = 0.0_f32, @type = nil, @base_value = 0.0_f32, @factor = 0.0_f32); end
   end
 
+  property block_sound_raw : Bytes?
+  property disable_sound_raw : Bytes?
+
   def initialize(@block_delay_seconds = 0.0_f32, @disable_cooldown_scale = 1.0_f32,
                  @damage_reductions = [] of DamageReduction,
                  @item_damage_threshold = 0.0_f32, @item_damage_base = 0.0_f32,
-                 @item_damage_factor = 0.0_f32, @bypassed_by = nil); end
+                 @item_damage_factor = 0.0_f32, @bypassed_by = nil,
+                 @block_sound_raw = nil, @disable_sound_raw = nil); end
 
   def self.read(io) : self
     block_delay = io.read_float
@@ -1492,45 +1488,60 @@ class Rosegold::DataComponents::BlocksAttacks < Rosegold::DataComponent
     reduction_count.times do
       angle = io.read_float
       has_type = io.read_bool
-      if has_type
-        # Prefixed Optional ID Set: VarInt type + tag/ids
-        id_set_type = io.read_var_int
-        if id_set_type == 0
-          io.read_var_string # tag name
-        else
-          (id_set_type - 1).times { io.read_var_int }
-        end
-      end
+      type_set = has_type ? DamageTypeHolderSet.read(io) : nil
       base_val = io.read_float
       factor = io.read_float
-      reductions << DamageReduction.new(angle, nil, base_val, factor)
+      reductions << DamageReduction.new(angle, type_set, base_val, factor)
     end
-    # itemDamage: 3 floats (threshold, base, factor)
     item_damage_threshold = io.read_float
     item_damage_base = io.read_float
     item_damage_factor = io.read_float
-    # bypassedBy: optional string
-    has_bypassed = io.read_bool
-    bypassed_by = has_bypassed ? io.read_var_string : nil
-    # block_sound and disable_sound
-    has_block_sound = io.read_bool
-    Consumable::ConsumeSound.read(io) if has_block_sound
-    has_disable_sound = io.read_bool
-    Consumable::ConsumeSound.read(io) if has_disable_sound
-    new(block_delay, disable_cooldown, reductions, item_damage_threshold, item_damage_base, item_damage_factor, bypassed_by)
+    bypassed_by = io.read_bool ? io.read_var_string : nil
+    block_sound_raw = io.read_bool ? capture_sound_event_bytes(io) : nil
+    disable_sound_raw = io.read_bool ? capture_sound_event_bytes(io) : nil
+    new(block_delay, disable_cooldown, reductions, item_damage_threshold,
+      item_damage_base, item_damage_factor, bypassed_by,
+      block_sound_raw, disable_sound_raw)
+  end
+
+  private def self.capture_sound_event_bytes(io) : Bytes
+    capture = Minecraft::IO::CaptureIO.new(io)
+    SoundEventHelper.skip_sound_event_holder(capture)
+    capture.buffer.to_slice.dup
   end
 
   def write(io) : Nil
     io.write block_delay_seconds
     io.write disable_cooldown_scale
-    io.write 0_u32 # empty damage_reductions
+    io.write damage_reductions.size
+    damage_reductions.each do |reduction|
+      io.write reduction.horizontal_blocking_angle
+      io.write !reduction.type.nil?
+      reduction.type.try &.write(io)
+      io.write reduction.base_value
+      io.write reduction.factor
+    end
     io.write item_damage_threshold
     io.write item_damage_base
     io.write item_damage_factor
-    io.write !bypassed_by.nil?
-    io.write bypassed_by.not_nil! unless bypassed_by.nil? # ameba:disable Lint/NotNil
-    io.write false                                        # no block_sound
-    io.write false                                        # no disable_sound
+    if by = bypassed_by
+      io.write true
+      io.write by
+    else
+      io.write false
+    end
+    if raw = block_sound_raw
+      io.write true
+      io.write raw
+    else
+      io.write false
+    end
+    if raw = disable_sound_raw
+      io.write true
+      io.write raw
+    else
+      io.write false
+    end
   end
 end
 
@@ -1549,14 +1560,16 @@ class Rosegold::DataComponents::PotionDurationScale < Rosegold::DataComponent
   end
 end
 
-# SuspiciousStewEffects
+# SuspiciousStewEffects - array of {MobEffect id (VarInt via holderRegistry, no inline), VarInt duration}.
+# MobEffect.STREAM_CODEC uses ByteBufCodecs.holderRegistry which has no inline branch — id 0 is a
+# valid registry index (minecraft:speed), so there is NO id==0-means-inline escape.
 class Rosegold::DataComponents::SuspiciousStewEffects < Rosegold::DataComponent
   def initialize; end
 
   def self.read(io) : self
     count = io.read_var_int
     count.times do
-      io.read_var_int # effect id
+      io.read_var_int # mob effect registry id
       io.read_var_int # duration
     end
     new
@@ -1569,20 +1582,33 @@ end
 
 # WritableBookContent
 class Rosegold::DataComponents::WritableBookContent < Rosegold::DataComponent
-  def initialize; end
+  record Page, raw : String, filtered : String?
+
+  property pages : Array(Page)
+
+  def initialize(@pages : Array(Page) = [] of Page); end
 
   def self.read(io) : self
     count = io.read_var_int
+    pages = Array(Page).new(count)
     count.times do
-      io.read_var_string # raw content
+      raw = io.read_var_string
       has_filtered = io.read_bool
-      io.read_var_string if has_filtered
+      filtered = has_filtered ? io.read_var_string : nil
+      pages << Page.new(raw, filtered)
     end
-    new
+    new(pages)
   end
 
   def write(io) : Nil
-    io.write 0_u32
+    io.write pages.size
+    pages.each do |page|
+      io.write page.raw
+      io.write !page.filtered.nil?
+      if filtered = page.filtered
+        io.write filtered
+      end
+    end
   end
 end
 
@@ -1652,18 +1678,39 @@ class Rosegold::DataComponents::Instrument < Rosegold::DataComponent
   end
 end
 
-# ProvidesTrimMaterial - Identifier
+# ProvidesTrimMaterial - EitherHolder<TrimMaterial>.
+# Wire: bool first; true → Holder<TrimMaterial>, false → ResourceKey<TrimMaterial> (Identifier).
+# Holder = VarInt id; if id == 0 ⇒ inline TrimMaterial follows; else ⇒ registry index (id - 1).
 class Rosegold::DataComponents::ProvidesTrimMaterial < Rosegold::DataComponent
-  property material : String
+  property raw_bytes : Bytes = Bytes.empty
 
-  def initialize(@material = ""); end
+  def initialize; end
 
   def self.read(io) : self
-    new(io.read_var_string)
+    capture = Minecraft::IO::CaptureIO.new(io)
+    first = capture.read_bool
+    if first
+      holder_id = capture.read_var_int
+      if holder_id == 0
+        # Inline TrimMaterial: AssetInfo suffix + map<ResourceKey, String suffix> + description
+        capture.read_var_string # base suffix
+        override_count = capture.read_var_int
+        override_count.times do
+          capture.read_var_string # override key
+          capture.read_var_string # suffix
+        end
+        capture.read_nbt_unamed # description TextComponent
+      end
+    else
+      capture.read_var_string # resource key
+    end
+    instance = new
+    instance.raw_bytes = capture.buffer.to_slice.dup
+    instance
   end
 
   def write(io) : Nil
-    io.write material
+    io.write(raw_bytes)
   end
 end
 
@@ -1826,7 +1873,9 @@ class Rosegold::DataComponents::Fireworks < Rosegold::DataComponent
   end
 end
 
-# Profile - player head profile
+# Profile - player head profile. Wire format differs between protocols:
+#   772 (1.21.8): ResolvableProfile = {Optional<String> name, Optional<UUID> id, PropertyMap}
+#   774+ (1.21.11+): Either<GameProfile, Partial> + PlayerSkin.Patch — captured via raw_bytes.
 class Rosegold::DataComponents::Profile < Rosegold::DataComponent
   property raw_bytes : Bytes = Bytes.empty
 
@@ -1834,19 +1883,59 @@ class Rosegold::DataComponents::Profile < Rosegold::DataComponent
 
   def self.read(io) : self
     capture = Minecraft::IO::CaptureIO.new(io)
-    capture.read_var_string # name
-    has_uuid = capture.read_bool
-    capture.read_uuid if has_uuid
-    prop_count = capture.read_var_int
-    prop_count.times do
-      capture.read_var_string # name
-      capture.read_var_string # value
-      has_sig = capture.read_bool
-      capture.read_var_string if has_sig # signature
+    if Client.protocol_version >= 774_u32
+      read_774(capture)
+    else
+      read_772(capture)
     end
     instance = new
     instance.raw_bytes = capture.buffer.to_slice.dup
     instance
+  end
+
+  # 772: Optional<String> name, Optional<UUID> id, PropertyMap properties
+  private def self.read_772(io)
+    has_name = io.read_bool
+    io.read_var_string if has_name
+    has_uuid = io.read_bool
+    io.read_uuid if has_uuid
+    read_property_map(io)
+  end
+
+  # 774: Either<GameProfile, Partial> discriminator bool + PlayerSkin.Patch
+  #   Left (true):  GameProfile = UUID(16) + String name + PropertyMap
+  #   Right (false): Partial = Optional<String> name + Optional<UUID> id + PropertyMap
+  # Then PlayerSkin.Patch = 4 Optionals: body, cape, elytra (ResourceTexture=Identifier string), model (Bool)
+  private def self.read_774(io)
+    left = io.read_bool
+    if left
+      io.read_uuid
+      io.read_var_string # name
+      read_property_map(io)
+    else
+      has_name = io.read_bool
+      io.read_var_string if has_name
+      has_uuid = io.read_bool
+      io.read_uuid if has_uuid
+      read_property_map(io)
+    end
+    # PlayerSkin.Patch: body, cape, elytra (each Optional<Identifier>), model (Optional<Bool>)
+    3.times do
+      present = io.read_bool
+      io.read_var_string if present
+    end
+    has_model = io.read_bool
+    io.read_bool if has_model
+  end
+
+  private def self.read_property_map(io)
+    prop_count = io.read_var_int
+    prop_count.times do
+      io.read_var_string # name
+      io.read_var_string # value
+      has_sig = io.read_bool
+      io.read_var_string if has_sig
+    end
   end
 
   def write(io) : Nil
@@ -1933,16 +2022,23 @@ class Rosegold::DataComponents::BlockState < Rosegold::DataComponent
   end
 end
 
-# Bees - list of bee data
+# Bees - list of occupants. Per-entry entity_data layout differs between protocols:
+#   772 (1.21.8): CustomData (bare CompoundTag: tag_type + body)
+#   774+ (1.21.11+): TypedEntityData (VarInt entity_type + CompoundTag)
 class Rosegold::DataComponents::Bees < Rosegold::DataComponent
   def initialize; end
 
   def self.read(io) : self
     count = io.read_var_int
     count.times do
-      io.read_nbt_unamed # entity data
-      io.read_var_int    # ticks in hive
-      io.read_var_int    # min ticks in hive
+      if Client.protocol_version >= 774_u32
+        io.read_var_int    # entity_type
+        io.read_nbt_unamed # entity data CompoundTag
+      else
+        io.read_nbt_unamed # CustomData: bare CompoundTag
+      end
+      io.read_var_int # ticks_in_hive
+      io.read_var_int # min_ticks_in_hive
     end
     new
   end
@@ -2015,14 +2111,22 @@ class Rosegold::DataComponents::BreakSound < Rosegold::DataComponent
   end
 end
 
-# BlockPredicates - used by can_place_on, can_break
+# BlockPredicates - used by can_place_on, can_break.
+# Per BlockPredicate.STREAM_CODEC (1.21.8/1.21.11):
+#   Optional<HolderSet<Block>> blocks
+#   Optional<StatePropertiesPredicate> properties
+#   Optional<NbtPredicate> nbt
+#   DataComponentMatchers components  (exact + partial predicate maps)
+#
+# DataComponentMatchers is effectively recursive Slot-component parsing. We read
+# the common empty-map case correctly; any non-empty matchers raise and the
+# packet-layer rescue falls back to RawPacket.
 class Rosegold::DataComponents::BlockPredicates < Rosegold::DataComponent
   def initialize; end
 
   def self.read(io) : self
     count = io.read_var_int
     count.times do
-      # Each predicate: optional blocks HolderSet, optional properties, optional NBT
       has_blocks = io.read_bool
       if has_blocks
         holder_type = io.read_var_int
@@ -2048,8 +2152,25 @@ class Rosegold::DataComponents::BlockPredicates < Rosegold::DataComponent
       end
       has_nbt = io.read_bool
       io.read_nbt_unamed if has_nbt
+      read_data_component_matchers(io)
     end
     new
+  end
+
+  private def self.read_data_component_matchers(io)
+    exact_count = io.read_var_int
+    exact_count.times do
+      component_type_id = io.read_var_int
+      # Each exact entry = (VarInt component_type, value with that type's streamCodec).
+      DataComponent.create_component(component_type_id, io)
+    end
+    partial_count = io.read_var_int
+    if partial_count != 0
+      raise Minecraft::NBT::DecodeError.new(
+        "DataComponentMatchers with non-empty partial-predicate map " \
+        "(count=#{partial_count}) is not supported; cannot advance IO stream safely"
+      )
+    end
   end
 
   def write(io) : Nil
@@ -2057,31 +2178,37 @@ class Rosegold::DataComponents::BlockPredicates < Rosegold::DataComponent
   end
 end
 
-# CustomModelData
+# CustomModelData - four prefixed arrays: floats, booleans, strings, colors (Int).
 class Rosegold::DataComponents::CustomModelData < Rosegold::DataComponent
-  def initialize; end
+  property floats : Array(Float32)
+  property booleans : Array(Bool)
+  property strings : Array(String)
+  property colors : Array(Int32)
+
+  def initialize(@floats = [] of Float32, @booleans = [] of Bool,
+                 @strings = [] of String, @colors = [] of Int32); end
 
   def self.read(io) : self
-    # Array of floats
     float_count = io.read_var_int
-    float_count.times { io.read_float }
-    # Array of booleans
+    floats = Array(Float32).new(float_count) { io.read_float }
     bool_count = io.read_var_int
-    bool_count.times { io.read_bool }
-    # Array of strings
+    booleans = Array(Bool).new(bool_count) { io.read_bool }
     string_count = io.read_var_int
-    string_count.times { io.read_var_string }
-    # Array of colors
+    strings = Array(String).new(string_count) { io.read_var_string }
     color_count = io.read_var_int
-    color_count.times { io.read_int }
-    new
+    colors = Array(Int32).new(color_count) { io.read_int }
+    new(floats, booleans, strings, colors)
   end
 
   def write(io) : Nil
-    io.write 0_u32
-    io.write 0_u32
-    io.write 0_u32
-    io.write 0_u32
+    io.write floats.size
+    floats.each { |float| io.write float }
+    io.write booleans.size
+    booleans.each { |bool| io.write bool }
+    io.write strings.size
+    strings.each { |string| io.write string }
+    io.write colors.size
+    colors.each { |color| io.write_full color }
   end
 end
 
@@ -2118,19 +2245,21 @@ end
 # Holder component (registry entry holder: VarInt where 0 = inline with string, >0 = registry ID + 1)
 class Rosegold::DataComponents::HolderComponent < Rosegold::DataComponent
   property value : UInt32
+  property inline_identifier : String?
 
-  def initialize(@value : UInt32 = 0_u32); end
+  def initialize(@value : UInt32 = 0_u32, @inline_identifier : String? = nil); end
 
   def self.read(io) : self
     holder_type = io.read_var_int
-    if holder_type == 0
-      io.read_var_string # inline resource location
-    end
-    new(holder_type)
+    inline = holder_type == 0 ? io.read_var_string : nil
+    new(holder_type, inline)
   end
 
   def write(io) : Nil
     io.write value
+    if value == 0
+      io.write(inline_identifier || "")
+    end
   end
 end
 
@@ -2367,7 +2496,12 @@ class Rosegold::Slot
     components_to_add_count.times do |_|
       component_type = io.read_var_int
       name = DataComponentTypes.name_for(component_type, Client.protocol_version) || "unknown_#{component_type}"
-      structured_component = DataComponent.create_component(component_type, io)
+      begin
+        structured_component = DataComponent.create_component(component_type, io)
+      rescue ex : Minecraft::NBT::DecodeError | UnknownComponentError
+        Log.warn { "Dropping component #{name} (id=#{component_type}, proto=#{Client.protocol_version}): #{ex.message}" }
+        raise ex
+      end
       components_to_add[name] = structured_component
     end
 

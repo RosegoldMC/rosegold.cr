@@ -29,12 +29,7 @@ class Rosegold::Clientbound::EntityEquipment < Rosegold::Clientbound::Packet
       raw_slot = packet.read_byte
       slot_index = raw_slot & 0x7F
       has_next = (raw_slot & 0x80) != 0
-      begin
-        item = Slot.read(packet)
-      rescue ex : UnknownComponentError
-        Log.warn { "#{ex.message} in EntityEquipment (entity #{entity_id}, slot #{slot_index})" }
-        item = Slot.new
-      end
+      item = Slot.read(packet)
       case slot_index
       when 0 then equipment.main_hand = item
       when 1 then equipment.off_hand = item

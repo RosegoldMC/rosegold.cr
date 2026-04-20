@@ -1,4 +1,93 @@
 module Minecraft::NBT
+  class DecodeError < Exception
+  end
+
+  # Minecraft NBT strings use Java's "Modified UTF-8": supplementary codepoints
+  # are written as a UTF-16 surrogate pair (each surrogate encoded in 3 bytes),
+  # and NUL is written as the two-byte overlong 0xC0 0x80. Plain UTF-8 corrupts
+  # such strings, so we encode/decode explicitly.
+  def self.modified_utf8_encode(s : String) : Bytes
+    buffer = ::IO::Memory.new
+
+    s.each_char do |char|
+      c = char.ord
+
+      if c == 0
+        buffer.write_byte 0xC0_u8
+        buffer.write_byte 0x80_u8
+      elsif c <= 0x7F
+        buffer.write_byte c.to_u8
+      elsif c <= 0x7FF
+        buffer.write_byte (0xC0 | (c >> 6)).to_u8
+        buffer.write_byte (0x80 | (c & 0x3F)).to_u8
+      elsif c <= 0xFFFF
+        buffer.write_byte (0xE0 | (c >> 12)).to_u8
+        buffer.write_byte (0x80 | ((c >> 6) & 0x3F)).to_u8
+        buffer.write_byte (0x80 | (c & 0x3F)).to_u8
+      else
+        adjusted = c - 0x10000
+        high = 0xD800 | (adjusted >> 10)
+        low = 0xDC00 | (adjusted & 0x3FF)
+
+        buffer.write_byte (0xE0 | (high >> 12)).to_u8
+        buffer.write_byte (0x80 | ((high >> 6) & 0x3F)).to_u8
+        buffer.write_byte (0x80 | (high & 0x3F)).to_u8
+
+        buffer.write_byte (0xE0 | (low >> 12)).to_u8
+        buffer.write_byte (0x80 | ((low >> 6) & 0x3F)).to_u8
+        buffer.write_byte (0x80 | (low & 0x3F)).to_u8
+      end
+    end
+
+    buffer.to_slice
+  end
+
+  def self.modified_utf8_decode(bytes : Bytes) : String
+    code_units = Array(UInt16).new
+    i = 0
+    while i < bytes.size
+      b0 = bytes[i]
+      if b0 < 0x80_u8
+        code_units << b0.to_u16
+        i += 1
+      elsif (b0 & 0xE0_u8) == 0xC0_u8
+        raise DecodeError.new("Invalid Modified UTF-8 byte") if i + 1 >= bytes.size
+        b1 = bytes[i + 1]
+        cu = ((b0 & 0x1F_u8).to_u16 << 6) | (b1 & 0x3F_u8).to_u16
+        code_units << cu
+        i += 2
+      elsif (b0 & 0xF0_u8) == 0xE0_u8
+        raise DecodeError.new("Invalid Modified UTF-8 byte") if i + 2 >= bytes.size
+        b1 = bytes[i + 1]
+        b2 = bytes[i + 2]
+        cu = ((b0 & 0x0F_u8).to_u16 << 12) | ((b1 & 0x3F_u8).to_u16 << 6) | (b2 & 0x3F_u8).to_u16
+        code_units << cu
+        i += 3
+      else
+        raise DecodeError.new("Invalid Modified UTF-8 byte")
+      end
+    end
+
+    String.build do |io|
+      j = 0
+      while j < code_units.size
+        cu = code_units[j]
+        if cu >= 0xD800_u16 && cu <= 0xDBFF_u16 &&
+           j + 1 < code_units.size &&
+           code_units[j + 1] >= 0xDC00_u16 && code_units[j + 1] <= 0xDFFF_u16
+          high = cu.to_i32
+          low = code_units[j + 1].to_i32
+          codepoint = ((high - 0xD800) << 10) + (low - 0xDC00) + 0x10000
+          io << codepoint.chr
+          j += 2
+        else
+          io << cu.to_i32.chr
+          j += 1
+        end
+      end
+    end
+  end
+
   abstract class Tag
     abstract def tag_type : UInt8
 
@@ -33,9 +122,7 @@ module Minecraft::NBT
       when 12
         LongArrayTag.read io
       else
-        Log.warn { "Unsupported NBT tag type: #{tag_type}, skipping" }
-        # For unknown tag types, return an empty EndTag as a fallback
-        EndTag.read io
+        raise DecodeError.new("Unsupported NBT tag type: #{tag_type}")
       end
     end
 
@@ -345,12 +432,16 @@ module Minecraft::NBT
     end
 
     def self.read(io : Minecraft::IO) : StringTag
-      new io.read_string io.read_ushort
+      length = io.read_ushort
+      buffer = Bytes.new(length)
+      io.read_fully(buffer) if length > 0
+      new Minecraft::NBT.modified_utf8_decode(buffer)
     end
 
     def write(io : Minecraft::IO)
-      io.write_full value.bytesize.to_u16
-      io.print value
+      bytes = Minecraft::NBT.modified_utf8_encode(value)
+      io.write_full bytes.size.to_u16
+      io.write bytes
     end
 
     def inspect(io)
@@ -454,6 +545,10 @@ module Minecraft::NBT
       list_tag_type = io.read_byte
       list_length = io.read_int
 
+      if list_tag_type == 0_u8 && list_length > 0
+        raise DecodeError.new("ListTag with type=END and length=#{list_length}")
+      end
+
       tags = Array(Tag).new(list_length)
 
       list_length.times do
@@ -479,7 +574,7 @@ module Minecraft::NBT
       end
     end
 
-    def inpsect(io)
+    def inspect(io)
       io << @value.inspect
     end
   end

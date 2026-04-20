@@ -9,6 +9,7 @@ class Rosegold::TextComponent
   property type : String?
   property text : String?
   property translate : String?
+  property fallback : String?
   property with : Array(TextComponent | String)?
   property score : ScoreComponent?
   property selector : String?
@@ -28,10 +29,12 @@ class Rosegold::TextComponent
   property underlined : Bool?
   property strikethrough : Bool?
   property obfuscated : Bool?
-  property shadow_color : Array(Float32)?
+  property shadow_color : Int32?
 
   # Interactive fields
   property insertion : String?
+
+  @[JSON::Field(ignore: true)]
   property click_event : ClickEventComponent?
 
   @[JSON::Field(ignore: true)]
@@ -57,10 +60,17 @@ class Rosegold::TextComponent
       # Complex text component with properties
       from_compound_nbt(nbt)
     when Minecraft::NBT::ListTag
-      # Array of text components - create a parent with extras
-      component = TextComponent.new("")
-      component.extra = nbt.value.map { |tag| from_nbt(tag) }
-      component
+      # Vanilla ComponentSerialization.createFromList: element 0 is the parent,
+      # elements [1..] are appended as siblings under `extra`.
+      return TextComponent.new("") if nbt.value.empty?
+      parent = from_nbt(nbt.value.first)
+      rest = nbt.value[1..]
+      unless rest.empty?
+        extras = parent.extra || [] of TextComponent
+        rest.each { |tag| extras << from_nbt(tag) }
+        parent.extra = extras
+      end
+      parent
     else
       # Fallback for any other NBT type
       TextComponent.new(nbt.to_s)
@@ -78,6 +88,8 @@ class Rosegold::TextComponent
         component.text = nbt_value_to_s(value)
       when "translate"
         component.translate = value.value if value.is_a?(Minecraft::NBT::StringTag)
+      when "fallback"
+        component.fallback = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "with"
         component.with = parse_with_array(value) if value.is_a?(Minecraft::NBT::ListTag)
       when "score"
@@ -105,7 +117,13 @@ class Rosegold::TextComponent
       when "bold", "italic", "underlined", "strikethrough", "obfuscated"
         set_boolean_property(component, key, value)
       when "shadow_color"
-        component.shadow_color = parse_shadow_color(value) if value.is_a?(Minecraft::NBT::ListTag)
+        # Vanilla ExtraCodecs.ARGB_COLOR_CODEC: packed IntTag primary, 4x Float32 list legacy.
+        case value
+        when Minecraft::NBT::IntTag
+          component.shadow_color = value.value
+        when Minecraft::NBT::ListTag
+          component.shadow_color = pack_argb_from_floats(value)
+        end
       when "insertion"
         component.insertion = value.value if value.is_a?(Minecraft::NBT::StringTag)
       when "clickEvent", "click_event"
@@ -123,10 +141,10 @@ class Rosegold::TextComponent
   private def self.parse_with_array(list_tag : Minecraft::NBT::ListTag) : Array(TextComponent | String)
     list_tag.value.map do |tag|
       case tag
-      when Minecraft::NBT::StringTag
-        tag.value
+      when Minecraft::NBT::CompoundTag, Minecraft::NBT::ListTag
+        from_nbt(tag).as(TextComponent | String)
       else
-        from_nbt(tag)
+        nbt_value_to_s(tag).as(TextComponent | String)
       end
     end
   end
@@ -139,37 +157,51 @@ class Rosegold::TextComponent
     ScoreComponent.new(name_tag.value, objective_tag.value)
   end
 
-  private def self.parse_shadow_color(list_tag : Minecraft::NBT::ListTag) : Array(Float32)?
+  private def self.pack_argb_from_floats(list_tag : Minecraft::NBT::ListTag) : Int32?
     return nil unless list_tag.value.size == 4
 
-    color_values = [] of Float32
+    floats = [] of Float32
     list_tag.value.each do |tag|
       case tag
       when Minecraft::NBT::FloatTag
-        color_values << tag.value
+        floats << tag.value
       when Minecraft::NBT::DoubleTag
-        color_values << tag.value.to_f32
+        floats << tag.value.to_f32
       else
         return nil
       end
     end
-    color_values
+
+    # Vanilla ExtraCodecs.VECTOR4F / ARGB_COLOR_CODEC: list order is [r, g, b, a];
+    # ARGB.as8BitChannel uses Mth.floor (not round).
+    r = (floats[0] * 255).floor.to_i32 & 0xFF
+    g = (floats[1] * 255).floor.to_i32 & 0xFF
+    b = (floats[2] * 255).floor.to_i32 & 0xFF
+    a = (floats[3] * 255).floor.to_i32 & 0xFF
+    packed = (a.to_u32 << 24) | (r.to_u32 << 16) | (g.to_u32 << 8) | b.to_u32
+    packed.to_i32!
   end
 
   private def self.parse_click_event(compound : Minecraft::NBT::CompoundTag) : ClickEventComponent?
     action_tag = compound.value["action"]?
-    value_tag = compound.value["value"]?
-    return nil unless action_tag.is_a?(Minecraft::NBT::StringTag) && value_tag.is_a?(Minecraft::NBT::StringTag)
+    return nil unless action_tag.is_a?(Minecraft::NBT::StringTag)
 
-    ClickEventComponent.new(action_tag.value, value_tag.value)
+    fields = {} of String => Minecraft::NBT::Tag
+    compound.value.each do |key, tag|
+      fields[key] = tag unless key == "action"
+    end
+    ClickEventComponent.new(action_tag.value, fields)
   end
 
   private def self.parse_hover_event(compound : Minecraft::NBT::CompoundTag) : HoverEventComponent?
     action_tag = compound.value["action"]?
-    contents = compound.value["contents"]? || compound.value["value"]?
-    return nil unless action_tag.is_a?(Minecraft::NBT::StringTag) && contents
+    return nil unless action_tag.is_a?(Minecraft::NBT::StringTag)
 
-    HoverEventComponent.new(action_tag.value, contents)
+    fields = {} of String => Minecraft::NBT::Tag
+    compound.value.each do |key, tag|
+      fields[key] = tag unless key == "action"
+    end
+    HoverEventComponent.new(action_tag.value, fields)
   end
 
   private def self.parse_extra_components(list_tag : Minecraft::NBT::ListTag) : Array(TextComponent)
@@ -265,11 +297,26 @@ class Rosegold::TextComponent
     compound = Minecraft::NBT::CompoundTag.new
 
     # Add content fields
+    if type_val = @type
+      compound.value["type"] = Minecraft::NBT::StringTag.new(type_val)
+    end
     if text_val = text
       compound.value["text"] = Minecraft::NBT::StringTag.new(text_val)
     end
     if translate_val = translate
       compound.value["translate"] = Minecraft::NBT::StringTag.new(translate_val)
+    end
+    if fallback_val = fallback
+      compound.value["fallback"] = Minecraft::NBT::StringTag.new(fallback_val)
+    end
+    if score_val = score
+      score_compound = Minecraft::NBT::CompoundTag.new
+      score_compound.value["name"] = Minecraft::NBT::StringTag.new(score_val.name)
+      score_compound.value["objective"] = Minecraft::NBT::StringTag.new(score_val.objective)
+      compound.value["score"] = score_compound
+    end
+    if separator_val = separator
+      compound.value["separator"] = separator_val.to_nbt
     end
     if selector_val = selector
       compound.value["selector"] = Minecraft::NBT::StringTag.new(selector_val)
@@ -306,9 +353,22 @@ class Rosegold::TextComponent
       compound.value["color"] = Minecraft::NBT::StringTag.new(color_val)
     end
 
+    # Add shadow_color (packed ARGB Int32 per vanilla ExtraCodecs.ARGB_COLOR_CODEC)
+    if shadow_color_val = shadow_color
+      compound.value["shadow_color"] = Minecraft::NBT::IntTag.new(shadow_color_val)
+    end
+
     # Add insertion
     if insertion_val = insertion
       compound.value["insertion"] = Minecraft::NBT::StringTag.new(insertion_val)
+    end
+
+    # Add interactive events (snake_case keys per vanilla Style.java 1.21.5+)
+    if click_event_val = click_event
+      compound.value["click_event"] = click_event_val.to_nbt
+    end
+    if hover_event_val = hover_event
+      compound.value["hover_event"] = hover_event_val.to_nbt
     end
 
     # Add with array for translations
@@ -347,9 +407,9 @@ class Rosegold::TextComponent
   private def simple_text_component? : Bool
     # Check if this is just a simple text component with no formatting or extras
     return false unless text
-    return false if translate || selector || keybind || nbt || block || entity || storage
+    return false if @type || translate || fallback || selector || keybind || nbt || block || entity || storage
     return false if bold || italic || underlined || strikethrough || obfuscated
-    return false if color || font || insertion || click_event || hover_event
+    return false if color || font || shadow_color || insertion || click_event || hover_event
     return false if self.with || score || interpret || separator
     return false if extra && !extra.try(&.empty?)
     true
@@ -366,45 +426,50 @@ class Rosegold::TextComponent
   end
 
   class ClickEventComponent
-    include JSON::Serializable
-
     property action : String
-    property value : String
+    property fields : Hash(String, Minecraft::NBT::Tag)
 
-    def initialize(@action : String, @value : String)
+    def initialize(@action : String, @fields : Hash(String, Minecraft::NBT::Tag) = {} of String => Minecraft::NBT::Tag)
+    end
+
+    # Returns the action-specific scalar field, for actions whose payload is a single string.
+    def value : String?
+      key = case action
+            when "open_url"                       then "url"
+            when "open_file"                      then "path"
+            when "run_command", "suggest_command" then "command"
+            when "copy_to_clipboard"              then "value"
+            when "custom"                         then "id"
+            else                                       return nil
+            end
+      tag = fields[key]?
+      tag.is_a?(Minecraft::NBT::StringTag) ? tag.value : nil
+    end
+
+    def to_nbt : Minecraft::NBT::CompoundTag
+      compound = Minecraft::NBT::CompoundTag.new
+      compound.value["action"] = Minecraft::NBT::StringTag.new(action)
+      fields.each do |key, tag|
+        compound.value[key] = tag
+      end
+      compound
     end
   end
 
   class HoverEventComponent
     property action : String
-    property contents : Minecraft::NBT::Tag
+    property fields : Hash(String, Minecraft::NBT::Tag)
 
-    def initialize(@action : String, @contents : Minecraft::NBT::Tag)
+    def initialize(@action : String, @fields : Hash(String, Minecraft::NBT::Tag) = {} of String => Minecraft::NBT::Tag)
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.object do
-        builder.field "action", @action
-        builder.field "contents", @contents.to_s
+    def to_nbt : Minecraft::NBT::CompoundTag
+      compound = Minecraft::NBT::CompoundTag.new
+      compound.value["action"] = Minecraft::NBT::StringTag.new(action)
+      fields.each do |key, tag|
+        compound.value[key] = tag
       end
-    end
-
-    def self.from_json(json : JSON::PullParser)
-      action = ""
-      contents = Minecraft::NBT::StringTag.new("")
-
-      json.read_object do |key|
-        case key
-        when "action"
-          action = json.read_string
-        when "contents"
-          contents = Minecraft::NBT::StringTag.new(json.read_string)
-        else
-          json.skip
-        end
-      end
-
-      new(action, contents)
+      compound
     end
   end
 end

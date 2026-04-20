@@ -18,12 +18,7 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
     window_id = packet.read_var_int.to_i8!
     state_id = packet.read_var_int
     slot_number = packet.read_short.to_i16
-    begin
-      slot = Slot.read(packet)
-    rescue ex : UnknownComponentError
-      Log.warn { "#{ex.message} in SetSlot (window #{window_id}, slot #{slot_number})" }
-      slot = Slot.new
-    end
+    slot = Slot.read(packet)
     new window_id, state_id, WindowSlot.new(slot_number, slot)
   end
 

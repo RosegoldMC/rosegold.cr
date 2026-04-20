@@ -24,25 +24,10 @@ class Rosegold::Clientbound::SetContainerContent < Rosegold::Clientbound::Packet
     num_slots = packet.read_var_int
     slots = Array(WindowSlot).new(num_slots.to_i32)
     num_slots.times do |slot_number|
-      begin
-        slots << WindowSlot.new(slot_number.to_i32, Slot.read(packet))
-      rescue ex : UnknownComponentError
-        # Can't skip unknown components (unknown wire format), so fill remaining slots as empty
-        Log.warn { "#{ex.message} in slot #{slot_number} of SetContainerContent (window #{window_id}). Remaining #{num_slots - slot_number - 1} slots will be empty." }
-        (slot_number...num_slots).each do |i|
-          slots << WindowSlot.new(i.to_i32, Slot.new)
-        end
-        return self.new(window_id, state_id, slots, WindowSlot.new(-1, Slot.new))
-      end
+      slots << WindowSlot.new(slot_number.to_i32, Slot.read(packet))
     end
 
-    begin
-      cursor = WindowSlot.new -1, Slot.read(packet)
-    rescue ex : UnknownComponentError
-      Log.warn { "#{ex.message} in cursor slot of SetContainerContent (window #{window_id})" }
-      cursor = WindowSlot.new -1, Slot.new
-    end
-
+    cursor = WindowSlot.new -1, Slot.read(packet)
     self.new(window_id, state_id, slots, cursor)
   end
 
