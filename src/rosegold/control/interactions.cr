@@ -387,7 +387,14 @@ class Rosegold::Interactions
         x + 0.125, y + 0.0, z + 0.125,
         x + 0.875, y + 0.75, z + 0.875
       )]
-    when "wheat", "carrots", "potatoes", "beetroots", "melon_stem", "pumpkin_stem"
+    when "carrots", "potatoes"
+      age = extract_age_property(block_state)
+      height = (2 + age) / 16.0
+      [AABBd.new(
+        x + 0.0, y + 0.0, z + 0.0,
+        x + 1.0, y + height, z + 1.0
+      )]
+    when "wheat", "beetroots", "melon_stem", "pumpkin_stem"
       age = extract_age_property(block_state)
       height = (2 + age * 2) / 16.0
       [AABBd.new(
