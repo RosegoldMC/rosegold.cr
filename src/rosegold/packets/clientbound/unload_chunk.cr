@@ -18,8 +18,8 @@ class Rosegold::Clientbound::UnloadChunk < Rosegold::Clientbound::Packet
     # MC 1.21+ format: ChunkPos encoded as a Long
     # x = lower 32 bits, z = upper 32 bits (already chunk coordinates)
     long = packet.read_long
-    chunk_x = (long & 0xFFFFFFFF).to_i32
-    chunk_z = (long >> 32).to_i32
+    chunk_x = (long & 0xFFFFFFFF).to_i32!
+    chunk_z = (long >> 32).to_i32!
     self.new(chunk_x, chunk_z)
   end
 
