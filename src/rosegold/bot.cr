@@ -149,24 +149,31 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.physics.keys
   end
 
-  # Moves straight towards `location`.
+  # Moves straight towards the exact `location` (decimal coordinates are
+  # honored verbatim).
   # Waits for arrival.
   # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
   def move_to(location : Vec3d, stuck_timeout_ticks : Int32 = 60)
     client.physics.move location, stuck_timeout_ticks
   end
 
+  # Moves to the **center** of the given block coordinate (`x + 0.5`,
+  # `z + 0.5`), preserving the bot's current feet `y`. Use a `Vec3d` overload
+  # if you need to land on an exact non-centered position.
   def move_to(location : Vec3i, stuck_timeout_ticks : Int32 = 60)
     move_to Vec3d.new(location.x + 0.5, feet.y, location.z + 0.5), stuck_timeout_ticks
   end
 
-  # Moves straight towards `location`.
+  # Moves straight towards the exact `(x, z)` (decimal coordinates are
+  # honored verbatim). `y` is taken from the bot's current feet location.
   # Waits for arrival.
   # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
   def move_to(x : Float, z : Float, stuck_timeout_ticks : Int32 = 60)
     client.physics.move Vec3d.new(x, location.y, z), stuck_timeout_ticks
   end
 
+  # Moves to the **center** of the given block column (`x + 0.5`, `z + 0.5`).
+  # Use the `Float` overload to target an exact non-centered position.
   def move_to(x : Int, z : Int, stuck_timeout_ticks : Int32 = 60)
     move_to x + 0.5, z + 0.5, stuck_timeout_ticks
   end
