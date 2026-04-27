@@ -46,6 +46,9 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   delegate host, port, connect, connected?, disconnect, join_game, spawned?, to: client
   delegate uuid, username, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
+  delegate effects, effect_by_name, speed_level, slowness_level,
+    jump_boost_level, has_slow_falling?, levitation_level,
+    to: client.player
   delegate sneak, sprint, to: client.physics
   delegate main_hand, to: inventory
   delegate stop_using_hand, stop_digging, to: client.interactions
