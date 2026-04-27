@@ -661,6 +661,29 @@ class Rosegold::Bot < Rosegold::EventEmitter
     dig 0, target
   end
 
+  # Estimates how many ticks it will take this bot to break the named block.
+  #
+  # Uses the bot's current main-hand item and live player state (Haste,
+  # gamemode, on_ground, etc.), so the estimate reflects what the bot would
+  # actually experience right now — not a fresh `Player.new` baseline.
+  #
+  # *buffer_ticks* is added on top of the computed mining time to absorb
+  # network latency and server tick variance; tune it down to 0 for a pure
+  # client-side estimate, or up if you're seeing the bot release dig too early.
+  #
+  # Raises `ArgumentError` if *block_name* isn't in the active version's MCData.
+  #
+  # ```
+  # bot.estimated_break_ticks("stone")                  # => e.g. 160
+  # bot.estimated_break_ticks("stone", buffer_ticks: 0) # => e.g. 150
+  # ```
+  def estimated_break_ticks(block_name : String, *, buffer_ticks : Int32 = 10) : Int32
+    block = MCData.default.blocks.find { |entry| entry.id_str == block_name } ||
+            raise ArgumentError.new("Unknown block name: #{block_name}")
+    creative = client.player.gamemode == 1
+    block.break_time(main_hand, client.player, creative) + buffer_ticks
+  end
+
   # Runs a slash command and waits for a confirmation message from the server.
   #
   # Use this for non-idempotent commands (like toggles) or when you want to
