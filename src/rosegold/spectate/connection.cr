@@ -40,11 +40,11 @@ class Rosegold::Spectate::Connection
   @packet_send_mutex = Mutex.new
   @transition_mutex = Mutex.new
 
-  # Event handler IDs for cleanup
-  @raw_packet_handler_id : UUID? = nil
-  @position_handler_id : UUID? = nil
-  @arm_swing_handler_id : UUID? = nil
-  @container_closed_handler_id : UUID? = nil
+  @bot_handler_cleanups : Array(->) = [] of ->
+
+  COMMAND_SUGGESTION_MAP_LIMIT = 256
+  @command_suggestion_map : Hash(UInt32, UInt32) = {} of UInt32 => UInt32
+  @command_suggestion_map_mutex = Mutex.new
 
   def initialize(raw_socket : TCPSocket, @spectate_server : Server)
     @socket = Minecraft::IO::Wrap.new(raw_socket)
@@ -98,6 +98,12 @@ class Rosegold::Spectate::Connection
         handle_keep_alive(packet)
       when Rosegold::Serverbound::TeleportConfirm
         Log.trace { "Received teleport confirm: #{packet.teleport_id}" }
+      when Rosegold::Serverbound::ChatMessage
+        handle_chat_message(packet)
+      when Rosegold::Serverbound::ChatCommand
+        handle_chat_command(packet)
+      when Rosegold::Serverbound::CommandSuggestionsRequest
+        handle_command_suggestions_request(packet)
       else
         Log.trace { "Unhandled packet: #{packet.class.name}" }
       end
@@ -148,19 +154,59 @@ class Rosegold::Spectate::Connection
     # Socket already closed
   end
 
-  private def cleanup_event_handlers
+  protected def track_bot_handler(event_type : T.class, &block : T ->) forall T
     bot = @client
     return unless bot
+    id = bot.on(event_type, &block)
+    @bot_handler_cleanups << -> { bot.off(event_type, id) }
+  end
 
-    @raw_packet_handler_id.try { |id| bot.off(Event::RawPacket, id) }
-    @position_handler_id.try { |id| bot.off(Event::PlayerPositionUpdate, id) }
-    @arm_swing_handler_id.try { |id| bot.off(Event::ArmSwing, id) }
-    @container_closed_handler_id.try { |id| bot.off(Event::ContainerClosed, id) }
+  private def cleanup_event_handlers
+    @bot_handler_cleanups.each(&.call)
+    @bot_handler_cleanups.clear
+    @command_suggestion_map_mutex.synchronize { @command_suggestion_map.clear }
+  end
 
-    @raw_packet_handler_id = nil
-    @position_handler_id = nil
-    @arm_swing_handler_id = nil
-    @container_closed_handler_id = nil
+  private def handle_chat_message(packet : Rosegold::Serverbound::ChatMessage)
+    return unless @spectate_state.spectating?
+    bot = @client
+    return unless bot && bot.connected?
+
+    Log.debug { "Forwarding spectator chat: #{packet.message}" }
+    bot.chat_manager.send_message(packet.message)
+  rescue ex
+    Log.error { "Failed to forward spectator chat: #{ex}" }
+  end
+
+  private def handle_chat_command(packet : Rosegold::Serverbound::ChatCommand)
+    return unless @spectate_state.spectating?
+    bot = @client
+    return unless bot && bot.connected?
+
+    Log.debug { "Forwarding spectator command: #{packet.command}" }
+    bot.chat_manager.send_command(packet.command)
+  rescue ex
+    Log.error { "Failed to forward spectator command: #{ex}" }
+  end
+
+  private def handle_command_suggestions_request(packet : Rosegold::Serverbound::CommandSuggestionsRequest)
+    return unless @spectate_state.spectating?
+    bot = @client
+    return unless bot && bot.connected?
+
+    bot_tid = @spectate_server.next_command_suggestion_tid
+    @command_suggestion_map_mutex.synchronize do
+      # Bound map growth: a server that drops suggestion requests would otherwise leak entries indefinitely.
+      if @command_suggestion_map.size >= COMMAND_SUGGESTION_MAP_LIMIT
+        @command_suggestion_map.delete(@command_suggestion_map.first_key)
+      end
+      @command_suggestion_map[bot_tid] = packet.transaction_id
+    end
+
+    Log.debug { "Forwarding spectator command suggestions request: tid=#{packet.transaction_id} -> bot_tid=#{bot_tid} text=#{packet.text}" }
+    bot.send_packet!(Rosegold::Serverbound::CommandSuggestionsRequest.new(bot_tid, packet.text))
+  rescue ex
+    Log.error { "Failed to forward spectator command suggestions request: #{ex}" }
   end
 
   def client_ready?

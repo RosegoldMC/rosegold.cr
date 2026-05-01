@@ -20,8 +20,37 @@ module Rosegold::Spectate::PlaySession
     setup_position_event_listener
     setup_arm_swing_listener
     setup_container_closed_listener
+    setup_command_suggestions_listener
     setup_raw_packet_relay
+    send_cached_commands
     start_keep_alive_sender
+  end
+
+  private def send_cached_commands
+    bytes = @spectate_server.cached_commands_bytes
+    return unless bytes
+    Log.debug { "Replaying cached Commands packet (#{bytes.size} bytes) to spectator" }
+    send_packet(Rosegold::Clientbound::RawPacket.new(bytes))
+  end
+
+  private def setup_command_suggestions_listener
+    track_bot_handler(Rosegold::Clientbound::CommandSuggestionsResponse) do |event|
+      next unless @connected
+      next unless @spectate_state.spectating?
+
+      spec_tid = @command_suggestion_map_mutex.synchronize do
+        @command_suggestion_map.delete(event.transaction_id)
+      end
+      next unless spec_tid
+
+      response = Rosegold::Clientbound::CommandSuggestionsResponse.new(
+        spec_tid,
+        event.start,
+        event.length,
+        event.matches
+      )
+      send_packet(response)
+    end
   end
 
   private def send_join_game(bot : Rosegold::Client)

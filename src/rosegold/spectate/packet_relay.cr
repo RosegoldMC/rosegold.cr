@@ -30,7 +30,7 @@ module Rosegold::Spectate::PacketRelay
     self_targeted = self_targeted_packet_ids(protocol_version)
     bot_entity_id = bot.player.entity_id
 
-    @raw_packet_handler_id = bot.on(Rosegold::Event::RawPacket) do |event|
+    track_bot_handler(Rosegold::Event::RawPacket) do |event|
       raw_bytes = event.bytes
       next unless raw_bytes.size > 0
       next unless @connected
@@ -40,7 +40,6 @@ module Rosegold::Spectate::PacketRelay
       next unless pkt_id
 
       if _packet_name = forwarded[pkt_id]?
-        # Check if this is a self-targeted packet that needs entity ID remapping
         remapped = if self_targeted.includes?(pkt_id)
                      try_remap_entity_id(raw_bytes, pkt_id, bot_entity_id)
                    end
@@ -59,9 +58,7 @@ module Rosegold::Spectate::PacketRelay
   end
 
   private def setup_position_event_listener
-    return unless bot = @client
-
-    @position_handler_id = bot.on(Rosegold::Event::PlayerPositionUpdate) do |event|
+    track_bot_handler(Rosegold::Event::PlayerPositionUpdate) do |event|
       next unless @connected
       next unless @spectate_state.spectating?
 
@@ -76,9 +73,7 @@ module Rosegold::Spectate::PacketRelay
   end
 
   private def setup_arm_swing_listener
-    return unless bot = @client
-
-    @arm_swing_handler_id = bot.on(Rosegold::Event::ArmSwing) do |event|
+    track_bot_handler(Rosegold::Event::ArmSwing) do |event|
       next unless @connected
       next unless @spectate_state.spectating?
       animation = event.hand.off_hand? ? Rosegold::Clientbound::EntityAnimation::Animation::SwingOffHand : Rosegold::Clientbound::EntityAnimation::Animation::SwingMainArm
@@ -88,9 +83,7 @@ module Rosegold::Spectate::PacketRelay
   end
 
   private def setup_container_closed_listener
-    return unless bot = @client
-
-    @container_closed_handler_id = bot.on(Rosegold::Event::ContainerClosed) do |event|
+    track_bot_handler(Rosegold::Event::ContainerClosed) do |event|
       next unless @connected
       next unless @spectate_state.spectating?
       packet = Rosegold::Clientbound::CloseWindow.new(event.window_id)
