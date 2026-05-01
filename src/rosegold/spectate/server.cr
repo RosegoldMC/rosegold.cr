@@ -55,6 +55,7 @@ class Rosegold::Spectate::Server
     "collect"                      => {772_u32 => 0x75_u32, 774_u32 => 0x7A_u32, 775_u32 => 0x7C_u32},
     "attach_entity"                => {772_u32 => 0x5D_u32, 774_u32 => 0x62_u32, 775_u32 => 0x64_u32},
     "entity_teleport"              => {772_u32 => 0x76_u32, 774_u32 => 0x7B_u32, 775_u32 => 0x7D_u32},
+    "commands"                     => {772_u32 => 0x10_u32, 774_u32 => 0x10_u32, 775_u32 => 0x10_u32},
   }
 
   macro build_forwarded_packets_method
@@ -111,7 +112,16 @@ class Rosegold::Spectate::Server
   property server : TCPServer?
   property connections = Array(Connection).new
 
+  getter cached_commands_bytes : Bytes? = nil
+  @bot_commands_handler_id : UUID? = nil
+
+  @next_command_suggestion_tid = Atomic(UInt32).new(0_u32)
+
   def initialize(@host : String = "127.0.0.1", @port : Int32 = 25566)
+  end
+
+  def next_command_suggestion_tid : UInt32
+    @next_command_suggestion_tid.add(1_u32) &+ 1_u32
   end
 
   def start
@@ -157,10 +167,34 @@ class Rosegold::Spectate::Server
   end
 
   def attach_client(client : Rosegold::Client)
+    stop_caching_commands
+    @cached_commands_bytes = nil
     @client = client
+    start_caching_commands(client)
   end
 
   def detach_client
+    stop_caching_commands
+    @cached_commands_bytes = nil
     @client = nil
+  end
+
+  private def start_caching_commands(client : Rosegold::Client)
+    commands_pkt_id = UNIMPLEMENTED_FORWARDED["commands"][client.protocol_version]?
+    return unless commands_pkt_id
+    commands_id_byte = commands_pkt_id.to_u8
+
+    @bot_commands_handler_id = client.on(Rosegold::Event::RawPacket) do |event|
+      next unless event.bytes[0]? == commands_id_byte
+      @cached_commands_bytes = event.bytes
+      Log.debug { "Cached Commands packet (#{event.bytes.size} bytes)" }
+    end
+  end
+
+  private def stop_caching_commands
+    if (client = @client) && (id = @bot_commands_handler_id)
+      client.off(Rosegold::Event::RawPacket, id)
+    end
+    @bot_commands_handler_id = nil
   end
 end
