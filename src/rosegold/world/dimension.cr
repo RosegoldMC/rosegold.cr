@@ -29,9 +29,11 @@ class Rosegold::Dimension
   end
 
   def self.new_nether
+    # Vanilla `the_nether` dimension type: height=256 (16 sections), logical_height=128.
+    # The wire format always uses the full height, even though the build limit is 128.
     self.new "minecraft:the_nether", Minecraft::NBT::CompoundTag.new({
       "min_y"  => Minecraft::NBT::IntTag.new(0_i32).as(Minecraft::NBT::Tag),
-      "height" => Minecraft::NBT::IntTag.new(128_i32).as(Minecraft::NBT::Tag),
+      "height" => Minecraft::NBT::IntTag.new(256_i32).as(Minecraft::NBT::Tag),
     })
   end
 
