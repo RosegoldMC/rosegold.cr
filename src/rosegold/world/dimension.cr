@@ -4,6 +4,8 @@ require "./entity"
 class Rosegold::Dimension
   alias ChunkPos = {Int32, Int32}
 
+  REGISTRY_ID = "minecraft:dimension_type"
+
   getter chunks = Hash(ChunkPos, Rosegold::Chunk).new
 
   getter name : String
@@ -17,8 +19,10 @@ class Rosegold::Dimension
   property world_age : Int64 = 0_i64
 
   def initialize(@name, @nbt)
-    @min_y = @nbt["min_y"].as_i32
-    @world_height = @nbt["height"].as_i32
+    if (compound = @nbt).is_a?(Minecraft::NBT::CompoundTag)
+      @min_y = compound["min_y"]?.try(&.as_i32) || @min_y
+      @world_height = compound["height"]?.try(&.as_i32) || @world_height
+    end
   end
 
   def self.new
@@ -44,7 +48,18 @@ class Rosegold::Dimension
     })
   end
 
-  # TODO: set dimension based on dimension_type via registry
+  # Build a Dimension from the server-provided dimension_type registry entry.
+  # `dimension_type` indexes into `minecraft:dimension_type`, whose codec NBT
+  # carries the authoritative `min_y` / `height` for this server. Falls back
+  # to vanilla defaults keyed by dimension name when the registry is missing
+  # or the entry is unparseable.
+  def self.from_registry(name : String, dimension_type : UInt32, registries : Hash(String, Rosegold::Clientbound::RegistryData))
+    nbt = registry_dimension_nbt(dimension_type, registries)
+    dim = nbt ? new(name, nbt) : for_dimension_name(name)
+    dim.dimension_type = dimension_type
+    dim
+  end
+
   def self.for_dimension_name(name : String)
     case name
     when "minecraft:the_nether"
@@ -54,6 +69,23 @@ class Rosegold::Dimension
     else
       new # defaults to overworld
     end
+  end
+
+  private def self.registry_dimension_nbt(dimension_type : UInt32, registries : Hash(String, Rosegold::Clientbound::RegistryData)) : Minecraft::NBT::CompoundTag?
+    registry = registries[REGISTRY_ID]?
+    return unless registry
+
+    entry = registry.entries[dimension_type.to_i32]?
+    return unless entry
+
+    data = entry[:data]
+    return unless data
+
+    tag = Minecraft::NBT::Tag.read(Minecraft::IO::Memory.new(data))
+    tag.is_a?(Minecraft::NBT::CompoundTag) ? tag : nil
+  rescue ex
+    Log.warn { "Failed to parse dimension_type registry entry #{dimension_type}: #{ex}" }
+    nil
   end
 
   def load_chunk(chunk : Chunk)
