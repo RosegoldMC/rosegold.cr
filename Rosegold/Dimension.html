@@ -2368,7 +2368,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L4" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L4" target="_blank">
         rosegold/world/dimension.cr
       </a>
     
@@ -2376,6 +2376,25 @@
   
 
 
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="REGISTRY_ID">
+        <strong>REGISTRY_ID</strong> = <code><span class="s">&quot;minecraft:dimension_type&quot;</span></code>
+      </dt>
+      
+    
+  </dl>
 
 
 
@@ -2417,7 +2436,12 @@
       <li class="entry-summary">
         <a href="#for_dimension_name%28name%3AString%29-class-method" class="signature"><strong>.for_dimension_name</strong>(name : String)</a>
         
-          <div class="summary"><p><span class="flag orange">TODO</span>  set dimension based on dimension_type via registry</p></div>
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#from_registry%28name%3AString%2Cdimension_type%3AUInt32%2Cregistries%3AHash%28String%2CRosegold%3A%3AClientbound%3A%3ARegistryData%29%29-class-method" class="signature"><strong>.from_registry</strong>(name : String, dimension_type : UInt32, registries : Hash(String, Rosegold::Clientbound::RegistryData))</a>
+        
+          <div class="summary"><p>Build a Dimension from the server-provided dimension_type registry entry.</p></div>
         
       </li>
     
@@ -2612,7 +2636,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2628,7 +2652,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2653,15 +2677,35 @@
         <a class="method-permalink" href="#for_dimension_name%28name%3AString%29-class-method">#</a>
       </div>
       
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L63" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="from_registry(name:String,dimension_type:UInt32,registries:Hash(String,Rosegold::Clientbound::RegistryData))-class-method">
+      <div class="signature">
+        
+        def self.<strong>from_registry</strong>(name : String, dimension_type : UInt32, registries : Hash(String, <a href="../Rosegold/Clientbound/RegistryData.html">Rosegold::Clientbound::RegistryData</a>))
+
+        <a class="method-permalink" href="#from_registry%28name%3AString%2Cdimension_type%3AUInt32%2Cregistries%3AHash%28String%2CRosegold%3A%3AClientbound%3A%3ARegistryData%29%29-class-method">#</a>
+      </div>
+      
         <div class="doc">
           
-          <p><span class="flag orange">TODO</span>  set dimension based on dimension_type via registry</p>
+          <p>Build a Dimension from the server-provided dimension_type registry entry.
+<code><a href="../Rosegold/Dimension.html#dimension_type%3AUInt32-instance-method">#dimension_type</a></code> indexes into <code>minecraft:dimension_type</code>, whose codec NBT
+carries the authoritative <code><a href="../Rosegold/Dimension.html#min_y%3AInt32-instance-method">#min_y</a></code> / <code>height</code> for this server. Falls back
+to vanilla defaults keyed by dimension name when the registry is missing
+or the entry is unparseable.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2677,7 +2721,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2693,7 +2737,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2723,7 +2767,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L80" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L114" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2739,7 +2783,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L71" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L105" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2755,7 +2799,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L75" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L109" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2771,7 +2815,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L62" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L96" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2787,7 +2831,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2803,7 +2847,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2819,7 +2863,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2835,7 +2879,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2851,7 +2895,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2867,7 +2911,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L91" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2883,7 +2927,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2899,7 +2943,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2915,7 +2959,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2931,7 +2975,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L128" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2947,7 +2991,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L89" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L123" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2963,7 +3007,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L85" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L119" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2979,7 +3023,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2995,7 +3039,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3011,7 +3055,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3027,7 +3071,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3043,7 +3087,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3059,7 +3103,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7fa82212112fe22d369a055e29a7baf4fd3b8880/src/rosegold/world/dimension.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/9e3e319d4eebcf3b89be00e66c8329e021156603/src/rosegold/world/dimension.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
