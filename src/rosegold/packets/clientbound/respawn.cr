@@ -93,10 +93,7 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
     client.physics.pause
     client.player.gamemode = gamemode.to_i8
 
-    # Update dimension based on dimension_name
-    # TODO: set dimension based on dimension_type via registry
-    client.dimension = Dimension.for_dimension_name(dimension_name)
-    client.dimension.dimension_type = dimension_type
+    client.dimension = Dimension.from_registry(dimension_name, dimension_type, client.registries)
 
     Log.debug { "Respawned in #{dimension_name} gamemode=#{gamemode} dimension_type=#{dimension_type}" }
   end
