@@ -108,6 +108,5 @@ Spectator.describe "PlayerPositionAndLook Serialization" do
     expect(packet_with_extremes.feet.z).to eq(30_000_000.0)          # Clamped to max
     expect(packet_with_extremes.look.yaw).to be_close(0.0, 0.001)    # 720 - 360 - 360 = 0
     expect(packet_with_extremes.look.pitch).to be_close(90.0, 0.001) # -270 + 360 = 90
-
   end
 end

@@ -133,11 +133,15 @@ class Rosegold::Spectate::Server
         begin
           client_socket = server.accept
 
+          @connections.reject! { |conn| !conn.connected? }
+
           if @connections.size >= MAX_CONNECTIONS
             Log.warn { "Max connections reached, rejecting #{client_socket.remote_address}" }
             client_socket.close
             next
           end
+
+          enable_tcp_keepalive(client_socket)
 
           Log.info { "New spectator connection from #{client_socket.remote_address}" }
 
@@ -164,6 +168,15 @@ class Rosegold::Spectate::Server
     @server.try &.close
     @connections.dup.each(&.close)
     @connections.clear
+  end
+
+  private def enable_tcp_keepalive(socket : TCPSocket)
+    socket.keepalive = true
+    socket.tcp_keepalive_idle = 30
+    socket.tcp_keepalive_interval = 10
+    socket.tcp_keepalive_count = 3
+  rescue ex
+    Log.debug { "Failed to enable TCP keepalive: #{ex}" }
   end
 
   def attach_client(client : Rosegold::Client)
