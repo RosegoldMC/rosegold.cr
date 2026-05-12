@@ -140,9 +140,11 @@ class Rosegold::Spectate::Connection
       socket.flush
     end
   rescue ex : IO::Error
-    Log.debug { "Failed to send packet: #{ex}" }
+    Log.debug { "Failed to send packet, closing connection: #{ex}" }
+    close
   rescue ex
     Log.error { "Packet send error: #{ex}" }
+    close
   end
 
   def close
