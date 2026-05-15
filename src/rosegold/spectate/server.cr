@@ -225,7 +225,7 @@ class Rosegold::Spectate::Server
     @scoreboard_cache = cache
 
     @bot_scoreboard_handler_id = client.on(Rosegold::Event::RawPacket) do |event|
-      next unless client.current_protocol_state.play?
+      next unless client.current_protocol_state == Rosegold::ProtocolState::PLAY
       first_byte = event.bytes[0]?
       next unless first_byte
       next unless cache.captures?(first_byte.to_u32)
