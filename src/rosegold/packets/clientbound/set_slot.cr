@@ -33,8 +33,12 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    # Pre-1.21.5 used window_id=-1, slot_number=-1 to sync the carried item; on
+    # 1.21.5+ that role is filled by SetCursorItem. Vanilla still allows -1/-1
+    # against legacy stacks, so route it to the cursor for safety.
     if window_id == -1 && slot.slot_number == -1
-      client.container_menu.cursor = slot.as(Rosegold::Slot)
+      menu = client.container_menu
+      menu.update_slot(-1, slot.as(Rosegold::Slot), menu.state_id)
     elsif window_id == 0
       client.inventory_menu.update_slot(slot.slot_number, slot.as(Rosegold::Slot), state_id)
     elsif client.container_menu.id == window_id
