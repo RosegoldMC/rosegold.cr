@@ -1,10 +1,15 @@
 require "../packet"
 
-# Direct player-inventory slot update (added in 1.21.5). Vanilla servers only
-# emit this when returning items from temporary slots on container close; it
-# uses Inventory slot indices (0-8 hotbar, 9-35 main, 36-39 armor, 40 offhand),
-# not menu-window slot indices, and carries no state id. Decoded so it doesn't
-# fall back to RawPacket, but applied as a no-op (matches azalea-client).
+# Direct player-inventory slot update (added in 1.21.5). Vanilla servers
+# emit this when returning items from temporary slots on container close —
+# e.g. leftover crafting-grid items get added back to the player inventory,
+# routing through Inventory#setItem which broadcasts this packet for each
+# affected slot. Carries no state id.
+#
+# Slot indices follow vanilla's Inventory layout (Inventory.java#setItem +
+# EQUIPMENT_SLOT_MAPPING): 0-8 hotbar, 9-35 main inventory, 36 FEET,
+# 37 LEGS, 38 CHEST, 39 HEAD, 40 OFFHAND. (41 BODY, 42 SADDLE are mount
+# armor and aren't reachable through the player menu.)
 class Rosegold::Clientbound::SetPlayerInventory < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
 
@@ -33,6 +38,30 @@ class Rosegold::Clientbound::SetPlayerInventory < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    Log.debug { "SetPlayerInventory slot=#{slot_index} item=#{slot_data} (no-op)" }
+    menu_index = self.class.player_menu_slot(slot_index)
+    if menu_index.nil?
+      Log.debug { "SetPlayerInventory: ignoring unsupported slot #{slot_index}" }
+      return
+    end
+
+    inventory = client.inventory_menu
+    Log.debug { "SetPlayerInventory net=#{slot_index} menu=#{menu_index} item=#{slot_data}" }
+    inventory.update_slot(menu_index, slot_data.as(Rosegold::Slot), inventory.state_id)
+  end
+
+  # Translates a vanilla Inventory slot index to a PlayerMenu slot index.
+  # Returns nil for mount-armor slots (BODY/SADDLE) which aren't represented
+  # in the player menu.
+  def self.player_menu_slot(slot_index : UInt32) : Int32?
+    case slot_index
+    when 0_u32..8_u32  then SlotOffsets::PlayerSlots::HOTBAR_START + slot_index.to_i32
+    when 9_u32..35_u32 then slot_index.to_i32
+    when 36_u32        then SlotOffsets::PlayerSlots::BOOTS_SLOT
+    when 37_u32        then SlotOffsets::PlayerSlots::LEGGINGS_SLOT
+    when 38_u32        then SlotOffsets::PlayerSlots::CHESTPLATE_SLOT
+    when 39_u32        then SlotOffsets::PlayerSlots::HELMET_SLOT
+    when 40_u32        then SlotOffsets::PlayerSlots::OFF_HAND
+    else                    nil
+    end
   end
 end

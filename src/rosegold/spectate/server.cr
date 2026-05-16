@@ -89,8 +89,6 @@ class Rosegold::Spectate::Server
                         Clientbound::SetPassengers,
                         Clientbound::SetContainerContent,
                         Clientbound::SetSlot,
-                        Clientbound::SetCursorItem,
-                        Clientbound::SetPlayerInventory,
                       ] %}
         result[{{klass}}[protocol]] = {{klass.name.split("::").last}}
       {% end %}
