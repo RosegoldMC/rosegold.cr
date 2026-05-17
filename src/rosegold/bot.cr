@@ -101,17 +101,23 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.player.look
   end
 
+  # Sets the look direction. `Look` is a yaw/pitch pair in degrees
+  # (see `Rosegold::Look` for the angle convention and constants like
+  # `Look::NORTH`, `Look::SOUTH.down`, etc.).
   # Waits for the new look to be sent to the server.
   def look=(look : Look)
     client.physics.look = look
   end
 
+  # Aims the look at a world position. Equivalent to `look_at(vec)`.
   # Waits for the new look to be sent to the server.
   def look=(vec : Vec3d)
     look_at vec
   end
 
-  # Computes the new look from the current look.
+  # Computes the new look from the current look. The block receives the
+  # current `Look` (yaw/pitch in degrees) and must return a new `Look`,
+  # e.g. `bot.look { |l| l.with_yaw(l.yaw + 90) }`.
   # Waits for the new look to be sent to the server.
   def look(&block : Look -> Look)
     client.physics.look = block.call look
