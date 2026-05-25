@@ -107,7 +107,7 @@ module Rosegold::Spectate::WorldSync
         pitch: entity.pitch.to_f64,
         yaw: entity.yaw.to_f64,
         head_yaw: entity.head_yaw.to_f64,
-        data: 0_u32,
+        data: entity.data,
         velocity_x: entity.velocity.x,
         velocity_y: entity.velocity.y,
         velocity_z: entity.velocity.z

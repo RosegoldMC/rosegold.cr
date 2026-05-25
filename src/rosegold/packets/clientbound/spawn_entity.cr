@@ -99,7 +99,8 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
       yaw.to_f32,
       head_yaw.to_f32,
       Vec3d.new(velocity_x, velocity_y, velocity_z),
-      living: is_living
+      living: is_living,
+      data: data
   end
 
   ENTITY_TYPE_PLAYER_BY_PROTOCOL = {

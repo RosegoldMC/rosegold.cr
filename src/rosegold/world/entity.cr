@@ -34,6 +34,7 @@ class Rosegold::Entity
     yaw : Float32,
     head_yaw : Float32,
     velocity : Vec3d,
+    data : UInt32 = 0_u32,
     passenger_ids : Array(UInt32) = [] of UInt32,
     effects : Array(EntityEffect) = [] of EntityEffect
 
@@ -54,7 +55,7 @@ class Rosegold::Entity
     "fishing_bobber",
   }
 
-  def initialize(@entity_id, @uuid, @entity_type, @position, @pitch, @yaw, @head_yaw, @velocity, @on_ground = true, @living = false)
+  def initialize(@entity_id, @uuid, @entity_type, @position, @pitch, @yaw, @head_yaw, @velocity, @on_ground = true, @living = false, @data = 0_u32)
   end
 
   def metadata
