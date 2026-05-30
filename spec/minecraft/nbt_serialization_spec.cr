@@ -103,6 +103,18 @@ Spectator.describe "NBT Tag Serialization" do
       read_back = Minecraft::NBT::ByteArrayTag.read(io)
       expect(read_back.value).to eq(original.value)
     end
+
+    it "round-trips full Int8 range including negative bytes" do
+      test_data = [-128_i8, -1_i8, 0_i8, 127_i8, -86_i8, 86_i8]
+      original = Minecraft::NBT::ByteArrayTag.new(test_data)
+      io = Minecraft::IO::Memory.new
+
+      original.write(io)
+      io.rewind
+
+      read_back = Minecraft::NBT::ByteArrayTag.read(io)
+      expect(read_back.value).to eq(original.value)
+    end
   end
 
   describe "StringTag" do

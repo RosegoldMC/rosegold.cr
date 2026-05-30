@@ -403,7 +403,7 @@ module Minecraft::NBT
       value = Array(Int8).new(length)
 
       length.times do
-        value << io.read_byte.to_i8
+        value << io.read_byte.to_i8!
       end
 
       new(value)
@@ -412,7 +412,7 @@ module Minecraft::NBT
     def write(io : IO)
       io.write_full value.size.to_i32
       value.each do |val|
-        io.write_byte val.to_u8
+        io.write_byte val.to_u8!
       end
     end
 
