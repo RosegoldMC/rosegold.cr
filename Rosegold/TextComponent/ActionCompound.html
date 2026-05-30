@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Bot::CraftingError - rosegold main</title>
+  <title>Rosegold::TextComponent::ActionCompound - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -297,12 +297,12 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
+  <li class="parent " data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
       <a href="../../Rosegold/Bot.html">Bot</a>
       
         <ul>
   
-  <li class=" current" data-id="rosegold/Rosegold/Bot/CraftingError" data-name="rosegold::bot::craftingerror">
+  <li class=" " data-id="rosegold/Rosegold/Bot/CraftingError" data-name="rosegold::bot::craftingerror">
       <a href="../../Rosegold/Bot/CraftingError.html">CraftingError</a>
       
     </li>
@@ -2257,12 +2257,12 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/TextComponent" data-name="rosegold::textcomponent">
+  <li class="parent open current" data-id="rosegold/Rosegold/TextComponent" data-name="rosegold::textcomponent">
       <a href="../../Rosegold/TextComponent.html">TextComponent</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/TextComponent/ActionCompound" data-name="rosegold::textcomponent::actioncompound">
+  <li class=" current" data-id="rosegold/Rosegold/TextComponent/ActionCompound" data-name="rosegold::textcomponent::actioncompound">
       <a href="../../Rosegold/TextComponent/ActionCompound.html">ActionCompound</a>
       
     </li>
@@ -2337,19 +2337,27 @@
 <h1 class="type-name">
 
   <span class="kind">
-    class
-  </span> Rosegold::<wbr>Bot::<wbr>CraftingError
+    module
+  </span> Rosegold::<wbr>TextComponent::<wbr>ActionCompound
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Bot/CraftingError.html">Rosegold::Bot::CraftingError</a></li><li class="superclass">Exception</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
 
-
-
+  <p>Shared {action: ..., ...arbitrary fields...} compound serialization used by
+ClickEventComponent and HoverEventComponent. Both are vanilla-shaped
+<code>action</code>-prefixed compounds with the rest of the keys carried verbatim.</p>
 
 
 
@@ -2364,6 +2372,25 @@
 
 
   <h2>
+    <a id="direct-including-types" class="anchor" href="#direct-including-types">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Direct including types
+  </h2>
+  <ul class="other-types-list">
+    
+      <li class="other-type"><a href="../../Rosegold/TextComponent/ClickEventComponent.html">Rosegold::TextComponent::ClickEventComponent</a></li>
+    
+      <li class="other-type"><a href="../../Rosegold/TextComponent/HoverEventComponent.html">Rosegold::TextComponent::HoverEventComponent</a></li>
+    
+  </ul>
+
+
+
+
+  <h2>
     <a id="defined-in" class="anchor" href="#defined-in">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -2373,8 +2400,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/bot.cr#L650" target="_blank">
-        rosegold/bot.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L530" target="_blank">
+        rosegold/models/text_component.cr
       </a>
     
     <br/>
@@ -2391,48 +2418,26 @@
   
 
   
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#to_nbt%3AMinecraft%3A%3ANBT%3A%3ACompoundTag-instance-method" class="signature"><strong>#to_nbt</strong> : Minecraft::NBT::CompoundTag</a>
+        
+      </li>
+    
+  </ul>
+
 
 
   <div class="methods-inherited">
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
     
   </div>
 
@@ -2443,6 +2448,32 @@
   
 
   
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="to_nbt:Minecraft::NBT::CompoundTag-instance-method">
+      <div class="signature">
+        
+        def <strong>to_nbt</strong> : <a href="../../Minecraft/NBT/CompoundTag.html">Minecraft::NBT::CompoundTag</a>
+
+        <a class="method-permalink" href="#to_nbt%3AMinecraft%3A%3ANBT%3A%3ACompoundTag-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L531" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
 
 </div>

@@ -2262,6 +2262,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/TextComponent/ActionCompound" data-name="rosegold::textcomponent::actioncompound">
+      <a href="../Rosegold/TextComponent/ActionCompound.html">ActionCompound</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/TextComponent/ClickEventComponent" data-name="rosegold::textcomponent::clickeventcomponent">
       <a href="../Rosegold/TextComponent/ClickEventComponent.html">ClickEventComponent</a>
       
@@ -2382,7 +2387,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L3" target="_blank">
         rosegold/models/text_component.cr
       </a>
     
@@ -2402,6 +2407,16 @@
     </h2>
   
   <dl>
+    
+      <dt class="entry-const" id="CANONICAL_KEY_ORDER">
+        <strong>CANONICAL_KEY_ORDER</strong> = <code>[<span class="s">&quot;type&quot;</span>, <span class="s">&quot;text&quot;</span>, <span class="s">&quot;translate&quot;</span>, <span class="s">&quot;fallback&quot;</span>, <span class="s">&quot;score&quot;</span>, <span class="s">&quot;separator&quot;</span>, <span class="s">&quot;selector&quot;</span>, <span class="s">&quot;keybind&quot;</span>, <span class="s">&quot;nbt&quot;</span>, <span class="s">&quot;block&quot;</span>, <span class="s">&quot;entity&quot;</span>, <span class="s">&quot;storage&quot;</span>, <span class="s">&quot;font&quot;</span>, <span class="s">&quot;bold&quot;</span>, <span class="s">&quot;italic&quot;</span>, <span class="s">&quot;underlined&quot;</span>, <span class="s">&quot;strikethrough&quot;</span>, <span class="s">&quot;obfuscated&quot;</span>, <span class="s">&quot;interpret&quot;</span>, <span class="s">&quot;color&quot;</span>, <span class="s">&quot;shadow_color&quot;</span>, <span class="s">&quot;insertion&quot;</span>, <span class="s">&quot;click_event&quot;</span>, <span class="s">&quot;hover_event&quot;</span>, <span class="s">&quot;with&quot;</span>, <span class="s">&quot;extra&quot;</span>] <span class="k">of</span> <span class="t">::</span><span class="t">String</span></code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Canonical write order when no source key_order was captured. Mirrors
+vanilla Style.java field ordering.</p>
+      </dd>
+      
     
       <dt class="entry-const" id="TRANSLATIONS">
         <strong>TRANSLATIONS</strong> = <code><span class="t">Hash</span>(<span class="t">String</span>, <span class="t">String</span>).from_json(<span class="t">Rosegold</span>.read_game_asset(<span class="s">&quot;1.21.11/language.json&quot;</span>))</code>
@@ -2599,6 +2614,20 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#key_order%3AArray%28String%29-instance-method" class="signature"><strong>#key_order</strong> : Array(String)</a>
+        
+          <div class="summary"><p>Wire-format fidelity state.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#key_order%3D%28key_order%3AArray%28String%29%29-instance-method" class="signature"><strong>#key_order=</strong>(key_order : Array(String))</a>
+        
+          <div class="summary"><p>Wire-format fidelity state.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#keybind%3AString%7CNil-instance-method" class="signature"><strong>#keybind</strong> : String | Nil</a>
         
       </li>
@@ -2665,6 +2694,20 @@
     
       <li class="entry-summary">
         <a href="#shadow_color%3D%28shadow_color%3AInt32%7CNil%29-instance-method" class="signature"><strong>#shadow_color=</strong>(shadow_color : Int32 | Nil)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#shadow_color_floats%3AArray%28Float32%29%7CNil-instance-method" class="signature"><strong>#shadow_color_floats</strong> : Array(Float32) | Nil</a>
+        
+          <div class="summary"><p>When non-nil, shadow_color was provided as a ListTag of 4 floats and must be re-emitted that way.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#shadow_color_floats%3D%28shadow_color_floats%3AArray%28Float32%29%7CNil%29-instance-method" class="signature"><strong>#shadow_color_floats=</strong>(shadow_color_floats : Array(Float32) | Nil)</a>
+        
+          <div class="summary"><p>When non-nil, shadow_color was provided as a ListTag of 4 floats and must be re-emitted that way.</p></div>
         
       </li>
     
@@ -2752,6 +2795,20 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#unknown_fields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29-instance-method" class="signature"><strong>#unknown_fields</strong> : Hash(String, Minecraft::NBT::Tag)</a>
+        
+          <div class="summary"><p>Original keys we didn't recognize - preserved verbatim and re-emitted in their original position via key_order.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#unknown_fields%3D%28unknown_fields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29%29-instance-method" class="signature"><strong>#unknown_fields=</strong>(unknown_fields : Hash(String, Minecraft::NBT::Tag))</a>
+        
+          <div class="summary"><p>Original keys we didn't recognize - preserved verbatim and re-emitted in their original position via key_order.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#with%3AArray%28TextComponent%7CString%29%7CNil-instance-method" class="signature"><strong>#with</strong> : Array(TextComponent | String) | Nil</a>
         
       </li>
@@ -2834,7 +2891,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2850,7 +2907,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2866,7 +2923,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L62" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2882,7 +2939,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2898,7 +2955,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2930,7 +2987,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2946,7 +3003,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2962,7 +3019,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2978,7 +3035,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2994,7 +3051,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3010,7 +3067,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3031,7 +3088,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3052,7 +3109,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3068,7 +3125,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3084,7 +3141,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3105,7 +3162,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3126,7 +3183,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3142,7 +3199,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3158,7 +3215,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3174,7 +3231,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3190,7 +3247,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3206,7 +3263,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L41" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3222,7 +3279,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L41" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3243,7 +3300,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3264,7 +3321,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3280,7 +3337,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3296,7 +3353,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3312,7 +3369,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3328,7 +3385,53 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L28" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="key_order:Array(String)-instance-method">
+      <div class="signature">
+        
+        def <strong>key_order</strong> : Array(String)
+
+        <a class="method-permalink" href="#key_order%3AArray%28String%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Wire-format fidelity state. Populated only when parsed from a CompoundTag,
+used to reconstruct byte-equivalent output. Empty/nil for programmatic
+construction, which falls back to canonical write order.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L50" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="key_order=(key_order:Array(String))-instance-method">
+      <div class="signature">
+        
+        def <strong>key_order=</strong>(key_order : Array(String))
+
+        <a class="method-permalink" href="#key_order%3D%28key_order%3AArray%28String%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Wire-format fidelity state. Populated only when parsed from a CompoundTag,
+used to reconstruct byte-equivalent output. Empty/nil for programmatic
+construction, which falls back to canonical write order.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3344,7 +3447,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3360,7 +3463,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3376,7 +3479,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3392,7 +3495,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3408,7 +3511,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3424,7 +3527,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3440,7 +3543,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3456,7 +3559,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3472,7 +3575,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3488,7 +3591,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3504,7 +3607,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3520,7 +3623,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3536,7 +3639,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L32" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3552,7 +3655,51 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L32" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="shadow_color_floats:Array(Float32)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>shadow_color_floats</strong> : Array(Float32) | Nil
+
+        <a class="method-permalink" href="#shadow_color_floats%3AArray%28Float32%29%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>When non-nil, shadow_color was provided as a ListTag of 4 floats and must
+be re-emitted that way.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L60" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="shadow_color_floats=(shadow_color_floats:Array(Float32)|Nil)-instance-method">
+      <div class="signature">
+        
+        def <strong>shadow_color_floats=</strong>(shadow_color_floats : Array(Float32) | Nil)
+
+        <a class="method-permalink" href="#shadow_color_floats%3D%28shadow_color_floats%3AArray%28Float32%29%7CNil%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>When non-nil, shadow_color was provided as a ListTag of 4 floats and must
+be re-emitted that way.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L60" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3568,7 +3715,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3584,7 +3731,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3600,7 +3747,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3616,7 +3763,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3632,7 +3779,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3648,7 +3795,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3664,7 +3811,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L290" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L380" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3696,7 +3843,7 @@ which includes its class name and its object address.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L245" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L330" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3725,7 +3872,7 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L286" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L368" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3741,7 +3888,7 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3757,7 +3904,7 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3778,7 +3925,7 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3799,7 +3946,7 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3815,7 +3962,7 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L29" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3831,7 +3978,51 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L29" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unknown_fields:Hash(String,Minecraft::NBT::Tag)-instance-method">
+      <div class="signature">
+        
+        def <strong>unknown_fields</strong> : Hash(String, <a href="../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>)
+
+        <a class="method-permalink" href="#unknown_fields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Original keys we didn't recognize - preserved verbatim and re-emitted in
+their original position via key_order.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L55" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="unknown_fields=(unknown_fields:Hash(String,Minecraft::NBT::Tag))-instance-method">
+      <div class="signature">
+        
+        def <strong>unknown_fields=</strong>(unknown_fields : Hash(String, <a href="../Minecraft/NBT/Tag.html">Minecraft::NBT::Tag</a>))
+
+        <a class="method-permalink" href="#unknown_fields%3D%28unknown_fields%3AHash%28String%2CMinecraft%3A%3ANBT%3A%3ATag%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Original keys we didn't recognize - preserved verbatim and re-emitted in
+their original position via key_order.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3847,7 +4038,7 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3863,7 +4054,7 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3879,7 +4070,7 @@ typically intended for users.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/da7f2f444c51f0b79ad0891bd2e60237e53c0415/src/rosegold/models/text_component.cr#L400" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/91c8af0b6e026e45cf4389ba958fadf9ac95e5ca/src/rosegold/models/text_component.cr#L501" target="_blank">View source</a>]
         
       </div>
     </div>
