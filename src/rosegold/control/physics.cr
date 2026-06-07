@@ -767,7 +767,7 @@ class Rosegold::Physics
           @consecutive_stuck_ticks += 1
 
           if @current_stuck_timeout_ticks > 0 && @consecutive_stuck_ticks >= @current_stuck_timeout_ticks
-            action.fail MovementStuck.new "Movement to #{@target} stuck for #{@current_stuck_timeout_ticks} consecutive ticks at #{feet}"
+            action.fail MovementStuck.new "Movement to #{action.target} stuck for #{@current_stuck_timeout_ticks} consecutive ticks at #{feet}"
             stop_moving
           end
         else
