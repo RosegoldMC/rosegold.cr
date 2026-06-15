@@ -265,7 +265,11 @@ class Rosegold::Client < Rosegold::EventEmitter
                         true
                       end
 
-        if should_tick
+        # The game tick only runs in PLAY. During a server switch the proxy
+        # puts us through PLAY→CONFIGURATION→PLAY; vanilla stops ticking while
+        # configuring, and any PLAY packet sent in CONFIGURATION (e.g.
+        # ClientTickEnd) makes Velocity drop the connection.
+        if should_tick && current_protocol_state == ProtocolState::PLAY
           begin
             interactions.tick
             physics.tick
@@ -432,6 +436,13 @@ class Rosegold::Client < Rosegold::EventEmitter
   # a EncryptionResponse has been sent.
   def send_packet!(packet : Serverbound::Packet)
     raise NotConnected.new unless connected?
+    # Mirror vanilla's Netty codec swap: a PLAY packet leaking out while we are
+    # not in PLAY (e.g. a straggler queued during a server switch) makes the
+    # proxy drop the connection with "internal error". Drop it instead.
+    if packet.class.state == ProtocolState::PLAY && current_protocol_state != ProtocolState::PLAY
+      Log.warn { "Dropping #{packet.class} send in #{current_protocol_state.name} state" }
+      return
+    end
     Log.trace { "[#{current_protocol_state.name}] SEND #{packet}" }
     connection.send_packet packet
   end
