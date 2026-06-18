@@ -32,8 +32,8 @@ HEX = "0123456789abcdef"
 
 def emit_string(io, s : String)
   io << '"'
-  s.each_char do |c|
-    o = c.ord
+  s.each_char do |chr|
+    o = chr.ord
     case o
     when 0x22 then io << "\\\""
     when 0x5C then io << "\\\\"
@@ -52,7 +52,7 @@ def emit_string(io, s : String)
           emit_u(io, o)
         end
       else
-        io << c
+        io << chr
       end
     end
   end
@@ -123,7 +123,7 @@ end
 
 def write_file(out_dir : String, name : String, value : JV)
   path = "#{out_dir}/#{name}"
-  File.open(path, "w") { |f| emit(f, value) }
+  File.open(path, "w") { |file| emit(file, value) }
   puts "  #{name}: #{File.size(path)} bytes"
 end
 
@@ -180,7 +180,7 @@ end
 # items.json
 # ---------------------------------------------------------------------------
 def enchant_categories_for(item_name : String, item_tags : Tags, category_tags : Array(String)) : Array(String)
-  category_tags.select { |c| item_tags.has?("enchantable/#{c}", item_name) }.sort
+  category_tags.select { |cat| item_tags.has?("enchantable/#{cat}", item_name) }.sort!
 end
 
 def build_items(registries : JSON::Any, components_dir : String, item_tags : Tags) : Array(JV)
@@ -188,7 +188,7 @@ def build_items(registries : JSON::Any, components_dir : String, item_tags : Tag
   category_tags = [] of String
   ench_dir = "#{item_tags.dir}/enchantable"
   if Dir.exists?(ench_dir)
-    category_tags = Dir.glob("#{ench_dir}/*.json").map { |p| File.basename(p, ".json") }
+    category_tags = Dir.glob("#{ench_dir}/*.json").map { |path| File.basename(path, ".json") }
   end
 
   items = [] of JV
@@ -210,7 +210,7 @@ def build_items(registries : JSON::Any, components_dir : String, item_tags : Tag
       cats = enchant_categories_for(name, item_tags, category_tags)
       unless cats.empty?
         arr = [] of JV
-        cats.each { |c| arr << c }
+        cats.each { |cat| arr << cat }
         entry["enchantCategories"] = arr
       end
     end
@@ -328,8 +328,8 @@ def build_material_predicates(tags : Tags, tool_tag_order : Array(String)) : Arr
 
   composites = [] of Tuple(String, Set(String))
   COMPOSITES.each do |parts|
-    members = if parts.all? { |p| by_name.has_key?(p) }
-                parts.map { |p| by_name[p] }.reduce { |a, b| a & b }
+    members = if parts.all? { |part| by_name.has_key?(part) }
+                parts.map { |part| by_name[part] }.reduce { |acc, set| acc & set }
               else
                 Set(String).new
               end
@@ -368,7 +368,7 @@ def build_materials(tool : ToolData, item_ids : Hash(String, Int32)) : Hash(Stri
 
   COMPOSITES.each do |parts|
     merged = {} of String => Float64
-    parts.each { |p| speeds[p]?.try { |h| merged.merge!(h) } }
+    parts.each { |part| speeds[part]?.try { |hash| merged.merge!(hash) } }
     speeds[parts.join(";")] = merged
   end
 
@@ -402,7 +402,7 @@ def build_blocks(blocks_report : JSON::Any, tags : Tags, ordered : Array(Tuple(S
   out = [] of Hash(String, JV)
   blocks_report.as_h.each do |full_name, bdef|
     name = strip_ns(full_name)
-    state_ids = bdef["states"].as_a.map { |s| s["id"].as_i }
+    state_ids = bdef["states"].as_a.map(&.["id"].as_i)
 
     states = [] of JV
     if props = bdef["properties"]?.try(&.as_h)
@@ -448,7 +448,7 @@ def build_blocks(blocks_report : JSON::Any, tags : Tags, ordered : Array(Tuple(S
     end
     out << entry
   end
-  out.sort_by! { |b| b["minStateId"].as(Int32) }
+  out.sort_by! { |entry| entry["minStateId"].as(Int32) }
   out
 end
 
@@ -462,8 +462,8 @@ def build_collision_shapes(blocks : Array(Hash(String, JV)), carry_shapes : JSON
   archetypes = deltas["collisionArchetype"]?.try(&.as_h) || {} of String => JSON::Any
 
   out_blocks = {} of String => JV
-  blocks.each do |b|
-    name = b["name"].as(String)
+  blocks.each do |block|
+    name = block["name"].as(String)
     if carry_block_map.has_key?(name)
       out_blocks[name] = carry_block_map[name]
     elsif archetypes.has_key?(name)
@@ -488,13 +488,13 @@ end
 # enchantments.json — numeric ids in sorted (alphabetical) registry order.
 # ---------------------------------------------------------------------------
 def build_enchantments(ench_dir : String) : Array(JV)
-  names = Dir.glob("#{ench_dir}/*.json").map { |p| File.basename(p, ".json") }.sort
+  names = Dir.glob("#{ench_dir}/*.json").map { |path| File.basename(path, ".json") }.sort!
   out = [] of JV
-  names.each_with_index do |n, i|
-    e = {} of String => JV
-    e["id"] = i
-    e["name"] = n
-    out << e
+  names.each_with_index do |enchant_name, idx|
+    entry = {} of String => JV
+    entry["id"] = idx
+    entry["name"] = enchant_name
+    out << entry
   end
   out
 end
@@ -564,7 +564,7 @@ deltas = (deltas_path && File.exists?(deltas_path)) ? load_json(deltas_path) : J
 item_ids = id_map(registries, "minecraft:item")
 
 carry_block_by_name = {} of String => JSON::Any
-load_json("#{carry}/blocks.json").as_a.each { |b| carry_block_by_name[b["name"].as_s] = b }
+load_json("#{carry}/blocks.json").as_a.each { |blk| carry_block_by_name[blk["name"].as_s] = blk }
 carry_shapes = load_json("#{carry}/blockCollisionShapes.json")
 carry_entity_by_name = {} of String => JSON::Any
 load_json("#{carry}/entities.json").as_a.each { |e| carry_entity_by_name[e["name"].as_s] = e }
@@ -582,7 +582,7 @@ puts "Writing slim game_assets to #{out_dir}"
 
 blocks = build_blocks(blocks_report, block_tags, ordered, carry_block_by_name, deltas, tool.tool_rules, item_ids)
 blocks_jv = [] of JV
-blocks.each { |b| blocks_jv << b }
+blocks.each { |blk| blocks_jv << blk }
 
 write_file(out_dir, "items.json", build_items(registries, components_dir, item_tags))
 write_file(out_dir, "blocks.json", blocks_jv)
