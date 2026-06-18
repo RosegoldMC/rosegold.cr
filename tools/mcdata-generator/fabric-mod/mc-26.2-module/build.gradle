@@ -1,0 +1,25 @@
+import xyz.wagyourtail.unimined.internal.minecraft.MinecraftProvider
+
+plugins {
+    id 'dg-mc-conventions'
+}
+
+unimined.minecraft {
+    version "26.2"
+
+    mappings {
+        mojmap()
+        
+        devFallbackNamespace "mojmap"
+    }
+
+    customPatcher(new CustomOfficialFabricMinecraftTransformer(project, delegate as MinecraftProvider)) {
+        it.loader libs.versions.fabric.loader.get()
+    }
+
+    runs.config("server") {
+        javaVersion = JavaVersion.VERSION_25
+    }
+
+    defaultRemapJar = true
+}

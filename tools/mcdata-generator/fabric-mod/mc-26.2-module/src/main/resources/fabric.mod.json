@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "minecraft-data-generator",
+  "version": "${version}",
+  "name": "Minecraft Data Generator",
+  "description": "",
+  "authors": [
+    "Archengius",
+    "U9G"
+  ],
+  "contact": {},
+  "license": "MIT",
+  "mixins": [
+    "minecraft-data-generator.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "*"
+  }
+}
