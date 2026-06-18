@@ -11,6 +11,7 @@
 # ensure_ascii=True) — see emit/emit_string. The material synthesis and tool-speed logic
 # replicate PrismarineJS's minecraft-data-generator (see README for algorithm + provenance).
 require "json"
+require "./json_writer"
 
 # Recursive value type the emitter accepts. Carried/delta numbers are spliced as JSON::Any
 # so they keep their source int-vs-float form; computed numbers use native Int32/Float64.
@@ -591,4 +592,9 @@ write_file(out_dir, "enchantments.json", build_enchantments(ench_dir))
 write_file(out_dir, "blockCollisionShapes.json", build_collision_shapes(blocks, carry_shapes, deltas))
 write_file(out_dir, "entities.json", build_entities(registries, carry_entity_by_name, deltas, classify))
 write_file(out_dir, "language.json", load_json("#{work}/lang/en_us.json"))
+
+# Rewrite each output one-record-per-line for readable diffs (see json_writer.cr).
+%w[items blocks materials enchantments blockCollisionShapes entities language].each do |asset|
+  pretty_format_file("#{out_dir}/#{asset}.json")
+end
 puts "done"
