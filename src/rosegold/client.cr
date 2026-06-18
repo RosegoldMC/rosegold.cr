@@ -1,3 +1,4 @@
+require "./versions"
 require "socket"
 require "../minecraft/io"
 require "../minecraft/auth"
@@ -13,13 +14,17 @@ require "./chat_manager"
 # and control state (physics, open window, etc.).
 # Can be reconnected.
 class Rosegold::Client < Rosegold::EventEmitter
-  SUPPORTED_PROTOCOLS = {772_u32, 774_u32, 775_u32}
-  LATEST_PROTOCOL     = 775_u32
+  SUPPORTED_PROTOCOLS = {% begin %}{ {% for p in Rosegold::ENABLED_PROTOCOLS.keys.sort %}{{p}}_u32,{% end %} }{% end %}
+  # ArrayLiteral has no #max, so sort and take the last (highest) enabled protocol.
+  LATEST_PROTOCOL = {% begin %}{{ Rosegold::ENABLED_PROTOCOLS.keys.sort.last }}_u32{% end %}
 
   # TODO: @@protocol_version is global state shared across all Client instances.
   # This prevents connecting to servers with different protocol versions concurrently.
   # To fix, protocol_version should become an instance variable set during handshake.
-  class_getter protocol_version = LATEST_PROTOCOL
+  # Explicit type: LATEST_PROTOCOL is a macro-generated constant, so class var
+  # inference can't prove UInt32 here and would otherwise widen to UInt32?.
+  @@protocol_version : UInt32 = LATEST_PROTOCOL
+  class_getter protocol_version
   class_getter? protocol_version_explicit = false
 
   def self.protocol_version=(version : UInt32)
@@ -371,6 +376,11 @@ class Rosegold::Client < Rosegold::EventEmitter
   private def detect_protocol_version
     if Client.protocol_version_explicit?
       Log.info { "Using explicitly set protocol version: #{protocol_version}" }
+      return
+    end
+
+    if SUPPORTED_PROTOCOLS.size == 1
+      Log.info { "Single-version build; using protocol #{protocol_version} without auto-detect" }
       return
     end
 

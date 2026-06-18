@@ -1,16 +1,16 @@
-class Rosegold::Entity
-  METADATA_1218  = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.8/entities.json")
-  METADATA_12111 = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.11/entities.json")
-  METADATA_261   = Array(Metadata).from_json(Rosegold.read_game_asset "26.1/entities.json")
+require "../versions"
 
-  METADATA_BY_PROTOCOL = {
-    772_u32 => METADATA_1218,
-    774_u32 => METADATA_12111,
-    775_u32 => METADATA_261,
-  }
+class Rosegold::Entity
+  # entities.json is read only for enabled versions (guarded read_file).
+  METADATA_BY_PROTOCOL = {% begin %}{
+    {% enabled = Rosegold::ENABLED_PROTOCOLS %}
+    {% for proto in enabled.keys.sort %}
+      {{proto}}_u32 => Array(Metadata).from_json(Rosegold.read_game_asset({{enabled[proto] + "/entities.json"}})),
+    {% end %}
+  }{% end %}
 
   def self.metadata_for_protocol : Array(Metadata)
-    METADATA_BY_PROTOCOL[Client.protocol_version]? || METADATA_261
+    {% begin %}METADATA_BY_PROTOCOL[Client.protocol_version]? || METADATA_BY_PROTOCOL[{{Rosegold::ENABLED_PROTOCOLS.keys.sort.last}}_u32]{% end %}
   end
 
   class Metadata
