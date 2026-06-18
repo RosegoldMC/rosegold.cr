@@ -4,12 +4,12 @@ require "json"
 class Rosegold::TextComponent
   include JSON::Serializable
 
-  # 1.21.8 (772), 1.21.9 (773), 1.21.11 (774) and 26.2 (776) ship a language.json;
-  # 26.1 (775) does not. Pick the newest enabled version that has one, else an
-  # empty map — so a 775-only slim build never tries to read another version's
-  # language.json.
+  # Every supported version ships its own language.json. Embed the newest enabled
+  # version's file (they differ only slightly across versions), so a single-version
+  # slim build always has the translations for what it speaks. Empty map only if
+  # somehow no enabled version has one.
   TRANSLATIONS = {% begin %}
-    {% lang_versions = {772 => "1.21.8", 773 => "1.21.9", 774 => "1.21.11", 776 => "26.2"} %}
+    {% lang_versions = {772 => "1.21.8", 773 => "1.21.9", 774 => "1.21.11", 775 => "26.1", 776 => "26.2"} %}
     {% lang_candidates = Rosegold::ENABLED_PROTOCOLS.keys.sort.select { |proto| lang_versions[proto] } %}
     {% if lang_candidates.empty? %}
       ({} of String => String)
