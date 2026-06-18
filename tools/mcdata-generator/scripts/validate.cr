@@ -107,7 +107,7 @@ blocks.each do |block|
   else
     prop_combos = Indexable.cartesian_product block.states.map { |prop|
       case prop.type
-      when BlockPropertyType::ENUM then prop.values.not_nil!
+      when BlockPropertyType::ENUM then prop.values.not_nil! # ameba:disable Lint/NotNil
       when BlockPropertyType::INT  then (0...prop.num_values).to_a.map(&.to_s)
       when BlockPropertyType::BOOL then ["true", "false"]
       else                              raise "bad prop type #{prop.type} in #{block.id_str}.#{prop.name}"
@@ -121,8 +121,7 @@ blocks.each do |block|
   end
 end
 
-# Build per-state collision shapes exactly like MCData
-block_state_collision_shapes = Array(Array(typeof({0_f32, 0_f32, 0_f32, 0_f32, 0_f32, 0_f32}))).new(max_block_state + 1) { [] of typeof({0_f32, 0_f32, 0_f32, 0_f32, 0_f32, 0_f32}) }
+# Resolve per-state collision shapes exactly like MCData — validates every shape nr exists
 blocks.each do |block|
   shape_nrs = collision.blocks[block.id_str]? || raise "no collision entry for #{block.id_str}"
   arr = shape_nrs.is_a?(Array) ? shape_nrs : [shape_nrs]
@@ -133,8 +132,8 @@ blocks.each do |block|
 end
 
 # materials referenced by blocks must exist in materials.json
-blocks.each do |b|
-  materials.json_unmapped[b.material]? || raise "block #{b.id_str} uses unknown material '#{b.material}'"
+blocks.each do |block|
+  materials.json_unmapped[block.material]? || raise "block #{block.id_str} uses unknown material '#{block.material}'"
 end
 
 # every block-state name slot filled
