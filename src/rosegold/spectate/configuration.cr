@@ -14,20 +14,18 @@ module Rosegold::Spectate::Configuration
     end
   end
 
-  VANILLA_KNOWN_PACKS = {
-    772_u32 => [{namespace: "minecraft", id: "core", version: "1.21.8"}],
-    774_u32 => [{namespace: "minecraft", id: "core", version: "1.21.11"}],
-    773_u32 => [{namespace: "minecraft", id: "core", version: "1.21.9"}],
-    775_u32 => [{namespace: "minecraft", id: "core", version: "26.1"}],
-    776_u32 => [{namespace: "minecraft", id: "core", version: "26.2"}],
-  }
+  VANILLA_KNOWN_PACKS = {% begin %}{
+    {% for proto, ver in Rosegold::ENABLED_PROTOCOLS %}
+      {{proto}}_u32 => [{namespace: "minecraft", id: "core", version: {{ver}}}],
+    {% end %}
+  }{% end %}
 
   private def send_configuration_packets
     if bot_known_packs = get_bot_known_packs
       send_packet(Rosegold::Clientbound::KnownPacks.new(bot_known_packs))
     else
       # Send vanilla known packs so client uses its built-in registry data
-      vanilla_packs = VANILLA_KNOWN_PACKS[protocol_version]? || VANILLA_KNOWN_PACKS[774_u32]
+      vanilla_packs = VANILLA_KNOWN_PACKS[protocol_version]? || VANILLA_KNOWN_PACKS[Client::LATEST_PROTOCOL]
       send_packet(Rosegold::Clientbound::KnownPacks.new(vanilla_packs))
     end
   end

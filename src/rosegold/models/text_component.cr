@@ -9,12 +9,11 @@ class Rosegold::TextComponent
   # slim build always has the translations for what it speaks. Empty map only if
   # somehow no enabled version has one.
   TRANSLATIONS = {% begin %}
-    {% lang_versions = {772 => "1.21.8", 773 => "1.21.9", 774 => "1.21.11", 775 => "26.1", 776 => "26.2"} %}
-    {% lang_candidates = Rosegold::ENABLED_PROTOCOLS.keys.sort.select { |proto| lang_versions[proto] } %}
-    {% if lang_candidates.empty? %}
+    {% protos = Rosegold::ENABLED_PROTOCOLS.keys.sort %}
+    {% if protos.empty? %}
       ({} of String => String)
     {% else %}
-      Hash(String, String).from_json(Rosegold.read_game_asset({{lang_versions[lang_candidates.last] + "/language.json"}}))
+      Hash(String, String).from_json(Rosegold.read_game_asset({{Rosegold::ENABLED_PROTOCOLS[protos.last] + "/language.json"}}))
     {% end %}
   {% end %}
 
