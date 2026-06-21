@@ -1,0 +1,75 @@
+{
+  "_comment": "Hand-curated additions for blocks/entities NEW in MC 26.2 vs the 26.1 carry-forward. All values verified against decompiled Mojmap source (tmp/emd_26.2). hardness from Blocks.java strength(); collisionArchetype maps each new block to an existing 26.1 block with identical state structure whose collision shape it shares; entity dims/category from EntityTypes.java.",
+
+  "blocks": {
+    "sulfur":                  { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "potent_sulfur":           { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "polished_sulfur":         { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "polished_sulfur_slab":    { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "polished_sulfur_stairs":  { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "polished_sulfur_wall":    { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "sulfur_slab":             { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "sulfur_stairs":           { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "sulfur_wall":             { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "sulfur_bricks":           { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "sulfur_brick_slab":       { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "sulfur_brick_stairs":     { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "sulfur_brick_wall":       { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "chiseled_sulfur":         { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "sulfur_spike":            { "hardness": 1.5, "requiresCorrectToolForDrops": false },
+
+    "cinnabar":                { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "polished_cinnabar":       { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "polished_cinnabar_slab":  { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "polished_cinnabar_stairs":{ "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "polished_cinnabar_wall":  { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "cinnabar_slab":           { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "cinnabar_stairs":         { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "cinnabar_wall":           { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "cinnabar_bricks":         { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "cinnabar_brick_slab":     { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "cinnabar_brick_stairs":   { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "cinnabar_brick_wall":     { "hardness": 1.5, "requiresCorrectToolForDrops": true },
+    "chiseled_cinnabar":       { "hardness": 1.5, "requiresCorrectToolForDrops": true }
+  },
+
+  "collisionArchetype": {
+    "sulfur":                  "stone",
+    "potent_sulfur":           "stone",
+    "polished_sulfur":         "stone",
+    "polished_sulfur_slab":    "stone_slab",
+    "polished_sulfur_stairs":  "stone_stairs",
+    "polished_sulfur_wall":    "cobblestone_wall",
+    "sulfur_slab":             "stone_slab",
+    "sulfur_stairs":           "stone_stairs",
+    "sulfur_wall":             "cobblestone_wall",
+    "sulfur_bricks":           "stone",
+    "sulfur_brick_slab":       "stone_slab",
+    "sulfur_brick_stairs":     "stone_stairs",
+    "sulfur_brick_wall":       "cobblestone_wall",
+    "chiseled_sulfur":         "stone",
+    "sulfur_spike":            "pointed_dripstone",
+
+    "cinnabar":                "stone",
+    "polished_cinnabar":       "stone",
+    "polished_cinnabar_slab":  "stone_slab",
+    "polished_cinnabar_stairs":"stone_stairs",
+    "polished_cinnabar_wall":  "cobblestone_wall",
+    "cinnabar_slab":           "stone_slab",
+    "cinnabar_stairs":         "stone_stairs",
+    "cinnabar_wall":           "cobblestone_wall",
+    "cinnabar_bricks":         "stone",
+    "cinnabar_brick_slab":     "stone_slab",
+    "cinnabar_brick_stairs":   "stone_stairs",
+    "cinnabar_brick_wall":     "cobblestone_wall",
+    "chiseled_cinnabar":       "stone"
+  },
+
+  "entities": {
+    "sulfur_cube":     { "width": 0.49,  "height": 0.49,  "type": "mob",            "category": "Hostile mobs" },
+    "camel_husk":      { "width": 1.7,   "height": 2.375, "type": "hostile",        "category": "Hostile mobs" },
+    "parched":         { "width": 0.6,   "height": 1.99,  "type": "hostile",        "category": "Hostile mobs" },
+    "zombie_nautilus": { "width": 0.875, "height": 0.95,  "type": "hostile",        "category": "Hostile mobs" },
+    "nautilus":        { "width": 0.875, "height": 0.95,  "type": "water_creature", "category": "Passive mobs" }
+  }
+}

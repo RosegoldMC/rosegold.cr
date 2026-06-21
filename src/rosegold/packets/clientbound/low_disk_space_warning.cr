@@ -5,6 +5,7 @@ class Rosegold::Clientbound::LowDiskSpaceWarning < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
     775_u32 => 0x32_u32, # MC 26.1
+    776_u32 => 0x32_u32, # MC 26.2
   })
 
   def initialize; end

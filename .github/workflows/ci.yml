@@ -49,8 +49,10 @@ jobs:
           # - latest
         minecraft_version:
           - "1.21.8"
+          - "1.21.9"
           - "1.21.11"
           - "26.1"
+          - "26.2"
         experimental:
           - false
 
@@ -91,3 +93,36 @@ jobs:
       - name: Retry failed specs
         if: steps.first-run.outcome == 'failure'
         run: crystal spec --only-failures
+
+  SlimBuild:
+    # A slim/single-version build error is invisible in the default all-versions
+    # build, so compile each one explicitly here.
+    if: github.repository != 'grepsedawk/sharded.cr'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oprypin/install-crystal@v1
+        with:
+          crystal: 1.19.1
+
+      - name: Set up Crystal cache
+        uses: actions/cache@v4
+        id: crystal-cache
+        with:
+          path: |
+            ~/.cache/crystal
+            bin/ameba
+            lib
+          key: ${{ runner.os }}-crystal-1.19.1-${{ hashFiles('**/shard.yml') }}
+
+      - name: Install shards
+        if: steps.crystal-cache.outputs.cache-hit != 'true'
+        run: shards check || shards install --ignore-crystal-version
+
+      - name: Per-version slim builds (require entrypoints)
+        run: |
+          for v in 1.21.8 1.21.9 1.21.11 26.1 26.2; do
+            echo "== require \"rosegold/$v\" =="
+            crystal build --no-codegen src/rosegold/$v.cr
+          done

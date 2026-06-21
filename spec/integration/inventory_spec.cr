@@ -759,6 +759,7 @@ Spectator.describe "Rosegold::Bot inventory" do
             admin.wait_tick
 
             bot.pitch = 90
+            bot.wait_ticks 2
             bot.use_hand
             bot.wait_for Rosegold::Clientbound::SetContainerContent
 

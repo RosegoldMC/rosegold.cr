@@ -1,6 +1,7 @@
 require "socket"
 require "io/hexdump"
 
+require "./rosegold/versions"
 require "./rosegold/client"
 require "./rosegold/bot"
 require "./rosegold/spectate_server"

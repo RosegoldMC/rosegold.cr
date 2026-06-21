@@ -1,3 +1,4 @@
+require "../versions"
 require "json"
 require "./aabb"
 require "../models/block"
@@ -6,21 +7,18 @@ require "../models/block"
 class Rosegold::MCData
   private MCD_ROOT = "minecraft-data/data/pc"
 
-  MC1218  = Rosegold::MCData.new "1.21.8"
-  MC12111 = Rosegold::MCData.new "1.21.11"
-  MC261   = Rosegold::MCData.new "26.1"
-
-  PROTOCOL_VERSION_MAP = {
-    772_u32 => MC1218,
-    774_u32 => MC12111,
-    775_u32 => MC261,
-  }
+  PROTOCOL_VERSION_MAP = {% begin %}{
+    {% enabled = Rosegold::ENABLED_PROTOCOLS %}
+    {% for proto in enabled.keys.sort %}
+      {{proto}}_u32 => Rosegold::MCData.new({{enabled[proto]}}),
+    {% end %}
+  }{% end %}
 
   @[Deprecated("Use MCData.default instead for version-aware data")]
-  DEFAULT = MC261
+  DEFAULT = {% begin %}PROTOCOL_VERSION_MAP[{{Rosegold::ENABLED_PROTOCOLS.keys.sort.last}}_u32]{% end %}
 
   def self.default : MCData
-    PROTOCOL_VERSION_MAP[Client.protocol_version]? || MC261
+    {% begin %}PROTOCOL_VERSION_MAP[Client.protocol_version]? || PROTOCOL_VERSION_MAP[{{Rosegold::ENABLED_PROTOCOLS.keys.sort.last}}_u32]{% end %}
   end
 
   getter items : Array(Item)
@@ -41,38 +39,30 @@ class Rosegold::MCData
   # TODO: more compact memory layout: only store one Shape if it's the same for all variants of a block
   getter block_state_collision_shapes : Array(Array(AABBf))
 
-  SUPPORTED_VERSIONS = ["1.21.8", "1.21.11", "26.1"]
+  SUPPORTED_VERSIONS = {% begin %}[ {% enabled = Rosegold::ENABLED_PROTOCOLS %}{% for proto in enabled.keys.sort %}{{enabled[proto]}},{% end %} ]{% end %}
 
-  # Must use string literals — read_game_asset is a compile-time macro
+  # read_game_asset is a compile-time macro requiring string literals, so the
+  # per-version arms are generated from the enabled map. Disabled versions'
+  # JSON is never read because their arm is not emitted.
   protected def self.assets_for(mc_version : String)
+    {% begin %}
+    {% enabled = Rosegold::ENABLED_PROTOCOLS %}
     case mc_version
-    when "1.21.8"
-      {
-        Rosegold.read_game_asset("1.21.8/items.json"),
-        Rosegold.read_game_asset("1.21.8/blocks.json"),
-        Rosegold.read_game_asset("1.21.8/materials.json"),
-        Rosegold.read_game_asset("1.21.8/enchantments.json"),
-        Rosegold.read_game_asset("1.21.8/blockCollisionShapes.json"),
-      }
-    when "1.21.11"
-      {
-        Rosegold.read_game_asset("1.21.11/items.json"),
-        Rosegold.read_game_asset("1.21.11/blocks.json"),
-        Rosegold.read_game_asset("1.21.11/materials.json"),
-        Rosegold.read_game_asset("1.21.11/enchantments.json"),
-        Rosegold.read_game_asset("1.21.11/blockCollisionShapes.json"),
-      }
-    when "26.1"
-      {
-        Rosegold.read_game_asset("26.1/items.json"),
-        Rosegold.read_game_asset("26.1/blocks.json"),
-        Rosegold.read_game_asset("26.1/materials.json"),
-        Rosegold.read_game_asset("26.1/enchantments.json"),
-        Rosegold.read_game_asset("26.1/blockCollisionShapes.json"),
-      }
+    {% for proto in enabled.keys.sort %}
+      {% v = enabled[proto] %}
+      when {{v}}
+        {
+          Rosegold.read_game_asset({{v + "/items.json"}}),
+          Rosegold.read_game_asset({{v + "/blocks.json"}}),
+          Rosegold.read_game_asset({{v + "/materials.json"}}),
+          Rosegold.read_game_asset({{v + "/enchantments.json"}}),
+          Rosegold.read_game_asset({{v + "/blockCollisionShapes.json"}}),
+        }
+    {% end %}
     else
       raise "Unsupported version: #{mc_version}"
     end
+    {% end %}
   end
 
   def initialize(mc_version : String)

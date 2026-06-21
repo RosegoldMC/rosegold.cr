@@ -56,6 +56,20 @@ Open that URL, enter the code, and sign in with the Microsoft account that owns 
 
 All the examples start a [SpectateServer](https://rosegoldmc.github.io/rosegold.cr/Rosegold/SpectateServer.html) on `localhost:25566`. Open Minecraft, add a server with that address, and connect to see through your bot's eyes in real time — its position, inventory, health, and everything happening around it. No auth required.
 
+### 5. Choosing Minecraft Versions
+
+By default Rosegold supports every Minecraft version it knows about and auto-detects which one the server speaks. Pick a mode by what you `require`:
+
+```crystal
+# All versions + auto-detect (the simple default)
+require "rosegold"
+
+# Smaller binary, single version only — no auto-detect round-trip
+require "rosegold/26.1"
+```
+
+Requiring a version-specific entrypoint (`rosegold/26.1`, `rosegold/26.2`, `rosegold/1.21.8`, `rosegold/1.21.9`, `rosegold/1.21.11`) compiles just that one version into the binary and connects to it directly. This produces a noticeably smaller binary and skips the status ping used to detect the server's version. Use the default `require "rosegold"` if you want one binary that works against multiple server versions.
+
 ## API Quick Reference
 
 Here's what you can do with a `Rosegold::Bot`. For the full API, see the [docs](https://rosegoldmc.github.io/rosegold.cr/).

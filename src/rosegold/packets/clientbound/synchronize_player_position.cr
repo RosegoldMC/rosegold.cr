@@ -11,7 +11,9 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
   packet_ids({
     772_u32 => 0x41_u32, # MC 1.21.8
     774_u32 => 0x46_u32, # MC 1.21.11
+    773_u32 => 0x46_u32, # MC 1.21.9
     775_u32 => 0x48_u32, # MC 26.1
+    776_u32 => 0x48_u32, # MC 26.2
   })
 
   property \
