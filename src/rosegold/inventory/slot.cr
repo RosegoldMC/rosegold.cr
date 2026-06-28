@@ -904,7 +904,7 @@ class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
     potion_id = has_potion_id ? io.read_var_int : nil
 
     has_custom_color = io.read_bool
-    custom_color = has_custom_color ? io.read_int.to_u32 : nil
+    custom_color = has_custom_color ? io.read_int.to_u32! : nil
 
     # Read custom effects array
     effects_count = io.read_var_int
@@ -964,7 +964,9 @@ class Rosegold::DataComponents::PotionContents < Rosegold::DataComponent
 
     def self.read_details(io, type_id : UInt32) : PotionEffect
       amplifier = io.read_var_int
-      duration = io.read_var_int.to_i32
+      # Infinite potions encode duration -1 as VarInt 0xFFFFFFFF; to_i32 (checked)
+      # overflows. Bit-reinterpret to preserve the signed wire value.
+      duration = io.read_var_int.to_i32!
       ambient = io.read_bool
       show_particles = io.read_bool
       show_icon = io.read_bool
