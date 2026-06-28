@@ -314,9 +314,13 @@ class Rosegold::Bot < Rosegold::EventEmitter
     rescue ex
       raise ContainerOpenError.new("Failed to open container: #{ex.message}")
     end
-    yield
-    wait_tick
-    inventory.close
+    # A chest left open desyncs the next world interaction, so close even on error.
+    begin
+      yield
+    ensure
+      wait_tick
+      inventory.close
+    end
   end
 
   # Opens a container and yields a ContainerHandle for typed interaction.
