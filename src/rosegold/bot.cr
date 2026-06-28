@@ -295,6 +295,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
     stop_using_hand
   end
 
+  class ContainerOpenError < Exception; end
+
   # Opens a container (chest, barrel, etc.) and yields control for interaction.
   # Automatically uses the main hand, waits for container content to load,
   # executes the provided block, then closes the container.
@@ -307,7 +309,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # ```
   # Caller must already be looking at the container block.
   def open_container(timeout : Time::Span = 5.seconds, &)
-    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
+    begin
+      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
+    rescue ex
+      raise ContainerOpenError.new("Failed to open container: #{ex.message}")
+    end
     yield
     wait_tick
     inventory.close
@@ -328,7 +334,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # ```
   # Caller must already be looking at the container block.
   def open_container_handle(timeout : Time::Span = 5.seconds, &)
-    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
+    begin
+      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
+    rescue ex
+      raise ContainerOpenError.new("Failed to open container: #{ex.message}")
+    end
     handle = ContainerHandle.new(client, client.container_menu)
     begin
       yield handle
@@ -339,7 +349,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   def open_container_handle(command : String, timeout : Time::Span = 5.seconds, &)
-    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { chat(command) }
+    begin
+      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { chat(command) }
+    rescue ex
+      raise ContainerOpenError.new("Failed to open container: #{ex.message}")
+    end
     handle = ContainerHandle.new(client, client.container_menu)
     begin
       yield handle
