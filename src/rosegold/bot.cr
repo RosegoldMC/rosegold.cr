@@ -368,9 +368,17 @@ class Rosegold::Bot < Rosegold::EventEmitter
     use_hand block + face
   end
 
+  # Whether eat! would actually consume food right now. Callers that must look
+  # away from a block before the eat right-click (so food isn't used on it) gate
+  # the look on this so they don't aim away when no eating will happen.
+  def should_eat?
+    return false if food >= 15 && full_health?
+    return false if food >= 18 # above healing threshold
+    true
+  end
+
   def eat!
-    return if food >= 15 && full_health?
-    return if food >= 18 # above healing threshold
+    return unless should_eat?
 
     Log.info { "Eating because food is #{food} and health is #{health}" }
 
