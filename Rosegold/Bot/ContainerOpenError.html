@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::Serverbound::Attack - rosegold main</title>
+  <title>Rosegold::Bot::ContainerOpenError - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -297,12 +297,12 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
+  <li class="parent open current" data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
       <a href="../../Rosegold/Bot.html">Bot</a>
       
         <ul>
   
-  <li class=" " data-id="rosegold/Rosegold/Bot/ContainerOpenError" data-name="rosegold::bot::containeropenerror">
+  <li class=" current" data-id="rosegold/Rosegold/Bot/ContainerOpenError" data-name="rosegold::bot::containeropenerror">
       <a href="../../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a>
       
     </li>
@@ -1817,7 +1817,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound" data-name="rosegold::serverbound">
       <a href="../../Rosegold/Serverbound.html">Serverbound</a>
       
         <ul>
@@ -1827,7 +1827,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/Serverbound/Attack" data-name="rosegold::serverbound::attack">
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/Attack" data-name="rosegold::serverbound::attack">
       <a href="../../Rosegold/Serverbound/Attack.html">Attack</a>
       
     </li>
@@ -2343,26 +2343,12 @@
 
   <span class="kind">
     class
-  </span> Rosegold::<wbr>Serverbound::<wbr>Attack
+  </span> Rosegold::<wbr>Bot::<wbr>ContainerOpenError
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Serverbound/Attack.html">Rosegold::Serverbound::Attack</a></li><li class="superclass"><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></li><li class="superclass"><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></li><li class="superclass"><a href="../../Rosegold/Event.html">Rosegold::Event</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
-
-
-
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>MC 26.1+ only: dedicated attack packet (split from InteractEntity)</p>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Bot/ContainerOpenError.html">Rosegold::Bot::ContainerOpenError</a></li><li class="superclass">Exception</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -2370,19 +2356,8 @@
 
 
 
-  <h2>
-    <a id="included-modules" class="anchor" href="#included-modules">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Included Modules
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></li>
-    
-  </ul>
+
+
 
 
 
@@ -2403,8 +2378,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L4" target="_blank">
-        rosegold/packets/serverbound/attack.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/bot.cr#L298" target="_blank">
+        rosegold/bot.cr
       </a>
     
     <br/>
@@ -2412,220 +2387,18 @@
 
 
 
-  
-    <h2>
-      <a id="constant-summary" class="anchor" href="#constant-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-      Constant Summary
-    </h2>
-  
-  <dl>
-    
-      <dt class="entry-const" id="PROTOCOL_PACKET_IDS">
-        <strong>PROTOCOL_PACKET_IDS</strong> = <code>{<span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">1_u32</span>}</code>
-      </dt>
-      
-      <dd class="entry-const-doc">
-        <p>Store the protocol mappings as a constant</p>
-      </dd>
-      
-    
-  </dl>
-
-
-
-  
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28entity_id%3AUInt64%29-class-method" class="signature"><strong>.new</strong>(entity_id : UInt64)</a>
-        
-      </li>
-    
-  </ul>
-
-
-  
-  <h2>
-    <a id="class-method-summary" class="anchor" href="#class-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt32-class-method" class="signature"><strong>.[]</strong>(protocol_version : UInt32) : UInt32</a>
-        
-          <div class="summary"><p>Generate the <a href="protocol_version"></a> method for elegant access</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#default_packet_id%3AUInt32-class-method" class="signature"><strong>.default_packet_id</strong> : UInt32</a>
-        
-          <div class="summary"><p>Define default packet ID (typically the latest/most common version)</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#packet_id%3AUInt32-class-method" class="signature"><strong>.packet_id</strong> : UInt32</a>
-        
-          <div class="summary"><p>Provide backward compatibility with existing packet_id class getter Use the first protocol's packet ID for registration compatibility</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt32-class-method" class="signature"><strong>.packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt32</a>
-        
-          <div class="summary"><p>Get packet ID for specific protocol version (returns UInt32 for VarInt encoding in write methods)</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#supported_protocols%3AArray%28UInt32%29-class-method" class="signature"><strong>.supported_protocols</strong> : Array(UInt32)</a>
-        
-          <div class="summary"><p>Helper method to get all supported protocols</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method" class="signature"><strong>.supports_protocol?</strong>(protocol_version : UInt32) : Bool</a>
-        
-          <div class="summary"><p>Helper method to check if a protocol is supported</p></div>
-        
-      </li>
-    
-  </ul>
 
 
   
 
   
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#entity_id%3AUInt64-instance-method" class="signature"><strong>#entity_id</strong> : UInt64</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#entity_id%3D%28entity_id%3AUInt64%29-instance-method" class="signature"><strong>#entity_id=</strong>(entity_id : UInt64)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#write%3ABytes-instance-method" class="signature"><strong>#write</strong> : Bytes</a>
-        
-      </li>
-    
-  </ul>
 
+  
+
+  
 
 
   <div class="methods-inherited">
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-  <h3>Macros inherited from module <code><a href="../../Rosegold/Packets/ProtocolMapping.html">Rosegold::Packets::ProtocolMapping</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Packets/ProtocolMapping.html#packet_ids%28mappings%29-macro" class="tooltip">
-      <span>packet_ids(mappings)</span>
-    packet_ids</a>
-    
-  
-
-
-    
-      
-
-
-      
-
-
-      
-
-  <h3>Class methods inherited from class <code><a href="../../Rosegold/Serverbound/Packet.html">Rosegold::Serverbound::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Serverbound/Packet.html#new_raw%28bytes%29-class-method" class="tooltip">
-      <span>new_raw(bytes)</span>
-    new_raw</a>, 
-    
-  
-    <a href="../../Rosegold/Serverbound/Packet.html#state-class-method" class="tooltip">
-      <span>state</span>
-    state</a>
-    
-  
-
-
-      
-
-
-    
-      
-
-  <h3>Instance methods inherited from class <code><a href="../../Rosegold/Packet.html">Rosegold::Packet</a></code></h3>
-  
-  
-    <a href="../../Rosegold/Packet.html#callback%28client_or_server%29-instance-method" class="tooltip">
-      <span>callback(client_or_server)</span>
-    callback</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#to_s%28io%29-instance-method" class="tooltip">
-      <span>to_s(io)</span>
-    to_s</a>, 
-    
-  
-    <a href="../../Rosegold/Packet.html#write%3ABytes-instance-method" class="tooltip">
-      <span>write : Bytes</span>
-    write</a>
-    
-  
-
-
-      
-
-
-      
-
-
-      
-
-
     
       
 
@@ -2669,231 +2442,12 @@
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(entity_id:UInt64)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(entity_id : UInt64)
-
-        <a class="method-permalink" href="#new%28entity_id%3AUInt64%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L12" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
-
-  
-  <h2>
-    <a id="class-method-detail" class="anchor" href="#class-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Class Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="[](protocol_version:UInt32):UInt32-class-method">
-      <div class="signature">
-        
-        def self.<strong>[]</strong>(protocol_version : UInt32) : UInt32
-
-        <a class="method-permalink" href="#%5B%5D%28protocol_version%3AUInt32%29%3AUInt32-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Generate the <a href="protocol_version"></a> method for elegant access</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="default_packet_id:UInt32-class-method">
-      <div class="signature">
-        
-        def self.<strong>default_packet_id</strong> : UInt32
-
-        <a class="method-permalink" href="#default_packet_id%3AUInt32-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Define default packet ID (typically the latest/most common version)</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="packet_id:UInt32-class-method">
-      <div class="signature">
-        
-        def self.<strong>packet_id</strong> : UInt32
-
-        <a class="method-permalink" href="#packet_id%3AUInt32-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Provide backward compatibility with existing packet_id class getter
-Use the first protocol's packet ID for registration compatibility</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="packet_id_for_protocol(protocol_version:UInt32):UInt32-class-method">
-      <div class="signature">
-        
-        def self.<strong>packet_id_for_protocol</strong>(protocol_version : UInt32) : UInt32
-
-        <a class="method-permalink" href="#packet_id_for_protocol%28protocol_version%3AUInt32%29%3AUInt32-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Get packet ID for specific protocol version (returns UInt32 for VarInt encoding in write methods)</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="supported_protocols:Array(UInt32)-class-method">
-      <div class="signature">
-        
-        def self.<strong>supported_protocols</strong> : Array(UInt32)
-
-        <a class="method-permalink" href="#supported_protocols%3AArray%28UInt32%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Helper method to get all supported protocols</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="supports_protocol?(protocol_version:UInt32):Bool-class-method">
-      <div class="signature">
-        
-        def self.<strong>supports_protocol?</strong>(protocol_version : UInt32) : Bool
-
-        <a class="method-permalink" href="#supports_protocol%3F%28protocol_version%3AUInt32%29%3ABool-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Helper method to check if a protocol is supported</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L6" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
   
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="entity_id:UInt64-instance-method">
-      <div class="signature">
-        
-        def <strong>entity_id</strong> : UInt64
 
-        <a class="method-permalink" href="#entity_id%3AUInt64-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
   
-    <div class="entry-detail" id="entity_id=(entity_id:UInt64)-instance-method">
-      <div class="signature">
-        
-        def <strong>entity_id=</strong>(entity_id : UInt64)
-
-        <a class="method-permalink" href="#entity_id%3D%28entity_id%3AUInt64%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L10" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="write:Bytes-instance-method">
-      <div class="signature">
-        
-        def <strong>write</strong> : Bytes
-
-        <a class="method-permalink" href="#write%3ABytes-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/ee86ed303a095eaba3c21bed17d576ea6c973873/src/rosegold/packets/serverbound/attack.cr#L14" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
 
 </div>
