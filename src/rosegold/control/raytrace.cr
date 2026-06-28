@@ -2,6 +2,16 @@ require "../world/aabb"
 require "../world/vec3"
 
 module Rosegold::Raytrace
+  # A ray aimed at a block's closest point lands on an edge/corner of its hitbox,
+  # and look quantization can put the hit a hair outside the face. Tolerate that so
+  # grazing hits register instead of being dropped (mirrors vanilla's inflated clip);
+  # far smaller than the 1/16 gap between blocks, so it can't hit a neighbor.
+  EDGE_EPSILON = 1e-4
+
+  private def self.within?(value : Float64, lo : Float64, hi : Float64) : Bool
+    lo - EDGE_EPSILON <= value && value <= hi + EDGE_EPSILON
+  end
+
   struct Ray
     getter start : Vec3d, delta : Vec3d
 
@@ -79,9 +89,9 @@ module Rosegold::Raytrace
     scalar = (plane_coord - start_coord) / delta_coord
     return nil if !(0 <= scalar && scalar < 1) # plane too far behind/ahead of ray
     hit = ray.start + ray.delta * scalar
-    return nil if face != BlockFace::East && face != BlockFace::West && !(box.min.x < hit.x && hit.x < box.max.x)
-    return nil if face != BlockFace::Top && face != BlockFace::Bottom && !(box.min.y < hit.y && hit.y < box.max.y)
-    return nil if face != BlockFace::South && face != BlockFace::North && !(box.min.z < hit.z && hit.z < box.max.z)
+    return nil if face != BlockFace::East && face != BlockFace::West && !within?(hit.x, box.min.x, box.max.x)
+    return nil if face != BlockFace::Top && face != BlockFace::Bottom && !within?(hit.y, box.min.y, box.max.y)
+    return nil if face != BlockFace::South && face != BlockFace::North && !within?(hit.z, box.min.z, box.max.z)
     {scalar, hit}
   end
 end
