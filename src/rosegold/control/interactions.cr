@@ -181,11 +181,15 @@ class Rosegold::Interactions
         Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
         place_block using_hand, reached
 
-        sequence = client.next_sequence
-        operation = BlockOperation.new(Vec3i::ORIGIN, :use)
-        client.pending_block_operations[sequence] = operation
+        # Sneaking with an item bypasses block-use, so the item is used against
+        # the block (the hopper-drain case). Vanilla skips UseItem otherwise.
+        if client.player.sneaking? && inventory.main_hand.present?
+          sequence = client.next_sequence
+          operation = BlockOperation.new(Vec3i::ORIGIN, :use)
+          client.pending_block_operations[sequence] = operation
 
-        send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
+          send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
+        end
       else
         Log.debug { "No block or entity reached" }
 
