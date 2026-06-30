@@ -86,6 +86,26 @@ class Rosegold::ProtocolState
   def initialize(@name)
   end
 
+  def handshaking? : Bool
+    self == HANDSHAKING
+  end
+
+  def status? : Bool
+    self == STATUS
+  end
+
+  def login? : Bool
+    self == LOGIN
+  end
+
+  def configuration? : Bool
+    self == CONFIGURATION
+  end
+
+  def play? : Bool
+    self == PLAY
+  end
+
   def self.register(packet : Packet.class)
     packet.state.register packet
   end
