@@ -23,6 +23,7 @@ module Rosegold::Spectate::PlaySession
     setup_command_suggestions_listener
     setup_raw_packet_relay
     send_cached_commands
+    send_cached_scoreboard
     start_keep_alive_sender
   end
 
@@ -31,6 +32,17 @@ module Rosegold::Spectate::PlaySession
     return unless bytes
     Log.debug { "Replaying cached Commands packet (#{bytes.size} bytes) to spectator" }
     send_packet(Rosegold::Clientbound::RawPacket.new(bytes))
+  end
+
+  private def send_cached_scoreboard
+    cache = @spectate_server.scoreboard_cache
+    return unless cache
+    count = 0
+    cache.replay do |bytes|
+      send_packet(Rosegold::Clientbound::RawPacket.new(bytes))
+      count += 1
+    end
+    Log.debug { "Replayed #{count} cached scoreboard packets to spectator" } if count > 0
   end
 
   private def setup_command_suggestions_listener
