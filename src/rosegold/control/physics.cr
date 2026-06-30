@@ -874,7 +874,7 @@ class Rosegold::Physics
   # Slide along block faces in three dimensions.
   private def self.slide(start, velocity, obstacles)
     (1..3).each do
-      collision = Raytrace.raytrace start, velocity, obstacles
+      collision = Raytrace.raytrace start, velocity, obstacles, strict: true
       return velocity unless collision
       # slide parallel to this face
       coord = (collision.intercept - start).axis collision.face
