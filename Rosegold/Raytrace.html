@@ -2376,7 +2376,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/8cb24bf98662ffc2d0795cf145e694814d89b283/src/rosegold/control/raytrace.cr#L4" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/642d1f58e1f8d83e9cb33eee060691f0e6553999/src/rosegold/control/raytrace.cr#L4" target="_blank">
         rosegold/control/raytrace.cr
       </a>
     
@@ -2409,6 +2409,19 @@ far smaller than the 1/16 gap between blocks, so it can't hit a neighbor.</p>
       </dd>
       
     
+      <dt class="entry-const" id="MOVE_EPSILON">
+        <strong>MOVE_EPSILON</strong> = <code><span class="n">1e-7</span></code>
+      </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Movement collision uses the opposite tolerance from block-aiming: the entity box is
+shrunk inward by 1e-7 on the perpendicular axes (matching vanilla VoxelShape.collideX),
+so a surface the entity merely <em>touches</em> — e.g. the floor it stands flush on, or the
+next floor block coplanar with its feet — does not impede perpendicular motion. Without
+this the bot wall-sticks on the top face it stands on (top slabs, full-block floors).</p>
+      </dd>
+      
+    
   </dl>
 
 
@@ -2427,12 +2440,14 @@ far smaller than the 1/16 gap between blocks, so it can't hit a neighbor.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#raytrace%28start%3AVec3d%2Cdelta%3AVec3d%2Cboxes%3AArray%28AABBd%29%29%3AResult%7CNil-class-method" class="signature"><strong>.raytrace</strong>(start : Vec3d, delta : Vec3d, boxes : Array(AABBd)) : Result | Nil</a>
+        <a href="#raytrace%28start%3AVec3d%2Cdelta%3AVec3d%2Cboxes%3AArray%28AABBd%29%2Cstrict%3ABool%3Dfalse%29%3AResult%7CNil-class-method" class="signature"><strong>.raytrace</strong>(start : Vec3d, delta : Vec3d, boxes : Array(AABBd), strict : Bool = <span class="n">false</span>) : Result | Nil</a>
+        
+          <div class="summary"><p><code>strict</code> selects movement-collision tolerance (touching != colliding); leave false for block-aiming, which wants the grazing tolerance.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#raytrace%28ray%3ARay%2Cboxes%3AArray%28AABBd%29%29%3AResult%7CNil-class-method" class="signature"><strong>.raytrace</strong>(ray : Ray, boxes : Array(AABBd)) : Result | Nil</a>
+        <a href="#raytrace%28ray%3ARay%2Cboxes%3AArray%28AABBd%29%2Cstrict%3ABool%3Dfalse%29%3AResult%7CNil-class-method" class="signature"><strong>.raytrace</strong>(ray : Ray, boxes : Array(AABBd), strict : Bool = <span class="n">false</span>) : Result | Nil</a>
         
       </li>
     
@@ -2460,34 +2475,40 @@ far smaller than the 1/16 gap between blocks, so it can't hit a neighbor.</p>
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="raytrace(start:Vec3d,delta:Vec3d,boxes:Array(AABBd)):Result|Nil-class-method">
+    <div class="entry-detail" id="raytrace(start:Vec3d,delta:Vec3d,boxes:Array(AABBd),strict:Bool=false):Result|Nil-class-method">
       <div class="signature">
         
-        def self.<strong>raytrace</strong>(start : <a href="../Rosegold/Vec3d.html">Vec3d</a>, delta : <a href="../Rosegold/Vec3d.html">Vec3d</a>, boxes : Array(<a href="../Rosegold/AABBd.html">AABBd</a>)) : <a href="../Rosegold/Raytrace/Result.html">Result</a> | Nil
+        def self.<strong>raytrace</strong>(start : <a href="../Rosegold/Vec3d.html">Vec3d</a>, delta : <a href="../Rosegold/Vec3d.html">Vec3d</a>, boxes : Array(<a href="../Rosegold/AABBd.html">AABBd</a>), strict : Bool = <span class="n">false</span>) : <a href="../Rosegold/Raytrace/Result.html">Result</a> | Nil
 
-        <a class="method-permalink" href="#raytrace%28start%3AVec3d%2Cdelta%3AVec3d%2Cboxes%3AArray%28AABBd%29%29%3AResult%7CNil-class-method">#</a>
+        <a class="method-permalink" href="#raytrace%28start%3AVec3d%2Cdelta%3AVec3d%2Cboxes%3AArray%28AABBd%29%2Cstrict%3ABool%3Dfalse%29%3AResult%7CNil-class-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p><code>strict</code> selects movement-collision tolerance (touching != colliding); leave false for
+block-aiming, which wants the grazing tolerance.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8cb24bf98662ffc2d0795cf145e694814d89b283/src/rosegold/control/raytrace.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/642d1f58e1f8d83e9cb33eee060691f0e6553999/src/rosegold/control/raytrace.cr#L40" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="raytrace(ray:Ray,boxes:Array(AABBd)):Result|Nil-class-method">
+    <div class="entry-detail" id="raytrace(ray:Ray,boxes:Array(AABBd),strict:Bool=false):Result|Nil-class-method">
       <div class="signature">
         
-        def self.<strong>raytrace</strong>(ray : <a href="../Rosegold/Raytrace/Ray.html">Ray</a>, boxes : Array(<a href="../Rosegold/AABBd.html">AABBd</a>)) : <a href="../Rosegold/Raytrace/Result.html">Result</a> | Nil
+        def self.<strong>raytrace</strong>(ray : <a href="../Rosegold/Raytrace/Ray.html">Ray</a>, boxes : Array(<a href="../Rosegold/AABBd.html">AABBd</a>), strict : Bool = <span class="n">false</span>) : <a href="../Rosegold/Raytrace/Result.html">Result</a> | Nil
 
-        <a class="method-permalink" href="#raytrace%28ray%3ARay%2Cboxes%3AArray%28AABBd%29%29%3AResult%7CNil-class-method">#</a>
+        <a class="method-permalink" href="#raytrace%28ray%3ARay%2Cboxes%3AArray%28AABBd%29%2Cstrict%3ABool%3Dfalse%29%3AResult%7CNil-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/8cb24bf98662ffc2d0795cf145e694814d89b283/src/rosegold/control/raytrace.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/642d1f58e1f8d83e9cb33eee060691f0e6553999/src/rosegold/control/raytrace.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
