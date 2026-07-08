@@ -1,9 +1,22 @@
+require "../versions"
 require "json"
+require "minecraft-data"
 
 class Rosegold::TextComponent
   include JSON::Serializable
 
-  TRANSLATIONS = Hash(String, String).from_json Rosegold.read_game_asset "1.21.11/language.json"
+  # Every supported version ships its own language.json. Embed the newest enabled
+  # version's file (they differ only slightly across versions), so a single-version
+  # slim build always has the translations for what it speaks. Empty map only if
+  # somehow no enabled version has one.
+  TRANSLATIONS = {% begin %}
+    {% protos = Rosegold::ENABLED_PROTOCOLS.keys.sort %}
+    {% if protos.empty? %}
+      ({} of String => String)
+    {% else %}
+      Hash(String, String).from_json(Minecraft::Data.read_asset({{Rosegold::ENABLED_PROTOCOLS[protos.last] + "/language.json"}}))
+    {% end %}
+  {% end %}
 
   # Core content fields
   property type : String?

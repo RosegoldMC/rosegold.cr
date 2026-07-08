@@ -14,15 +14,15 @@
 # Dependencies will be locked in applications that use them
 /shard.lock
 
+# Developer-local dependency overrides (e.g. minecraft-data from a local path)
+/shard.override.yml
+
 # whole entire minecraft server for specs
 spec/fixtures/server/*
 !spec/fixtures/server/ops.json
 
 # added by copilot
 crystal.tar.gz
-
-# a place to put game data for searching
-game_assets/protocol_docs
 
 tmp
 

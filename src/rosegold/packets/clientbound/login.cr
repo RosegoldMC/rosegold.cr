@@ -9,7 +9,9 @@ class Rosegold::Clientbound::Login < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x2B_u32, # MC 1.21.8
     774_u32 => 0x30_u32, # MC 1.21.11
+    773_u32 => 0x30_u32, # MC 1.21.9
     775_u32 => 0x31_u32, # MC 26.1
+    776_u32 => 0x31_u32, # MC 26.2
   })
 
   property entity_id : Int32
@@ -33,9 +35,10 @@ class Rosegold::Clientbound::Login < Rosegold::Clientbound::Packet
   property death_location : Rosegold::Vec3i?
   property portal_cooldown : UInt32
   property sea_level : UInt32
+  property? online_mode : Bool = false # MC 26.2+ only (between sea_level and enforces_secure_chat on the wire)
   property? enforces_secure_chat : Bool
 
-  def initialize(@entity_id, @hardcore, @dimension_names, @max_players, @view_distance, @simulation_distance, @reduced_debug_info, @enable_respawn_screen, @do_limited_crafting, @dimension_type, @dimension_name, @hashed_seed, @gamemode, @previous_gamemode, @is_debug, @is_flat, @has_death_location, @death_dimension_name, @death_location, @portal_cooldown, @sea_level, @enforces_secure_chat); end
+  def initialize(@entity_id, @hardcore, @dimension_names, @max_players, @view_distance, @simulation_distance, @reduced_debug_info, @enable_respawn_screen, @do_limited_crafting, @dimension_type, @dimension_name, @hashed_seed, @gamemode, @previous_gamemode, @is_debug, @is_flat, @has_death_location, @death_dimension_name, @death_location, @portal_cooldown, @sea_level, @enforces_secure_chat, @online_mode = false); end
 
   def self.read(io)
     entity_id = io.read_int
@@ -72,6 +75,7 @@ class Rosegold::Clientbound::Login < Rosegold::Clientbound::Packet
 
     portal_cooldown = io.read_var_int
     sea_level = io.read_var_int
+    online_mode = Client.protocol_version >= 776_u32 ? io.read_bool : false
     enforces_secure_chat = io.read_bool
 
     self.new(
@@ -96,7 +100,8 @@ class Rosegold::Clientbound::Login < Rosegold::Clientbound::Packet
       death_location,
       portal_cooldown,
       sea_level,
-      enforces_secure_chat
+      enforces_secure_chat,
+      online_mode
     )
   end
 
@@ -127,6 +132,7 @@ class Rosegold::Clientbound::Login < Rosegold::Clientbound::Packet
       end
       buffer.write portal_cooldown
       buffer.write sea_level
+      buffer.write online_mode? if Client.protocol_version >= 776_u32
       buffer.write enforces_secure_chat?
     end.to_slice
   end

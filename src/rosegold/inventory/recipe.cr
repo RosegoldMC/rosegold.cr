@@ -79,28 +79,9 @@ module Rosegold
     def initialize(@slot); end
 
     def self.read(io) : self
+      # 26.1+: ItemStackTemplate (item-then-count + component patch), unlike Slot's count-first order.
       if Client.protocol_version >= 775_u32
-        # 26.1: ItemStackTemplate = item_holder, count, component_patch
-        # Different field order from Slot: item first, then count (Slot has count first)
-        item_id = io.read_var_int
-        count = io.read_var_int
-        # Component patch uses same format as Slot: add_count + remove_count + components
-        components_to_add_count = io.read_var_int
-        components_to_remove_count = io.read_var_int
-        components_to_add = Hash(String, DataComponent).new
-        components_to_add_count.times do
-          component_type = io.read_var_int
-          name = DataComponentTypes.name_for(component_type, Client.protocol_version) || "unknown_#{component_type}"
-          structured_component = DataComponent.create_component(component_type, io)
-          components_to_add[name] = structured_component
-        end
-        components_to_remove = Set(String).new
-        components_to_remove_count.times do
-          component_type = io.read_var_int
-          name = DataComponentTypes.name_for(component_type, Client.protocol_version) || "unknown_#{component_type}"
-          components_to_remove.add(name)
-        end
-        new(Slot.new(count: count, item_id_int: item_id, components_to_add: components_to_add, components_to_remove: components_to_remove))
+        new(Slot.read_item_stack_template(io))
       else
         new(Slot.read(io))
       end

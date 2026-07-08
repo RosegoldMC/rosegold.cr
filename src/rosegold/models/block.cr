@@ -1,37 +1,23 @@
 require "json"
+require "minecraft-data"
 
-class Rosegold::Block
-  include JSON::Serializable
-
-  @[JSON::Field(key: "name")]
-  getter id_str : String
-  @[JSON::Field(key: "minStateId")]
-  getter min_state_id : UInt16
-  @[JSON::Field(key: "maxStateId")]
-  getter max_state_id : UInt16
-  getter hardness : Float32 = -1.0
-  @[JSON::Field(key: "harvestTools")]
-  getter harvest_tools : Hash(String, Bool)?
-  getter material : String
-
-  # Not individual block states, but the properties that, in combination, make up each block state.
-  # Empty array if block has only one state.
-  getter states : Array(MCData::BlockProperty)
-
-  def self.from_block_state_id(state_id : UInt16) : Block
-    MCData.default.blocks.find { |block| block.min_state_id <= state_id && block.max_state_id >= state_id } || \
+# Runtime extensions to the minecraft-data schema block: break-speed and
+# harvest logic that consults the active version's data and the held item.
+class Minecraft::Data::Block
+  def self.from_block_state_id(state_id : UInt16) : Minecraft::Data::Block
+    Rosegold::MCData.default.blocks.find { |block| block.min_state_id <= state_id && block.max_state_id >= state_id } || \
        raise "Invalid block state id #{state_id}"
   end
 
   def material_tool_multipliers
-    MCData.default.materials.json_unmapped[material]
+    Rosegold::MCData.default.materials.json_unmapped[material]
   end
 
-  def best_tool?(slot : Slot)
+  def best_tool?(slot : Rosegold::Slot)
     material_tool_multipliers.as_h[slot.item_id_int.to_s]? || false
   end
 
-  def can_harvest?(slot : Slot)
+  def can_harvest?(slot : Rosegold::Slot)
     return true if harvest_tools.nil?
 
     best_tool?(slot) || harvest_tools.try &.keys.includes? slot.item_id_int.to_s
@@ -40,9 +26,9 @@ class Rosegold::Block
   # Search all materials for the tool's speed multiplier.
   # Handles cases where the block's material doesn't list all valid tools
   # (e.g. obsidian's "incorrect_for_wooden_tool" omits diamond/netherite pickaxes).
-  def tool_speed_from_any_material(slot : Slot) : Float64?
+  def tool_speed_from_any_material(slot : Rosegold::Slot) : Float64?
     item_id = slot.item_id_int.to_s
-    MCData.default.materials.json_unmapped.each_value do |multipliers|
+    Rosegold::MCData.default.materials.json_unmapped.each_value do |multipliers|
       if speed = multipliers.as_h[item_id]?
         return speed.as_f
       end
@@ -50,7 +36,7 @@ class Rosegold::Block
     nil
   end
 
-  def break_damage(main_hand : Slot, player : Player, creative : Bool = false) : Float64
+  def break_damage(main_hand : Rosegold::Slot, player : Rosegold::Player, creative : Bool = false) : Float64
     return 0_f64 if creative
 
     speed_multiplier = 1.0
@@ -88,11 +74,15 @@ class Rosegold::Block
     damage
   end
 
-  def break_time(main_hand : Slot, player : Player, creative : Bool = false) : Int32
+  def break_time(main_hand : Rosegold::Slot, player : Rosegold::Player, creative : Bool = false) : Int32
     break_damage = break_damage(main_hand, player, creative)
 
     return 0 if break_damage.zero?
 
     (1.0 / break_damage).ceil.to_i
   end
+end
+
+module Rosegold
+  alias Block = Minecraft::Data::Block
 end

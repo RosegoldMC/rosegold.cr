@@ -6,7 +6,9 @@ class Rosegold::Clientbound::StartConfiguration < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x6F_u32, # MC 1.21.8
     774_u32 => 0x74_u32, # MC 1.21.11
+    773_u32 => 0x74_u32, # MC 1.21.9
     775_u32 => 0x76_u32, # MC 26.1
+    776_u32 => 0x76_u32, # MC 26.2
   })
 
   class_getter state = ProtocolState::PLAY
@@ -24,6 +26,9 @@ class Rosegold::Clientbound::StartConfiguration < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    # Must ack while still in PLAY: send_packet! drops PLAY-state packets once the
+    # state leaves PLAY, so flipping to CONFIGURATION first would swallow this ack
+    # and stall the server switch.
     client.send_packet! Rosegold::Serverbound::AcknowledgeConfiguration.new
     Log.info { "Sent AcknowledgeConfiguration packet" }
 
