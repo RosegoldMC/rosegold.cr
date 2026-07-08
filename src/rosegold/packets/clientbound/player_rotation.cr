@@ -8,7 +8,9 @@ class Rosegold::Clientbound::PlayerRotation < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x42_u32, # MC 1.21.8
     774_u32 => 0x47_u32, # MC 1.21.11
+    773_u32 => 0x47_u32, # MC 1.21.9
     775_u32 => 0x49_u32, # MC 26.1
+    776_u32 => 0x49_u32, # MC 26.2
   })
 
   property \
@@ -22,7 +24,7 @@ class Rosegold::Clientbound::PlayerRotation < Rosegold::Clientbound::Packet
   end
 
   def self.read(packet)
-    if Client.protocol_version >= 774_u32
+    if Client.protocol_version >= 773_u32
       yaw = packet.read_float
       relative_yaw = packet.read_bool
       pitch = packet.read_float
@@ -38,7 +40,7 @@ class Rosegold::Clientbound::PlayerRotation < Rosegold::Clientbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |io|
       io.write self.class.packet_id_for_protocol(Client.protocol_version)
-      if Client.protocol_version >= 774_u32
+      if Client.protocol_version >= 773_u32
         io.write yaw
         io.write relative_yaw
         io.write pitch

@@ -11,15 +11,12 @@ module Rosegold::Spectate::PacketRelay
       {772_u32 => 0x5E_u32, 774_u32 => 0x63_u32, 775_u32 => 0x65_u32}, # set_entity_motion
       {772_u32 => 0x7C_u32, 774_u32 => 0x81_u32, 775_u32 => 0x83_u32}, # update_attributes
     }.each do |id_map|
-      id_map[protocol]?.try { |id| ids << id }
+      id_map.merge({773_u32 => id_map[774_u32], 776_u32 => id_map[775_u32]})[protocol]?.try { |id| ids << id }
     end
-    # Crystal-class packets also forwarded as raw
-    # EntityEffect and RemoveEntityEffect use VarLong for entity_id in protocol 772
-    # but VarInt in protocol 774+. Only remap in 774+ where our varint logic works.
-    if protocol >= 774_u32
-      ids << Rosegold::Clientbound::EntityEffect[protocol]
-      ids << Rosegold::Clientbound::RemoveEntityEffect[protocol]
-    end
+    # Crystal-class packets also forwarded as raw. EntityEffect/RemoveEntityEffect
+    # carry entity_id as a VarInt in every supported protocol, so always remap.
+    ids << Rosegold::Clientbound::EntityEffect[protocol]
+    ids << Rosegold::Clientbound::RemoveEntityEffect[protocol]
     ids
   end
 

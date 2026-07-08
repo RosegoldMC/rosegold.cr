@@ -3,7 +3,9 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x01_u32, # MC 1.21.8
     774_u32 => 0x01_u32, # MC 1.21.11
+    773_u32 => 0x01_u32, # MC 1.21.9
     775_u32 => 0x01_u32, # MC 26.1
+    776_u32 => 0x01_u32, # MC 26.2
   })
   class_getter state = ProtocolState::PLAY
 
@@ -33,8 +35,8 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
     y = packet.read_double
     z = packet.read_double
 
-    if Client.protocol_version >= 774_u32
-      # 1.21.11+: velocity as LpVec3, before angles
+    if Client.protocol_version >= 773_u32
+      # 1.21.9+: velocity as LpVec3, before angles
       velocity_x, velocity_y, velocity_z = packet.read_lp_vec3
       pitch = packet.read_angle256_deg
       yaw = packet.read_angle256_deg
@@ -65,7 +67,7 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
       buffer.write_full y
       buffer.write_full z
 
-      if Client.protocol_version >= 774_u32
+      if Client.protocol_version >= 773_u32
         buffer.write_lp_vec3(velocity_x, velocity_y, velocity_z)
         buffer.write_angle256_deg pitch
         buffer.write_angle256_deg yaw
@@ -105,11 +107,13 @@ class Rosegold::Clientbound::SpawnEntity < Rosegold::Clientbound::Packet
 
   ENTITY_TYPE_PLAYER_BY_PROTOCOL = {
     772_u32 => 149_u32, # MC 1.21.8
+    773_u32 => 151_u32, # MC 1.21.9
     774_u32 => 155_u32, # MC 1.21.11
     775_u32 => 155_u32, # MC 26.1
+    776_u32 => 156_u32, # MC 26.2
   }
 
   def self.entity_type_player : UInt32
-    ENTITY_TYPE_PLAYER_BY_PROTOCOL[Client.protocol_version]? || 155_u32
+    ENTITY_TYPE_PLAYER_BY_PROTOCOL[Client.protocol_version]? || 156_u32
   end
 end

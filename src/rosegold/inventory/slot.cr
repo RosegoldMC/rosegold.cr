@@ -1,3 +1,4 @@
+require "../versions"
 require "../../minecraft/nbt"
 require "digest/crc32"
 require "../world/mcdata"
@@ -22,8 +23,8 @@ module Rosegold::DataComponentTypes
     32_u32 => "death_protection", 33_u32 => "blocks_attacks",
     34_u32 => "stored_enchantments", 35_u32 => "dyed_color", 36_u32 => "map_color",
     37_u32 => "map_id", 38_u32 => "map_decorations", 39_u32 => "map_post_processing",
-    40_u32 => "potion_duration_scale", 41_u32 => "charged_projectiles",
-    42_u32 => "bundle_contents", 43_u32 => "potion_contents",
+    40_u32 => "charged_projectiles", 41_u32 => "bundle_contents",
+    42_u32 => "potion_contents", 43_u32 => "potion_duration_scale",
     44_u32 => "suspicious_stew_effects", 45_u32 => "writable_book_content",
     46_u32 => "written_book_content", 47_u32 => "trim", 48_u32 => "debug_stick_state",
     49_u32 => "entity_data", 50_u32 => "bucket_entity_data",
@@ -45,6 +46,9 @@ module Rosegold::DataComponentTypes
     90_u32 => "llama/variant", 91_u32 => "axolotl/variant", 92_u32 => "cat/variant",
     93_u32 => "cat/collar", 94_u32 => "sheep/color", 95_u32 => "shulker/color",
   }
+
+  # Protocol 773 (MC 1.21.9 / 1.21.10) — byte-identical component table to 772.
+  PROTOCOL_773 = PROTOCOL_772
 
   # Protocol 774 (MC 1.21.11) — 104 component types
   PROTOCOL_774 = {
@@ -139,22 +143,70 @@ module Rosegold::DataComponentTypes
     107_u32 => "cat/collar", 108_u32 => "sheep/color", 109_u32 => "shulker/color",
   }
 
-  PROTOCOL_MAP = {
-    772_u32 => PROTOCOL_772,
-    774_u32 => PROTOCOL_774,
-    775_u32 => PROTOCOL_775,
+  # Protocol 776 (MC 26.2) — 111 component types (1 new vs 775: sulfur_cube_content@78, shifting everything >=78 up by one)
+  PROTOCOL_776 = {
+    0_u32 => "custom_data", 1_u32 => "max_stack_size", 2_u32 => "max_damage",
+    3_u32 => "damage", 4_u32 => "unbreakable", 5_u32 => "use_effects",
+    6_u32 => "custom_name", 7_u32 => "minimum_attack_charge", 8_u32 => "damage_type",
+    9_u32 => "item_name", 10_u32 => "item_model", 11_u32 => "lore",
+    12_u32 => "rarity", 13_u32 => "enchantments", 14_u32 => "can_place_on",
+    15_u32 => "can_break", 16_u32 => "attribute_modifiers", 17_u32 => "custom_model_data",
+    18_u32 => "tooltip_display", 19_u32 => "repair_cost", 20_u32 => "creative_slot_lock",
+    21_u32 => "enchantment_glint_override", 22_u32 => "intangible_projectile",
+    23_u32 => "food", 24_u32 => "consumable", 25_u32 => "use_remainder",
+    26_u32 => "use_cooldown", 27_u32 => "damage_resistant", 28_u32 => "tool",
+    29_u32 => "weapon", 30_u32 => "attack_range", 31_u32 => "enchantable",
+    32_u32 => "equippable", 33_u32 => "repairable", 34_u32 => "glider",
+    35_u32 => "tooltip_style", 36_u32 => "death_protection", 37_u32 => "blocks_attacks",
+    38_u32 => "piercing_weapon", 39_u32 => "kinetic_weapon", 40_u32 => "swing_animation",
+    41_u32 => "additional_trade_cost", 42_u32 => "stored_enchantments",
+    43_u32 => "dye", 44_u32 => "dyed_color", 45_u32 => "map_color",
+    46_u32 => "map_id", 47_u32 => "map_decorations", 48_u32 => "map_post_processing",
+    49_u32 => "charged_projectiles", 50_u32 => "bundle_contents",
+    51_u32 => "potion_contents", 52_u32 => "potion_duration_scale",
+    53_u32 => "suspicious_stew_effects", 54_u32 => "writable_book_content",
+    55_u32 => "written_book_content", 56_u32 => "trim", 57_u32 => "debug_stick_state",
+    58_u32 => "entity_data", 59_u32 => "bucket_entity_data",
+    60_u32 => "block_entity_data", 61_u32 => "instrument",
+    62_u32 => "provides_trim_material", 63_u32 => "ominous_bottle_amplifier",
+    64_u32 => "jukebox_playable", 65_u32 => "provides_banner_patterns",
+    66_u32 => "recipes", 67_u32 => "lodestone_tracker", 68_u32 => "firework_explosion",
+    69_u32 => "fireworks", 70_u32 => "profile", 71_u32 => "note_block_sound",
+    72_u32 => "banner_patterns", 73_u32 => "base_color", 74_u32 => "pot_decorations",
+    75_u32 => "container", 76_u32 => "block_state", 77_u32 => "bees",
+    78_u32 => "sulfur_cube_content", # NEW in 26.2
+    79_u32 => "lock", 80_u32 => "container_loot", 81_u32 => "break_sound",
+    82_u32 => "villager/variant", 83_u32 => "wolf/variant", 84_u32 => "wolf/sound_variant",
+    85_u32 => "wolf/collar", 86_u32 => "fox/variant", 87_u32 => "salmon/size",
+    88_u32 => "parrot/variant", 89_u32 => "tropical_fish/pattern",
+    90_u32 => "tropical_fish/base_color", 91_u32 => "tropical_fish/pattern_color",
+    92_u32 => "mooshroom/variant", 93_u32 => "rabbit/variant", 94_u32 => "pig/variant",
+    95_u32 => "pig/sound_variant", 96_u32 => "cow/variant", 97_u32 => "cow/sound_variant",
+    98_u32 => "chicken/variant", 99_u32 => "chicken/sound_variant",
+    100_u32 => "zombie_nautilus/variant", 101_u32 => "frog/variant", 102_u32 => "horse/variant",
+    103_u32 => "painting/variant", 104_u32 => "llama/variant", 105_u32 => "axolotl/variant",
+    106_u32 => "cat/variant", 107_u32 => "cat/sound_variant", 108_u32 => "cat/collar",
+    109_u32 => "sheep/color", 110_u32 => "shulker/color",
   }
+
+  # The PROTOCOL_* tables above are pure literals (no read_file) so they stay
+  # defined unconditionally; only the map is filtered to enabled protocols.
+  PROTOCOL_MAP = {% begin %}{
+    {% for proto in Rosegold::ENABLED_PROTOCOLS.keys.sort %}
+      {{proto}}_u32 => PROTOCOL_{{proto}},
+    {% end %}
+  }{% end %}
 
   def self.name_for(component_type : UInt32, protocol_version : UInt32) : String?
     if mapping = PROTOCOL_MAP[protocol_version]?
       mapping[component_type]?
     else
-      PROTOCOL_774[component_type]?
+      PROTOCOL_MAP[Client::LATEST_PROTOCOL][component_type]?
     end
   end
 
   def self.id_for(name : String, protocol_version : UInt32) : UInt32?
-    mapping = PROTOCOL_MAP[protocol_version]? || PROTOCOL_774
+    mapping = PROTOCOL_MAP[protocol_version]? || PROTOCOL_MAP[Client::LATEST_PROTOCOL]
     mapping.each do |component_id, component_name|
       return component_id if component_name == name
     end
@@ -201,7 +253,7 @@ abstract class Rosegold::DataComponent
     when "potion_contents"            then DataComponents::PotionContents.read(io)
     when "trim"                       then DataComponents::Trim.read(io)
     when "entity_data"
-      Client.protocol_version >= 774_u32 ? DataComponents::TypedEntityData.read(io) : DataComponents::EntityData.read(io)
+      Client.protocol_version >= 773_u32 ? DataComponents::TypedEntityData.read(io) : DataComponents::EntityData.read(io)
     when "banner_patterns"         then DataComponents::BannerPatterns.read(io)
     when "weapon"                  then DataComponents::Weapon.read(io)
     when "stored_enchantments"     then DataComponents::Enchantments.read(io)
@@ -226,7 +278,7 @@ abstract class Rosegold::DataComponent
     when "written_book_content"    then DataComponents::WrittenBookContent.read(io)
     when "bucket_entity_data"      then DataComponents::EntityData.read(io)
     when "block_entity_data"
-      Client.protocol_version >= 774_u32 ? DataComponents::TypedEntityData.read(io) : DataComponents::EntityData.read(io)
+      Client.protocol_version >= 773_u32 ? DataComponents::TypedEntityData.read(io) : DataComponents::EntityData.read(io)
     when "debug_stick_state"        then DataComponents::EntityData.read(io) # NBT compound
     when "map_decorations"          then DataComponents::EntityData.read(io) # NBT compound
     when "instrument"               then DataComponents::Instrument.read(io)
@@ -262,6 +314,8 @@ abstract class Rosegold::DataComponent
       # New 26.1 component types
     when "additional_trade_cost" then DataComponents::VarIntComponent.read(io)
     when "dye"                   then DataComponents::VarIntComponent.read(io)
+      # New 26.2 component types
+    when "sulfur_cube_content" then DataComponents::SulfurCubeContent.read(io)
       # Entity variant components (most are simple VarInt)
     when "villager/variant"            then DataComponents::VarIntComponent.read(io)
     when "wolf/variant"                then DataComponents::HolderComponent.read(io)
@@ -1044,6 +1098,21 @@ class Rosegold::DataComponents::SlotList < Rosegold::DataComponent
   def write(io) : Nil
     io.write slots.size
     slots.each(&.write(io))
+  end
+end
+
+# sulfur_cube_content (26.2+): the absorbed block item, encoded as a plain Slot.
+class Rosegold::DataComponents::SulfurCubeContent < Rosegold::DataComponent
+  property absorbed_block_item : Rosegold::Slot
+
+  def initialize(@absorbed_block_item = Rosegold::Slot.new); end
+
+  def self.read(io) : self
+    new(Rosegold::Slot.read(io))
+  end
+
+  def write(io) : Nil
+    absorbed_block_item.write(io)
   end
 end
 
@@ -1875,7 +1944,7 @@ end
 
 # Profile - player head profile. Wire format differs between protocols:
 #   772 (1.21.8): ResolvableProfile = {Optional<String> name, Optional<UUID> id, PropertyMap}
-#   774+ (1.21.11+): Either<GameProfile, Partial> + PlayerSkin.Patch — captured via raw_bytes.
+#   773+ (1.21.9+): Either<GameProfile, Partial> + PlayerSkin.Patch — captured via raw_bytes.
 class Rosegold::DataComponents::Profile < Rosegold::DataComponent
   property raw_bytes : Bytes = Bytes.empty
 
@@ -1883,7 +1952,7 @@ class Rosegold::DataComponents::Profile < Rosegold::DataComponent
 
   def self.read(io) : self
     capture = Minecraft::IO::CaptureIO.new(io)
-    if Client.protocol_version >= 774_u32
+    if Client.protocol_version >= 773_u32
       read_774(capture)
     else
       read_772(capture)
@@ -2024,14 +2093,14 @@ end
 
 # Bees - list of occupants. Per-entry entity_data layout differs between protocols:
 #   772 (1.21.8): CustomData (bare CompoundTag: tag_type + body)
-#   774+ (1.21.11+): TypedEntityData (VarInt entity_type + CompoundTag)
+#   773+ (1.21.9+): TypedEntityData (VarInt entity_type + CompoundTag)
 class Rosegold::DataComponents::Bees < Rosegold::DataComponent
   def initialize; end
 
   def self.read(io) : self
     count = io.read_var_int
     count.times do
-      if Client.protocol_version >= 774_u32
+      if Client.protocol_version >= 773_u32
         io.read_var_int    # entity_type
         io.read_nbt_unamed # entity data CompoundTag
       else
@@ -2482,30 +2551,26 @@ class Rosegold::Slot
 
   def initialize(@count = 0_u32, @item_id_int = 0_u32, @components_to_add = Hash(String, DataComponent).new, @components_to_remove = Set(String).new); end
 
-  def self.read(io) : Rosegold::Slot
-    count = io.read_var_int
-    return new(count) if count == 0 # Empty slot
-
-    item_id_int = io.read_var_int
-
-    # Read components to add
+  # Reads a DataComponentPatch (add-count, remove-count, then the add/remove
+  # entries). Shared by Slot.read and read_item_stack_template, which differ only
+  # in the preceding item_id/count ordering.
+  def self.read_component_patch(io) : {Hash(String, DataComponent), Set(String)}
     components_to_add_count = io.read_var_int
     components_to_remove_count = io.read_var_int
-    components_to_add = Hash(String, DataComponent).new
 
-    components_to_add_count.times do |_|
+    components_to_add = Hash(String, DataComponent).new
+    components_to_add_count.times do
       component_type = io.read_var_int
-      name = DataComponentTypes.name_for(component_type, Client.protocol_version) || "unknown_#{component_type}"
+      resolved_name = DataComponentTypes.name_for(component_type, Client.protocol_version)
+      name = resolved_name || "unknown_#{component_type}"
       begin
-        structured_component = DataComponent.create_component(component_type, io)
+        components_to_add[name] = DataComponent.create_component_by_name(resolved_name, component_type, io)
       rescue ex : Minecraft::NBT::DecodeError | UnknownComponentError
         Log.warn { "Dropping component #{name} (id=#{component_type}, proto=#{Client.protocol_version}): #{ex.message}" }
         raise ex
       end
-      components_to_add[name] = structured_component
     end
 
-    # Read components to remove
     components_to_remove = Set(String).new
     components_to_remove_count.times do
       component_type = io.read_var_int
@@ -2513,18 +2578,32 @@ class Rosegold::Slot
       components_to_remove.add(name)
     end
 
+    {components_to_add, components_to_remove}
+  end
+
+  def self.read(io) : Rosegold::Slot
+    count = io.read_var_int
+    return new(count) if count == 0 # Empty slot
+
+    item_id_int = io.read_var_int
+    components_to_add, components_to_remove = read_component_patch(io)
     new(count, item_id_int, components_to_add, components_to_remove)
   end
 
-  def write(io)
-    io.write count
-    return if count == 0 # Empty slot
+  # ItemStackTemplate (775+): item_id and count are read in the OPPOSITE order
+  # from Slot (item-then-count), but the trailing DataComponentPatch is identical.
+  # Used by recipe SlotDisplayItemStack and the sulfur_cube_content component.
+  def self.read_item_stack_template(io) : Rosegold::Slot
+    item_id_int = io.read_var_int
+    count = io.read_var_int
+    components_to_add, components_to_remove = read_component_patch(io)
+    new(count, item_id_int, components_to_add, components_to_remove)
+  end
 
-    io.write item_id_int
-
-    # Write components to add count
+  # Writes a DataComponentPatch (add-count, remove-count, then the add/remove
+  # entries). Shared by Slot#write and write_item_stack_template.
+  private def write_component_patch(io) : Nil
     io.write components_to_add.size
-    # Write components to remove count
     io.write components_to_remove.size
 
     components_to_add.each do |name, component|
@@ -2534,12 +2613,25 @@ class Rosegold::Slot
       component.write(io)
     end
 
-    # Write components to remove
     components_to_remove.each do |name|
       component_id = DataComponentTypes.id_for(name, Client.protocol_version)
       raise "Unknown component name: #{name}" unless component_id
       io.write component_id
     end
+  end
+
+  def write_item_stack_template(io) : Nil
+    io.write item_id_int
+    io.write count
+    write_component_patch(io)
+  end
+
+  def write(io)
+    io.write count
+    return if count == 0 # Empty slot
+
+    io.write item_id_int
+    write_component_patch(io)
   end
 
   def empty?

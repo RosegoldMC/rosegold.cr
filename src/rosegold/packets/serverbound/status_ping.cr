@@ -9,7 +9,9 @@ class Rosegold::Serverbound::StatusPing < Rosegold::Serverbound::Packet
     771_u32 => 0x01_u32, # MC 1.21.6
     772_u32 => 0x01_u32, # MC 1.21.8
     774_u32 => 0x01_u32, # MC 1.21.11
+    773_u32 => 0x01_u32, # MC 1.21.9
     775_u32 => 0x01_u32, # MC 26.1
+    776_u32 => 0x01_u32, # MC 26.2
   })
 
   class_getter state = Rosegold::ProtocolState::STATUS

@@ -52,18 +52,18 @@ class Rosegold::Spectate::Connection
     @client = @spectate_server.client
   end
 
-  PROTOCOL_VERSION_NAMES = {
-    772_u32 => "1.21.8",
-    774_u32 => "1.21.11",
-    775_u32 => "26.1",
-  }
+  PROTOCOL_VERSION_NAMES = {% begin %}{
+    {% for proto, ver in Rosegold::ENABLED_PROTOCOLS %}
+      {{proto}}_u32 => {{ver}},
+    {% end %}
+  }{% end %}
 
   def protocol_version : UInt32
     @client.try(&.protocol_version) || Client.protocol_version
   end
 
   private def protocol_version_name : String
-    PROTOCOL_VERSION_NAMES[protocol_version]? || "1.21.11"
+    PROTOCOL_VERSION_NAMES[protocol_version]? || PROTOCOL_VERSION_NAMES[Client::LATEST_PROTOCOL]
   end
 
   def handle_client

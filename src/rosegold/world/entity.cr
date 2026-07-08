@@ -1,28 +1,33 @@
-class Rosegold::Entity
-  METADATA_1218  = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.8/entities.json")
-  METADATA_12111 = Array(Metadata).from_json(Rosegold.read_game_asset "1.21.11/entities.json")
-  METADATA_261   = Array(Metadata).from_json(Rosegold.read_game_asset "26.1/entities.json")
+require "../versions"
+require "minecraft-data"
 
-  METADATA_BY_PROTOCOL = {
-    772_u32 => METADATA_1218,
-    774_u32 => METADATA_12111,
-    775_u32 => METADATA_261,
-  }
+class Rosegold::Entity
+  alias Metadata = Minecraft::Data::EntityMetadata
+
+  # entities.json is embedded only for enabled versions (guarded read_file),
+  # parsed and memoized per protocol on first use.
+  @@metadata_cache = {} of UInt32 => Array(Metadata)
+  @@metadata_mutex = Mutex.new
 
   def self.metadata_for_protocol : Array(Metadata)
-    METADATA_BY_PROTOCOL[Client.protocol_version]? || METADATA_261
+    protocol = Client.protocol_version
+    protocol = Client::LATEST_PROTOCOL unless Client::SUPPORTED_PROTOCOLS.includes?(protocol)
+    @@metadata_mutex.synchronize do
+      @@metadata_cache[protocol] ||= load_metadata(protocol)
+    end
   end
 
-  class Metadata
-    include JSON::Serializable
-
-    property id : Int32
-    property name : String
-    property width : Float64
-    property height : Float64
-    @[JSON::Field(key: "type")]
-    property entity_type : String = ""
-    property category : String = ""
+  protected def self.load_metadata(protocol : UInt32) : Array(Metadata)
+    {% begin %}
+    case protocol
+    {% for proto in Rosegold::ENABLED_PROTOCOLS.keys.sort %}
+      when {{proto}}_u32
+        Array(Metadata).from_json(Minecraft::Data.read_asset({{Rosegold::ENABLED_PROTOCOLS[proto] + "/entities.json"}}))
+    {% end %}
+    else
+      raise "Unsupported protocol version: #{protocol}"
+    end
+    {% end %}
   end
 
   property \

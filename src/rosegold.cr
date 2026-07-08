@@ -1,6 +1,8 @@
 require "socket"
 require "io/hexdump"
+require "minecraft-data"
 
+require "./rosegold/versions"
 require "./rosegold/client"
 require "./rosegold/bot"
 require "./rosegold/spectate_server"
@@ -12,10 +14,4 @@ module Rosegold
   VERSION = "0.4.1"
 
   Log = ::Log.for self
-
-  GAME_ASSETS_ROOT = "#{__DIR__}/../game_assets/"
-
-  macro read_game_asset(path)
-    {{read_file GAME_ASSETS_ROOT + path}}
-  end
 end

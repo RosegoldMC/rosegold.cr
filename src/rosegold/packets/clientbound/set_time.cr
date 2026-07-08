@@ -6,7 +6,9 @@ class Rosegold::Clientbound::SetTime < Rosegold::Clientbound::Packet
   packet_ids({
     772_u32 => 0x6A_u32, # MC 1.21.8
     774_u32 => 0x6F_u32, # MC 1.21.11
+    773_u32 => 0x6F_u32, # MC 1.21.9
     775_u32 => 0x71_u32, # MC 26.1
+    776_u32 => 0x71_u32, # MC 26.2
   })
 
   property world_age : Int64
