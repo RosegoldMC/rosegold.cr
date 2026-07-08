@@ -1,9 +1,35 @@
+require "../versions"
 require "json"
+require "minecraft-data"
 
 class Rosegold::TextComponent
   include JSON::Serializable
 
-  TRANSLATIONS = Hash(String, String).from_json Rosegold.read_game_asset "1.21.11/language.json"
+  # Every supported version ships its own language.json, whose wording differs
+  # across versions, so parse and memoize each protocol's file on first use.
+  @@translations_cache = {} of UInt32 => Hash(String, String)
+  @@translations_mutex = Mutex.new
+
+  def self.translations : Hash(String, String)
+    protocol = Client.protocol_version
+    protocol = Client::LATEST_PROTOCOL unless Client::SUPPORTED_PROTOCOLS.includes?(protocol)
+    @@translations_mutex.synchronize do
+      @@translations_cache[protocol] ||= load_translations(protocol)
+    end
+  end
+
+  protected def self.load_translations(protocol : UInt32) : Hash(String, String)
+    {% begin %}
+    case protocol
+    {% for proto in Rosegold::ENABLED_PROTOCOLS.keys.sort %}
+      when {{proto}}_u32
+        Hash(String, String).from_json(Minecraft::Data.read_asset({{Rosegold::ENABLED_PROTOCOLS[proto] + "/language.json"}}))
+    {% end %}
+    else
+      ({} of String => String)
+    end
+    {% end %}
+  end
 
   # Core content fields
   property type : String?
@@ -331,7 +357,7 @@ class Rosegold::TextComponent
     if translate_key = translate
       if with_args = self.with
         begin
-          translation = TRANSLATIONS[translate_key]?
+          translation = TextComponent.translations[translate_key]?
           if translation
             args = with_args.map(&.to_s)
             io << (translation % args)
@@ -343,7 +369,7 @@ class Rosegold::TextComponent
           io << translate_key
         end
       else
-        translation = TRANSLATIONS[translate_key]?
+        translation = TextComponent.translations[translate_key]?
         if translation
           io << translation
         else

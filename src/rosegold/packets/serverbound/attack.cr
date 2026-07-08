@@ -5,6 +5,7 @@ class Rosegold::Serverbound::Attack < Rosegold::Serverbound::Packet
   include Rosegold::Packets::ProtocolMapping
   packet_ids({
     775_u32 => 0x01_u32, # MC 26.1
+    776_u32 => 0x01_u32, # MC 26.2
   })
 
   property entity_id : UInt64

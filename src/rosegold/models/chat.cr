@@ -5,8 +5,6 @@ require "./text_component"
 class Rosegold::Chat
   include JSON::Serializable
 
-  TRANSLATIONS = TextComponent::TRANSLATIONS
-
   property \
     bold : Bool?,
     italic : Bool?,
@@ -30,7 +28,7 @@ class Rosegold::Chat
   def to_s(io : IO) : Nil
     if translate
       begin
-        io << TRANSLATIONS[translate] % self.with.try &.map(&.to_s)
+        io << TextComponent.translations[translate] % self.with.try &.map(&.to_s)
       rescue ex : ArgumentError
         Log.warn { "Translation error: #{translate} with #{self.with.try &.map(&.to_s)}" }
       end

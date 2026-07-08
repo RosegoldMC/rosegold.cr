@@ -6,7 +6,9 @@ class Rosegold::Serverbound::CommandSuggestionsRequest < Rosegold::Serverbound::
   packet_ids({
     772_u32 => 0x0E_u32,
     774_u32 => 0x0E_u32,
-    775_u32 => 0x0E_u32,
+    773_u32 => 0x0E_u32, # MC 1.21.9 (shorter list, like 772/774)
+    775_u32 => 0x0F_u32, # MC 26.1 (was 0x0E; SERVERBOUND_COMMAND_SUGGESTION is index 0x0F in 26.1+)
+    776_u32 => 0x0F_u32, # MC 26.2
   })
 
   property transaction_id : UInt32

@@ -23,4 +23,80 @@ Spectator.describe "Login Serialization" do
     # Compare the bytes - rewritten includes packet ID, so compare with original
     expect(rewritten_bytes).to eq(original_bytes)
   end
+
+  it "round-trips the online_mode field on protocol 776" do
+    Rosegold::Client.protocol_version = 776_u32
+
+    packet = Rosegold::Clientbound::Login.new(
+      entity_id: 42,
+      hardcore: false,
+      dimension_names: ["minecraft:overworld"],
+      max_players: 20_u32,
+      view_distance: 10_u32,
+      simulation_distance: 10_u32,
+      reduced_debug_info: false,
+      enable_respawn_screen: true,
+      do_limited_crafting: false,
+      dimension_type: 0_u32,
+      dimension_name: "minecraft:overworld",
+      hashed_seed: 0_i64,
+      gamemode: 0_u8,
+      previous_gamemode: -1_i8,
+      is_debug: false,
+      is_flat: true,
+      has_death_location: false,
+      death_dimension_name: nil,
+      death_location: nil,
+      portal_cooldown: 0_u32,
+      sea_level: 63_u32,
+      enforces_secure_chat: true,
+      online_mode: true
+    )
+
+    bytes = packet.write
+    io = Minecraft::IO::Memory.new(bytes[1..]) # skip packet id
+    parsed = Rosegold::Clientbound::Login.read(io)
+
+    expect(parsed.online_mode?).to be_true
+    expect(parsed.enforces_secure_chat?).to be_true
+    expect(parsed.sea_level).to eq(63_u32)
+    expect(parsed.write).to eq(bytes)
+  end
+
+  it "does not emit online_mode below protocol 776" do
+    Rosegold::Client.protocol_version = 775_u32
+
+    base = {
+      entity_id:             1,
+      hardcore:              false,
+      dimension_names:       ["minecraft:overworld"],
+      max_players:           20_u32,
+      view_distance:         10_u32,
+      simulation_distance:   10_u32,
+      reduced_debug_info:    false,
+      enable_respawn_screen: true,
+      do_limited_crafting:   false,
+      dimension_type:        0_u32,
+      dimension_name:        "minecraft:overworld",
+      hashed_seed:           0_i64,
+      gamemode:              0_u8,
+      previous_gamemode:     -1_i8,
+      is_debug:              false,
+      is_flat:               true,
+      has_death_location:    false,
+      death_dimension_name:  nil,
+      death_location:        nil,
+      portal_cooldown:       0_u32,
+      sea_level:             63_u32,
+      enforces_secure_chat:  true,
+    }
+
+    bytes_775 = Rosegold::Clientbound::Login.new(**base).write
+
+    Rosegold::Client.protocol_version = 776_u32
+    bytes_776 = Rosegold::Clientbound::Login.new(**base, online_mode: false).write
+
+    # 776 inserts exactly one extra byte (online_mode) vs 775
+    expect(bytes_776.size).to eq(bytes_775.size + 1)
+  end
 end

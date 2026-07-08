@@ -56,7 +56,7 @@ class Rosegold::Spectate::Server
     "attach_entity"                => {772_u32 => 0x5D_u32, 774_u32 => 0x62_u32, 775_u32 => 0x64_u32},
     "entity_teleport"              => {772_u32 => 0x76_u32, 774_u32 => 0x7B_u32, 775_u32 => 0x7D_u32},
     "commands"                     => {772_u32 => 0x10_u32, 774_u32 => 0x10_u32, 775_u32 => 0x10_u32},
-  }
+  }.transform_values { |ids| ids.merge({773_u32 => ids[774_u32], 776_u32 => ids[775_u32]}) }
 
   macro build_forwarded_packets_method
     def self.forwarded_packets(protocol : UInt32) : Hash(UInt32, String)
