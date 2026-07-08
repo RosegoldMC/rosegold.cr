@@ -181,9 +181,11 @@ class Rosegold::Interactions
         Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
         place_block using_hand, reached
 
-        # Sneaking with an item bypasses block-use, so the item is used against
-        # the block (the hopper-drain case). Vanilla skips UseItem otherwise.
-        if client.player.sneaking? && inventory.main_hand.present?
+        # Vanilla falls through to UseItem when the block-use result is PASS.
+        # Sneaking with an item in either hand bypasses block-use entirely.
+        bypass_block_use = client.player.sneaking? &&
+                           (inventory.main_hand.present? || inventory.off_hand.present?)
+        if bypass_block_use || !block_use_consumes_click?(reached)
           sequence = client.next_sequence
           operation = BlockOperation.new(Vec3i::ORIGIN, :use)
           client.pending_block_operations[sequence] = operation
@@ -226,6 +228,37 @@ class Rosegold::Interactions
       hand, reached.block, reached.face, cursor, inside_block, sequence
     send_packet Serverbound::SwingArm.new hand
     client.emit_event Event::ArmSwing.new(hand)
+  end
+
+  # Blocks whose right-click returns vanilla Success, suppressing the UseItem
+  # fall-through. Unknown/unloaded block states do not consume.
+  private def block_use_consumes_click?(reached : ReachedBlock) : Bool
+    block_state = client.dimension.block_state(reached.block)
+    return false unless block_state
+    block = Block.from_block_state_id(block_state)
+    case block.id_str
+    when "chest", "trapped_chest", "ender_chest", "barrel",
+         .ends_with?("shulker_box"),
+         "furnace", "blast_furnace", "smoker", "crafting_table",
+         .ends_with?("anvil"),
+         "enchanting_table", "brewing_stand", "beacon", "hopper",
+         "dispenser", "dropper", "crafter", "loom", "stonecutter",
+         "grindstone", "smithing_table", "cartography_table", "lectern",
+         "chiseled_bookshelf"
+      true
+    when "lever", .ends_with?("button"), "repeater", "comparator",
+         "note_block", "jukebox", "daylight_detector"
+      true
+    when "iron_door", "iron_trapdoor"
+      false
+    when .ends_with?("door"), .ends_with?("trapdoor"), .ends_with?("fence_gate")
+      true
+    when .ends_with?("bed"), "flower_pot", .starts_with?("potted_"),
+         .ends_with?("sign"), "bell", "cake"
+      true
+    else
+      false
+    end
   end
 
   private def start_digging(reached : ReachedBlock)
