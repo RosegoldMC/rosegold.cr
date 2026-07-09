@@ -4,6 +4,7 @@ require "../packets/*"
 require "../world/*"
 require "../../minecraft/nbt"
 require "../../minecraft/io"
+require "./scoreboard_cache"
 
 # Forward declaration to avoid circular dependency
 class Rosegold::Client; end
@@ -113,7 +114,9 @@ class Rosegold::Spectate::Server
   property connections = Array(Connection).new
 
   getter cached_commands_bytes : Bytes? = nil
+  getter scoreboard_cache : ScoreboardCache? = nil
   @bot_commands_handler_id : UUID? = nil
+  @bot_scoreboard_handler_id : UUID? = nil
 
   @next_command_suggestion_tid = Atomic(UInt32).new(0_u32)
 
@@ -181,14 +184,19 @@ class Rosegold::Spectate::Server
 
   def attach_client(client : Rosegold::Client)
     stop_caching_commands
+    stop_caching_scoreboard
     @cached_commands_bytes = nil
+    @scoreboard_cache = nil
     @client = client
     start_caching_commands(client)
+    start_caching_scoreboard(client)
   end
 
   def detach_client
     stop_caching_commands
+    stop_caching_scoreboard
     @cached_commands_bytes = nil
+    @scoreboard_cache = nil
     @client = nil
   end
 
@@ -209,5 +217,26 @@ class Rosegold::Spectate::Server
       client.off(Rosegold::Event::RawPacket, id)
     end
     @bot_commands_handler_id = nil
+  end
+
+  private def start_caching_scoreboard(client : Rosegold::Client)
+    cache = ScoreboardCache.for_protocol?(client.protocol_version)
+    return unless cache
+    @scoreboard_cache = cache
+
+    @bot_scoreboard_handler_id = client.on(Rosegold::Event::RawPacket) do |event|
+      next unless client.current_protocol_state.play?
+      first_byte = event.bytes[0]?
+      next unless first_byte
+      next unless cache.captures?(first_byte.to_u32)
+      cache.capture(event.bytes)
+    end
+  end
+
+  private def stop_caching_scoreboard
+    if (client = @client) && (id = @bot_scoreboard_handler_id)
+      client.off(Rosegold::Event::RawPacket, id)
+    end
+    @bot_scoreboard_handler_id = nil
   end
 end
