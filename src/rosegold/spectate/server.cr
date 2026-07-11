@@ -11,8 +11,8 @@ class Rosegold::Client; end
 class Rosegold::Spectate::Server
   DEFAULT_SPECTATOR_ENTITY_ID = 0x7fffffff
   SPECTATOR_VEHICLE_ENTITY_ID = DEFAULT_SPECTATOR_ENTITY_ID - 1
-  # Interaction entity's default height; a rider's feet attach at the vehicle's top.
-  VEHICLE_PASSENGER_ATTACHMENT = 1.0
+  # Riders attach at the vehicle's height; interaction is sized 0x0, so rider feet sit at the vehicle position.
+  VEHICLE_PASSENGER_ATTACHMENT = 0.0
   # Standing eye 1.62 minus sneaking eye 1.27; drop the vehicle to glide the camera down.
   SNEAK_CAMERA_DROP           = 0.35
   TELEPORT_JUMP_THRESHOLD     =  8.0
