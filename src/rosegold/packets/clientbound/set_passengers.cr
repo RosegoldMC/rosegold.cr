@@ -27,7 +27,7 @@ class Rosegold::Clientbound::SetPassengers < Rosegold::Clientbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write entity_id
-      buffer.write_var_int(passengers.length)
+      buffer.write(passengers.size)
       passengers.each do |eid|
         buffer.write eid
       end
