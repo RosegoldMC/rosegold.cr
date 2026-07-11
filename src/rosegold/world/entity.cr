@@ -5,6 +5,12 @@ require "./attribute_snapshot"
 class Rosegold::Entity
   alias Metadata = Minecraft::Data::EntityMetadata
 
+  # A decoded entity-metadata value; member types are exactly what the
+  # SetEntityData serializer readers return.
+  alias TrackedValue = Bool | UInt8 | UInt32 | UInt64 | Float32 | String |
+                       Rosegold::TextComponent | Rosegold::Slot | Rosegold::Vec3i | UUID |
+                       Minecraft::NBT::Tag | Tuple(Float32, Float32, Float32) | Array(UInt32) | Nil
+
   # entities.json is embedded only for enabled versions (guarded read_file).
   METADATA_BY_PROTOCOL = {% begin %}{
     {% enabled = Rosegold::ENABLED_PROTOCOLS %}
@@ -31,6 +37,45 @@ class Rosegold::Entity
     effects : Array(EntityEffect) = [] of EntityEffect
 
   property attributes : Hash(UInt32, AttributeSnapshot) = Hash(UInt32, AttributeSnapshot).new
+
+  # SetEntityData tracked values, keyed by metadata index. Partial updates merge.
+  property tracked_data : Hash(UInt8, TrackedValue) = Hash(UInt8, TrackedValue).new
+
+  def entity_flags : UInt8
+    tracked_data[0_u8]?.as?(UInt8) || 0_u8
+  end
+
+  def on_fire?
+    (entity_flags & 0x01) != 0
+  end
+
+  def crouching?
+    (entity_flags & 0x02) != 0
+  end
+
+  def sprinting?
+    (entity_flags & 0x08) != 0
+  end
+
+  def invisible?
+    (entity_flags & 0x20) != 0
+  end
+
+  def glowing?
+    (entity_flags & 0x40) != 0
+  end
+
+  def custom_name : Rosegold::TextComponent?
+    tracked_data[2_u8]?.as?(Rosegold::TextComponent)
+  end
+
+  def pose : UInt32?
+    tracked_data[6_u8]?.as?(UInt32)
+  end
+
+  def item_stack : Rosegold::Slot?
+    tracked_data[8_u8]?.as?(Rosegold::Slot)
+  end
 
   property? \
     on_ground : Bool = true,
