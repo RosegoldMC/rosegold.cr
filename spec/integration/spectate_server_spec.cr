@@ -51,4 +51,42 @@ Spectator.describe "SpectateServer Integration" do
       end
     end
   end
+
+  it "spectator connecting before chunks load still ends up spectating with chunks" do
+    main_client = client()
+    Rosegold::Client.protocol_version = main_client.protocol_version
+
+    main_client.join_game do |bot_client|
+      spectate_server = Rosegold::SpectateServer.new("127.0.0.1", spectate_port)
+      spectate_server.attach_client(bot_client)
+      spectate_server.start
+      sleep 0.5.seconds # Allow TCP server to fully start accepting connections
+
+      spectator = Rosegold::Client.new(
+        "127.0.0.1", spectate_port,
+        offline: {uuid: "22222222-2222-2222-2222-222222222222", username: "SpectatorBot"}
+      )
+
+      begin
+        spectator.connect
+
+        # Lobby serves exactly one empty chunk; spectating serves a render-distance square
+        deadline = Time.instant + 15.seconds
+        until (spectator.player.entity_id != 0_u64 && spectator.dimension_for_test.chunks.size > 1) || Time.instant > deadline
+          sleep 10.milliseconds
+        end
+
+        unless spectator.connected?
+          fail("Spectator disconnected: #{spectator.connection?.try(&.close_reason)}")
+        end
+
+        expect(spectator.player.entity_id).not_to eq(0_u64)
+        expect(spectator.dimension_for_test.chunks.size).to be > 1
+      ensure
+        spectator.connection?.try(&.disconnect("test done"))
+        spectate_server.stop
+        sleep 0.2.seconds
+      end
+    end
+  end
 end
