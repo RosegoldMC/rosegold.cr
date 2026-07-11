@@ -5,8 +5,10 @@ Spectator.describe Rosegold::Clientbound::SetActionBarText do
 
   it "uses correct packet ID per protocol" do
     expect(Rosegold::Clientbound::SetActionBarText[772_u32]).to eq(0x50_u32)
+    expect(Rosegold::Clientbound::SetActionBarText[773_u32]).to eq(0x55_u32)
     expect(Rosegold::Clientbound::SetActionBarText[774_u32]).to eq(0x55_u32)
     expect(Rosegold::Clientbound::SetActionBarText[775_u32]).to eq(0x57_u32)
+    expect(Rosegold::Clientbound::SetActionBarText[776_u32]).to eq(0x57_u32)
   end
 
   it "round-trips a simple text message" do

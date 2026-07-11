@@ -5,8 +5,10 @@ Spectator.describe Rosegold::Clientbound::BossEvent do
 
   it "uses correct packet ID per protocol" do
     expect(Rosegold::Clientbound::BossEvent[772_u32]).to eq(0x09_u32)
+    expect(Rosegold::Clientbound::BossEvent[773_u32]).to eq(0x09_u32)
     expect(Rosegold::Clientbound::BossEvent[774_u32]).to eq(0x09_u32)
     expect(Rosegold::Clientbound::BossEvent[775_u32]).to eq(0x09_u32)
+    expect(Rosegold::Clientbound::BossEvent[776_u32]).to eq(0x09_u32)
   end
 
   describe "add action" do
