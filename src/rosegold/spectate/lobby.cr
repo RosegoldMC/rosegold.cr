@@ -105,6 +105,7 @@ module Rosegold::Spectate::Lobby
       setup_arm_swing_listener
       setup_container_closed_listener
       setup_raw_packet_relay
+      @spectate_server.replay_ui_state(self)
 
       Log.info { "#{@username} is now spectating" }
     end

@@ -23,6 +23,7 @@ module Rosegold::Spectate::PlaySession
     setup_command_suggestions_listener
     setup_raw_packet_relay
     send_cached_commands
+    @spectate_server.replay_ui_state(self)
     start_keep_alive_sender
   end
 
