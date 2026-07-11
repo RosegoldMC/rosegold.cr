@@ -3,6 +3,10 @@ module Rosegold::Spectate::PlaySession
     return unless bot = @client
 
     send_join_game(bot)
+    start_spectating_session(bot)
+  end
+
+  private def start_spectating_session(bot : Rosegold::Client)
     send_set_time(bot)
     send_default_spawn_position(bot)
     send_player_abilities

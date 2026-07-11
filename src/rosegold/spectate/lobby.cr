@@ -96,24 +96,7 @@ module Rosegold::Spectate::Lobby
       # Unload lobby chunk
       send_packet(Rosegold::Clientbound::UnloadChunk.new(0, 0))
 
-      send_player_abilities
-      send_default_spawn_position(bot)
-      send_player_position(bot)
-      send_set_time(bot)
-      send_update_health(bot)
-      send_set_experience(bot)
-      start_inventory_polling
-      send_hotbar_selection(bot.player.hotbar_selection)
-      send_start_waiting_for_chunks
-      send_chunks
-      send_existing_players
-      send_existing_entities
-      send_existing_entity_effects
-      start_bot_monitoring
-      setup_position_event_listener
-      setup_arm_swing_listener
-      setup_container_closed_listener
-      setup_raw_packet_relay
+      start_spectating_session(bot)
 
       Log.info { "#{@username} is now spectating" }
     end
