@@ -10,9 +10,17 @@ class Rosegold::Client; end
 
 class Rosegold::Spectate::Server
   DEFAULT_SPECTATOR_ENTITY_ID = 0x7fffffff
-  DEFAULT_RENDER_DISTANCE     =          4
-  DEFAULT_VIEW_DISTANCE       =     10_u32
-  DEFAULT_SIMULATION_DISTANCE =      3_u32
+  SPECTATOR_VEHICLE_ENTITY_ID = DEFAULT_SPECTATOR_ENTITY_ID - 1
+  # Interaction entity's default height; a rider's feet attach at the vehicle's top.
+  VEHICLE_PASSENGER_ATTACHMENT = 1.0
+  # Standing eye 1.62 minus sneaking eye 1.27; drop the vehicle to glide the camera down.
+  SNEAK_CAMERA_DROP           = 0.35
+  TELEPORT_JUMP_THRESHOLD     =  8.0
+  LOOK_UPDATE_INTERVAL        = 16.milliseconds
+  LOOK_UPSAMPLING             = true
+  DEFAULT_RENDER_DISTANCE     =      4
+  DEFAULT_VIEW_DISTANCE       = 10_u32
+  DEFAULT_SIMULATION_DISTANCE =  3_u32
   KEEP_ALIVE_INTERVAL         = 20.seconds
   INVENTORY_POLL_INTERVAL     = 1.second
   BOT_MONITOR_INTERVAL        = 50.milliseconds

@@ -26,8 +26,10 @@ module Rosegold::Spectate::PlaySession
     setup_container_closed_listener
     setup_command_suggestions_listener
     setup_raw_packet_relay
+    setup_sneak_listener
     send_cached_commands
     start_keep_alive_sender
+    mount_spectator_vehicle(bot)
   end
 
   private def send_cached_commands

@@ -59,13 +59,7 @@ module Rosegold::Spectate::PacketRelay
       next unless @connected
       next unless @spectate_state.spectating?
 
-      send_player_position_update(
-        event.position.x,
-        event.position.y,
-        event.position.z,
-        event.look.yaw,
-        event.look.pitch
-      )
+      handle_spectator_position(event.position, event.look)
     end
   end
 
