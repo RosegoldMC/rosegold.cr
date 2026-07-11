@@ -46,6 +46,8 @@ module Rosegold::Spectate::Lobby
   end
 
   private def start_lobby_monitor
+    return if @lobby_monitor_running
+    @lobby_monitor_running = true
     spawn do
       loop do
         break unless @connected
@@ -60,6 +62,8 @@ module Rosegold::Spectate::Lobby
       end
     rescue e
       Log.error { "Lobby monitor error: #{e}" }
+    ensure
+      @lobby_monitor_running = false
     end
   end
 
