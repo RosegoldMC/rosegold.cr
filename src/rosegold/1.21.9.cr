@@ -1,3 +1,5 @@
+{% skip_file if flag?(:docs) %}
+
 module Rosegold
   COMPILE_ONLY_VERSION = "1.21.9"
 end
