@@ -56,9 +56,12 @@ class Rosegold::Clientbound::ResourcePackPush < Rosegold::Clientbound::Packet
 
   def self.response_actions(policy : Symbol) : Array(Serverbound::ResourcePackResponse::Action)
     case policy
-    when :decline
+    when :decline, :declined
       [Serverbound::ResourcePackResponse::Action::Declined]
+    when :loaded, :accept, :accepted
+      [Serverbound::ResourcePackResponse::Action::Accepted, Serverbound::ResourcePackResponse::Action::SuccessfullyLoaded]
     else
+      Log.warn { "Unknown resource_pack_response policy #{policy.inspect}; accepting" }
       [Serverbound::ResourcePackResponse::Action::Accepted, Serverbound::ResourcePackResponse::Action::SuccessfullyLoaded]
     end
   end

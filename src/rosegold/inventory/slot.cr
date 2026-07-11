@@ -2271,39 +2271,44 @@ end
 # value encoded as a single network NBT tag (ByteBufCodecs.fromCodecWithRegistries),
 # so the value is self-terminating and can be skipped without a per-type codec.
 class Rosegold::DataComponents::BlockPredicates < Rosegold::DataComponent
+  property raw_bytes : Bytes = Bytes.empty
+
   def initialize; end
 
   def self.read(io) : self
-    count = io.read_var_int
+    capture = Minecraft::IO::CaptureIO.new(io)
+    count = capture.read_var_int
     count.times do
-      has_blocks = io.read_bool
+      has_blocks = capture.read_bool
       if has_blocks
-        holder_type = io.read_var_int
+        holder_type = capture.read_var_int
         if holder_type == 0
-          io.read_var_string # tag
+          capture.read_var_string # tag
         else
-          (holder_type - 1).times { io.read_var_int }
+          (holder_type - 1).times { capture.read_var_int }
         end
       end
-      has_properties = io.read_bool
+      has_properties = capture.read_bool
       if has_properties
-        prop_count = io.read_var_int
+        prop_count = capture.read_var_int
         prop_count.times do
-          io.read_var_string # property name
-          is_exact = io.read_bool
+          capture.read_var_string # property name
+          is_exact = capture.read_bool
           if is_exact
-            io.read_var_string # exact value
+            capture.read_var_string # exact value
           else
-            io.read_var_string # min
-            io.read_var_string # max
+            capture.read_var_string # min
+            capture.read_var_string # max
           end
         end
       end
-      has_nbt = io.read_bool
-      io.read_nbt_unamed if has_nbt
-      read_data_component_matchers(io)
+      has_nbt = capture.read_bool
+      capture.read_nbt_unamed if has_nbt
+      read_data_component_matchers(capture)
     end
-    new
+    instance = new
+    instance.raw_bytes = capture.buffer.to_slice.dup
+    instance
   end
 
   private def self.read_data_component_matchers(io)
@@ -2322,7 +2327,11 @@ class Rosegold::DataComponents::BlockPredicates < Rosegold::DataComponent
   end
 
   def write(io) : Nil
-    io.write 0_u32
+    if raw_bytes.empty?
+      io.write 0_u32
+    else
+      io.write raw_bytes
+    end
   end
 end
 
