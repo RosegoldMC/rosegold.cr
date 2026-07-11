@@ -215,6 +215,15 @@ class Rosegold::Spectate::Connection
     @spectate_server.client.try &.spawned? || false
   end
 
+  def world_ready?
+    return false unless client_ready?
+    bot = @spectate_server.client
+    return false unless bot
+
+    feet = bot.player.feet
+    bot.dimension.chunks.has_key?({feet.x.to_i >> 4, feet.z.to_i >> 4})
+  end
+
   def self.decode_varint(bytes : Bytes) : UInt32?
     result = 0_u32
     shift = 0

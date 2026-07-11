@@ -1,12 +1,21 @@
 module Rosegold::Spectate::Lobby
   private def enter_initial_state
-    if client_ready?
+    if world_ready?
       @spectate_state = State::SPECTATING
       send_spectating_packets
     else
       @spectate_state = State::LOBBY
       send_lobby_packets
       start_lobby_monitor
+    end
+  end
+
+  private def lobby_wait_message : String
+    bot = @spectate_server.client
+    if bot.nil? || !bot.connected?
+      "Waiting for bot to connect to server..."
+    else
+      "Bot connected, waiting for world data..."
     end
   end
 
@@ -31,7 +40,7 @@ module Rosegold::Spectate::Lobby
     send_empty_chunk(0, 0)
 
     # System chat message
-    send_packet(Rosegold::Clientbound::SystemChatMessage.new(TextComponent.new("Waiting for bot to connect..."), false))
+    send_packet(Rosegold::Clientbound::SystemChatMessage.new(TextComponent.new(lobby_wait_message), false))
 
     start_keep_alive_sender
   end
@@ -42,7 +51,7 @@ module Rosegold::Spectate::Lobby
         break unless @connected
         break unless @spectate_state.lobby?
 
-        if client_ready?
+        if world_ready?
           transition_to_spectating
           break
         end
@@ -57,7 +66,7 @@ module Rosegold::Spectate::Lobby
   private def transition_to_spectating
     @transition_mutex.synchronize do
       return unless @spectate_state.lobby?
-      return unless client_ready?
+      return unless world_ready?
       return unless bot = @spectate_server.client
 
       Log.info { "Transitioning #{@username} from lobby to spectating" }
