@@ -118,6 +118,9 @@ module Rosegold::Spectate::Lobby
       unload_all_chunks
       destroy_all_entities
 
+      @last_digging_block = nil
+      @last_dig_progress = 0.0_f32
+
       @client = nil
 
       # Send Respawn to transition to spectator mode (lobby)
