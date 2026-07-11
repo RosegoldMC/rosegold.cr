@@ -2265,9 +2265,11 @@ end
 #   Optional<NbtPredicate> nbt
 #   DataComponentMatchers components  (exact + partial predicate maps)
 #
-# DataComponentMatchers is effectively recursive Slot-component parsing. We read
-# the common empty-map case correctly; any non-empty matchers raise and the
-# packet-layer rescue falls back to RawPacket.
+# DataComponentMatchers holds an exact map (recursive Slot-component parsing) and
+# a partial map. Partial entries are uniform on the wire regardless of predicate
+# type: an Either type-ref (bool + VarInt registry id) followed by the predicate
+# value encoded as a single network NBT tag (ByteBufCodecs.fromCodecWithRegistries),
+# so the value is self-terminating and can be skipped without a per-type codec.
 class Rosegold::DataComponents::BlockPredicates < Rosegold::DataComponent
   def initialize; end
 
@@ -2312,11 +2314,10 @@ class Rosegold::DataComponents::BlockPredicates < Rosegold::DataComponent
       DataComponent.create_component(component_type_id, io)
     end
     partial_count = io.read_var_int
-    if partial_count != 0
-      raise Minecraft::NBT::DecodeError.new(
-        "DataComponentMatchers with non-empty partial-predicate map " \
-        "(count=#{partial_count}) is not supported; cannot advance IO stream safely"
-      )
+    partial_count.times do
+      io.read_bool       # Either discriminator: predicate-type vs component-type registry
+      io.read_var_int    # registry id of the predicate/component type
+      io.read_nbt_unamed # predicate value (network NBT via fromCodecWithRegistries)
     end
   end
 
