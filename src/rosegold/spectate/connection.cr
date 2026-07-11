@@ -221,7 +221,7 @@ class Rosegold::Spectate::Connection
     return false unless bot
 
     feet = bot.player.feet
-    bot.dimension.chunks.has_key?({feet.x.to_i >> 4, feet.z.to_i >> 4})
+    bot.dimension.chunks.has_key?({(feet.x / 16).floor.to_i32, (feet.z / 16).floor.to_i32})
   end
 
   def self.decode_varint(bytes : Bytes) : UInt32?
