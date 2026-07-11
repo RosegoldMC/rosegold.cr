@@ -42,9 +42,9 @@ class Rosegold::Clientbound::PlayerRotation < Rosegold::Clientbound::Packet
       io.write self.class.packet_id_for_protocol(Client.protocol_version)
       if Client.protocol_version >= 773_u32
         io.write yaw
-        io.write relative_yaw
+        io.write relative_yaw?
         io.write pitch
-        io.write relative_pitch
+        io.write relative_pitch?
       else
         io.write yaw
         io.write pitch
