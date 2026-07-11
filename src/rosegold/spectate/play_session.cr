@@ -31,6 +31,7 @@ module Rosegold::Spectate::PlaySession
     reset_look_samples(bot.player.look)
     start_look_sender
     send_cached_commands
+    @spectate_server.replay_ui_state(self)
     start_keep_alive_sender
   end
 
