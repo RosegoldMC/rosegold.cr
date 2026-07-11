@@ -26,6 +26,8 @@ module Rosegold::Spectate::PlaySession
     setup_container_closed_listener
     setup_command_suggestions_listener
     setup_raw_packet_relay
+    setup_sneak_listener
+    send_current_sneak_scale(bot)
     reset_look_samples(bot.player.look)
     start_look_sender
     send_cached_commands
