@@ -26,10 +26,10 @@ module Rosegold::Spectate::PlaySession
     setup_container_closed_listener
     setup_command_suggestions_listener
     setup_raw_packet_relay
-    setup_sneak_listener
+    reset_look_samples(bot.player.look)
+    start_look_sender
     send_cached_commands
     start_keep_alive_sender
-    mount_spectator_vehicle(bot)
   end
 
   private def send_cached_commands
@@ -230,11 +230,20 @@ module Rosegold::Spectate::PlaySession
   end
 
   private def send_player_position_update(x : Float64, y : Float64, z : Float64, yaw : Float32, pitch : Float32)
-    packet = Rosegold::Clientbound::SynchronizePlayerPosition.new(
-      x, y, z, yaw, pitch,
-      0x00_u8,
-      @teleport_id &+= 1
-    )
+    # With upsampling the look sender owns rotation; relative zero deltas keep this teleport from snapping it back.
+    packet = if Server::LOOK_UPSAMPLING
+               Rosegold::Clientbound::SynchronizePlayerPosition.new(
+                 x, y, z, 0.0_f32, 0.0_f32,
+                 LookSmoothing::RELATIVE_ROTATION_FLAGS,
+                 @teleport_id &+= 1
+               )
+             else
+               Rosegold::Clientbound::SynchronizePlayerPosition.new(
+                 x, y, z, yaw, pitch,
+                 0x00_u8,
+                 @teleport_id &+= 1
+               )
+             end
     send_packet(packet)
   end
 

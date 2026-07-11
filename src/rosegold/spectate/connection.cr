@@ -4,7 +4,7 @@ require "./world_sync"
 require "./play_session"
 require "./monitoring"
 require "./packet_relay"
-require "./spectator_vehicle"
+require "./look_smoothing"
 require "./lobby"
 
 enum Rosegold::Spectate::State
@@ -19,7 +19,7 @@ class Rosegold::Spectate::Connection
   include Spectate::PlaySession
   include Spectate::Monitoring
   include Spectate::PacketRelay
-  include Spectate::SpectatorVehicle
+  include Spectate::LookSmoothing
   include Spectate::Lobby
 
   Log = ::Log.for self
@@ -43,10 +43,6 @@ class Rosegold::Spectate::Connection
   @bot_monitoring_running : Bool = false
   @lobby_monitor_running : Bool = false
   @look_sender_running : Bool = false
-  @vehicle_spawned : Bool = false
-  @vehicle_sneaking : Bool = false
-  @vehicle_uuid : UUID = UUID.random
-  @last_bot_feet : Vec3d? = nil
   @prev_look : Look? = nil
   @last_look : Look? = nil
   @last_look_time : Time::Instant = Time.instant

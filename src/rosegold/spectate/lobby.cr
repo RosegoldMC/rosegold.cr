@@ -114,9 +114,6 @@ module Rosegold::Spectate::Lobby
 
       cleanup_event_handlers
 
-      # Dismount before teleporting: SynchronizePlayerPosition is a no-op while a passenger.
-      destroy_spectator_vehicle
-
       # Unload all world state
       unload_all_chunks
       destroy_all_entities

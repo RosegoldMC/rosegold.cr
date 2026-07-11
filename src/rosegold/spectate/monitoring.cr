@@ -59,9 +59,6 @@ module Rosegold::Spectate::Monitoring
   private def handle_dimension_change(bot : Rosegold::Client)
     unload_all_chunks
 
-    # Dismount before the respawn teleport: SynchronizePlayerPosition is a no-op while a passenger.
-    destroy_spectator_vehicle
-
     respawn = Rosegold::Clientbound::Respawn.new(
       dimension_type: bot.dimension.dimension_type,
       dimension_name: bot.dimension.name,
@@ -91,7 +88,6 @@ module Rosegold::Spectate::Monitoring
     send_update_health(bot)
     send_set_experience(bot)
     send_inventory_content
-    mount_spectator_vehicle(bot)
   end
 
   private def check_hotbar_updates(monitor : MonitorState, bot : Rosegold::Client)

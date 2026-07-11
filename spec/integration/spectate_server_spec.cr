@@ -44,17 +44,6 @@ Spectator.describe "SpectateServer Integration" do
         # Verify basic play state was received
         expect(spectator.player.entity_id).not_to eq(0_u64)
         expect(spectator.dimension_for_test.chunks.size).to be > 0
-
-        # Spectator rides an invisible interaction vehicle so its own motion interpolates.
-        vehicle_id = Rosegold::SpectateServer::SPECTATOR_VEHICLE_ENTITY_ID.to_u64
-        spectator_id = Rosegold::SpectateServer::DEFAULT_SPECTATOR_ENTITY_ID.to_u32
-        deadline = Time.instant + 5.seconds
-        until spectator.dimension_for_test.entities[vehicle_id]?.try(&.passenger_ids.includes?(spectator_id)) || Time.instant > deadline
-          sleep 10.milliseconds
-        end
-        vehicle = spectator.dimension_for_test.entities[vehicle_id]?
-        expect(vehicle).not_to be_nil
-        expect(vehicle.try(&.passenger_ids.includes?(spectator_id))).to be_true
       ensure
         spectator.connection?.try(&.disconnect("test done"))
         spectate_server.stop
