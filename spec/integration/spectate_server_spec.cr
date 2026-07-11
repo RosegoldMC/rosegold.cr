@@ -70,8 +70,9 @@ Spectator.describe "SpectateServer Integration" do
       begin
         spectator.connect
 
+        # Lobby serves exactly one empty chunk; spectating serves a render-distance square
         deadline = Time.instant + 15.seconds
-        until (spectator.player.entity_id != 0_u64 && spectator.dimension_for_test.chunks.size > 0) || Time.instant > deadline
+        until (spectator.player.entity_id != 0_u64 && spectator.dimension_for_test.chunks.size > 1) || Time.instant > deadline
           sleep 10.milliseconds
         end
 
@@ -80,7 +81,7 @@ Spectator.describe "SpectateServer Integration" do
         end
 
         expect(spectator.player.entity_id).not_to eq(0_u64)
-        expect(spectator.dimension_for_test.chunks.size).to be > 0
+        expect(spectator.dimension_for_test.chunks.size).to be > 1
       ensure
         spectator.connection?.try(&.disconnect("test done"))
         spectate_server.stop
