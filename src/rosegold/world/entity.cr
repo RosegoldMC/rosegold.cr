@@ -9,7 +9,8 @@ class Rosegold::Entity
   # SetEntityData serializer readers return.
   alias TrackedValue = Bool | UInt8 | UInt32 | UInt64 | Float32 | String |
                        Rosegold::TextComponent | Rosegold::Slot | Rosegold::Vec3i | UUID |
-                       Minecraft::NBT::Tag | Tuple(Float32, Float32, Float32) | Array(UInt32) | Nil
+                       Minecraft::NBT::Tag | Tuple(Float32, Float32, Float32) | Array(UInt32) |
+                       Tuple(String, Rosegold::Vec3i) | Array(Float32) | Bytes | Nil
 
   # entities.json is embedded only for enabled versions (guarded read_file).
   METADATA_BY_PROTOCOL = {% begin %}{

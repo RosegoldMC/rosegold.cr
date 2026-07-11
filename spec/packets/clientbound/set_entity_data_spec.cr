@@ -58,6 +58,98 @@ Spectator.describe Rosegold::Clientbound::SetEntityData do
       expect(Rosegold::EntityMetadata.serializer_for(22_u32, 775_u32)).to eq(:cat_sound_variant)
       expect(Rosegold::EntityMetadata.serializer_for(23_u32, 775_u32)).to eq(:cow_variant)
     end
+
+    it "covers the full 772 tail through quaternion" do
+      expect(Rosegold::EntityMetadata.serializer_for(24_u32, 772_u32)).to eq(:wolf_variant)
+      expect(Rosegold::EntityMetadata.serializer_for(29_u32, 772_u32)).to eq(:opt_global_pos)
+      expect(Rosegold::EntityMetadata.serializer_for(30_u32, 772_u32)).to eq(:painting_variant)
+      expect(Rosegold::EntityMetadata.serializer_for(34_u32, 772_u32)).to eq(:quaternion)
+      expect(Rosegold::EntityMetadata.serializer_for(35_u32, 772_u32)).to be_nil
+    end
+
+    it "inserts zombie_nautilus_variant at 28 on 774 only, unlike 773" do
+      expect(Rosegold::EntityMetadata.serializer_for(28_u32, 773_u32)).to eq(:opt_global_pos)
+      expect(Rosegold::EntityMetadata.serializer_for(28_u32, 774_u32)).to eq(:zombie_nautilus_variant)
+      expect(Rosegold::EntityMetadata.serializer_for(29_u32, 774_u32)).to eq(:opt_global_pos)
+      expect(Rosegold::EntityMetadata.serializer_for(38_u32, 774_u32)).to eq(:humanoid_arm)
+      expect(Rosegold::EntityMetadata.serializer_for(37_u32, 773_u32)).to be_nil
+    end
+
+    it "runs the 775 tail out to humanoid_arm at 42" do
+      expect(Rosegold::EntityMetadata.serializer_for(29_u32, 775_u32)).to eq(:pig_sound_variant)
+      expect(Rosegold::EntityMetadata.serializer_for(34_u32, 775_u32)).to eq(:painting_variant)
+      expect(Rosegold::EntityMetadata.serializer_for(41_u32, 775_u32)).to eq(:resolvable_profile)
+      expect(Rosegold::EntityMetadata.serializer_for(42_u32, 775_u32)).to eq(:humanoid_arm)
+    end
+  end
+
+  describe "tail serializer values" do
+    it "decodes wolf_variant, vector3, quaternion and opt_global_pos on 772" do
+      Rosegold::Client.protocol_version = 772_u32
+
+      io = Minecraft::IO::Memory.new
+      io.write 7_u32
+      io.write_byte 17_u8
+      io.write 24_u32 # wolf_variant
+      io.write 3_u32
+      io.write_byte 11_u8
+      io.write 33_u32 # vector3
+      io.write_full 1.0_f32
+      io.write_full 2.0_f32
+      io.write_full 3.0_f32
+      io.write_byte 12_u8
+      io.write 34_u32 # quaternion
+      4.times { io.write_full 0.5_f32 }
+      io.write_byte 13_u8
+      io.write 29_u32 # opt_global_pos
+      io.write true
+      io.write "minecraft:overworld"
+      io.write Rosegold::Vec3i.new(1, 64, -2)
+      io.write_byte 0xFF_u8
+
+      read_io = Minecraft::IO::Memory.new(io.to_slice)
+      packet = Rosegold::Clientbound::SetEntityData.read(read_io)
+
+      expect(packet.values[17_u8]).to eq(3_u32)
+      expect(packet.values[11_u8]).to eq({1.0_f32, 2.0_f32, 3.0_f32})
+      expect(packet.values[12_u8]).to eq([0.5_f32, 0.5_f32, 0.5_f32, 0.5_f32])
+      expect(packet.values[13_u8]).to eq({"minecraft:overworld", Rosegold::Vec3i.new(1, 64, -2)})
+
+      round_trip = Minecraft::IO::Memory.new(packet.write)
+      round_trip.read_byte
+      expect(Rosegold::Clientbound::SetEntityData.read(round_trip).values).to eq(packet.values)
+    end
+
+    it "captures a registry painting_variant holder for byte-exact round-trip" do
+      Rosegold::Client.protocol_version = 772_u32
+
+      io = Minecraft::IO::Memory.new
+      io.write 7_u32
+      io.write_byte 19_u8
+      io.write 30_u32 # painting_variant
+      io.write 5_u32  # registry holder (id 4 + 1)
+      io.write_byte 0xFF_u8
+
+      packet = Rosegold::Clientbound::SetEntityData.read(Minecraft::IO::Memory.new(io.to_slice))
+      expect(packet.values[19_u8].as(Bytes)).to eq(Bytes[5])
+
+      round_trip = Minecraft::IO::Memory.new(packet.write)
+      round_trip.read_byte
+      expect(Rosegold::Clientbound::SetEntityData.read(round_trip).values[19_u8]).to eq(Bytes[5])
+    end
+
+    it "aborts on resolvable_profile" do
+      Rosegold::Client.protocol_version = 775_u32
+
+      io = Minecraft::IO::Memory.new
+      io.write 7_u32
+      io.write_byte 0_u8
+      io.write 41_u32 # resolvable_profile
+      io.write_byte 0xFF_u8
+
+      expect { Rosegold::Clientbound::SetEntityData.read(Minecraft::IO::Memory.new(io.to_slice)) }
+        .to raise_error(/resolvable_profile/)
+    end
   end
 
   describe "packet parsing" do

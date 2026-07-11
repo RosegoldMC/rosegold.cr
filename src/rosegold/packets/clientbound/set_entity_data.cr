@@ -14,7 +14,12 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
 
   VARINT_SERIALIZERS = {
     :varint, :direction, :pose, :opt_varint,
-    :block_state, :opt_block_state, :cat_variant, :cat_sound_variant, :cow_variant,
+    :block_state, :opt_block_state, :cat_variant, :cat_sound_variant,
+    :cow_variant, :cow_sound_variant, :wolf_variant, :wolf_sound_variant,
+    :frog_variant, :pig_variant, :pig_sound_variant, :chicken_variant,
+    :chicken_sound_variant, :zombie_nautilus_variant, :sniffer_state,
+    :armadillo_state, :copper_golem_state, :weathering_copper_state,
+    :humanoid_arm,
   }
 
   record Entry, index : UInt8, serializer_id : UInt32, value : Rosegold::Entity::TrackedValue
@@ -54,12 +59,32 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
     when :opt_uuid           then io.read_bool ? io.read_uuid : nil
     when :nbt                then io.read_nbt_unamed
     when :villager_data      then [io.read_var_int, io.read_var_int, io.read_var_int]
-    when :particle, :particles
+    when :opt_global_pos     then io.read_bool ? {io.read_var_string, io.read_bit_location} : nil
+    when :vector3            then {io.read_float, io.read_float, io.read_float}
+    when :quaternion         then [io.read_float, io.read_float, io.read_float, io.read_float]
+    when :painting_variant   then read_painting_variant(io)
+    when :particle, :particles, :resolvable_profile
       raise "Entity metadata serializer #{symbol} has no stream codec; cannot advance IO"
     else
       raise "Unhandled entity metadata serializer #{symbol}" unless VARINT_SERIALIZERS.includes?(symbol)
       io.read_var_int
     end
+  end
+
+  # Holder<PaintingVariant>: VarInt where 0 = inline body follows (width,
+  # height, asset id, optional title/author components). Captured raw so write
+  # can replay the bytes without modeling the inline struct.
+  private def self.read_painting_variant(io) : Bytes
+    capture = Minecraft::IO::CaptureIO.new(io)
+    holder = capture.read_var_int
+    if holder == 0
+      capture.read_var_int
+      capture.read_var_int
+      capture.read_var_string
+      capture.read_text_component if capture.read_bool
+      capture.read_text_component if capture.read_bool
+    end
+    capture.buffer.to_slice.dup
   end
 
   def values : Hash(UInt8, Rosegold::Entity::TrackedValue)
@@ -109,6 +134,18 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
       tag.write io
     when :villager_data
       value.as(Array(UInt32)).each { |element| io.write element }
+    when :opt_global_pos
+      write_optional(io, value) do |present|
+        dimension, pos = present.as(Tuple(String, Rosegold::Vec3i))
+        io.write dimension
+        io.write pos
+      end
+    when :vector3
+      value.as(Tuple(Float32, Float32, Float32)).each { |component| io.write_full component }
+    when :quaternion
+      value.as(Array(Float32)).each { |component| io.write_full component }
+    when :painting_variant
+      io.write value.as(Bytes)
     else
       raise "Unhandled entity metadata serializer #{symbol}" unless VARINT_SERIALIZERS.includes?(symbol)
       io.write value.as(UInt32)
