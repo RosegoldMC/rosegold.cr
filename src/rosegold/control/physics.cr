@@ -551,8 +551,7 @@ class Rosegold::Physics
       slip = block_slip
       friction_cubed = slip * slip * slip
       # Correct Minecraft formula: base_speed * (friction_constant / friction³)
-      # Apply Speed and Slowness potion effects to base movement speed
-      effective_speed = Math.max(0.0, BASE_MOVEMENT_SPEED * (1.0 + 0.2 * player.speed_level) * (1.0 - 0.15 * player.slowness_level))
+      effective_speed = player.ground_movement_speed(BASE_MOVEMENT_SPEED)
       movement_multiplier = effective_speed * (FRICTION_CONSTANT / friction_cubed)
 
       # Apply movement state modifiers

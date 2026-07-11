@@ -1,5 +1,6 @@
 require "../versions"
 require "minecraft-data"
+require "./attribute_snapshot"
 
 class Rosegold::Entity
   alias Metadata = Minecraft::Data::EntityMetadata
@@ -29,9 +30,15 @@ class Rosegold::Entity
     passenger_ids : Array(UInt32) = [] of UInt32,
     effects : Array(EntityEffect) = [] of EntityEffect
 
+  property attributes : Hash(UInt32, AttributeSnapshot) = Hash(UInt32, AttributeSnapshot).new
+
   property? \
     on_ground : Bool = true,
     living : Bool = false
+
+  def apply_attribute_snapshots(snapshots : Array(AttributeSnapshot)) : Nil
+    snapshots.each { |snapshot| attributes[snapshot.attribute_id] = snapshot }
+  end
 
   # Matches vanilla MC's Entity.isPickable() = false. Default is pickable; only these are excluded.
   NON_PICKABLE_ENTITIES = Set{
