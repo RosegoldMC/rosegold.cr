@@ -4,6 +4,7 @@ require "./world_sync"
 require "./play_session"
 require "./monitoring"
 require "./packet_relay"
+require "./look_smoothing"
 require "./lobby"
 
 enum Rosegold::Spectate::State
@@ -18,6 +19,7 @@ class Rosegold::Spectate::Connection
   include Spectate::PlaySession
   include Spectate::Monitoring
   include Spectate::PacketRelay
+  include Spectate::LookSmoothing
   include Spectate::Lobby
 
   Log = ::Log.for self
@@ -40,6 +42,10 @@ class Rosegold::Spectate::Connection
   @inventory_polling_running : Bool = false
   @bot_monitoring_running : Bool = false
   @lobby_monitor_running : Bool = false
+  @look_sender_running : Bool = false
+  @prev_look : Look? = nil
+  @last_look : Look? = nil
+  @last_look_time : Time::Instant = Time.instant
   @packet_send_mutex = Mutex.new
   @transition_mutex = Mutex.new
 

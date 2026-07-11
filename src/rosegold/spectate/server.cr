@@ -10,9 +10,11 @@ class Rosegold::Client; end
 
 class Rosegold::Spectate::Server
   DEFAULT_SPECTATOR_ENTITY_ID = 0x7fffffff
-  DEFAULT_RENDER_DISTANCE     =          4
-  DEFAULT_VIEW_DISTANCE       =     10_u32
-  DEFAULT_SIMULATION_DISTANCE =      3_u32
+  LOOK_UPDATE_INTERVAL        = 16.milliseconds
+  LOOK_UPSAMPLING             = true
+  DEFAULT_RENDER_DISTANCE     =      4
+  DEFAULT_VIEW_DISTANCE       = 10_u32
+  DEFAULT_SIMULATION_DISTANCE =  3_u32
   KEEP_ALIVE_INTERVAL         = 20.seconds
   INVENTORY_POLL_INTERVAL     = 1.second
   BOT_MONITOR_INTERVAL        = 50.milliseconds
