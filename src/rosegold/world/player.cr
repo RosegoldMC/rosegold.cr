@@ -7,12 +7,15 @@ class Rosegold::Player
   # of minecraft-data attributes.json for 1.21.8/1.21.9/1.21.11. 26.1/26.2 are not
   # published in minecraft-data; inherited from 774 and safe because physics falls
   # back to the effect formula whenever the attribute is absent.
+  # Derived from each version's decompiled Attributes registration order;
+  # 26.2 added 4 attributes before movement_speed (air_drag_modifier,
+  # below_name_distance, bounciness, friction_modifier).
   MOVEMENT_SPEED_ATTRIBUTE_IDS = {
     772_u32 => 22_u32,
     773_u32 => 22_u32,
     774_u32 => 22_u32,
     775_u32 => 22_u32,
-    776_u32 => 22_u32,
+    776_u32 => 26_u32,
   }
   SPRINT_EXCLUDED_MODIFIER_IDS = Set{Rosegold::AttributeSnapshot::SPRINTING_MODIFIER_ID}
 
