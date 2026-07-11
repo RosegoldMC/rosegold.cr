@@ -56,6 +56,14 @@ Open that URL, enter the code, and sign in with the Microsoft account that owns 
 
 All the examples start a [SpectateServer](https://rosegoldmc.github.io/rosegold.cr/Rosegold/SpectateServer.html) on `localhost:25566`. Open Minecraft, add a server with that address, and connect to see through your bot's eyes in real time — its position, inventory, health, and everything happening around it. No auth required.
 
+Scripts can also push UI straight to everyone spectating: chat lines, an action bar, and a boss bar for progress.
+
+```crystal
+spectate.chat "hello"
+spectate.action_bar "mining 42%"
+spectate.boss_bar "Progress", 42, 100
+```
+
 ### 5. Choosing Minecraft Versions
 
 By default Rosegold supports every Minecraft version it knows about and auto-detects which one the server speaks. Pick a mode by what you `require`:
