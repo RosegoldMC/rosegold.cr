@@ -5,6 +5,7 @@ require "./play_session"
 require "./monitoring"
 require "./packet_relay"
 require "./look_smoothing"
+require "./sneak_camera"
 require "./lobby"
 
 enum Rosegold::Spectate::State
@@ -20,6 +21,7 @@ class Rosegold::Spectate::Connection
   include Spectate::Monitoring
   include Spectate::PacketRelay
   include Spectate::LookSmoothing
+  include Spectate::SneakCamera
   include Spectate::Lobby
 
   Log = ::Log.for self

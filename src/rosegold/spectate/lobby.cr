@@ -114,6 +114,9 @@ module Rosegold::Spectate::Lobby
 
       cleanup_event_handlers
 
+      # The player entity persists across Respawn, so undo any sneak scale.
+      send_spectator_scale(1.0)
+
       # Unload all world state
       unload_all_chunks
       destroy_all_entities

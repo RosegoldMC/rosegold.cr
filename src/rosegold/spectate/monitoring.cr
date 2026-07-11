@@ -88,6 +88,7 @@ module Rosegold::Spectate::Monitoring
     send_update_health(bot)
     send_set_experience(bot)
     send_inventory_content
+    send_current_sneak_scale(bot)
   end
 
   private def check_hotbar_updates(monitor : MonitorState, bot : Rosegold::Client)
