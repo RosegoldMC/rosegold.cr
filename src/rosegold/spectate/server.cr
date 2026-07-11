@@ -142,6 +142,7 @@ class Rosegold::Spectate::Server
           end
 
           enable_tcp_keepalive(client_socket)
+          enable_tcp_nodelay(client_socket)
 
           Log.info { "New spectator connection from #{client_socket.remote_address}" }
 
@@ -177,6 +178,12 @@ class Rosegold::Spectate::Server
     socket.tcp_keepalive_count = 3
   rescue ex
     Log.debug { "Failed to enable TCP keepalive: #{ex}" }
+  end
+
+  private def enable_tcp_nodelay(socket : TCPSocket)
+    socket.tcp_nodelay = true
+  rescue ex
+    Log.debug { "Failed to enable TCP nodelay: #{ex}" }
   end
 
   def attach_client(client : Rosegold::Client)

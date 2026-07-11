@@ -300,7 +300,9 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     detect_protocol_version
 
-    io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
+    socket = TCPSocket.new(host, port)
+    socket.tcp_nodelay = true
+    io = Minecraft::IO::Wrap.new socket
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING, protocol_version, self
     @current_protocol_state = ProtocolState::HANDSHAKING
     connection.handler.try &.on Event::Disconnected do |_event|
@@ -410,7 +412,9 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def self.status(host : String, port : UInt16 = 25565)
-    io = Minecraft::IO::Wrap.new TCPSocket.new(host, port)
+    socket = TCPSocket.new(host, port)
+    socket.tcp_nodelay = true
+    io = Minecraft::IO::Wrap.new socket
     connection = Connection::Client.new io, ProtocolState::HANDSHAKING, Client.protocol_version
 
     connection.send_packet Serverbound::Handshake.new Client.protocol_version, host, port, 1
