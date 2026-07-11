@@ -237,6 +237,8 @@ module Rosegold::Spectate::PlaySession
   end
 
   private def start_inventory_polling
+    return if @inventory_polling_running
+    @inventory_polling_running = true
     spawn do
       loop do
         send_inventory_content
@@ -248,6 +250,8 @@ module Rosegold::Spectate::PlaySession
       end
     rescue ex
       Log.debug { "Inventory polling error: #{ex}" }
+    ensure
+      @inventory_polling_running = false
     end
   end
 end

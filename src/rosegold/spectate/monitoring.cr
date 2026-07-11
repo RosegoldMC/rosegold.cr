@@ -10,8 +10,10 @@ end
 
 module Rosegold::Spectate::Monitoring
   private def start_bot_monitoring
+    return if @bot_monitoring_running
     return unless bot = @client
 
+    @bot_monitoring_running = true
     spawn do
       monitor = MonitorState.new(
         last_hotbar_selection: bot.player.hotbar_selection,
@@ -40,6 +42,8 @@ module Rosegold::Spectate::Monitoring
     rescue e
       Log.error { "Bot monitoring error: #{e}" }
       Log.error exception: e
+    ensure
+      @bot_monitoring_running = false
     end
   end
 
