@@ -72,6 +72,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     cookies : Hash(String, Bytes) = Hash(String, Bytes).new,
     registries : Hash(String, Clientbound::RegistryData) = Hash(String, Clientbound::RegistryData).new,
     known_packs : Array(NamedTuple(namespace: String, id: String, version: String)) = [] of NamedTuple(namespace: String, id: String, version: String),
+    resource_pack_response : Symbol = :loaded,
     tags : Clientbound::UpdateTags? = nil,
     ticker_done : Channel(Nil) = Channel(Nil).new,
     recipe_registry : RecipeRegistry = RecipeRegistry.new
