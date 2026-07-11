@@ -280,6 +280,9 @@ class Rosegold::Spectate::Server
     stop_caching_commands
     @cached_commands_bytes = nil
     @client = nil
+    @last_action_bar = nil
+    @boss_bar_active = false
+    @last_boss_bar_title = nil
   end
 
   private def start_caching_commands(client : Rosegold::Client)
