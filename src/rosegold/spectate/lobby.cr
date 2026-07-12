@@ -112,6 +112,10 @@ module Rosegold::Spectate::Lobby
 
       Log.info { "Transitioning #{@username} from spectating to lobby" }
 
+      # Must precede any lobby packet: the look/inventory sender fibers gate on
+      # spectating? and would otherwise emit stale packets after the Respawn.
+      @spectate_state = State::LOBBY
+
       cleanup_event_handlers
 
       # The player entity persists across Respawn, so undo any sneak scale.
@@ -143,8 +147,6 @@ module Rosegold::Spectate::Lobby
         data_kept: 0_u8
       )
       send_packet(respawn)
-
-      @spectate_state = State::LOBBY
 
       spawn_pos = Vec3i.new(0, 100, 0)
       send_packet(Rosegold::Clientbound::SetDefaultSpawnPosition.new(spawn_pos, 0.0_f32, "minecraft:overworld"))
