@@ -10,9 +10,11 @@ class Rosegold::Client; end
 
 class Rosegold::Spectate::Server
   DEFAULT_SPECTATOR_ENTITY_ID = 0x7fffffff
-  DEFAULT_RENDER_DISTANCE     =          4
-  DEFAULT_VIEW_DISTANCE       =     10_u32
-  DEFAULT_SIMULATION_DISTANCE =      3_u32
+  LOOK_UPDATE_INTERVAL        = 16.milliseconds
+  LOOK_UPSAMPLING             = true
+  DEFAULT_RENDER_DISTANCE     =      4
+  DEFAULT_VIEW_DISTANCE       = 10_u32
+  DEFAULT_SIMULATION_DISTANCE =  3_u32
   KEEP_ALIVE_INTERVAL         = 20.seconds
   INVENTORY_POLL_INTERVAL     = 1.second
   BOT_MONITOR_INTERVAL        = 50.milliseconds
@@ -56,6 +58,7 @@ class Rosegold::Spectate::Server
     "attach_entity"                => {772_u32 => 0x5D_u32, 774_u32 => 0x62_u32, 775_u32 => 0x64_u32},
     "entity_teleport"              => {772_u32 => 0x76_u32, 774_u32 => 0x7B_u32, 775_u32 => 0x7D_u32},
     "commands"                     => {772_u32 => 0x10_u32, 774_u32 => 0x10_u32, 775_u32 => 0x10_u32},
+    "boss_event"                   => {772_u32 => 0x09_u32, 774_u32 => 0x09_u32, 775_u32 => 0x09_u32},
   }.transform_values { |ids| ids.merge({773_u32 => ids[774_u32], 776_u32 => ids[775_u32]}) }
 
   macro build_forwarded_packets_method
@@ -117,11 +120,100 @@ class Rosegold::Spectate::Server
 
   @next_command_suggestion_tid = Atomic(UInt32).new(0_u32)
 
+  @boss_bar_uuid = UUID.random
+  @boss_bar_active = false
+  @last_action_bar : Rosegold::TextComponent? = nil
+  @last_boss_bar_title : Rosegold::TextComponent? = nil
+  @last_boss_bar_progress : Float32 = 0.0_f32
+  @last_boss_bar_color : Clientbound::BossEvent::Color = Clientbound::BossEvent::Color::White
+  @last_boss_bar_division : Clientbound::BossEvent::Division = Clientbound::BossEvent::Division::None
+
   def initialize(@host : String = "127.0.0.1", @port : Int32 = 25566)
   end
 
   def next_command_suggestion_tid : UInt32
     @next_command_suggestion_tid.add(1_u32) &+ 1_u32
+  end
+
+  # Broadcast a chat message to every spectating connection.
+  def chat(message : String | Rosegold::TextComponent)
+    broadcast(Clientbound::SystemChatMessage.new(as_text_component(message), false))
+  end
+
+  # Broadcast an action bar message to every spectating connection.
+  # Sticky: replayed to spectators that join later, until replaced.
+  def action_bar(text : String | Rosegold::TextComponent)
+    component = as_text_component(text)
+    @last_action_bar = component
+    broadcast(Clientbound::SetActionBarText.new(component))
+  end
+
+  # Broadcast a boss bar update to every spectating connection.
+  # The server owns a single boss bar with one stable UUID: the first call
+  # sends an add, later calls send targeted updates.
+  def boss_bar(
+    title : String | Rosegold::TextComponent,
+    progress : Float64,
+    color : Clientbound::BossEvent::Color = Clientbound::BossEvent::Color::White,
+    division : Clientbound::BossEvent::Division = Clientbound::BossEvent::Division::None,
+  )
+    component = as_text_component(title)
+    health = progress.clamp(0.0, 1.0).to_f32
+
+    if @boss_bar_active
+      broadcast(Clientbound::BossEvent.update_title(@boss_bar_uuid, component)) if @last_boss_bar_title.try(&.to_s) != component.to_s
+      broadcast(Clientbound::BossEvent.update_style(@boss_bar_uuid, color, division)) if @last_boss_bar_color != color || @last_boss_bar_division != division
+      broadcast(Clientbound::BossEvent.update_health(@boss_bar_uuid, health))
+    else
+      broadcast(Clientbound::BossEvent.add(@boss_bar_uuid, component, health, color, division))
+      @boss_bar_active = true
+    end
+
+    @last_boss_bar_title = component
+    @last_boss_bar_progress = health
+    @last_boss_bar_color = color
+    @last_boss_bar_division = division
+  end
+
+  # Convenience overload computing progress from current/max, clamped to 0..1.
+  def boss_bar(
+    title : String | Rosegold::TextComponent,
+    current : Number,
+    max : Number,
+    color : Clientbound::BossEvent::Color = Clientbound::BossEvent::Color::White,
+    division : Clientbound::BossEvent::Division = Clientbound::BossEvent::Division::None,
+  )
+    progress = max.to_f64 > 0 ? current.to_f64 / max.to_f64 : 0.0
+    boss_bar(title, progress, color, division)
+  end
+
+  # Remove the boss bar from every spectating connection and clear stored state.
+  def clear_boss_bar
+    return unless @boss_bar_active
+    broadcast(Clientbound::BossEvent.remove(@boss_bar_uuid))
+    @boss_bar_active = false
+    @last_boss_bar_title = nil
+  end
+
+  # Replay stored action bar and boss bar state to a spectator that just joined.
+  def replay_ui_state(connection : Connection)
+    if text = @last_action_bar
+      connection.send_packet(Clientbound::SetActionBarText.new(text))
+    end
+
+    if @boss_bar_active && (title = @last_boss_bar_title)
+      connection.send_packet(Clientbound::BossEvent.add(@boss_bar_uuid, title, @last_boss_bar_progress, @last_boss_bar_color, @last_boss_bar_division))
+    end
+  end
+
+  private def as_text_component(value : String | Rosegold::TextComponent) : Rosegold::TextComponent
+    value.is_a?(String) ? Rosegold::TextComponent.new(value) : value
+  end
+
+  private def broadcast(packet : Clientbound::Packet)
+    @connections.select(&.spectate_state.spectating?).each do |connection|
+      connection.send_packet(packet)
+    end
   end
 
   def start
@@ -142,6 +234,7 @@ class Rosegold::Spectate::Server
           end
 
           enable_tcp_keepalive(client_socket)
+          enable_tcp_nodelay(client_socket)
 
           Log.info { "New spectator connection from #{client_socket.remote_address}" }
 
@@ -179,6 +272,12 @@ class Rosegold::Spectate::Server
     Log.debug { "Failed to enable TCP keepalive: #{ex}" }
   end
 
+  private def enable_tcp_nodelay(socket : TCPSocket)
+    socket.tcp_nodelay = true
+  rescue ex
+    Log.debug { "Failed to enable TCP nodelay: #{ex}" }
+  end
+
   def attach_client(client : Rosegold::Client)
     stop_caching_commands
     @cached_commands_bytes = nil
@@ -190,6 +289,9 @@ class Rosegold::Spectate::Server
     stop_caching_commands
     @cached_commands_bytes = nil
     @client = nil
+    @last_action_bar = nil
+    @boss_bar_active = false
+    @last_boss_bar_title = nil
   end
 
   private def start_caching_commands(client : Rosegold::Client)

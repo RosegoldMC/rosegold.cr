@@ -3,14 +3,17 @@ struct Rosegold::Spectate::MonitorState
   property last_chunk_x : Int32
   property last_chunk_z : Int32
   property last_dimension_name : String
+  property last_missing_chunk_check : Time::Instant = Time.instant
 
   def initialize(@last_hotbar_selection, @last_chunk_x, @last_chunk_z, @last_dimension_name); end
 end
 
 module Rosegold::Spectate::Monitoring
   private def start_bot_monitoring
+    return if @bot_monitoring_running
     return unless bot = @client
 
+    @bot_monitoring_running = true
     spawn do
       monitor = MonitorState.new(
         last_hotbar_selection: bot.player.hotbar_selection,
@@ -33,11 +36,14 @@ module Rosegold::Spectate::Monitoring
         check_dimension_change(monitor, bot)
         check_hotbar_updates(monitor, bot)
         check_chunk_updates(monitor, bot)
+        check_missing_chunks(monitor, bot)
         track_block_breaking_progress(bot)
       end
     rescue e
       Log.error { "Bot monitoring error: #{e}" }
       Log.error exception: e
+    ensure
+      @bot_monitoring_running = false
     end
   end
 
@@ -82,6 +88,7 @@ module Rosegold::Spectate::Monitoring
     send_update_health(bot)
     send_set_experience(bot)
     send_inventory_content
+    send_current_sneak_scale(bot)
   end
 
   private def check_hotbar_updates(monitor : MonitorState, bot : Rosegold::Client)
@@ -101,6 +108,42 @@ module Rosegold::Spectate::Monitoring
       monitor.last_chunk_x = current_x
       monitor.last_chunk_z = current_z
     end
+  end
+
+  MISSING_CHUNK_CHECK_INTERVAL = 1.second
+
+  private def check_missing_chunks(monitor : MonitorState, bot : Rosegold::Client)
+    now = Time.instant
+    return if now - monitor.last_missing_chunk_check < MISSING_CHUNK_CHECK_INTERVAL
+    monitor.last_missing_chunk_check = now
+
+    render_distance = Server::DEFAULT_RENDER_DISTANCE
+    center_x = monitor.last_chunk_x
+    center_z = monitor.last_chunk_z
+
+    missing_chunks = [] of Tuple(Int32, Int32)
+
+    (-render_distance..render_distance).each do |delta_x|
+      (-render_distance..render_distance).each do |delta_z|
+        chunk_pos = {center_x + delta_x, center_z + delta_z}
+        next if @loaded_chunks.includes?(chunk_pos)
+        next unless bot.dimension.chunk_at?(*chunk_pos)
+
+        missing_chunks << chunk_pos
+      end
+    end
+
+    return if missing_chunks.empty?
+
+    send_packet(Rosegold::Clientbound::ChunkBatchStart.new)
+    loaded_count = 0
+    missing_chunks.each do |chunk_x, chunk_z|
+      if send_chunk_data(chunk_x, chunk_z)
+        @loaded_chunks.add({chunk_x, chunk_z})
+        loaded_count += 1
+      end
+    end
+    send_packet(Rosegold::Clientbound::ChunkBatchFinished.new(loaded_count.to_i32))
   end
 
   private def track_block_breaking_progress(bot : Rosegold::Client)

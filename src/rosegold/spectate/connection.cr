@@ -4,6 +4,8 @@ require "./world_sync"
 require "./play_session"
 require "./monitoring"
 require "./packet_relay"
+require "./look_smoothing"
+require "./sneak_camera"
 require "./lobby"
 
 enum Rosegold::Spectate::State
@@ -18,6 +20,8 @@ class Rosegold::Spectate::Connection
   include Spectate::PlaySession
   include Spectate::Monitoring
   include Spectate::PacketRelay
+  include Spectate::LookSmoothing
+  include Spectate::SneakCamera
   include Spectate::Lobby
 
   Log = ::Log.for self
@@ -37,6 +41,13 @@ class Rosegold::Spectate::Connection
   property last_dig_progress : Float32 = 0.0_f32
   @handshake_protocol : UInt32 = 0_u32
   @keep_alive_running : Bool = false
+  @inventory_polling_running : Bool = false
+  @bot_monitoring_running : Bool = false
+  @lobby_monitor_running : Bool = false
+  @look_sender_running : Bool = false
+  @prev_look : Look? = nil
+  @last_look : Look? = nil
+  @last_look_time : Time::Instant = Time.instant
   @packet_send_mutex = Mutex.new
   @transition_mutex = Mutex.new
 
@@ -213,6 +224,15 @@ class Rosegold::Spectate::Connection
 
   def client_ready?
     @spectate_server.client.try &.spawned? || false
+  end
+
+  def world_ready?
+    return false unless client_ready?
+    bot = @spectate_server.client
+    return false unless bot
+
+    feet = bot.player.feet
+    bot.dimension.chunks.has_key?({(feet.x / 16).floor.to_i32, (feet.z / 16).floor.to_i32})
   end
 
   def self.decode_varint(bytes : Bytes) : UInt32?

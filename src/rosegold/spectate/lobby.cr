@@ -1,12 +1,21 @@
 module Rosegold::Spectate::Lobby
   private def enter_initial_state
-    if client_ready?
+    if world_ready?
       @spectate_state = State::SPECTATING
       send_spectating_packets
     else
       @spectate_state = State::LOBBY
       send_lobby_packets
       start_lobby_monitor
+    end
+  end
+
+  private def lobby_wait_message : String
+    bot = @spectate_server.client
+    if bot.nil? || !bot.connected?
+      "Waiting for bot to connect to server..."
+    else
+      "Bot connected, waiting for world data..."
     end
   end
 
@@ -31,18 +40,20 @@ module Rosegold::Spectate::Lobby
     send_empty_chunk(0, 0)
 
     # System chat message
-    send_packet(Rosegold::Clientbound::SystemChatMessage.new(TextComponent.new("Waiting for bot to connect..."), false))
+    send_packet(Rosegold::Clientbound::SystemChatMessage.new(TextComponent.new(lobby_wait_message), false))
 
     start_keep_alive_sender
   end
 
   private def start_lobby_monitor
+    return if @lobby_monitor_running
+    @lobby_monitor_running = true
     spawn do
       loop do
         break unless @connected
         break unless @spectate_state.lobby?
 
-        if client_ready?
+        if world_ready?
           transition_to_spectating
           break
         end
@@ -51,13 +62,15 @@ module Rosegold::Spectate::Lobby
       end
     rescue e
       Log.error { "Lobby monitor error: #{e}" }
+    ensure
+      @lobby_monitor_running = false
     end
   end
 
   private def transition_to_spectating
     @transition_mutex.synchronize do
       return unless @spectate_state.lobby?
-      return unless client_ready?
+      return unless world_ready?
       return unless bot = @spectate_server.client
 
       Log.info { "Transitioning #{@username} from lobby to spectating" }
@@ -87,24 +100,7 @@ module Rosegold::Spectate::Lobby
       # Unload lobby chunk
       send_packet(Rosegold::Clientbound::UnloadChunk.new(0, 0))
 
-      send_player_abilities
-      send_default_spawn_position(bot)
-      send_player_position(bot)
-      send_set_time(bot)
-      send_update_health(bot)
-      send_set_experience(bot)
-      start_inventory_polling
-      send_hotbar_selection(bot.player.hotbar_selection)
-      send_start_waiting_for_chunks
-      send_chunks
-      send_existing_players
-      send_existing_entities
-      send_existing_entity_effects
-      start_bot_monitoring
-      setup_position_event_listener
-      setup_arm_swing_listener
-      setup_container_closed_listener
-      setup_raw_packet_relay
+      start_spectating_session(bot)
 
       Log.info { "#{@username} is now spectating" }
     end
@@ -116,11 +112,21 @@ module Rosegold::Spectate::Lobby
 
       Log.info { "Transitioning #{@username} from spectating to lobby" }
 
+      # Must precede any lobby packet: the look/inventory sender fibers gate on
+      # spectating? and would otherwise emit stale packets after the Respawn.
+      @spectate_state = State::LOBBY
+
       cleanup_event_handlers
+
+      # The player entity persists across Respawn, so undo any sneak scale.
+      send_spectator_scale(1.0)
 
       # Unload all world state
       unload_all_chunks
       destroy_all_entities
+
+      @last_digging_block = nil
+      @last_dig_progress = 0.0_f32
 
       @client = nil
 
@@ -141,8 +147,6 @@ module Rosegold::Spectate::Lobby
         data_kept: 0_u8
       )
       send_packet(respawn)
-
-      @spectate_state = State::LOBBY
 
       spawn_pos = Vec3i.new(0, 100, 0)
       send_packet(Rosegold::Clientbound::SetDefaultSpawnPosition.new(spawn_pos, 0.0_f32, "minecraft:overworld"))

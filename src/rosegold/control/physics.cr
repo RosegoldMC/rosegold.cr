@@ -208,6 +208,7 @@ class Rosegold::Physics
     sprint false if sneaking
 
     player.sneaking = sneaking
+    client.emit_event Event::SneakChanged.new(sneaking)
     # Sneaking is handled via PlayerInput Sneak flag (bit 0x20)
   end
 
