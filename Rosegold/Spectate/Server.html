@@ -232,6 +232,31 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/Clientbound/BossEvent" data-name="rosegold::clientbound::bossevent">
+      <a href="../../Rosegold/Clientbound/BossEvent.html">BossEvent</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/BossEvent/Action" data-name="rosegold::clientbound::bossevent::action">
+      <a href="../../Rosegold/Clientbound/BossEvent/Action.html">Action</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/BossEvent/Color" data-name="rosegold::clientbound::bossevent::color">
+      <a href="../../Rosegold/Clientbound/BossEvent/Color.html">Color</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/BossEvent/Division" data-name="rosegold::clientbound::bossevent::division">
+      <a href="../../Rosegold/Clientbound/BossEvent/Division.html">Division</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Clientbound/ChunkBatchFinished" data-name="rosegold::clientbound::chunkbatchfinished">
       <a href="../../Rosegold/Clientbound/ChunkBatchFinished.html">ChunkBatchFinished</a>
       
@@ -524,6 +549,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Clientbound/Respawn" data-name="rosegold::clientbound::respawn">
       <a href="../../Rosegold/Clientbound/Respawn.html">Respawn</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/SetActionBarText" data-name="rosegold::clientbound::setactionbartext">
+      <a href="../../Rosegold/Clientbound/SetActionBarText.html">SetActionBarText</a>
       
     </li>
   
@@ -1332,6 +1362,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Event/SneakChanged" data-name="rosegold::event::sneakchanged">
+      <a href="../../Rosegold/Event/SneakChanged.html">SneakChanged</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Event/Tick" data-name="rosegold::event::tick">
       <a href="../../Rosegold/Event/Tick.html">Tick</a>
       
@@ -2052,6 +2087,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Spectate/LookSmoothing" data-name="rosegold::spectate::looksmoothing">
+      <a href="../../Rosegold/Spectate/LookSmoothing.html">LookSmoothing</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Spectate/Monitoring" data-name="rosegold::spectate::monitoring">
       <a href="../../Rosegold/Spectate/Monitoring.html">Monitoring</a>
       
@@ -2074,6 +2114,11 @@
   
   <li class=" current" data-id="rosegold/Rosegold/Spectate/Server" data-name="rosegold::spectate::server">
       <a href="../../Rosegold/Spectate/Server.html">Server</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Spectate/SneakCamera" data-name="rosegold::spectate::sneakcamera">
+      <a href="../../Rosegold/Spectate/SneakCamera.html">SneakCamera</a>
       
     </li>
   
@@ -2218,7 +2263,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L11" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L11" target="_blank">
         rosegold/spectate/server.cr
       </a>
     
@@ -2279,13 +2324,23 @@
       </dt>
       
     
+      <dt class="entry-const" id="LOOK_UPDATE_INTERVAL">
+        <strong>LOOK_UPDATE_INTERVAL</strong> = <code><span class="n">16</span>.milliseconds</code>
+      </dt>
+      
+    
+      <dt class="entry-const" id="LOOK_UPSAMPLING">
+        <strong>LOOK_UPSAMPLING</strong> = <code><span class="n">true</span></code>
+      </dt>
+      
+    
       <dt class="entry-const" id="MAX_CONNECTIONS">
         <strong>MAX_CONNECTIONS</strong> = <code><span class="n">10</span></code>
       </dt>
       
     
       <dt class="entry-const" id="UNIMPLEMENTED_FORWARDED">
-        <strong>UNIMPLEMENTED_FORWARDED</strong> = <code>{<span class="s">&quot;set_entity_motion&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">94_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">99_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">101_u32</span>}, <span class="s">&quot;set_entity_data&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">92_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">97_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">99_u32</span>}, <span class="s">&quot;sound&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">110_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">115_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">117_u32</span>}, <span class="s">&quot;update_attributes&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">124_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">129_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">131_u32</span>}, <span class="s">&quot;world_particles&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">41_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">46_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">47_u32</span>}, <span class="s">&quot;explosion&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">32_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">36_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">36_u32</span>}, <span class="s">&quot;scoreboard_objective&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">99_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">104_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">106_u32</span>}, <span class="s">&quot;scoreboard_score&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">103_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">108_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">110_u32</span>}, <span class="s">&quot;scoreboard_display_objective&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">91_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">96_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">98_u32</span>}, <span class="s">&quot;reset_score&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">72_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">77_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">79_u32</span>}, <span class="s">&quot;teams&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">102_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">107_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">109_u32</span>}, <span class="s">&quot;set_title_text&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">107_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">112_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">114_u32</span>}, <span class="s">&quot;set_title_subtitle&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">105_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">110_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">112_u32</span>}, <span class="s">&quot;set_title_time&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">108_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">113_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">115_u32</span>}, <span class="s">&quot;clear_titles&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">14_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">14_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">14_u32</span>}, <span class="s">&quot;action_bar&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">80_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">85_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">87_u32</span>}, <span class="s">&quot;playerlist_header&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">115_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">120_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">122_u32</span>}, <span class="s">&quot;hurt_animation&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">36_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">41_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">42_u32</span>}, <span class="s">&quot;damage_event&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">25_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">25_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">25_u32</span>}, <span class="s">&quot;entity_sound_effect&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">109_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">114_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">116_u32</span>}, <span class="s">&quot;entity_head_rotation&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">76_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">81_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">83_u32</span>}, <span class="s">&quot;entity_status&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">30_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">34_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">34_u32</span>}, <span class="s">&quot;initialize_world_border&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">37_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">42_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">43_u32</span>}, <span class="s">&quot;world_border_center&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">81_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">86_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">88_u32</span>}, <span class="s">&quot;world_border_lerp_size&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">82_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">87_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">89_u32</span>}, <span class="s">&quot;world_border_size&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">83_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">88_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">90_u32</span>}, <span class="s">&quot;world_border_warning_delay&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">84_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">89_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">91_u32</span>}, <span class="s">&quot;world_border_warning_reach&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">85_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">90_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">92_u32</span>}, <span class="s">&quot;world_event&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">40_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">45_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">46_u32</span>}, <span class="s">&quot;block_action&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">7_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">7_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">7_u32</span>}, <span class="s">&quot;tile_entity_data&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">6_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">6_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">6_u32</span>}, <span class="s">&quot;experience&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">96_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">101_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">103_u32</span>}, <span class="s">&quot;set_cooldown&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">22_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">22_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">22_u32</span>}, <span class="s">&quot;collect&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">117_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">122_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">124_u32</span>}, <span class="s">&quot;attach_entity&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">93_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">98_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">100_u32</span>}, <span class="s">&quot;entity_teleport&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">118_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">123_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">125_u32</span>}, <span class="s">&quot;commands&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">16_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">16_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">16_u32</span>}}.transform_values <span class="k">do</span> <span class="o">|</span>ids<span class="o">|</span> ids.merge({<span class="n">773_u32</span> <span class="o">=&gt;</span> ids[<span class="n">774_u32</span>], <span class="n">776_u32</span> <span class="o">=&gt;</span> ids[<span class="n">775_u32</span>]}) <span class="k">end</span></code>
+        <strong>UNIMPLEMENTED_FORWARDED</strong> = <code>{<span class="s">&quot;set_entity_motion&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">94_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">99_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">101_u32</span>}, <span class="s">&quot;set_entity_data&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">92_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">97_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">99_u32</span>}, <span class="s">&quot;sound&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">110_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">115_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">117_u32</span>}, <span class="s">&quot;update_attributes&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">124_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">129_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">131_u32</span>}, <span class="s">&quot;world_particles&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">41_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">46_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">47_u32</span>}, <span class="s">&quot;explosion&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">32_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">36_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">36_u32</span>}, <span class="s">&quot;scoreboard_objective&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">99_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">104_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">106_u32</span>}, <span class="s">&quot;scoreboard_score&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">103_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">108_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">110_u32</span>}, <span class="s">&quot;scoreboard_display_objective&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">91_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">96_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">98_u32</span>}, <span class="s">&quot;reset_score&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">72_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">77_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">79_u32</span>}, <span class="s">&quot;teams&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">102_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">107_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">109_u32</span>}, <span class="s">&quot;set_title_text&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">107_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">112_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">114_u32</span>}, <span class="s">&quot;set_title_subtitle&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">105_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">110_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">112_u32</span>}, <span class="s">&quot;set_title_time&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">108_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">113_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">115_u32</span>}, <span class="s">&quot;clear_titles&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">14_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">14_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">14_u32</span>}, <span class="s">&quot;action_bar&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">80_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">85_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">87_u32</span>}, <span class="s">&quot;playerlist_header&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">115_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">120_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">122_u32</span>}, <span class="s">&quot;hurt_animation&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">36_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">41_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">42_u32</span>}, <span class="s">&quot;damage_event&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">25_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">25_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">25_u32</span>}, <span class="s">&quot;entity_sound_effect&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">109_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">114_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">116_u32</span>}, <span class="s">&quot;entity_head_rotation&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">76_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">81_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">83_u32</span>}, <span class="s">&quot;entity_status&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">30_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">34_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">34_u32</span>}, <span class="s">&quot;initialize_world_border&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">37_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">42_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">43_u32</span>}, <span class="s">&quot;world_border_center&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">81_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">86_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">88_u32</span>}, <span class="s">&quot;world_border_lerp_size&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">82_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">87_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">89_u32</span>}, <span class="s">&quot;world_border_size&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">83_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">88_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">90_u32</span>}, <span class="s">&quot;world_border_warning_delay&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">84_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">89_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">91_u32</span>}, <span class="s">&quot;world_border_warning_reach&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">85_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">90_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">92_u32</span>}, <span class="s">&quot;world_event&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">40_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">45_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">46_u32</span>}, <span class="s">&quot;block_action&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">7_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">7_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">7_u32</span>}, <span class="s">&quot;tile_entity_data&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">6_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">6_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">6_u32</span>}, <span class="s">&quot;experience&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">96_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">101_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">103_u32</span>}, <span class="s">&quot;set_cooldown&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">22_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">22_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">22_u32</span>}, <span class="s">&quot;collect&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">117_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">122_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">124_u32</span>}, <span class="s">&quot;attach_entity&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">93_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">98_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">100_u32</span>}, <span class="s">&quot;entity_teleport&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">118_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">123_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">125_u32</span>}, <span class="s">&quot;commands&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">16_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">16_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">16_u32</span>}, <span class="s">&quot;boss_event&quot;</span> <span class="o">=&gt;</span> {<span class="n">772_u32</span> <span class="o">=&gt;</span> <span class="n">9_u32</span>, <span class="n">774_u32</span> <span class="o">=&gt;</span> <span class="n">9_u32</span>, <span class="n">775_u32</span> <span class="o">=&gt;</span> <span class="n">9_u32</span>}}.transform_values <span class="k">do</span> <span class="o">|</span>ids<span class="o">|</span> ids.merge({<span class="n">773_u32</span> <span class="o">=&gt;</span> ids[<span class="n">774_u32</span>], <span class="n">776_u32</span> <span class="o">=&gt;</span> ids[<span class="n">775_u32</span>]}) <span class="k">end</span></code>
       </dt>
       
     
@@ -2362,12 +2417,47 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#action_bar%28text%3AString%7CRosegold%3A%3ATextComponent%29-instance-method" class="signature"><strong>#action_bar</strong>(text : String | Rosegold::TextComponent)</a>
+        
+          <div class="summary"><p>Broadcast an action bar message to every spectating connection.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#attach_client%28client%3ARosegold%3A%3AClient%29-instance-method" class="signature"><strong>#attach_client</strong>(client : Rosegold::Client)</a>
         
       </li>
     
       <li class="entry-summary">
+        <a href="#boss_bar%28title%3AString%7CRosegold%3A%3ATextComponent%2Cprogress%3AFloat64%2Ccolor%3AClientbound%3A%3ABossEvent%3A%3AColor%3DClientbound%3A%3ABossEvent%3A%3AColor%3A%3AWhite%2Cdivision%3AClientbound%3A%3ABossEvent%3A%3ADivision%3DClientbound%3A%3ABossEvent%3A%3ADivision%3A%3ANone%29-instance-method" class="signature"><strong>#boss_bar</strong>(title : String | Rosegold::TextComponent, progress : Float64, color : Clientbound::BossEvent::Color = <span class="t">Clientbound</span><span class="t">::</span><span class="t">BossEvent</span><span class="t">::</span><span class="t">Color</span><span class="t">::</span><span class="t">White</span>, division : Clientbound::BossEvent::Division = <span class="t">Clientbound</span><span class="t">::</span><span class="t">BossEvent</span><span class="t">::</span><span class="t">Division</span><span class="t">::</span><span class="t">None</span>)</a>
+        
+          <div class="summary"><p>Broadcast a boss bar update to every spectating connection.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#boss_bar%28title%3AString%7CRosegold%3A%3ATextComponent%2Ccurrent%3ANumber%2Cmax%3ANumber%2Ccolor%3AClientbound%3A%3ABossEvent%3A%3AColor%3DClientbound%3A%3ABossEvent%3A%3AColor%3A%3AWhite%2Cdivision%3AClientbound%3A%3ABossEvent%3A%3ADivision%3DClientbound%3A%3ABossEvent%3A%3ADivision%3A%3ANone%29-instance-method" class="signature"><strong>#boss_bar</strong>(title : String | Rosegold::TextComponent, current : Number, max : Number, color : Clientbound::BossEvent::Color = <span class="t">Clientbound</span><span class="t">::</span><span class="t">BossEvent</span><span class="t">::</span><span class="t">Color</span><span class="t">::</span><span class="t">White</span>, division : Clientbound::BossEvent::Division = <span class="t">Clientbound</span><span class="t">::</span><span class="t">BossEvent</span><span class="t">::</span><span class="t">Division</span><span class="t">::</span><span class="t">None</span>)</a>
+        
+          <div class="summary"><p>Convenience overload computing progress from current/max, clamped to 0..1.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#cached_commands_bytes%3ABytes%7CNil-instance-method" class="signature"><strong>#cached_commands_bytes</strong> : Bytes | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#chat%28message%3AString%7CRosegold%3A%3ATextComponent%29-instance-method" class="signature"><strong>#chat</strong>(message : String | Rosegold::TextComponent)</a>
+        
+          <div class="summary"><p>Broadcast a chat message to every spectating connection.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#clear_boss_bar-instance-method" class="signature"><strong>#clear_boss_bar</strong></a>
+        
+          <div class="summary"><p>Remove the boss bar from every spectating connection and clear stored state.</p></div>
         
       </li>
     
@@ -2418,6 +2508,13 @@
     
       <li class="entry-summary">
         <a href="#port%3D%28port%3AInt32%29-instance-method" class="signature"><strong>#port=</strong>(port : Int32)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#replay_ui_state%28connection%3AConnection%29-instance-method" class="signature"><strong>#replay_ui_state</strong>(connection : Connection)</a>
+        
+          <div class="summary"><p>Replay stored action bar and boss bar state to a spectator that just joined.</p></div>
         
       </li>
     
@@ -2496,7 +2593,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L120" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L131" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2524,7 +2621,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L105" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L108" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2552,7 +2649,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L64" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2569,6 +2666,28 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="action_bar(text:String|Rosegold::TextComponent)-instance-method">
+      <div class="signature">
+        
+        def <strong>action_bar</strong>(text : String | <a href="../../Rosegold/TextComponent.html">Rosegold::TextComponent</a>)
+
+        <a class="method-permalink" href="#action_bar%28text%3AString%7CRosegold%3A%3ATextComponent%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Broadcast an action bar message to every spectating connection.
+Sticky: replayed to spectators that join later, until replaced.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L145" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="attach_client(client:Rosegold::Client)-instance-method">
       <div class="signature">
         
@@ -2580,7 +2699,51 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L182" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L281" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="boss_bar(title:String|Rosegold::TextComponent,progress:Float64,color:Clientbound::BossEvent::Color=Clientbound::BossEvent::Color::White,division:Clientbound::BossEvent::Division=Clientbound::BossEvent::Division::None)-instance-method">
+      <div class="signature">
+        
+        def <strong>boss_bar</strong>(title : String | <a href="../../Rosegold/TextComponent.html">Rosegold::TextComponent</a>, progress : Float64, color : <a href="../../Rosegold/Clientbound/BossEvent/Color.html">Clientbound::BossEvent::Color</a> = <span class="t">Clientbound</span><span class="t">::</span><span class="t">BossEvent</span><span class="t">::</span><span class="t">Color</span><span class="t">::</span><span class="t">White</span>, division : <a href="../../Rosegold/Clientbound/BossEvent/Division.html">Clientbound::BossEvent::Division</a> = <span class="t">Clientbound</span><span class="t">::</span><span class="t">BossEvent</span><span class="t">::</span><span class="t">Division</span><span class="t">::</span><span class="t">None</span>)
+
+        <a class="method-permalink" href="#boss_bar%28title%3AString%7CRosegold%3A%3ATextComponent%2Cprogress%3AFloat64%2Ccolor%3AClientbound%3A%3ABossEvent%3A%3AColor%3DClientbound%3A%3ABossEvent%3A%3AColor%3A%3AWhite%2Cdivision%3AClientbound%3A%3ABossEvent%3A%3ADivision%3DClientbound%3A%3ABossEvent%3A%3ADivision%3A%3ANone%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Broadcast a boss bar update to every spectating connection.
+The server owns a single boss bar with one stable UUID: the first call
+sends an add, later calls send targeted updates.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L154" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="boss_bar(title:String|Rosegold::TextComponent,current:Number,max:Number,color:Clientbound::BossEvent::Color=Clientbound::BossEvent::Color::White,division:Clientbound::BossEvent::Division=Clientbound::BossEvent::Division::None)-instance-method">
+      <div class="signature">
+        
+        def <strong>boss_bar</strong>(title : String | <a href="../../Rosegold/TextComponent.html">Rosegold::TextComponent</a>, current : Number, max : Number, color : <a href="../../Rosegold/Clientbound/BossEvent/Color.html">Clientbound::BossEvent::Color</a> = <span class="t">Clientbound</span><span class="t">::</span><span class="t">BossEvent</span><span class="t">::</span><span class="t">Color</span><span class="t">::</span><span class="t">White</span>, division : <a href="../../Rosegold/Clientbound/BossEvent/Division.html">Clientbound::BossEvent::Division</a> = <span class="t">Clientbound</span><span class="t">::</span><span class="t">BossEvent</span><span class="t">::</span><span class="t">Division</span><span class="t">::</span><span class="t">None</span>)
+
+        <a class="method-permalink" href="#boss_bar%28title%3AString%7CRosegold%3A%3ATextComponent%2Ccurrent%3ANumber%2Cmax%3ANumber%2Ccolor%3AClientbound%3A%3ABossEvent%3A%3AColor%3DClientbound%3A%3ABossEvent%3A%3AColor%3A%3AWhite%2Cdivision%3AClientbound%3A%3ABossEvent%3A%3ADivision%3DClientbound%3A%3ABossEvent%3A%3ADivision%3A%3ANone%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Convenience overload computing progress from current/max, clamped to 0..1.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L179" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2596,7 +2759,49 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L115" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L118" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="chat(message:String|Rosegold::TextComponent)-instance-method">
+      <div class="signature">
+        
+        def <strong>chat</strong>(message : String | <a href="../../Rosegold/TextComponent.html">Rosegold::TextComponent</a>)
+
+        <a class="method-permalink" href="#chat%28message%3AString%7CRosegold%3A%3ATextComponent%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Broadcast a chat message to every spectating connection.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L139" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="clear_boss_bar-instance-method">
+      <div class="signature">
+        
+        def <strong>clear_boss_bar</strong>
+
+        <a class="method-permalink" href="#clear_boss_bar-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Remove the boss bar from every spectating connection and clear stored state.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L191" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2612,7 +2817,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L111" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L114" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2628,7 +2833,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L111" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L114" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2644,7 +2849,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L116" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2660,7 +2865,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L116" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2676,7 +2881,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L189" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L288" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2692,7 +2897,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L112" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2708,7 +2913,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L112" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2724,7 +2929,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L123" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L134" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2740,7 +2945,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L110" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L113" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2756,7 +2961,28 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L110" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L113" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="replay_ui_state(connection:Connection)-instance-method">
+      <div class="signature">
+        
+        def <strong>replay_ui_state</strong>(connection : <a href="../../Rosegold/Spectate/Connection.html">Connection</a>)
+
+        <a class="method-permalink" href="#replay_ui_state%28connection%3AConnection%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Replay stored action bar and boss bar state to a spectator that just joined.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L199" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2772,7 +2998,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L112" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L115" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2788,7 +3014,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L112" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L115" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2804,7 +3030,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L127" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L219" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2820,7 +3046,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd6f48b26a562de90cf69e6e0e768268d9755efa/src/rosegold/spectate/server.cr#L167" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/4e3a198dd5586b4df1ec46c5f6ec2fe6d5105efe/src/rosegold/spectate/server.cr#L260" target="_blank">View source</a>]
         
       </div>
     </div>
