@@ -76,6 +76,9 @@ class Rosegold::Client < Rosegold::EventEmitter
     ticker_done : Channel(Nil) = Channel(Nil).new,
     recipe_registry : RecipeRegistry = RecipeRegistry.new
 
+  @boss_bars = Hash(UUID, BossBarState).new
+  @boss_bars_mutex = Mutex.new
+
   def protocol_version
     Client.protocol_version
   end
@@ -193,8 +196,36 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def set_protocol_state(protocol_state : ProtocolState)
+    clear_boss_bars if @current_protocol_state == ProtocolState::PLAY && protocol_state == ProtocolState::CONFIGURATION
     @current_protocol_state = protocol_state
     connection.protocol_state = protocol_state
+  end
+
+  def apply_boss_event(event : Clientbound::BossEvent)
+    @boss_bars_mutex.synchronize do
+      case event.action
+      in .add?
+        @boss_bars[event.uuid] = BossBarState.from_add(event)
+      in .remove?
+        @boss_bars.delete(event.uuid)
+      in .update_health?, .update_title?, .update_style?, .update_flags?
+        if state = @boss_bars[event.uuid]?
+          @boss_bars[event.uuid] = state.apply(event)
+        end
+      end
+    end
+  end
+
+  def boss_bar_state(uuid : UUID) : BossBarState?
+    @boss_bars_mutex.synchronize { @boss_bars[uuid]? }
+  end
+
+  def boss_bar_states : Array(BossBarState)
+    @boss_bars_mutex.synchronize { @boss_bars.values }
+  end
+
+  def clear_boss_bars
+    @boss_bars_mutex.synchronize { @boss_bars.clear }
   end
 
   def spawned?
@@ -296,6 +327,8 @@ class Rosegold::Client < Rosegold::EventEmitter
   def connect
     raise NotConnected.new "Already connected" if connected?
 
+    clear_boss_bars
+
     authenticate!
 
     detect_protocol_version
@@ -306,6 +339,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING, protocol_version, self
     @current_protocol_state = ProtocolState::HANDSHAKING
     connection.handler.try &.on Event::Disconnected do |_event|
+      clear_boss_bars
       physics.handle_disconnect
     end
     Log.info { "Connected to #{host}:#{port}" }

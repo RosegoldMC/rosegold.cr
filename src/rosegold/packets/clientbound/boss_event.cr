@@ -133,6 +133,48 @@ class Rosegold::Clientbound::BossEvent < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    client.apply_boss_event(self)
     Log.debug { "[BOSS EVENT] #{action} #{uuid}" }
+  end
+end
+
+struct Rosegold::BossBarState
+  getter uuid : UUID
+  getter title : Rosegold::TextComponent
+  getter health : Float32
+  getter color : Rosegold::Clientbound::BossEvent::Color
+  getter division : Rosegold::Clientbound::BossEvent::Division
+  getter flags : UInt8
+
+  def initialize(@uuid, @title, @health, @color, @division, @flags); end
+
+  def self.from_add(event : Rosegold::Clientbound::BossEvent) : self
+    title = event.title || raise "BossEvent add requires title"
+    health = event.health || raise "BossEvent add requires health"
+    color = event.color || raise "BossEvent add requires color"
+    division = event.division || raise "BossEvent add requires division"
+    flags = event.flags || raise "BossEvent add requires flags"
+    new(event.uuid, title, health, color, division, flags)
+  end
+
+  def apply(event : Rosegold::Clientbound::BossEvent) : self
+    case event.action
+    in .add?
+      self.class.from_add(event)
+    in .remove?
+      self
+    in .update_health?
+      self.class.new(uuid, title, event.health || health, color, division, flags)
+    in .update_title?
+      self.class.new(uuid, event.title || title, health, color, division, flags)
+    in .update_style?
+      self.class.new(uuid, title, health, event.color || color, event.division || division, flags)
+    in .update_flags?
+      self.class.new(uuid, title, health, color, division, event.flags || flags)
+    end
+  end
+
+  def add_packet : Rosegold::Clientbound::BossEvent
+    Rosegold::Clientbound::BossEvent.add(uuid, title, health, color, division, flags)
   end
 end

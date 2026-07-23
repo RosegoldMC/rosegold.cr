@@ -96,11 +96,12 @@ module Rosegold::Spectate::Lobby
       send_packet(respawn)
 
       @spectate_state = State::SPECTATING
+      boss_bar_session = begin_boss_bar_session
 
       # Unload lobby chunk
       send_packet(Rosegold::Clientbound::UnloadChunk.new(0, 0))
 
-      start_spectating_session(bot)
+      start_spectating_session(bot, boss_bar_session)
 
       Log.info { "#{@username} is now spectating" }
     end
@@ -115,6 +116,7 @@ module Rosegold::Spectate::Lobby
       # Must precede any lobby packet: the look/inventory sender fibers gate on
       # spectating? and would otherwise emit stale packets after the Respawn.
       @spectate_state = State::LOBBY
+      end_boss_bar_session
 
       cleanup_event_handlers
 

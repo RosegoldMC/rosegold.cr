@@ -3,10 +3,11 @@ module Rosegold::Spectate::PlaySession
     return unless bot = @client
 
     send_join_game(bot)
-    start_spectating_session(bot)
+    boss_bar_session = begin_boss_bar_session
+    start_spectating_session(bot, boss_bar_session)
   end
 
-  private def start_spectating_session(bot : Rosegold::Client)
+  private def start_spectating_session(bot : Rosegold::Client, boss_bar_session : UInt64)
     send_set_time(bot)
     send_default_spawn_position(bot)
     send_player_abilities
@@ -31,7 +32,7 @@ module Rosegold::Spectate::PlaySession
     reset_look_samples(bot.player.look)
     start_look_sender
     send_cached_commands
-    @spectate_server.replay_ui_state(self)
+    @spectate_server.replay_ui_state(self, boss_bar_session)
     start_keep_alive_sender
   end
 

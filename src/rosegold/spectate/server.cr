@@ -58,7 +58,6 @@ class Rosegold::Spectate::Server
     "attach_entity"                => {772_u32 => 0x5D_u32, 774_u32 => 0x62_u32, 775_u32 => 0x64_u32},
     "entity_teleport"              => {772_u32 => 0x76_u32, 774_u32 => 0x7B_u32, 775_u32 => 0x7D_u32},
     "commands"                     => {772_u32 => 0x10_u32, 774_u32 => 0x10_u32, 775_u32 => 0x10_u32},
-    "boss_event"                   => {772_u32 => 0x09_u32, 774_u32 => 0x09_u32, 775_u32 => 0x09_u32},
   }.transform_values { |ids| ids.merge({773_u32 => ids[774_u32], 776_u32 => ids[775_u32]}) }
 
   macro build_forwarded_packets_method
@@ -120,6 +119,7 @@ class Rosegold::Spectate::Server
 
   @next_command_suggestion_tid = Atomic(UInt32).new(0_u32)
 
+  @boss_bar_mutex = Mutex.new
   @boss_bar_uuid = UUID.random
   @boss_bar_active = false
   @last_action_bar : Rosegold::TextComponent? = nil
@@ -127,6 +127,12 @@ class Rosegold::Spectate::Server
   @last_boss_bar_progress : Float32 = 0.0_f32
   @last_boss_bar_color : Clientbound::BossEvent::Color = Clientbound::BossEvent::Color::White
   @last_boss_bar_division : Clientbound::BossEvent::Division = Clientbound::BossEvent::Division::None
+
+  @upstream_boss_bars = Hash(UUID, BossBarState).new
+  @bot_boss_bar_handler_id : UUID? = nil
+  @bot_disconnected_handler_id : UUID? = nil
+  @bot_start_configuration_handler_id : UUID? = nil
+  @client_generation = 0_u64
 
   def initialize(@host : String = "127.0.0.1", @port : Int32 = 25566)
   end
@@ -149,8 +155,8 @@ class Rosegold::Spectate::Server
   end
 
   # Broadcast a boss bar update to every spectating connection.
-  # The server owns a single boss bar with one stable UUID: the first call
-  # sends an add, later calls send targeted updates.
+  # Complete add packets also replace existing bars, avoiding vanilla crashes
+  # if the client lost its prior state before an update.
   def boss_bar(
     title : String | Rosegold::TextComponent,
     progress : Float64,
@@ -160,19 +166,22 @@ class Rosegold::Spectate::Server
     component = as_text_component(title)
     health = progress.clamp(0.0, 1.0).to_f32
 
-    if @boss_bar_active
-      broadcast(Clientbound::BossEvent.update_title(@boss_bar_uuid, component)) if @last_boss_bar_title.try(&.to_s) != component.to_s
-      broadcast(Clientbound::BossEvent.update_style(@boss_bar_uuid, color, division)) if @last_boss_bar_color != color || @last_boss_bar_division != division
-      broadcast(Clientbound::BossEvent.update_health(@boss_bar_uuid, health))
-    else
-      broadcast(Clientbound::BossEvent.add(@boss_bar_uuid, component, health, color, division))
-      @boss_bar_active = true
+    @boss_bar_mutex.synchronize do
+      if @boss_bar_active
+        @last_boss_bar_title = component
+        @last_boss_bar_progress = health
+        @last_boss_bar_color = color
+        @last_boss_bar_division = division
+        broadcast_boss_bar_add(current_boss_bar_add, replace: true)
+      else
+        @boss_bar_active = true
+        @last_boss_bar_title = component
+        @last_boss_bar_progress = health
+        @last_boss_bar_color = color
+        @last_boss_bar_division = division
+        broadcast_boss_bar_add(current_boss_bar_add)
+      end
     end
-
-    @last_boss_bar_title = component
-    @last_boss_bar_progress = health
-    @last_boss_bar_color = color
-    @last_boss_bar_division = division
   end
 
   # Convenience overload computing progress from current/max, clamped to 0..1.
@@ -189,20 +198,32 @@ class Rosegold::Spectate::Server
 
   # Remove the boss bar from every spectating connection and clear stored state.
   def clear_boss_bar
-    return unless @boss_bar_active
-    broadcast(Clientbound::BossEvent.remove(@boss_bar_uuid))
-    @boss_bar_active = false
-    @last_boss_bar_title = nil
+    @boss_bar_mutex.synchronize do
+      return unless @boss_bar_active
+      broadcast_boss_bar_remove(@boss_bar_uuid)
+      @boss_bar_active = false
+      @last_boss_bar_title = nil
+    end
   end
 
   # Replay stored action bar and boss bar state to a spectator that just joined.
-  def replay_ui_state(connection : Connection)
+  def replay_ui_state(connection : Connection, boss_bar_session : UInt64)
+    return unless connection.boss_bar_session?(boss_bar_session)
+
     if text = @last_action_bar
       connection.send_packet(Clientbound::SetActionBarText.new(text))
     end
 
-    if @boss_bar_active && (title = @last_boss_bar_title)
-      connection.send_packet(Clientbound::BossEvent.add(@boss_bar_uuid, title, @last_boss_bar_progress, @last_boss_bar_color, @last_boss_bar_division))
+    @boss_bar_mutex.synchronize do
+      return unless connection.boss_bar_session?(boss_bar_session)
+
+      if @boss_bar_active
+        connection.enqueue_boss_bar_add(current_boss_bar_add, boss_bar_session)
+      end
+
+      @upstream_boss_bars.each_value do |state|
+        connection.enqueue_boss_bar_add(state.add_packet, boss_bar_session)
+      end
     end
   end
 
@@ -216,7 +237,28 @@ class Rosegold::Spectate::Server
     end
   end
 
+  private def current_boss_bar_add : Clientbound::BossEvent
+    title = @last_boss_bar_title || raise "Active boss bar requires title"
+    Clientbound::BossEvent.add(@boss_bar_uuid, title, @last_boss_bar_progress, @last_boss_bar_color, @last_boss_bar_division)
+  end
+
+  private def broadcast_boss_bar_add(packet : Clientbound::BossEvent, replace : Bool = false)
+    @connections.each do |connection|
+      connection.enqueue_boss_bar_add(packet, replace: replace)
+    end
+  end
+
+  private def broadcast_boss_bar_remove(uuid : UUID)
+    @connections.each do |connection|
+      connection.enqueue_boss_bar_remove(uuid)
+    end
+  end
+
   def start
+    if (client = @client) && @bot_boss_bar_handler_id.nil?
+      attach_client(client)
+    end
+
     @server = TCPServer.new(host, port)
     Log.info { "SpectateServer listening on #{host}:#{port}" }
 
@@ -258,6 +300,12 @@ class Rosegold::Spectate::Server
   end
 
   def stop
+    stop_caching_commands
+    stop_tracking_boss_bars
+    @boss_bar_mutex.synchronize do
+      @client_generation &+= 1
+      @upstream_boss_bars.clear
+    end
     @server.try &.close
     @connections.dup.each(&.close)
     @connections.clear
@@ -279,22 +327,127 @@ class Rosegold::Spectate::Server
   end
 
   def attach_client(client : Rosegold::Client)
+    previous_client = @client
     stop_caching_commands
+    stop_tracking_boss_bars
     @cached_commands_bytes = nil
-    @client = client
+
+    generation = @boss_bar_mutex.synchronize do
+      @client_generation &+= 1
+      @upstream_boss_bars.each_key { |uuid| broadcast_boss_bar_remove(uuid) }
+      @upstream_boss_bars.clear
+      @client = client
+      @client_generation
+    end
+
+    if previous_client && !previous_client.same?(client)
+      @connections.dup.each(&.detach_from_bot("Bot changed. Loading new world..."))
+    end
+
     start_caching_commands(client)
+    start_tracking_boss_bars(client, generation)
+    sync_upstream_boss_bars(client, generation)
   end
 
   def detach_client
     stop_caching_commands
+    stop_tracking_boss_bars
     @cached_commands_bytes = nil
     @client = nil
     @last_action_bar = nil
-    @boss_bar_active = false
-    @last_boss_bar_title = nil
+    @boss_bar_mutex.synchronize do
+      @client_generation &+= 1
+      if @boss_bar_active
+        broadcast_boss_bar_remove(@boss_bar_uuid)
+        @boss_bar_active = false
+        @last_boss_bar_title = nil
+      end
+      @upstream_boss_bars.each_key do |uuid|
+        broadcast_boss_bar_remove(uuid)
+      end
+      @upstream_boss_bars.clear
+    end
+    @connections.dup.each(&.detach_from_bot)
+  end
+
+  # Relay the upstream server's boss bars to spectators. Only packets for bars
+  # the spectator has seen an add for may be sent: vanilla crashes on updates
+  # for unknown boss bar UUIDs.
+  private def handle_upstream_boss_event(client : Rosegold::Client, generation : UInt64, event : Clientbound::BossEvent)
+    @boss_bar_mutex.synchronize do
+      return unless @client.same?(client) && @client_generation == generation
+
+      case event.action
+      in .add?
+        if state = client.boss_bar_state(event.uuid)
+          replace = @upstream_boss_bars.has_key?(event.uuid)
+          @upstream_boss_bars[event.uuid] = state
+          broadcast_boss_bar_add(state.add_packet, replace: replace)
+        end
+      in .remove?
+        broadcast_boss_bar_remove(event.uuid) if @upstream_boss_bars.delete(event.uuid)
+      in .update_health?, .update_title?, .update_style?, .update_flags?
+        if state = client.boss_bar_state(event.uuid)
+          @upstream_boss_bars[event.uuid] = state
+          broadcast_boss_bar_add(state.add_packet, replace: true)
+        end
+      end
+    end
+  end
+
+  private def start_tracking_boss_bars(client : Rosegold::Client, generation : UInt64)
+    return if @bot_boss_bar_handler_id
+
+    @bot_boss_bar_handler_id = client.on(Clientbound::BossEvent) do |event|
+      handle_upstream_boss_event(client, generation, event)
+    end
+    @bot_disconnected_handler_id = client.on(Event::Disconnected) do |_event|
+      clear_upstream_boss_bars(client, generation)
+    end
+    @bot_start_configuration_handler_id = client.on(Clientbound::StartConfiguration) do |_event|
+      clear_upstream_boss_bars(client, generation)
+    end
+  end
+
+  private def sync_upstream_boss_bars(client : Rosegold::Client, generation : UInt64)
+    @boss_bar_mutex.synchronize do
+      return unless @client.same?(client) && @client_generation == generation
+
+      @upstream_boss_bars.each_key { |uuid| broadcast_boss_bar_remove(uuid) }
+      @upstream_boss_bars = client.boss_bar_states.to_h { |state| {state.uuid, state} }
+      @upstream_boss_bars.each_value { |state| broadcast_boss_bar_add(state.add_packet) }
+    end
+  end
+
+  private def clear_upstream_boss_bars(client : Rosegold::Client, generation : UInt64)
+    @boss_bar_mutex.synchronize do
+      return unless @client.same?(client) && @client_generation == generation
+
+      @upstream_boss_bars.each_key { |uuid| broadcast_boss_bar_remove(uuid) }
+      @upstream_boss_bars.clear
+    end
+  end
+
+  private def stop_tracking_boss_bars
+    if client = @client
+      if id = @bot_boss_bar_handler_id
+        client.off(Clientbound::BossEvent, id)
+      end
+      if id = @bot_disconnected_handler_id
+        client.off(Event::Disconnected, id)
+      end
+      if id = @bot_start_configuration_handler_id
+        client.off(Clientbound::StartConfiguration, id)
+      end
+    end
+    @bot_boss_bar_handler_id = nil
+    @bot_disconnected_handler_id = nil
+    @bot_start_configuration_handler_id = nil
   end
 
   private def start_caching_commands(client : Rosegold::Client)
+    return if @bot_commands_handler_id
+
     commands_pkt_id = UNIMPLEMENTED_FORWARDED["commands"][client.protocol_version]?
     return unless commands_pkt_id
     commands_id_byte = commands_pkt_id.to_u8
