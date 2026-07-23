@@ -1,4 +1,5 @@
 require "./handshake"
+require "deque"
 require "./configuration"
 require "./world_sync"
 require "./play_session"
@@ -14,6 +15,10 @@ enum Rosegold::Spectate::State
 end
 
 class Rosegold::Spectate::Connection
+  private alias BossBarQueueItem = Rosegold::Clientbound::BossEvent | Channel(Nil)
+
+  BOSS_BAR_QUEUE_LIMIT = 1024
+
   include Spectate::Handshake
   include Spectate::Configuration
   include Spectate::WorldSync
@@ -50,6 +55,14 @@ class Rosegold::Spectate::Connection
   @last_look_time : Time::Instant = Time.instant
   @packet_send_mutex = Mutex.new
   @transition_mutex = Mutex.new
+
+  @boss_bar_queue = Deque(BossBarQueueItem).new
+  @boss_bar_queue_mutex = Mutex.new
+  @boss_bar_writer_running = false
+  @boss_bar_queue_overflowed = false
+  @boss_bar_session = 0_u64
+  @boss_bar_session_active = false
+  @known_boss_bars = Set(UUID).new
 
   @bot_handler_cleanups : Array(->) = [] of ->
 
@@ -165,6 +178,119 @@ class Rosegold::Spectate::Connection
     @socket.close
   rescue
     # Socket already closed
+  end
+
+  def begin_boss_bar_session : UInt64
+    @boss_bar_queue_mutex.synchronize do
+      @boss_bar_session &+= 1
+      @boss_bar_session_active = true
+      @known_boss_bars.clear
+      @boss_bar_session
+    end
+  end
+
+  def boss_bar_session?(session : UInt64) : Bool
+    @boss_bar_queue_mutex.synchronize do
+      @boss_bar_session_active && @boss_bar_session == session && @spectate_state.spectating? && @connected
+    end
+  end
+
+  def boss_bar_session_active? : Bool
+    @boss_bar_queue_mutex.synchronize do
+      @boss_bar_session_active && @spectate_state.spectating? && @connected
+    end
+  end
+
+  def enqueue_boss_bar_add(packet : Rosegold::Clientbound::BossEvent, session : UInt64? = nil, replace : Bool = false)
+    start_writer = @boss_bar_queue_mutex.synchronize do
+      next false unless boss_bar_session_valid_unlocked?(session)
+      next false if !replace && @known_boss_bars.includes?(packet.uuid)
+
+      @known_boss_bars << packet.uuid
+      queue_boss_bar_item_unlocked(packet)
+    end
+    start_boss_bar_writer if start_writer
+  end
+
+  def enqueue_boss_bar_remove(uuid : UUID)
+    start_writer = @boss_bar_queue_mutex.synchronize do
+      next false unless boss_bar_session_valid_unlocked?
+      next false unless @known_boss_bars.delete(uuid)
+
+      queue_boss_bar_item_unlocked(Rosegold::Clientbound::BossEvent.remove(uuid))
+    end
+    start_boss_bar_writer if start_writer
+  end
+
+  def end_boss_bar_session
+    barrier = Channel(Nil).new(1)
+    start_writer = @boss_bar_queue_mutex.synchronize do
+      @boss_bar_session_active = false
+      @boss_bar_session &+= 1
+      should_start = false
+      @known_boss_bars.each do |uuid|
+        start = queue_boss_bar_item_unlocked(Rosegold::Clientbound::BossEvent.remove(uuid))
+        should_start = start || should_start
+      end
+      @known_boss_bars.clear
+      start = queue_boss_bar_item_unlocked(barrier)
+      start || should_start
+    end
+    start_boss_bar_writer if start_writer
+    barrier.receive
+  end
+
+  def detach_from_bot(message : String = "Bot disconnected. Waiting for reconnection...")
+    transition_to_lobby(message) if @spectate_state.spectating?
+  end
+
+  private def boss_bar_session_valid_unlocked?(session : UInt64? = nil) : Bool
+    @boss_bar_session_active &&
+      @spectate_state.spectating? &&
+      @connected &&
+      (session.nil? || @boss_bar_session == session)
+  end
+
+  private def queue_boss_bar_item_unlocked(item : BossBarQueueItem) : Bool
+    if item.is_a?(Rosegold::Clientbound::BossEvent) && (@boss_bar_queue_overflowed || @boss_bar_queue.size >= BOSS_BAR_QUEUE_LIMIT)
+      unless @boss_bar_queue_overflowed
+        @boss_bar_queue_overflowed = true
+        spawn do
+          Log.warn { "Closing spectator with an overflowing boss bar queue" }
+          close
+        end
+      end
+      return false
+    end
+
+    @boss_bar_queue << item
+    return false if @boss_bar_writer_running
+
+    @boss_bar_writer_running = true
+    true
+  end
+
+  private def start_boss_bar_writer
+    spawn do
+      loop do
+        item = @boss_bar_queue_mutex.synchronize do
+          if @boss_bar_queue.empty?
+            @boss_bar_writer_running = false
+            nil
+          else
+            @boss_bar_queue.shift
+          end
+        end
+        break unless item
+
+        case item
+        when Rosegold::Clientbound::BossEvent
+          send_packet(item)
+        when Channel(Nil)
+          item.send(nil)
+        end
+      end
+    end
   end
 
   protected def track_bot_handler(event_type : T.class, &block : T ->) forall T
