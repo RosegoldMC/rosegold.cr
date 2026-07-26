@@ -18,7 +18,7 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
     pushing_against_wall : Bool = false
 
   def initialize(yaw : Float32, pitch : Float32, @on_ground : Bool, @pushing_against_wall : Bool = false)
-    @yaw = sanitize_angle(yaw)
+    @yaw = Look.wrap_yaw(yaw)
     @pitch = sanitize_angle(pitch)
   end
 
@@ -44,7 +44,7 @@ class Rosegold::Serverbound::PlayerLook < Rosegold::Serverbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write yaw
+      buffer.write Look.wrap_yaw(yaw)
       buffer.write pitch
 
       # MC 1.21.4+ format: Use bit field (0x01: on ground, 0x02: pushing against wall)
