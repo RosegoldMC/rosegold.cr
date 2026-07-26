@@ -12,7 +12,14 @@ class Rosegold::Serverbound::UseItem < Rosegold::Serverbound::Packet
 
   property hand : Hand, sequence : Int32, yaw : Float32, pitch : Float32
 
-  def initialize(@hand : Hand = Hand::MainHand, @sequence : Int32 = 0, @yaw : Float32 = 0.0_f32, @pitch : Float32 = 0.0_f32); end
+  def initialize(
+    @hand : Hand = Hand::MainHand,
+    @sequence : Int32 = 0,
+    yaw : Float32 = 0.0_f32,
+    @pitch : Float32 = 0.0_f32,
+  )
+    @yaw = Look.wrap_yaw(yaw)
+  end
 
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
@@ -21,7 +28,7 @@ class Rosegold::Serverbound::UseItem < Rosegold::Serverbound::Packet
 
       # MC 1.21+ adds sequence number, yaw, and pitch
       buffer.write sequence
-      buffer.write yaw
+      buffer.write Look.wrap_yaw(yaw)
       buffer.write pitch
     end.to_slice
   end

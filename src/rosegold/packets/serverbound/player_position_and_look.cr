@@ -29,7 +29,7 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
 
     # Validate and sanitize look angles
     @look = Look.new(
-      sanitize_angle(look.yaw),
+      Look.wrap_yaw(look.yaw),
       sanitize_angle(look.pitch)
     )
   end
@@ -59,7 +59,7 @@ class Rosegold::Serverbound::PlayerPositionAndLook < Rosegold::Serverbound::Pack
       buffer.write feet.x
       buffer.write feet.y
       buffer.write feet.z
-      buffer.write look.yaw
+      buffer.write Look.wrap_yaw(look.yaw)
       buffer.write look.pitch
 
       # MC 1.21.8 (protocol 772) format: Use bit field (0x01: on ground, 0x02: pushing against wall)
