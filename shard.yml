@@ -21,7 +21,7 @@ dependencies:
 development_dependencies:
   ameba:
     github: crystal-ameba/ameba
-    version: ~> 1
+    version: ~> 1.6.4
   spectator:
     github: icy-arctic-fox/spectator
     version: ~> 0.12.0
