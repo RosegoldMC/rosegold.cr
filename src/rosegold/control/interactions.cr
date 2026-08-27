@@ -185,7 +185,7 @@ class Rosegold::Interactions
         # Sneaking with an item in either hand bypasses block-use entirely.
         bypass_block_use = client.player.sneaking? &&
                            (inventory.main_hand.present? || inventory.off_hand.present?)
-        if bypass_block_use || !block_use_consumes_click?(reached)
+        if bypass_block_use || !block_use_consumes_click?(reached, using_hand)
           sequence = client.next_sequence
           operation = BlockOperation.new(Vec3i::ORIGIN, :use)
           client.pending_block_operations[sequence] = operation
@@ -230,9 +230,9 @@ class Rosegold::Interactions
     client.emit_event Event::ArmSwing.new(hand)
   end
 
-  # Blocks whose right-click returns vanilla Success, suppressing the UseItem
-  # fall-through. Unknown/unloaded block states do not consume.
-  private def block_use_consumes_click?(reached : ReachedBlock) : Bool
+  # Suppress UseItem fall-through when vanilla consumes the block interaction.
+  # Unknown/unloaded block states do not consume.
+  private def block_use_consumes_click?(reached : ReachedBlock, hand : Hand) : Bool
     block_state = client.dimension.block_state(reached.block)
     return false unless block_state
     block = Block.from_block_state_id(block_state)
@@ -256,6 +256,23 @@ class Rosegold::Interactions
     when .ends_with?("bed"), "flower_pot", .starts_with?("potted_"),
          .ends_with?("sign"), "bell", "cake"
       true
+    when "cauldron", "water_cauldron", "lava_cauldron", "powder_snow_cauldron"
+      cauldron_use_consumes_click?(block, block_state, hand)
+    else
+      false
+    end
+  end
+
+  private def cauldron_use_consumes_click?(block : Block, block_state : UInt16, hand : Hand) : Bool
+    held_item_name = (hand.main_hand? ? inventory.main_hand : inventory.off_hand).name
+    return true if {"water_bucket", "lava_bucket", "powder_snow_bucket"}.includes?(held_item_name)
+    return false unless held_item_name == "bucket"
+
+    case block.id_str
+    when "lava_cauldron"
+      true
+    when "water_cauldron", "powder_snow_cauldron"
+      block_state == block.max_state_id
     else
       false
     end
