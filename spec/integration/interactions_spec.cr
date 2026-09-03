@@ -219,6 +219,72 @@ Spectator.describe "Rosegold::Bot interactions" do
     end
   end
 
+  it "picks up water from a cauldron with one bucket" do
+    admin.setblock 0, -60, 0, "water_cauldron[level=3]"
+    admin.wait_ticks 3
+
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        admin.clear
+        admin.give "bucket"
+        admin.tp 0.5, -60, 2.5
+        bot.wait_ticks 10
+
+        bot.inventory.pick! "bucket"
+        bot.wait_ticks 5
+
+        expect(bot.main_hand.name).to eq("bucket")
+        expect(bot.main_hand.count).to eq(1)
+
+        bot.use_hand Rosegold::Vec3d.new(0.5, -59.1, 0.9)
+        bot.wait_ticks 10
+
+        expect(bot.main_hand.name).to eq("water_bucket")
+
+        cauldron_state = client.dimension_for_test.block_state(0, -60, 0).as(UInt16)
+        expect(Rosegold::MCData.default.block_state_names[cauldron_state]).to eq("cauldron")
+
+        [{-1, 0}, {1, 0}, {0, -1}, {0, 1}].each do |x_offset, z_offset|
+          state = client.dimension_for_test.block_state(x_offset, -60, z_offset).as(UInt16)
+          expect(Rosegold::MCData.default.block_state_names[state]).to eq("air")
+        end
+      end
+    end
+  end
+
+  it "uses each filled bucket on an occupied cauldron" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        admin.tp 0.5, -60, 2.5
+        bot.wait_ticks 5
+
+        [
+          {"water_cauldron[level=1]", "water_bucket", "water_cauldron"},
+          {"water_cauldron[level=3]", "lava_bucket", "lava_cauldron"},
+          {"lava_cauldron", "powder_snow_bucket", "powder_snow_cauldron"},
+        ].each do |starting_block, bucket, expected_block|
+          admin.setblock 0, -60, 0, starting_block
+          admin.clear
+          admin.give bucket
+          bot.wait_ticks 10
+
+          bot.inventory.pick! bucket
+          bot.wait_ticks 5
+
+          bot.use_hand Rosegold::Vec3d.new(0.5, -59.1, 0.9)
+          bot.wait_ticks 10
+
+          expect(bot.main_hand.name).to eq("bucket")
+
+          cauldron_state = client.dimension_for_test.block_state(0, -60, 0).as(UInt16)
+          cauldron = Rosegold::Block.from_block_state_id(cauldron_state)
+          expect(cauldron.id_str).to eq(expected_block)
+          expect(cauldron_state).to eq(cauldron.max_state_id)
+        end
+      end
+    end
+  end
+
   it "should be able to harvest a hanging vine while walking east with pitch=40" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|

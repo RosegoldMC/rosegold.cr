@@ -35,7 +35,7 @@ jobs:
         run: shards check || shards install --ignore-crystal-version
 
       - name: Run ameba linter
-        run: ./bin/ameba
+        run: crystal run lib/ameba/src/cli.cr --
 
   RunSpecs:
     if: github.repository != 'grepsedawk/sharded.cr'
