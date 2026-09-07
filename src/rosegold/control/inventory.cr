@@ -99,8 +99,16 @@ class Rosegold::Inventory
     false
   end
 
+  def pick(&spec : Slot -> _)
+    pick(spec)
+  end
+
   def pick!(spec)
     pick(spec) || raise ItemNotFoundError.new("Item #{spec} not found in inventory")
+  end
+
+  def pick!(&spec : Slot -> _)
+    pick!(spec)
   end
 
   # Tries to transfer at least `count` matching items from the container to the player inventory, using shift-clicking.

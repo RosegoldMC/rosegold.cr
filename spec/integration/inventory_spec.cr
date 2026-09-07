@@ -60,7 +60,7 @@ Spectator.describe "Rosegold::Bot inventory" do
 
             expect(bot.inventory.pick("diamond_pickaxe")).to eq false
             expect(bot.inventory.pick("stone")).to eq false
-            expect(bot.inventory.pick("diamond_pickaxe")).to eq false
+            expect(bot.inventory.pick { |slot| slot.name == "diamond_pickaxe" }).to eq false
           end
         end
       end
@@ -80,6 +80,24 @@ Spectator.describe "Rosegold::Bot inventory" do
             expect(bot.inventory.pick("stone")).to eq true
             expect(bot.inventory.main_hand.name).to eq "stone"
             expect(bot.inventory.pick("grass_block")).to eq true
+            expect(bot.inventory.main_hand.name).to eq "grass_block"
+          end
+        end
+      end
+    end
+
+    context "when a predicate matches an item in the hotbar" do
+      it "selects the matching item" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            admin.clear
+            bot.wait_ticks 2
+            admin.give "stone", 42
+            bot.wait_ticks 2
+            admin.give "grass_block", 43
+            bot.wait_ticks 2
+
+            expect(bot.inventory.pick { |slot| slot.name == "grass_block" }).to eq true
             expect(bot.inventory.main_hand.name).to eq "grass_block"
           end
         end
@@ -135,6 +153,24 @@ Spectator.describe "Rosegold::Bot inventory" do
   end
 
   describe "#pick!" do
+    context "when a suffix predicate matches an item in the hotbar" do
+      it "selects the matching item" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            admin.clear
+            bot.wait_ticks 2
+            admin.give "stone", 42
+            bot.wait_ticks 2
+            admin.give "diamond_axe"
+            bot.wait_ticks 2
+
+            expect(bot.inventory.pick!(&.name.ends_with?("_axe"))).to eq true
+            expect(bot.inventory.main_hand.name).to eq "diamond_axe"
+          end
+        end
+      end
+    end
+
     context "when the item is not in the inventory" do
       it "raises exception" do
         client.join_game do |client|
@@ -142,6 +178,7 @@ Spectator.describe "Rosegold::Bot inventory" do
             admin.clear
             bot.wait_ticks 2
             expect { bot.inventory.pick!("diamond_pickaxe") }.to raise_error(Rosegold::Inventory::ItemNotFoundError)
+            expect { bot.inventory.pick! { |slot| slot.name == "diamond_pickaxe" } }.to raise_error(Rosegold::Inventory::ItemNotFoundError)
           end
         end
       end
