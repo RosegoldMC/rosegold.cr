@@ -2,8 +2,18 @@ require "../container_menu"
 
 # Villager/wandering trader menu — 3 slots: first_input(0), second_input(1), result(2).
 class Rosegold::MerchantMenu < Rosegold::ContainerMenu
+  property trades = [] of Rosegold::Clientbound::MerchantOffers::MerchantOffer
+  property villager_level : UInt32 = 0_u32
+  property villager_xp : UInt32 = 0_u32
+  property? show_progress : Bool = false
+  property? can_restock : Bool = false
+
   def initialize(@client : Client, @id : UInt8, @title : Chat)
     super(@client, @id, @title, 3)
+  end
+
+  def select_trade(index : Int32) : Nil
+    @client.send_packet!(Serverbound::SelectTrade.new(index))
   end
 
   def first_input : Rosegold::Slot
