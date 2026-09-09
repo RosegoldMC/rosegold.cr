@@ -48,6 +48,7 @@ abstract class Rosegold::Menu
   abstract def player_inventory_start : Int32
 
   property state_id : UInt32 = 0
+  property properties = Hash(Int16, Int16).new
   @player_inventory : PlayerInventory
   @cursor : Rosegold::Slot = Rosegold::Slot.new
   @remote_slots : Array(RemoteSlot)
