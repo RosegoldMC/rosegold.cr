@@ -1,5 +1,6 @@
 require "../versions"
 require "minecraft-data"
+require "./attribute_snapshot"
 
 class Rosegold::Entity
   alias Metadata = Minecraft::Data::EntityMetadata
@@ -8,6 +9,13 @@ class Rosegold::Entity
   # parsed and memoized per protocol on first use.
   @@metadata_cache = {} of UInt32 => Array(Metadata)
   @@metadata_mutex = Mutex.new
+
+  # A decoded entity-metadata value; member types are exactly what the
+  # SetEntityData serializer readers return.
+  alias TrackedValue = Bool | UInt8 | UInt32 | UInt64 | Float32 | String |
+                       Rosegold::TextComponent | Rosegold::Slot | Rosegold::Vec3i | UUID |
+                       Minecraft::NBT::Tag | Tuple(Float32, Float32, Float32) | Array(UInt32) |
+                       Tuple(String, Rosegold::Vec3i) | Array(Float32) | Bytes | Nil
 
   def self.metadata_for_protocol : Array(Metadata)
     protocol = Client.protocol_version
@@ -43,9 +51,54 @@ class Rosegold::Entity
     passenger_ids : Array(UInt32) = [] of UInt32,
     effects : Array(EntityEffect) = [] of EntityEffect
 
+  property attributes : Hash(UInt32, AttributeSnapshot) = Hash(UInt32, AttributeSnapshot).new
+
+  # SetEntityData tracked values, keyed by metadata index. Partial updates merge.
+  property tracked_data : Hash(UInt8, TrackedValue) = Hash(UInt8, TrackedValue).new
+
+  def entity_flags : UInt8
+    tracked_data[0_u8]?.as?(UInt8) || 0_u8
+  end
+
+  def on_fire?
+    (entity_flags & 0x01) != 0
+  end
+
+  def crouching?
+    (entity_flags & 0x02) != 0
+  end
+
+  def sprinting?
+    (entity_flags & 0x08) != 0
+  end
+
+  def invisible?
+    (entity_flags & 0x20) != 0
+  end
+
+  def glowing?
+    (entity_flags & 0x40) != 0
+  end
+
+  def custom_name : Rosegold::TextComponent?
+    tracked_data[2_u8]?.as?(Rosegold::TextComponent)
+  end
+
+  def pose : UInt32?
+    tracked_data[6_u8]?.as?(UInt32)
+  end
+
+  def item_stack : Rosegold::Slot?
+    tracked_data[8_u8]?.as?(Rosegold::Slot)
+  end
+
   property? \
     on_ground : Bool = true,
     living : Bool = false
+
+  def apply_attribute_snapshots(snapshots : Array(AttributeSnapshot)) : Nil
+    snapshots.each { |snapshot| attributes[snapshot.attribute_id] = snapshot }
+  end
 
   # Matches vanilla MC's Entity.isPickable() = false. Default is pickable; only these are excluded.
   NON_PICKABLE_ENTITIES = Set{
