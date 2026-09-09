@@ -36,7 +36,8 @@ class Rosegold::Clientbound::SetSlot < Rosegold::Clientbound::Packet
 
   def callback(client)
     if window_id == -1 && slot.slot_number == -1
-      client.container_menu.cursor = slot.as(Rosegold::Slot)
+      menu = client.container_menu
+      menu.update_slot(-1, slot.as(Rosegold::Slot), menu.state_id)
     elsif window_id == 0
       client.inventory_menu.update_slot(slot.slot_number, slot.as(Rosegold::Slot), state_id)
     elsif client.container_menu.id == window_id
