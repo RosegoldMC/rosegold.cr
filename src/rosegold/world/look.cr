@@ -16,6 +16,16 @@ struct Rosegold::Look
 
   def initialize(@yaw : Float32, @pitch : Float32); end
 
+  def self.wrap_yaw(yaw : Float32) : Float32
+    return 0.0_f32 if yaw.nan? || yaw.infinite?
+
+    wrapped = yaw.remainder(360.0_f32)
+    return wrapped - 360.0_f32 if wrapped >= 180.0_f32
+    return wrapped + 360.0_f32 if wrapped < -180.0_f32
+
+    wrapped
+  end
+
   def yaw_rad
     yaw * Math::TAU / 360
   end
