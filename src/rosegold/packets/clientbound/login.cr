@@ -138,6 +138,7 @@ class Rosegold::Clientbound::Login < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    client.player.clear_attributes
     client.player.entity_id = entity_id.to_u64
     client.player.gamemode = gamemode.to_i8
 

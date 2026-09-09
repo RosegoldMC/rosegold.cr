@@ -3,6 +3,7 @@ require "../../world/vec3"
 
 class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
+  KEEP_ATTRIBUTES = 0x01_u8
   packet_ids({
     772_u32 => 0x4B_u32, # MC 1.21.8
     774_u32 => 0x50_u32, # MC 1.21.11
@@ -93,6 +94,7 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
 
   def callback(client)
     client.physics.pause
+    client.player.clear_attributes unless data_kept & KEEP_ATTRIBUTES != 0
     client.player.gamemode = gamemode.to_i8
 
     client.dimension = Dimension.from_registry(dimension_name, dimension_type, client.registries)
