@@ -306,11 +306,12 @@ abstract class Rosegold::DataComponent
       # New 1.21.11 component types
     when "use_effects"           then DataComponents::UseEffects.read(io)
     when "minimum_attack_charge" then DataComponents::FloatComponent.read(io)
-    when "damage_type"           then DataComponents::EitherHolderComponent.read(io)
-    when "attack_range"          then DataComponents::AttackRange.read(io)
-    when "piercing_weapon"       then DataComponents::PiercingWeapon.read(io)
-    when "kinetic_weapon"        then DataComponents::KineticWeapon.read(io)
-    when "swing_animation"       then DataComponents::SwingAnimation.read(io)
+    when "damage_type"
+      Client.protocol_version >= 775_u32 ? DataComponents::VarIntComponent.read(io) : DataComponents::EitherHolderComponent.read(io)
+    when "attack_range"    then DataComponents::AttackRange.read(io)
+    when "piercing_weapon" then DataComponents::PiercingWeapon.read(io)
+    when "kinetic_weapon"  then DataComponents::KineticWeapon.read(io)
+    when "swing_animation" then DataComponents::SwingAnimation.read(io)
       # New 26.1 component types
     when "additional_trade_cost" then DataComponents::VarIntComponent.read(io)
     when "dye"                   then DataComponents::VarIntComponent.read(io)
@@ -318,8 +319,8 @@ abstract class Rosegold::DataComponent
     when "sulfur_cube_content" then DataComponents::SulfurCubeContent.read(io)
       # Entity variant components (most are simple VarInt)
     when "villager/variant"            then DataComponents::VarIntComponent.read(io)
-    when "wolf/variant"                then DataComponents::HolderComponent.read(io)
-    when "wolf/sound_variant"          then DataComponents::HolderComponent.read(io)
+    when "wolf/variant"                then DataComponents::VarIntComponent.read(io)
+    when "wolf/sound_variant"          then DataComponents::VarIntComponent.read(io)
     when "wolf/collar"                 then DataComponents::VarIntComponent.read(io)
     when "fox/variant"                 then DataComponents::VarIntComponent.read(io)
     when "salmon/size"                 then DataComponents::VarIntComponent.read(io)
@@ -329,23 +330,23 @@ abstract class Rosegold::DataComponent
     when "tropical_fish/pattern_color" then DataComponents::VarIntComponent.read(io)
     when "mooshroom/variant"           then DataComponents::VarIntComponent.read(io)
     when "rabbit/variant"              then DataComponents::VarIntComponent.read(io)
-    when "pig/variant"                 then DataComponents::HolderComponent.read(io)
-    when "pig/sound_variant"           then DataComponents::HolderComponent.read(io)
-    when "cow/variant"                 then DataComponents::HolderComponent.read(io)
-    when "cow/sound_variant"           then DataComponents::HolderComponent.read(io)
+    when "pig/variant"                 then DataComponents::VarIntComponent.read(io)
+    when "pig/sound_variant"           then DataComponents::VarIntComponent.read(io)
+    when "cow/variant"                 then DataComponents::VarIntComponent.read(io)
+    when "cow/sound_variant"           then DataComponents::VarIntComponent.read(io)
     when "chicken/variant"
       Client.protocol_version >= 775_u32 ? DataComponents::VarIntComponent.read(io) : DataComponents::EitherHolderComponent.read(io)
-    when "chicken/sound_variant" then DataComponents::HolderComponent.read(io)
+    when "chicken/sound_variant" then DataComponents::VarIntComponent.read(io)
     when "zombie_nautilus/variant"
       Client.protocol_version >= 775_u32 ? DataComponents::VarIntComponent.read(io) : DataComponents::EitherHolderComponent.read(io)
-    when "frog/variant"      then DataComponents::HolderComponent.read(io)
+    when "frog/variant"      then DataComponents::VarIntComponent.read(io)
     when "horse/variant"     then DataComponents::VarIntComponent.read(io)
-    when "painting/variant"  then DataComponents::HolderComponent.read(io)
+    when "painting/variant"  then DataComponents::PaintingVariant.read(io)
     when "llama/variant"     then DataComponents::VarIntComponent.read(io)
     when "axolotl/variant"   then DataComponents::VarIntComponent.read(io)
-    when "cat/variant"       then DataComponents::HolderComponent.read(io)
+    when "cat/variant"       then DataComponents::VarIntComponent.read(io)
     when "cat/collar"        then DataComponents::VarIntComponent.read(io)
-    when "cat/sound_variant" then DataComponents::HolderComponent.read(io)
+    when "cat/sound_variant" then DataComponents::VarIntComponent.read(io)
     when "sheep/color"       then DataComponents::VarIntComponent.read(io)
     when "shulker/color"     then DataComponents::VarIntComponent.read(io)
     else
@@ -1721,27 +1722,31 @@ class Rosegold::DataComponents::Instrument < Rosegold::DataComponent
 
   def self.read(io) : self
     capture = Minecraft::IO::CaptureIO.new(io)
-    has_holder = capture.read_bool
-    if has_holder
-      holder_type = capture.read_var_int
-      if holder_type == 0
-        # Inline instrument data
-        sound_type = capture.read_var_int
-        if sound_type == 0
-          capture.read_var_string # sound name
-          has_fixed_range = capture.read_bool
-          capture.read_float if has_fixed_range
-        end
-        capture.read_float      # use_duration
-        capture.read_float      # range
-        capture.read_nbt_unamed # description
-      end
+    # 775+ dropped the leading EitherHolder bool; the holder is written directly.
+    if Client.protocol_version >= 775_u32
+      read_holder(capture)
+    elsif capture.read_bool
+      read_holder(capture)
     else
       capture.read_var_string # resource key
     end
     instance = new
     instance.raw_bytes = capture.buffer.to_slice.dup
     instance
+  end
+
+  private def self.read_holder(capture) : Nil
+    holder_type = capture.read_var_int
+    return unless holder_type == 0
+    sound_type = capture.read_var_int
+    if sound_type == 0
+      capture.read_var_string # sound name
+      has_fixed_range = capture.read_bool
+      capture.read_float if has_fixed_range
+    end
+    capture.read_float      # use_duration
+    capture.read_float      # range
+    capture.read_nbt_unamed # description
   end
 
   def write(io) : Nil
@@ -1759,25 +1764,30 @@ class Rosegold::DataComponents::ProvidesTrimMaterial < Rosegold::DataComponent
 
   def self.read(io) : self
     capture = Minecraft::IO::CaptureIO.new(io)
-    first = capture.read_bool
-    if first
-      holder_id = capture.read_var_int
-      if holder_id == 0
-        # Inline TrimMaterial: AssetInfo suffix + map<ResourceKey, String suffix> + description
-        capture.read_var_string # base suffix
-        override_count = capture.read_var_int
-        override_count.times do
-          capture.read_var_string # override key
-          capture.read_var_string # suffix
-        end
-        capture.read_nbt_unamed # description TextComponent
-      end
+    # 775+ dropped the leading EitherHolder bool; the holder is written directly.
+    if Client.protocol_version >= 775_u32
+      read_holder(capture)
+    elsif capture.read_bool
+      read_holder(capture)
     else
       capture.read_var_string # resource key
     end
     instance = new
     instance.raw_bytes = capture.buffer.to_slice.dup
     instance
+  end
+
+  private def self.read_holder(capture) : Nil
+    holder_id = capture.read_var_int
+    return unless holder_id == 0
+    # Inline TrimMaterial: AssetInfo suffix + map<ResourceKey, String suffix> + description
+    capture.read_var_string # base suffix
+    override_count = capture.read_var_int
+    override_count.times do
+      capture.read_var_string # override key
+      capture.read_var_string # suffix
+    end
+    capture.read_nbt_unamed # description TextComponent
   end
 
   def write(io) : Nil
@@ -1808,23 +1818,53 @@ class Rosegold::DataComponents::JukeboxPlayable < Rosegold::DataComponent
 
   def self.read(io) : self
     capture = Minecraft::IO::CaptureIO.new(io)
-    has_holder = capture.read_bool
-    if has_holder
-      holder_type = capture.read_var_int
-      if holder_type == 0
-        # Inline jukebox song data
-        sound_type = capture.read_var_int
-        if sound_type == 0
-          capture.read_var_string # sound name
-          has_fixed_range = capture.read_bool
-          capture.read_float if has_fixed_range
-        end
-        capture.read_nbt_unamed # description
-        capture.read_float      # duration
-        capture.read_var_int    # output
-      end
+    # 775+ dropped the leading EitherHolder bool; the holder is written directly.
+    if Client.protocol_version >= 775_u32
+      read_holder(capture)
+    elsif capture.read_bool
+      read_holder(capture)
     else
       capture.read_var_string # resource key
+    end
+    instance = new
+    instance.raw_bytes = capture.buffer.to_slice.dup
+    instance
+  end
+
+  private def self.read_holder(capture) : Nil
+    holder_type = capture.read_var_int
+    return unless holder_type == 0
+    sound_type = capture.read_var_int
+    if sound_type == 0
+      capture.read_var_string # sound name
+      has_fixed_range = capture.read_bool
+      capture.read_float if has_fixed_range
+    end
+    capture.read_nbt_unamed # description
+    capture.read_float      # duration
+    capture.read_var_int    # output
+  end
+
+  def write(io) : Nil
+    io.write(raw_bytes)
+  end
+end
+
+# PaintingVariant - Holder<PaintingVariant>: VarInt id, 0 ⇒ inline body follows.
+class Rosegold::DataComponents::PaintingVariant < Rosegold::DataComponent
+  property raw_bytes : Bytes = Bytes.empty
+
+  def initialize; end
+
+  def self.read(io) : self
+    capture = Minecraft::IO::CaptureIO.new(io)
+    holder_type = capture.read_var_int
+    if holder_type == 0
+      capture.read_var_int                         # width
+      capture.read_var_int                         # height
+      capture.read_var_string                      # asset_id
+      capture.read_nbt_unamed if capture.read_bool # optional title
+      capture.read_nbt_unamed if capture.read_bool # optional author
     end
     instance = new
     instance.raw_bytes = capture.buffer.to_slice.dup
@@ -2189,43 +2229,50 @@ end
 #   Optional<NbtPredicate> nbt
 #   DataComponentMatchers components  (exact + partial predicate maps)
 #
-# DataComponentMatchers is effectively recursive Slot-component parsing. We read
-# the common empty-map case correctly; any non-empty matchers raise and the
-# packet-layer rescue falls back to RawPacket.
+# DataComponentMatchers holds an exact map (recursive Slot-component parsing) and
+# a partial map. Partial entries are uniform on the wire regardless of predicate
+# type: an Either type-ref (bool + VarInt registry id) followed by the predicate
+# value encoded as a single network NBT tag (ByteBufCodecs.fromCodecWithRegistries),
+# so the value is self-terminating and can be skipped without a per-type codec.
 class Rosegold::DataComponents::BlockPredicates < Rosegold::DataComponent
+  property raw_bytes : Bytes = Bytes.empty
+
   def initialize; end
 
   def self.read(io) : self
-    count = io.read_var_int
+    capture = Minecraft::IO::CaptureIO.new(io)
+    count = capture.read_var_int
     count.times do
-      has_blocks = io.read_bool
+      has_blocks = capture.read_bool
       if has_blocks
-        holder_type = io.read_var_int
+        holder_type = capture.read_var_int
         if holder_type == 0
-          io.read_var_string # tag
+          capture.read_var_string # tag
         else
-          (holder_type - 1).times { io.read_var_int }
+          (holder_type - 1).times { capture.read_var_int }
         end
       end
-      has_properties = io.read_bool
+      has_properties = capture.read_bool
       if has_properties
-        prop_count = io.read_var_int
+        prop_count = capture.read_var_int
         prop_count.times do
-          io.read_var_string # property name
-          is_exact = io.read_bool
+          capture.read_var_string # property name
+          is_exact = capture.read_bool
           if is_exact
-            io.read_var_string # exact value
+            capture.read_var_string # exact value
           else
-            io.read_var_string # min
-            io.read_var_string # max
+            capture.read_var_string # min
+            capture.read_var_string # max
           end
         end
       end
-      has_nbt = io.read_bool
-      io.read_nbt_unamed if has_nbt
-      read_data_component_matchers(io)
+      has_nbt = capture.read_bool
+      capture.read_nbt_unamed if has_nbt
+      read_data_component_matchers(capture)
     end
-    new
+    instance = new
+    instance.raw_bytes = capture.buffer.to_slice.dup
+    instance
   end
 
   private def self.read_data_component_matchers(io)
@@ -2236,16 +2283,19 @@ class Rosegold::DataComponents::BlockPredicates < Rosegold::DataComponent
       DataComponent.create_component(component_type_id, io)
     end
     partial_count = io.read_var_int
-    if partial_count != 0
-      raise Minecraft::NBT::DecodeError.new(
-        "DataComponentMatchers with non-empty partial-predicate map " \
-        "(count=#{partial_count}) is not supported; cannot advance IO stream safely"
-      )
+    partial_count.times do
+      io.read_bool       # Either discriminator: predicate-type vs component-type registry
+      io.read_var_int    # registry id of the predicate/component type
+      io.read_nbt_unamed # predicate value (network NBT via fromCodecWithRegistries)
     end
   end
 
   def write(io) : Nil
-    io.write 0_u32
+    if raw_bytes.empty?
+      io.write 0_u32
+    else
+      io.write raw_bytes
+    end
   end
 end
 
