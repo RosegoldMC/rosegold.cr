@@ -977,10 +977,144 @@ Spectator.describe "Rosegold::Bot inventory" do
         # Relog and verify state persists (check for desync issues)
         client.join_game do |client|
           Rosegold::Bot.new(client).try do |bot|
-            expect(bot.inventory.main_hand.count).to eq 10
+            expect(bot.inventory.main_hand.count).to eq 30
             expect(bot.inventory.main_hand.name).to eq "diamond"
-            # Server reverts to original state (inventory moves aren't permanent for test commands)
-            expect(bot.inventory.count("diamond")).to be >= 10
+            expect(bot.inventory.count("diamond")).to eq 30
+          end
+        end
+      end
+
+      it "refills from a preceding hotbar slot when every other inventory slot is full" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            admin.clear
+            bot.wait_ticks 2
+
+            # Lava buckets leave no spare slot for shift-click staging. The donor is
+            # before the selected slot so a refill must preserve the selected hand.
+            admin.give "lava_bucket", 36
+            bot.wait_ticks 5
+            bot.hotbar_selection = 3_u8
+            bot.wait_tick
+            admin.item_replace "hotbar.0", "bucket", 10
+            bot.wait_ticks 2
+            admin.item_replace "hotbar.1", "bucket", 10
+            bot.wait_ticks 2
+            admin.item_replace "hotbar.2", "bucket", 10
+            bot.wait_ticks 2
+
+            expect(bot.inventory.main_hand.name).to eq "bucket"
+            expect(bot.inventory.main_hand.count).to eq 10
+            expect(bot.inventory.count("bucket")).to eq 30
+            expect(bot.inventory.count("lava_bucket")).to eq 33
+            expect(bot.inventory.inventory.all? { |slot| slot.name == "lava_bucket" }).to eq true
+
+            result = bot.inventory.refill_hand
+            bot.wait_ticks 5
+
+            expect(result).to eq 16
+            expect(bot.hotbar_selection).to eq 3_u8
+            expect(bot.inventory.main_hand.name).to eq "bucket"
+            expect(bot.inventory.main_hand.count).to eq 16
+            expect(bot.inventory.count("bucket")).to eq 30
+            expect(bot.inventory.count("lava_bucket")).to eq 33
+            expect(bot.inventory.hotbar[0].name).to eq "lava_bucket"
+            staged_slot = bot.inventory.inventory[0]
+            expect(staged_slot.empty? || staged_slot.name == "bucket").to eq true
+            expect(bot.inventory.cursor.empty?).to eq true
+          end
+        end
+
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            expect(bot.hotbar_selection).to eq 3_u8
+            expect(bot.inventory.main_hand.name).to eq "bucket"
+            expect(bot.inventory.main_hand.count).to eq 16
+            expect(bot.inventory.count("bucket")).to eq 30
+            expect(bot.inventory.count("lava_bucket")).to eq 33
+            expect(bot.inventory.hotbar[0].name).to eq "lava_bucket"
+            staged_slot = bot.inventory.inventory[0]
+            expect(staged_slot.empty? || staged_slot.name == "bucket").to eq true
+            expect(bot.inventory.cursor.empty?).to eq true
+          end
+        end
+      end
+
+      it "refills selected slots at the beginning, middle, and end of a full hotbar" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            [
+              {1_u8, "hotbar.0", "hotbar.1", 1, 10, 6, 16},
+              {3_u8, "hotbar.2", "hotbar.0", 0, 4, 6, 10},
+              {9_u8, "hotbar.8", "hotbar.7", 7, 10, 6, 16},
+            ].each do |selection, hand_slot, donor_slot, donor_hotbar_index, hand_count, donor_count, expected_count|
+              admin.clear
+              bot.wait_ticks 2
+              admin.give "lava_bucket", 36
+              bot.wait_ticks 5
+              bot.hotbar_selection = selection
+              bot.wait_tick
+              admin.item_replace hand_slot, "bucket", hand_count
+              bot.wait_ticks 2
+              admin.item_replace donor_slot, "bucket", donor_count
+              bot.wait_ticks 2
+
+              expect(bot.inventory.refill_hand).to eq expected_count
+              bot.wait_ticks 5
+
+              expect(bot.hotbar_selection).to eq selection
+              expect(bot.inventory.main_hand.name).to eq "bucket"
+              expect(bot.inventory.main_hand.count).to eq expected_count
+              expect(bot.inventory.count("bucket")).to eq expected_count
+              expect(bot.inventory.count("lava_bucket")).to eq 34
+              expect(bot.inventory.hotbar[donor_hotbar_index].name).to eq "lava_bucket"
+              staged_slot = bot.inventory.inventory[0]
+              expect(staged_slot.empty? || staged_slot.name == "bucket").to eq true
+              expect(bot.inventory.cursor.empty?).to eq true
+            end
+          end
+        end
+      end
+
+      it "preserves overflow when staging through an empty inventory slot" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            admin.clear
+            bot.wait_ticks 2
+            bot.hotbar_selection = 3_u8
+            admin.item_replace "hotbar.2", "bucket", 10
+            bot.wait_ticks 2
+            admin.item_replace "hotbar.0", "bucket", 10
+            bot.wait_ticks 2
+
+            expect(bot.inventory.refill_hand).to eq 16
+            bot.wait_ticks 5
+
+            expect(bot.hotbar_selection).to eq 3_u8
+            expect(bot.inventory.main_hand.count).to eq 16
+            expect(bot.inventory.count("bucket")).to eq 20
+            expect(bot.inventory.cursor.empty?).to eq true
+          end
+        end
+      end
+
+      it "does not combine matching item ids with different components" do
+        client.join_game do |client|
+          Rosegold::Bot.new(client).try do |bot|
+            admin.clear
+            bot.wait_ticks 2
+            bot.hotbar_selection = 1_u8
+            admin.item_replace "hotbar.0", "stone[custom_data={marker:1}]", 10
+            bot.wait_ticks 2
+            admin.item_replace "inventory.0", "stone[custom_data={marker:2}]", 10
+            bot.wait_ticks 2
+
+            expect(bot.inventory.main_hand.name).to eq "stone"
+            expect(bot.inventory.main_hand.components_to_add).not_to eq(bot.inventory.inventory[0].components_to_add)
+            expect(bot.inventory.refill_hand).to eq 10
+            bot.wait_ticks 2
+            expect(bot.inventory.main_hand.count).to eq 10
+            expect(bot.inventory.inventory[0].count).to eq 10
           end
         end
       end
