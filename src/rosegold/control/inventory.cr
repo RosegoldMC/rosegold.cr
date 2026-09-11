@@ -175,78 +175,98 @@ class Rosegold::Inventory
   def refill_hand
     log = Log.for("refill_hand")
 
-    # Check if container is open - if so, warn and return current quantity
-    if @client.container_menu != @client.inventory_menu
+    menu = @client.inventory_menu
+    if @client.container_menu != menu
       Log.warn { "Cannot refill hand while container is open" }
       return main_hand.count.to_i32
     end
 
-    # Get initial state
     return 0 if main_hand.empty?
+    return main_hand.count.to_i32 unless menu.cursor.empty?
 
-    target_item_id = main_hand.item_id_int
+    target = menu.copy_slot(main_hand)
     max_stack_size = main_hand.max_stack_size.to_i32
 
-    log.debug { "refill_hand: main_hand=#{main_hand.name}x#{main_hand.count}, target_id=#{target_item_id}, max_stack=#{max_stack_size}, hotbar_sel=#{@client.player.hotbar_selection}, state_id=#{@client.inventory_menu.state_id}" }
+    log.debug { "refill_hand: main_hand=#{main_hand.name}x#{main_hand.count}, target_id=#{target.item_id_int}, max_stack=#{max_stack_size}, hotbar_sel=#{@client.player.hotbar_selection}, state_id=#{menu.state_id}" }
 
     return main_hand.count.to_i32 if main_hand.count.to_i32 >= max_stack_size
 
-    # Get current hotbar selection
     current_hotbar_selection = @client.player.hotbar_selection.to_i32
 
-    # Process main inventory first (shift-clicking moves items TO hotbar)
-    loop do
+    refill_hand_from_inventory(target, current_hotbar_selection, max_stack_size, log)
+
+    # Number-key staging works even when every main-inventory slot is occupied.
+    8.times do
       break if main_hand.count.to_i32 >= max_stack_size
+      break if inventory.any? { |slot| refill_hand_matches?(slot, target) }
 
-      # Find matching item in main inventory
-      matching_slot = inventory.find { |slot|
-        slot.item_id_int == target_item_id && slot.count > 0
-      }
-      break unless matching_slot
+      donor = refill_hand_hotbar_donor(target, current_hotbar_selection)
+      break unless donor
 
-      log.debug { "refill_hand: shift-clicking slot #{matching_slot.slot_number} (#{matching_slot.name}x#{matching_slot.count}), state_id=#{@client.inventory_menu.state_id}" }
-      # Shift-click to move items from main inventory to hotbar (stacks with main hand)
-      @client.inventory_menu.send_click matching_slot.slot_number, 0, :shift
-      log.debug { "refill_hand: after click, main_hand=#{main_hand.count}, state_id=#{@client.inventory_menu.state_id}" }
+      count_before = main_hand.count.to_i32
+      donor_hotbar_index = donor.slot_number - menu.hotbar_slot_index(0)
 
-      # Check if any items were actually transferred
-      # If main hand didn't change, we're done with main inventory
-      break if main_hand.count.to_i32 >= max_stack_size
-    end
+      displaced_slot = inventory.first?
+      break unless displaced_slot
 
-    # Then process other hotbar slots - use a two-stage approach for hotbar consolidation
-    hotbar_slots_with_matching_items = [] of Int32
-    hotbar.each_with_index do |slot, index|
-      # Skip the current main hand slot
-      next if index == current_hotbar_selection
+      menu.swap_hotbar(donor_hotbar_index, displaced_slot)
+      @client.wait_tick
+      refill_hand_from_inventory(target, current_hotbar_selection, max_stack_size, log)
 
-      # Collect slots with matching items
-      if slot.item_id_int == target_item_id && slot.count > 0
-        hotbar_slots_with_matching_items << slot.slot_number
-      end
-    end
-
-    # Stage 1: Move items from other hotbar slots to main inventory (if we have items to consolidate)
-    hotbar_slots_with_matching_items.each do |slot_number|
-      break if main_hand.count.to_i32 >= max_stack_size
-      @client.inventory_menu.send_click slot_number, 0, :shift
-    end
-
-    # Stage 2: Move items back from main inventory to main hand
-    loop do
-      break if main_hand.count.to_i32 >= max_stack_size
-
-      # Find matching item in main inventory that we just moved there
-      matching_slot = inventory.find { |slot|
-        slot.item_id_int == target_item_id && slot.count > 0
-      }
-      break unless matching_slot
-
-      # Shift-click to move items from main inventory back to hotbar (stacks with main hand)
-      @client.inventory_menu.send_click matching_slot.slot_number, 0, :shift
+      break if main_hand.count.to_i32 <= count_before
     end
 
     main_hand.count.to_i32
+  end
+
+  # Quick-move fills hotbar slots left to right, so temporarily give the hand
+  # the earliest compatible partial stack's priority, then restore it.
+  private def refill_hand_from_inventory(target : Rosegold::Slot, selected_hotbar_index : Int32, max_stack_size : Int32, log)
+    menu = @client.inventory_menu
+    return unless inventory.any? { |slot| refill_hand_matches?(slot, target) }
+
+    selected_slot_number = menu.hotbar_slot_index(selected_hotbar_index)
+    priority_slot = hotbar.find { |slot| refill_hand_matches?(slot, target) && slot.count.to_i32 < max_stack_size }
+    staged_slot_number = priority_slot ? priority_slot.slot_number : selected_slot_number
+    swapped = staged_slot_number != selected_slot_number
+
+    if swapped
+      menu.swap_hotbar(selected_hotbar_index, staged_slot_number)
+      @client.wait_tick
+    end
+
+    begin
+      27.times do
+        staged_stack = menu[staged_slot_number]
+        break if staged_stack.count.to_i32 >= max_stack_size
+
+        source = inventory.find { |slot| refill_hand_matches?(slot, target) }
+        break unless source
+
+        count_before = staged_stack.count.to_i32
+        log.debug { "refill_hand: shift-clicking slot #{source.slot_number} (#{source.name}x#{source.count}), state_id=#{menu.state_id}" }
+        menu.send_click source.slot_number, 0, :shift
+        @client.wait_tick
+
+        break if menu[staged_slot_number].count.to_i32 <= count_before
+      end
+    ensure
+      if swapped
+        menu.swap_hotbar(selected_hotbar_index, staged_slot_number)
+        @client.wait_tick
+      end
+    end
+  end
+
+  private def refill_hand_hotbar_donor(target : Rosegold::Slot, selected_hotbar_index : Int32) : Rosegold::WindowSlot?
+    hotbar.find do |slot|
+      slot.slot_number != @client.inventory_menu.hotbar_slot_index(selected_hotbar_index) &&
+        refill_hand_matches?(slot, target)
+    end
+  end
+
+  private def refill_hand_matches?(slot : Rosegold::Slot, target : Rosegold::Slot) : Bool
+    slot.count > 0 && @client.inventory_menu.same_item_same_components?(slot, target)
   end
 
   # Finds an empty slot in the source
