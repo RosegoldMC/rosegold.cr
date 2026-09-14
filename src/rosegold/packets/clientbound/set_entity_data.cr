@@ -1,5 +1,6 @@
 require "../packet"
 require "../../world/entity_metadata"
+require "../../world/particle"
 
 class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
   include Rosegold::Packets::ProtocolMapping
@@ -63,8 +64,9 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
     when :vector3            then {io.read_float, io.read_float, io.read_float}
     when :quaternion         then [io.read_float, io.read_float, io.read_float, io.read_float]
     when :painting_variant   then read_painting_variant(io)
-    when :particle, :particles, :resolvable_profile
-      raise "Entity metadata serializer #{symbol} has no stream codec; cannot advance IO"
+    when :particle           then Rosegold::Particle.read(io)
+    when :particles          then Rosegold::Particle.read_list(io)
+    when :resolvable_profile then Rosegold::DataComponents::Profile.read(io).raw_bytes
     else
       raise "Unhandled entity metadata serializer #{symbol}" unless VARINT_SERIALIZERS.includes?(symbol)
       io.read_var_int
@@ -144,7 +146,7 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
       value.as(Tuple(Float32, Float32, Float32)).each { |component| io.write_full component }
     when :quaternion
       value.as(Array(Float32)).each { |component| io.write_full component }
-    when :painting_variant
+    when :painting_variant, :particle, :particles, :resolvable_profile
       io.write value.as(Bytes)
     else
       raise "Unhandled entity metadata serializer #{symbol}" unless VARINT_SERIALIZERS.includes?(symbol)
