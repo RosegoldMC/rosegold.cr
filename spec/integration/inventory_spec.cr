@@ -1,5 +1,13 @@
 require "../spec_helper"
 
+private def wait_for_inventory_setup(bot : Rosegold::Bot, timeout : Time::Span = 5.seconds, &)
+  deadline = Time.monotonic + timeout
+  until yield
+    raise "Timed out waiting for inventory setup" if Time.monotonic >= deadline
+    bot.wait_tick
+  end
+end
+
 Spectator.describe "Rosegold::Bot inventory" do
   describe "#count" do
     context "when the item is not in the inventory" do
@@ -193,6 +201,148 @@ Spectator.describe "Rosegold::Bot inventory" do
             admin.give "diamond_pickaxe[damage=1550,enchantments={\"minecraft:efficiency\":1}]"
             bot.wait_ticks 2
             expect { bot.inventory.pick!("diamond_pickaxe") }.to raise_error(Rosegold::Inventory::ItemNotFoundError)
+          end
+        end
+      end
+    end
+  end
+
+  describe "#swap_hands" do
+    it "swaps the selected picked item immediately and persists both component-bearing stacks" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          admin.clear
+          admin.item_replace "inventory.0", "diamond_sword[damage=100]"
+          admin.item_replace "weapon.offhand", "shield"
+          wait_for_inventory_setup(bot) do
+            bot.inventory.inventory.any? { |slot| slot.name == "diamond_sword" && slot.damage == 100 } &&
+              bot.inventory.off_hand.name == "shield"
+          end
+
+          sword = bot.inventory.inventory.find { |slot| slot.name == "diamond_sword" }
+          expect(sword).not_to be_nil
+          expect(sword.try(&.damage)).to eq 100
+          expect(bot.inventory.off_hand.name).to eq "shield"
+
+          bot.inventory.pick! "diamond_sword"
+          bot.wait_ticks 4
+          expect(bot.inventory.main_hand.damage).to eq 100
+
+          bot.swap_hands
+          expect(bot.inventory.main_hand.name).to eq "shield"
+          expect(bot.inventory.off_hand.name).to eq "diamond_sword"
+          expect(bot.inventory.off_hand.damage).to eq 100
+
+          bot.swap_hands
+          expect(bot.inventory.main_hand.name).to eq "diamond_sword"
+          expect(bot.inventory.main_hand.damage).to eq 100
+          expect(bot.inventory.off_hand.name).to eq "shield"
+        end
+      end
+
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          expect(bot.inventory.main_hand.name).to eq "diamond_sword"
+          expect(bot.inventory.main_hand.damage).to eq 100
+          expect(bot.inventory.off_hand.name).to eq "shield"
+        end
+      end
+    end
+
+    it "handles an empty main or off hand and an immediate hotbar pick" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          admin.clear
+          admin.item_replace "hotbar.4", "stone", 16
+          wait_for_inventory_setup(bot) do
+            bot.inventory.hotbar[4].name == "stone" &&
+              bot.inventory.hotbar[4].count == 16 &&
+              bot.inventory.off_hand.empty?
+          end
+
+          expect(bot.inventory.hotbar[4].name).to eq "stone"
+          expect(bot.inventory.hotbar[4].count).to eq 16
+          expect(bot.inventory.off_hand.empty?).to be_true
+
+          bot.inventory.pick! "stone"
+          bot.swap_hands
+          expect(bot.inventory.main_hand.empty?).to be_true
+          expect(bot.inventory.off_hand.name).to eq "stone"
+          expect(bot.inventory.off_hand.count).to eq 16
+
+          admin.clear
+          admin.item_replace "weapon.offhand", "shield"
+          wait_for_inventory_setup(bot) do
+            bot.inventory.main_hand.empty? && bot.inventory.off_hand.name == "shield"
+          end
+
+          expect(bot.inventory.main_hand.empty?).to be_true
+          expect(bot.inventory.off_hand.name).to eq "shield"
+
+          bot.swap_hands
+          expect(bot.inventory.main_hand.name).to eq "shield"
+          expect(bot.inventory.off_hand.empty?).to be_true
+        end
+      end
+    end
+
+    it "leaves identical stacks unchanged" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          admin.clear
+          admin.item_replace "hotbar.0", "stone", 16
+          admin.item_replace "weapon.offhand", "stone", 16
+          wait_for_inventory_setup(bot) do
+            bot.inventory.hotbar[0].name == "stone" &&
+              bot.inventory.hotbar[0].count == 16 &&
+              bot.inventory.off_hand.name == "stone" &&
+              bot.inventory.off_hand.count == 16
+          end
+
+          expect(bot.inventory.hotbar[0].name).to eq "stone"
+          expect(bot.inventory.hotbar[0].count).to eq 16
+          expect(bot.inventory.off_hand.name).to eq "stone"
+          expect(bot.inventory.off_hand.count).to eq 16
+
+          bot.inventory.pick! "stone"
+          bot.swap_hands
+
+          expect(bot.inventory.main_hand.name).to eq "stone"
+          expect(bot.inventory.main_hand.count).to eq 16
+          expect(bot.inventory.off_hand.name).to eq "stone"
+          expect(bot.inventory.off_hand.count).to eq 16
+        end
+      end
+    end
+
+    it "closes an open chest before swapping hands" do
+      client.join_game do |client|
+        Rosegold::Bot.new(client).try do |bot|
+          admin.tp 30.5, -60, 30.5
+          admin.setblock 30, -61, 30, "chest", "replace"
+          admin.clear
+          admin.item_replace "hotbar.0", "diamond_axe"
+          admin.item_replace "weapon.offhand", "shield"
+          wait_for_inventory_setup(bot) do
+            bot.inventory.hotbar[0].name == "diamond_axe" &&
+              bot.inventory.off_hand.name == "shield"
+          end
+
+          expect(bot.inventory.hotbar[0].name).to eq "diamond_axe"
+          expect(bot.inventory.off_hand.name).to eq "shield"
+
+          bot.inventory.pick! "diamond_axe"
+          bot.pitch = 90
+          bot.wait_for(Rosegold::Clientbound::SetContainerContent) { bot.use_hand }
+
+          begin
+            bot.swap_hands
+            expect(bot.container_type).to be_nil
+            expect(bot.inventory.main_hand.name).to eq "shield"
+            expect(bot.inventory.off_hand.name).to eq "diamond_axe"
+          ensure
+            bot.inventory.close
+            bot.wait_tick
           end
         end
       end

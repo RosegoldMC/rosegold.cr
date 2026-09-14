@@ -6,6 +6,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   getter inventory : Inventory
   property? auto_respawn : Bool = true
+  @swapping_hands = false
 
   def initialize(@client)
     @inventory = Inventory.new client
@@ -259,8 +260,17 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.player.hotbar_selection = index - 1
   end
 
-  def swap_hands
-    client.queue_packet Serverbound::PlayerAction.new :swap_hands
+  # Closes any container and waits for the server to confirm both hands.
+  # Unchanged stacks need no confirmation. A timeout does not undo the swap.
+  def swap_hands(timeout : Time::Span = 5.seconds) : Nil
+    raise "A hand swap is already in progress" if @swapping_hands
+
+    @swapping_hands = true
+    begin
+      HandSwap.new(client).run(timeout) { client.interactions.swap_hands }
+    ensure
+      @swapping_hands = false
+    end
   end
 
   def drop_hand_single
