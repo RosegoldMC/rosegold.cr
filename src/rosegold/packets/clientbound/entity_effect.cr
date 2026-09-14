@@ -53,6 +53,7 @@ class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
       end
 
       client.player.effects << effect
+      return
     end
 
     if entity.nil?

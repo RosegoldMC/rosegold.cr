@@ -138,17 +138,60 @@ Spectator.describe Rosegold::Clientbound::SetEntityData do
       expect(Rosegold::Clientbound::SetEntityData.read(round_trip).values[19_u8]).to eq(Bytes[5])
     end
 
-    it "aborts on resolvable_profile" do
-      Rosegold::Client.protocol_version = 775_u32
+    it "captures both resolvable_profile variants for every protocol that uses it" do
+      [773_u32, 774_u32, 775_u32, 776_u32].each do |protocol|
+        Rosegold::Client.protocol_version = protocol
+        serializer_id = case protocol
+                        when 773_u32 then 36_u32
+                        when 774_u32 then 37_u32
+                        else              41_u32
+                        end
 
-      io = Minecraft::IO::Memory.new
-      io.write 7_u32
-      io.write_byte 0_u8
-      io.write 41_u32 # resolvable_profile
-      io.write_byte 0xFF_u8
+        [true, false].each do |full_profile|
+          profile = Minecraft::IO::Memory.new
+          profile.write full_profile
+          if full_profile
+            profile.write UUID.new("00000000-0000-0000-0000-000000000001")
+            profile.write "Ally"
+          else
+            profile.write true # partial name present
+            profile.write "Ally"
+            profile.write true # partial UUID present
+            profile.write UUID.new("00000000-0000-0000-0000-000000000002")
+          end
+          profile.write 2_u32
+          profile.write "textures"
+          profile.write "unsigned"
+          profile.write false
+          profile.write "skin"
+          profile.write "signed"
+          profile.write true
+          profile.write "signature"
+          3.times do
+            profile.write true
+            profile.write "minecraft:skin"
+          end
+          profile.write true
+          profile.write true
 
-      expect { Rosegold::Clientbound::SetEntityData.read(Minecraft::IO::Memory.new(io.to_slice)) }
-        .to raise_error(/resolvable_profile/)
+          io = Minecraft::IO::Memory.new
+          io.write 7_u32
+          io.write_byte 0_u8
+          io.write serializer_id
+          io.write profile.to_slice
+          io.write_byte 1_u8
+          io.write 0_u32
+          io.write_byte 0x20_u8
+          io.write_byte 0xFF_u8
+
+          expected = io.to_slice.dup
+          packet = Rosegold::Clientbound::SetEntityData.read(Minecraft::IO::Memory.new(expected))
+
+          expect(packet.values[0_u8].as(Bytes).hexstring).to eq(profile.to_slice.hexstring)
+          expect(packet.values[1_u8]).to eq(0x20_u8)
+          expect(packet.write.hexstring).to eq("#{Rosegold::Clientbound::SetEntityData[protocol].to_s(16).rjust(2, '0')}#{expected.hexstring}")
+        end
+      end
     end
   end
 
@@ -233,17 +276,112 @@ Spectator.describe Rosegold::Clientbound::SetEntityData do
       expect(slot.as(Rosegold::Slot).item_id_int).to eq(55_u32)
     end
 
-    it "degrades to RawPacket when a particle serializer is encountered" do
-      Rosegold::Client.protocol_version = 772_u32
+    it "captures a single particle across legacy and template protocols" do
+      [772_u32, 775_u32].each do |protocol|
+        Rosegold::Client.protocol_version = protocol
+        particle = Rosegold::Particle.registry.particles.find { |entry| entry.codec == "simple" } || raise "Missing simple particle"
+        serializer_id = protocol == 772_u32 ? 17_u32 : 16_u32
 
-      buffer = Minecraft::IO::Memory.new
-      buffer.write 0x5C_u32 # packet id
-      buffer.write 1_u32    # entity_id
-      buffer.write_byte 0_u8
-      buffer.write 17_u32 # serializer: particle (772) — no codec, must raise
+        io = Minecraft::IO::Memory.new
+        io.write 7_u32
+        io.write_byte 10_u8
+        io.write serializer_id
+        io.write particle.id
+        io.write_byte 0_u8
+        io.write 0_u32
+        io.write_byte 0x20_u8
+        io.write_byte 0xFF_u8
+        expected = io.to_slice.dup
 
-      decoded = Rosegold::Connection.decode_clientbound_packet(
-        buffer.to_slice, Rosegold::ProtocolState::PLAY, 772_u32)
+        packet = Rosegold::Clientbound::SetEntityData.read(Minecraft::IO::Memory.new(expected))
+
+        expect(packet.values[10_u8].as(Bytes).hexstring).to eq(particle.id.to_s(16).rjust(2, '0'))
+        expect(packet.values[0_u8]).to eq(0x20_u8)
+        expect(packet.write.hexstring).to eq("#{Rosegold::Clientbound::SetEntityData[protocol].to_s(16).rjust(2, '0')}#{expected.hexstring}")
+      end
+    end
+
+    it "decodes, applies, and replays the captured protocol 775 particle list" do
+      Rosegold::Client.protocol_version = 775_u32
+      raw = Bytes[
+        0x63, 0x8d, 0x96, 0x62, 0x0a, 0x11, 0x03, 0x15, 0x26, 0x91,
+        0x46, 0xf0, 0x15, 0x26, 0xcd, 0x5c, 0xab, 0x15, 0x26, 0xd9,
+        0xc0, 0x43, 0xff,
+      ]
+
+      decoded = Rosegold::Connection.decode_clientbound_packet(raw, Rosegold::ProtocolState::PLAY, 775_u32)
+
+      expect(decoded).to be_a(Rosegold::Clientbound::SetEntityData)
+      packet = decoded.as(Rosegold::Clientbound::SetEntityData)
+      expect(packet.entity_id).to eq(1_608_461_u64)
+      expect(packet.entries.size).to eq(1)
+      expect(packet.entries.first.index).to eq(10_u8)
+      expect(packet.entries.first.serializer_id).to eq(17_u32)
+      expect(packet.entries.first.value.as(Bytes).hexstring).to eq("0315269146f01526cd5cab1526d9c043")
+      expect(packet.write.hexstring).to eq(raw.hexstring)
+
+      client = Rosegold::Client.new("localhost", 25565, offline: {uuid: "00000000-0000-0000-0000-000000000000", username: "tester"})
+      entity = Rosegold::Entity.new(
+        1_608_461_u32, UUID.random, 1_u32,
+        Rosegold::Vec3d.new(0.0, 0.0, 0.0),
+        0.0_f32, 0.0_f32, 0.0_f32,
+        Rosegold::Vec3d.new(0.0, 0.0, 0.0))
+      client.dimension_for_test.entities[1_608_461_u64] = entity
+      entity.tracked_data[0_u8] = 0x08_u8
+
+      packet.callback(client)
+
+      expect(entity.tracked_data[0_u8]).to eq(0x08_u8)
+      expect(entity.tracked_data[10_u8].as(Bytes).hexstring).to eq("0315269146f01526cd5cab1526d9c043")
+    end
+
+    it "keeps later metadata aligned after a protocol 775 particle list" do
+      Rosegold::Client.protocol_version = 775_u32
+      raw = Bytes[
+        0x63, 0x8d, 0x96, 0x62, 0x0a, 0x11, 0x03, 0x15, 0x26, 0x91,
+        0x46, 0xf0, 0x15, 0x26, 0xcd, 0x5c, 0xab, 0x15, 0x26, 0xd9,
+        0xc0, 0x43, 0x00, 0x00, 0x20, 0xff,
+      ]
+
+      decoded = Rosegold::Connection.decode_clientbound_packet(raw, Rosegold::ProtocolState::PLAY, 775_u32)
+
+      expect(decoded).to be_a(Rosegold::Clientbound::SetEntityData)
+      packet = decoded.as(Rosegold::Clientbound::SetEntityData)
+      expect(packet.entries.size).to eq(2)
+      expect(packet.values[0_u8]).to eq(0x20_u8)
+      expect(packet.write.hexstring).to eq(raw.hexstring)
+    end
+
+    it "preserves metadata on both sides of the captured protocol 775 particle list" do
+      Rosegold::Client.protocol_version = 775_u32
+      raw = Bytes[
+        0x63, 0x97, 0x97, 0x89, 0x01, 0x09, 0x03, 0x41, 0xa0, 0x00,
+        0x00, 0x0a, 0x11, 0x03, 0x15, 0x26, 0x91, 0x46, 0xf0, 0x15,
+        0x26, 0xcd, 0x5c, 0xab, 0x15, 0x26, 0xd9, 0xc0, 0x43, 0x0b,
+        0x08, 0x01, 0x12, 0x01, 0x8c, 0xe8, 0x04, 0xff,
+      ]
+
+      decoded = Rosegold::Connection.decode_clientbound_packet(raw, Rosegold::ProtocolState::PLAY, 775_u32)
+
+      expect(decoded).to be_a(Rosegold::Clientbound::SetEntityData)
+      packet = decoded.as(Rosegold::Clientbound::SetEntityData)
+      expect(packet.entity_id).to eq(2_247_575_u64)
+      expect(packet.values[9_u8]).to eq(20.0_f32)
+      expect(packet.values[10_u8].as(Bytes).hexstring).to eq("0315269146f01526cd5cab1526d9c043")
+      expect(packet.values[11_u8]).to be_true
+      expect(packet.values[18_u8]).to eq(78_860_u32)
+      expect(packet.write.hexstring).to eq(raw.hexstring)
+    end
+
+    it "falls back to RawPacket for a truncated protocol 775 particle list" do
+      Rosegold::Client.protocol_version = 775_u32
+      truncated = Bytes[
+        0x63, 0x8d, 0x96, 0x62, 0x0a, 0x11, 0x03, 0x15, 0x26, 0x91,
+        0x46, 0xf0, 0x15, 0x26, 0xcd, 0x5c, 0xab, 0x15, 0x26, 0xd9,
+        0xc0, 0x43,
+      ]
+
+      decoded = Rosegold::Connection.decode_clientbound_packet(truncated, Rosegold::ProtocolState::PLAY, 775_u32)
 
       expect(decoded).to be_a(Rosegold::Clientbound::RawPacket)
     end
