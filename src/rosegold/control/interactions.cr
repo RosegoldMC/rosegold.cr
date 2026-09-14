@@ -84,6 +84,11 @@ class Rosegold::Interactions
     end
   end
 
+  def swap_hands : Nil
+    tick_held_item
+    send_packet Serverbound::PlayerAction.new :swap_hands
+  end
+
   private def tick_attack
     if @attack_cooldown_ticks > 0
       @attack_cooldown_ticks -= 1
