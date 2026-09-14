@@ -639,6 +639,10 @@ class Rosegold::Physics
   private def no_collision?(box : AABBd) : Bool
     min_block = box.min.block
     max_block = box.max.block
+    min_block = min_block.with_y(Math.max(min_block.y, dimension.min_y))
+    max_block = max_block.with_y(Math.min(max_block.y, dimension.min_y + dimension.world_height - 1))
+    return true if min_block.y > max_block.y
+
     block_coords = Indexable.cartesian_product({
       (min_block.x..max_block.x).to_a,
       (min_block.y..max_block.y).to_a,
@@ -898,6 +902,10 @@ class Rosegold::Physics
     min_block = bounds.min.down(0.5).block
     # add maximum stepping height so we can reuse the obstacles when stepping
     max_block = bounds.max.up(MAX_UP_STEP).block
+    min_block = min_block.with_y(Math.max(min_block.y, dimension.min_y))
+    max_block = max_block.with_y(Math.min(max_block.y, dimension.min_y + dimension.world_height - 1))
+    return [] of AABBd if min_block.y > max_block.y
+
     blocks_coords = Indexable.cartesian_product({
       (min_block.x..max_block.x).to_a,
       (min_block.y..max_block.y).to_a,

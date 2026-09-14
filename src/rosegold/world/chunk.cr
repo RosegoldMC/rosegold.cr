@@ -29,7 +29,8 @@ class Rosegold::Chunk
   def block_state(x : Int32, y : Int32, z : Int32) : BlockStateNr | Nil
     x, z = x & 15, z & 15
     section_index = (y - min_y) >> 4
-    section = sections[section_index]? || return nil
+    return nil if section_index < 0 || section_index >= sections.size
+    section = sections[section_index]
     index = (((y - min_y) & 15) << 8) | (z << 4) | x
     section.block_state index.to_u32
   end
