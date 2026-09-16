@@ -8,6 +8,7 @@ class Rosegold::Clientbound::EntityEffect < Rosegold::Clientbound::Packet
     773_u32 => 0x82_u32, # MC 1.21.9
     775_u32 => 0x84_u32, # MC 26.1
     776_u32 => 0x84_u32, # MC 26.2
+    777_u32 => 0x87_u32,
   })
 
   property \

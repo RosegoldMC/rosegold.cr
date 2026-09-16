@@ -7,8 +7,9 @@ services:
       - 25565:25565
     environment:
       EULA: "TRUE"
-      VERSION: ${MC_VERSION:-26.1}
+      VERSION: ${MC_VERSION:-26.3}
       ONLINE_MODE: "FALSE"
+      ENABLE_WHITELIST: "FALSE"
       LEVEL_TYPE: flat
       SPAWN_PROTECTION: 0
       SPAWN_MONSTERS: "FALSE"

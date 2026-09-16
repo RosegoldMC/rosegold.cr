@@ -8,6 +8,7 @@ class Rosegold::Clientbound::UpdateAttributes < Rosegold::Clientbound::Packet
     774_u32 => 0x81_u32, # MC 1.21.11
     775_u32 => 0x83_u32, # MC 26.1
     776_u32 => 0x83_u32, # MC 26.2
+    777_u32 => 0x86_u32,
   })
   class_getter state = ProtocolState::PLAY
 

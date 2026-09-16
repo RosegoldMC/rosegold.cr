@@ -6,6 +6,7 @@ class Rosegold::Clientbound::ContainerSetData < Rosegold::Clientbound::Packet
     774_u32 => 0x13_u32, # MC 1.21.11
     775_u32 => 0x13_u32, # MC 26.1
     776_u32 => 0x13_u32, # MC 26.2
+    777_u32 => 0x13_u32,
   })
   class_getter state = ProtocolState::PLAY
 

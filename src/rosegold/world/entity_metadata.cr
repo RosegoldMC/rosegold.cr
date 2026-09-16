@@ -129,6 +129,7 @@ module Rosegold::EntityMetadata
   })
 
   PROTOCOL_776 = PROTOCOL_775
+  PROTOCOL_777 = PROTOCOL_776.merge({43_u32 => :dye_color})
 
   PROTOCOL_MAP = {% begin %}{
     {% for proto in Rosegold::ENABLED_PROTOCOLS.keys.sort %}

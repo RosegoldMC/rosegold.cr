@@ -6,6 +6,7 @@ class Rosegold::Serverbound::Attack < Rosegold::Serverbound::Packet
   packet_ids({
     775_u32 => 0x01_u32, # MC 26.1
     776_u32 => 0x01_u32, # MC 26.2
+    777_u32 => 0x01_u32,
   })
 
   property entity_id : UInt64

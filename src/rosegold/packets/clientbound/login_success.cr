@@ -16,6 +16,7 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
     773_u32 => 0x02_u32, # MC 1.21.9
     775_u32 => 0x02_u32, # MC 26.1
     776_u32 => 0x02_u32, # MC 26.2
+    777_u32 => 0x02_u32, # MC 26.3
   })
 
   class_getter state = ProtocolState::LOGIN
@@ -23,9 +24,10 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
   property \
     uuid : UUID,
     username : String,
-    properties : Array(Property)
+    properties : Array(Property),
+    session_id : UUID
 
-  def initialize(@uuid, @username, @properties = [] of Property); end
+  def initialize(@uuid, @username, @properties = [] of Property, @session_id = UUID.new("00000000-0000-0000-0000-000000000000")); end
 
   def self.read(packet)
     uuid = packet.read_uuid
@@ -40,7 +42,9 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
       )
     end
 
-    self.new(uuid, username, properties)
+    session_id = Client.protocol_version >= 776_u32 ? packet.read_uuid : UUID.new("00000000-0000-0000-0000-000000000000")
+
+    self.new(uuid, username, properties, session_id)
   end
 
   def write : Bytes
@@ -62,6 +66,8 @@ class Rosegold::Clientbound::LoginSuccess < Rosegold::Clientbound::Packet
           buffer.write false
         end
       end
+
+      buffer.write session_id if Client.protocol_version >= 776_u32
     end.to_slice
   end
 

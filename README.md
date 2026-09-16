@@ -76,7 +76,7 @@ require "rosegold"
 require "rosegold/26.1"
 ```
 
-Requiring a version-specific entrypoint (`rosegold/26.1`, `rosegold/26.2`, `rosegold/1.21.8`, `rosegold/1.21.9`, `rosegold/1.21.11`) compiles just that one version into the binary and connects to it directly. This produces a noticeably smaller binary and skips the status ping used to detect the server's version. Use the default `require "rosegold"` if you want one binary that works against multiple server versions.
+Requiring a version-specific entrypoint (`rosegold/26.1`, `rosegold/26.2`, `rosegold/26.3`, `rosegold/1.21.8`, `rosegold/1.21.9`, `rosegold/1.21.11`) compiles just that one version into the binary and connects to it directly. This produces a noticeably smaller binary and skips the status ping used to detect the server's version. Use the default `require "rosegold"` if you want one binary that works against multiple server versions.
 
 ## API Quick Reference
 

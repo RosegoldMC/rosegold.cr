@@ -105,8 +105,7 @@ class Rosegold::Interactions
       else
         send_packet Serverbound::InteractEntity.new reached.entity_id, :attack
       end
-      send_packet Serverbound::SwingArm.new
-      client.emit_event Event::ArmSwing.new
+      send_swing attack: true
       @attack_cooldown_ticks = rand(ATTACK_COOLDOWN_RANGE)
     when ReachedBlock
       start_digging reached
@@ -163,8 +162,7 @@ class Rosegold::Interactions
       @dig_hand_swing_countdown -= 1
       if @dig_hand_swing_countdown <= 0
         @dig_hand_swing_countdown = 6
-        send_packet Serverbound::SwingArm.new
-        client.emit_event Event::ArmSwing.new
+        send_swing attack: true
       end
     end
   end
@@ -180,8 +178,7 @@ class Rosegold::Interactions
       when Entity
         Log.debug { "Interacting with entity #{reached.entity_id}" }
         send_packet Serverbound::InteractEntity.new reached.entity_id.to_u64, :interact, hand: using_hand
-        send_packet Serverbound::SwingArm.new using_hand
-        client.emit_event Event::ArmSwing.new(using_hand)
+        send_swing using_hand
       when ReachedBlock
         Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
         place_block using_hand, reached
@@ -221,6 +218,41 @@ class Rosegold::Interactions
     client.send_packet! packet
   end
 
+  private def send_swing(hand : Hand = :main_hand, attack : Bool = false)
+    if Client.protocol_version >= 777_u32
+      send_packet Serverbound::Punch.new if attack
+    else
+      send_packet Serverbound::SwingArm.new hand
+    end
+    animation = Client.protocol_version >= 777_u32 ? swing_animation(hand, attack) : nil
+    client.emit_event Event::ArmSwing.new(hand, animation)
+  end
+
+  private def swing_animation(hand : Hand, attack : Bool) : DataComponents::SwingAnimation
+    slot = hand.main_hand? ? inventory.main_hand : inventory.off_hand
+    component_name = attack ? "attack_animation" : "interact_animation"
+    component = slot.components_to_add[component_name]?
+    return component if component.is_a?(DataComponents::SwingAnimation)
+
+    return default_swing_animation if slot.components_to_remove.includes?(component_name)
+    return default_swing_animation unless attack
+
+    case slot.name
+    when "wooden_spear"    then DataComponents::SwingAnimation.new(2_u32, 13_u32)
+    when "stone_spear"     then DataComponents::SwingAnimation.new(2_u32, 15_u32)
+    when "copper_spear"    then DataComponents::SwingAnimation.new(2_u32, 17_u32)
+    when "iron_spear"      then DataComponents::SwingAnimation.new(2_u32, 19_u32)
+    when "golden_spear"    then DataComponents::SwingAnimation.new(2_u32, 19_u32)
+    when "diamond_spear"   then DataComponents::SwingAnimation.new(2_u32, 21_u32)
+    when "netherite_spear" then DataComponents::SwingAnimation.new(2_u32, 23_u32)
+    else                        default_swing_animation
+    end
+  end
+
+  private def default_swing_animation : DataComponents::SwingAnimation
+    DataComponents::SwingAnimation.new(1_u32, 6_u32)
+  end
+
   private def place_block(hand : Hand, reached : ReachedBlock)
     cursor = (reached.intercept - reached.block.to_f64).to_f32
     inside_block = false # TODO
@@ -231,8 +263,7 @@ class Rosegold::Interactions
 
     send_packet Serverbound::PlayerBlockPlacement.new \
       hand, reached.block, reached.face, cursor, inside_block, sequence
-    send_packet Serverbound::SwingArm.new hand
-    client.emit_event Event::ArmSwing.new(hand)
+    send_swing hand
   end
 
   # Suppress UseItem fall-through when vanilla consumes the block interaction.
@@ -293,8 +324,7 @@ class Rosegold::Interactions
 
     send_packet Serverbound::PlayerAction.new \
       :start, reached.block, reached.face, sequence
-    send_packet Serverbound::SwingArm.new
-    client.emit_event Event::ArmSwing.new
+    send_swing attack: true
   end
 
   private def finish_digging

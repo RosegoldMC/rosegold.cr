@@ -9,6 +9,7 @@ class Rosegold::Serverbound::PlayerInput < Rosegold::Serverbound::Packet
     773_u32 => 0x2A_u32, # MC 1.21.9
     775_u32 => 0x2B_u32, # MC 26.1
     776_u32 => 0x2B_u32, # MC 26.2
+    777_u32 => 0x2B_u32,
   })
 
   # Player Input flags from protocol documentation

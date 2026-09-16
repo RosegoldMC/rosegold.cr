@@ -9,6 +9,7 @@ class Rosegold::Serverbound::AcceptCodeOfConduct < Rosegold::Serverbound::Packet
     774_u32 => 0x09_u32, # MC 1.21.11
     775_u32 => 0x09_u32, # MC 26.1
     776_u32 => 0x09_u32, # MC 26.2
+    777_u32 => 0x09_u32,
   })
 
   def initialize; end

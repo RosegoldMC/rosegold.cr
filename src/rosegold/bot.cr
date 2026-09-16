@@ -275,12 +275,12 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   def drop_hand_single
     client.queue_packet Serverbound::PlayerAction.new :drop_hand_single
-    client.queue_packet Serverbound::SwingArm.new
+    client.queue_packet Serverbound::SwingArm.new if Client.protocol_version < 777_u32
   end
 
   def drop_hand_full
     client.queue_packet Serverbound::PlayerAction.new :drop_hand_full
-    client.queue_packet Serverbound::SwingArm.new
+    client.queue_packet Serverbound::SwingArm.new if Client.protocol_version < 777_u32
   end
 
   # Pick the item at the given block position (middle-click on a block).
@@ -538,7 +538,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
   private def resolve_ingredient_ids(ingredient : SlotDisplay) : Array(UInt32)
     case ingredient
     when SlotDisplayTag
-      resolve_item_tag(ingredient.tag)
+      if tag = ingredient.tag
+        resolve_item_tag(tag)
+      else
+        ingredient.item_ids
+      end
     else
       ingredient.all_item_ids
     end

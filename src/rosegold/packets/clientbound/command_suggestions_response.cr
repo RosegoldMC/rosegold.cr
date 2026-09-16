@@ -10,6 +10,7 @@ class Rosegold::Clientbound::CommandSuggestionsResponse < Rosegold::Clientbound:
     773_u32 => 0x0F_u32, # MC 1.21.9
     775_u32 => 0x0F_u32,
     776_u32 => 0x0F_u32, # MC 26.2
+    777_u32 => 0x0F_u32,
   })
 
   record Match, text : String, tooltip : Rosegold::TextComponent? = nil

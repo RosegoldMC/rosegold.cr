@@ -9,6 +9,7 @@ class Rosegold::Clientbound::SetDefaultSpawnPosition < Rosegold::Clientbound::Pa
     773_u32 => 0x5F_u32, # MC 1.21.9
     775_u32 => 0x61_u32, # MC 26.1
     776_u32 => 0x61_u32, # MC 26.2
+    777_u32 => 0x63_u32,
   })
 
   property \

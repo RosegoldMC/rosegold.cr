@@ -6,6 +6,7 @@ class Rosegold::Clientbound::EntityRotation < Rosegold::Clientbound::Packet
     773_u32 => 0x36_u32, # MC 1.21.9
     775_u32 => 0x38_u32, # MC 26.1
     776_u32 => 0x38_u32, # MC 26.2
+    777_u32 => 0x39_u32,
   })
 
   property \
@@ -21,6 +22,13 @@ class Rosegold::Clientbound::EntityRotation < Rosegold::Clientbound::Packet
 
   def self.read(packet)
     entity_id = packet.read_var_int.to_u64
+    if Client.protocol_version >= 777_u32
+      on_ground = packet.read_bool
+      yaw = packet.read_angle256_deg
+      pitch = packet.read_angle256_deg
+      return self.new(entity_id, yaw, pitch, on_ground)
+    end
+
     yaw = packet.read_angle256_deg
     pitch = packet.read_angle256_deg
     on_ground = packet.read_bool
@@ -32,6 +40,12 @@ class Rosegold::Clientbound::EntityRotation < Rosegold::Clientbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write entity_id.to_u32
+      if Client.protocol_version >= 777_u32
+        buffer.write on_ground?
+        buffer.write_angle256_deg yaw
+        buffer.write_angle256_deg pitch
+        next
+      end
       buffer.write_angle256_deg yaw
       buffer.write_angle256_deg pitch
       buffer.write on_ground?
