@@ -11,7 +11,7 @@ Log.setup_from_env
 
 # TODO: Write documentation for `Rosegold`
 module Rosegold
-  VERSION = "0.4.1"
+  VERSION = "0.10.0"
 
   Log = ::Log.for self
 end
