@@ -72,12 +72,13 @@ class Rosegold::Client < Rosegold::EventEmitter
     cookies : Hash(String, Bytes) = Hash(String, Bytes).new,
     registries : Hash(String, Clientbound::RegistryData) = Hash(String, Clientbound::RegistryData).new,
     known_packs : Array(NamedTuple(namespace: String, id: String, version: String)) = [] of NamedTuple(namespace: String, id: String, version: String),
-    # A headless client cannot apply a resource pack, so decline unless a caller
-    # deliberately opts into the compatibility-only :loaded acknowledgement.
-    resource_pack_response : Symbol = :decline,
     tags : Clientbound::UpdateTags? = nil,
     ticker_done : Channel(Nil) = Channel(Nil).new,
     recipe_registry : RecipeRegistry = RecipeRegistry.new
+
+  # A headless client cannot apply a resource pack, so decline unless a caller
+  # deliberately opts into the compatibility-only :loaded acknowledgement.
+  property resource_pack_response : Symbol = :decline
 
   @boss_bars = Hash(UUID, BossBarState).new
   @boss_bars_mutex = Mutex.new
