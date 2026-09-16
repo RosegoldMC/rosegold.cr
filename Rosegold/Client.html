@@ -292,6 +292,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/CodeOfConduct" data-name="rosegold::clientbound::codeofconduct">
+      <a href="../Rosegold/Clientbound/CodeOfConduct.html">CodeOfConduct</a>
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/Clientbound/CommandSuggestionsResponse" data-name="rosegold::clientbound::commandsuggestionsresponse">
       <a href="../Rosegold/Clientbound/CommandSuggestionsResponse.html">CommandSuggestionsResponse</a>
       
@@ -314,6 +319,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Clientbound/ConfigurationKeepAlive" data-name="rosegold::clientbound::configurationkeepalive">
       <a href="../Rosegold/Clientbound/ConfigurationKeepAlive.html">ConfigurationKeepAlive</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ConfigurationPing" data-name="rosegold::clientbound::configurationping">
+      <a href="../Rosegold/Clientbound/ConfigurationPing.html">ConfigurationPing</a>
       
     </li>
   
@@ -584,6 +594,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Clientbound/RemoveEntityEffect" data-name="rosegold::clientbound::removeentityeffect">
       <a href="../Rosegold/Clientbound/RemoveEntityEffect.html">RemoveEntityEffect</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Clientbound/ResourcePackPush" data-name="rosegold::clientbound::resourcepackpush">
+      <a href="../Rosegold/Clientbound/ResourcePackPush.html">ResourcePackPush</a>
       
     </li>
   
@@ -1797,6 +1812,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/AcceptCodeOfConduct" data-name="rosegold::serverbound::acceptcodeofconduct">
+      <a href="../Rosegold/Serverbound/AcceptCodeOfConduct.html">AcceptCodeOfConduct</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/AcknowledgeConfiguration" data-name="rosegold::serverbound::acknowledgeconfiguration">
       <a href="../Rosegold/Serverbound/AcknowledgeConfiguration.html">AcknowledgeConfiguration</a>
       
@@ -1879,6 +1899,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Serverbound/ConfigurationKeepAlive" data-name="rosegold::serverbound::configurationkeepalive">
       <a href="../Rosegold/Serverbound/ConfigurationKeepAlive.html">ConfigurationKeepAlive</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ConfigurationPong" data-name="rosegold::serverbound::configurationpong">
+      <a href="../Rosegold/Serverbound/ConfigurationPong.html">ConfigurationPong</a>
       
     </li>
   
@@ -2029,6 +2054,21 @@
   
   <li class=" " data-id="rosegold/Rosegold/Serverbound/RawPacket" data-name="rosegold::serverbound::rawpacket">
       <a href="../Rosegold/Serverbound/RawPacket.html">RawPacket</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/Serverbound/ResourcePackResponse" data-name="rosegold::serverbound::resourcepackresponse">
+      <a href="../Rosegold/Serverbound/ResourcePackResponse.html">ResourcePackResponse</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ResourcePackResponse/Action" data-name="rosegold::serverbound::resourcepackresponse::action">
+      <a href="../Rosegold/Serverbound/ResourcePackResponse/Action.html">Action</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -2379,14 +2419,14 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L16" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L16" target="_blank">
         rosegold/client.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/spectate/server.cr#L9" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/spectate/server.cr#L9" target="_blank">
         rosegold/spectate/server.cr
       </a>
     
@@ -2795,6 +2835,20 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#resource_pack_response%3ASymbol-instance-method" class="signature"><strong>#resource_pack_response</strong> : Symbol</a>
+        
+          <div class="summary"><p>A headless client cannot apply a resource pack, so decline unless a caller deliberately opts into the compatibility-only :loaded acknowledgement.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#resource_pack_response%3D%28resource_pack_response%3ASymbol%29-instance-method" class="signature"><strong>#resource_pack_response=</strong>(resource_pack_response : Symbol)</a>
+        
+          <div class="summary"><p>A headless client cannot apply a resource pack, so decline unless a caller deliberately opts into the compatibility-only :loaded acknowledgement.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#send_packet%21%28packet%3AServerbound%3A%3APacket%29-instance-method" class="signature"><strong>#send_packet!</strong>(packet : Serverbound::Packet)</a>
         
           <div class="summary"><p>Send a packet in the current fiber.</p></div>
@@ -3014,7 +3068,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L158" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L162" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3042,7 +3096,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3058,7 +3112,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3074,7 +3128,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3090,7 +3144,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3106,7 +3160,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L448" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L452" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3136,7 +3190,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3152,7 +3206,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3168,7 +3222,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L90" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L94" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3189,7 +3243,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L112" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L116" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3205,7 +3259,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L204" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L208" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3221,7 +3275,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L151" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L155" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3237,7 +3291,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L219" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L223" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3253,7 +3307,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L223" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L227" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3269,7 +3323,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3285,7 +3339,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3301,7 +3355,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3317,7 +3371,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3333,7 +3387,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3349,7 +3403,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3365,7 +3419,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L227" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L231" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3381,7 +3435,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L128" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L132" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3397,7 +3451,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L327" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L331" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3413,7 +3467,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L188" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L192" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3435,7 +3489,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L181" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L185" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3451,7 +3505,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L177" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L181" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3467,7 +3521,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3483,7 +3537,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3499,7 +3553,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3515,7 +3569,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3531,7 +3585,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3547,7 +3601,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3563,7 +3617,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3579,7 +3633,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3595,7 +3649,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L124" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L128" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3611,7 +3665,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3627,7 +3681,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3643,7 +3697,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3659,7 +3713,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3680,7 +3734,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L236" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L240" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3696,7 +3750,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L257" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L261" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3712,7 +3766,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3728,7 +3782,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3744,7 +3798,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L86" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3760,7 +3814,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3776,7 +3830,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3792,7 +3846,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3808,7 +3862,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3824,7 +3878,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3840,7 +3894,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3856,7 +3910,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3872,7 +3926,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3888,7 +3942,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3904,7 +3958,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3920,7 +3974,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3936,7 +3990,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3952,7 +4006,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3968,7 +4022,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3984,7 +4038,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4005,7 +4059,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L473" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L477" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4021,7 +4075,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4037,7 +4091,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4053,7 +4107,7 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4069,7 +4123,51 @@ Protected: accessible within Rosegold:: namespace only.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="resource_pack_response:Symbol-instance-method">
+      <div class="signature">
+        
+        def <strong>resource_pack_response</strong> : Symbol
+
+        <a class="method-permalink" href="#resource_pack_response%3ASymbol-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>A headless client cannot apply a resource pack, so decline unless a caller
+deliberately opts into the compatibility-only :loaded acknowledgement.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L81" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="resource_pack_response=(resource_pack_response:Symbol)-instance-method">
+      <div class="signature">
+        
+        def <strong>resource_pack_response=</strong>(resource_pack_response : Symbol)
+
+        <a class="method-permalink" href="#resource_pack_response%3D%28resource_pack_response%3ASymbol%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>A headless client cannot apply a resource pack, so decline unless a caller
+deliberately opts into the compatibility-only :loaded acknowledgement.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L81" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4092,7 +4190,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L485" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L489" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4108,7 +4206,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4124,7 +4222,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4140,7 +4238,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L198" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L202" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4156,7 +4254,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L231" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L235" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4172,7 +4270,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L266" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L270" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4193,7 +4291,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L193" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L197" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4209,7 +4307,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L444" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L448" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4225,7 +4323,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L119" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L123" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4241,7 +4339,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4257,7 +4355,7 @@ a EncryptionResponse has been sent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4279,7 +4377,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L145" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L149" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4295,7 +4393,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4311,7 +4409,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4327,7 +4425,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4343,7 +4441,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4359,7 +4457,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4375,7 +4473,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4391,7 +4489,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L365" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L369" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4412,7 +4510,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L105" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4428,7 +4526,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L139" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L143" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4444,7 +4542,7 @@ Vanilla client never ticks faster than 20 TPS (Minecraft.java:getTickTargetMilli
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/bd0827d59f20030f00d54e453726216f2a7986ed/src/rosegold/client.cr#L133" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/34dd2c09fffb4e0a32e3c3607d5a01d474a85bb2/src/rosegold/client.cr#L137" target="_blank">View source</a>]
         
       </div>
     </div>
