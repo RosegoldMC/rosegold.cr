@@ -10,6 +10,7 @@ class Rosegold::Player
     774_u32 => 22_u32,
     775_u32 => 22_u32,
     776_u32 => 26_u32,
+    777_u32 => 26_u32,
   }
   SPRINT_EXCLUDED_MODIFIER_IDS = Set{Rosegold::AttributeSnapshot::SPRINTING_MODIFIER_ID}
 

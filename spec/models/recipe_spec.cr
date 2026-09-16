@@ -50,6 +50,34 @@ Spectator.describe Rosegold::SlotDisplay do
   after_each { Rosegold::Client.reset_protocol_version! }
 
   describe ".read" do
+    it "parses 26.3 direct item holder sets in tag displays" do
+      Rosegold::Client.protocol_version = 777_u32
+      io = build_io do |writer|
+        writer.write 6_u32 # TagSlotDisplay
+        writer.write 3_u32 # two holders, encoded count + 1
+        writer.write 12_u32
+        writer.write 34_u32
+      end
+
+      result = Rosegold::SlotDisplay.read(io).as(Rosegold::SlotDisplayTag)
+      expect(result.tag).to be_nil
+      expect(result.item_ids).to eq([12_u32, 34_u32])
+      expect(result.item_id).to eq(12_u32)
+    end
+
+    it "parses 26.3 named item holder sets in tag displays" do
+      Rosegold::Client.protocol_version = 777_u32
+      io = build_io do |writer|
+        writer.write 6_u32 # TagSlotDisplay
+        writer.write 0_u32 # named holder set
+        writer.write "minecraft:planks"
+      end
+
+      result = Rosegold::SlotDisplay.read(io).as(Rosegold::SlotDisplayTag)
+      expect(result.tag).to eq("minecraft:planks")
+      expect(result.item_ids).to be_empty
+    end
+
     it "parses Empty (type 0)" do
       io = build_io { |writer| write_slot_display_empty(writer) }
       result = Rosegold::SlotDisplay.read(io)

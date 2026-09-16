@@ -9,6 +9,7 @@ class Rosegold::Clientbound::RegistryData < Rosegold::Clientbound::Packet
     773_u32 => 0x07_u32, # MC 1.21.9
     775_u32 => 0x07_u32, # MC 26.1
     776_u32 => 0x07_u32, # MC 26.2
+    777_u32 => 0x07_u32,
   })
 
   class_getter state = ProtocolState::CONFIGURATION

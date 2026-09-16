@@ -48,6 +48,7 @@ module Rosegold::Spectate::Configuration
         send_packet(Rosegold::Clientbound::UpdateTags.new)
       end
 
+      send_post_effects
       send_packet(Rosegold::Clientbound::FinishConfiguration.new)
     else
       Log.info { "No bot registries available, waiting for bot to connect..." }
@@ -78,6 +79,7 @@ module Rosegold::Spectate::Configuration
               send_packet(tags)
             end
 
+            send_post_effects
             send_packet(Rosegold::Clientbound::FinishConfiguration.new)
             return
           end
@@ -112,5 +114,12 @@ module Rosegold::Spectate::Configuration
     return nil unless bot
 
     bot.tags
+  end
+
+  private def send_post_effects
+    return unless protocol_version == 777_u32
+
+    post_effects = @client.try(&.post_effects) || [] of String
+    send_packet(Rosegold::Clientbound::ConfigurationPostEffects.new(post_effects))
   end
 end

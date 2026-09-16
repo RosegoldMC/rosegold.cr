@@ -9,6 +9,7 @@ class Rosegold::Clientbound::SetPlayerInventory < Rosegold::Clientbound::Packet
     774_u32 => 0x6A_u32,
     775_u32 => 0x6C_u32,
     776_u32 => 0x6C_u32,
+    777_u32 => 0x6E_u32,
   })
 
   property \

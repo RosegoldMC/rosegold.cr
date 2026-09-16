@@ -3,7 +3,7 @@ module Rosegold
   # a constant assigned to a `{% if %}` expression leaks the unexpanded AST node
   # instead of the value, breaking consumers that iterate it in their own macros.
   {% begin %}
-    {% all = {772 => "1.21.8", 773 => "1.21.9", 774 => "1.21.11", 775 => "26.1", 776 => "26.2"} %}
+    {% all = {772 => "1.21.8", 773 => "1.21.9", 774 => "1.21.11", 775 => "26.1", 776 => "26.2", 777 => "26.3"} %}
     {% if @type.has_constant?("COMPILE_ONLY_VERSION") %}
       {% selected = {} of NumberLiteral => StringLiteral %}
       {% for k, v in all %}{% if v == COMPILE_ONLY_VERSION %}{% selected[k] = v %}{% end %}{% end %}

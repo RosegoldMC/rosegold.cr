@@ -10,6 +10,7 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
     774_u32 => 0x61_u32, # MC 1.21.11
     775_u32 => 0x63_u32, # MC 26.1
     776_u32 => 0x63_u32, # MC 26.2
+    777_u32 => 0x65_u32,
   })
   class_getter state = ProtocolState::PLAY
 
@@ -20,7 +21,7 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
     :frog_variant, :pig_variant, :pig_sound_variant, :chicken_variant,
     :chicken_sound_variant, :zombie_nautilus_variant, :sniffer_state,
     :armadillo_state, :copper_golem_state, :weathering_copper_state,
-    :humanoid_arm,
+    :humanoid_arm, :dye_color,
   }
 
   record Entry, index : UInt8, serializer_id : UInt32, value : Rosegold::Entity::TrackedValue

@@ -8,6 +8,7 @@ class Rosegold::Serverbound::ClientStatus < Rosegold::Serverbound::Packet
     773_u32 => 0x0B_u32, # MC 1.21.9
     775_u32 => 0x0C_u32, # MC 26.1
     776_u32 => 0x0C_u32, # MC 26.2
+    777_u32 => 0x0C_u32,
   })
 
   enum Action

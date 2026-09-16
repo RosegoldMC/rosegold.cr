@@ -13,7 +13,7 @@ dependencies:
     github: luckyframework/habitat
   minecraft-data:
     github: rosegoldmc/minecraft-data.cr
-    commit: 2868c18b437747ef65c6337f3b7fb563c82f8617
+    commit: bdc1033ea023feddea03d0869137a36b70a64a9e
   openssl_ext:
     github: spider-gazelle/openssl_ext
     version: ~> 2.0

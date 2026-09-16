@@ -8,6 +8,7 @@ class Rosegold::Serverbound::CloseWindow < Rosegold::Serverbound::Packet
     773_u32 => 0x12_u32, # MC 1.21.9
     775_u32 => 0x13_u32, # MC 26.1
     776_u32 => 0x13_u32, # MC 26.2
+    777_u32 => 0x13_u32,
   })
 
   property window_id : UInt16

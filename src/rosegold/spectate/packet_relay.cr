@@ -7,9 +7,9 @@ module Rosegold::Spectate::PacketRelay
     ids = Set(UInt32).new
     # Raw packets
     {
-      {772_u32 => 0x5C_u32, 774_u32 => 0x61_u32, 775_u32 => 0x63_u32}, # set_entity_data
-      {772_u32 => 0x5E_u32, 774_u32 => 0x63_u32, 775_u32 => 0x65_u32}, # set_entity_motion
-      {772_u32 => 0x7C_u32, 774_u32 => 0x81_u32, 775_u32 => 0x83_u32}, # update_attributes
+      {772_u32 => 0x5C_u32, 774_u32 => 0x61_u32, 775_u32 => 0x63_u32, 777_u32 => 0x65_u32}, # set_entity_data
+      {772_u32 => 0x5E_u32, 774_u32 => 0x63_u32, 775_u32 => 0x65_u32, 777_u32 => 0x67_u32}, # set_entity_motion
+      {772_u32 => 0x7C_u32, 774_u32 => 0x81_u32, 775_u32 => 0x83_u32, 777_u32 => 0x86_u32}, # update_attributes
     }.each do |id_map|
       id_map.merge({773_u32 => id_map[774_u32], 776_u32 => id_map[775_u32]})[protocol]?.try { |id| ids << id }
     end
@@ -17,6 +17,9 @@ module Rosegold::Spectate::PacketRelay
     # carry entity_id as a VarInt in every supported protocol, so always remap.
     ids << Rosegold::Clientbound::EntityEffect[protocol]
     ids << Rosegold::Clientbound::RemoveEntityEffect[protocol]
+    if Rosegold::Clientbound::SwingAnimation.supports_protocol?(protocol)
+      ids << Rosegold::Clientbound::SwingAnimation[protocol]
+    end
     ids
   end
 
@@ -74,8 +77,13 @@ module Rosegold::Spectate::PacketRelay
     track_bot_handler(Rosegold::Event::ArmSwing) do |event|
       next unless @connected
       next unless @spectate_state.spectating?
-      animation = event.hand.off_hand? ? Rosegold::Clientbound::EntityAnimation::Animation::SwingOffHand : Rosegold::Clientbound::EntityAnimation::Animation::SwingMainArm
-      packet = Rosegold::Clientbound::EntityAnimation.new(Server::DEFAULT_SPECTATOR_ENTITY_ID, animation)
+      packet = if protocol_version >= 777_u32
+                 animation = event.animation || Rosegold::DataComponents::SwingAnimation.new(1_u32, 6_u32)
+                 Rosegold::Clientbound::SwingAnimation.new(Server::DEFAULT_SPECTATOR_ENTITY_ID, event.hand, animation)
+               else
+                 animation = event.hand.off_hand? ? Rosegold::Clientbound::EntityAnimation::Animation::SwingOffHand : Rosegold::Clientbound::EntityAnimation::Animation::SwingMainArm
+                 Rosegold::Clientbound::EntityAnimation.new(Server::DEFAULT_SPECTATOR_ENTITY_ID, animation)
+               end
       send_packet(packet)
     end
   end

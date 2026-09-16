@@ -112,12 +112,12 @@ Bot (high-level DSL: move_to, dig, craft, chat)
 
 HANDSHAKING → LOGIN → CONFIGURATION → PLAY (→ re-CONFIGURATION → PLAY)
 
-Protocol version auto-detected via STATUS ping (among the versions compiled in). Supports a contiguous range: 772 (1.21.8), 773 (1.21.9/1.21.10), 774 (1.21.11), 775 (26.1), 776 (26.2). Compression enabled during LOGIN via SetCompression. Which versions are compiled in is controlled at build time — see "Build & Run".
+Protocol version auto-detected via STATUS ping (among the versions compiled in). Supports a contiguous range: 772 (1.21.8), 773 (1.21.9/1.21.10), 774 (1.21.11), 775 (26.1), 776 (26.2), 777 (26.3). Compression enabled during LOGIN via SetCompression. Which versions are compiled in is controlled at build time — see "Build & Run".
 
 ### Packet System
 
 ~109 packet classes (70 clientbound + 39 serverbound). All packets extend `Rosegold::Event`, so they flow through the event system. Each packet defines:
-- `packet_ids({772_u32 => 0xNN, 773_u32 => 0xNN, 774_u32 => 0xNN, 775_u32 => 0xNN, 776_u32 => 0xNN})` — multi-version ID mapping (entries for disabled versions are filtered out at compile time)
+- `packet_ids({772_u32 => 0xNN, 773_u32 => 0xNN, 774_u32 => 0xNN, 775_u32 => 0xNN, 776_u32 => 0xNN, 777_u32 => 0xNN})` — multi-version ID mapping (entries for disabled versions are filtered out at compile time)
 - `self.read(io)` — deserialize from wire
 - `write : Bytes` — serialize to wire
 - `callback(client)` — update game state (clientbound only)
@@ -187,7 +187,7 @@ Reach: 4.5 blocks (survival), 5.0 (creative). Entity reach: 3.0 / 5.0. Unified r
 ### Adding a New Packet
 1. Create file in `packets/clientbound/` or `packets/serverbound/`
 2. Include `Rosegold::Packets::ProtocolMapping`
-3. Define `packet_ids({772_u32 => 0xNN, 773_u32 => 0xNN, 774_u32 => 0xNN, 775_u32 => 0xNN, 776_u32 => 0xNN})` — derive each ID from the decompiled protocol source, never guess
+3. Define `packet_ids({772_u32 => 0xNN, 773_u32 => 0xNN, 774_u32 => 0xNN, 775_u32 => 0xNN, 776_u32 => 0xNN, 777_u32 => 0xNN})` — derive each ID from the decompiled protocol source, never guess
 4. Implement `self.read(io)` and `write : Bytes`
 5. Implement `callback(client)` for clientbound packets
 
@@ -203,7 +203,7 @@ Reach: 4.5 blocks (survival), 5.0 (creative). Entity reach: 3.0 / 5.0. Unified r
 - Test server: `docker compose -f spec/docker-compose.yml up` (itzg/minecraft-server, offline mode, flat world)
 - `AdminBot` has op permissions: `admin.fill`, `admin.setblock`, `admin.tp`, `admin.give`, etc.
 - Framework: spectator (Crystal BDD)
-- CI: Crystal 1.19.1; integration matrix runs MC 1.21.8, 1.21.9, 1.21.11, 26.1, 26.2; a separate SlimBuild job compiles each single-version build so slim-only errors aren't invisible
+- CI: Crystal 1.19.1; integration matrix runs MC 1.21.8, 1.21.9, 1.21.11, 26.1, 26.2, 26.3; a separate SlimBuild job compiles each single-version build so slim-only errors aren't invisible
 
 ### Code Style
 - Minimal comments — self-descriptive code, comments only for magical/weird things

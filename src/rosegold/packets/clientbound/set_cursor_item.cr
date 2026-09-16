@@ -9,6 +9,7 @@ class Rosegold::Clientbound::SetCursorItem < Rosegold::Clientbound::Packet
     774_u32 => 0x5E_u32,
     775_u32 => 0x60_u32,
     776_u32 => 0x60_u32,
+    777_u32 => 0x62_u32,
   })
 
   property slot : Slot

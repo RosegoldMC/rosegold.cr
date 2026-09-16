@@ -74,7 +74,8 @@ Spectator.describe "Rosegold::Bot#swap_hands" do
     action_size = frame.read_var_int
     action = Minecraft::IO::Memory.new(Bytes.new(action_size).tap { |bytes| frame.read_fully(bytes) })
     expect(action.read_var_int).to eq(Rosegold::Serverbound::PlayerAction.packet_id_for_protocol(Rosegold::Client.protocol_version))
-    expect(action.read_var_int).to eq(Rosegold::Serverbound::PlayerAction::Status::SwapHands.value.to_u32)
+    expected_swap_action = Rosegold::Client.protocol_version >= 777_u32 ? 7_u32 : 6_u32
+    expect(action.read_var_int).to eq(expected_swap_action)
   end
 
   it "accepts reversed SetContainerContent confirmation using decoded equivalent components" do

@@ -14,6 +14,7 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     773_u32 => 0x46_u32, # MC 1.21.9
     775_u32 => 0x48_u32, # MC 26.1
     776_u32 => 0x48_u32, # MC 26.2
+    777_u32 => 0x49_u32, # MC 26.3
   })
 
   property \
@@ -132,7 +133,18 @@ class Rosegold::Clientbound::SynchronizePlayerPosition < Rosegold::Clientbound::
     player.look = look player.look
     player.velocity = velocity player.velocity
 
-    client.queue_packet Serverbound::TeleportConfirm.new teleport_id
+    if Client.protocol_version >= 777_u32
+      client.queue_packet Serverbound::TeleportConfirm.new(
+        teleport_id,
+        player.feet.x,
+        player.feet.y,
+        player.feet.z,
+        player.look.yaw,
+        player.look.pitch
+      )
+    else
+      client.queue_packet Serverbound::TeleportConfirm.new teleport_id
+    end
 
     client.physics.handle_reset
 

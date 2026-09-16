@@ -10,6 +10,7 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
     773_u32 => 0x50_u32, # MC 1.21.9
     775_u32 => 0x52_u32, # MC 26.1
     776_u32 => 0x52_u32, # MC 26.2
+    777_u32 => 0x54_u32,
   })
 
   property \

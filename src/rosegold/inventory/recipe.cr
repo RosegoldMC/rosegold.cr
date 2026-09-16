@@ -42,6 +42,7 @@ module Rosegold
       when SlotDisplayWithAnyPotion     then display.display.item_id
       when SlotDisplayOnlyWithComponent then display.source.item_id
       when SlotDisplayDyed              then display.target.item_id
+      when SlotDisplayTag               then display.item_ids.first?
       end
     end
 
@@ -54,6 +55,7 @@ module Rosegold
       when SlotDisplayWithAnyPotion     then display.display.all_item_ids
       when SlotDisplayOnlyWithComponent then display.source.all_item_ids
       when SlotDisplayDyed              then display.target.all_item_ids
+      when SlotDisplayTag               then display.item_ids
       else                                   id = item_id; id ? [id] : [] of UInt32
       end
     end
@@ -89,12 +91,20 @@ module Rosegold
   end
 
   class SlotDisplayTag < SlotDisplay
-    getter tag : String
+    getter tag : String?
+    getter item_ids : Array(UInt32)
 
-    def initialize(@tag); end
+    def initialize(@tag : String? = nil, @item_ids = [] of UInt32); end
 
     def self.read(io) : self
-      new(io.read_var_string)
+      return new(io.read_var_string) if Client.protocol_version < 777_u32
+
+      encoded_count = io.read_var_int
+      if encoded_count == 0_u32
+        new(io.read_var_string)
+      else
+        new(nil, Array(UInt32).new(encoded_count - 1) { io.read_var_int })
+      end
     end
   end
 

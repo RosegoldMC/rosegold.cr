@@ -189,6 +189,131 @@ module Rosegold::DataComponentTypes
     109_u32 => "sheep/color", 110_u32 => "shulker/color",
   }
 
+  PROTOCOL_777 = {
+      0_u32 => "custom_data",
+      1_u32 => "max_stack_size",
+      2_u32 => "max_damage",
+      3_u32 => "damage",
+      4_u32 => "unbreakable",
+      5_u32 => "use_effects",
+      6_u32 => "custom_name",
+      7_u32 => "minimum_attack_charge",
+      8_u32 => "damage_type",
+      9_u32 => "item_name",
+     10_u32 => "item_model",
+     11_u32 => "lore",
+     12_u32 => "rarity",
+     13_u32 => "enchantments",
+     14_u32 => "can_place_on",
+     15_u32 => "can_break",
+     16_u32 => "attribute_modifiers",
+     17_u32 => "custom_model_data",
+     18_u32 => "tooltip_display",
+     19_u32 => "repair_cost",
+     20_u32 => "creative_slot_lock",
+     21_u32 => "enchantment_glint_override",
+     22_u32 => "intangible_projectile",
+     23_u32 => "food",
+     24_u32 => "consumable",
+     25_u32 => "use_remainder",
+     26_u32 => "use_cooldown",
+     27_u32 => "damage_resistant",
+     28_u32 => "tool",
+     29_u32 => "weapon",
+     30_u32 => "attack_range",
+     31_u32 => "enchantable",
+     32_u32 => "equippable",
+     33_u32 => "repairable",
+     34_u32 => "glider",
+     35_u32 => "tooltip_style",
+     36_u32 => "death_protection",
+     37_u32 => "blocks_attacks",
+     38_u32 => "piercing_weapon",
+     39_u32 => "kinetic_weapon",
+     40_u32 => "attack_animation",
+     41_u32 => "interact_animation",
+     42_u32 => "additional_trade_cost",
+     43_u32 => "block_transformer",
+     44_u32 => "villager_food",
+     45_u32 => "stored_enchantments",
+     46_u32 => "dye",
+     47_u32 => "dyed_color",
+     48_u32 => "map_id",
+     49_u32 => "map_decorations",
+     50_u32 => "map_post_processing",
+     51_u32 => "charged_projectiles",
+     52_u32 => "bundle_contents",
+     53_u32 => "potion_contents",
+     54_u32 => "potion_duration_scale",
+     55_u32 => "suspicious_stew_effects",
+     56_u32 => "writable_book_content",
+     57_u32 => "written_book_content",
+     58_u32 => "trim",
+     59_u32 => "debug_stick_state",
+     60_u32 => "entity_data",
+     61_u32 => "bucket_entity_data",
+     62_u32 => "block_entity_data",
+     63_u32 => "instrument",
+     64_u32 => "provides_trim_material",
+     65_u32 => "ominous_bottle_amplifier",
+     66_u32 => "jukebox_playable",
+     67_u32 => "provides_banner_patterns",
+     68_u32 => "recipes",
+     69_u32 => "lodestone_tracker",
+     70_u32 => "firework_explosion",
+     71_u32 => "fireworks",
+     72_u32 => "profile",
+     73_u32 => "note_block_sound",
+     74_u32 => "banner_patterns",
+     75_u32 => "base_color",
+     76_u32 => "pot_decorations",
+     77_u32 => "container",
+     78_u32 => "block_state",
+     79_u32 => "bees",
+     80_u32 => "sulfur_cube_content",
+     81_u32 => "lock",
+     82_u32 => "container_loot",
+     83_u32 => "break_sound",
+     84_u32 => "compostable",
+     85_u32 => "cooking_fuel",
+     86_u32 => "brewing_fuel",
+     87_u32 => "mob_visibility",
+     88_u32 => "villager/variant",
+     89_u32 => "wolf/variant",
+     90_u32 => "wolf/sound_variant",
+     91_u32 => "wolf/collar",
+     92_u32 => "fox/variant",
+     93_u32 => "salmon/size",
+     94_u32 => "parrot/variant",
+     95_u32 => "tropical_fish/pattern",
+     96_u32 => "tropical_fish/base_color",
+     97_u32 => "tropical_fish/pattern_color",
+     98_u32 => "mooshroom/variant",
+     99_u32 => "rabbit/variant",
+    100_u32 => "pig/variant",
+    101_u32 => "pig/sound_variant",
+    102_u32 => "cow/variant",
+    103_u32 => "cow/sound_variant",
+    104_u32 => "chicken/variant",
+    105_u32 => "chicken/sound_variant",
+    106_u32 => "zombie_nautilus/variant",
+    107_u32 => "frog/variant",
+    108_u32 => "horse/variant",
+    109_u32 => "painting/variant",
+    110_u32 => "llama/variant",
+    111_u32 => "axolotl/variant",
+    112_u32 => "cat/variant",
+    113_u32 => "cat/sound_variant",
+    114_u32 => "cat/collar",
+    115_u32 => "sheep/color",
+    116_u32 => "shulker/color",
+    117_u32 => "provides_pottery_pattern",
+    118_u32 => "sign_text_front",
+    119_u32 => "sign_text_back",
+    120_u32 => "waxed",
+    121_u32 => "cushion/color",
+  }
+
   # The PROTOCOL_* tables above are pure literals (no read_file) so they stay
   # defined unconditionally; only the map is filtered to enabled protocols.
   PROTOCOL_MAP = {% begin %}{
@@ -293,25 +418,34 @@ abstract class Rosegold::DataComponent
     when "profile"                  then DataComponents::Profile.read(io)
     when "note_block_sound"         then DataComponents::NoteBlockSound.read(io)
     when "base_color"               then DataComponents::BaseColor.read(io)
-    when "pot_decorations"          then DataComponents::PotDecorations.read(io)
-    when "container"                then DataComponents::Container.read(io)
-    when "block_state"              then DataComponents::BlockState.read(io)
-    when "bees"                     then DataComponents::Bees.read(io)
-    when "lock"                     then DataComponents::Lock.read(io)
-    when "container_loot"           then DataComponents::ContainerLoot.read(io)
-    when "break_sound"              then DataComponents::BreakSound.read(io)
-    when "can_place_on"             then DataComponents::BlockPredicates.read(io)
-    when "can_break"                then DataComponents::BlockPredicates.read(io)
-    when "custom_model_data"        then DataComponents::CustomModelData.read(io)
+    when "pot_decorations"
+      Client.protocol_version >= 777_u32 ? DataComponents::PotDecorationItems.read(io) : DataComponents::PotDecorations.read(io)
+    when "container"         then DataComponents::Container.read(io)
+    when "block_state"       then DataComponents::BlockState.read(io)
+    when "bees"              then DataComponents::Bees.read(io)
+    when "lock"              then DataComponents::Lock.read(io)
+    when "container_loot"    then DataComponents::ContainerLoot.read(io)
+    when "break_sound"       then DataComponents::BreakSound.read(io)
+    when "can_place_on"      then DataComponents::BlockPredicates.read(io)
+    when "can_break"         then DataComponents::BlockPredicates.read(io)
+    when "custom_model_data" then DataComponents::CustomModelData.read(io)
       # New 1.21.11 component types
     when "use_effects"           then DataComponents::UseEffects.read(io)
     when "minimum_attack_charge" then DataComponents::FloatComponent.read(io)
     when "damage_type"
       Client.protocol_version >= 775_u32 ? DataComponents::VarIntComponent.read(io) : DataComponents::EitherHolderComponent.read(io)
-    when "attack_range"    then DataComponents::AttackRange.read(io)
-    when "piercing_weapon" then DataComponents::PiercingWeapon.read(io)
-    when "kinetic_weapon"  then DataComponents::KineticWeapon.read(io)
-    when "swing_animation" then DataComponents::SwingAnimation.read(io)
+    when "attack_range"                                  then DataComponents::AttackRange.read(io)
+    when "piercing_weapon"                               then DataComponents::PiercingWeapon.read(io)
+    when "kinetic_weapon"                                then DataComponents::KineticWeapon.read(io)
+    when "swing_animation"                               then DataComponents::SwingAnimation.read(io)
+    when "attack_animation", "interact_animation"        then DataComponents::SwingAnimation.read(io)
+    when "villager_food", "cushion/color"                then DataComponents::VarIntComponent.read(io)
+    when "waxed"                                         then DataComponents::Unbreakable.read(io)
+    when "compostable"                                   then DataComponents::ResolvableIntComponent.read(io)
+    when "cooking_fuel", "brewing_fuel"                  then DataComponents::FuelComponent.read(io)
+    when "block_transformer", "provides_pottery_pattern" then DataComponents::VarIntComponent.read(io)
+    when "mob_visibility"                                then DataComponents::MobVisibility.read(io)
+    when "sign_text_front", "sign_text_back"             then DataComponents::SignText.read(io)
       # New 26.1 component types
     when "additional_trade_cost" then DataComponents::VarIntComponent.read(io)
     when "dye"                   then DataComponents::VarIntComponent.read(io)
@@ -2443,6 +2577,121 @@ class Rosegold::DataComponents::SwingAnimation < Rosegold::DataComponent
   def write(io) : Nil
     io.write type_id
     io.write duration
+  end
+end
+
+class Rosegold::DataComponents::ResolvableIntComponent < Rosegold::DataComponent
+  getter reference : String?
+  getter value : Int32
+
+  def initialize(@reference : String? = nil, @value : Int32 = 0); end
+
+  def self.read(io) : self
+    io.read_bool ? new(nil, io.read_int) : new(io.read_var_string)
+  end
+
+  def write(io) : Nil
+    io.write @reference.nil?
+    if reference = @reference
+      io.write reference
+    else
+      io.write_full @value
+    end
+  end
+end
+
+class Rosegold::DataComponents::ResolvableFloatComponent < Rosegold::DataComponent
+  getter reference : String?
+  getter value : Float32
+
+  def initialize(@reference : String? = nil, @value : Float32 = 0_f32); end
+
+  def self.read(io) : self
+    io.read_bool ? new(nil, io.read_float) : new(io.read_var_string)
+  end
+
+  def write(io) : Nil
+    io.write @reference.nil?
+    if reference = @reference
+      io.write reference
+    else
+      io.write @value
+    end
+  end
+end
+
+class Rosegold::DataComponents::FuelComponent < Rosegold::DataComponent
+  getter burn_time : ResolvableIntComponent
+  getter speed_multiplier : ResolvableFloatComponent
+
+  def initialize(@burn_time = ResolvableIntComponent.new, @speed_multiplier = ResolvableFloatComponent.new); end
+
+  def self.read(io) : self
+    new(ResolvableIntComponent.read(io), ResolvableFloatComponent.read(io))
+  end
+
+  def write(io) : Nil
+    @burn_time.write(io)
+    @speed_multiplier.write(io)
+  end
+end
+
+class Rosegold::DataComponents::PotDecorationItems < Rosegold::DataComponent
+  def initialize(@sides = [] of Rosegold::Slot?); end
+
+  def self.read(io) : self
+    new(Array(Rosegold::Slot?).new(4) { io.read_bool ? Rosegold::Slot.read_item_stack_template(io) : nil })
+  end
+
+  def write(io) : Nil
+    4.times do |index|
+      side = @sides[index]?
+      io.write !side.nil?
+      side.try &.write_item_stack_template(io)
+    end
+  end
+end
+
+class Rosegold::DataComponents::MobVisibility < Rosegold::DataComponent
+  def initialize(@entity_types = [] of UInt32, @visibility : Float32 = 0_f32, @tag : String? = nil); end
+
+  def self.read(io) : self
+    encoded_count = io.read_var_int
+    if encoded_count == 0_u32
+      tag = io.read_var_string
+      new([] of UInt32, io.read_float, tag)
+    else
+      new(Array(UInt32).new(encoded_count - 1) { io.read_var_int }, io.read_float)
+    end
+  end
+
+  def write(io) : Nil
+    if tag = @tag
+      io.write 0_u32
+      io.write tag
+    else
+      io.write @entity_types.size + 1
+      @entity_types.each { |id| io.write id }
+    end
+    io.write @visibility
+  end
+end
+
+class Rosegold::DataComponents::SignText < Rosegold::DataComponent
+  def initialize(@messages = Array(Rosegold::TextComponent).new(4) { Rosegold::TextComponent.new("") }, @filtered : Array(Rosegold::TextComponent)? = nil, @color : UInt32 = 0_u32, @glowing : Bool = false); end
+
+  def self.read(io) : self
+    messages = Array(Rosegold::TextComponent).new(4) { Rosegold::TextComponent.read(io) }
+    filtered = io.read_bool ? Array(Rosegold::TextComponent).new(4) { Rosegold::TextComponent.read(io) } : nil
+    new(messages, filtered, io.read_var_int, io.read_bool)
+  end
+
+  def write(io) : Nil
+    @messages.each(&.write(io))
+    io.write !@filtered.nil?
+    @filtered.try &.each(&.write(io))
+    io.write @color
+    io.write @glowing
   end
 end
 

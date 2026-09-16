@@ -9,6 +9,7 @@ class Rosegold::Clientbound::RecipeBookAdd < Rosegold::Clientbound::Packet
     773_u32 => 0x48_u32, # MC 1.21.9
     775_u32 => 0x4A_u32, # MC 26.1
     776_u32 => 0x4A_u32, # MC 26.2
+    777_u32 => 0x4B_u32,
   })
 
   FLAG_SHOW_NOTIFICATION = 0x01_u8

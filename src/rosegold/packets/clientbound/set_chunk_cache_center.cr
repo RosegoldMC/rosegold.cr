@@ -8,6 +8,7 @@ class Rosegold::Clientbound::SetChunkCacheCenter < Rosegold::Clientbound::Packet
     773_u32 => 0x5C_u32, # MC 1.21.9
     775_u32 => 0x5E_u32, # MC 26.1
     776_u32 => 0x5E_u32, # MC 26.2
+    777_u32 => 0x60_u32,
   })
 
   property \

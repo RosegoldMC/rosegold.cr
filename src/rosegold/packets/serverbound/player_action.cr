@@ -9,6 +9,7 @@ class Rosegold::Serverbound::PlayerAction < Rosegold::Serverbound::Packet
     773_u32 => 0x28_u32, # MC 1.21.9
     775_u32 => 0x29_u32, # MC 26.1
     776_u32 => 0x29_u32, # MC 26.2
+    777_u32 => 0x29_u32,
   })
 
   enum Status
@@ -31,7 +32,10 @@ class Rosegold::Serverbound::PlayerAction < Rosegold::Serverbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      buffer.write status.value
+      wire_status = status.value
+      # 26.3 inserts CHANGE_DESTROY_DIRECTION after START_DESTROY_BLOCK.
+      wire_status += 1 if Client.protocol_version >= 777_u32 && !status.start?
+      buffer.write wire_status
       buffer.write location
       buffer.write face.value
 

@@ -6,6 +6,7 @@ class Rosegold::Clientbound::GameRuleValues < Rosegold::Clientbound::Packet
   packet_ids({
     775_u32 => 0x27_u32, # MC 26.1
     776_u32 => 0x27_u32, # MC 26.2
+    777_u32 => 0x28_u32,
   })
 
   property rules : Hash(String, String)

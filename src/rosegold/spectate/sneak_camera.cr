@@ -9,6 +9,7 @@ module Rosegold::Spectate::SneakCamera
     774_u32 => 25_u32,
     775_u32 => 25_u32,
     776_u32 => 30_u32,
+    777_u32 => 30_u32,
   }
 
   private def setup_sneak_listener

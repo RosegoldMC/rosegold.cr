@@ -9,11 +9,13 @@ Spectator.describe Rosegold::Clientbound::TeleportEntity do
     expect(Rosegold::Clientbound::TeleportEntity[774_u32]).to eq(0x7B_u8)
     expect(Rosegold::Clientbound::TeleportEntity[775_u32]).to eq(0x7D_u8)
     expect(Rosegold::Clientbound::TeleportEntity[776_u32]).to eq(0x7D_u8)
+    expect(Rosegold::Clientbound::TeleportEntity[777_u32]).to eq(0x80_u8)
   end
 
-  it "supports exactly the five mapped protocols" do
+  it "supports exactly the six mapped protocols" do
     expect(Rosegold::Clientbound::TeleportEntity.supports_protocol?(772_u32)).to be_true
     expect(Rosegold::Clientbound::TeleportEntity.supports_protocol?(776_u32)).to be_true
+    expect(Rosegold::Clientbound::TeleportEntity.supports_protocol?(777_u32)).to be_true
     expect(Rosegold::Clientbound::TeleportEntity.supports_protocol?(999_u32)).to be_false
   end
 
@@ -40,7 +42,7 @@ Spectator.describe Rosegold::Clientbound::TeleportEntity do
 
       bytes = original.write
       io = Minecraft::IO::Memory.new(bytes)
-      io.read_byte
+      io.read_var_int
       read_back = Rosegold::Clientbound::TeleportEntity.read(io)
 
       expect(read_back.entity_id).to eq(42_u64)
