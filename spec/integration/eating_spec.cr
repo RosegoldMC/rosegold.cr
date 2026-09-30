@@ -34,7 +34,7 @@ Spectator.describe "Rosegold::Bot eating" do
         admin.give "bread", 64
         bot.wait_ticks 5
 
-        bot.eat!
+        bot.eat
 
         expect(bot.food).to be > food_before
         expect(bot.food).to be >= 18
