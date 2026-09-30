@@ -391,6 +391,21 @@ class Rosegold::Bot < Rosegold::EventEmitter
     true
   end
 
+  # Best-effort version of `eat!`. Logs a warning if eating raises, including
+  # when no allowed food is available, and returns `nil` without re-raising.
+  # Uses the same hunger thresholds and food selection as `eat!`.
+  # This blocks while eating; returning does not guarantee hunger was restored.
+  def eat : Nil
+    eat!
+  rescue ex
+    Log.warn { "Eating failed: #{ex.message}" }
+  end
+
+  # Eats allowed food from inventory when `should_eat?` is true.
+  # Does nothing at 18+ food, or at 15+ food with full health. Otherwise,
+  # blocks until food reaches 18, the held food runs out, or eating times out.
+  # Raises when no allowed food is available and propagates interaction errors.
+  # A timeout only logs a warning. Use `eat` for best-effort eating instead.
   def eat!
     return unless should_eat?
 
@@ -435,18 +450,19 @@ class Rosegold::Bot < Rosegold::EventEmitter
       return
     end
 
-    start_using_hand
-
-    max_attempts = 100 # Prevent infinite loop (about 55 seconds)
+    max_attempts = 100 # Prevent infinite loop (about 165 seconds at 20 TPS)
     attempts = 0
 
-    until food >= 18 || attempts >= max_attempts
-      break unless main_hand.edible? # Stop if no food equipped anymore
-      wait_ticks 33
-      attempts += 1
+    begin
+      start_using_hand
+      until food >= 18 || attempts >= max_attempts
+        break unless main_hand.edible? # Stop if no food equipped anymore
+        wait_ticks 33
+        attempts += 1
+      end
+    ensure
+      stop_using_hand
     end
-
-    stop_using_hand
 
     if attempts >= max_attempts
       Log.warn { "Eating timed out after #{max_attempts} attempts, food is #{food}" }

@@ -8,7 +8,7 @@ bot = Rosegold::Bot.join_game("play.civmc.net")
 bot.move_to(100, 200)           # walk to coordinates
 bot.inventory.pick! "diamond_sword"  # equip a sword
 bot.attack                       # swing
-bot.eat!                         # auto-eat when hungry
+bot.eat                          # best-effort auto-eat when hungry
 bot.craft("stick", 4)           # craft items by name
 ```
 
@@ -150,9 +150,20 @@ bot.stop_digging
 # Place a block
 bot.place_block_against(block_pos, :top)
 
-# Auto-eat when hungry
+# Auto-eat when hungry, logging failures without raising
+bot.eat
+
+# Or propagate errors, including missing food
 bot.eat!
 ```
+
+Both methods skip eating at 18+ food, or at 15+ food with full health.
+Otherwise, they select an allowed food from inventory and block until food
+reaches 18, the held food runs out, or eating times out (about 165 seconds
+at 20 TPS). Timeouts log a warning rather than raise, even with `eat!`.
+`eat` returns `nil`, not a success flag; check `bot.food` if you need to know
+whether hunger was restored. Neither method supplies food or restores the
+previously selected item.
 
 ### Inventory
 
