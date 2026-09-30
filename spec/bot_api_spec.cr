@@ -5,6 +5,10 @@ class BotApiSpecBot < Rosegold::Bot
   property heights = [] of Float64
   getter waited_ticks = 0
 
+  def chat(message : String)
+    raise "send failed"
+  end
+
   def look=(target : Rosegold::Look)
     @aimed_at = target
   end
@@ -60,5 +64,23 @@ Spectator.describe Rosegold::Bot do
     client.player.feet = Rosegold::Vec3d.new(0.0, 5.0, 0.0)
     bot.heights = [4.0, 3.0, 2.0]
     expect { bot.land_on_ground(3) }.to raise_error(Exception, /Still falling/)
+  end
+
+  it "raises when a jump never reaches its requested height" do
+    bot.heights = [0.2, 0.4, 0.6]
+    expect { bot.jump_by_height(1, 3) }.to raise_error(Exception, /within 3 ticks/)
+  end
+
+  it "returns after a jump reaches the requested height" do
+    bot.heights = [0.4, 1.0]
+    bot.jump_by_height(1, 3)
+    expect(bot.waited_ticks).to eq(2)
+  end
+
+  it "removes command confirmation listeners if sending raises" do
+    expect do
+      bot.run_command_with_confirmation("/example", "done")
+    end.to raise_error(Exception, "send failed")
+    expect(bot.event_handlers[Rosegold::Clientbound::SystemChatMessage]).to be_empty
   end
 end

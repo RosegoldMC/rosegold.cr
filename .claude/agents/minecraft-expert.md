@@ -17,7 +17,8 @@ https://github.com/extremeheat/extracted_minecraft_data
 Each version is a separate branch. To get the source for a specific version:
 
 ```bash
-# Clone a specific version's decompiled source to ./tmp
+# Run from the repository root. Downloaded sources stay under ignored ./tmp.
+mkdir -p tmp
 cd tmp
 git clone --branch <version> --single-branch --depth 1 https://github.com/extremeheat/extracted_minecraft_data.git extracted_minecraft_data_<version>
 ```
@@ -53,6 +54,7 @@ The easiest way to get searchable protocol docs is to download the raw wiki sour
 3. Save it to `./tmp/protocol_docs/`
 
 ```bash
+# Run from the repository root. Do not commit downloaded wiki sources.
 mkdir -p tmp/protocol_docs
 curl -sL "https://minecraft.wiki/w/Java_Edition_protocol/Packets?action=raw" -o tmp/protocol_docs/<version>_packets.wiki
 ```
@@ -108,6 +110,15 @@ This page is separate from the packets page and much more fetchable.
 ### Step 5: Diff game data
 Compare blocks.json, entities.json, items.json for new entries and count changes.
 
+### Step 6: Change the repository as one versioned surface
+
+`src/rosegold/versions.cr` is the sole protocol/version registry. Keep it,
+every exact-version entrypoint in `src/rosegold/`, the pinned minecraft-data
+shard reference, README, CI integration matrix, and CI slim-build loop aligned.
+Then validate the default no-codegen build, every slim entrypoint, and the
+affected integration-server versions. A STATUS ping or packet-ID diff alone is
+not support verification.
+
 ## Lessons Learned
 
 - **Packet ID changes != format changes.** Most version bumps just insert new packets that shift IDs. Don't assume an EOF error means the format changed - it's more likely a wrong packet ID registration.
@@ -119,11 +130,13 @@ Compare blocks.json, entities.json, items.json for new entries and count changes
 
 ## Project Context
 
-- Game assets go in `game_assets/<version>/` (committed to repo)
-- Protocol docs and decompiled source go in `./tmp/` (not committed, gitignored)
-- The project currently supports protocol 772 (1.21.8) and 774 (1.21.11)
-- Packet IDs use the `packet_ids()` macro for multi-version support
-- DataComponent types use compile-time macros with `since:` annotations
+- `src/rosegold/versions.cr` is the source of truth for enabled protocol/version pairs.
+- Per-version game data comes from the pinned `rosegoldmc/minecraft-data.cr` shard.
+- Downloaded protocol documentation, decompiled source, and npm artifacts belong
+  under ignored `./tmp/`, never in a committed asset directory.
+- Packet IDs use the `packet_ids()` macro. Map a packet only for protocols where
+  the packet exists; never fill mappings by a shift pattern alone.
+- DataComponent types use compile-time macros with `since:` annotations.
 
 ## Key Files
 
@@ -131,5 +144,4 @@ Compare blocks.json, entities.json, items.json for new entries and count changes
 - `src/rosegold/packets/protocol_mapping.cr` - multi-version packet ID macro
 - `src/rosegold/world/mcdata.cr` - game data loading
 - `src/rosegold/inventory/slot.cr` - item slot and DataComponent parsing
-- `game_assets/` - extracted game data per version
 - `tmp/protocol_docs/` - downloaded protocol documentation

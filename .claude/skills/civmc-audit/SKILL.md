@@ -6,7 +6,9 @@ argument-hint: [full]
 
 # CivMC Compliance Audit
 
-Audit the rosegold.cr codebase against CivMC server rules for bot compliance.
+Audit the rosegold.cr codebase against the CivMC rules snapshot in this
+repository. The result is code-review evidence, not a guarantee that any user
+script or current server policy is compliant.
 
 ## Determine Audit Mode
 
@@ -25,8 +27,10 @@ Pass a prompt containing:
 - The branch name
 - Today's date
 - If branch diff mode: the list of changed `src/rosegold/` files from `git diff main...HEAD --name-only`
-- Reminder: this is research only — do NOT edit any files
+- Reminder: this is research only; do not edit any files
+- Reminder: identify `server-rules/civmc.md` as a dated snapshot; recheck live
+  official rules before making a present-tense compliance claim
 
 ## Present Results
 
-After the agent completes, present the full audit report to the user. Do not summarize — show the complete checklist output.
+After the agent completes, present the full audit report to the user. Do not summarize; show the complete checklist output.

@@ -60,7 +60,7 @@ Spectator.describe Rosegold::Interactions do
     expect(use_packets(client).size).to eq(2)
   end
 
-  it "lets a tap proceed immediately after stopping a held use" do
+  it "clears the food repeat delay without bypassing the use cooldown" do
     client = interactions
     interactions = client.interactions_for_test
     client.inventory_menu[36] = slot("apple")
@@ -69,6 +69,8 @@ Spectator.describe Rosegold::Interactions do
     interactions.tick
     interactions.stop_using_hand
     interactions.tap_using_hand
+    3.times { interactions.tick }
+    expect(use_packets(client).size).to eq(1)
     interactions.tick
 
     expect(use_packets(client).size).to eq(2)
@@ -118,5 +120,34 @@ Spectator.describe Rosegold::Interactions do
 
     expect(use_packets(client).size).to eq(1)
     expect(use_packets(client).first.hand).to eq(Rosegold::Hand::OffHand)
+  end
+
+  it "does not bypass the use cooldown by restarting a hold" do
+    client = interactions
+    interactions = client.interactions_for_test
+    interactions.start_using_hand
+    interactions.tick
+    3.times do
+      interactions.stop_using_hand
+      interactions.start_using_hand
+      interactions.tick
+    end
+    expect(use_packets(client).size).to eq(1)
+    interactions.tick
+    expect(use_packets(client).size).to eq(2)
+  end
+
+  it "replaces a held use with one tap in the requested hand" do
+    client = interactions
+    interactions = client.interactions_for_test
+    interactions.start_using_hand
+    interactions.tick
+    Rosegold::Bot.new(client).use_hand(hand: :off_hand)
+    12.times { interactions.tick }
+
+    expect(use_packets(client).map(&.hand)).to eq([
+      Rosegold::Hand::MainHand,
+      Rosegold::Hand::OffHand,
+    ])
   end
 end

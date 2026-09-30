@@ -17,6 +17,8 @@ class Rosegold::Interactions
   @using_hand_started = false
   @queued_hand_tap = nil
   @using_hand_delay = 0_i32
+  # Releasing food cancels its repeat delay, but must not bypass the click cooldown.
+  @use_cooldown_ticks = 0_i32
   getter digging_block : ReachedBlock?
   @dig_hand_swing_countdown = 0_i8
   @attack_queued = false
@@ -44,6 +46,7 @@ class Rosegold::Interactions
 
   # Queues one use-button press without holding it.
   def tap_using_hand(hand : Hand = :main_hand)
+    stop_using_hand if @using_hand
     @queued_hand_tap = hand
   end
 
@@ -181,11 +184,13 @@ class Rosegold::Interactions
 
   private def tick_using_hand
     @using_hand_delay -= 1 if @using_hand_delay > 0
-    return if @using_hand_delay > 0
+    @use_cooldown_ticks -= 1 if @use_cooldown_ticks > 0
+    return if @using_hand_delay > 0 || @use_cooldown_ticks > 0
 
     if using_hand = @using_hand || @queued_hand_tap
       held_slot = using_hand.main_hand? ? inventory.main_hand : inventory.off_hand
       @using_hand_delay = using_hand_delay_for held_slot
+      @use_cooldown_ticks = 4
       @queued_hand_tap = nil
       case reached = reach_block_or_entity
       when Entity

@@ -1,6 +1,7 @@
 # Debugging Guide
 
-This guide covers various debugging features and techniques available in the Rosegold Minecraft client.
+This guide covers the packet and log diagnostics available in Rosegold. Packet
+IDs are protocol-specific, so identify the active protocol before choosing one.
 
 ## Packet Logging
 
@@ -13,7 +14,7 @@ The `LOG_PACKET` environment variable allows you to log specific packet types wi
 Set the environment variable to the packet ID(s) you want to log:
 
 ```bash
-# Log SystemChatMessage packets (ID 0x72)
+# For example, SystemChatMessage is 0x72 for protocol 772.
 export LOG_PACKET=72
 ./your_rosegold_app
 
@@ -47,19 +48,18 @@ WARN - Logged packet Rosegold::Clientbound::SystemChatMessage (0x72) in PLAY sta
 WARN - Packet bytes (335 bytes): 720a08000474657874005bc2a76152656365697665207265776172647320666f7220766f74696e67...
 ```
 
-#### Common Packet IDs
+#### Packet IDs vary by protocol
 
-| Packet ID | Hex  | Packet Name | Description |
-|-----------|------|-------------|-------------|
-| 114       | 0x72 | SystemChatMessage | System chat and action bar messages |
-| 96        | 0x60 | ChatMessage | Player chat messages |
-| 65        | 0x41 | OpenWindow | Container/inventory opening |
-| 20        | 0x14 | EntitySpawn | Entity spawning |
+The packet definition is authoritative. For example,
+`Clientbound::SystemChatMessage` maps to 0x72 for protocol 772, 0x77 for 773
+and 774, 0x79 for 775 and 776, and 0x7C for 777. Read the packet's
+`packet_ids(...)` mapping before using its ID in `LOG_PACKET`; do not carry an
+ID from one Minecraft version to another.
 
 ### Performance Considerations
 
-- The `LOG_PACKET` feature has zero overhead when not enabled
-- Environment variable parsing only occurs during packet processing
+- The decoder performs a small environment lookup for each clientbound packet.
+- It parses the configured ID list and emits packet bytes only when `LOG_PACKET` is set.
 - Large packet dumps may impact performance in high-traffic scenarios
 
 ## General Logging
@@ -70,13 +70,13 @@ Set the Crystal log level to control verbosity:
 
 ```bash
 # Enable debug logging
-export CRYSTAL_LOG_LEVEL=DEBUG
+export LOG_LEVEL=debug
 
 # Enable info logging (default)
-export CRYSTAL_LOG_LEVEL=INFO
+export LOG_LEVEL=info
 
 # Enable only warnings and errors
-export CRYSTAL_LOG_LEVEL=WARN
+export LOG_LEVEL=warn
 ```
 
 ### Log Output Example
@@ -106,10 +106,10 @@ WARN - Stack trace:
 
 ### Common Issues
 
-1. **Packet parsing errors**: Use `LOG_PACKET` to inspect raw packet data
-2. **NBT parsing failures**: Check if text components are malformed
-3. **Protocol version mismatches**: Verify protocol version is 772 for MC 1.21.8
-4. **Missing translations**: Ensure game assets are properly loaded
+1. **Packet parsing errors**: Use `LOG_PACKET` to inspect raw packet data for the active protocol.
+2. **NBT parsing failures**: Check whether the target version changed the text-component or packet field layout.
+3. **Protocol version mismatches**: Verify the active protocol is enabled in `src/rosegold/versions.cr` and each affected packet has the right mapping.
+4. **Missing game data**: Check the pinned `minecraft-data` shard and the selected protocol, not a local `game_assets/` directory.
 
 ### Getting Help
 
@@ -122,7 +122,9 @@ When reporting issues, include:
 
 ## Development Notes
 
-- Never change packet IDs without user approval
-- Use `LOG_PACKET` for debugging new packet implementations
+- Never guess or casually renumber packet IDs. Verify target-version source and
+  the pinned minecraft-data shard.
+- Use `LOG_PACKET` for debugging new packet implementations, with IDs from the
+  active protocol mapping.
 - Server logs contain useful context for packet analysis
 - Integration specs should include timeouts to prevent hangs

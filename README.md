@@ -55,7 +55,7 @@ ensure
 end
 ```
 
-That is deliberately a small DSL. Movement, inventory, and interaction calls are synchronous from the script's point of view, but wait through game ticks so packet processing continues.
+That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result.
 
 ## Choose a protocol build
 
@@ -74,7 +74,7 @@ Use a version-specific entrypoint only when the target server is known. Availabl
 | --- | --- |
 | Connect, inspect state, and chat | `Bot.new`, `join_game`, `location`, `health`, `food`, `chat` |
 | Walk, look, jump | `move_to`, `look_at`, `look`, `start_jump`, `sprint`, `sneak` |
-| Mine, fight, place, eat | `dig`, `attack`, `place_block_against`, `use_hand`, `eat!` |
+| Mine, use, place, eat | `dig`, `attack`, `place_block_against`, `use_hand`, `eat!` |
 | Manage the inventory | `inventory.pick!`, `inventory.count`, `inventory.throw_all_of`, `main_hand` |
 | Work with containers | `open_container_handle` |
 | Craft | `craft`, `craft_all`, `craft_pattern` |
@@ -82,6 +82,9 @@ Use a version-specific entrypoint only when the target server is known. Availabl
 | Watch the bot in Minecraft | `SpectateServer` |
 
 The generated [API reference](https://rosegoldmc.github.io/rosegold.cr/) has every overload and type. The sections below cover the calls people usually need first.
+
+Coming from JsMacros? Read the [Rosegold idiom guide](https://github.com/RosegoldMC/rosegold.cr/blob/main/guide/idioms.md) for the
+public API equivalents, their semantic differences, and the server-rule boundary.
 
 ## Movement and looking
 
@@ -134,7 +137,7 @@ bot.open_container_handle do |container|
 end
 ```
 
-Container blocks must already be in reach and under the bot's crosshair. The handle closes the window even if the block raises. `withdraw` and `deposit` return the amount actually moved, which can be lower than requested when the source is short or the destination is full.
+Container blocks must already be in reach and under the bot's crosshair. The handle closes the window even if the block raises. `withdraw` and `deposit` shift-click whole stacks until the requested count is reached, so the returned menu-observed amount can be short or exceed the requested threshold. It is not a server acknowledgement.
 
 ```crystal
 # The count is recipe placements, not the number of result items.
@@ -209,7 +212,7 @@ ensure
 end
 ```
 
-Add `localhost:25566` as a multiplayer server in a normal Minecraft client to spectate. It does not need Minecraft-account authentication. See [examples/spectate.cr](examples/spectate.cr) for the full runnable version.
+Add `localhost:25566` as a multiplayer server in a normal Minecraft client to spectate. It listens on `127.0.0.1` by default and does not authenticate spectators. See [examples/spectate.cr](https://github.com/RosegoldMC/rosegold.cr/blob/main/examples/spectate.cr) for the full runnable version.
 
 ## Features
 

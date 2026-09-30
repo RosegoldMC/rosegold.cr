@@ -5,9 +5,12 @@ require "./menu"
 # as well as item-level operations (pickup, put_down, move, swap).
 # Auto-closes via ensure when used with a block.
 class Rosegold::ContainerHandle
+  # The active server menu wrapped by this handle.
   getter menu : Menu
   private getter client : Client
 
+  # Wraps an already-open menu. Prefer `Bot#open_container_handle`, which waits
+  # for opening and closes the handle in an `ensure` block.
   def initialize(@client, @menu)
   end
 
@@ -74,7 +77,9 @@ class Rosegold::ContainerHandle
   # --- Intent-level operations ---
 
   # Transfer items from container to player inventory via shift-click.
-  # Returns the number of items actually transferred.
+  # Stops once at least *count* items have moved, or no progress is possible.
+  # Whole stacks are shift-clicked, so the result may exceed *count*. Returns
+  # the item-count change observed in the local menu, not a server acknowledgment.
   def withdraw(spec, count : Int32 = Int32::MAX) : Int32
     transferred = 0
 
@@ -98,7 +103,9 @@ class Rosegold::ContainerHandle
   end
 
   # Transfer items from player inventory to container via shift-click.
-  # Returns the number of items actually transferred.
+  # Stops once at least *count* items have moved, or no progress is possible.
+  # Whole stacks are shift-clicked, so the result may exceed *count*. Returns
+  # the item-count change observed in the local menu, not a server acknowledgment.
   def deposit(spec, count : Int32 = Int32::MAX) : Int32
     transferred = 0
 
@@ -145,41 +152,50 @@ class Rosegold::ContainerHandle
 
   # --- Typed menu access ---
 
-  # Returns the menu as a specific type, or nil if it doesn't match.
+  # Returns the menu as a chest, or `nil` when the open menu is another type.
   def as_chest : ChestMenu?
     menu.as?(ChestMenu)
   end
 
+  # Returns the menu as a crafting table, or `nil` when it is another type.
   def as_crafting : CraftingMenu?
     menu.as?(CraftingMenu)
   end
 
+  # Returns the menu as a furnace, or `nil` when it is another type.
   def as_furnace : FurnaceMenu?
     menu.as?(FurnaceMenu)
   end
 
+  # Returns the menu as an anvil, or `nil` when it is another type.
   def as_anvil : AnvilMenu?
     menu.as?(AnvilMenu)
   end
 
+  # Returns the menu as a brewing stand, or `nil` when it is another type.
   def as_brewing_stand : BrewingStandMenu?
     menu.as?(BrewingStandMenu)
   end
 
+  # Returns the menu as an enchanting table, or `nil` when it is another type.
   def as_enchantment : EnchantmentMenu?
     menu.as?(EnchantmentMenu)
   end
 
+  # Returns the menu as a hopper, or `nil` when it is another type.
   def as_hopper : HopperMenu?
     menu.as?(HopperMenu)
   end
 
+  # Returns the menu as a merchant, or `nil` when it is another type.
   def as_merchant : MerchantMenu?
     menu.as?(MerchantMenu)
   end
 
   # --- Lifecycle ---
 
+  # Closes the wrapped menu. It queues the close packet without waiting for a
+  # later player-inventory update.
   def close
     menu.close
   end

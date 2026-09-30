@@ -272,12 +272,15 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
-  # Sends a chat message or slash command. Queues the packet without waiting for a response.
+  # Sends a chat message or slash command without waiting for a response.
+  # Returns `true` when sent, `false` if sending fails or a chat message exceeds
+  # 256 bytes. A successful send does not confirm server acceptance.
   def chat(message : String)
     client.chat_manager.send_chat(message)
   end
 
-  # Waits for one client game tick, with a one-second event timeout.
+  # Waits for one client game tick, returning the event or `nil` after one second.
+  # A timeout does not raise, including when disconnected.
   def wait_tick
     client.wait_tick
   end
@@ -335,7 +338,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
     look.pitch
   end
 
-  # Waits for the new look to be sent to the server.
+  # Aims from the eyes at a known world position and waits for the look update.
   def look_at(location : Vec3d)
     client.physics.look = Look.from_vec location - eyes
   end
@@ -404,15 +407,16 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Raises if the player cannot rise or does not reach that height before
   # *timeout_ticks*. It does not wait for landing.
   def jump_by_height(height = 1, timeout_ticks = 20)
-    target_y = feet.y + height
-    prev_y = feet.y
+    target_y = location.y + height
+    prev_y = location.y
     client.physics.jump_queued = true
     timeout_ticks.times do
       wait_tick
-      break if feet.y >= target_y
-      raise "Cannot jump up #{height}m at #{feet}" if prev_y == feet.y
-      prev_y = feet.y
+      return if location.y >= target_y
+      raise "Cannot jump up #{height}m at #{location}" if prev_y == location.y
+      prev_y = location.y
     end
+    raise "Did not jump up #{height}m within #{timeout_ticks} ticks"
   end
 
   # Waits until the player's feet y coordinate stops changing.
@@ -496,6 +500,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   # Queues one press of use in *hand*, optionally aiming at *target* first.
+  # Releases any held use action. Repeated calls before a tick coalesce into one press.
   # The target raytrace happens on the next tick eligible under the use cooldown.
   # This does not wait for a world-result confirmation.
   def use_hand(target : Vec3d? | Look? = nil, hand : Hand = :main_hand)
@@ -734,11 +739,14 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
-  # Crafts *count* copies of a craftable recipe producing *item_name*.
+  # Attempts *count* recipe placements producing *item_name*.
+  # Each placement may produce several items; *count* is not an item count.
   #
   # Waits for recipe placement and output slot updates. Supply *table* for a
   # recipe that needs a crafting table. Raises `CraftingError` when no recipe,
-  # materials, or required table position is available.
+  # materials, or required table position is available. It can stop early when
+  # no output appears within ten ticks or the inventory cannot accept the output.
+  # Inspect inventory counts when the exact produced amount matters.
   def craft(item_name : String, count : Int32 = 1, table : Vec3i? = nil)
     recipes = recipes_for(item_name)
     raise CraftingError.new("No recipe found for '#{item_name}'") if recipes.empty?
@@ -747,7 +755,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
     craft(recipe, count, table)
   end
 
-  # Crafts *count* copies from a specific synchronized *recipe*.
+  # Attempts *count* placements of a specific synchronized *recipe*.
+  # Each placement may produce several result items.
   # Waits for recipe placement and output slot updates. Raises `CraftingError`
   # if materials or a required crafting table position are unavailable.
   def craft(recipe : RecipeDisplayEntry, count : Int32 = 1, table : Vec3i? = nil)
@@ -865,7 +874,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   #   ["iron_ingot", "iron_ingot", "iron_ingot"],
   #   [nil, "stick", nil],
   #   [nil, "stick", nil],
-  # ])
+  # ], table: crafting_table_position)
   # ```
   def craft_pattern(pattern : Array(Array(String?)), count : Int32 = 1, table : Vec3i? = nil)
     raise CraftingError.new("Cannot craft with an empty pattern") if pattern.empty?
@@ -980,9 +989,9 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Runs a slash command and waits for a confirmation message from the server.
   #
-  # Use this for non-idempotent commands (like toggles) or when you want to
-  # force retries on idempotent commands until confirmation. Retries automatically
-  # if the command fails or returns an inverse message.
+  # Each attempt waits up to five seconds. Retries after a timeout or an inverse
+  # message. Use only when replaying the command is acceptable: a missing
+  # confirmation does not prove the server failed to execute it.
   #
   # The *expected_message* is matched after stripping formatting codes. If
   # *inverse_message* is provided and received, the command will retry, which is
@@ -1030,7 +1039,6 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
       if command_completed
         Log.info { "Received expected response for: #{command}" }
-        self.off Rosegold::Clientbound::SystemChatMessage, handler_id
         return true
       elsif got_response
         Log.info { "Got inverse response, trying again: #{inverse_message}" }
@@ -1042,7 +1050,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
 
     Log.error { "Failed to get expected response after #{max_tries} attempts: #{command}" }
-    self.off Rosegold::Clientbound::SystemChatMessage, handler_id
     false
+  ensure
+    self.off Rosegold::Clientbound::SystemChatMessage, handler_id if handler_id
   end
 end

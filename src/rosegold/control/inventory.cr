@@ -2,21 +2,34 @@
 class Rosegold::Inventory
   private property client : Client
 
+  # Creates an inventory facade over the client's currently active menu.
   def initialize(@client); end
 
+  # Forwards unrecognized menu accessors to the active `Client#container_menu`.
+  #
+  # This keeps the inventory DSL available for both the player inventory and an
+  # open container. `#slots` covers the whole active window; `#inventory` and
+  # `#hotbar` are the player's storage slots, while `#content` is the container
+  # portion of a non-player menu. These accessors are live menu views, not
+  # independently enumerable collections owned by `Inventory`.
   forward_missing_to @client.container_menu
 
   # Returns the number of matching items in the player inventory (inventory + hotbar), or in the given slots range.
   #
   # Example:
-  #   inventory.count "diamond_pickaxe" # => 2
-  #   inventory.count &.empty? # => 2
-  #   inventory.count { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 1
-  #   inventory.count "stone", slots # => 5 (count in entire window including container)
+  # ```
+  # inventory.count "diamond_pickaxe"                                                 # => 2
+  # inventory.count { |slot| slot.name.ends_with?("_pickaxe") }                       # sum of matching stacks
+  # inventory.count { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 1
+  # inventory.count "stone", slots                                                    # => 5 (count in entire window including container)
+  # ```
   def count(spec, slots = player_inventory_slots)
     slots.select(&.matches? spec).sum(&.count.to_i32)
   end
 
+  # Sums item counts in player-inventory stacks selected by the predicate.
+  # Pass an explicit slot range to the non-block overload to count another
+  # portion of the active menu.
   def count(&spec : Slot -> _)
     count(spec)
   end
@@ -25,9 +38,11 @@ class Rosegold::Inventory
   # Returns true if an item was picked, false otherwise.
   #
   # Example:
-  #   inventory.pick "diamond_pickaxe" # => true
-  #   inventory.pick &.empty? # => true
-  #   inventory.pick { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => false
+  # ```
+  # inventory.pick "diamond_pickaxe"                                                 # => true
+  # inventory.pick &.empty?                                                          # => true
+  # inventory.pick { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => false
+  # ```
   #
   # ### Durability-aware selection
   #
@@ -99,14 +114,19 @@ class Rosegold::Inventory
     false
   end
 
+  # Selects the first usable item matched by the predicate into the main hand.
+  # Returns `true` on selection and `false` when no eligible slot exists.
   def pick(&spec : Slot -> _)
     pick(spec)
   end
 
+  # Selects a matching usable item, raising `ItemNotFoundError` if none exists.
   def pick!(spec)
     pick(spec) || raise ItemNotFoundError.new("Item #{spec} not found in inventory")
   end
 
+  # Selects an item matched by the predicate, raising `ItemNotFoundError` when
+  # no eligible slot exists.
   def pick!(&spec : Slot -> _)
     pick!(spec)
   end
@@ -115,13 +135,17 @@ class Rosegold::Inventory
   # Returns the number of actually transferred items.
   #
   # Example:
-  #   inventory.withdraw_at_least 5, "diamond_pickaxe" # => 3
-  #   inventory.withdraw_at_least 5, &.empty? # => 1
-  #   inventory.withdraw_at_least 5, { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
+  # ```
+  # inventory.withdraw_at_least 5, "diamond_pickaxe"                                                 # => 3
+  # inventory.withdraw_at_least 5, &.empty?                                                          # => 1
+  # inventory.withdraw_at_least(5) { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
+  # ```
   def withdraw_at_least(count, spec)
     shift_click_at_least count, spec, :container_to_player
   end
 
+  # Withdraws matching whole stacks until at least *count* items have moved or
+  # no progress is possible. Uses the predicate to select stacks.
   def withdraw_at_least(count, &spec : Slot -> _)
     withdraw_at_least(count, spec)
   end
@@ -130,9 +154,11 @@ class Rosegold::Inventory
   # Returns the number of actually transferred items.
   #
   # Example:
-  #   inventory.deposit_at_least 5, "diamond_pickaxe" # => 3
-  #   inventory.deposit_at_least 5, &.empty? # => 1
-  #   inventory.deposit_at_least 5, { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
+  # ```
+  # inventory.deposit_at_least 5, "diamond_pickaxe"                                                 # => 3
+  # inventory.deposit_at_least 5, &.empty?                                                          # => 1
+  # inventory.deposit_at_least(5) { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
+  # ```
   def deposit_at_least(count, spec)
     # If container is not ready, return immediately rather than blocking
     return 0 if content.empty?
@@ -140,6 +166,8 @@ class Rosegold::Inventory
     shift_click_at_least count, spec, :player_to_container
   end
 
+  # Deposits matching whole stacks until at least *count* items have moved or
+  # no progress is possible. Uses the predicate to select stacks.
   def deposit_at_least(count, &spec : Slot -> _)
     deposit_at_least(count, spec)
   end
@@ -150,9 +178,11 @@ class Rosegold::Inventory
   # Returns the total count after replenishment attempt.
   #
   # Example:
-  #   inventory.replenish 10, "stone" # => 10 (if successful)
-  #   inventory.replenish 5, "diamond" # => 3 (if only 3 available)
-  #   inventory.replenish 3 { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
+  # ```
+  # inventory.replenish 10, "stone"                                                         # => 10 (if successful)
+  # inventory.replenish 5, "diamond"                                                        # => 3 (if only 3 available)
+  # inventory.replenish 3 { |slot| slot.name == "diamond_pickaxe" && slot.efficiency >= 4 } # => 2
+  # ```
   def replenish(count, spec)
     current_count = count(spec, inventory + hotbar)
     return current_count if current_count >= count
@@ -160,6 +190,8 @@ class Rosegold::Inventory
     current_count + withdraw_at_least(count - current_count, spec)
   end
 
+  # Withdraws predicate-matching stacks until the player holds at least *count*.
+  # Returns the resulting item count, which can be below or above the target.
   def replenish(count, &spec : Slot -> _)
     replenish(count, spec)
   end
@@ -169,9 +201,11 @@ class Rosegold::Inventory
   # Returns the final quantity in the main hand after refilling.
   #
   # Example:
-  #   inventory.refill_hand # => 64 (if main hand was stone and got filled to max stack)
-  #   inventory.refill_hand # => 32 (if only 32 items were available)
-  #   inventory.refill_hand # => 0 (if main hand is empty)
+  # ```
+  # inventory.refill_hand # => 64 (if main hand was stone and got filled to max stack)
+  # inventory.refill_hand # => 32 (if only 32 items were available)
+  # inventory.refill_hand # => 0 (if main hand is empty)
+  # ```
   def refill_hand
     log = Log.for("refill_hand")
 
@@ -287,6 +321,8 @@ class Rosegold::Inventory
     empty_slot
   end
 
+  # Drops every stack named *name* from the active menu and returns the item
+  # count queued for dropping. The server applies the click packets asynchronously.
   def throw_all_of(name)
     quantity = 0
     # Collect slot numbers first to avoid iterator invalidation
@@ -357,8 +393,10 @@ class Rosegold::Inventory
     transferred
   end
 
-  # Equipment slot accessors
+  # Equipment slots from the player's inventory menu: helmet, chestplate,
+  # leggings, boots, and off-hand.
   delegate helmet, chestplate, leggings, boots, off_hand, to: @client.inventory_menu
 
+  # Raised by `#pick!` when no matching usable item is in the player inventory.
   class ItemNotFoundError < Exception; end
 end
