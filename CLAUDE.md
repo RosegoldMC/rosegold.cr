@@ -227,7 +227,8 @@ or public interface without an authenticated access boundary.
 - Framework: spectator (Crystal BDD)
 - CI: `.github/workflows/ci.yml` is the source of truth for Crystal version,
   integration matrix, retries, and slim builds. Read it before changing workflow
-  guidance; `windows.yml` is a smaller Windows smoke suite.
+  guidance; `windows.yml` is a smaller Windows smoke suite. Ubuntu jobs refresh
+  the apt package index before Crystal setup to avoid stale runner-image URLs.
 
 ### Code Style
 - Document every public Bot/DSL method directly above its definition for Crystal docs.
