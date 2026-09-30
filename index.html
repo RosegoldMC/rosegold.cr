@@ -2439,7 +2439,7 @@
 bot.move_to(<span class="n">100</span>, <span class="n">200</span>)           <span class="c"># walk to coordinates</span>
 bot.inventory.pick! <span class="s">&quot;diamond_sword&quot;</span>  <span class="c"># equip a sword</span>
 bot.attack                       <span class="c"># swing</span>
-bot.eat!                         <span class="c"># auto-eat when hungry</span>
+bot.eat                          <span class="c"># best-effort auto-eat when hungry</span>
 bot.craft(<span class="s">&quot;stick&quot;</span>, <span class="n">4</span>)           <span class="c"># craft items by name</span></code></pre>
 <p>Rosegold handles the protocol, physics, and inventory management so you can focus on what your bot does.</p>
 <h2><a id="getting-started" class="anchor" href="#getting-started">
@@ -2577,8 +2577,18 @@ bot.stop_digging
 <span class="c"># Place a block</span>
 bot.place_block_against(block_pos, <span class="n">:top</span>)
 
-<span class="c"># Auto-eat when hungry</span>
+<span class="c"># Auto-eat when hungry, logging failures without raising</span>
+bot.eat
+
+<span class="c"># Or propagate errors, including missing food</span>
 bot.eat!</code></pre>
+<p>Both methods skip eating at 18+ food, or at 15+ food with full health.
+Otherwise, they select an allowed food from inventory and block until food
+reaches 18, the held food runs out, or eating times out (about 165 seconds
+at 20 TPS). Timeouts log a warning rather than raise, even with <code>eat!</code>.
+<code>eat</code> returns <code>nil</code>, not a success flag; check <code>bot.food</code> if you need to know
+whether hunger was restored. Neither method supplies food or restores the
+previously selected item.</p>
 <h3><a id="inventory" class="anchor" href="#inventory">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
