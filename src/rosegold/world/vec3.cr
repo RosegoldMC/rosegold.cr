@@ -259,24 +259,24 @@ enum BlockFace
   # order matters for packet serialization
   Bottom; Top; North; South; West; East
 
-  def +(other : Vec3d | Vec3i) : Vec3d
+  def +(other : Rosegold::Vec3d | Rosegold::Vec3i) : Rosegold::Vec3d
     other.centered_3d + to_vec3d(0.5)
   end
 
-  def to_vec3d(len : Float64 = 0.5) : Vec3d
+  def to_vec3d(len : Float64 = 0.5) : Rosegold::Vec3d
     case self
     when BlockFace::West
-      Vec3d.new -len, 0, 0
+      Rosegold::Vec3d.new -len, 0, 0
     when BlockFace::East
-      Vec3d.new len, 0, 0
+      Rosegold::Vec3d.new len, 0, 0
     when BlockFace::Bottom
-      Vec3d.new 0, -len, 0
+      Rosegold::Vec3d.new 0, -len, 0
     when BlockFace::Top
-      Vec3d.new 0, len, 0
+      Rosegold::Vec3d.new 0, len, 0
     when BlockFace::North
-      Vec3d.new 0, 0, -len
+      Rosegold::Vec3d.new 0, 0, -len
     when BlockFace::South
-      Vec3d.new 0, 0, len
+      Rosegold::Vec3d.new 0, 0, len
     else raise "Invalid BlockFace #{self}"
     end
   end

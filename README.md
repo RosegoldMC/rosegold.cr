@@ -6,8 +6,8 @@ It was built for [CivMC](https://civwiki.org/wiki/CivMC). Its public bot API is 
 
 ```crystal
 bot.move_to(100, 200)
-bot.inventory.pick!("diamond_sword")
-bot.attack
+bot.inventory.pick!("diamond_pickaxe")
+bot.dig(20)
 bot.eat
 ```
 
@@ -23,7 +23,7 @@ shards build
 ./bin/attack
 ```
 
-The first connection asks you to sign in through Microsoft's device-login page. The token is cached after that.
+The first connection asks you to sign in through Microsoft's device-login page. The token is cached after that; keep the authentication cache private and out of version control.
 
 For this checkout, patrol and events default to `localhost:25565`. Set `ROSEGOLD_SERVER` to a `host:port` pair for another server:
 
@@ -32,6 +32,8 @@ ROSEGOLD_SERVER=localhost:25565 crystal run examples/patrol.cr
 ```
 
 `examples/patrol.cr` walks a small square from the bot's current position. `examples/events.cr` prints chat for one minute and starts guarded eating work after low-food events. `examples/spectate.cr` opens the spectator bridge and walks the same kind of short route.
+
+`examples/container.cr` opens a configured, reachable container and counts its inventory without transferring items. Pass its known coordinates as `-- X Y Z`; it does not discover containers.
 
 The examples use `require "../src/rosegold"` so they run in this repository. In your own shard, replace it with `require "rosegold"`.
 
@@ -48,8 +50,8 @@ begin
   bot.join_game
   bot.chat "Online."
   bot.move_to(100, 200) # integer x/z targets the centre of that block column
-  bot.inventory.pick!("diamond_sword")
-  bot.attack
+  bot.inventory.pick!("diamond_pickaxe")
+  bot.dig(20)
 ensure
   bot.disconnect("Script finished") if bot.connected?
 end
@@ -187,14 +189,15 @@ end
 bot.wait_ticks 20
 ```
 
-`wait_for` registers the handler before running its block, which avoids missing a quick server response. `auto_respawn?` is enabled by default; set `bot.auto_respawn = false` if your own death handler should decide what happens next.
+`wait_for` registers before running its block, so it cannot miss a quick response. It accepts the next event of that type, including unrelated chat; use a content predicate when a specific confirmation matters (see the idiom guide). `auto_respawn?` is enabled by default; set `bot.auto_respawn = false` if your own death handler should decide what happens next.
 
 ## Spectate from a normal Minecraft client
 
 `SpectateServer` bridges the same client used by your bot. Attach it before connecting, then stop it and disconnect the bot in `ensure`.
 
 ```crystal
-bot = Rosegold::Bot.new("play.example.net")
+client = Rosegold::Client.new("play.example.net")
+bot = Rosegold::Bot.new(client)
 spectate = Rosegold::SpectateServer.new
 
 spectate.attach_client(client)
