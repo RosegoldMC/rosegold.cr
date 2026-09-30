@@ -1,6 +1,8 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file is the canonical AI-facing contributor guide for this repository. Keep
+task-local instructions short and point here instead of maintaining duplicate
+instruction bodies.
 
 ## Common Development Commands
 
@@ -11,9 +13,9 @@ crystal build src/rosegold.cr            # all versions + auto-detection (defaul
 
 By default all supported MC versions are compiled in and the protocol is auto-detected
 via STATUS ping. To shrink the binary to a single version, require an exact-version
-entrypoint (no flags, lives in the bot's own source) — this skips auto-detection:
+entrypoint (no flags, lives in the bot's own source); this skips auto-detection:
 ```crystal
-require "rosegold/26.2"   # only 26.2 (proto 776) compiled in; ~50% smaller binary
+require "rosegold/26.2"   # only 26.2 (proto 776) compiled in; smaller binary
 ```
 Both paths share one source of truth: `Rosegold::ENABLED_PROTOCOLS` in
 `src/rosegold/versions.cr`.
@@ -30,18 +32,18 @@ crystal build --no-codegen src/rosegold.cr
 # Run all tests
 crystal spec
 
-# Run specific spec files
+# Run a focused spec file
 crystal spec spec/integration/interactions_spec.cr
 
-# Run with environment variables for debugging
+# Packet diagnostics accept decimal, hexadecimal, or comma-separated IDs.
 LOG_LEVEL=trace crystal spec spec/integration/interactions_spec.cr
-LOG_PACKET=72 crystal spec  # Log specific packet types
+LOG_PACKET=72,0x73 crystal spec
 ```
 
 ### Code Quality
 ```bash
 crystal tool format
-bin/ameba
+crystal run lib/ameba/src/cli.cr --
 ```
 
 ## Project Structure
@@ -53,22 +55,22 @@ src/rosegold/
 ├── chat_manager.cr        # Chat sending (signed/unsigned messages, commands)
 ├── spectate_server.cr     # Entry point for spectate server
 ├── control/
-│   ├── physics.cr         # Movement, collision, gravity (817 lines)
+│   ├── physics.cr         # Movement, collision, gravity
 │   ├── interactions.cr    # Block breaking, placing, eating, attacks
 │   └── inventory.cr       # High-level pick/deposit/withdraw/throw
 ├── events/                # Event classes (Tick, HealthChanged, Died, etc.)
 ├── inventory/
-│   ├── slot.cr            # Slot + 70+ DataComponent classes
+│   ├── slot.cr            # Slot and DataComponent classes
 │   ├── menu.cr            # Base menu with click/move logic
 │   ├── menus/             # PlayerMenu, ChestMenu, CraftingMenu, FurnaceMenu, etc.
 │   ├── container_handle.cr # Intent-level container operations
 │   ├── recipe.cr          # RecipeRegistry + RecipeDisplayEntry
 │   └── ...                # click_operation, slot_offsets, item_constants, etc.
 ├── packets/
-│   ├── clientbound/       # 63 clientbound packet classes
-│   ├── serverbound/       # 40 serverbound packet classes
+│   ├── clientbound/       # Clientbound packet definitions
+│   ├── serverbound/       # Serverbound packet definitions
 │   └── protocol_mapping.cr # packet_ids macro for multi-version support
-├── spectate/              # SpectateServer modules (9 files)
+├── spectate/              # SpectateServer modules
 │   ├── server.cr          # TCP server, forwarded packet tables
 │   ├── connection.cr      # Per-spectator connection, state machine
 │   ├── play_session.cr    # Spectating state, world sync setup
@@ -112,17 +114,25 @@ Bot (high-level DSL: move_to, dig, craft, chat)
 
 HANDSHAKING → LOGIN → CONFIGURATION → PLAY (→ re-CONFIGURATION → PLAY)
 
-Protocol version auto-detected via STATUS ping (among the versions compiled in). Supports a contiguous range: 772 (1.21.8), 773 (1.21.9/1.21.10), 774 (1.21.11), 775 (26.1), 776 (26.2), 777 (26.3). Compression enabled during LOGIN via SetCompression. Which versions are compiled in is controlled at build time — see "Build & Run".
+Protocol version auto-detected via STATUS ping (among the versions compiled in). The
+authoritative protocol/version map is `Rosegold::ENABLED_PROTOCOLS` in
+`src/rosegold/versions.cr`; update it, the exact-version entrypoints, README,
+CI matrix, and slim-build coverage as one change. Compression is enabled during
+LOGIN via SetCompression. `Client.protocol_version` is class-wide state, so one
+process cannot safely connect to different protocol versions concurrently.
 
 ### Packet System
 
-~109 packet classes (70 clientbound + 39 serverbound). All packets extend `Rosegold::Event`, so they flow through the event system. Each packet defines:
-- `packet_ids({772_u32 => 0xNN, 773_u32 => 0xNN, 774_u32 => 0xNN, 775_u32 => 0xNN, 776_u32 => 0xNN, 777_u32 => 0xNN})` — multi-version ID mapping (entries for disabled versions are filtered out at compile time)
-- `self.read(io)` — deserialize from wire
-- `write : Bytes` — serialize to wire
-- `callback(client)` — update game state (clientbound only)
+Concrete packets extend `Rosegold::Event`, so they flow through the event system.
+Every concrete packet must use `packet_ids(...)`; the macro retains mappings only
+for enabled protocols and registration rejects packet classes without it. A
+packet supplies `self.read(io)`, `write : Bytes`, and a clientbound callback when
+its direction and behavior require them. The base class supplies defaults where
+appropriate.
 
-Unknown/failed packets gracefully degrade to `RawPacket` (never crashes the connection).
+Unknown clientbound packets and clientbound parse failures are logged and become
+`RawPacket`. This compatibility fallback does not prove a protocol update is
+complete.
 
 ### Event System
 
@@ -134,9 +144,11 @@ Events are simple data classes extending `abstract class Rosegold::Event`. Both 
 
 **Forwarding to Bot:** Add `subscribe Event::Foo` in `Bot#initialize` so users can listen via `bot.on`.
 
-**Subscribing:** `bot.on(Event::Foo) { |e| ... }` — returns UUID for later removal with `off`.
+**Subscribing:** `bot.on(Event::Foo) { |e| ... }` returns a UUID for later removal with `off`.
 
-Bot forwards these events from Client: SystemChatMessage, PlayerChatMessage, DisguisedChatMessage, Tick, HealthChanged, Died, SetContainerContent, SetSlot, ContainerOpened.
+Bot forwards chat packets plus Tick, HealthChanged, ExperienceChanged, Died,
+PlayerJoined, PlayerLeft, SetContainerContent, SetSlot, and ContainerOpened.
+Check `Bot#initialize` rather than copying this list into another guide.
 
 ### Physics Engine
 
@@ -152,7 +164,9 @@ Status effects applied: Speed (+20%/level), Slowness (-15%/level), Jump Boost (+
 
 Layered: **Slot** (item + DataComponents) → **Menu** (window with click logic) → **Inventory/ContainerHandle** (high-level API).
 
-Menu subclasses: PlayerMenu (46 slots), ChestMenu, CraftingMenu, FurnaceMenu, AnvilMenu, BrewingStandMenu, EnchantmentMenu, HopperMenu, MerchantMenu, GenericMenu.
+Menu types include PlayerMenu (46 slots), ChestMenu, CraftingMenu, FurnaceMenu,
+AnvilMenu, BrewingStandMenu, EnchantmentMenu, HopperMenu, MerchantMenu, and
+GenericMenu. `MenuFactory` selects and synchronizes the active menu.
 
 Crafting supports: recipe lookup, can_craft? check, auto-craft by name, craft_all, manual grid patterns.
 
@@ -166,7 +180,11 @@ Reach: 4.5 blocks (survival), 5.0 (creative). Entity reach: 3.0 / 5.0. Unified r
 
 ### SpectateServer
 
-"Headless with headful feel" — vanilla clients connect to `localhost:25566` and see the bot's world. Uses LOBBY (waiting) ↔ SPECTATING (active) state machine. Forwards ~50 packet types via raw relay. Entity ID remapping for self-targeted packets. Polling monitors dimension changes, chunk boundaries, hotbar, block breaking progress.
+"Headless with headful feel": vanilla clients connect to `127.0.0.1:25566` by
+default and see the bot's world. It uses a LOBBY (waiting) to SPECTATING (active)
+state machine, raw relay with self-targeted entity-ID remapping, and polling for
+world and hotbar changes. The server is unauthenticated: do not bind it to a LAN
+or public interface without an authenticated access boundary.
 
 ### World State
 
@@ -179,23 +197,27 @@ Reach: 4.5 blocks (survival), 5.0 (creative). Entity reach: 3.0 / 5.0. Unified r
 ## Development Guidelines
 
 ### Protocol Work
-- **NEVER change packet IDs** without explicit user approval — they must match Minecraft protocol
-- Use `LOG_PACKET=<id>` to debug specific packets (e.g., `LOG_PACKET=72`)
+- **Never change packet IDs without explicit user approval.**
+- **Never guess or casually renumber packet IDs.** Verify every affected state,
+  ID, field layout, data component, and entity ID against target-version
+  decompiled source and the pinned minecraft-data shard.
+- Use `LOG_PACKET=<id>` to debug specific packets. IDs are protocol-specific.
 - Failed packet parsing logs hex dump and falls back to RawPacket
 - Protocol docs: `./tmp/protocol_docs/` (not committed)
 
 ### Adding a New Packet
 1. Create file in `packets/clientbound/` or `packets/serverbound/`
 2. Include `Rosegold::Packets::ProtocolMapping`
-3. Define `packet_ids({772_u32 => 0xNN, 773_u32 => 0xNN, 774_u32 => 0xNN, 775_u32 => 0xNN, 776_u32 => 0xNN, 777_u32 => 0xNN})` — derive each ID from the decompiled protocol source, never guess
-4. Implement `self.read(io)` and `write : Bytes`
-5. Implement `callback(client)` for clientbound packets
+3. Define `packet_ids(...)` for every protocol where the packet exists, using
+   target-version source. Do not add a mapping by pattern alone.
+4. Implement serialization and callbacks required by that packet's direction.
+5. Add focused parsing or serialization coverage and run the affected slim build.
 
 ### Adding a New Event
 1. Create file in `src/rosegold/events/` extending `Rosegold::Event`
 2. Emit via `client.emit_event` in the appropriate callback
 3. Add `subscribe Event::YourEvent` in `Bot#initialize` if users need it
-4. Events are auto-required via glob — no manual require needed
+4. Events are auto-required via glob; no manual require needed
 
 ### Testing
 - **Unit specs** (`spec/models/`, `spec/packets/`): test data classes and packet parsing, no server needed
@@ -203,14 +225,37 @@ Reach: 4.5 blocks (survival), 5.0 (creative). Entity reach: 3.0 / 5.0. Unified r
 - Test server: `docker compose -f spec/docker-compose.yml up` (itzg/minecraft-server, offline mode, flat world)
 - `AdminBot` has op permissions: `admin.fill`, `admin.setblock`, `admin.tp`, `admin.give`, etc.
 - Framework: spectator (Crystal BDD)
-- CI: Crystal 1.19.1; integration matrix runs MC 1.21.8, 1.21.9, 1.21.11, 26.1, 26.2, 26.3; a separate SlimBuild job compiles each single-version build so slim-only errors aren't invisible
+- CI: `.github/workflows/ci.yml` is the source of truth for Crystal version,
+  integration matrix, retries, and slim builds. Read it before changing workflow
+  guidance; `windows.yml` is a smaller Windows smoke suite.
 
 ### Code Style
-- Minimal comments — self-descriptive code, comments only for magical/weird things
+- Document every public Bot/DSL method directly above its definition for Crystal docs.
+- Keep implementation comments minimal: explain hidden constraints, not obvious code.
 - `crystal tool format` before committing
 - `property?` for Bool properties (generates `foo?` getter)
 - `getter` for read-only event fields, `property` for mutable packet fields
 - One event per file in `src/rosegold/events/`
+
+## Public API and documentation maintenance
+
+Preserve Rosegold's direct, expressive Bot DSL. Operations that wait for server
+progress cooperate through ticks; event handlers run synchronously in the
+emitting fiber, so handlers that wait for ticks or packets must `spawn` their
+work. Prefer Bot and control-layer APIs over exposing raw packets or internal
+world state as a shortcut.
+
+Keep one press and a held use distinct in public guidance. `Bot#use_hand` queues
+one use on the next eligible tick. `Bot#start_using_hand` holds use until
+`#stop_using_hand`; interaction timing and release packets belong to
+`Interactions`. Do not describe a tap as a start followed by an immediate
+release, and do not copy timing assumptions from another protocol or server.
+
+When public behavior, examples, supported versions, or workflows change, update
+the relevant README, examples, specs, and this guide in the same change. Keep
+version claims derived from `versions.cr` and CI rather than repeating volatile
+counts. Do not put credentials, player information, private deployment patterns,
+or local operational history in repository documentation or agent prompts.
 
 ## Documentation Links
 - Protocol docs: https://minecraft.wiki/w/Java_Edition_protocol/Packets

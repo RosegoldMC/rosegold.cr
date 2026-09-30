@@ -1,290 +1,237 @@
 # Rosegold
 
-Minecraft botting client written in [Crystal](https://crystal-lang.org/), designed for [CivMC](https://civwiki.org/wiki/CivMC) and compliant with its [botting rules](https://civwiki.org/wiki/Botting#Botting_Rules).
+Rosegold is a Crystal client library for Minecraft bots. It handles the wire protocol, local physics, inventory windows, recipes, and a live spectator bridge. You write the bot's behaviour.
+
+It was built for [CivMC](https://civwiki.org/wiki/CivMC). Its public bot API is deliberately constrained by the [repository rules snapshot](server-rules/civmc.md): scripts use their own player state, not environmental scans. Bot authors still need to follow the server’s current rules.
 
 ```crystal
-bot = Rosegold::Bot.join_game("play.civmc.net")
-
-bot.move_to(100, 200)           # walk to coordinates
-bot.inventory.pick! "diamond_sword"  # equip a sword
-bot.attack                       # swing
-bot.eat                          # best-effort auto-eat when hungry
-bot.craft("stick", 4)           # craft items by name
+bot.move_to(100, 200)
+bot.inventory.pick!("diamond_pickaxe")
+bot.dig(20)
+bot.eat
 ```
 
-Rosegold handles the protocol, physics, and inventory management so you can focus on what your bot does.
+## Start here
 
-## Getting Started
+Install [Crystal](https://crystal-lang.org/install/), then create a bot from the [example template](https://github.com/RosegoldMC/example). The template includes a dependency declaration and release builds for Linux and Windows.
 
-### 1. Install Crystal
-
-Follow the [official Crystal installation guide](https://crystal-lang.org/install/) for your platform.
-
-> Windows users: Crystal works best under [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) (Windows Subsystem for Linux).
-
-`shards` (Crystal's package manager, like npm) is included with Crystal.
-
-### 2. Use the Template
-
-The fastest way to start is with the [example template](https://github.com/RosegoldMC/example):
-
-1. Click **[Use this template](https://github.com/new?template_name=example&template_owner=RosegoldMC)** to create your own repo — it includes GitHub Actions that build Linux and Windows binaries automatically
-2. Clone your new repo and install dependencies:
-
-```bash
+```sh
 git clone https://github.com/YOUR_USERNAME/my-bot.git
 cd my-bot
 shards install
-```
-
-### 3. Build and Run
-
-```bash
 shards build
 ./bin/attack
 ```
 
-On first run, you'll see a message like:
+The first connection asks you to sign in through Microsoft's device-login page. The token is cached after that; keep the authentication cache private and out of version control.
 
+For this checkout, patrol and events default to `localhost:25565`. Set `ROSEGOLD_SERVER` to a `host:port` pair for another server:
+
+```sh
+ROSEGOLD_SERVER=localhost:25565 crystal run examples/patrol.cr
 ```
-To sign in, use a web browser to open https://microsoft.com/devicelogin and enter the code XXXXXXXX
-```
 
-Open that URL, enter the code, and sign in with the Microsoft account that owns Minecraft Java Edition. After that, your token is cached and future runs connect automatically.
+`examples/patrol.cr` walks a small square from the bot's current position. `examples/events.cr` prints chat for one minute and starts guarded eating work after low-food events. `examples/spectate.cr` opens the spectator bridge and walks the same kind of short route.
 
-### 4. Watch Your Bot (SpectateServer)
+`examples/container.cr` opens a configured, reachable container and counts its inventory without transferring items. Pass its known coordinates as `-- X Y Z`; it does not discover containers.
 
-All the examples start a [SpectateServer](https://rosegoldmc.github.io/rosegold.cr/Rosegold/SpectateServer.html) on `localhost:25566`. Open Minecraft, add a server with that address, and connect to see through your bot's eyes in real time — its position, inventory, health, and everything happening around it. No auth required.
+The examples use `require "../src/rosegold"` so they run in this repository. In your own shard, replace it with `require "rosegold"`.
 
-Scripts can also push UI straight to everyone spectating: chat lines, an action bar, and a boss bar for progress.
+## A small bot, with a clean lifecycle
+
+`Bot.new` builds the high-level API without connecting. `join_game` connects and waits until the player is spawned. Disconnect in `ensure`, so an exception does not leave the bot connected.
 
 ```crystal
-spectate.chat "hello"
-spectate.action_bar "mining 42%"
-spectate.boss_bar "Progress", 42, 100
-```
-
-### 5. Choosing Minecraft Versions
-
-By default Rosegold supports every Minecraft version it knows about and auto-detects which one the server speaks. Pick a mode by what you `require`:
-
-```crystal
-# All versions + auto-detect (the simple default)
 require "rosegold"
 
-# Smaller binary, single version only — no auto-detect round-trip
-require "rosegold/26.1"
+bot = Rosegold::Bot.new("play.example.net")
+
+begin
+  bot.join_game
+  bot.chat "Online."
+  bot.move_to(100, 200) # integer x/z targets the centre of that block column
+  bot.inventory.pick!("diamond_pickaxe")
+  bot.dig(20)
+ensure
+  bot.disconnect("Script finished") if bot.connected?
+end
 ```
 
-Requiring a version-specific entrypoint (`rosegold/26.1`, `rosegold/26.2`, `rosegold/26.3`, `rosegold/1.21.8`, `rosegold/1.21.9`, `rosegold/1.21.11`) compiles just that one version into the binary and connects to it directly. This produces a noticeably smaller binary and skips the status ping used to detect the server's version. Use the default `require "rosegold"` if you want one binary that works against multiple server versions.
+That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result.
 
-## API Quick Reference
+## Choose a protocol build
 
-Here's what you can do with a `Rosegold::Bot`. For the full API, see the [docs](https://rosegoldmc.github.io/rosegold.cr/).
-
-### Connection
+The default entrypoint compiles every supported protocol and detects the server with a status ping.
 
 ```crystal
-# Connect and wait for spawn
-bot = Rosegold::Bot.join_game("play.civmc.net")
-
-# Check connection state
-bot.connected?
-bot.health
-bot.food
-bot.dead?
-
-# Respawn after death
-bot.respawn
+require "rosegold"       # all supported versions, auto-detect
+require "rosegold/26.3"  # one protocol, smaller binary, no status ping
 ```
 
-### Movement
+Use a version-specific entrypoint only when the target server is known. Available entrypoints are `1.21.8`, `1.21.9`, `1.21.11`, `26.1`, `26.2`, and `26.3`.
+
+## What you can build
+
+| Task | Main API |
+| --- | --- |
+| Connect, inspect state, and chat | `Bot.new`, `join_game`, `location`, `health`, `food`, `chat` |
+| Walk, look, jump | `move_to`, `look_at`, `look`, `start_jump`, `sprint`, `sneak` |
+| Mine, use, place, eat | `dig`, `attack`, `place_block_against`, `use_hand`, `eat!` |
+| Manage the inventory | `inventory.pick!`, `inventory.count`, `inventory.throw_all_of`, `main_hand` |
+| Work with containers | `open_container_handle` |
+| Craft | `craft`, `craft_all`, `craft_pattern` |
+| React to the game | `on`, `once`, `wait_for`, `wait_ticks` |
+| Watch the bot in Minecraft | `SpectateServer` |
+
+The generated [API reference](https://rosegoldmc.github.io/rosegold.cr/) has every overload and type. The sections below cover the calls people usually need first.
+
+Coming from JsMacros? Read the [Rosegold idiom guide](https://github.com/RosegoldMC/rosegold.cr/blob/main/guide/idioms.md) for the
+public API equivalents, their semantic differences, and the server-rule boundary.
+
+## Movement and looking
 
 ```crystal
-# Move to coordinates (straight line, no pathfinding)
+# Exact decimal target, preserving the supplied y coordinate.
+bot.move_to(Rosegold::Vec3d.new(100.25, 64.0, 200.75))
+
+# Integer x/z target the middle of a block column at the current feet height.
 bot.move_to(100, 200)
+bot.move_to(Rosegold::Vec3i.new(100, 64, 200))
 
-# Move to a block center
-bot.move_to(Vec3i.new(100, 64, 200))
+# Compute a target from the current feet position.
+bot.move_to { |feet| feet.plus(5.0, 0.0, 0.0) }
 
-# Relative movement
-bot.move_to { |pos| pos + Vec3d.new(5, 0, 0) }
-
-# Stop moving
-bot.stop_moving
-
-# Sprint and sneak
+bot.look_at(Rosegold::Vec3d.new(100.5, 65.0, 200.5))
+bot.look = Rosegold::Look::NORTH.down(10)
 bot.sprint
-bot.sneak
+bot.start_jump
 ```
 
-`move_to` walks in a straight line and auto-steps up 0.6-block ledges. There is no built-in pathfinding — it will get stuck on walls. Raises `Physics::MovementStuck` if no progress is made.
+`move_to` is straight-line movement, not pathfinding. It steps up short ledges but cannot route around walls, and raises `Rosegold::Physics::MovementStuck` when it stops making progress. Use `stop_moving` to cancel a move from another event handler.
 
-### Look Direction
+`Rosegold::Vec3d` is for exact world positions. `Rosegold::Vec3i` is for block coordinates. The vector types live under `Rosegold`; `BlockFace` is a top-level enum, so placement looks like this:
 
 ```crystal
-# Look at a position
-bot.look_at(Vec3d.new(100, 65, 200))
-
-# Set yaw/pitch directly (yaw: 0=South, 90=West, 180=North, 270=East)
-bot.yaw = 180
-bot.pitch = -10
-
-# Look horizontally (useful while walking)
-bot.look_at_horizontal(target)
+bot.place_block_against(Rosegold::Vec3i.new(100, 63, 200), BlockFace::Top)
 ```
 
-### Combat and Mining
+## Eating
+
+`bot.eat` is best effort: it logs errors rather than raising. Use `bot.eat!`
+when missing food or an interaction error should stop the task. Both skip
+at 18+ food, or 15+ food with full health, and may wait up to about 165 seconds
+at 20 TPS. A timeout logs a warning even with `eat!`. Neither restores the
+previous item selection. `eat` returns `nil`; check `bot.food` for the result.
+
+## Inventory, containers, and crafting
 
 ```crystal
-# Attack whatever you're looking at
-bot.attack
+bot.inventory.pick!("diamond_sword")
+bot.inventory.pick! { |slot| slot.name.ends_with?("_axe") }
 
-# Hold attack for N ticks (for mining)
-bot.dig(40)
+puts bot.inventory.count("diamond")
+puts bot.main_hand.name
 
-# Start/stop continuous digging
-bot.start_digging
-bot.stop_digging
-
-# Place a block
-bot.place_block_against(block_pos, :top)
-
-# Auto-eat when hungry, logging failures without raising
-bot.eat
-
-# Or propagate errors, including missing food
-bot.eat!
-```
-
-Both methods skip eating at 18+ food, or at 15+ food with full health.
-Otherwise, they select an allowed food from inventory and block until food
-reaches 18, the held food runs out, or eating times out (about 165 seconds
-at 20 TPS). Timeouts log a warning rather than raise, even with `eat!`.
-`eat` returns `nil`, not a success flag; check `bot.food` if you need to know
-whether hunger was restored. Neither method supplies food or restores the
-previously selected item.
-
-### Inventory
-
-```crystal
-# Select an item by name
-bot.inventory.pick! "diamond_sword"
-
-# ...or by predicate — pick the most-damaged usable axe
-bot.inventory.pick! { |s| s.name.ends_with?("_axe") }
-
-# Count items
-bot.inventory.count("diamond")
-
-# Check main hand
-bot.main_hand.name        # => "diamond_sword"
-bot.main_hand.durability  # => 1561
-bot.main_hand.enchantments # => {"sharpness" => 5}
-
-# Drop items
-bot.drop_hand_full
-bot.inventory.throw_all_of("cobblestone")
-
-# Equipment
-bot.inventory.helmet
-bot.inventory.chestplate
-```
-
-`pick` is durability-aware: it cycles through matching tools from most-damaged
-to least-damaged and refuses to hand you an enchanted diamond/netherite tool
-that's about to break, so looping over `pick` will auto-rotate fresh tools in
-from your inventory. Tune `Rosegold::Slot.max_repair_cost` to control when
-heavily-repaired tools get retired. See the [`Inventory#pick` docs][pick-docs]
-for details.
-
-[pick-docs]: https://rosegoldmc.github.io/rosegold.cr/Rosegold/Inventory.html#pick(spec)-instance-method
-
-### Containers (Chests, Furnaces, etc.)
-
-```crystal
-# Look at a chest, then:
-bot.open_container_handle do |handle|
-  handle.withdraw("diamond", 10)
-  handle.deposit("cobblestone", 64)
-  handle.count_in_container("emerald")
+bot.open_container_handle do |container|
+  withdrawn = container.withdraw("diamond", 10)
+  deposited = container.deposit("cobblestone", 64)
+  puts "moved #{withdrawn} diamonds and #{deposited} cobblestone"
 end
 ```
 
-### Crafting
+Container blocks must already be in reach and under the bot's crosshair. The handle closes the window even if the block raises. `withdraw` and `deposit` shift-click whole stacks until the requested count is reached, so the returned menu-observed amount can be short or exceed the requested threshold. It is not a server acknowledgement.
 
 ```crystal
-# Craft by name (auto-selects recipe)
+# The count is recipe placements, not the number of result items.
 bot.craft("stick", 4)
+bot.craft_all("torch")
 
-# Craft as many as possible
-bot.craft_all("iron_ingot")
-
-# Manual grid pattern (needs crafting table position for 3x3)
-bot.craft_pattern([
-  ["iron_ingot", "iron_ingot", "iron_ingot"],
-  [nil, "stick", nil],
-  [nil, "stick", nil],
-], table: crafting_table_pos)
+table = Rosegold::Vec3i.new(100, 64, 200)
+bot.craft("diamond_pickaxe", table: table)
 ```
 
-### Chat and Events
+`craft` uses the synchronized recipe book and chooses a craftable recipe. A 3×3 recipe needs the crafting-table block position. Use `craft_pattern` only for recipes missing from that book, such as a custom server recipe.
+
+## Events and timing
+
+`Bot` forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Subscribe to `Bot`, not an internal client. Event handlers run on Rosegold's packet-processing path, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.
 
 ```crystal
-# Send a chat message or command
-bot.chat "Hello!"
-bot.chat "/msg someone Hi"
-
-# Listen for chat
-bot.on Rosegold::Clientbound::SystemChatMessage do |event|
-  puts event.message.to_s
-end
+eating = false
 
 bot.on Rosegold::Clientbound::PlayerChatMessage do |event|
-  puts "[#{event.network_name}] #{event.message}"
+  puts "#{event.network_name}: #{event.message}"
 end
 
-# Wait for a specific response
+bot.on Rosegold::Event::HealthChanged do |event|
+  next if event.food >= 12 || eating
+
+  eating = true
+  spawn do
+    begin
+      bot.eat!
+    rescue ex
+      Log.warn { "Eating failed: #{ex.message}" }
+    ensure
+      eating = false
+    end
+  end
+end
+
+bot.once Rosegold::Event::Died do
+  puts "The automatic respawn attempt has started."
+end
+
 bot.wait_for(Rosegold::Clientbound::SystemChatMessage, timeout: 5.seconds) do
   bot.chat "/time query daytime"
 end
 
-# Tick-based timing
-bot.wait_ticks 20  # wait 1 second (20 ticks)
+bot.wait_ticks 20
 ```
 
-### Event Types
+`wait_for` registers before running its block, so it cannot miss a quick response. It accepts the next event of that type, including unrelated chat; use a content predicate when a specific confirmation matters (see the idiom guide). `auto_respawn?` is enabled by default; set `bot.auto_respawn = false` if your own death handler should decide what happens next.
 
-Events you can subscribe to on `bot`:
+## Spectate from a normal Minecraft client
 
-| Event | Description |
-|-------|-------------|
-| `Clientbound::SystemChatMessage` | Server messages, command responses |
-| `Clientbound::PlayerChatMessage` | Player chat |
-| `Clientbound::DisguisedChatMessage` | /say, /me style messages |
-| `Event::Tick` | Every game tick (~50ms) |
-| `Event::ContainerOpened` | A container UI opened |
-| `Clientbound::SetContainerContent` | Container contents updated |
-| `Clientbound::SetSlot` | Single slot updated |
+`SpectateServer` bridges the same client used by your bot. Attach it before connecting, then stop it and disconnect the bot in `ensure`.
 
-For other packets (health updates, entity spawns, etc.), subscribe on `bot.client` directly.
+```crystal
+client = Rosegold::Client.new("play.example.net")
+bot = Rosegold::Bot.new(client)
+spectate = Rosegold::SpectateServer.new
+
+spectate.attach_client(client)
+spectate.start
+
+begin
+  bot.join_game
+  spectate.chat "Bot connected"
+  spectate.action_bar "Patrolling"
+  spectate.boss_bar "Distance", 42, 100
+  bot.move_to(100, 200)
+ensure
+  spectate.stop
+  bot.disconnect("Script finished") if bot.connected?
+end
+```
+
+Add `localhost:25566` as a multiplayer server in a normal Minecraft client to spectate. It listens on `127.0.0.1` by default and does not authenticate spectators. See [examples/spectate.cr](https://github.com/RosegoldMC/rosegold.cr/blob/main/examples/spectate.cr) for the full runnable version.
 
 ## Features
 
-- **Accurate Physics** — collision detection, block slipperiness, status effects
-- **Full Inventory** — containers, shift-click, equipment, crafting
-- **Combat and Mining** — damage calculation, cooldowns, block breaking
-- **Movement** — straight-line movement, sprint, sneak, jumping
-- **CivMC Legal** — no seeing/hearing rule violations
-- **Cross-Platform** — compiles to static binaries for Mac, Linux, Raspberry Pi, Windows
-- **World State** — chunks, entities, dimensions, player status
-- **Chat and Events** — send/receive chat, subscribe to game events
-- **[SpectateServer](https://rosegoldmc.github.io/rosegold.cr/Rosegold/SpectateServer.html)** — connect a real Minecraft client to watch your bot live
+- Accurate client-side physics, collision, status effects, and block slipperiness
+- Inventory windows, containers, equipment, recipe-book crafting, and manual grids
+- Combat, digging, placement, food use, chat, and typed game events
+- Multi-version protocol support and single-version builds
+- A spectator server that relays the bot's world to a normal client
 
 ## Contributing
 
-1. Fork it (<https://github.com/RosegoldMC/rosegold.cr/fork>)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+```sh
+shards install
+crystal tool format
+crystal spec
+bin/ameba
+```
+
+Please keep public APIs documented and add a focused spec for behaviour changes.

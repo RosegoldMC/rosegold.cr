@@ -14,8 +14,11 @@ class Rosegold::Interactions
   ATTACK_COOLDOWN_RANGE = 3..6
 
   @using_hand = nil
-  @queue_using_hand = nil
+  @using_hand_started = false
+  @queued_hand_tap = nil
   @using_hand_delay = 0_i32
+  # Releasing food cancels its repeat delay, but must not bypass the click cooldown.
+  @use_cooldown_ticks = 0_i32
   getter digging_block : ReachedBlock?
   @dig_hand_swing_countdown = 0_i8
   @attack_queued = false
@@ -33,18 +36,32 @@ class Rosegold::Interactions
 
   # Activates the "use" button.
   def start_using_hand(hand : Hand = :main_hand) # TODO: Auto select hand each tick
+    return if @using_hand == hand
+
+    stop_using_hand if @using_hand
     @using_hand = hand
-    @queue_using_hand = hand
+    @using_hand_started = false
+    @using_hand_delay = 0
+  end
+
+  # Queues one use-button press without holding it.
+  def tap_using_hand(hand : Hand = :main_hand)
+    stop_using_hand if @using_hand
+    @queued_hand_tap = hand
   end
 
   # Deactivates the "use" button.
   def stop_using_hand
-    return unless @using_hand
+    hand_was_started = @using_hand_started
 
     @using_hand = nil
-    # TODO: seems to be only for eating
-    # move to tick loop
+    @using_hand_started = false
+    @queued_hand_tap = nil
+    @using_hand_delay = 0
+    finish_using_hand if hand_was_started
+  end
 
+  private def finish_using_hand
     sequence = client.next_sequence
     operation = BlockOperation.new(Vec3i::ORIGIN, :use)
     client.pending_block_operations[sequence] = operation
@@ -55,7 +72,7 @@ class Rosegold::Interactions
   # Activates the "attack" button.
   def start_digging
     return if digging?
-    return if @using_hand || @queue_using_hand # Vanilla: suppress attacks while using item
+    return if @using_hand || @queued_hand_tap # Vanilla: suppress attacks while using item
 
     self.digging = true
     @attack_queued = true
@@ -169,11 +186,14 @@ class Rosegold::Interactions
 
   private def tick_using_hand
     @using_hand_delay -= 1 if @using_hand_delay > 0
-    return if @using_hand_delay > 0
+    @use_cooldown_ticks -= 1 if @use_cooldown_ticks > 0
+    return if @using_hand_delay > 0 || @use_cooldown_ticks > 0
 
-    if using_hand = @using_hand || @queue_using_hand
-      @using_hand_delay = using_hand_delay_for inventory.main_hand
-      @queue_using_hand = nil
+    if using_hand = @using_hand || @queued_hand_tap
+      held_slot = using_hand.main_hand? ? inventory.main_hand : inventory.off_hand
+      @using_hand_delay = using_hand_delay_for held_slot
+      @use_cooldown_ticks = 4
+      @queued_hand_tap = nil
       case reached = reach_block_or_entity
       when Entity
         Log.debug { "Interacting with entity #{reached.entity_id}" }
@@ -202,6 +222,12 @@ class Rosegold::Interactions
         client.pending_block_operations[sequence] = operation
 
         send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
+      end
+      if @using_hand
+        @using_hand_started = true
+      else
+        finish_using_hand
+        @using_hand_delay = 0
       end
     end
   end
