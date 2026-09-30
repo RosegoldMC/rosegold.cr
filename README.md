@@ -2,13 +2,13 @@
 
 Rosegold is a Crystal client library for Minecraft bots. It handles the wire protocol, local physics, inventory windows, recipes, and a live spectator bridge. You write the bot's behaviour.
 
-It was built for [CivMC](https://civwiki.org/wiki/CivMC) and follows its [botting rules](https://civwiki.org/wiki/Botting#Botting_Rules).
+It was built for [CivMC](https://civwiki.org/wiki/CivMC). Its public bot API is deliberately constrained by the [repository rules snapshot](server-rules/civmc.md): scripts use their own player state, not environmental scans. Bot authors still need to follow the server’s current rules.
 
 ```crystal
 bot.move_to(100, 200)
 bot.inventory.pick!("diamond_sword")
 bot.attack
-bot.eat!
+bot.eat
 ```
 
 ## Start here
@@ -42,8 +42,7 @@ The examples use `require "../src/rosegold"` so they run in this repository. In 
 ```crystal
 require "rosegold"
 
-client = Rosegold::Client.new("play.example.net", 25565)
-bot = Rosegold::Bot.new(client)
+bot = Rosegold::Bot.new("play.example.net")
 
 begin
   bot.join_game
@@ -110,6 +109,14 @@ bot.start_jump
 ```crystal
 bot.place_block_against(Rosegold::Vec3i.new(100, 63, 200), BlockFace::Top)
 ```
+
+## Eating
+
+`bot.eat` is best effort: it logs errors rather than raising. Use `bot.eat!`
+when missing food or an interaction error should stop the task. Both skip
+at 18+ food, or 15+ food with full health, and may wait up to about 165 seconds
+at 20 TPS. A timeout logs a warning even with `eat!`. Neither restores the
+previous item selection. `eat` returns `nil`; check `bot.food` for the result.
 
 ## Inventory, containers, and crafting
 
@@ -184,8 +191,7 @@ bot.wait_ticks 20
 `SpectateServer` bridges the same client used by your bot. Attach it before connecting, then stop it and disconnect the bot in `ensure`.
 
 ```crystal
-client = Rosegold::Client.new("play.example.net", 25565)
-bot = Rosegold::Bot.new(client)
+bot = Rosegold::Bot.new("play.example.net")
 spectate = Rosegold::SpectateServer.new
 
 spectate.attach_client(client)
