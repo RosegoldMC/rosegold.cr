@@ -6,7 +6,9 @@ class EatSpyBot < Rosegold::Bot
 
   def eat! : Nil
     @eat_calls += 1
-    raise error.not_nil! if error
+    if failure = error
+      raise failure
+    end
   end
 end
 
