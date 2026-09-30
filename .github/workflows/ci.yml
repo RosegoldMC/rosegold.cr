@@ -121,6 +121,12 @@ jobs:
         if: steps.crystal-cache.outputs.cache-hit != 'true'
         run: shards check || shards install --ignore-crystal-version
 
+      - name: Compile runnable examples
+        run: |
+          for example in examples/*.cr; do
+            crystal build --no-codegen "$example"
+          done
+
       - name: Per-version slim builds (require entrypoints)
         run: |
           for f in src/rosegold/[0-9]*.cr; do
