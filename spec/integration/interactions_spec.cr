@@ -219,6 +219,51 @@ Spectator.describe "Rosegold::Bot interactions" do
     end
   end
 
+  sample Indexable.cartesian_product({["floor", "wall", "ceiling"], ["north", "south", "east", "west"]}) do |mount|
+    it "toggles the lever on and off" do
+      face, facing = mount
+      client.join_game do |client|
+        bot = Rosegold::Bot.new(client)
+        admin.clear
+        admin.fill -2, -60, -2, 2, -58, 2, "air"
+
+        dx, dz = case facing
+                 when "north" then {0, -1}
+                 when "south" then {0, 1}
+                 when "east"  then {1, 0}
+                 else              {-1, 0}
+                 end
+        target = case face
+                 when "floor"
+                   admin.setblock 0, -60, 0, "stone"
+                   Rosegold::Vec3d.new(0.5, -58.8125, 0.5)
+                 when "ceiling"
+                   admin.setblock 0, -58, 0, "stone"
+                   Rosegold::Vec3d.new(0.5, -58.1875, 0.5)
+                 else
+                   admin.setblock -dx, -59, -dz, "stone"
+                   Rosegold::Vec3d.new(0.5 - dx * 0.3125, -58.5, 0.5 - dz * 0.3125)
+                 end
+        admin.setblock 0, -59, 0, "lever[face=#{face},facing=#{facing},powered=false]"
+        admin.tp 0.5 + dx * 2, -60, 0.5 + dz * 2
+        bot.wait_ticks 10
+
+        [true, false].each do |powered|
+          bot.use_hand target
+          bot.wait_ticks 10
+
+          state = client.dimension_for_test.block_state(0, -59, 0).as(UInt16)
+          expect(Rosegold::MCData.default.block_state_names[state]).to eq(
+            "lever[face=#{face}, facing=#{facing}, powered=#{powered}]"
+          )
+        end
+      ensure
+        admin.fill -2, -60, -2, 2, -58, 2, "air"
+        admin.wait_ticks 3
+      end
+    end
+  end
+
   it "picks up water from a cauldron with one bucket" do
     admin.setblock 0, -60, 0, "water_cauldron[level=3]"
     admin.wait_ticks 3
