@@ -511,6 +511,8 @@ class Rosegold::Interactions
         x + 0.0, y + 0.0, z + 0.0,
         x + 1.0, y + height, z + 1.0
       )]
+    when "lever"
+      [get_lever_hitbox(block_state, x, y, z)]
     when .includes?("button")
       [get_button_hitbox(block_state, x, y, z)]
     when "vine"
@@ -533,6 +535,28 @@ class Rosegold::Interactions
     # Faceless vine: thin bottom slab matching vanilla
     hitboxes << AABBd.new(x + 0.0, y + 0.0, z + 0.0, x + 1.0, y + 0.0625, z + 1.0) if hitboxes.empty?
     hitboxes
+  end
+
+  private def get_lever_hitbox(block_state : UInt16, x : Int32, y : Int32, z : Int32) : AABBd
+    state = MCData.default.block_state_names[block_state]
+    if state.includes?("face=wall")
+      if state.includes?("facing=north")
+        AABBd.new(0.3125, 0.25, 0.625, 0.6875, 0.75, 1.0)
+      elsif state.includes?("facing=south")
+        AABBd.new(0.3125, 0.25, 0.0, 0.6875, 0.75, 0.375)
+      elsif state.includes?("facing=east")
+        AABBd.new(0.0, 0.25, 0.3125, 0.375, 0.75, 0.6875)
+      else
+        AABBd.new(0.625, 0.25, 0.3125, 1.0, 0.75, 0.6875)
+      end
+    else
+      min_y = state.includes?("face=ceiling") ? 0.625 : 0.0
+      if state.includes?("facing=north") || state.includes?("facing=south")
+        AABBd.new(0.3125, min_y, 0.25, 0.6875, min_y + 0.375, 0.75)
+      else
+        AABBd.new(0.25, min_y, 0.3125, 0.75, min_y + 0.375, 0.6875)
+      end
+    end.offset(x, y, z)
   end
 
   private def get_button_hitbox(block_state : UInt16, x : Int32, y : Int32, z : Int32) : AABBd
