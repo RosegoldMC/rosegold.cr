@@ -58,8 +58,10 @@ class Rosegold::Interactions
     @using_hand_started = false
     @queued_hand_tap = nil
     @using_hand_delay = 0
-    return unless hand_was_started
+    finish_using_hand if hand_was_started
+  end
 
+  private def finish_using_hand
     sequence = client.next_sequence
     operation = BlockOperation.new(Vec3i::ORIGIN, :use)
     client.pending_block_operations[sequence] = operation
@@ -221,7 +223,12 @@ class Rosegold::Interactions
 
         send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
       end
-      @using_hand_started = true if @using_hand
+      if @using_hand
+        @using_hand_started = true
+      else
+        finish_using_hand
+        @using_hand_delay = 0
+      end
     end
   end
 

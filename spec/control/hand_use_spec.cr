@@ -76,6 +76,7 @@ Spectator.describe Rosegold::Interactions do
     expect(use_packets(client).size).to eq(2)
     expect(client.sent_packets.select(Rosegold::Serverbound::PlayerAction).map(&.status)).to eq([
       Rosegold::Serverbound::PlayerAction::Status::FinishUsingHand,
+      Rosegold::Serverbound::PlayerAction::Status::FinishUsingHand,
     ])
   end
 
@@ -149,5 +150,19 @@ Spectator.describe Rosegold::Interactions do
       Rosegold::Hand::MainHand,
       Rosegold::Hand::OffHand,
     ])
+  end
+
+  it "releases a tap after its use packet so food is not left held" do
+    client = interactions
+    client.inventory_menu[36] = slot("apple")
+    Rosegold::Bot.new(client).use_hand
+    client.interactions_for_test.tick
+
+    packets = client.sent_packets.reject(Rosegold::Serverbound::HeldItemChange)
+    expect(packets[0]).to be_a(Rosegold::Serverbound::UseItem)
+    expect(packets[1].as(Rosegold::Serverbound::PlayerAction).status).to eq(
+      Rosegold::Serverbound::PlayerAction::Status::FinishUsingHand)
+    40.times { client.interactions_for_test.tick }
+    expect(use_packets(client).size).to eq(1)
   end
 end

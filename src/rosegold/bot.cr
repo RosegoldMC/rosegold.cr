@@ -499,7 +499,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.interactions.start_using_hand hand
   end
 
-  # Queues one press of use in *hand*, optionally aiming at *target* first.
+  # Queues one press and release of use in *hand*, optionally aiming at *target* first.
   # Releases any held use action. Repeated calls before a tick coalesce into one press.
   # The target raytrace happens on the next tick eligible under the use cooldown.
   # This does not wait for a world-result confirmation.
