@@ -1,13 +1,23 @@
 require "../rosegold"
 require "./control/*"
 
+# The high-level API for a connected Minecraft player.
+#
+# `Bot` forwards game events from its `Client` and exposes movement, inventory,
+# interaction, and crafting operations. Most operations that wait for the
+# server yield cooperatively through ticks rather than blocking the process.
 class Rosegold::Bot < Rosegold::EventEmitter
   private getter client : Client
 
+  # The inventory facade for the player and currently open menu.
   getter inventory : Inventory
+
+  # Whether a death automatically starts a background `#respawn` attempt.
+  # Enabled by default.
   property? auto_respawn : Bool = true
   @swapping_hands = false
 
+  # Wraps an existing client. The client may be connected later with `#join_game`.
   def initialize(@client)
     @inventory = Inventory.new client
 
@@ -29,56 +39,228 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
+  # Forwards events of *event_class* emitted by the underlying client to this bot.
+  #
+  # This is primarily useful when extending `Bot`; normal consumers subscribe
+  # with `#on` to the events already forwarded during initialization.
   def subscribe(event_class : Class)
     client.on event_class do |packet|
       emit_event packet
     end
   end
 
-  # Does not connect immediately.
-  def new(address : String)
+  # Creates a bot for *address* without connecting it.
+  # Call `#join_game` before issuing world operations.
+  def self.new(address : String)
     new Client.new address
   end
 
-  # Connects to the server and waits for being ingame.
+  # Connects to *address* and waits until the player has joined the world.
+  # Raises if joining does not complete within *timeout_ticks* game ticks.
   def self.join_game(address : String, timeout_ticks = 1200)
     new Client.new(address).join_game(timeout_ticks)
   end
 
-  delegate host, port, connect, connected?, disconnect, join_game, spawned?, to: client
-  delegate uuid, username, eyes, health, food, saturation, gamemode, sneaking?, sprinting?, to: client.player
-  delegate effects, effect_by_name, speed_level, slowness_level,
-    jump_boost_level, has_slow_falling?, levitation_level,
-    to: client.player
-  delegate sneak, sprint, to: client.physics
-  delegate main_hand, to: inventory
-  delegate stop_using_hand, stop_digging, to: client.interactions
-  delegate x, y, z, to: location
-  delegate recipe_registry, to: client
+  # The configured Minecraft server hostname.
+  def host
+    client.host
+  end
 
+  # The configured Minecraft server port.
+  def port
+    client.port
+  end
+
+  # Opens and authenticates a connection. It returns once packet processing has
+  # started, before the player is necessarily spawned. Use `#join_game` when
+  # the next operation needs world state.
+  def connect
+    client.connect
+  end
+
+  # Whether the connection exists and has not been closed. Returns `nil` before connecting.
+  def connected?
+    client.connected?
+  end
+
+  # Closes the connection with the server-visible *reason*.
+  def disconnect(reason : String)
+    client.disconnect reason
+  end
+
+  # Connects and waits for a spawned player, returning the underlying `Client`.
+  # Raises if joining exceeds *timeout_ticks* or the connection closes.
+  def join_game(timeout_ticks = 1200)
+    client.join_game timeout_ticks
+  end
+
+  # Connects, yields the underlying `Client` after spawning, then disconnects when
+  # the block returns normally. If it raises, the exception propagates without
+  # disconnecting; use an explicit `ensure` for unconditional cleanup.
+  def join_game(timeout_ticks = 1200, &)
+    client.join_game(timeout_ticks) { |connected| yield connected }
+  end
+
+  # Whether the server has completed player spawn and world state is ready.
+  def spawned?
+    client.spawned?
+  end
+
+  # The authenticated player UUID, or `nil` before login completes.
+  def uuid
+    client.player.uuid
+  end
+
+  # The player name, or `nil` before login completes.
+  def username
+    client.player.username
+  end
+
+  # Current eye position in world coordinates.
+  def eyes
+    client.player.eyes
+  end
+
+  # Current health in half-hearts.
+  def health
+    client.player.health
+  end
+
+  # Current hunger points, from 0 through 20.
+  def food
+    client.player.food
+  end
+
+  # Current saturation level.
+  def saturation
+    client.player.saturation
+  end
+
+  # Current game mode ID as supplied by the server.
+  def gamemode
+    client.player.gamemode
+  end
+
+  # Whether the player is currently sneaking.
+  def sneaking?
+    client.player.sneaking?
+  end
+
+  # Whether the player is currently sprinting.
+  def sprinting?
+    client.player.sprinting?
+  end
+
+  # The active status effects reported by the server.
+  def effects
+    client.player.effects
+  end
+
+  # Finds an active status effect by its display name, ignoring case and spaces.
+  # Returns `nil` when the effect is absent.
+  def effect_by_name(name)
+    client.player.effect_by_name name
+  end
+
+  # Current Speed amplifier plus one, or zero when Speed is absent.
+  def speed_level
+    client.player.speed_level
+  end
+
+  # Current Slowness amplifier plus one, or zero when Slowness is absent.
+  def slowness_level
+    client.player.slowness_level
+  end
+
+  # Current Jump Boost amplifier plus one, or zero when Jump Boost is absent.
+  def jump_boost_level
+    client.player.jump_boost_level
+  end
+
+  # Whether Slow Falling is active.
+  def has_slow_falling?
+    client.player.has_slow_falling?
+  end
+
+  # Current Levitation amplifier plus one, or zero when Levitation is absent.
+  def levitation_level
+    client.player.levitation_level
+  end
+
+  # Enables or disables sneaking. The next client tick sends the changed input state.
+  def sneak(sneaking = true)
+    client.physics.sneak sneaking
+  end
+
+  # Enables or disables sprinting. The next client tick sends the changed input state.
+  def sprint(sprinting = true)
+    client.physics.sprint sprinting
+  end
+
+  # The stack currently held in the main hand.
+  def main_hand
+    inventory.main_hand
+  end
+
+  # Releases an active use action immediately.
+  def stop_using_hand
+    client.interactions.stop_using_hand
+  end
+
+  # Releases an active dig action immediately.
+  def stop_digging
+    client.interactions.stop_digging
+  end
+
+  # The feet-position x coordinate.
+  def x
+    location.x
+  end
+
+  # The feet-position y coordinate.
+  def y
+    location.y
+  end
+
+  # The feet-position z coordinate.
+  def z
+    location.z
+  end
+
+  # The synchronized recipe registry for the connected server.
+  def recipe_registry
+    client.recipe_registry
+  end
+
+  # The class of the currently open non-player menu, or `nil` for the player inventory.
   def container_type : Menu.class | Nil
     menu = client.container_menu
     menu == client.inventory_menu ? nil : menu.class
   end
 
+  # The player's current feet position in world coordinates.
   def location
     client.player.feet
   end
 
   @[Deprecated("Use `bot.location` instead of `bot.feet`")]
+  # Deprecated alias for `#location`.
   def feet
     client.player.feet
   end
 
+  # The server-supplied close reason, or `nil` while connected or before a connection exists.
   def disconnect_reason
     client.connection?.try &.close_reason
   end
 
+  # Whether the player's health is zero or below.
   def dead?
     client.player.health <= 0
   end
 
-  # Revive the player if dead. Does nothing if alive.
+  # Revives a dead player and waits for its spawn confirmation.
+  # Does nothing while alive. Raises if spawning exceeds *timeout_ticks*.
   def respawn(timeout_ticks = 1200)
     return unless dead?
     client.queue_packet Serverbound::ClientStatus.new :respawn
@@ -90,14 +272,23 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
-  # Send a message or slash command.
+  # Sends a chat message or slash command. Queues the packet without waiting for a response.
   def chat(message : String)
     client.chat_manager.send_chat(message)
   end
 
-  delegate wait_tick, wait_ticks, to: client
+  # Waits for one client game tick, with a one-second event timeout.
+  def wait_tick
+    client.wait_tick
+  end
 
-  # Direction the player is looking.
+  # Waits for *ticks* client game ticks. Each tick has the same one-second timeout
+  # as `#wait_tick`.
+  def wait_ticks(ticks : Int32)
+    client.wait_ticks ticks
+  end
+
+  # The player's current `Look` direction as a yaw/pitch pair in degrees.
   def look
     client.player.look
   end
@@ -124,22 +315,22 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.physics.look = block.call look
   end
 
-  # Sets the yaw of the look
-  # Waits for the new look to be sent to the server
+  # Sets the horizontal look angle in degrees and waits for it to reach the server.
   def yaw=(yaw : Float64)
     self.look = look.with_yaw yaw
   end
 
-  # Sets the pitch of the look
-  # Waits for the new look to be sent to the server
+  # Sets the vertical look angle in degrees and waits for it to reach the server.
   def pitch=(pitch : Float64)
     self.look = look.with_pitch pitch
   end
 
+  # The current horizontal look angle in degrees.
   def yaw
     look.yaw
   end
 
+  # The current vertical look angle in degrees.
   def pitch
     look.pitch
   end
@@ -155,6 +346,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
     look_at location.with_y eyes.y
   end
 
+  # Mutable movement-key state used by physics on subsequent ticks.
   def keys
     client.physics.keys
   end
@@ -196,21 +388,21 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.physics.move block.call(feet), stuck_timeout_ticks
   end
 
-  # Stop moving towards the target specified in #move_to
-  # Also releases all movement keys and dequeues any pending jump.
+  # Cancels `#move_to`, releases movement keys, and clears a pending jump.
   def stop_moving
     client.physics.stop_moving
     client.physics.jump_queued = false
   end
 
-  # Jumps the next time the player is on the ground.
+  # Queues a jump for the next tick on which the player is on the ground.
   def start_jump
     client.physics.jump_queued = true
     client.physics.reset_jump_delay
   end
 
-  # Jumps and waits until the bot is `height` above the ground.
-  # Fails if the bot lands before reaching this height.
+  # Queues a jump and waits until the feet are *height* blocks above their start.
+  # Raises if the player cannot rise or does not reach that height before
+  # *timeout_ticks*. It does not wait for landing.
   def jump_by_height(height = 1, timeout_ticks = 20)
     target_y = feet.y + height
     prev_y = feet.y
@@ -223,40 +415,45 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
-  # Waits until the bot's y level stops changing.
+  # Waits until the player's feet y coordinate stops changing.
+  # Raises if this does not happen within *timeout_ticks*.
   def land_on_ground(timeout_ticks = 120)
-    prev_y = feet.y
+    prev_y = location.y
     ticks_remaining = timeout_ticks
     loop do
       wait_tick
-      break if prev_y == feet.y
+      break if prev_y == location.y
       ticks_remaining -= 1
       raise "Still falling after #{timeout_ticks} ticks" if ticks_remaining <= 0
+      prev_y = location.y
     end
   end
 
+  # Disables sneaking.
   def unsneak
     sneak false
   end
 
+  # Disables sprinting.
   def unsprint
     sprint false
   end
 
-  # Use #interact_block to enter a bed.
+  # Leaves the current bed. Use `#use_hand` or `#place_block_against` to enter one.
   def leave_bed
     client.queue_packet Serverbound::EntityAction.new \
       client.player.entity_id, :leave_bed
   end
 
-  # The active (main hand) hotbar slot number (1-9).
+  # The selected main-hand hotbar slot, numbered 1 through 9.
   def hotbar_selection
     client.player.hotbar_selection + 1
   end
 
-  # Selects the active (main hand) hotbar slot number (1-9).
+  # Selects a main-hand hotbar slot, numbered 1 through 9.
+  # Raises `ArgumentError` for an index outside that range.
   def hotbar_selection=(index : UInt8)
-    # TODO check range
+    raise ArgumentError.new("Hotbar index must be between 1 and 9, got #{index}") unless (1_u8..9_u8).includes?(index)
     client.player.hotbar_selection = index - 1
   end
 
@@ -273,11 +470,13 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
+  # Drops one item from the main-hand stack. Queues packets without waiting.
   def drop_hand_single
     client.queue_packet Serverbound::PlayerAction.new :drop_hand_single
     client.queue_packet Serverbound::SwingArm.new if Client.protocol_version < 777_u32
   end
 
+  # Drops the full main-hand stack. Queues packets without waiting.
   def drop_hand_full
     client.queue_packet Serverbound::PlayerAction.new :drop_hand_full
     client.queue_packet Serverbound::SwingArm.new if Client.protocol_version < 777_u32
@@ -290,21 +489,22 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.queue_packet Serverbound::PickItemFromBlock.new pos, include_data
   end
 
-  # Activates the "use" button.
+  # Holds the use button for *hand*. Call `#stop_using_hand` to release it.
   def start_using_hand(hand : Hand = :main_hand)
     # can't delegate this because it wouldn't pick up the symbol as a Hand value
     client.interactions.start_using_hand hand
   end
 
-  # Looks in the direction of `target`, then
-  # activates and immediately deactivates the `use` button.
+  # Queues one press of use in *hand*, optionally aiming at *target* first.
+  # The target raytrace happens on the next tick eligible under the use cooldown.
+  # This does not wait for a world-result confirmation.
   def use_hand(target : Vec3d? | Look? = nil, hand : Hand = :main_hand)
     look_at target if target.is_a? Vec3d
-    look target if target.is_a? Look
-    start_using_hand hand
-    stop_using_hand
+    self.look = target if target.is_a? Look
+    client.interactions.tap_using_hand hand
   end
 
+  # Raised when a container does not send its initial content before the timeout.
   class ContainerOpenError < Exception; end
 
   # Opens a container (chest, barrel, etc.) and yields control for interaction.
@@ -317,7 +517,9 @@ class Rosegold::Bot < Rosegold::EventEmitter
   #   bot.inventory.withdraw_at_least(5, "emerald")
   # end
   # ```
-  # Caller must already be looking at the container block.
+  # Caller must already be looking at the container block. Raises
+  # `ContainerOpenError` if its content does not arrive within *timeout*.
+  # The container is closed even if the block raises.
   def open_container(timeout : Time::Span = 5.seconds, &)
     begin
       wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
@@ -346,7 +548,9 @@ class Rosegold::Bot < Rosegold::EventEmitter
   #   end
   # end
   # ```
-  # Caller must already be looking at the container block.
+  # Caller must already be looking at the container block. Raises
+  # `ContainerOpenError` if its content does not arrive within *timeout*.
+  # The handle is closed even if the block raises.
   def open_container_handle(timeout : Time::Span = 5.seconds, &)
     begin
       wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
@@ -362,6 +566,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
+  # Runs *command*, waits for it to open a container, then yields its handle.
+  #
+  # This is for servers that expose a container through a command rather than a
+  # block interaction. Raises `ContainerOpenError` on timeout and closes the
+  # handle even if the block raises.
   def open_container_handle(command : String, timeout : Time::Span = 5.seconds, &)
     begin
       wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { chat(command) }
@@ -377,20 +586,22 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
-  # Looks at that face of that block, then activates and immediately deactivates the `use` button.
+  # Aims at *face* of *block*, then presses and releases use with the main hand.
+  # It queues the placement attempt without waiting for confirmation.
   def place_block_against(block : Vec3i, face : BlockFace)
     use_hand block + face
   end
 
-  # Whether eat! would actually consume food right now. Callers that must look
-  # away from a block before the eat right-click (so food isn't used on it) gate
-  # the look on this so they don't aim away when no eating will happen.
+  # Whether `#eat!` will attempt to consume food at the current health and hunger.
   def should_eat?
     return false if food >= 15 && full_health?
     return false if food >= 18 # above healing threshold
     true
   end
 
+  # Eats one of the supported foods in inventory until food reaches 18 or food
+  # runs out. Does nothing when `#should_eat?` is false and raises if no supported
+  # food stack can be selected. It can wait for up to roughly 55 seconds.
   def eat!
     return unless should_eat?
 
@@ -455,14 +666,18 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
+  # Whether the player has at least 20 health points.
   def full_health?
     health >= 20
   end
 
+  # Returns every synchronized recipe whose result matches *item_name*.
   def recipes_for(item_name : String) : Array(RecipeDisplayEntry)
     recipe_registry.find_by_result(item_name)
   end
 
+  # Whether the player inventory has one complete set of ingredients for *recipe*.
+  # Returns `false` for recipe display types that cannot be crafted in a grid.
   def can_craft?(recipe : RecipeDisplayEntry) : Bool
     display = recipe.display
     ingredients = case display
@@ -506,6 +721,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
+  # Crafts *count* copies of a craftable recipe producing *item_name*.
+  #
+  # Waits for recipe placement and output slot updates. Supply *table* for a
+  # recipe that needs a crafting table. Raises `CraftingError` when no recipe,
+  # materials, or required table position is available.
   def craft(item_name : String, count : Int32 = 1, table : Vec3i? = nil)
     recipes = recipes_for(item_name)
     raise CraftingError.new("No recipe found for '#{item_name}'") if recipes.empty?
@@ -514,6 +734,9 @@ class Rosegold::Bot < Rosegold::EventEmitter
     craft(recipe, count, table)
   end
 
+  # Crafts *count* copies from a specific synchronized *recipe*.
+  # Waits for recipe placement and output slot updates. Raises `CraftingError`
+  # if materials or a required crafting table position are unavailable.
   def craft(recipe : RecipeDisplayEntry, count : Int32 = 1, table : Vec3i? = nil)
     raise CraftingError.new("Not enough materials to craft") unless can_craft?(recipe)
     with_crafting_menu(recipe, table) do |menu|
@@ -521,6 +744,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
+  # Crafts the maximum possible amount of a craftable recipe producing *item_name*.
+  # Raises `CraftingError` when no usable recipe, materials, or table position exists.
   def craft_all(item_name : String, table : Vec3i? = nil)
     recipes = recipes_for(item_name)
     raise CraftingError.new("No recipe found for '#{item_name}'") if recipes.empty?
@@ -529,6 +754,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
     craft_all(recipe, table)
   end
 
+  # Crafts the maximum possible amount from a specific synchronized *recipe*.
+  # Raises `CraftingError` if its requirements cannot be met.
   def craft_all(recipe : RecipeDisplayEntry, table : Vec3i? = nil)
     with_crafting_menu(recipe, table) do |menu|
       place_recipe_loop(menu, recipe, 1, use_max: true)
@@ -613,8 +840,12 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
-  # Craft by manually placing items into the grid. Use this for custom/modded
-  # recipes or when the recipe book doesn't have what you need.
+  # Crafts by manually placing the named items from *pattern* into the grid.
+  # Use this for custom recipes or recipes absent from the recipe book.
+  #
+  # The pattern is at most 3 by 3; `nil` leaves a grid cell empty. Provide
+  # *table* for patterns larger than 2 by 2. Raises `CraftingError` for an
+  # invalid pattern, missing item, or missing table position.
   #
   # ```
   # bot.craft_pattern([
@@ -687,25 +918,26 @@ class Rosegold::Bot < Rosegold::EventEmitter
     nil
   end
 
+  # Raised when a crafting operation has no usable recipe, ingredients, or table.
   class CraftingError < Exception; end
 
-  # Looks at that target, then activates the `attack` button.
+  # Optionally aims at *target*, then holds the attack button to begin digging.
+  # Call `#stop_digging` to release it.
   def start_digging(target : Vec3d? | Look? = nil)
     look_at target if target.is_a? Vec3d
-    look target if target.is_a? Look
+    self.look = target if target.is_a? Look
     client.interactions.start_digging
   end
 
-  # Looks in the direction of target, then
-  # activates the `attack` button, waits `ticks`, and deactivates it again.
+  # Optionally aims at *target*, holds attack for *ticks*, then releases it.
+  # Waits exactly *ticks* client ticks after starting the dig.
   def dig(ticks : Int32, target : Vec3d? | Look? = nil)
     start_digging target
     wait_ticks ticks
     stop_digging
   end
 
-  # Looks in the direction of target, then
-  # activates and immediately deactivates the `attack` button.
+  # Optionally aims at *target*, then presses and releases attack immediately.
   def attack(target : Vec3d? | Look? = nil)
     dig 0, target
   end
