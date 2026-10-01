@@ -1,11 +1,55 @@
 require "../rosegold"
 require "./control/*"
 
-# The high-level API for a connected Minecraft player.
+# Start here to write a Minecraft bot.
+#
+# `Bot` is Rosegold's main scripting API. This page is the starting point for
+# connecting, moving, interacting, managing inventory, and reacting to events.
+# Use the task links below to find an operation, then its method documentation
+# for arguments, overloads, and examples.
+#
+# ## Your first bot
+#
+# Create a project from the [example template](https://github.com/RosegoldMC/example),
+# then use `Bot` to connect and run your script:
+#
+# ```
+# require "rosegold"
+#
+# bot = Rosegold::Bot.new("localhost:25565")
+# begin
+#   bot.join_game
+#   bot.chat "Hello from Rosegold."
+#   bot.wait_ticks 20
+# ensure
+#   bot.disconnect("Script finished") if bot.connected?
+# end
+# ```
+#
+# ## Find an operation
+#
+# - **Connect and read player state:** `.new`, `#join_game`, `#disconnect`,
+#   `#location`, `#health`, `#food`, `#chat`.
+# - **Move and look:** `#move_to`, `#look_at`, `#look`, `#sprint`, `#sneak`.
+# - **Mine, place, use, and eat:** `#dig`, `#place_block_against`, `#use_hand`,
+#   `#start_using_hand`, `#stop_using_hand`, `#eat`, `#eat!`.
+# - **Manage items and containers:** `#inventory` returns an `Inventory`;
+#   `#open_container_handle` yields a `ContainerHandle`.
+# - **Craft:** `#craft`, `#craft_all`, `#craft_pattern`.
+# - **React and wait:** inherited `EventEmitter#on`, `EventEmitter#once`, and
+#   `EventEmitter#wait_for`, plus `#wait_ticks`.
+# - **Watch your bot in Minecraft:** `SpectateServer`.
+#
+# For longer scripts, see the [runnable examples](https://github.com/RosegoldMC/rosegold.cr/tree/main/examples)
+# and [idiom guide](https://github.com/RosegoldMC/rosegold.cr/blob/main/guide/idioms.md).
+#
+# ## Execution model
 #
 # `Bot` forwards game events from its `Client` and exposes movement, inventory,
 # interaction, and crafting operations. Most operations that wait for the
 # server yield cooperatively through ticks rather than blocking the process.
+# Event handlers run synchronously; use `spawn` inside a handler for work that
+# waits for ticks or more packets.
 class Rosegold::Bot < Rosegold::EventEmitter
   private getter client : Client
 

@@ -13,6 +13,10 @@ bot.eat
 
 ## Start here
 
+**Writing a bot? Start with the [Bot API](https://rosegoldmc.github.io/rosegold.cr/Rosegold/Bot.html).**
+It brings together connection, movement, interactions, inventory, crafting, and
+events, with task links and examples. Use it as your main scripting reference.
+
 Install [Crystal](https://crystal-lang.org/install/), then create a bot from the [example template](https://github.com/RosegoldMC/example). The template includes a dependency declaration and release builds for Linux and Windows.
 
 ```sh
