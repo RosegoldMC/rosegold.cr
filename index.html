@@ -2433,291 +2433,215 @@
     <use href="#octicon-link"/>
   </svg>
 </a>Rosegold</h1>
-<p>Minecraft botting client written in <a href="https://crystal-lang.org/">Crystal</a>, designed for <a href="https://civwiki.org/wiki/CivMC">CivMC</a> and compliant with its <a href="https://civwiki.org/wiki/Botting#Botting_Rules">botting rules</a>.</p>
-<pre><code class="language-crystal">bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.join_game(<span class="s">&quot;play.civmc.net&quot;</span>)
-
-bot.move_to(<span class="n">100</span>, <span class="n">200</span>)           <span class="c"># walk to coordinates</span>
-bot.inventory.pick! <span class="s">&quot;diamond_sword&quot;</span>  <span class="c"># equip a sword</span>
-bot.attack                       <span class="c"># swing</span>
-bot.eat                          <span class="c"># best-effort auto-eat when hungry</span>
-bot.craft(<span class="s">&quot;stick&quot;</span>, <span class="n">4</span>)           <span class="c"># craft items by name</span></code></pre>
-<p>Rosegold handles the protocol, physics, and inventory management so you can focus on what your bot does.</p>
-<h2><a id="getting-started" class="anchor" href="#getting-started">
+<p>Rosegold is a Crystal client library for Minecraft bots. It handles the wire protocol, local physics, inventory windows, recipes, and a live spectator bridge. You write the bot's behaviour.</p>
+<p>It was built for <a href="https://civwiki.org/wiki/CivMC">CivMC</a>. Its public bot API is deliberately constrained by the <a href="server-rules/civmc.md">repository rules snapshot</a>: scripts use their own player state, not environmental scans. Bot authors still need to follow the server’s current rules.</p>
+<pre><code class="language-crystal">bot.move_to(<span class="n">100</span>, <span class="n">200</span>)
+bot.inventory.pick!(<span class="s">&quot;diamond_pickaxe&quot;</span>)
+bot.dig(<span class="n">20</span>)
+bot.eat</code></pre>
+<h2><a id="start-here" class="anchor" href="#start-here">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Getting Started</h2>
-<h3><a id="1.-install-crystal" class="anchor" href="#1.-install-crystal">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>1. Install Crystal</h3>
-<p>Follow the <a href="https://crystal-lang.org/install/">official Crystal installation guide</a> for your platform.</p>
-<blockquote>
-<p>Windows users: Crystal works best under <a href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> (Windows Subsystem for Linux).</p>
-</blockquote>
-<p><code>shards</code> (Crystal's package manager, like npm) is included with Crystal.</p>
-<h3><a id="2.-use-the-template" class="anchor" href="#2.-use-the-template">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>2. Use the Template</h3>
-<p>The fastest way to start is with the <a href="https://github.com/RosegoldMC/example">example template</a>:</p>
-<ol>
-<li>Click <strong><a href="https://github.com/new?template_name=example&amp;template_owner=RosegoldMC">Use this template</a></strong> to create your own repo — it includes GitHub Actions that build Linux and Windows binaries automatically</li>
-<li>Clone your new repo and install dependencies:</li>
-</ol>
-<pre><code class="language-bash">git clone https://github.com/YOUR_USERNAME/my-bot.git
+</a>Start here</h2>
+<p>Install <a href="https://crystal-lang.org/install/">Crystal</a>, then create a bot from the <a href="https://github.com/RosegoldMC/example">example template</a>. The template includes a dependency declaration and release builds for Linux and Windows.</p>
+<pre><code class="language-sh">git clone https://github.com/YOUR_USERNAME/my-bot.git
 cd my-bot
-shards install</code></pre>
-<h3><a id="3.-build-and-run" class="anchor" href="#3.-build-and-run">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>3. Build and Run</h3>
-<pre><code class="language-bash">shards build
+shards install
+shards build
 ./bin/attack</code></pre>
-<p>On first run, you'll see a message like:</p>
-<pre><code class="language-crystal"><span class="t">To</span> sign <span class="k">in</span>, use a web browser to open https<span class="n">://</span>microsoft.com<span class="o">/</span>devicelogin and enter the code <span class="t">XXXXXXXX</span></code></pre>
-<p>Open that URL, enter the code, and sign in with the Microsoft account that owns Minecraft Java Edition. After that, your token is cached and future runs connect automatically.</p>
-<h3><a id="4.-watch-your-bot-spectate-server" class="anchor" href="#4.-watch-your-bot-spectate-server">
+<p>The first connection asks you to sign in through Microsoft's device-login page. The token is cached after that; keep the authentication cache private and out of version control.</p>
+<p>For this checkout, patrol and events default to <code>localhost:25565</code>. Set <code>ROSEGOLD_SERVER</code> to a <code>host:port</code> pair for another server:</p>
+<pre><code class="language-sh">ROSEGOLD_SERVER=localhost:25565 crystal run examples/patrol.cr</code></pre>
+<p><code>examples/patrol.cr</code> walks a small square from the bot's current position. <code>examples/events.cr</code> prints chat for one minute and starts guarded eating work after low-food events. <code>examples/spectate.cr</code> opens the spectator bridge and walks the same kind of short route.</p>
+<p><code>examples/container.cr</code> opens a configured, reachable container and counts its inventory without transferring items. Pass its known coordinates as <code>-- X Y Z</code>; it does not discover containers.</p>
+<p>The examples use <code>require &quot;../src/rosegold&quot;</code> so they run in this repository. In your own shard, replace it with <code>require &quot;rosegold&quot;</code>.</p>
+<h2><a id="a-small-bot-with-a-clean-lifecycle" class="anchor" href="#a-small-bot-with-a-clean-lifecycle">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>4. Watch Your Bot (SpectateServer)</h3>
-<p>All the examples start a <a href="https://rosegoldmc.github.io/rosegold.cr/Rosegold/SpectateServer.html">SpectateServer</a> on <code>localhost:25566</code>. Open Minecraft, add a server with that address, and connect to see through your bot's eyes in real time — its position, inventory, health, and everything happening around it. No auth required.</p>
-<p>Scripts can also push UI straight to everyone spectating: chat lines, an action bar, and a boss bar for progress.</p>
-<pre><code class="language-crystal">spectate.chat <span class="s">&quot;hello&quot;</span>
-spectate.action_bar <span class="s">&quot;mining 42%&quot;</span>
-spectate.boss_bar <span class="s">&quot;Progress&quot;</span>, <span class="n">42</span>, <span class="n">100</span></code></pre>
-<h3><a id="5.-choosing-minecraft-versions" class="anchor" href="#5.-choosing-minecraft-versions">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>5. Choosing Minecraft Versions</h3>
-<p>By default Rosegold supports every Minecraft version it knows about and auto-detects which one the server speaks. Pick a mode by what you <code>require</code>:</p>
-<pre><code class="language-crystal"><span class="c"># All versions + auto-detect (the simple default)</span>
-<span class="k">require</span> <span class="s">&quot;rosegold&quot;</span>
+</a>A small bot, with a clean lifecycle</h2>
+<p><code>Bot.new</code> builds the high-level API without connecting. <code>join_game</code> connects and waits until the player is spawned. Disconnect in <code>ensure</code>, so an exception does not leave the bot connected.</p>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;rosegold&quot;</span>
 
-<span class="c"># Smaller binary, single version only — no auto-detect round-trip</span>
-<span class="k">require</span> <span class="s">&quot;rosegold/26.1&quot;</span></code></pre>
-<p>Requiring a version-specific entrypoint (<code>rosegold/26.1</code>, <code>rosegold/26.2</code>, <code>rosegold/26.3</code>, <code>rosegold/1.21.8</code>, <code>rosegold/1.21.9</code>, <code>rosegold/1.21.11</code>) compiles just that one version into the binary and connects to it directly. This produces a noticeably smaller binary and skips the status ping used to detect the server's version. Use the default <code>require &quot;rosegold&quot;</code> if you want one binary that works against multiple server versions.</p>
-<h2><a id="api-quick-reference" class="anchor" href="#api-quick-reference">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>API Quick Reference</h2>
-<p>Here's what you can do with a <code><a href="Rosegold/Bot.html">Rosegold::Bot</a></code>. For the full API, see the <a href="https://rosegoldmc.github.io/rosegold.cr/">docs</a>.</p>
-<h3><a id="connection" class="anchor" href="#connection">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Connection</h3>
-<pre><code class="language-crystal"><span class="c"># Connect and wait for spawn</span>
-bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.join_game(<span class="s">&quot;play.civmc.net&quot;</span>)
+bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.new(<span class="s">&quot;play.example.net&quot;</span>)
 
-<span class="c"># Check connection state</span>
-bot.connected?
-bot.health
-bot.food
-bot.dead?
-
-<span class="c"># Respawn after death</span>
-bot.respawn</code></pre>
-<h3><a id="movement" class="anchor" href="#movement">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Movement</h3>
-<pre><code class="language-crystal"><span class="c"># Move to coordinates (straight line, no pathfinding)</span>
-bot.move_to(<span class="n">100</span>, <span class="n">200</span>)
-
-<span class="c"># Move to a block center</span>
-bot.move_to(<span class="t">Vec3i</span>.new(<span class="n">100</span>, <span class="n">64</span>, <span class="n">200</span>))
-
-<span class="c"># Relative movement</span>
-bot.move_to { <span class="o">|</span>pos<span class="o">|</span> pos <span class="o">+</span> <span class="t">Vec3d</span>.new(<span class="n">5</span>, <span class="n">0</span>, <span class="n">0</span>) }
-
-<span class="c"># Stop moving</span>
-bot.stop_moving
-
-<span class="c"># Sprint and sneak</span>
-bot.sprint
-bot.sneak</code></pre>
-<p><code>move_to</code> walks in a straight line and auto-steps up 0.6-block ledges. There is no built-in pathfinding — it will get stuck on walls. Raises <code>Physics::MovementStuck</code> if no progress is made.</p>
-<h3><a id="look-direction" class="anchor" href="#look-direction">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Look Direction</h3>
-<pre><code class="language-crystal"><span class="c"># Look at a position</span>
-bot.look_at(<span class="t">Vec3d</span>.new(<span class="n">100</span>, <span class="n">65</span>, <span class="n">200</span>))
-
-<span class="c"># Set yaw/pitch directly (yaw: 0=South, 90=West, 180=North, 270=East)</span>
-bot.yaw <span class="o">=</span> <span class="n">180</span>
-bot.pitch <span class="o">=</span> <span class="n">-10</span>
-
-<span class="c"># Look horizontally (useful while walking)</span>
-bot.look_at_horizontal(target)</code></pre>
-<h3><a id="combat-and-mining" class="anchor" href="#combat-and-mining">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Combat and Mining</h3>
-<pre><code class="language-crystal"><span class="c"># Attack whatever you&#39;re looking at</span>
-bot.attack
-
-<span class="c"># Hold attack for N ticks (for mining)</span>
-bot.dig(<span class="n">40</span>)
-
-<span class="c"># Start/stop continuous digging</span>
-bot.start_digging
-bot.stop_digging
-
-<span class="c"># Place a block</span>
-bot.place_block_against(block_pos, <span class="n">:top</span>)
-
-<span class="c"># Auto-eat when hungry, logging failures without raising</span>
-bot.eat
-
-<span class="c"># Or propagate errors, including missing food</span>
-bot.eat!</code></pre>
-<p>Both methods skip eating at 18+ food, or at 15+ food with full health.
-Otherwise, they select an allowed food from inventory and block until food
-reaches 18, the held food runs out, or eating times out (about 165 seconds
-at 20 TPS). Timeouts log a warning rather than raise, even with <code>eat!</code>.
-<code>eat</code> returns <code>nil</code>, not a success flag; check <code>bot.food</code> if you need to know
-whether hunger was restored. Neither method supplies food or restores the
-previously selected item.</p>
-<h3><a id="inventory" class="anchor" href="#inventory">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Inventory</h3>
-<pre><code class="language-crystal"><span class="c"># Select an item by name</span>
-bot.inventory.pick! <span class="s">&quot;diamond_sword&quot;</span>
-
-<span class="c"># ...or by predicate — pick the most-damaged usable axe</span>
-bot.inventory.pick! { <span class="o">|</span>s<span class="o">|</span> s.name.ends_with?(<span class="s">&quot;_axe&quot;</span>) }
-
-<span class="c"># Count items</span>
-bot.inventory.count(<span class="s">&quot;diamond&quot;</span>)
-
-<span class="c"># Check main hand</span>
-bot.main_hand.name        <span class="c"># =&gt; &quot;diamond_sword&quot;</span>
-bot.main_hand.durability  <span class="c"># =&gt; 1561</span>
-bot.main_hand.enchantments <span class="c"># =&gt; {&quot;sharpness&quot; =&gt; 5}</span>
-
-<span class="c"># Drop items</span>
-bot.drop_hand_full
-bot.inventory.throw_all_of(<span class="s">&quot;cobblestone&quot;</span>)
-
-<span class="c"># Equipment</span>
-bot.inventory.helmet
-bot.inventory.chestplate</code></pre>
-<p><code>pick</code> is durability-aware: it cycles through matching tools from most-damaged
-to least-damaged and refuses to hand you an enchanted diamond/netherite tool
-that's about to break, so looping over <code>pick</code> will auto-rotate fresh tools in
-from your inventory. Tune <code>Rosegold::Slot.max_repair_cost</code> to control when
-heavily-repaired tools get retired. See the <a href="https://rosegoldmc.github.io/rosegold.cr/Rosegold/Inventory.html#pick(spec)-instance-method"><code>Inventory#pick</code> docs</a>
-for details.</p>
-<h3><a id="containers-chests-furnaces-etc." class="anchor" href="#containers-chests-furnaces-etc.">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Containers (Chests, Furnaces, etc.)</h3>
-<pre><code class="language-crystal"><span class="c"># Look at a chest, then:</span>
-bot.open_container_handle <span class="k">do</span> <span class="o">|</span>handle<span class="o">|</span>
-  handle.withdraw(<span class="s">&quot;diamond&quot;</span>, <span class="n">10</span>)
-  handle.deposit(<span class="s">&quot;cobblestone&quot;</span>, <span class="n">64</span>)
-  handle.count_in_container(<span class="s">&quot;emerald&quot;</span>)
+<span class="k">begin</span>
+  bot.join_game
+  bot.chat <span class="s">&quot;Online.&quot;</span>
+  bot.move_to(<span class="n">100</span>, <span class="n">200</span>) <span class="c"># integer x/z targets the centre of that block column</span>
+  bot.inventory.pick!(<span class="s">&quot;diamond_pickaxe&quot;</span>)
+  bot.dig(<span class="n">20</span>)
+<span class="k">ensure</span>
+  bot.disconnect(<span class="s">&quot;Script finished&quot;</span>) <span class="k">if</span> bot.connected?
 <span class="k">end</span></code></pre>
-<h3><a id="crafting" class="anchor" href="#crafting">
+<p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result.</p>
+<h2><a id="choose-a-protocol-build" class="anchor" href="#choose-a-protocol-build">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Crafting</h3>
-<pre><code class="language-crystal"><span class="c"># Craft by name (auto-selects recipe)</span>
+</a>Choose a protocol build</h2>
+<p>The default entrypoint compiles every supported protocol and detects the server with a status ping.</p>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;rosegold&quot;</span>       <span class="c"># all supported versions, auto-detect</span>
+<span class="k">require</span> <span class="s">&quot;rosegold/26.3&quot;</span>  <span class="c"># one protocol, smaller binary, no status ping</span></code></pre>
+<p>Use a version-specific entrypoint only when the target server is known. Available entrypoints are <code>1.21.8</code>, <code>1.21.9</code>, <code>1.21.11</code>, <code>26.1</code>, <code>26.2</code>, and <code>26.3</code>.</p>
+<h2><a id="what-you-can-build" class="anchor" href="#what-you-can-build">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>What you can build</h2>
+<p>| Task | Main API |
+| --- | --- |
+| Connect, inspect state, and chat | <code>Bot.new</code>, <code>join_game</code>, <code>location</code>, <code>health</code>, <code>food</code>, <code>chat</code> |
+| Walk, look, jump | <code>move_to</code>, <code>look_at</code>, <code>look</code>, <code>start_jump</code>, <code>sprint</code>, <code>sneak</code> |
+| Mine, use, place, eat | <code>dig</code>, <code>attack</code>, <code>place_block_against</code>, <code>use_hand</code>, <code>eat!</code> |
+| Manage the inventory | <code>inventory.pick!</code>, <code>inventory.count</code>, <code>inventory.throw_all_of</code>, <code>main_hand</code> |
+| Work with containers | <code>open_container_handle</code> |
+| Craft | <code>craft</code>, <code>craft_all</code>, <code>craft_pattern</code> |
+| React to the game | <code>on</code>, <code>once</code>, <code>wait_for</code>, <code>wait_ticks</code> |
+| Watch the bot in Minecraft | <code>SpectateServer</code> |</p>
+<p>The generated <a href="https://rosegoldmc.github.io/rosegold.cr/">API reference</a> has every overload and type. The sections below cover the calls people usually need first.</p>
+<p>Coming from JsMacros? Read the <a href="https://github.com/RosegoldMC/rosegold.cr/blob/main/guide/idioms.md">Rosegold idiom guide</a> for the
+public API equivalents, their semantic differences, and the server-rule boundary.</p>
+<h2><a id="movement-and-looking" class="anchor" href="#movement-and-looking">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Movement and looking</h2>
+<pre><code class="language-crystal"><span class="c"># Exact decimal target, preserving the supplied y coordinate.</span>
+bot.move_to(<span class="t">Rosegold</span><span class="t">::</span><span class="t">Vec3d</span>.new(<span class="n">100.25</span>, <span class="n">64.0</span>, <span class="n">200.75</span>))
+
+<span class="c"># Integer x/z target the middle of a block column at the current feet height.</span>
+bot.move_to(<span class="n">100</span>, <span class="n">200</span>)
+bot.move_to(<span class="t">Rosegold</span><span class="t">::</span><span class="t">Vec3i</span>.new(<span class="n">100</span>, <span class="n">64</span>, <span class="n">200</span>))
+
+<span class="c"># Compute a target from the current feet position.</span>
+bot.move_to { <span class="o">|</span>feet<span class="o">|</span> feet.plus(<span class="n">5.0</span>, <span class="n">0.0</span>, <span class="n">0.0</span>) }
+
+bot.look_at(<span class="t">Rosegold</span><span class="t">::</span><span class="t">Vec3d</span>.new(<span class="n">100.5</span>, <span class="n">65.0</span>, <span class="n">200.5</span>))
+bot.look <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Look</span><span class="t">::</span><span class="t">NORTH</span>.down(<span class="n">10</span>)
+bot.sprint
+bot.start_jump</code></pre>
+<p><code>move_to</code> is straight-line movement, not pathfinding. It steps up short ledges but cannot route around walls, and raises <code><a href="Rosegold/Physics/MovementStuck.html">Rosegold::Physics::MovementStuck</a></code> when it stops making progress. Use <code>stop_moving</code> to cancel a move from another event handler.</p>
+<p><code><a href="Rosegold/Vec3d.html">Rosegold::Vec3d</a></code> is for exact world positions. <code><a href="Rosegold/Vec3i.html">Rosegold::Vec3i</a></code> is for block coordinates. The vector types live under <code><a href="Rosegold.html">Rosegold</a></code>; <code><a href="BlockFace.html">BlockFace</a></code> is a top-level enum, so placement looks like this:</p>
+<pre><code class="language-crystal">bot.place_block_against(<span class="t">Rosegold</span><span class="t">::</span><span class="t">Vec3i</span>.new(<span class="n">100</span>, <span class="n">63</span>, <span class="n">200</span>), <span class="t">BlockFace</span><span class="t">::</span><span class="t">Top</span>)</code></pre>
+<h2><a id="eating" class="anchor" href="#eating">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Eating</h2>
+<p><code>bot.eat</code> is best effort: it logs errors rather than raising. Use <code>bot.eat!</code>
+when missing food or an interaction error should stop the task. Both skip
+at 18+ food, or 15+ food with full health, and may wait up to about 165 seconds
+at 20 TPS. A timeout logs a warning even with <code>eat!</code>. Neither restores the
+previous item selection. <code>eat</code> returns <code>nil</code>; check <code>bot.food</code> for the result.</p>
+<h2><a id="inventory-containers-and-crafting" class="anchor" href="#inventory-containers-and-crafting">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Inventory, containers, and crafting</h2>
+<pre><code class="language-crystal">bot.inventory.pick!(<span class="s">&quot;diamond_sword&quot;</span>)
+bot.inventory.pick! { <span class="o">|</span>slot<span class="o">|</span> slot.name.ends_with?(<span class="s">&quot;_axe&quot;</span>) }
+
+puts bot.inventory.count(<span class="s">&quot;diamond&quot;</span>)
+puts bot.main_hand.name
+
+bot.open_container_handle <span class="k">do</span> <span class="o">|</span>container<span class="o">|</span>
+  withdrawn <span class="o">=</span> container.withdraw(<span class="s">&quot;diamond&quot;</span>, <span class="n">10</span>)
+  deposited <span class="o">=</span> container.deposit(<span class="s">&quot;cobblestone&quot;</span>, <span class="n">64</span>)
+  puts <span class="s">&quot;moved </span><span class="i">#{</span>withdrawn<span class="i">}</span><span class="s"> diamonds and </span><span class="i">#{</span>deposited<span class="i">}</span><span class="s"> cobblestone&quot;</span>
+<span class="k">end</span></code></pre>
+<p>Container blocks must already be in reach and under the bot's crosshair. The handle closes the window even if the block raises. <code>withdraw</code> and <code>deposit</code> shift-click whole stacks until the requested count is reached, so the returned menu-observed amount can be short or exceed the requested threshold. It is not a server acknowledgement.</p>
+<pre><code class="language-crystal"><span class="c"># The count is recipe placements, not the number of result items.</span>
 bot.craft(<span class="s">&quot;stick&quot;</span>, <span class="n">4</span>)
+bot.craft_all(<span class="s">&quot;torch&quot;</span>)
 
-<span class="c"># Craft as many as possible</span>
-bot.craft_all(<span class="s">&quot;iron_ingot&quot;</span>)
-
-<span class="c"># Manual grid pattern (needs crafting table position for 3x3)</span>
-bot.craft_pattern([
-  [<span class="s">&quot;iron_ingot&quot;</span>, <span class="s">&quot;iron_ingot&quot;</span>, <span class="s">&quot;iron_ingot&quot;</span>],
-  [<span class="n">nil</span>, <span class="s">&quot;stick&quot;</span>, <span class="n">nil</span>],
-  [<span class="n">nil</span>, <span class="s">&quot;stick&quot;</span>, <span class="n">nil</span>],
-], table: crafting_table_pos)</code></pre>
-<h3><a id="chat-and-events" class="anchor" href="#chat-and-events">
+table <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Vec3i</span>.new(<span class="n">100</span>, <span class="n">64</span>, <span class="n">200</span>)
+bot.craft(<span class="s">&quot;diamond_pickaxe&quot;</span>, table: table)</code></pre>
+<p><code>craft</code> uses the synchronized recipe book and chooses a craftable recipe. A 3×3 recipe needs the crafting-table block position. Use <code>craft_pattern</code> only for recipes missing from that book, such as a custom server recipe.</p>
+<h2><a id="events-and-timing" class="anchor" href="#events-and-timing">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Chat and Events</h3>
-<pre><code class="language-crystal"><span class="c"># Send a chat message or command</span>
-bot.chat <span class="s">&quot;Hello!&quot;</span>
-bot.chat <span class="s">&quot;/msg someone Hi&quot;</span>
-
-<span class="c"># Listen for chat</span>
-bot.on <span class="t">Rosegold</span><span class="t">::</span><span class="t">Clientbound</span><span class="t">::</span><span class="t">SystemChatMessage</span> <span class="k">do</span> <span class="o">|</span>event<span class="o">|</span>
-  puts event.message.to_s
-<span class="k">end</span>
+</a>Events and timing</h2>
+<p><code>Bot</code> forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Subscribe to <code>Bot</code>, not an internal client. Event handlers run on Rosegold's packet-processing path, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.</p>
+<pre><code class="language-crystal">eating <span class="o">=</span> <span class="n">false</span>
 
 bot.on <span class="t">Rosegold</span><span class="t">::</span><span class="t">Clientbound</span><span class="t">::</span><span class="t">PlayerChatMessage</span> <span class="k">do</span> <span class="o">|</span>event<span class="o">|</span>
-  puts <span class="s">&quot;[</span><span class="i">#{</span>event.network_name<span class="i">}</span><span class="s">] </span><span class="i">#{</span>event.message<span class="i">}</span><span class="s">&quot;</span>
+  puts <span class="s">&quot;</span><span class="i">#{</span>event.network_name<span class="i">}</span><span class="s">: </span><span class="i">#{</span>event.message<span class="i">}</span><span class="s">&quot;</span>
 <span class="k">end</span>
 
-<span class="c"># Wait for a specific response</span>
+bot.on <span class="t">Rosegold</span><span class="t">::</span><span class="t">Event</span><span class="t">::</span><span class="t">HealthChanged</span> <span class="k">do</span> <span class="o">|</span>event<span class="o">|</span>
+  <span class="k">next</span> <span class="k">if</span> event.food <span class="o">&gt;=</span> <span class="n">12</span> <span class="o">||</span> eating
+
+  eating <span class="o">=</span> <span class="n">true</span>
+  spawn <span class="k">do</span>
+    <span class="k">begin</span>
+      bot.eat!
+    <span class="k">rescue</span> ex
+      <span class="t">Log</span>.warn { <span class="s">&quot;Eating failed: </span><span class="i">#{</span>ex.message<span class="i">}</span><span class="s">&quot;</span> }
+    <span class="k">ensure</span>
+      eating <span class="o">=</span> <span class="n">false</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+bot.once <span class="t">Rosegold</span><span class="t">::</span><span class="t">Event</span><span class="t">::</span><span class="t">Died</span> <span class="k">do</span>
+  puts <span class="s">&quot;The automatic respawn attempt has started.&quot;</span>
+<span class="k">end</span>
+
 bot.wait_for(<span class="t">Rosegold</span><span class="t">::</span><span class="t">Clientbound</span><span class="t">::</span><span class="t">SystemChatMessage</span>, timeout: <span class="n">5</span>.seconds) <span class="k">do</span>
   bot.chat <span class="s">&quot;/time query daytime&quot;</span>
 <span class="k">end</span>
 
-<span class="c"># Tick-based timing</span>
-bot.wait_ticks <span class="n">20</span>  <span class="c"># wait 1 second (20 ticks)</span></code></pre>
-<h3><a id="event-types" class="anchor" href="#event-types">
+bot.wait_ticks <span class="n">20</span></code></pre>
+<p><code>wait_for</code> registers before running its block, so it cannot miss a quick response. It accepts the next event of that type, including unrelated chat; use a content predicate when a specific confirmation matters (see the idiom guide). <code>auto_respawn?</code> is enabled by default; set <code>bot.auto_respawn = false</code> if your own death handler should decide what happens next.</p>
+<h2><a id="spectate-from-a-normal-minecraft-client" class="anchor" href="#spectate-from-a-normal-minecraft-client">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Event Types</h3>
-<p>Events you can subscribe to on <code>bot</code>:</p>
-<p>| Event | Description |
-|-------|-------------|
-| <code>Clientbound::SystemChatMessage</code> | Server messages, command responses |
-| <code>Clientbound::PlayerChatMessage</code> | Player chat |
-| <code>Clientbound::DisguisedChatMessage</code> | /say, /me style messages |
-| <code>Event::Tick</code> | Every game tick (~50ms) |
-| <code>Event::ContainerOpened</code> | A container UI opened |
-| <code>Clientbound::SetContainerContent</code> | Container contents updated |
-| <code>Clientbound::SetSlot</code> | Single slot updated |</p>
-<p>For other packets (health updates, entity spawns, etc.), subscribe on <code>bot.client</code> directly.</p>
+</a>Spectate from a normal Minecraft client</h2>
+<p><code>SpectateServer</code> bridges the same client used by your bot. Attach it before connecting, then stop it and disconnect the bot in <code>ensure</code>.</p>
+<pre><code class="language-crystal">client <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Client</span>.new(<span class="s">&quot;play.example.net&quot;</span>)
+bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.new(client)
+spectate <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">SpectateServer</span>.new
+
+spectate.attach_client(client)
+spectate.start
+
+<span class="k">begin</span>
+  bot.join_game
+  spectate.chat <span class="s">&quot;Bot connected&quot;</span>
+  spectate.action_bar <span class="s">&quot;Patrolling&quot;</span>
+  spectate.boss_bar <span class="s">&quot;Distance&quot;</span>, <span class="n">42</span>, <span class="n">100</span>
+  bot.move_to(<span class="n">100</span>, <span class="n">200</span>)
+<span class="k">ensure</span>
+  spectate.stop
+  bot.disconnect(<span class="s">&quot;Script finished&quot;</span>) <span class="k">if</span> bot.connected?
+<span class="k">end</span></code></pre>
+<p>Add <code>localhost:25566</code> as a multiplayer server in a normal Minecraft client to spectate. It listens on <code>127.0.0.1</code> by default and does not authenticate spectators. See <a href="https://github.com/RosegoldMC/rosegold.cr/blob/main/examples/spectate.cr">examples/spectate.cr</a> for the full runnable version.</p>
 <h2><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Features</h2>
 <ul>
-<li><strong>Accurate Physics</strong> — collision detection, block slipperiness, status effects</li>
-<li><strong>Full Inventory</strong> — containers, shift-click, equipment, crafting</li>
-<li><strong>Combat and Mining</strong> — damage calculation, cooldowns, block breaking</li>
-<li><strong>Movement</strong> — straight-line movement, sprint, sneak, jumping</li>
-<li><strong>CivMC Legal</strong> — no seeing/hearing rule violations</li>
-<li><strong>Cross-Platform</strong> — compiles to static binaries for Mac, Linux, Raspberry Pi, Windows</li>
-<li><strong>World State</strong> — chunks, entities, dimensions, player status</li>
-<li><strong>Chat and Events</strong> — send/receive chat, subscribe to game events</li>
-<li><strong><a href="https://rosegoldmc.github.io/rosegold.cr/Rosegold/SpectateServer.html">SpectateServer</a></strong> — connect a real Minecraft client to watch your bot live</li>
+<li>Accurate client-side physics, collision, status effects, and block slipperiness</li>
+<li>Inventory windows, containers, equipment, recipe-book crafting, and manual grids</li>
+<li>Combat, digging, placement, food use, chat, and typed game events</li>
+<li>Multi-version protocol support and single-version builds</li>
+<li>A spectator server that relays the bot's world to a normal client</li>
 </ul>
 <h2><a id="contributing" class="anchor" href="#contributing">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Contributing</h2>
-<ol>
-<li>Fork it (<a href="https://github.com/RosegoldMC/rosegold.cr/fork">https://github.com/RosegoldMC/rosegold.cr/fork</a>)</li>
-<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
-<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
-<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
-<li>Create a new Pull Request</li>
-</ol>
+<pre><code class="language-sh">shards install
+crystal tool format
+crystal spec
+bin/ameba</code></pre>
+<p>Please keep public APIs documented and add a focused spec for behaviour changes.</p>
 </div>
 </body>
 </html>

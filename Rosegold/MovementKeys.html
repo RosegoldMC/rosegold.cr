@@ -2468,7 +2468,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L1" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L1" target="_blank">
         rosegold/control/movement_keys.cr
       </a>
     
@@ -2497,82 +2497,79 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#backward%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#backward?</strong>(*args, **options)</a>
+        <a href="#backward%3F-instance-method" class="signature"><strong>#backward?</strong></a>
+        
+          <div class="summary"><p>Whether backward is currently pressed.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#backward%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#backward?</strong>(*args, **options, &)</a>
+        <a href="#forward%3F-instance-method" class="signature"><strong>#forward?</strong></a>
+        
+          <div class="summary"><p>Whether forward is currently pressed.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#forward%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#forward?</strong>(*args, **options)</a>
+        <a href="#left%3F-instance-method" class="signature"><strong>#left?</strong></a>
+        
+          <div class="summary"><p>Whether left strafe is currently pressed.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#forward%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#forward?</strong>(*args, **options, &)</a>
+        <a href="#none%3F-instance-method" class="signature"><strong>#none?</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#left%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#left?</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#left%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#left?</strong>(*args, **options, &)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#none%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#none?</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#none%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#none?</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Whether no directional keys are currently pressed.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#press%28%2Akeys%3AKey%29-instance-method" class="signature"><strong>#press</strong>(*keys : Key)</a>
         
+          <div class="summary"><p>Marks each supplied directional key as pressed.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#pressed%3F%28keys%3AKey%29%3ABool-instance-method" class="signature"><strong>#pressed?</strong>(keys : Key) : Bool</a>
+        
+          <div class="summary"><p>Whether every flag in <em>keys</em> is currently pressed.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#release%28%2Akeys%3AKey%29-instance-method" class="signature"><strong>#release</strong>(*keys : Key)</a>
         
+          <div class="summary"><p>Clears each supplied directional key while retaining the others.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#release_all-instance-method" class="signature"><strong>#release_all</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#right%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#right?</strong>(*args, **options)</a>
+          <div class="summary"><p>Clears every directional key.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#right%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#right?</strong>(*args, **options, &)</a>
+        <a href="#right%3F-instance-method" class="signature"><strong>#right?</strong></a>
+        
+          <div class="summary"><p>Whether right strafe is currently pressed.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#state%3AKey-instance-method" class="signature"><strong>#state</strong> : Key</a>
         
+          <div class="summary"><p>The currently pressed directional keys.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#state%3D%28state%3AKey%29-instance-method" class="signature"><strong>#state=</strong>(state : Key)</a>
+        
+          <div class="summary"><p>The currently pressed directional keys.</p></div>
         
       </li>
     
@@ -2626,130 +2623,86 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="backward?(*args,**options)-instance-method">
+    <div class="entry-detail" id="backward?-instance-method">
       <div class="signature">
         
-        def <strong>backward?</strong>(*args, **options)
+        def <strong>backward?</strong>
 
-        <a class="method-permalink" href="#backward%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#backward%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether backward is currently pressed.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="backward?(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="forward?-instance-method">
       <div class="signature">
         
-        def <strong>backward?</strong>(*args, **options, &)
+        def <strong>forward?</strong>
 
-        <a class="method-permalink" href="#backward%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#forward%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether forward is currently pressed.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="forward?(*args,**options)-instance-method">
+    <div class="entry-detail" id="left?-instance-method">
       <div class="signature">
         
-        def <strong>forward?</strong>(*args, **options)
+        def <strong>left?</strong>
 
-        <a class="method-permalink" href="#forward%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#left%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether left strafe is currently pressed.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="forward?(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="none?-instance-method">
       <div class="signature">
         
-        def <strong>forward?</strong>(*args, **options, &)
+        def <strong>none?</strong>
 
-        <a class="method-permalink" href="#forward%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#none%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether no directional keys are currently pressed.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="left?(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>left?</strong>(*args, **options)
-
-        <a class="method-permalink" href="#left%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="left?(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>left?</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#left%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="none?(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>none?</strong>(*args, **options)
-
-        <a class="method-permalink" href="#none%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="none?(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>none?</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#none%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L59" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2762,10 +2715,15 @@
         <a class="method-permalink" href="#press%28%2Akeys%3AKey%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Marks each supplied directional key as pressed.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2778,10 +2736,15 @@
         <a class="method-permalink" href="#pressed%3F%28keys%3AKey%29%3ABool-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Whether every flag in <em>keys</em> is currently pressed.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2794,10 +2757,15 @@
         <a class="method-permalink" href="#release%28%2Akeys%3AKey%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Clears each supplied directional key while retaining the others.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2810,42 +2778,36 @@
         <a class="method-permalink" href="#release_all-instance-method">#</a>
       </div>
       
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L20" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="right?(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>right?</strong>(*args, **options)
-
-        <a class="method-permalink" href="#right%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
+        <div class="doc">
+          
+          <p>Clears every directional key.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L29" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="right?(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="right?-instance-method">
       <div class="signature">
         
-        def <strong>right?</strong>(*args, **options, &)
+        def <strong>right?</strong>
 
-        <a class="method-permalink" href="#right%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#right%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether right strafe is currently pressed.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2858,10 +2820,15 @@
         <a class="method-permalink" href="#state%3AKey-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The currently pressed directional keys.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2874,10 +2841,15 @@
         <a class="method-permalink" href="#state%3D%28state%3AKey%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The currently pressed directional keys.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/control/movement_keys.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/control/movement_keys.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>

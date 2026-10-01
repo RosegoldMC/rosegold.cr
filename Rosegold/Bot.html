@@ -2443,6 +2443,20 @@
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>The high-level API for a connected Minecraft player.</p>
+<p><code><a href="../Rosegold/Bot.html">Bot</a></code> forwards game events from its <code><a href="../Rosegold/Client.html">Client</a></code> and exposes movement, inventory,
+interaction, and crafting operations. Most operations that wait for the
+server yield cooperatively through ticks rather than blocking the process.</p>
+
 
 
 
@@ -2468,7 +2482,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L4" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L9" target="_blank">
         rosegold/bot.cr
       </a>
     
@@ -2491,7 +2505,16 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#new%28address%3AString%29-class-method" class="signature"><strong>.new</strong>(address : String)</a>
+        
+          <div class="summary"><p>Creates a bot for <em>address</em> without connecting it.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#new%28client%3ARosegold%3A%3AClient%29-class-method" class="signature"><strong>.new</strong>(client : Rosegold::Client)</a>
+        
+          <div class="summary"><p>Wraps an existing client.</p></div>
         
       </li>
     
@@ -2512,7 +2535,7 @@
       <li class="entry-summary">
         <a href="#join_game%28address%3AString%2Ctimeout_ticks%3D1200%29-class-method" class="signature"><strong>.join_game</strong>(address : String, timeout_ticks = <span class="n">1200</span>)</a>
         
-          <div class="summary"><p>Connects to the server and waits for being ingame.</p></div>
+          <div class="summary"><p>Connects to <em>address</em> and waits until the player has joined the world.</p></div>
         
       </li>
     
@@ -2535,118 +2558,133 @@
       <li class="entry-summary">
         <a href="#attack%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%29-instance-method" class="signature"><strong>#attack</strong>(target : Vec3d | Nil | Look | Nil = <span class="n">nil</span>)</a>
         
-          <div class="summary"><p>Looks in the direction of target, then activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#attack%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%29-instance-method">#attack</a></code> button.</p></div>
+          <div class="summary"><p>Optionally aims at <em>target</em>, then presses and releases attack immediately.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#auto_respawn%3D%28auto_respawn%3ABool%29-instance-method" class="signature"><strong>#auto_respawn=</strong>(auto_respawn : Bool)</a>
         
+          <div class="summary"><p>Whether a death automatically starts a background <code><a href="../Rosegold/Bot.html#respawn%28timeout_ticks%3D1200%29-instance-method">#respawn</a></code> attempt.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#auto_respawn%3F%3ABool-instance-method" class="signature"><strong>#auto_respawn?</strong> : Bool</a>
+        
+          <div class="summary"><p>Whether a death automatically starts a background <code><a href="../Rosegold/Bot.html#respawn%28timeout_ticks%3D1200%29-instance-method">#respawn</a></code> attempt.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#can_craft%3F%28recipe%3ARecipeDisplayEntry%29%3ABool-instance-method" class="signature"><strong>#can_craft?</strong>(recipe : RecipeDisplayEntry) : Bool</a>
         
+          <div class="summary"><p>Whether the player inventory has one complete set of ingredients for <em>recipe</em>.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#chat%28message%3AString%29-instance-method" class="signature"><strong>#chat</strong>(message : String)</a>
         
-          <div class="summary"><p>Send a message or slash command.</p></div>
+          <div class="summary"><p>Sends a chat message or slash command without waiting for a response.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#connect%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#connect</strong>(*args, **options)</a>
+        <a href="#connect-instance-method" class="signature"><strong>#connect</strong></a>
+        
+          <div class="summary"><p>Opens and authenticates a connection.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#connect%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#connect</strong>(*args, **options, &)</a>
+        <a href="#connected%3F-instance-method" class="signature"><strong>#connected?</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#connected%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#connected?</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#connected%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#connected?</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Whether the connection exists and has not been closed.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#container_type%3AMenu.class%7CNil-instance-method" class="signature"><strong>#container_type</strong> : <span class="t">Menu</span>.<span class="k">class</span> | Nil</a>
         
+          <div class="summary"><p>The class of the currently open non-player menu, or <code>nil</code> for the player inventory.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#craft%28item_name%3AString%2Ccount%3AInt32%3D1%2Ctable%3AVec3i%7CNil%3Dnil%29-instance-method" class="signature"><strong>#craft</strong>(item_name : String, count : Int32 = <span class="n">1</span>, table : Vec3i | Nil = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>Attempts <em>count</em> recipe placements producing <em>item_name</em>.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#craft%28recipe%3ARecipeDisplayEntry%2Ccount%3AInt32%3D1%2Ctable%3AVec3i%7CNil%3Dnil%29-instance-method" class="signature"><strong>#craft</strong>(recipe : RecipeDisplayEntry, count : Int32 = <span class="n">1</span>, table : Vec3i | Nil = <span class="n">nil</span>)</a>
         
+          <div class="summary"><p>Attempts <em>count</em> placements of a specific synchronized <em>recipe</em>.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#craft_all%28item_name%3AString%2Ctable%3AVec3i%7CNil%3Dnil%29-instance-method" class="signature"><strong>#craft_all</strong>(item_name : String, table : Vec3i | Nil = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>Crafts the maximum possible amount of a craftable recipe producing <em>item_name</em>.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#craft_all%28recipe%3ARecipeDisplayEntry%2Ctable%3AVec3i%7CNil%3Dnil%29-instance-method" class="signature"><strong>#craft_all</strong>(recipe : RecipeDisplayEntry, table : Vec3i | Nil = <span class="n">nil</span>)</a>
         
+          <div class="summary"><p>Crafts the maximum possible amount from a specific synchronized <em>recipe</em>.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#craft_pattern%28pattern%3AArray%28Array%28String%7CNil%29%29%2Ccount%3AInt32%3D1%2Ctable%3AVec3i%7CNil%3Dnil%29-instance-method" class="signature"><strong>#craft_pattern</strong>(pattern : Array(Array(String | Nil)), count : Int32 = <span class="n">1</span>, table : Vec3i | Nil = <span class="n">nil</span>)</a>
         
-          <div class="summary"><p>Craft by manually placing items into the grid.</p></div>
+          <div class="summary"><p>Crafts by manually placing the named items from <em>pattern</em> into the grid.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#dead%3F-instance-method" class="signature"><strong>#dead?</strong></a>
         
+          <div class="summary"><p>Whether the player's health is zero or below.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#dig%28ticks%3AInt32%2Ctarget%3AVec3d%7CNil%7CLook%7CNil%3Dnil%29-instance-method" class="signature"><strong>#dig</strong>(ticks : Int32, target : Vec3d | Nil | Look | Nil = <span class="n">nil</span>)</a>
         
-          <div class="summary"><p>Looks in the direction of target, then activates the <code><a href="../Rosegold/Bot.html#attack%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%29-instance-method">#attack</a></code> button, waits <code>ticks</code>, and deactivates it again.</p></div>
+          <div class="summary"><p>Optionally aims at <em>target</em>, holds attack for <em>ticks</em>, then releases it.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#disconnect%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#disconnect</strong>(*args, **options)</a>
+        <a href="#disconnect%28reason%3AString%29-instance-method" class="signature"><strong>#disconnect</strong>(reason : String)</a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#disconnect%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#disconnect</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Closes the connection with the server-visible <em>reason</em>.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#disconnect_reason-instance-method" class="signature"><strong>#disconnect_reason</strong></a>
         
+          <div class="summary"><p>The server-supplied close reason, or <code>nil</code> while connected or before a connection exists.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#drop_hand_full-instance-method" class="signature"><strong>#drop_hand_full</strong></a>
         
+          <div class="summary"><p>Drops the full main-hand stack.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#drop_hand_single-instance-method" class="signature"><strong>#drop_hand_single</strong></a>
+        
+          <div class="summary"><p>Drops one item from the main-hand stack.</p></div>
         
       </li>
     
@@ -2665,22 +2703,16 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#effect_by_name%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#effect_by_name</strong>(*args, **options)</a>
+        <a href="#effect_by_name%28name%29-instance-method" class="signature"><strong>#effect_by_name</strong>(name)</a>
+        
+          <div class="summary"><p>Finds an active status effect by its display name, ignoring case and spaces.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#effect_by_name%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#effect_by_name</strong>(*args, **options, &)</a>
+        <a href="#effects-instance-method" class="signature"><strong>#effects</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#effects%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#effects</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#effects%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#effects</strong>(*args, **options, &)</a>
+          <div class="summary"><p>The active status effects reported by the server.</p></div>
         
       </li>
     
@@ -2692,161 +2724,150 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#eyes%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#eyes</strong>(*args, **options)</a>
+        <a href="#eyes-instance-method" class="signature"><strong>#eyes</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#eyes%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#eyes</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Current eye position in world coordinates.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#feet-instance-method" class="signature"><strong>#feet</strong></a>
         
-          <div class="summary"><p><span class="flag red">DEPRECATED</span>  Use <code>bot.location</code> instead of <code>bot.feet</code></p></div>
+          <div class="summary"><p>Deprecated alias for <code><a href="../Rosegold/Bot.html#location-instance-method">#location</a></code>.</p>
+<p><span class="flag red">DEPRECATED</span>  Use <code>bot.location</code> instead of <code>bot.feet</code></p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#food%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#food</strong>(*args, **options)</a>
+        <a href="#food-instance-method" class="signature"><strong>#food</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#food%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#food</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Current hunger points, from 0 through 20.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#full_health%3F-instance-method" class="signature"><strong>#full_health?</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#gamemode%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#gamemode</strong>(*args, **options)</a>
+          <div class="summary"><p>Whether the player has at least 20 health points.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#gamemode%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#gamemode</strong>(*args, **options, &)</a>
+        <a href="#gamemode-instance-method" class="signature"><strong>#gamemode</strong></a>
+        
+          <div class="summary"><p>Current game mode ID as supplied by the server.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#has_slow_falling%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#has_slow_falling?</strong>(*args, **options)</a>
+        <a href="#has_slow_falling%3F-instance-method" class="signature"><strong>#has_slow_falling?</strong></a>
+        
+          <div class="summary"><p>Whether Slow Falling is active.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#has_slow_falling%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#has_slow_falling?</strong>(*args, **options, &)</a>
+        <a href="#health-instance-method" class="signature"><strong>#health</strong></a>
+        
+          <div class="summary"><p>Current health in half-hearts.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#health%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#health</strong>(*args, **options)</a>
+        <a href="#host-instance-method" class="signature"><strong>#host</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#health%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#health</strong>(*args, **options, &)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#host%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#host</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#host%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#host</strong>(*args, **options, &)</a>
+          <div class="summary"><p>The configured Minecraft server hostname.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#hotbar_selection-instance-method" class="signature"><strong>#hotbar_selection</strong></a>
         
-          <div class="summary"><p>The active (main hand) hotbar slot number (1-9).</p></div>
+          <div class="summary"><p>The selected main-hand hotbar slot, numbered 1 through 9.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#hotbar_selection%3D%28index%3AUInt8%29-instance-method" class="signature"><strong>#hotbar_selection=</strong>(index : UInt8)</a>
         
-          <div class="summary"><p>Selects the active (main hand) hotbar slot number (1-9).</p></div>
+          <div class="summary"><p>Selects a main-hand hotbar slot, numbered 1 through 9.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#inventory%3AInventory-instance-method" class="signature"><strong>#inventory</strong> : Inventory</a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#join_game%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#join_game</strong>(*args, **options)</a>
+          <div class="summary"><p>The inventory facade for the player and currently open menu.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#join_game%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#join_game</strong>(*args, **options, &)</a>
+        <a href="#join_game%28timeout_ticks%3D1200%29-instance-method" class="signature"><strong>#join_game</strong>(timeout_ticks = <span class="n">1200</span>)</a>
+        
+          <div class="summary"><p>Connects and waits for a spawned player, returning the underlying <code><a href="../Rosegold/Client.html">Client</a></code>.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#jump_boost_level%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#jump_boost_level</strong>(*args, **options)</a>
+        <a href="#join_game%28timeout_ticks%3D1200%2C%26%29-instance-method" class="signature"><strong>#join_game</strong>(timeout_ticks = <span class="n">1200</span>, &)</a>
+        
+          <div class="summary"><p>Connects, yields the underlying <code><a href="../Rosegold/Client.html">Client</a></code> after spawning, then disconnects when the block returns normally.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#jump_boost_level%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#jump_boost_level</strong>(*args, **options, &)</a>
+        <a href="#jump_boost_level-instance-method" class="signature"><strong>#jump_boost_level</strong></a>
+        
+          <div class="summary"><p>Current Jump Boost amplifier plus one, or zero when Jump Boost is absent.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#jump_by_height%28height%3D1%2Ctimeout_ticks%3D20%29-instance-method" class="signature"><strong>#jump_by_height</strong>(height = <span class="n">1</span>, timeout_ticks = <span class="n">20</span>)</a>
         
-          <div class="summary"><p>Jumps and waits until the bot is <code>height</code> above the ground.</p></div>
+          <div class="summary"><p>Queues a jump and waits until the feet are <em>height</em> blocks above their start.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#keys-instance-method" class="signature"><strong>#keys</strong></a>
         
+          <div class="summary"><p>Mutable movement-key state used by physics on subsequent ticks.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#land_on_ground%28timeout_ticks%3D120%29-instance-method" class="signature"><strong>#land_on_ground</strong>(timeout_ticks = <span class="n">120</span>)</a>
         
-          <div class="summary"><p>Waits until the bot's y level stops changing.</p></div>
+          <div class="summary"><p>Waits until the player's feet y coordinate stops changing.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#leave_bed-instance-method" class="signature"><strong>#leave_bed</strong></a>
         
-          <div class="summary"><p>Use #interact_block to enter a bed.</p></div>
+          <div class="summary"><p>Leaves the current bed.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#levitation_level%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#levitation_level</strong>(*args, **options)</a>
+        <a href="#levitation_level-instance-method" class="signature"><strong>#levitation_level</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#levitation_level%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#levitation_level</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Current Levitation amplifier plus one, or zero when Levitation is absent.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#location-instance-method" class="signature"><strong>#location</strong></a>
         
+          <div class="summary"><p>The player's current feet position in world coordinates.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#look-instance-method" class="signature"><strong>#look</strong></a>
         
-          <div class="summary"><p>Direction the player is looking.</p></div>
+          <div class="summary"><p>The player's current <code><a href="../Rosegold/Look.html">Look</a></code> direction as a yaw/pitch pair in degrees.</p></div>
         
       </li>
     
@@ -2874,7 +2895,7 @@
       <li class="entry-summary">
         <a href="#look_at%28location%3AVec3d%29-instance-method" class="signature"><strong>#look_at</strong>(location : Vec3d)</a>
         
-          <div class="summary"><p>Waits for the new look to be sent to the server.</p></div>
+          <div class="summary"><p>Aims from the eyes at a known world position and waits for the look update.</p></div>
         
       </li>
     
@@ -2886,12 +2907,9 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#main_hand%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#main_hand</strong>(*args, **options)</a>
+        <a href="#main_hand-instance-method" class="signature"><strong>#main_hand</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#main_hand%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#main_hand</strong>(*args, **options, &)</a>
+          <div class="summary"><p>The stack currently held in the main hand.</p></div>
         
       </li>
     
@@ -2905,7 +2923,7 @@
       <li class="entry-summary">
         <a href="#move_to%28location%3AVec3i%2Cstuck_timeout_ticks%3AInt32%3D60%29-instance-method" class="signature"><strong>#move_to</strong>(location : Vec3i, stuck_timeout_ticks : Int32 = <span class="n">60</span>)</a>
         
-          <div class="summary"><p>Moves to the <strong>center</strong> of the given block coordinate (<code>x + 0.5</code>, <code>z + 0.5</code>), preserving the bot's current feet <code><a href="../Rosegold/Bot.html#y%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#y</a></code>.</p></div>
+          <div class="summary"><p>Moves to the <strong>center</strong> of the given block coordinate (<code>x + 0.5</code>, <code>z + 0.5</code>), preserving the bot's current feet <code><a href="../Rosegold/Bot.html#y-instance-method">#y</a></code>.</p></div>
         
       </li>
     
@@ -2931,13 +2949,6 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#new%28address%3AString%29-instance-method" class="signature"><strong>#new</strong>(address : String)</a>
-        
-          <div class="summary"><p>Does not connect immediately.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#open_container%28timeout%3ATime%3A%3ASpan%3D5.seconds%2C%26%29-instance-method" class="signature"><strong>#open_container</strong>(timeout : Time::Span = <span class="n">5</span>.seconds, &)</a>
         
           <div class="summary"><p>Opens a container (chest, barrel, etc.) and yields control for interaction.</p></div>
@@ -2954,6 +2965,8 @@
       <li class="entry-summary">
         <a href="#open_container_handle%28command%3AString%2Ctimeout%3ATime%3A%3ASpan%3D5.seconds%2C%26%29-instance-method" class="signature"><strong>#open_container_handle</strong>(command : String, timeout : Time::Span = <span class="n">5</span>.seconds, &)</a>
         
+          <div class="summary"><p>Runs <em>command</em>, waits for it to open a container, then yields its handle.</p></div>
+        
       </li>
     
       <li class="entry-summary">
@@ -2966,51 +2979,49 @@
       <li class="entry-summary">
         <a href="#pitch-instance-method" class="signature"><strong>#pitch</strong></a>
         
+          <div class="summary"><p>The current vertical look angle in degrees.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#pitch%3D%28pitch%3AFloat64%29-instance-method" class="signature"><strong>#pitch=</strong>(pitch : Float64)</a>
         
-          <div class="summary"><p>Sets the pitch of the look Waits for the new look to be sent to the server</p></div>
+          <div class="summary"><p>Sets the vertical look angle in degrees and waits for it to reach the server.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#place_block_against%28block%3AVec3i%2Cface%3ABlockFace%29-instance-method" class="signature"><strong>#place_block_against</strong>(block : Vec3i, face : BlockFace)</a>
         
-          <div class="summary"><p>Looks at that face of that block, then activates and immediately deactivates the <code>use</code> button.</p></div>
+          <div class="summary"><p>Aims at <em>face</em> of <em>block</em>, then presses and releases use with the main hand.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#port%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#port</strong>(*args, **options)</a>
+        <a href="#port-instance-method" class="signature"><strong>#port</strong></a>
+        
+          <div class="summary"><p>The configured Minecraft server port.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#port%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#port</strong>(*args, **options, &)</a>
+        <a href="#recipe_registry-instance-method" class="signature"><strong>#recipe_registry</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#recipe_registry%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#recipe_registry</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#recipe_registry%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#recipe_registry</strong>(*args, **options, &)</a>
+          <div class="summary"><p>The synchronized recipe registry for the connected server.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#recipes_for%28item_name%3AString%29%3AArray%28RecipeDisplayEntry%29-instance-method" class="signature"><strong>#recipes_for</strong>(item_name : String) : Array(RecipeDisplayEntry)</a>
         
+          <div class="summary"><p>Returns every synchronized recipe whose result matches <em>item_name</em>.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#respawn%28timeout_ticks%3D1200%29-instance-method" class="signature"><strong>#respawn</strong>(timeout_ticks = <span class="n">1200</span>)</a>
         
-          <div class="summary"><p>Revive the player if dead.</p></div>
+          <div class="summary"><p>Revives a dead player and waits for its spawn confirmation.</p></div>
         
       </li>
     
@@ -3022,142 +3033,114 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#saturation%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#saturation</strong>(*args, **options)</a>
+        <a href="#saturation-instance-method" class="signature"><strong>#saturation</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#saturation%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#saturation</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Current saturation level.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#should_eat%3F-instance-method" class="signature"><strong>#should_eat?</strong></a>
         
-          <div class="summary"><p>Whether eat! would actually consume food right now.</p></div>
+          <div class="summary"><p>Whether <code><a href="../Rosegold/Bot.html#eat%21-instance-method">#eat!</a></code> will attempt to consume food at the current health and hunger.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#slowness_level%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#slowness_level</strong>(*args, **options)</a>
+        <a href="#slowness_level-instance-method" class="signature"><strong>#slowness_level</strong></a>
+        
+          <div class="summary"><p>Current Slowness amplifier plus one, or zero when Slowness is absent.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#slowness_level%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#slowness_level</strong>(*args, **options, &)</a>
+        <a href="#sneak%28sneaking%3Dtrue%29-instance-method" class="signature"><strong>#sneak</strong>(sneaking = <span class="n">true</span>)</a>
+        
+          <div class="summary"><p>Enables or disables sneaking.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#sneak%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#sneak</strong>(*args, **options)</a>
+        <a href="#sneaking%3F-instance-method" class="signature"><strong>#sneaking?</strong></a>
+        
+          <div class="summary"><p>Whether the player is currently sneaking.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#sneak%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#sneak</strong>(*args, **options, &)</a>
+        <a href="#spawned%3F-instance-method" class="signature"><strong>#spawned?</strong></a>
+        
+          <div class="summary"><p>Whether the server has completed player spawn and world state is ready.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#sneaking%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#sneaking?</strong>(*args, **options)</a>
+        <a href="#speed_level-instance-method" class="signature"><strong>#speed_level</strong></a>
+        
+          <div class="summary"><p>Current Speed amplifier plus one, or zero when Speed is absent.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#sneaking%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#sneaking?</strong>(*args, **options, &)</a>
+        <a href="#sprint%28sprinting%3Dtrue%29-instance-method" class="signature"><strong>#sprint</strong>(sprinting = <span class="n">true</span>)</a>
+        
+          <div class="summary"><p>Enables or disables sprinting.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#spawned%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#spawned?</strong>(*args, **options)</a>
+        <a href="#sprinting%3F-instance-method" class="signature"><strong>#sprinting?</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#spawned%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#spawned?</strong>(*args, **options, &)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#speed_level%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#speed_level</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#speed_level%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#speed_level</strong>(*args, **options, &)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#sprint%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#sprint</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#sprint%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#sprint</strong>(*args, **options, &)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#sprinting%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#sprinting?</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#sprinting%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#sprinting?</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Whether the player is currently sprinting.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#start_digging%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%29-instance-method" class="signature"><strong>#start_digging</strong>(target : Vec3d | Nil | Look | Nil = <span class="n">nil</span>)</a>
         
-          <div class="summary"><p>Looks at that target, then activates the <code><a href="../Rosegold/Bot.html#attack%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%29-instance-method">#attack</a></code> button.</p></div>
+          <div class="summary"><p>Optionally aims at <em>target</em>, then holds the attack button to begin digging.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#start_jump-instance-method" class="signature"><strong>#start_jump</strong></a>
         
-          <div class="summary"><p>Jumps the next time the player is on the ground.</p></div>
+          <div class="summary"><p>Queues a jump for the next tick on which the player is on the ground.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#start_using_hand%28hand%3AHand%3D%3Amain_hand%29-instance-method" class="signature"><strong>#start_using_hand</strong>(hand : Hand = <span class="n">:main_hand</span>)</a>
         
-          <div class="summary"><p>Activates the &quot;use&quot; button.</p></div>
+          <div class="summary"><p>Holds the use button for <em>hand</em>.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#stop_digging%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#stop_digging</strong>(*args, **options)</a>
+        <a href="#stop_digging-instance-method" class="signature"><strong>#stop_digging</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#stop_digging%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#stop_digging</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Releases an active dig action immediately.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#stop_moving-instance-method" class="signature"><strong>#stop_moving</strong></a>
         
-          <div class="summary"><p>Stop moving towards the target specified in #move_to Also releases all movement keys and dequeues any pending jump.</p></div>
+          <div class="summary"><p>Cancels <code><a href="../Rosegold/Bot.html#move_to%28location%3AVec3d%2Cstuck_timeout_ticks%3AInt32%3D60%29-instance-method">#move_to</a></code>, releases movement keys, and clears a pending jump.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#stop_using_hand%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#stop_using_hand</strong>(*args, **options)</a>
+        <a href="#stop_using_hand-instance-method" class="signature"><strong>#stop_using_hand</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#stop_using_hand%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#stop_using_hand</strong>(*args, **options, &)</a>
+          <div class="summary"><p>Releases an active use action immediately.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#subscribe%28event_class%3AClass%29-instance-method" class="signature"><strong>#subscribe</strong>(event_class : Class)</a>
+        
+          <div class="summary"><p>Forwards events of <em>event_class</em> emitted by the underlying client to this bot.</p></div>
         
       </li>
     
@@ -3171,99 +3154,84 @@
       <li class="entry-summary">
         <a href="#unsneak-instance-method" class="signature"><strong>#unsneak</strong></a>
         
+          <div class="summary"><p>Disables sneaking.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#unsprint-instance-method" class="signature"><strong>#unsprint</strong></a>
+        
+          <div class="summary"><p>Disables sprinting.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#use_hand%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%2Chand%3AHand%3D%3Amain_hand%29-instance-method" class="signature"><strong>#use_hand</strong>(target : Vec3d | Nil | Look | Nil = <span class="n">nil</span>, hand : Hand = <span class="n">:main_hand</span>)</a>
         
-          <div class="summary"><p>Looks in the direction of <code>target</code>, then activates and immediately deactivates the <code>use</code> button.</p></div>
+          <div class="summary"><p>Queues one press and release of use in <em>hand</em>, optionally aiming at <em>target</em> first.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#username%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#username</strong>(*args, **options)</a>
+        <a href="#username-instance-method" class="signature"><strong>#username</strong></a>
+        
+          <div class="summary"><p>The player name, or <code>nil</code> before login completes.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#username%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#username</strong>(*args, **options, &)</a>
+        <a href="#uuid-instance-method" class="signature"><strong>#uuid</strong></a>
+        
+          <div class="summary"><p>The authenticated player UUID, or <code>nil</code> before login completes.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#uuid%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#uuid</strong>(*args, **options)</a>
+        <a href="#wait_tick-instance-method" class="signature"><strong>#wait_tick</strong></a>
+        
+          <div class="summary"><p>Waits for one client game tick, returning the event or <code>nil</code> after one second.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#uuid%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#uuid</strong>(*args, **options, &)</a>
+        <a href="#wait_ticks%28ticks%3AInt32%29-instance-method" class="signature"><strong>#wait_ticks</strong>(ticks : Int32)</a>
+        
+          <div class="summary"><p>Waits for <em>ticks</em> client game ticks.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#wait_tick%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#wait_tick</strong>(*args, **options)</a>
+        <a href="#x-instance-method" class="signature"><strong>#x</strong></a>
+        
+          <div class="summary"><p>The feet-position x coordinate.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#wait_tick%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#wait_tick</strong>(*args, **options, &)</a>
+        <a href="#y-instance-method" class="signature"><strong>#y</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#wait_ticks%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#wait_ticks</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#wait_ticks%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#wait_ticks</strong>(*args, **options, &)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#x%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#x</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#x%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#x</strong>(*args, **options, &)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#y%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#y</strong>(*args, **options)</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#y%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#y</strong>(*args, **options, &)</a>
+          <div class="summary"><p>The feet-position y coordinate.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#yaw-instance-method" class="signature"><strong>#yaw</strong></a>
         
+          <div class="summary"><p>The current horizontal look angle in degrees.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#yaw%3D%28yaw%3AFloat64%29-instance-method" class="signature"><strong>#yaw=</strong>(yaw : Float64)</a>
         
-          <div class="summary"><p>Sets the yaw of the look Waits for the new look to be sent to the server</p></div>
+          <div class="summary"><p>Sets the horizontal look angle in degrees and waits for it to reach the server.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#z%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#z</strong>(*args, **options)</a>
+        <a href="#z-instance-method" class="signature"><strong>#z</strong></a>
         
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#z%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#z</strong>(*args, **options, &)</a>
+          <div class="summary"><p>The feet-position z coordinate.</p></div>
         
       </li>
     
@@ -3358,6 +3326,28 @@
     Constructor Detail
   </h2>
   
+    <div class="entry-detail" id="new(address:String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(address : String)
+
+        <a class="method-permalink" href="#new%28address%3AString%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a bot for <em>address</em> without connecting it.
+Call <code><a href="../Rosegold/Bot.html#join_game%28timeout_ticks%3D1200%29-instance-method">#join_game</a></code> before issuing world operations.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L54" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="new(client:Rosegold::Client)-class-method">
       <div class="signature">
         
@@ -3366,10 +3356,15 @@
         <a class="method-permalink" href="#new%28client%3ARosegold%3A%3AClient%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Wraps an existing client. The client may be connected later with <code><a href="../Rosegold/Bot.html#join_game%28timeout_ticks%3D1200%29-instance-method">#join_game</a></code>.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3396,13 +3391,14 @@
       
         <div class="doc">
           
-          <p>Connects to the server and waits for being ingame.</p>
+          <p>Connects to <em>address</em> and waits until the player has joined the world.
+Raises if joining does not complete within <em>timeout_ticks</em> game ticks.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L60" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3431,14 +3427,13 @@
       
         <div class="doc">
           
-          <p>Looks in the direction of target, then
-activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#attack%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%29-instance-method">#attack</a></code> button.</p>
+          <p>Optionally aims at <em>target</em>, then presses and releases attack immediately.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L725" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L963" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3451,10 +3446,16 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
         <a class="method-permalink" href="#auto_respawn%3D%28auto_respawn%3ABool%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Whether a death automatically starts a background <code><a href="../Rosegold/Bot.html#respawn%28timeout_ticks%3D1200%29-instance-method">#respawn</a></code> attempt.
+Enabled by default.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3467,10 +3468,16 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
         <a class="method-permalink" href="#auto_respawn%3F%3ABool-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Whether a death automatically starts a background <code><a href="../Rosegold/Bot.html#respawn%28timeout_ticks%3D1200%29-instance-method">#respawn</a></code> attempt.
+Enabled by default.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3483,10 +3490,16 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
         <a class="method-permalink" href="#can_craft%3F%28recipe%3ARecipeDisplayEntry%29%3ABool-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Whether the player inventory has one complete set of ingredients for <em>recipe</em>.
+Returns <code>false</code> for recipe display types that cannot be crafted in a grid.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L482" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L699" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3501,77 +3514,59 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
       
         <div class="doc">
           
-          <p>Send a message or slash command.</p>
+          <p>Sends a chat message or slash command without waiting for a response.
+Returns <code>true</code> when sent, <code>false</code> if sending fails or a chat message exceeds
+256 bytes. A successful send does not confirm server acceptance.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L278" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="connect(*args,**options)-instance-method">
+    <div class="entry-detail" id="connect-instance-method">
       <div class="signature">
         
-        def <strong>connect</strong>(*args, **options)
+        def <strong>connect</strong>
 
-        <a class="method-permalink" href="#connect%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#connect-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Opens and authenticates a connection. It returns once packet processing has
+started, before the player is necessarily spawned. Use <code><a href="../Rosegold/Bot.html#join_game%28timeout_ticks%3D1200%29-instance-method">#join_game</a></code> when
+the next operation needs world state.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L77" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="connect(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="connected?-instance-method">
       <div class="signature">
         
-        def <strong>connect</strong>(*args, **options, &)
+        def <strong>connected?</strong>
 
-        <a class="method-permalink" href="#connect%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#connected%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether the connection exists and has not been closed. Returns <code>nil</code> before connecting.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="connected?(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>connected?</strong>(*args, **options)
-
-        <a class="method-permalink" href="#connected%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="connected?(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>connected?</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#connected%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3584,10 +3579,15 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
         <a class="method-permalink" href="#container_type%3AMenu.class%7CNil-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The class of the currently open non-player menu, or <code>nil</code> for the player inventory.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L236" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3600,10 +3600,21 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
         <a class="method-permalink" href="#craft%28item_name%3AString%2Ccount%3AInt32%3D1%2Ctable%3AVec3i%7CNil%3Dnil%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Attempts <em>count</em> recipe placements producing <em>item_name</em>.
+Each placement may produce several items; <em>count</em> is not an item count.</p>
+<p>Waits for recipe placement and output slot updates. Supply <em>table</em> for a
+recipe that needs a crafting table. Raises <code><a href="../Rosegold/Bot/CraftingError.html">CraftingError</a></code> when no recipe,
+materials, or required table position is available. It can stop early when
+no output appears within ten ticks or the inventory cannot accept the output.
+Inspect inventory counts when the exact produced amount matters.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L525" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L750" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3616,10 +3627,18 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
         <a class="method-permalink" href="#craft%28recipe%3ARecipeDisplayEntry%2Ccount%3AInt32%3D1%2Ctable%3AVec3i%7CNil%3Dnil%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Attempts <em>count</em> placements of a specific synchronized <em>recipe</em>.
+Each placement may produce several result items.
+Waits for recipe placement and output slot updates. Raises <code><a href="../Rosegold/Bot/CraftingError.html">CraftingError</a></code>
+if materials or a required crafting table position are unavailable.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L533" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L762" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3632,10 +3651,16 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
         <a class="method-permalink" href="#craft_all%28item_name%3AString%2Ctable%3AVec3i%7CNil%3Dnil%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Crafts the maximum possible amount of a craftable recipe producing <em>item_name</em>.
+Raises <code><a href="../Rosegold/Bot/CraftingError.html">CraftingError</a></code> when no usable recipe, materials, or table position exists.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L540" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L771" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3648,10 +3673,16 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
         <a class="method-permalink" href="#craft_all%28recipe%3ARecipeDisplayEntry%2Ctable%3AVec3i%7CNil%3Dnil%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Crafts the maximum possible amount from a specific synchronized <em>recipe</em>.
+Raises <code><a href="../Rosegold/Bot/CraftingError.html">CraftingError</a></code> if its requirements cannot be met.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L548" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L781" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3666,19 +3697,22 @@ activates and immediately deactivates the <code><a href="../Rosegold/Bot.html#at
       
         <div class="doc">
           
-          <p>Craft by manually placing items into the grid. Use this for custom/modded
-recipes or when the recipe book doesn't have what you need.</p>
+          <p>Crafts by manually placing the named items from <em>pattern</em> into the grid.
+Use this for custom recipes or recipes absent from the recipe book.</p>
+<p>The pattern is at most 3 by 3; <code>nil</code> leaves a grid cell empty. Provide
+<em>table</em> for patterns larger than 2 by 2. Raises <code><a href="../Rosegold/Bot/CraftingError.html">CraftingError</a></code> for an
+invalid pattern, missing item, or missing table position.</p>
 <pre><code class="language-crystal">bot.craft_pattern([
   [<span class="s">&quot;iron_ingot&quot;</span>, <span class="s">&quot;iron_ingot&quot;</span>, <span class="s">&quot;iron_ingot&quot;</span>],
   [<span class="n">nil</span>, <span class="s">&quot;stick&quot;</span>, <span class="n">nil</span>],
   [<span class="n">nil</span>, <span class="s">&quot;stick&quot;</span>, <span class="n">nil</span>],
-])</code></pre>
+], table: crafting_table_position)</code></pre>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L642" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L879" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3691,10 +3725,15 @@ recipes or when the recipe book doesn't have what you need.</p>
         <a class="method-permalink" href="#dead%3F-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Whether the player's health is zero or below.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L258" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3709,46 +3748,35 @@ recipes or when the recipe book doesn't have what you need.</p>
       
         <div class="doc">
           
-          <p>Looks in the direction of target, then
-activates the <code><a href="../Rosegold/Bot.html#attack%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%29-instance-method">#attack</a></code> button, waits <code>ticks</code>, and deactivates it again.</p>
+          <p>Optionally aims at <em>target</em>, holds attack for <em>ticks</em>, then releases it.
+Waits exactly <em>ticks</em> client ticks after starting the dig.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L717" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L956" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="disconnect(*args,**options)-instance-method">
+    <div class="entry-detail" id="disconnect(reason:String)-instance-method">
       <div class="signature">
         
-        def <strong>disconnect</strong>(*args, **options)
+        def <strong>disconnect</strong>(reason : String)
 
-        <a class="method-permalink" href="#disconnect%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#disconnect%28reason%3AString%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Closes the connection with the server-visible <em>reason</em>.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="disconnect(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>disconnect</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#disconnect%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L87" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3761,10 +3789,15 @@ activates the <code><a href="../Rosegold/Bot.html#attack%28target%3AVec3d%7CNil%
         <a class="method-permalink" href="#disconnect_reason-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The server-supplied close reason, or <code>nil</code> while connected or before a connection exists.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L73" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L253" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3777,10 +3810,15 @@ activates the <code><a href="../Rosegold/Bot.html#attack%28target%3AVec3d%7CNil%
         <a class="method-permalink" href="#drop_hand_full-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Drops the full main-hand stack. Queues packets without waiting.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L281" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L484" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3793,10 +3831,15 @@ activates the <code><a href="../Rosegold/Bot.html#attack%28target%3AVec3d%7CNil%
         <a class="method-permalink" href="#drop_hand_single-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Drops one item from the main-hand stack. Queues packets without waiting.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L276" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L478" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3820,7 +3863,7 @@ This blocks while eating; returning does not guarantee hunger was restored.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L398" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L611" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3845,71 +3888,50 @@ A timeout only logs a warning. Use <code><a href="../Rosegold/Bot.html#eat%3ANil
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L409" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L622" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="effect_by_name(*args,**options)-instance-method">
+    <div class="entry-detail" id="effect_by_name(name)-instance-method">
       <div class="signature">
         
-        def <strong>effect_by_name</strong>(*args, **options)
+        def <strong>effect_by_name</strong>(name)
 
-        <a class="method-permalink" href="#effect_by_name%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#effect_by_name%28name%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Finds an active status effect by its display name, ignoring case and spaces.
+Returns <code>nil</code> when the effect is absent.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L161" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="effect_by_name(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="effects-instance-method">
       <div class="signature">
         
-        def <strong>effect_by_name</strong>(*args, **options, &)
+        def <strong>effects</strong>
 
-        <a class="method-permalink" href="#effect_by_name%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#effects-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The active status effects reported by the server.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="effects(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>effects</strong>(*args, **options)
-
-        <a class="method-permalink" href="#effects%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="effects(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>effects</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#effects%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L155" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3939,39 +3961,28 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L745" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L983" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="eyes(*args,**options)-instance-method">
+    <div class="entry-detail" id="eyes-instance-method">
       <div class="signature">
         
-        def <strong>eyes</strong>(*args, **options)
+        def <strong>eyes</strong>
 
-        <a class="method-permalink" href="#eyes%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#eyes-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Current eye position in world coordinates.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="eyes(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>eyes</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#eyes%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L120" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3986,45 +3997,35 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       
         <div class="doc">
           
-          <p><span class="flag red">DEPRECATED</span>  Use <code>bot.location</code> instead of <code>bot.feet</code></p>
+          <p>Deprecated alias for <code><a href="../Rosegold/Bot.html#location-instance-method">#location</a></code>.</p>
+<p><span class="flag red">DEPRECATED</span>  Use <code>bot.location</code> instead of <code>bot.feet</code></p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L248" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="food(*args,**options)-instance-method">
+    <div class="entry-detail" id="food-instance-method">
       <div class="signature">
         
-        def <strong>food</strong>(*args, **options)
+        def <strong>food</strong>
 
-        <a class="method-permalink" href="#food%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#food-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Current hunger points, from 0 through 20.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="food(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>food</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#food%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L130" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4037,138 +4038,99 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
         <a class="method-permalink" href="#full_health%3F-instance-method">#</a>
       </div>
       
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L474" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="gamemode(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>gamemode</strong>(*args, **options)
-
-        <a class="method-permalink" href="#gamemode%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
+        <div class="doc">
+          
+          <p>Whether the player has at least 20 health points.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L688" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="gamemode(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="gamemode-instance-method">
       <div class="signature">
         
-        def <strong>gamemode</strong>(*args, **options, &)
+        def <strong>gamemode</strong>
 
-        <a class="method-permalink" href="#gamemode%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#gamemode-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Current game mode ID as supplied by the server.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L140" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="has_slow_falling?(*args,**options)-instance-method">
+    <div class="entry-detail" id="has_slow_falling?-instance-method">
       <div class="signature">
         
-        def <strong>has_slow_falling?</strong>(*args, **options)
+        def <strong>has_slow_falling?</strong>
 
-        <a class="method-permalink" href="#has_slow_falling%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#has_slow_falling%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether Slow Falling is active.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L181" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="has_slow_falling?(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="health-instance-method">
       <div class="signature">
         
-        def <strong>has_slow_falling?</strong>(*args, **options, &)
+        def <strong>health</strong>
 
-        <a class="method-permalink" href="#has_slow_falling%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#health-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Current health in half-hearts.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L125" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="health(*args,**options)-instance-method">
+    <div class="entry-detail" id="host-instance-method">
       <div class="signature">
         
-        def <strong>health</strong>(*args, **options)
+        def <strong>host</strong>
 
-        <a class="method-permalink" href="#health%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#host-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The configured Minecraft server hostname.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="health(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>health</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#health%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="host(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>host</strong>(*args, **options)
-
-        <a class="method-permalink" href="#host%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="host(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>host</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#host%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4183,13 +4145,13 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       
         <div class="doc">
           
-          <p>The active (main hand) hotbar slot number (1-9).</p>
+          <p>The selected main-hand hotbar slot, numbered 1 through 9.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L253" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L453" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4204,13 +4166,14 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       
         <div class="doc">
           
-          <p>Selects the active (main hand) hotbar slot number (1-9).</p>
+          <p>Selects a main-hand hotbar slot, numbered 1 through 9.
+Raises <code>ArgumentError</code> for an index outside that range.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L258" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L459" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4223,74 +4186,81 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
         <a class="method-permalink" href="#inventory%3AInventory-instance-method">#</a>
       </div>
       
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L7" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="join_game(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>join_game</strong>(*args, **options)
-
-        <a class="method-permalink" href="#join_game%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
+        <div class="doc">
+          
+          <p>The inventory facade for the player and currently open menu.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="join_game(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="join_game(timeout_ticks=1200)-instance-method">
       <div class="signature">
         
-        def <strong>join_game</strong>(*args, **options, &)
+        def <strong>join_game</strong>(timeout_ticks = <span class="n">1200</span>)
 
-        <a class="method-permalink" href="#join_game%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#join_game%28timeout_ticks%3D1200%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Connects and waits for a spawned player, returning the underlying <code><a href="../Rosegold/Client.html">Client</a></code>.
+Raises if joining exceeds <em>timeout_ticks</em> or the connection closes.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="jump_boost_level(*args,**options)-instance-method">
+    <div class="entry-detail" id="join_game(timeout_ticks=1200,&amp;)-instance-method">
       <div class="signature">
         
-        def <strong>jump_boost_level</strong>(*args, **options)
+        def <strong>join_game</strong>(timeout_ticks = <span class="n">1200</span>, &)
 
-        <a class="method-permalink" href="#jump_boost_level%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#join_game%28timeout_ticks%3D1200%2C%26%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Connects, yields the underlying <code><a href="../Rosegold/Client.html">Client</a></code> after spawning, then disconnects when
+the block returns normally. If it raises, the exception propagates without
+disconnecting; use an explicit <code>ensure</code> for unconditional cleanup.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="jump_boost_level(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="jump_boost_level-instance-method">
       <div class="signature">
         
-        def <strong>jump_boost_level</strong>(*args, **options, &)
+        def <strong>jump_boost_level</strong>
 
-        <a class="method-permalink" href="#jump_boost_level%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#jump_boost_level-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Current Jump Boost amplifier plus one, or zero when Jump Boost is absent.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L176" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4305,14 +4275,15 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       
         <div class="doc">
           
-          <p>Jumps and waits until the bot is <code>height</code> above the ground.
-Fails if the bot lands before reaching this height.</p>
+          <p>Queues a jump and waits until the feet are <em>height</em> blocks above their start.
+Raises if the player cannot rise or does not reach that height before
+<em>timeout_ticks</em>. It does not wait for landing.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L214" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L409" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4325,10 +4296,15 @@ Fails if the bot lands before reaching this height.</p>
         <a class="method-permalink" href="#keys-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Mutable movement-key state used by physics on subsequent ticks.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L158" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L353" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4343,13 +4319,14 @@ Fails if the bot lands before reaching this height.</p>
       
         <div class="doc">
           
-          <p>Waits until the bot's y level stops changing.</p>
+          <p>Waits until the player's feet y coordinate stops changing.
+Raises if this does not happen within <em>timeout_ticks</em>.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L227" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L424" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4364,45 +4341,34 @@ Fails if the bot lands before reaching this height.</p>
       
         <div class="doc">
           
-          <p>Use #interact_block to enter a bed.</p>
+          <p>Leaves the current bed. Use <code><a href="../Rosegold/Bot.html#use_hand%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%2Chand%3AHand%3D%3Amain_hand%29-instance-method">#use_hand</a></code> or <code><a href="../Rosegold/Bot.html#place_block_against%28block%3AVec3i%2Cface%3ABlockFace%29-instance-method">#place_block_against</a></code> to enter one.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L247" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L447" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="levitation_level(*args,**options)-instance-method">
+    <div class="entry-detail" id="levitation_level-instance-method">
       <div class="signature">
         
-        def <strong>levitation_level</strong>(*args, **options)
+        def <strong>levitation_level</strong>
 
-        <a class="method-permalink" href="#levitation_level%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#levitation_level-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Current Levitation amplifier plus one, or zero when Levitation is absent.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="levitation_level(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>levitation_level</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#levitation_level%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L186" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4415,10 +4381,15 @@ Fails if the bot lands before reaching this height.</p>
         <a class="method-permalink" href="#location-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The player's current feet position in world coordinates.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L242" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4433,13 +4404,13 @@ Fails if the bot lands before reaching this height.</p>
       
         <div class="doc">
           
-          <p>Direction the player is looking.</p>
+          <p>The player's current <code><a href="../Rosegold/Look.html">Look</a></code> direction as a yaw/pitch pair in degrees.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L295" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4463,7 +4434,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L123" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L317" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4487,7 +4458,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L303" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4509,7 +4480,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L115" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L309" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4524,13 +4495,13 @@ Waits for the new look to be sent to the server.</p>
       
         <div class="doc">
           
-          <p>Waits for the new look to be sent to the server.</p>
+          <p>Aims from the eyes at a known world position and waits for the look update.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L148" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L342" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4552,39 +4523,28 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L154" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L348" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="main_hand(*args,**options)-instance-method">
+    <div class="entry-detail" id="main_hand-instance-method">
       <div class="signature">
         
-        def <strong>main_hand</strong>(*args, **options)
+        def <strong>main_hand</strong>
 
-        <a class="method-permalink" href="#main_hand%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#main_hand-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The stack currently held in the main hand.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L54" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="main_hand(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>main_hand</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#main_hand%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L201" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4608,7 +4568,7 @@ Waits for arrival.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L166" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L361" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4624,14 +4584,14 @@ Waits for arrival.
         <div class="doc">
           
           <p>Moves to the <strong>center</strong> of the given block coordinate (<code>x + 0.5</code>,
-<code>z + 0.5</code>), preserving the bot's current feet <code><a href="../Rosegold/Bot.html#y%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#y</a></code>. Use a <code><a href="../Rosegold/Vec3d.html">Vec3d</a></code> overload
+<code>z + 0.5</code>), preserving the bot's current feet <code><a href="../Rosegold/Bot.html#y-instance-method">#y</a></code>. Use a <code><a href="../Rosegold/Vec3d.html">Vec3d</a></code> overload
 if you need to land on an exact non-centered position.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L173" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L368" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4647,7 +4607,7 @@ if you need to land on an exact non-centered position.</p>
         <div class="doc">
           
           <p>Moves straight towards the exact <code>(x, z)</code> (decimal coordinates are
-honored verbatim). <code><a href="../Rosegold/Bot.html#y%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#y</a></code> is taken from the bot's current feet location.
+honored verbatim). <code><a href="../Rosegold/Bot.html#y-instance-method">#y</a></code> is taken from the bot's current feet location.
 Waits for arrival.
 <code>stuck_timeout_ticks</code> specifies how many consecutive stuck ticks before throwing MovementStuck.</p>
         </div>
@@ -4655,7 +4615,7 @@ Waits for arrival.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L181" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L376" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4677,7 +4637,7 @@ Use the <code>Float</code> overload to target an exact non-centered position.</p
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L187" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L382" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4701,28 +4661,7 @@ Waits for arrival.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L195" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="new(address:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>new</strong>(address : String)
-
-        <a class="method-permalink" href="#new%28address%3AString%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Does not connect immediately.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L390" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4744,13 +4683,15 @@ executes the provided block, then closes the container.</p>
   bot.inventory.deposit_at_least(<span class="n">10</span>, <span class="s">&quot;diamond&quot;</span>)
   bot.inventory.withdraw_at_least(<span class="n">5</span>, <span class="s">&quot;emerald&quot;</span>)
 <span class="k">end</span></code></pre>
-<p>Caller must already be looking at the container block.</p>
+<p>Caller must already be looking at the container block. Raises
+<code><a href="../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a></code> if its content does not arrive within <em>timeout</em>.
+The container is closed even if the block raises.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L321" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L528" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4775,13 +4716,15 @@ typed menu access (as_chest, as_furnace, etc.).</p>
     chest.contents.each { <span class="o">|</span>slot<span class="o">|</span> puts slot.name }
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
-<p>Caller must already be looking at the container block.</p>
+<p>Caller must already be looking at the container block. Raises
+<code><a href="../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a></code> if its content does not arrive within <em>timeout</em>.
+The handle is closed even if the block raises.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L350" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L559" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4794,10 +4737,18 @@ typed menu access (as_chest, as_furnace, etc.).</p>
         <a class="method-permalink" href="#open_container_handle%28command%3AString%2Ctimeout%3ATime%3A%3ASpan%3D5.seconds%2C%26%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Runs <em>command</em>, waits for it to open a container, then yields its handle.</p>
+<p>This is for servers that expose a container through a command rather than a
+block interaction. Raises <code><a href="../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a></code> on timeout and closes the
+handle even if the block raises.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L365" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L579" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4820,7 +4771,7 @@ moves it to the hotbar, and sends the appropriate slot update packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L289" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L492" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4833,10 +4784,15 @@ moves it to the hotbar, and sends the appropriate slot update packets.</p>
         <a class="method-permalink" href="#pitch-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The current vertical look angle in degrees.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L143" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L337" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4851,14 +4807,13 @@ moves it to the hotbar, and sends the appropriate slot update packets.</p>
       
         <div class="doc">
           
-          <p>Sets the pitch of the look
-Waits for the new look to be sent to the server</p>
+          <p>Sets the vertical look angle in degrees and waits for it to reach the server.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L135" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L327" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4873,77 +4828,56 @@ Waits for the new look to be sent to the server</p>
       
         <div class="doc">
           
-          <p>Looks at that face of that block, then activates and immediately deactivates the <code>use</code> button.</p>
+          <p>Aims at <em>face</em> of <em>block</em>, then presses and releases use with the main hand.
+It queues the placement attempt without waiting for confirmation.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L381" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L596" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="port(*args,**options)-instance-method">
+    <div class="entry-detail" id="port-instance-method">
       <div class="signature">
         
-        def <strong>port</strong>(*args, **options)
+        def <strong>port</strong>
 
-        <a class="method-permalink" href="#port%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#port-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The configured Minecraft server port.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="port(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="recipe_registry-instance-method">
       <div class="signature">
         
-        def <strong>port</strong>(*args, **options, &)
+        def <strong>recipe_registry</strong>
 
-        <a class="method-permalink" href="#port%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#recipe_registry-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The synchronized recipe registry for the connected server.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="recipe_registry(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>recipe_registry</strong>(*args, **options)
-
-        <a class="method-permalink" href="#recipe_registry%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L57" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="recipe_registry(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>recipe_registry</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#recipe_registry%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L231" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4956,10 +4890,15 @@ Waits for the new look to be sent to the server</p>
         <a class="method-permalink" href="#recipes_for%28item_name%3AString%29%3AArray%28RecipeDisplayEntry%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns every synchronized recipe whose result matches <em>item_name</em>.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L478" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L693" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4974,13 +4913,14 @@ Waits for the new look to be sent to the server</p>
       
         <div class="doc">
           
-          <p>Revive the player if dead. Does nothing if alive.</p>
+          <p>Revives a dead player and waits for its spawn confirmation.
+Does nothing while alive. Raises if spawning exceeds <em>timeout_ticks</em>.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L264" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4996,9 +4936,9 @@ Waits for the new look to be sent to the server</p>
         <div class="doc">
           
           <p>Runs a slash command and waits for a confirmation message from the server.</p>
-<p>Use this for non-idempotent commands (like toggles) or when you want to
-force retries on idempotent commands until confirmation. Retries automatically
-if the command fails or returns an inverse message.</p>
+<p>Each attempt waits up to five seconds. Retries after a timeout or an inverse
+message. Use only when replaying the command is acceptable: a missing
+confirmation does not prove the server failed to execute it.</p>
 <p>The <em>expected_message</em> is matched after stripping formatting codes. If
 <em>inverse_message</em> is provided and received, the command will retry, which is
 useful for toggle commands where the bot may be in the wrong state.</p>
@@ -5015,39 +4955,28 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L773" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L1011" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="saturation(*args,**options)-instance-method">
+    <div class="entry-detail" id="saturation-instance-method">
       <div class="signature">
         
-        def <strong>saturation</strong>(*args, **options)
+        def <strong>saturation</strong>
 
-        <a class="method-permalink" href="#saturation%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#saturation-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Current saturation level.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="saturation(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>saturation</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#saturation%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L135" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5062,239 +4991,160 @@ attempts, <code>false</code> otherwise.</p>
       
         <div class="doc">
           
-          <p>Whether eat! would actually consume food right now. Callers that must look
-away from a block before the eat right-click (so food isn't used on it) gate
-the look on this so they don't aim away when no eating will happen.</p>
+          <p>Whether <code><a href="../Rosegold/Bot.html#eat%21-instance-method">#eat!</a></code> will attempt to consume food at the current health and hunger.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L388" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L601" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="slowness_level(*args,**options)-instance-method">
+    <div class="entry-detail" id="slowness_level-instance-method">
       <div class="signature">
         
-        def <strong>slowness_level</strong>(*args, **options)
+        def <strong>slowness_level</strong>
 
-        <a class="method-permalink" href="#slowness_level%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#slowness_level-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Current Slowness amplifier plus one, or zero when Slowness is absent.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L171" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="slowness_level(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="sneak(sneaking=true)-instance-method">
       <div class="signature">
         
-        def <strong>slowness_level</strong>(*args, **options, &)
+        def <strong>sneak</strong>(sneaking = <span class="n">true</span>)
 
-        <a class="method-permalink" href="#slowness_level%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#sneak%28sneaking%3Dtrue%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Enables or disables sneaking. The next client tick sends the changed input state.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L191" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="sneak(*args,**options)-instance-method">
+    <div class="entry-detail" id="sneaking?-instance-method">
       <div class="signature">
         
-        def <strong>sneak</strong>(*args, **options)
+        def <strong>sneaking?</strong>
 
-        <a class="method-permalink" href="#sneak%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#sneaking%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether the player is currently sneaking.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L53" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L145" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="sneak(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="spawned?-instance-method">
       <div class="signature">
         
-        def <strong>sneak</strong>(*args, **options, &)
+        def <strong>spawned?</strong>
 
-        <a class="method-permalink" href="#sneak%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#spawned%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether the server has completed player spawn and world state is ready.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L53" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L105" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="sneaking?(*args,**options)-instance-method">
+    <div class="entry-detail" id="speed_level-instance-method">
       <div class="signature">
         
-        def <strong>sneaking?</strong>(*args, **options)
+        def <strong>speed_level</strong>
 
-        <a class="method-permalink" href="#sneaking%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#speed_level-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Current Speed amplifier plus one, or zero when Speed is absent.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L166" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="sneaking?(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="sprint(sprinting=true)-instance-method">
       <div class="signature">
         
-        def <strong>sneaking?</strong>(*args, **options, &)
+        def <strong>sprint</strong>(sprinting = <span class="n">true</span>)
 
-        <a class="method-permalink" href="#sneaking%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#sprint%28sprinting%3Dtrue%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Enables or disables sprinting. The next client tick sends the changed input state.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L196" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="spawned?(*args,**options)-instance-method">
+    <div class="entry-detail" id="sprinting?-instance-method">
       <div class="signature">
         
-        def <strong>spawned?</strong>(*args, **options)
+        def <strong>sprinting?</strong>
 
-        <a class="method-permalink" href="#spawned%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#sprinting%3F-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Whether the player is currently sprinting.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="spawned?(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>spawned?</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#spawned%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L48" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="speed_level(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>speed_level</strong>(*args, **options)
-
-        <a class="method-permalink" href="#speed_level%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="speed_level(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>speed_level</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#speed_level%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L50" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="sprint(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>sprint</strong>(*args, **options)
-
-        <a class="method-permalink" href="#sprint%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L53" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="sprint(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>sprint</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#sprint%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L53" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="sprinting?(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>sprinting?</strong>(*args, **options)
-
-        <a class="method-permalink" href="#sprinting%3F%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="sprinting?(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>sprinting?</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#sprinting%3F%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L150" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5309,13 +5159,14 @@ the look on this so they don't aim away when no eating will happen.</p>
       
         <div class="doc">
           
-          <p>Looks at that target, then activates the <code><a href="../Rosegold/Bot.html#attack%28target%3AVec3d%7CNil%7CLook%7CNil%3Dnil%29-instance-method">#attack</a></code> button.</p>
+          <p>Optionally aims at <em>target</em>, then holds the attack button to begin digging.
+Call <code><a href="../Rosegold/Bot.html#stop_digging-instance-method">#stop_digging</a></code> to release it.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L709" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L948" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5330,13 +5181,13 @@ the look on this so they don't aim away when no eating will happen.</p>
       
         <div class="doc">
           
-          <p>Jumps the next time the player is on the ground.</p>
+          <p>Queues a jump for the next tick on which the player is on the ground.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L207" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L401" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5351,45 +5202,34 @@ the look on this so they don't aim away when no eating will happen.</p>
       
         <div class="doc">
           
-          <p>Activates the &quot;use&quot; button.</p>
+          <p>Holds the use button for <em>hand</em>. Call <code><a href="../Rosegold/Bot.html#stop_using_hand-instance-method">#stop_using_hand</a></code> to release it.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L294" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L497" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="stop_digging(*args,**options)-instance-method">
+    <div class="entry-detail" id="stop_digging-instance-method">
       <div class="signature">
         
-        def <strong>stop_digging</strong>(*args, **options)
+        def <strong>stop_digging</strong>
 
-        <a class="method-permalink" href="#stop_digging%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#stop_digging-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Releases an active dig action immediately.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L55" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="stop_digging(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>stop_digging</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#stop_digging%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L211" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5404,46 +5244,34 @@ the look on this so they don't aim away when no eating will happen.</p>
       
         <div class="doc">
           
-          <p>Stop moving towards the target specified in #move_to
-Also releases all movement keys and dequeues any pending jump.</p>
+          <p>Cancels <code><a href="../Rosegold/Bot.html#move_to%28location%3AVec3d%2Cstuck_timeout_ticks%3AInt32%3D60%29-instance-method">#move_to</a></code>, releases movement keys, and clears a pending jump.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L201" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L395" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="stop_using_hand(*args,**options)-instance-method">
+    <div class="entry-detail" id="stop_using_hand-instance-method">
       <div class="signature">
         
-        def <strong>stop_using_hand</strong>(*args, **options)
+        def <strong>stop_using_hand</strong>
 
-        <a class="method-permalink" href="#stop_using_hand%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#stop_using_hand-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Releases an active use action immediately.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L55" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="stop_using_hand(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>stop_using_hand</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#stop_using_hand%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L206" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5456,10 +5284,17 @@ Also releases all movement keys and dequeues any pending jump.</p>
         <a class="method-permalink" href="#subscribe%28event_class%3AClass%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Forwards events of <em>event_class</em> emitted by the underlying client to this bot.</p>
+<p>This is primarily useful when extending <code><a href="../Rosegold/Bot.html">Bot</a></code>; normal consumers subscribe
+with <code>#on</code> to the events already forwarded during initialization.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5481,7 +5316,7 @@ Unchanged stacks need no confirmation. A timeout does not undo the swap.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L265" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L466" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5494,10 +5329,15 @@ Unchanged stacks need no confirmation. A timeout does not undo the swap.</p>
         <a class="method-permalink" href="#unsneak-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Disables sneaking.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L238" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L437" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5510,10 +5350,15 @@ Unchanged stacks need no confirmation. A timeout does not undo the swap.</p>
         <a class="method-permalink" href="#unsprint-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Disables sprinting.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L242" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L442" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5528,206 +5373,144 @@ Unchanged stacks need no confirmation. A timeout does not undo the swap.</p>
       
         <div class="doc">
           
-          <p>Looks in the direction of <code>target</code>, then
-activates and immediately deactivates the <code>use</code> button.</p>
+          <p>Queues one press and release of use in <em>hand</em>, optionally aiming at <em>target</em> first.
+Releases any held use action. Repeated calls before a tick coalesce into one press.
+The target raytrace happens on the next tick eligible under the use cooldown.
+This does not wait for a world-result confirmation.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L301" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L506" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="username(*args,**options)-instance-method">
+    <div class="entry-detail" id="username-instance-method">
       <div class="signature">
         
-        def <strong>username</strong>(*args, **options)
+        def <strong>username</strong>
 
-        <a class="method-permalink" href="#username%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#username-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The player name, or <code>nil</code> before login completes.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L115" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="username(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="uuid-instance-method">
       <div class="signature">
         
-        def <strong>username</strong>(*args, **options, &)
+        def <strong>uuid</strong>
 
-        <a class="method-permalink" href="#username%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#uuid-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The authenticated player UUID, or <code>nil</code> before login completes.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="uuid(*args,**options)-instance-method">
+    <div class="entry-detail" id="wait_tick-instance-method">
       <div class="signature">
         
-        def <strong>uuid</strong>(*args, **options)
+        def <strong>wait_tick</strong>
 
-        <a class="method-permalink" href="#uuid%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#wait_tick-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Waits for one client game tick, returning the event or <code>nil</code> after one second.
+A timeout does not raise, including when disconnected.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L284" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="uuid(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="wait_ticks(ticks:Int32)-instance-method">
       <div class="signature">
         
-        def <strong>uuid</strong>(*args, **options, &)
+        def <strong>wait_ticks</strong>(ticks : <a href="../Int32.html">Int32</a>)
 
-        <a class="method-permalink" href="#uuid%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#wait_ticks%28ticks%3AInt32%29-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Waits for <em>ticks</em> client game ticks. Each tick has the same one-second timeout
+as <code><a href="../Rosegold/Bot.html#wait_tick-instance-method">#wait_tick</a></code>.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L290" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="wait_tick(*args,**options)-instance-method">
+    <div class="entry-detail" id="x-instance-method">
       <div class="signature">
         
-        def <strong>wait_tick</strong>(*args, **options)
+        def <strong>x</strong>
 
-        <a class="method-permalink" href="#wait_tick%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#x-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The feet-position x coordinate.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L98" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L216" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="wait_tick(*args,**options,&amp;)-instance-method">
+    <div class="entry-detail" id="y-instance-method">
       <div class="signature">
         
-        def <strong>wait_tick</strong>(*args, **options, &)
+        def <strong>y</strong>
 
-        <a class="method-permalink" href="#wait_tick%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
+        <a class="method-permalink" href="#y-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The feet-position y coordinate.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L98" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="wait_ticks(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>wait_ticks</strong>(*args, **options)
-
-        <a class="method-permalink" href="#wait_ticks%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L98" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="wait_ticks(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>wait_ticks</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#wait_ticks%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L98" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="x(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>x</strong>(*args, **options)
-
-        <a class="method-permalink" href="#x%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L56" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="x(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>x</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#x%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L56" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="y(*args,**options)-instance-method">
-      <div class="signature">
-        
-        def <strong>y</strong>(*args, **options)
-
-        <a class="method-permalink" href="#y%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L56" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="y(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>y</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#y%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L221" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5740,10 +5523,15 @@ activates and immediately deactivates the <code>use</code> button.</p>
         <a class="method-permalink" href="#yaw-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The current horizontal look angle in degrees.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L139" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L332" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5758,46 +5546,34 @@ activates and immediately deactivates the <code>use</code> button.</p>
       
         <div class="doc">
           
-          <p>Sets the yaw of the look
-Waits for the new look to be sent to the server</p>
+          <p>Sets the horizontal look angle in degrees and waits for it to reach the server.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L129" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L322" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="z(*args,**options)-instance-method">
+    <div class="entry-detail" id="z-instance-method">
       <div class="signature">
         
-        def <strong>z</strong>(*args, **options)
+        def <strong>z</strong>
 
-        <a class="method-permalink" href="#z%28%2Aargs%2C%2A%2Aoptions%29-instance-method">#</a>
+        <a class="method-permalink" href="#z-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>The feet-position z coordinate.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L56" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="z(*args,**options,&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>z</strong>(*args, **options, &)
-
-        <a class="method-permalink" href="#z%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/bot.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/bot.cr#L226" target="_blank">View source</a>]
         
       </div>
     </div>

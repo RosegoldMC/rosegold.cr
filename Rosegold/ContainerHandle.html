@@ -2482,7 +2482,7 @@ Auto-closes via ensure when used with a block.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L7" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L7" target="_blank">
         rosegold/inventory/container_handle.cr
       </a>
     
@@ -2507,6 +2507,8 @@ Auto-closes via ensure when used with a block.</p>
       <li class="entry-summary">
         <a href="#new%28client%3ARosegold%3A%3AClient%2Cmenu%3ARosegold%3A%3AMenu%29-class-method" class="signature"><strong>.new</strong>(client : Rosegold::Client, menu : Rosegold::Menu)</a>
         
+          <div class="summary"><p>Wraps an already-open menu.</p></div>
+        
       </li>
     
   </ul>
@@ -2530,47 +2532,63 @@ Auto-closes via ensure when used with a block.</p>
       <li class="entry-summary">
         <a href="#as_anvil%3AAnvilMenu%7CNil-instance-method" class="signature"><strong>#as_anvil</strong> : AnvilMenu | Nil</a>
         
+          <div class="summary"><p>Returns the menu as an anvil, or <code>nil</code> when it is another type.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#as_brewing_stand%3ABrewingStandMenu%7CNil-instance-method" class="signature"><strong>#as_brewing_stand</strong> : BrewingStandMenu | Nil</a>
+        
+          <div class="summary"><p>Returns the menu as a brewing stand, or <code>nil</code> when it is another type.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#as_chest%3AChestMenu%7CNil-instance-method" class="signature"><strong>#as_chest</strong> : ChestMenu | Nil</a>
         
-          <div class="summary"><p>Returns the menu as a specific type, or nil if it doesn't match.</p></div>
+          <div class="summary"><p>Returns the menu as a chest, or <code>nil</code> when the open menu is another type.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#as_crafting%3ACraftingMenu%7CNil-instance-method" class="signature"><strong>#as_crafting</strong> : CraftingMenu | Nil</a>
         
+          <div class="summary"><p>Returns the menu as a crafting table, or <code>nil</code> when it is another type.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#as_enchantment%3AEnchantmentMenu%7CNil-instance-method" class="signature"><strong>#as_enchantment</strong> : EnchantmentMenu | Nil</a>
+        
+          <div class="summary"><p>Returns the menu as an enchanting table, or <code>nil</code> when it is another type.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#as_furnace%3AFurnaceMenu%7CNil-instance-method" class="signature"><strong>#as_furnace</strong> : FurnaceMenu | Nil</a>
         
+          <div class="summary"><p>Returns the menu as a furnace, or <code>nil</code> when it is another type.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#as_hopper%3AHopperMenu%7CNil-instance-method" class="signature"><strong>#as_hopper</strong> : HopperMenu | Nil</a>
+        
+          <div class="summary"><p>Returns the menu as a hopper, or <code>nil</code> when it is another type.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#as_merchant%3AMerchantMenu%7CNil-instance-method" class="signature"><strong>#as_merchant</strong> : MerchantMenu | Nil</a>
         
+          <div class="summary"><p>Returns the menu as a merchant, or <code>nil</code> when it is another type.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#close-instance-method" class="signature"><strong>#close</strong></a>
+        
+          <div class="summary"><p>Closes the wrapped menu.</p></div>
         
       </li>
     
@@ -2618,6 +2636,8 @@ Auto-closes via ensure when used with a block.</p>
     
       <li class="entry-summary">
         <a href="#menu%3AMenu-instance-method" class="signature"><strong>#menu</strong> : Menu</a>
+        
+          <div class="summary"><p>The active server menu wrapped by this handle.</p></div>
         
       </li>
     
@@ -2715,10 +2735,16 @@ Auto-closes via ensure when used with a block.</p>
         <a class="method-permalink" href="#new%28client%3ARosegold%3A%3AClient%2Cmenu%3ARosegold%3A%3AMenu%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Wraps an already-open menu. Prefer <code><a href="../Rosegold/Bot.html#open_container_handle%28timeout%3ATime%3A%3ASpan%3D5.seconds%2C%26%29-instance-method">Bot#open_container_handle</a></code>, which waits
+for opening and closes the handle in an <code>ensure</code> block.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2747,10 +2773,15 @@ Auto-closes via ensure when used with a block.</p>
         <a class="method-permalink" href="#as_anvil%3AAnvilMenu%7CNil-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns the menu as an anvil, or <code>nil</code> when it is another type.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L161" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L171" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2763,10 +2794,15 @@ Auto-closes via ensure when used with a block.</p>
         <a class="method-permalink" href="#as_brewing_stand%3ABrewingStandMenu%7CNil-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns the menu as a brewing stand, or <code>nil</code> when it is another type.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L165" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L176" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2781,13 +2817,13 @@ Auto-closes via ensure when used with a block.</p>
       
         <div class="doc">
           
-          <p>Returns the menu as a specific type, or nil if it doesn't match.</p>
+          <p>Returns the menu as a chest, or <code>nil</code> when the open menu is another type.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L149" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L156" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2800,10 +2836,15 @@ Auto-closes via ensure when used with a block.</p>
         <a class="method-permalink" href="#as_crafting%3ACraftingMenu%7CNil-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns the menu as a crafting table, or <code>nil</code> when it is another type.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L153" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L161" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2816,10 +2857,15 @@ Auto-closes via ensure when used with a block.</p>
         <a class="method-permalink" href="#as_enchantment%3AEnchantmentMenu%7CNil-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns the menu as an enchanting table, or <code>nil</code> when it is another type.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L169" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L181" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2832,10 +2878,15 @@ Auto-closes via ensure when used with a block.</p>
         <a class="method-permalink" href="#as_furnace%3AFurnaceMenu%7CNil-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns the menu as a furnace, or <code>nil</code> when it is another type.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L157" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L166" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2848,10 +2899,15 @@ Auto-closes via ensure when used with a block.</p>
         <a class="method-permalink" href="#as_hopper%3AHopperMenu%7CNil-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns the menu as a hopper, or <code>nil</code> when it is another type.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L173" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L186" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2864,10 +2920,15 @@ Auto-closes via ensure when used with a block.</p>
         <a class="method-permalink" href="#as_merchant%3AMerchantMenu%7CNil-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns the menu as a merchant, or <code>nil</code> when it is another type.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L177" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L191" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2880,10 +2941,16 @@ Auto-closes via ensure when used with a block.</p>
         <a class="method-permalink" href="#close-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Closes the wrapped menu. It queues the close packet without waiting for a
+later player-inventory update.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L183" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L199" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2904,7 +2971,7 @@ Auto-closes via ensure when used with a block.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L135" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L142" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2925,7 +2992,7 @@ Auto-closes via ensure when used with a block.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L140" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L147" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2941,13 +3008,15 @@ Auto-closes via ensure when used with a block.</p>
         <div class="doc">
           
           <p>Transfer items from player inventory to container via shift-click.
-Returns the number of items actually transferred.</p>
+Stops once at least <em>count</em> items have moved, or no progress is possible.
+Whole stacks are shift-clicked, so the result may exceed <em>count</em>. Returns
+the item-count change observed in the local menu, not a server acknowledgment.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L102" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L109" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2968,7 +3037,7 @@ Returns the number of items actually transferred.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L72" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2989,7 +3058,7 @@ Returns the number of items actually transferred.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L125" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L132" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3010,7 +3079,7 @@ Returns the number of items actually transferred.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L130" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L137" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3023,10 +3092,15 @@ Returns the number of items actually transferred.</p>
         <a class="method-permalink" href="#menu%3AMenu-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The active server menu wrapped by this handle.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3048,7 +3122,7 @@ Uses left-click for full stack, right-click for half.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3070,7 +3144,7 @@ Left-click places all, right-click places one.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3091,7 +3165,7 @@ Left-click places all, right-click places one.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3112,7 +3186,7 @@ Left-click places all, right-click places one.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L62" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3133,7 +3207,7 @@ Left-click places all, right-click places one.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3149,13 +3223,15 @@ Left-click places all, right-click places one.</p>
         <div class="doc">
           
           <p>Transfer items from container to player inventory via shift-click.
-Returns the number of items actually transferred.</p>
+Stops once at least <em>count</em> items have moved, or no progress is possible.
+Whole stacks are shift-clicked, so the result may exceed <em>count</em>. Returns
+the item-count change observed in the local menu, not a server acknowledgment.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/inventory/container_handle.cr#L78" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/inventory/container_handle.cr#L83" target="_blank">View source</a>]
         
       </div>
     </div>

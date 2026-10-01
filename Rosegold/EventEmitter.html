@@ -2443,6 +2443,19 @@
 
 
 
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Typed event subscriptions shared by <code><a href="../Rosegold/Bot.html">Bot</a></code> and <code><a href="../Rosegold/Client.html">Client</a></code>.</p>
+<p>Handlers run synchronously in the emitting fiber. Use <code>spawn</code> for work that
+waits for ticks or further packets so the reader can keep receiving events.</p>
+
 
 
 
@@ -2484,7 +2497,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/models/event_emitter.cr#L3" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/models/event_emitter.cr#L7" target="_blank">
         rosegold/models/event_emitter.cr
       </a>
     
@@ -2515,39 +2528,49 @@
       <li class="entry-summary">
         <a href="#emit_event%28event%3AEvent%29-instance-method" class="signature"><strong>#emit_event</strong>(event : Event)</a>
         
+          <div class="summary"><p>Calls handlers for this exact event type in registration order.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#event_handlers%3AHandlers-instance-method" class="signature"><strong>#event_handlers</strong> : Handlers</a>
+        
+          <div class="summary"><p>Registered handlers, grouped by exact event type.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#off%28event_type%3AT.class%2Cid%3AUUID%29forallT-instance-method" class="signature"><strong>#off</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, id : UUID) forall T</a>
         
+          <div class="summary"><p>Removes the handler identified by <em>id</em> for <em>event_type</em>.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#on%28event_type%3AT.class%2Cid%3AUUID%3DUUID.random%2C%26block%3AT-%3E%29forallT-instance-method" class="signature"><strong>#on</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, id : UUID = <span class="t">UUID</span>.random, &block : T -> ) forall T</a>
+        
+          <div class="summary"><p>Registers a handler and returns its UUID for removal with <code><a href="../Rosegold/EventEmitter.html#off%28event_type%3AT.class%2Cid%3AUUID%29forallT-instance-method">#off</a></code>.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#once%28event_type%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method" class="signature"><strong>#once</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, &block : T -> ) forall T</a>
         
+          <div class="summary"><p>Registers a handler for the next matching event and returns its UUID.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#wait_for%28event_type%3AT.class%2Ctimeout%3ATime%3A%3ASpan%3D5.seconds%29forallT-instance-method" class="signature"><strong>#wait_for</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, timeout : Time::Span = <span class="n">5</span>.seconds) forall T</a>
         
-          <div class="summary"><p>Waits for an event.</p></div>
+          <div class="summary"><p>Waits for the next matching event, or returns <code>nil</code> after <em>timeout</em>.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#wait_for%28event_type%3AT.class%2Ctimeout%3ATime%3A%3ASpan%3D5.seconds%2C%26%29forallT-instance-method" class="signature"><strong>#wait_for</strong>(event_type : <span class="t">T</span>.<span class="k">class</span>, timeout : Time::Span = <span class="n">5</span>.seconds, &) forall T</a>
         
-          <div class="summary"><p>Registers listener before running block, then waits.</p></div>
+          <div class="summary"><p>Registers a listener, runs the block, then waits for the matching event.</p></div>
         
       </li>
     
@@ -2609,10 +2632,16 @@
         <a class="method-permalink" href="#emit_event%28event%3AEvent%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Calls handlers for this exact event type in registration order.
+Handler exceptions propagate to the caller.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/models/event_emitter.cr#L73" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/models/event_emitter.cr#L102" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2625,10 +2654,16 @@
         <a class="method-permalink" href="#event_handlers%3AHandlers-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Registered handlers, grouped by exact event type. Prefer <code><a href="../Rosegold/EventEmitter.html#on%28event_type%3AT.class%2Cid%3AUUID%3DUUID.random%2C%26block%3AT-%3E%29forallT-instance-method">#on</a></code> and <code><a href="../Rosegold/EventEmitter.html#off%28event_type%3AT.class%2Cid%3AUUID%29forallT-instance-method">#off</a></code>
+over modifying this registry directly.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/models/event_emitter.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/models/event_emitter.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2641,10 +2676,16 @@
         <a class="method-permalink" href="#off%28event_type%3AT.class%2Cid%3AUUID%29forallT-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Removes the handler identified by <em>id</em> for <em>event_type</em>.
+Does nothing if the handler is already gone.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/models/event_emitter.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/models/event_emitter.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2657,10 +2698,18 @@
         <a class="method-permalink" href="#on%28event_type%3AT.class%2Cid%3AUUID%3DUUID.random%2C%26block%3AT-%3E%29forallT-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Registers a handler and returns its UUID for removal with <code><a href="../Rosegold/EventEmitter.html#off%28event_type%3AT.class%2Cid%3AUUID%29forallT-instance-method">#off</a></code>.
+Subscriptions match the exact event type, not its subclasses.</p>
+<pre><code class="language-crystal">id <span class="o">=</span> bot.on(<span class="t">Rosegold</span><span class="t">::</span><span class="t">Event</span><span class="t">::</span><span class="t">HealthChanged</span>) { <span class="o">|</span>event<span class="o">|</span> puts event.health }
+bot.off(<span class="t">Rosegold</span><span class="t">::</span><span class="t">Event</span><span class="t">::</span><span class="t">HealthChanged</span>, id)</code></pre>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/models/event_emitter.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/models/event_emitter.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2673,10 +2722,16 @@
         <a class="method-permalink" href="#once%28event_type%3AT.class%2C%26block%3AT-%3E%29forallT-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Registers a handler for the next matching event and returns its UUID.
+Removes it before invoking the block, even if the block raises or emits again.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/models/event_emitter.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/models/event_emitter.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2691,13 +2746,14 @@
       
         <div class="doc">
           
-          <p>Waits for an event. Returns nil on timeout.</p>
+          <p>Waits for the next matching event, or returns <code>nil</code> after <em>timeout</em>.
+Always removes its temporary listener before returning.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/models/event_emitter.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/models/event_emitter.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2712,13 +2768,17 @@
       
         <div class="doc">
           
-          <p>Registers listener before running block, then waits. Raises on timeout.</p>
+          <p>Registers a listener, runs the block, then waits for the matching event.
+Returns the event; raises on timeout. The timeout includes time in the block,
+but cannot interrupt it. The listener is removed even if the block raises.</p>
+<p>The block triggers the action; it is not an event filter. Any event of the
+requested type can satisfy the wait, including an unrelated server message.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/models/event_emitter.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/models/event_emitter.cr#L80" target="_blank">View source</a>]
         
       </div>
     </div>

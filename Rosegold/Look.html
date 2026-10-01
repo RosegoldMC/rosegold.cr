@@ -2482,7 +2482,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L8" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L8" target="_blank">
         rosegold/world/look.cr
       </a>
     
@@ -2507,20 +2507,36 @@
         <strong>EAST</strong> = <code><span class="k">self</span>.new(<span class="n">270</span>, <span class="n">0</span>)</code>
       </dt>
       
+      <dd class="entry-const-doc">
+        <p>Faces positive X on the horizontal plane.</p>
+      </dd>
+      
     
       <dt class="entry-const" id="NORTH">
         <strong>NORTH</strong> = <code><span class="k">self</span>.new(<span class="n">180</span>, <span class="n">0</span>)</code>
       </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Faces negative Z on the horizontal plane.</p>
+      </dd>
       
     
       <dt class="entry-const" id="SOUTH">
         <strong>SOUTH</strong> = <code><span class="k">self</span>.new(<span class="n">0</span>, <span class="n">0</span>)</code>
       </dt>
       
+      <dd class="entry-const-doc">
+        <p>Faces positive Z on the horizontal plane.</p>
+      </dd>
+      
     
       <dt class="entry-const" id="WEST">
         <strong>WEST</strong> = <code><span class="k">self</span>.new(<span class="n">90</span>, <span class="n">0</span>)</code>
       </dt>
+      
+      <dd class="entry-const-doc">
+        <p>Faces negative X on the horizontal plane.</p>
+      </dd>
       
     
   </dl>
@@ -2541,6 +2557,8 @@
       <li class="entry-summary">
         <a href="#new%28yaw%3AFloat32%2Cpitch%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(yaw : Float32, pitch : Float32)</a>
         
+          <div class="summary"><p>Creates a direction from yaw and pitch in degrees.</p></div>
+        
       </li>
     
   </ul>
@@ -2560,15 +2578,21 @@
       <li class="entry-summary">
         <a href="#from_rad%28yaw_rad%3AFloat32%2Cpitch_rad%3AFloat32%29-class-method" class="signature"><strong>.from_rad</strong>(yaw_rad : Float32, pitch_rad : Float32)</a>
         
+          <div class="summary"><p>Builds a direction from yaw and pitch in radians.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#from_vec%28vec%3AVec3d%7CVec3f%29-class-method" class="signature"><strong>.from_vec</strong>(vec : Vec3d | Vec3f)</a>
         
+          <div class="summary"><p>Builds a direction that points along <em>vec</em>.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#wrap_yaw%28yaw%3AFloat32%29%3AFloat32-class-method" class="signature"><strong>.wrap_yaw</strong>(yaw : Float32) : Float32</a>
+        
+          <div class="summary"><p>Normalizes a yaw angle to the half-open range -180 through 180 degrees.</p></div>
         
       </li>
     
@@ -2591,60 +2615,84 @@
       <li class="entry-summary">
         <a href="#down%28angle%3AFloat32%3D90%29-instance-method" class="signature"><strong>#down</strong>(angle : Float32 = <span class="n">90</span>)</a>
         
+          <div class="summary"><p>Returns a copy looking downward by <em>angle</em> degrees while retaining yaw.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#inspect%28io%29-instance-method" class="signature"><strong>#inspect</strong>(io)</a>
+        
+          <div class="summary"><p>Writes a compact yaw/pitch representation for debugging.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#pitch%3AFloat32-instance-method" class="signature"><strong>#pitch</strong> : Float32</a>
         
+          <div class="summary"><p>Vertical facing angle in degrees; negative looks up and positive looks down.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#pitch_rad-instance-method" class="signature"><strong>#pitch_rad</strong></a>
+        
+          <div class="summary"><p>The pitch angle in radians.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#to_vec3-instance-method" class="signature"><strong>#to_vec3</strong></a>
         
+          <div class="summary"><p>Converts this direction to a unit world-space vector.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#up%28angle%3AFloat32%3D90%29-instance-method" class="signature"><strong>#up</strong>(angle : Float32 = <span class="n">90</span>)</a>
+        
+          <div class="summary"><p>Returns a copy looking upward by <em>angle</em> degrees while retaining yaw.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#with_pitch%28pitch%3AFloat32%29-instance-method" class="signature"><strong>#with_pitch</strong>(pitch : Float32)</a>
         
+          <div class="summary"><p>Returns a copy with <em>pitch</em> in degrees and the existing yaw.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#with_pitch%28pitch%3AFloat64%29-instance-method" class="signature"><strong>#with_pitch</strong>(pitch : Float64)</a>
+        
+          <div class="summary"><p>Returns a copy with a Float64 <em>pitch</em> converted to Float32.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#with_yaw%28yaw%3AFloat32%29-instance-method" class="signature"><strong>#with_yaw</strong>(yaw : Float32)</a>
         
+          <div class="summary"><p>Returns a copy with <em>yaw</em> in degrees and the existing pitch.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#with_yaw%28yaw%3AFloat64%29-instance-method" class="signature"><strong>#with_yaw</strong>(yaw : Float64)</a>
+        
+          <div class="summary"><p>Returns a copy with a Float64 <em>yaw</em> converted to Float32.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#yaw%3AFloat32-instance-method" class="signature"><strong>#yaw</strong> : Float32</a>
         
+          <div class="summary"><p>Horizontal facing angle in degrees.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#yaw_rad-instance-method" class="signature"><strong>#yaw_rad</strong></a>
+        
+          <div class="summary"><p>The yaw angle in radians.</p></div>
         
       </li>
     
@@ -2713,10 +2761,15 @@
         <a class="method-permalink" href="#new%28yaw%3AFloat32%2Cpitch%3AFloat32%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Creates a direction from yaw and pitch in degrees. Angles are stored as given.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2741,10 +2794,15 @@
         <a class="method-permalink" href="#from_rad%28yaw_rad%3AFloat32%2Cpitch_rad%3AFloat32%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Builds a direction from yaw and pitch in radians.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L97" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2757,10 +2815,15 @@
         <a class="method-permalink" href="#from_vec%28vec%3AVec3d%7CVec3f%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Builds a direction that points along <em>vec</em>.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L88" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2773,10 +2836,16 @@
         <a class="method-permalink" href="#wrap_yaw%28yaw%3AFloat32%29%3AFloat32-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Normalizes a yaw angle to the half-open range -180 through 180 degrees.
+Returns 0 for <code>NaN</code> or infinite input.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2803,10 +2872,15 @@
         <a class="method-permalink" href="#down%28angle%3AFloat32%3D90%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns a copy looking downward by <em>angle</em> degrees while retaining yaw.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L53" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2819,10 +2893,15 @@
         <a class="method-permalink" href="#inspect%28io%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Writes a compact yaw/pitch representation for debugging.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L104" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2835,10 +2914,15 @@
         <a class="method-permalink" href="#pitch%3AFloat32-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Vertical facing angle in degrees; negative looks up and positive looks down.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2851,10 +2935,15 @@
         <a class="method-permalink" href="#pitch_rad-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The pitch angle in radians.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2867,10 +2956,15 @@
         <a class="method-permalink" href="#to_vec3-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Converts this direction to a unit world-space vector.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L79" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2883,10 +2977,15 @@
         <a class="method-permalink" href="#up%28angle%3AFloat32%3D90%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns a copy looking upward by <em>angle</em> degrees while retaining yaw.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L74" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2899,10 +2998,15 @@
         <a class="method-permalink" href="#with_pitch%28pitch%3AFloat32%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns a copy with <em>pitch</em> in degrees and the existing yaw.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L59" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2915,10 +3019,15 @@
         <a class="method-permalink" href="#with_pitch%28pitch%3AFloat64%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns a copy with a Float64 <em>pitch</em> converted to Float32.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L64" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2931,10 +3040,15 @@
         <a class="method-permalink" href="#with_yaw%28yaw%3AFloat32%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns a copy with <em>yaw</em> in degrees and the existing pitch.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2947,10 +3061,15 @@
         <a class="method-permalink" href="#with_yaw%28yaw%3AFloat64%29-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns a copy with a Float64 <em>yaw</em> converted to Float32.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2963,10 +3082,15 @@
         <a class="method-permalink" href="#yaw%3AFloat32-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Horizontal facing angle in degrees.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2979,10 +3103,15 @@
         <a class="method-permalink" href="#yaw_rad-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>The yaw angle in radians.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/96ab188a0181ad90ff3fdbb1849697e29e72ee02/src/rosegold/world/look.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/0a18b5c4f94b4247f92ddd896bf4f8ebef282a77/src/rosegold/world/look.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
