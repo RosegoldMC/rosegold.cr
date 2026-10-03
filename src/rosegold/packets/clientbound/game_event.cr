@@ -42,6 +42,7 @@ class Rosegold::Clientbound::GameEvent < Rosegold::Clientbound::Packet
     when 2_u8
       Log.debug { "End raining" }
     when 3_u8
+      client.player.gamemode = value.to_i8
       Log.debug { "Change game mode to #{value.to_i}" }
     when 4_u8
       Log.debug { "Win game - show credits" }

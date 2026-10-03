@@ -38,6 +38,7 @@ end
 | `player.attack()` | `bot.attack` | Taps the attack button at the current aim, or a configured `Vec3d`/ `Look`. There is no public entity-target API. |
 | `player.openInventory().findItem(...)` / slot clicks | `bot.inventory.pick!`, `count`, `throw_all_of` | Prefer item intent. Rosegold selects matching stacks and tracks the synchronized menu. |
 | open-screen inventory clicks | `bot.open_container_handle { |container| ... }` | The handle offers `withdraw` and `deposit`, reports a menu-observed transfer after each tick, and closes in `ensure`. |
+| enchanting-table offer click | `bot.enchant(item, option: 0..2)` | The bot performs one chosen, server-confirmed offer. It does not discover a table, predict seeds, or choose an offer for you. |
 | manual recipe-book or grid clicks | `bot.craft`, `craft_all`, `craft_pattern` | `craft` uses the received recipe registry. Its count is crafting rounds, not guaranteed output item count. |
 | JsMacros event listener | `bot.on`, `once`, `wait_for` | Keep the handler short. Start a fiber for operations that wait for ticks. |
 
@@ -163,6 +164,23 @@ end
 ```
 
 `withdraw` and `deposit` shift-click whole stacks until their count threshold is met. A result can be short when the source or destination is constrained, and can exceed the requested threshold when the last stack is larger. The result is calculated from the local menu after a tick, not a server acknowledgement. The handle closes even if the block raises.
+
+### Choose one enchanting offer
+
+Enchanting still starts from a known table. Put it in reach, aim at it, and begin with no open container, an empty cursor, the item and lapis in inventory, and room for the returned item:
+
+```crystal
+enchanted = bot.enchant("diamond_pickaxe", option: 2)
+puts enchanted.enchantments
+```
+
+Offer indexes are zero-based: `0`, `1`, and `2`. `enchant` has a five-second timeout for the entire workflow. It opens the table, supplies one matching item and lapis, waits for offers, chooses the requested option, waits for the server result, collects the item, and closes the table. Its returned `Slot` is the actual synchronized item, not a local click result. Normal items expose their result through `Slot#enchantments`; enchanted books use `Slot#stored_enchantments`.
+
+Do not treat the offer clue as a full result prediction. Each offer has an `index`, `required_level`, `level_cost`, `lapis_cost`, and possibly an `enchantment_name` and `enchantment_level`; the latter pair is only what the server displays. The third offer may require 30 levels to select but consume three levels and three lapis. Rosegold does not predict the seed, select the best offer, retry a timeout, discover a table, or route to one. A timeout does not reverse an offer that the server already applied. After an opening timeout, a late table response is closed; another enchant attempt is rejected until the pending opening settles by response, use acknowledgement, or disconnect.
+
+For a lower-level workflow, `open_container_handle` exposes the already aimed table as `handle.as_enchantment`. Its `offers` are a non-atomic cache: the server updates each property separately. Disabled or incomplete entries are `nil`. `EnchantmentMenu#enchant(option, timeout)` selects one after the caller has loaded the item and lapis. This is useful when the script, rather than Rosegold, owns the selection policy.
+
+Like other menu operations, moving item stacks is optimistic. There is no per-click acknowledgement promise; trust the resulting slot's synchronized enchantments for the result.
 
 ## Craft from the server's recipe data
 

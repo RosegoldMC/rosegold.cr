@@ -37,7 +37,11 @@ ROSEGOLD_SERVER=localhost:25565 crystal run examples/patrol.cr
 
 `examples/patrol.cr` walks a small square from the bot's current position. `examples/events.cr` prints chat for one minute and starts guarded eating work after low-food events. `examples/spectate.cr` opens the spectator bridge and walks the same kind of short route.
 
-`examples/container.cr` opens a configured, reachable container and counts its inventory without transferring items. Pass its known coordinates as `-- X Y Z`; it does not discover containers.
+`examples/container.cr` opens a configured, reachable container and counts its inventory without transferring items. Pass its known coordinates as `-- X Y Z`; it does not discover containers. `examples/enchanting.cr` enchants a diamond pickaxe with a selected offer. Pass the yaw and pitch that already put a reachable enchanting table under the bot's crosshair; it does not find or route to a table:
+
+```sh
+crystal run examples/enchanting.cr -- 180 20
+```
 
 The examples use `require "../src/rosegold"` so they run in this repository. In your own shard, replace it with `require "rosegold"`.
 
@@ -83,6 +87,7 @@ Use a version-specific entrypoint only when the target server is known. Availabl
 | Mine, use, place, eat | `dig`, `attack`, `place_block_against`, `use_hand`, `eat!` |
 | Manage the inventory | `inventory.pick!`, `inventory.count`, `inventory.throw_all_of`, `main_hand` |
 | Work with containers | `open_container_handle` |
+| Enchant a selected item | `enchant` |
 | Craft | `craft`, `craft_all`, `craft_pattern` |
 | React to the game | `on`, `once`, `wait_for`, `wait_ticks` |
 | Watch the bot in Minecraft | `SpectateServer` |
@@ -144,6 +149,29 @@ end
 ```
 
 Container blocks must already be in reach and under the bot's crosshair. The handle closes the window even if the block raises. `withdraw` and `deposit` shift-click whole stacks until the requested count is reached, so the returned menu-observed amount can be short or exceed the requested threshold. It is not a server acknowledgement.
+
+### Enchanting
+
+`enchant` performs one selected enchanting-table offer from start to finish:
+
+```crystal
+enchanted = bot.enchant("diamond_pickaxe", option: 2)
+puts enchanted.enchantments
+```
+
+`option` is zero-based and must be `0..2`. The table must already be known, in reach, and under the bot's crosshair.
+
+Start with no container open, an empty cursor, the item and lapis in inventory, and room to collect the result.
+
+The default five-second timeout covers the whole workflow: opening the table, moving one item and lapis into it, receiving and validating the offers, choosing the option, waiting for the server result, collecting the item, and closing the menu.
+
+The returned `Slot` is the server-synchronized enchanted result. Check `Slot#enchantments` for tools and other ordinary items; enchanted books use `Slot#stored_enchantments`.
+
+A timeout does not undo an offer the server may already have applied, and the method does not retry it. If opening times out after the use was sent, Rosegold closes a late table response and rejects another enchant attempt until that response, the use acknowledgement, or a disconnect settles the pending opening. It does not predict the enchantment seed, choose the best offer, or find a table.
+
+The third offer can require 30 experience levels to select while consuming only three levels and three lapis. Treat the offer's `enchantment_name` and `enchantment_level` as the visible clue, not a complete prediction of the resulting enchantments.
+
+### Crafting
 
 ```crystal
 # The count is recipe placements, not the number of result items.

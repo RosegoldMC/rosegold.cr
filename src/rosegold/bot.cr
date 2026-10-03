@@ -35,7 +35,7 @@ require "./control/*"
 #   `#start_using_hand`, `#stop_using_hand`, `#eat`, `#eat!`.
 # - **Manage items and containers:** `#inventory` returns an `Inventory`;
 #   `#open_container_handle` yields a `ContainerHandle`.
-# - **Craft:** `#craft`, `#craft_all`, `#craft_pattern`.
+# - **Craft and enchant:** `#craft`, `#craft_all`, `#craft_pattern`, `#enchant`.
 # - **React and wait:** inherited `EventEmitter#on`, `EventEmitter#once`, and
 #   `EventEmitter#wait_for`, plus `#wait_ticks`.
 # - **Watch your bot in Minecraft:** `SpectateServer`.
@@ -60,6 +60,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Enabled by default.
   property? auto_respawn : Bool = true
   @swapping_hands = false
+  @enchanting = false
 
   # Wraps an existing client. The client may be connected later with `#join_game`.
   def initialize(@client)
@@ -516,6 +517,36 @@ class Rosegold::Bot < Rosegold::EventEmitter
     ensure
       @swapping_hands = false
     end
+  end
+
+  # Enchants one matching inventory item using *option* (0 through 2).
+  # The caller must face a reachable table, with no container open and an empty
+  # cursor. Opens, supplies, enchants, collects, and closes the table within
+  # *timeout*, returning a detached server-confirmed result. Books expose their
+  # enchantments through `Slot#stored_enchantments`.
+  #
+  # ```
+  # enchanted = bot.enchant("diamond_pickaxe", option: 2)
+  # ```
+  #
+  # A timeout does not undo a server-applied enchantment. This does not retry,
+  # discover a table, or predict enchantments beyond the displayed offer clue.
+  # A timed-out opening closes a late table response. Another enchant attempt
+  # is rejected until a response, acknowledgement, or disconnect settles it.
+  def enchant(spec, *, option : Int32, timeout : Time::Span = 5.seconds) : Slot
+    raise "An enchantment operation is already in progress" if @enchanting
+
+    @enchanting = true
+    begin
+      client.enchantment_workflow.run(spec, option, timeout) { use_hand }
+    ensure
+      @enchanting = false
+    end
+  end
+
+  # Enchants the first inventory item for which the block returns truthy.
+  def enchant(*, option : Int32, timeout : Time::Span = 5.seconds, &spec : Slot -> _) : Slot
+    enchant(spec, option: option, timeout: timeout)
   end
 
   # Drops one item from the main-hand stack. Queues packets without waiting.
