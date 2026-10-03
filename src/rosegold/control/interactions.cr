@@ -16,6 +16,7 @@ class Rosegold::Interactions
   @using_hand = nil
   @using_hand_started = false
   @queued_hand_tap = nil
+  getter last_hand_tap_sequence : Int32 = 0
   @using_hand_delay = 0_i32
   # Releasing food cancels its repeat delay, but must not bypass the click cooldown.
   @use_cooldown_ticks = 0_i32
@@ -190,6 +191,7 @@ class Rosegold::Interactions
     return if @using_hand_delay > 0 || @use_cooldown_ticks > 0
 
     if using_hand = @using_hand || @queued_hand_tap
+      hand_tap = @using_hand.nil?
       held_slot = using_hand.main_hand? ? inventory.main_hand : inventory.off_hand
       @using_hand_delay = using_hand_delay_for held_slot
       @use_cooldown_ticks = 4
@@ -201,7 +203,7 @@ class Rosegold::Interactions
         send_swing using_hand
       when ReachedBlock
         Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
-        place_block using_hand, reached
+        place_block using_hand, reached, hand_tap: hand_tap
 
         # Vanilla falls through to UseItem when the block-use result is PASS.
         # Sneaking with an item in either hand bypasses block-use entirely.
@@ -211,6 +213,7 @@ class Rosegold::Interactions
           sequence = client.next_sequence
           operation = BlockOperation.new(Vec3i::ORIGIN, :use)
           client.pending_block_operations[sequence] = operation
+          @last_hand_tap_sequence = sequence if hand_tap
 
           send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
         end
@@ -220,6 +223,7 @@ class Rosegold::Interactions
         sequence = client.next_sequence
         operation = BlockOperation.new(Vec3i::ORIGIN, :use)
         client.pending_block_operations[sequence] = operation
+        @last_hand_tap_sequence = sequence if hand_tap
 
         send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
       end
@@ -279,13 +283,14 @@ class Rosegold::Interactions
     DataComponents::SwingAnimation.new(1_u32, 6_u32)
   end
 
-  private def place_block(hand : Hand, reached : ReachedBlock)
+  private def place_block(hand : Hand, reached : ReachedBlock, hand_tap : Bool = false)
     cursor = (reached.intercept - reached.block.to_f64).to_f32
     inside_block = false # TODO
 
     sequence = client.next_sequence
     operation = BlockOperation.new(reached.block, :place)
     client.pending_block_operations[sequence] = operation
+    @last_hand_tap_sequence = sequence if hand_tap
 
     send_packet Serverbound::PlayerBlockPlacement.new \
       hand, reached.block, reached.face, cursor, inside_block, sequence

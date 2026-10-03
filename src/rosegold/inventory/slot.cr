@@ -3002,7 +3002,15 @@ class Rosegold::Slot
   end
 
   def enchantments
-    enchant_component = components_to_add["enchantments"]?
+    named_enchantments "enchantments"
+  end
+
+  def stored_enchantments
+    named_enchantments "stored_enchantments"
+  end
+
+  private def named_enchantments(component_name : String)
+    enchant_component = components_to_add[component_name]?
     return Hash(String, Int8 | Int16 | Int32 | Int64 | UInt8).new unless enchant_component.is_a?(DataComponents::Enchantments)
 
     result = Hash(String, Int8 | Int16 | Int32 | Int64 | UInt8).new

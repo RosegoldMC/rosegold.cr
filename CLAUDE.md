@@ -168,6 +168,17 @@ Menu types include PlayerMenu (46 slots), ChestMenu, CraftingMenu, FurnaceMenu,
 AnvilMenu, BrewingStandMenu, EnchantmentMenu, HopperMenu, MerchantMenu, and
 GenericMenu. `MenuFactory` selects and synchronizes the active menu.
 
+Keep Bot methods thin: inventory workflows belong in `inventory/`, while
+`Interactions` owns low-level world-use mechanics. `EnchantmentWorkflow` owns
+the item-level table workflow; `Enchanting` confirms a loaded menu's selection.
+Client owns the workflow so a cancelled opening remains tracked until its late
+response, use acknowledgement, or disconnect, even after the Bot call returns.
+The public Bot workflow requires an already known, in-reach table under the
+crosshair; it must not discover tables, predict enchantment seeds, or choose
+offers by policy. Offer clues are server display data, not a complete result
+prediction. Keep the whole workflow bounded and return the server-synchronized
+result rather than a local click assumption.
+
 Crafting supports: recipe lookup, can_craft? check, auto-craft by name, craft_all, manual grid patterns.
 
 ### Interactions

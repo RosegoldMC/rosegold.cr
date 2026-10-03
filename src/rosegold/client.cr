@@ -51,7 +51,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     connection : Connection::Client?,
     dimension : Dimension = Dimension.new,
     physics : Physics,
-    interactions : Interactions
+    interactions : Interactions,
+    enchantment_workflow : EnchantmentWorkflow
 
   property \
     player : Player = Player.new,
@@ -167,12 +168,14 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
     @physics = uninitialized Physics
     @interactions = uninitialized Interactions
+    @enchantment_workflow = uninitialized EnchantmentWorkflow
     @player_inventory = uninitialized PlayerInventory
     @inventory_menu = uninitialized PlayerMenu
     @container_menu = uninitialized Menu
     @chat_manager = uninitialized ChatManager
     @physics = Physics.new self
     @interactions = Interactions.new self
+    @enchantment_workflow = EnchantmentWorkflow.new self
     @player_inventory = PlayerInventory.new
     @inventory_menu = PlayerMenu.new self
     @container_menu = @inventory_menu
