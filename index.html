@@ -1412,8 +1412,23 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Enchanting" data-name="rosegold::enchanting">
+      <a href="Rosegold/Enchanting.html">Enchanting</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/EnchantmentMenu" data-name="rosegold::enchantmentmenu">
       <a href="Rosegold/EnchantmentMenu.html">EnchantmentMenu</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/EnchantmentOffer" data-name="rosegold::enchantmentoffer">
+      <a href="Rosegold/EnchantmentOffer.html">EnchantmentOffer</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/EnchantmentWorkflow" data-name="rosegold::enchantmentworkflow">
+      <a href="Rosegold/EnchantmentWorkflow.html">EnchantmentWorkflow</a>
       
     </li>
   
@@ -1962,6 +1977,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ContainerButtonClick" data-name="rosegold::serverbound::containerbuttonclick">
+      <a href="Rosegold/Serverbound/ContainerButtonClick.html">ContainerButtonClick</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/EncryptionResponse" data-name="rosegold::serverbound::encryptionresponse">
       <a href="Rosegold/Serverbound/EncryptionResponse.html">EncryptionResponse</a>
       
@@ -2457,7 +2477,8 @@ shards build
 <p>For this checkout, patrol and events default to <code>localhost:25565</code>. Set <code>ROSEGOLD_SERVER</code> to a <code>host:port</code> pair for another server:</p>
 <pre><code class="language-sh">ROSEGOLD_SERVER=localhost:25565 crystal run examples/patrol.cr</code></pre>
 <p><code>examples/patrol.cr</code> walks a small square from the bot's current position. <code>examples/events.cr</code> prints chat for one minute and starts guarded eating work after low-food events. <code>examples/spectate.cr</code> opens the spectator bridge and walks the same kind of short route.</p>
-<p><code>examples/container.cr</code> opens a configured, reachable container and counts its inventory without transferring items. Pass its known coordinates as <code>-- X Y Z</code>; it does not discover containers.</p>
+<p><code>examples/container.cr</code> opens a configured, reachable container and counts its inventory without transferring items. Pass its known coordinates as <code>-- X Y Z</code>; it does not discover containers. <code>examples/enchanting.cr</code> enchants a diamond pickaxe with a selected offer. Pass the yaw and pitch that already put a reachable enchanting table under the bot's crosshair; it does not find or route to a table:</p>
+<pre><code class="language-sh">crystal run examples/enchanting.cr -- 180 20</code></pre>
 <p>The examples use <code>require &quot;../src/rosegold&quot;</code> so they run in this repository. In your own shard, replace it with <code>require &quot;rosegold&quot;</code>.</p>
 <h2><a id="a-small-bot-with-a-clean-lifecycle" class="anchor" href="#a-small-bot-with-a-clean-lifecycle">
   <svg class="octicon-link" aria-hidden="true">
@@ -2500,6 +2521,7 @@ bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</
 | Mine, use, place, eat | <code>dig</code>, <code>attack</code>, <code>place_block_against</code>, <code>use_hand</code>, <code>eat!</code> |
 | Manage the inventory | <code>inventory.pick!</code>, <code>inventory.count</code>, <code>inventory.throw_all_of</code>, <code>main_hand</code> |
 | Work with containers | <code>open_container_handle</code> |
+| Enchant a selected item | <code>enchant</code> |
 | Craft | <code>craft</code>, <code>craft_all</code>, <code>craft_pattern</code> |
 | React to the game | <code>on</code>, <code>once</code>, <code>wait_for</code>, <code>wait_ticks</code> |
 | Watch the bot in Minecraft | <code>SpectateServer</code> |</p>
@@ -2555,6 +2577,25 @@ bot.open_container_handle <span class="k">do</span> <span class="o">|</span>cont
   puts <span class="s">&quot;moved </span><span class="i">#{</span>withdrawn<span class="i">}</span><span class="s"> diamonds and </span><span class="i">#{</span>deposited<span class="i">}</span><span class="s"> cobblestone&quot;</span>
 <span class="k">end</span></code></pre>
 <p>Container blocks must already be in reach and under the bot's crosshair. The handle closes the window even if the block raises. <code>withdraw</code> and <code>deposit</code> shift-click whole stacks until the requested count is reached, so the returned menu-observed amount can be short or exceed the requested threshold. It is not a server acknowledgement.</p>
+<h3><a id="enchanting" class="anchor" href="#enchanting">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Enchanting</h3>
+<p><code>enchant</code> performs one selected enchanting-table offer from start to finish:</p>
+<pre><code class="language-crystal">enchanted <span class="o">=</span> bot.enchant(<span class="s">&quot;diamond_pickaxe&quot;</span>, option: <span class="n">2</span>)
+puts enchanted.enchantments</code></pre>
+<p><code>option</code> is zero-based and must be <code>0..2</code>. The table must already be known, in reach, and under the bot's crosshair.</p>
+<p>Start with no container open, an empty cursor, the item and lapis in inventory, and room to collect the result.</p>
+<p>The default five-second timeout covers the whole workflow: opening the table, moving one item and lapis into it, receiving and validating the offers, choosing the option, waiting for the server result, collecting the item, and closing the menu.</p>
+<p>The returned <code>Slot</code> is the server-synchronized enchanted result. Check <code>Slot#enchantments</code> for tools and other ordinary items; enchanted books use <code>Slot#stored_enchantments</code>.</p>
+<p>A timeout does not undo an offer the server may already have applied, and the method does not retry it. If opening times out after the use was sent, Rosegold closes a late table response and rejects another enchant attempt until that response, the use acknowledgement, or a disconnect settles the pending opening. It does not predict the enchantment seed, choose the best offer, or find a table.</p>
+<p>The third offer can require 30 experience levels to select while consuming only three levels and three lapis. Treat the offer's <code>enchantment_name</code> and <code>enchantment_level</code> as the visible clue, not a complete prediction of the resulting enchantments.</p>
+<h3><a id="crafting" class="anchor" href="#crafting">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Crafting</h3>
 <pre><code class="language-crystal"><span class="c"># The count is recipe placements, not the number of result items.</span>
 bot.craft(<span class="s">&quot;stick&quot;</span>, <span class="n">4</span>)
 bot.craft_all(<span class="s">&quot;torch&quot;</span>)

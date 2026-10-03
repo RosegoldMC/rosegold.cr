@@ -1412,8 +1412,23 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Enchanting" data-name="rosegold::enchanting">
+      <a href="../Rosegold/Enchanting.html">Enchanting</a>
+      
+    </li>
+  
   <li class=" current" data-id="rosegold/Rosegold/EnchantmentMenu" data-name="rosegold::enchantmentmenu">
       <a href="../Rosegold/EnchantmentMenu.html">EnchantmentMenu</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/EnchantmentOffer" data-name="rosegold::enchantmentoffer">
+      <a href="../Rosegold/EnchantmentOffer.html">EnchantmentOffer</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/EnchantmentWorkflow" data-name="rosegold::enchantmentworkflow">
+      <a href="../Rosegold/EnchantmentWorkflow.html">EnchantmentWorkflow</a>
       
     </li>
   
@@ -1962,6 +1977,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Serverbound/ContainerButtonClick" data-name="rosegold::serverbound::containerbuttonclick">
+      <a href="../Rosegold/Serverbound/ContainerButtonClick.html">ContainerButtonClick</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Serverbound/EncryptionResponse" data-name="rosegold::serverbound::encryptionresponse">
       <a href="../Rosegold/Serverbound/EncryptionResponse.html">EncryptionResponse</a>
       
@@ -2479,7 +2499,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/f24d07ab6fab422467f038a4c8b89bad31980491/src/rosegold/inventory/menus/enchantment_menu.cr#L4" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/827127717970e8eb7f06d4fa2202a4352825b0b8/src/rosegold/inventory/menus/enchantment_menu.cr#L4" target="_blank">
         rosegold/inventory/menus/enchantment_menu.cr
       </a>
     
@@ -2525,6 +2545,13 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#enchant%28option%3AInt32%2Ctimeout%3ATime%3A%3ASpan%3D5.seconds%29%3ARosegold%3A%3ASlot-instance-method" class="signature"><strong>#enchant</strong>(option : Int32, timeout : Time::Span = <span class="n">5</span>.seconds) : Rosegold::Slot</a>
+        
+          <div class="summary"><p>Selects one currently advertised offer and waits for the enchanted input stack plus the server's survival resource updates.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#get_slot_max_stack_size%28slot_index%3AInt32%2Citem_slot%3ARosegold%3A%3ASlot%29%3AInt32-instance-method" class="signature"><strong>#get_slot_max_stack_size</strong>(slot_index : Int32, item_slot : Rosegold::Slot) : Int32</a>
         
       </li>
@@ -2543,6 +2570,13 @@
         <a href="#may_place%3F%28slot_index%3AInt32%2Citem_slot%3ARosegold%3A%3ASlot%29%3ABool-instance-method" class="signature"><strong>#may_place?</strong>(slot_index : Int32, item_slot : Rosegold::Slot) : Bool</a>
         
           <div class="summary"><p>Slot validation</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#offers%3AStaticArray%28EnchantmentOffer%7CNil%2C3%29-instance-method" class="signature"><strong>#offers</strong> : StaticArray(EnchantmentOffer | Nil, <span class="n">3</span>)</a>
+        
+          <div class="summary"><p>Cached server offers, updated one property at a time rather than atomically.</p></div>
         
       </li>
     
@@ -3030,7 +3064,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f24d07ab6fab422467f038a4c8b89bad31980491/src/rosegold/inventory/menus/enchantment_menu.cr#L5" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/827127717970e8eb7f06d4fa2202a4352825b0b8/src/rosegold/inventory/menus/enchantment_menu.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3051,6 +3085,28 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="enchant(option:Int32,timeout:Time::Span=5.seconds):Rosegold::Slot-instance-method">
+      <div class="signature">
+        
+        def <strong>enchant</strong>(option : <a href="../Int32.html">Int32</a>, timeout : Time::Span = <span class="n">5</span>.seconds) : <a href="../Rosegold/Slot.html">Rosegold::Slot</a>
+
+        <a class="method-permalink" href="#enchant%28option%3AInt32%2Ctimeout%3ATime%3A%3ASpan%3D5.seconds%29%3ARosegold%3A%3ASlot-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Selects one currently advertised offer and waits for the enchanted input
+stack plus the server's survival resource updates.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/827127717970e8eb7f06d4fa2202a4352825b0b8/src/rosegold/inventory/menus/enchantment_menu.cr#L52" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="get_slot_max_stack_size(slot_index:Int32,item_slot:Rosegold::Slot):Int32-instance-method">
       <div class="signature">
         
@@ -3062,7 +3118,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f24d07ab6fab422467f038a4c8b89bad31980491/src/rosegold/inventory/menus/enchantment_menu.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/827127717970e8eb7f06d4fa2202a4352825b0b8/src/rosegold/inventory/menus/enchantment_menu.cr#L71" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3078,7 +3134,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f24d07ab6fab422467f038a4c8b89bad31980491/src/rosegold/inventory/menus/enchantment_menu.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/827127717970e8eb7f06d4fa2202a4352825b0b8/src/rosegold/inventory/menus/enchantment_menu.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3094,7 +3150,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f24d07ab6fab422467f038a4c8b89bad31980491/src/rosegold/inventory/menus/enchantment_menu.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/827127717970e8eb7f06d4fa2202a4352825b0b8/src/rosegold/inventory/menus/enchantment_menu.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3119,7 +3175,30 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f24d07ab6fab422467f038a4c8b89bad31980491/src/rosegold/inventory/menus/enchantment_menu.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/827127717970e8eb7f06d4fa2202a4352825b0b8/src/rosegold/inventory/menus/enchantment_menu.cr#L63" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="offers:StaticArray(EnchantmentOffer|Nil,3)-instance-method">
+      <div class="signature">
+        
+        def <strong>offers</strong> : StaticArray(<a href="../Rosegold/EnchantmentOffer.html">EnchantmentOffer</a> | Nil, <span class="n">3</span>)
+
+        <a class="method-permalink" href="#offers%3AStaticArray%28EnchantmentOffer%7CNil%2C3%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Cached server offers, updated one property at a time rather than atomically.
+Names are display clues only; custom names remain namespaced and unknown
+IDs remain unnamed. Disabled or incomplete offers are nil.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/827127717970e8eb7f06d4fa2202a4352825b0b8/src/rosegold/inventory/menus/enchantment_menu.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3144,7 +3223,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f24d07ab6fab422467f038a4c8b89bad31980491/src/rosegold/inventory/menus/enchantment_menu.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/827127717970e8eb7f06d4fa2202a4352825b0b8/src/rosegold/inventory/menus/enchantment_menu.cr#L75" target="_blank">View source</a>]
         
       </div>
     </div>
