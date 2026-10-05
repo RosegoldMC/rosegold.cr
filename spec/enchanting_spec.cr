@@ -6,6 +6,47 @@ class EnchantingSpecClient < Rosegold::Client
   end
 end
 
+class HiddenClueEnchantmentServerClient < EnchantingSpecClient
+  getter sent_packets = [] of Rosegold::Serverbound::Packet
+  property menu : Rosegold::EnchantmentMenu?
+  property? selected_hidden_clue_offer = false
+
+  def send_packet!(packet : Rosegold::Serverbound::Packet)
+    super
+    @sent_packets << packet
+
+    return unless packet.is_a?(Rosegold::Serverbound::ContainerButtonClick)
+
+    menu = @menu || raise "Hidden-clue server received a button before opening its table"
+    raise "Expected hidden-clue option 2, got #{packet.button_id}" unless packet.container_id == menu.id && packet.button_id == 2
+
+    clicks = @sent_packets.select(Rosegold::Serverbound::ClickWindow)
+    raise "Expected item and lapis shift-clicks before selecting the offer" unless clicks.size == 2
+    raise "Expected item to load before lapis" unless clicks[0].changed_slots.any? { |slot| slot.slot_number == 0 }
+    raise "Expected lapis to load before selecting the offer" unless clicks[1].changed_slots.any? { |slot| slot.slot_number == 1 }
+
+    @selected_hidden_clue_offer = true
+    spawn do
+      sleep 1.millisecond
+      deliver Rosegold::Clientbound::SetSlot.new(menu.id.to_i8, 3_u32, Rosegold::WindowSlot.new(0, hidden_clue_enchanted_item(menu.item.item_id_int)))
+      deliver Rosegold::Clientbound::SetSlot.new(menu.id.to_i8, 3_u32, Rosegold::WindowSlot.new(1, Rosegold::Slot.new))
+      deliver Rosegold::Clientbound::SetExperience.new(0_f32, 27_u32, 0_u32)
+    end
+  end
+
+  private def hidden_clue_enchanted_item(item_id : UInt32)
+    components = Hash(String, Rosegold::DataComponent){
+      "enchantments" => Rosegold::DataComponents::Enchantments.new({1_u32 => 1_u32}),
+    }
+    Rosegold::Slot.new(1_u32, item_id, components, Set(String).new)
+  end
+
+  private def deliver(packet : Rosegold::Clientbound::Packet)
+    packet.callback(self)
+    emit_event(packet)
+  end
+end
+
 class EnchantingOpeningRaceBot < Rosegold::Bot
   def initialize(@race_client : EnchantingSpecClient, @opening_menu : Rosegold::EnchantmentMenu)
     super(@race_client)
@@ -105,6 +146,31 @@ Spectator.describe Rosegold::EnchantmentMenu do
 
     expect { bot.enchant("diamond_pickaxe", option: 0, timeout: 20.milliseconds) }
       .to raise_error(Exception, /No matching item available to enchant/)
+  end
+
+  it "enchants a hidden option 2 after loading lapis and server-confirmed completion" do
+    io = Minecraft::IO::Memory.new
+    client = HiddenClueEnchantmentServerClient.new("localhost", 25565,
+      offline: {uuid: "00000000-0000-0000-0000-000000000000", username: "hiddencluetest"})
+    client.connection_for_test = Rosegold::Connection::Client.new(io, Rosegold::ProtocolState::PLAY, Rosegold::Client.protocol_version)
+    client.set_protocol_state(Rosegold::ProtocolState::PLAY)
+    client.player.experience_level = 30_u32
+    menu = Rosegold::EnchantmentMenu.new(client, 4_u8, Rosegold::Chat.new("Enchant"))
+    client.menu = menu
+    menu[2] = Rosegold::Slot.new(count: 1_u32, item_id_int: Rosegold::MCData.default.items.find! { |item| item.name == "diamond_pickaxe" }.id)
+    menu[3] = Rosegold::Slot.new(count: 3_u32, item_id_int: Rosegold::MCData.default.items.find! { |item| item.name == "lapis_lazuli" }.id)
+    menu.properties[2_i16] = 30_i16
+    menu.properties[6_i16] = -1_i16
+    menu.properties[9_i16] = -1_i16
+    bot = EnchantingOpeningRaceBot.new(client, menu)
+
+    result = bot.enchant("diamond_pickaxe", option: 2, timeout: 100.milliseconds)
+
+    expect(client.selected_hidden_clue_offer?).to be_true
+    expect(result.enchanted?).to be_true
+    expect(client.player.experience_level).to eq(27_u32)
+    expect(menu.item.empty?).to be_true
+    expect(menu.lapis.empty?).to be_true
   end
 
   it "waits for matching enchanted input, lapis, and experience updates" do
