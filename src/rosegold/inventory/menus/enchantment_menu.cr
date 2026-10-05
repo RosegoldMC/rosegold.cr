@@ -19,28 +19,23 @@ class Rosegold::EnchantmentMenu < Rosegold::ContainerMenu
 
   # Cached server offers, updated one property at a time rather than atomically.
   # Names are display clues only; custom names remain namespaced and unknown
-  # IDs remain unnamed. Disabled or incomplete offers are nil.
+  # IDs remain unnamed. Only a non-positive required level disables an offer.
   def offers : StaticArray(EnchantmentOffer?, 3)
     3.times do |index|
       required_level = properties[index.to_i16]?
-      next unless required_level
-      if required_level <= 0
+      if !required_level || required_level <= 0
         @offers[index] = nil
         next
       end
 
       clue_id = properties[(index + 4).to_i16]?
-      clue_level = properties[(index + 7).to_i16]?.try(&.to_i)
-      unless clue_id && clue_id >= 0 && clue_level && clue_level > 0
-        @offers[index] = nil
-        next
-      end
+      clue_level = properties[(index + 7).to_i16]?.try { |level| level > 0 ? level.to_i : nil }
       @offers[index] = EnchantmentOffer.new(
         index,
         required_level.to_i,
         index + 1,
         index + 1,
-        clue_id ? enchantment_name(clue_id) : nil,
+        clue_id.try { |id| enchantment_name(id) },
         clue_level
       )
     end

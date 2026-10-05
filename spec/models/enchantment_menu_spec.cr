@@ -53,7 +53,9 @@ Spectator.describe Rosegold::EnchantmentMenu do
     expect(first.enchantment_level).to eq(1)
     expect(second.enchantment_name).to eq("custom:weightless")
     expect(second.enchantment_level).to eq(3)
-    expect(offers[2]).to be_nil
+    third = offers[2] || raise("Missing third offer")
+    expect(third.enchantment_name).to be_nil
+    expect(third.enchantment_level).to be_nil
   end
 
   it "does not retain a stale offer after the server withdraws it" do
@@ -66,13 +68,35 @@ Spectator.describe Rosegold::EnchantmentMenu do
     expect(menu.offers[0]).to be_nil
   end
 
-  it "does not advertise an offer before all its display properties arrive" do
+  it "keeps an offered option selectable when its clue is hidden or absent" do
     menu.properties[0_i16] = 5_i16
-    expect(menu.offers[0]).to be_nil
+    hidden_clue = menu.offers[0] || raise("Missing offer")
+    expect(hidden_clue.enchantment_name).to be_nil
+    expect(hidden_clue.enchantment_level).to be_nil
+
+    menu.properties[4_i16] = -1_i16
+    menu.properties[7_i16] = -1_i16
+    clue_less_offer = menu.offers[0] || raise("Missing offer")
+    expect(clue_less_offer.required_level).to eq(5)
+    expect(clue_less_offer.enchantment_name).to be_nil
+    expect(clue_less_offer.enchantment_level).to be_nil
+
+    client.registries["minecraft:enchantment"] = Rosegold::Clientbound::RegistryData.new(
+      "minecraft:enchantment", [{id: "minecraft:sharpness", data: nil.as(Bytes?)}]
+    )
     menu.properties[4_i16] = 0_i16
-    expect(menu.offers[0]).to be_nil
+    menu.properties[7_i16] = 3_i16
+    visible_clue = menu.offers[0] || raise("Missing offer")
+    expect(visible_clue.enchantment_name).to eq("sharpness")
+    expect(visible_clue.enchantment_level).to eq(3)
+  end
+
+  it "does not advertise a disabled option even if it has clue properties" do
+    menu.properties[0_i16] = 0_i16
+    menu.properties[4_i16] = 0_i16
     menu.properties[7_i16] = 1_i16
-    expect(menu.offers[0]).not_to be_nil
+
+    expect(menu.offers[0]).to be_nil
   end
 
   it "keeps unknown clue ids unnamed rather than applying a registry position from another server" do

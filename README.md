@@ -169,7 +169,7 @@ The returned `Slot` is the server-synchronized enchanted result. Check `Slot#enc
 
 A timeout does not undo an offer the server may already have applied, and the method does not retry it. If opening times out after the use was sent, Rosegold closes a late table response and rejects another enchant attempt until that response, the use acknowledgement, or a disconnect settles the pending opening. It does not predict the enchantment seed, choose the best offer, or find a table.
 
-The third offer can require 30 experience levels to select while consuming only three levels and three lapis. Treat the offer's `enchantment_name` and `enchantment_level` as the visible clue, not a complete prediction of the resulting enchantments.
+The third offer can require 30 experience levels to select while consuming only three levels and three lapis. Treat the offer's `enchantment_name` and `enchantment_level` as the visible clue, not a complete prediction of the resulting enchantments. Servers can hide that clue; an explicit option remains selectable when its required level is positive, even if the clue fields are `nil`.
 
 ### Crafting
 

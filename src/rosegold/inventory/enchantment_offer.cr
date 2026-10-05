@@ -1,4 +1,5 @@
 # One selectable enchantment-table offer advertised by the active menu.
+# Servers may omit the display clue without withdrawing the offer.
 struct Rosegold::EnchantmentOffer
   getter index : Int32
   getter required_level : Int32
