@@ -2590,7 +2590,7 @@ puts enchanted.enchantments</code></pre>
 <p>The default five-second timeout covers the whole workflow: opening the table, moving one item and lapis into it, receiving and validating the offers, choosing the option, waiting for the server result, collecting the item, and closing the menu.</p>
 <p>The returned <code>Slot</code> is the server-synchronized enchanted result. Check <code>Slot#enchantments</code> for tools and other ordinary items; enchanted books use <code>Slot#stored_enchantments</code>.</p>
 <p>A timeout does not undo an offer the server may already have applied, and the method does not retry it. If opening times out after the use was sent, Rosegold closes a late table response and rejects another enchant attempt until that response, the use acknowledgement, or a disconnect settles the pending opening. It does not predict the enchantment seed, choose the best offer, or find a table.</p>
-<p>The third offer can require 30 experience levels to select while consuming only three levels and three lapis. Treat the offer's <code>enchantment_name</code> and <code>enchantment_level</code> as the visible clue, not a complete prediction of the resulting enchantments.</p>
+<p>The third offer can require 30 experience levels to select while consuming only three levels and three lapis. Treat the offer's <code>enchantment_name</code> and <code>enchantment_level</code> as the visible clue, not a complete prediction of the resulting enchantments. Servers can hide that clue; an explicit option remains selectable when its required level is positive, even if the clue fields are <code>nil</code>.</p>
 <h3><a id="crafting" class="anchor" href="#crafting">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
