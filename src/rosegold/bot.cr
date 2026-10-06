@@ -51,6 +51,9 @@ require "./control/*"
 # Event handlers run synchronously; use `spawn` inside a handler for work that
 # waits for ticks or more packets.
 class Rosegold::Bot < Rosegold::EventEmitter
+  # A snapshot keeps a retained mount from exposing entity updates after dismounting.
+  record Mount, type : String?, location : Vec3d
+
   private getter client : Client
 
   # The inventory facade for the player and currently open menu.
@@ -286,6 +289,26 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # The player's current feet position in world coordinates.
   def location
     client.player.feet
+  end
+
+  # A snapshot of the direct mount's type and location, or `nil` when unmounted.
+  # Unknown entity type IDs have a `nil` type. No other entity data is exposed.
+  def riding : Mount?
+    entity = client.dimension.entities.each_value.find do |candidate|
+      candidate.passenger_ids.includes?(client.player.entity_id)
+    end
+    return unless entity
+
+    Mount.new(entity.metadata.try(&.name), entity.position)
+  end
+
+  # Whether the player is riding, optionally matching an exact entity type.
+  # Accepts names with or without the `minecraft:` prefix.
+  def riding?(type : String? = nil) : Bool
+    mount = riding
+    return false unless mount
+
+    type.nil? || mount.type == type.lchop("minecraft:")
   end
 
   @[Deprecated("Use `bot.location` instead of `bot.feet`")]

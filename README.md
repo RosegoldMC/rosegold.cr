@@ -67,6 +67,28 @@ end
 
 That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result.
 
+## Riding
+
+```crystal
+bot.riding?
+bot.riding?("minecart")
+bot.riding?("horse")
+
+if mount = bot.riding
+  mount.type
+  mount.location
+end
+```
+
+`riding` returns a snapshot of the entity you're directly riding, or `nil`.
+It exposes only the entity type and location, not other passengers or entity
+metadata. Read `bot.riding` again for a fresh snapshot.
+
+`riding?` accepts an optional exact entity type, with or without the `minecraft:`
+prefix. `"minecart"` does not match `"chest_minecart"`. All entity types are
+supported. If the server sends an unknown type ID, `riding?` is still true and
+the snapshot's `type` is `nil`.
+
 ## Choose a protocol build
 
 The default entrypoint compiles every supported protocol and detects the server with a status ping.

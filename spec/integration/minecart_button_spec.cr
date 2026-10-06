@@ -18,16 +18,11 @@ Spectator.describe "Rosegold::Bot mounted button interactions" do
         bot.wait_ticks 5
         admin.chat "/ride #{AdminBot::TEST_PLAYER} mount @e[type=minecraft:minecart,tag=mounted_button_spec,limit=1]"
 
-        vehicle : Rosegold::Entity? = nil
         40.times do
-          vehicle = client.dimension_for_test.entities.values.find do |entity|
-            entity.passenger_ids.includes?(client.player.entity_id.to_u32)
-          end
-          break if vehicle
+          break if bot.riding?("minecart")
           bot.wait_tick
         end
-        expect(vehicle).not_to be_nil
-        mounted_vehicle = vehicle || raise "Bot did not mount the minecart"
+        expect(bot.riding?("minecart")).to be_true
 
         bot.look = Rosegold::Look.new(-90_f32, 15_f32)
         bot.wait_ticks 5
@@ -38,7 +33,7 @@ Spectator.describe "Rosegold::Bot mounted button interactions" do
         bot.use_hand
         final_name = wait_for_mounted_button_state(client, bot, 1, true)
         expect(final_name).to contain("powered=true")
-        expect(mounted_vehicle.passenger_ids).to contain(client.player.entity_id.to_u32)
+        expect(bot.riding?("minecart")).to be_true
 
         released_name = wait_for_mounted_button_state(client, bot, 1, false)
         expect(released_name).to contain("powered=false")
