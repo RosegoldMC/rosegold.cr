@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="rosegold">
-  <title>Rosegold::DataComponents::DeathProtection - rosegold main</title>
+  <title>Rosegold::Bot::Mount - rosegold main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -147,7 +147,7 @@
       
     </li>
   
-  <li class="parent " data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
+  <li class="parent open current" data-id="rosegold/Rosegold/Bot" data-name="rosegold::bot">
       <a href="../../Rosegold/Bot.html">Bot</a>
       
         <ul>
@@ -162,7 +162,7 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/Bot/Mount" data-name="rosegold::bot::mount">
+  <li class=" current" data-id="rosegold/Rosegold/Bot/Mount" data-name="rosegold::bot::mount">
       <a href="../../Rosegold/Bot/Mount.html">Mount</a>
       
     </li>
@@ -862,7 +862,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
+  <li class="parent " data-id="rosegold/Rosegold/DataComponents" data-name="rosegold::datacomponents">
       <a href="../../Rosegold/DataComponents.html">DataComponents</a>
       
         <ul>
@@ -1007,7 +1007,7 @@
       
     </li>
   
-  <li class=" current" data-id="rosegold/Rosegold/DataComponents/DeathProtection" data-name="rosegold::datacomponents::deathprotection">
+  <li class=" " data-id="rosegold/Rosegold/DataComponents/DeathProtection" data-name="rosegold::datacomponents::deathprotection">
       <a href="../../Rosegold/DataComponents/DeathProtection.html">DeathProtection</a>
       
     </li>
@@ -2457,13 +2457,13 @@
 <h1 class="type-name">
 
   <span class="kind">
-    class
-  </span> Rosegold::<wbr>DataComponents::<wbr>DeathProtection
+    struct
+  </span> Rosegold::<wbr>Bot::<wbr>Mount
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/DataComponents/DeathProtection.html">Rosegold::DataComponents::DeathProtection</a></li><li class="superclass"><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Rosegold/Bot/Mount.html">Rosegold::Bot::Mount</a></li><li class="superclass">Struct</li><li class="superclass">Value</li><li class="superclass">Object</li></ul>
 
 
 
@@ -2477,7 +2477,7 @@
     Overview
   </h2>
 
-  <p>DeathProtection - list of consume effects</p>
+  <p>A snapshot keeps a retained mount from exposing entity updates after dismounting.</p>
 
 
 
@@ -2504,8 +2504,8 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7456bab1f03432503cfb928f84637523ee4c6970/src/rosegold/inventory/slot.cr#L1615" target="_blank">
-        rosegold/inventory/slot.cr
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/7456bab1f03432503cfb928f84637523ee4c6970/src/rosegold/bot.cr#L55" target="_blank">
+        rosegold/bot.cr
       </a>
     
     <br/>
@@ -2527,12 +2527,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#read%28io%29%3Aself-class-method" class="signature"><strong>.read</strong>(io) : <span class="k">self</span></a>
+        <a href="#new%28type%3AString%7CNil%2Clocation%3AVec3d%29-class-method" class="signature"><strong>.new</strong>(type : String | Nil, location : Vec3d)</a>
         
       </li>
     
@@ -2555,7 +2550,22 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#write%28io%29%3ANil-instance-method" class="signature"><strong>#write</strong>(io) : Nil</a>
+        <a href="#clone-instance-method" class="signature"><strong>#clone</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#copy_with%28type_type%3D%40type%2Clocation_location%3D%40location%29-instance-method" class="signature"><strong>#copy_with</strong>(type _type = @type, location _location = @location)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#location%3AVec3d-instance-method" class="signature"><strong>#location</strong> : Vec3d</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#type%3AString%7CNil-instance-method" class="signature"><strong>#type</strong> : String | Nil</a>
         
       </li>
     
@@ -2567,31 +2577,8 @@
     
       
 
-  <h3>Instance methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
-  
-  
-    <a href="../../Rosegold/DataComponent.html#write%28io%29%3ANil-instance-method" class="tooltip">
-      <span>write(io) : Nil</span>
-    write</a>
-    
-  
-
 
       
-
-  <h3>Constructor methods inherited from class <code><a href="../../Rosegold/DataComponent.html">Rosegold::DataComponent</a></code></h3>
-  
-  
-    <a href="../../Rosegold/DataComponent.html#create_component%28component_type%3AUInt32%2Cio%29%3ADataComponent-class-method" class="tooltip">
-      <span>create_component(component_type : UInt32, io) : DataComponent</span>
-    create_component</a>, 
-    
-  
-    <a href="../../Rosegold/DataComponent.html#create_component_by_name%28name%3AString%7CNil%2Ccomponent_type%3AUInt32%2Cio%29%3ADataComponent-class-method" class="tooltip">
-      <span>create_component_by_name(name : String | Nil, component_type : UInt32, io) : DataComponent</span>
-    create_component_by_name</a>
-    
-  
 
 
       
@@ -2639,34 +2626,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new-class-method">
+    <div class="entry-detail" id="new(type:String|Nil,location:Vec3d)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>
+        def self.<strong>new</strong>(type : String | Nil, location : <a href="../../Rosegold/Vec3d.html">Vec3d</a>)
 
-        <a class="method-permalink" href="#new-class-method">#</a>
+        <a class="method-permalink" href="#new%28type%3AString%7CNil%2Clocation%3AVec3d%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7456bab1f03432503cfb928f84637523ee4c6970/src/rosegold/inventory/slot.cr#L1616" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="read(io):self-class-method">
-      <div class="signature">
-        
-        def self.<strong>read</strong>(io) : <span class="k">self</span>
-
-        <a class="method-permalink" href="#read%28io%29%3Aself-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7456bab1f03432503cfb928f84637523ee4c6970/src/rosegold/inventory/slot.cr#L1618" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7456bab1f03432503cfb928f84637523ee4c6970/src/rosegold/bot.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2687,18 +2658,62 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="write(io):Nil-instance-method">
+    <div class="entry-detail" id="clone-instance-method">
       <div class="signature">
         
-        def <strong>write</strong>(io) : Nil
+        def <strong>clone</strong>
 
-        <a class="method-permalink" href="#write%28io%29%3ANil-instance-method">#</a>
+        <a class="method-permalink" href="#clone-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7456bab1f03432503cfb928f84637523ee4c6970/src/rosegold/inventory/slot.cr#L1627" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7456bab1f03432503cfb928f84637523ee4c6970/src/rosegold/bot.cr#L55" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="copy_with(type_type=@type,location_location=@location)-instance-method">
+      <div class="signature">
+        
+        def <strong>copy_with</strong>(type _type = @type, location _location = @location)
+
+        <a class="method-permalink" href="#copy_with%28type_type%3D%40type%2Clocation_location%3D%40location%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/7456bab1f03432503cfb928f84637523ee4c6970/src/rosegold/bot.cr#L55" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="location:Vec3d-instance-method">
+      <div class="signature">
+        
+        def <strong>location</strong> : <a href="../../Rosegold/Vec3d.html">Vec3d</a>
+
+        <a class="method-permalink" href="#location%3AVec3d-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="type:String|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>type</strong> : String | Nil
+
+        <a class="method-permalink" href="#type%3AString%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
         
       </div>
     </div>

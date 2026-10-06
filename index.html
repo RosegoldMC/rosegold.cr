@@ -162,6 +162,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/Bot/Mount" data-name="rosegold::bot::mount">
+      <a href="Rosegold/Bot/Mount.html">Mount</a>
+      
+    </li>
+  
 </ul>
 
       
@@ -2500,6 +2505,26 @@ bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</
   bot.disconnect(<span class="s">&quot;Script finished&quot;</span>) <span class="k">if</span> bot.connected?
 <span class="k">end</span></code></pre>
 <p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result.</p>
+<h2><a id="riding" class="anchor" href="#riding">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Riding</h2>
+<pre><code class="language-crystal">bot.riding?
+bot.riding?(<span class="s">&quot;minecart&quot;</span>)
+bot.riding?(<span class="s">&quot;horse&quot;</span>)
+
+<span class="k">if</span> mount <span class="o">=</span> bot.riding
+  mount.<span class="k">type</span>
+  mount.location
+<span class="k">end</span></code></pre>
+<p><code>riding</code> returns a snapshot of the entity you're directly riding, or <code>nil</code>.
+It exposes only the entity type and location, not other passengers or entity
+metadata. Read <code>bot.riding</code> again for a fresh snapshot.</p>
+<p><code>riding?</code> accepts an optional exact entity type, with or without the <code>minecraft:</code>
+prefix. <code>&quot;minecart&quot;</code> does not match <code>&quot;chest_minecart&quot;</code>. All entity types are
+supported. If the server sends an unknown type ID, <code>riding?</code> is still true and
+the snapshot's <code>type</code> is <code>nil</code>.</p>
 <h2><a id="choose-a-protocol-build" class="anchor" href="#choose-a-protocol-build">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
