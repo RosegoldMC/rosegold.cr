@@ -150,12 +150,18 @@ class Rosegold::Entity
     !NON_PICKABLE_ENTITIES.includes?(meta.name)
   end
 
-  def update_passengers(client, previous_position : Vec3d? = nil)
+  def update_passengers(client, previous_position : Vec3d? = nil, visited = Set(UInt32).new)
+    return if visited.includes?(entity_id)
+    visited << entity_id
+
     movement = previous_position ? position - previous_position : Vec3d::ORIGIN
     @player_passenger_offset = nil unless passenger_ids.includes?(client.player.entity_id.to_u32)
 
     passenger_ids.each do |passenger_id|
+      next if visited.includes?(passenger_id)
+
       if client.player.entity_id == passenger_id
+        visited << passenger_id
         # A passenger correction can arrive before the vehicle's teleport update.
         offset = @player_passenger_offset ||= if metadata.try(&.name) == "minecart"
                                                 MINECART_PLAYER_SEAT_OFFSET
@@ -164,7 +170,13 @@ class Rosegold::Entity
                                               end
         client.player.feet = position + offset if previous_position
       elsif passenger = client.dimension.entities[passenger_id]?
-        passenger.position = previous_position ? passenger.position + movement : position
+        if previous_position
+          passenger_previous_position = passenger.position
+          passenger.position += movement
+          passenger.update_passengers(client, passenger_previous_position, visited)
+        else
+          passenger.update_passengers(client, nil, visited)
+        end
       end
     end
   end

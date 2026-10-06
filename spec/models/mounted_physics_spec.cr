@@ -261,6 +261,71 @@ Spectator.describe "Mounted player physics" do
     expect(passenger.position).to eq(passenger_position + Rosegold::Vec3d.new(1, 0.5, -1))
   end
 
+  it "moves a nested player passenger with its vehicle" do
+    passenger = Rosegold::Entity.new(43_u32, UUID.random, 0_u32, vehicle.position + Rosegold::Vec3d.new(0, 0.75, 0),
+      0_f32, 0_f32, 0_f32, Rosegold::Vec3d::ORIGIN)
+    bot_client.dimension_for_test.entities[43_u64] = passenger
+    Rosegold::Clientbound::SetPassengers.new(42_u32, [43_u32]).callback(bot_client)
+    Rosegold::Clientbound::SetPassengers.new(43_u32, [300_u32]).callback(bot_client)
+
+    Rosegold::Clientbound::EntityPosition.new(42_u64, 4096_i16, 2048_i16, -4096_i16, true).callback(bot_client)
+
+    expect(bot_client.player.feet).to eq(seated_position + Rosegold::Vec3d.new(1, 0.5, -1))
+  end
+
+  it "preserves a nested player's server position while attaching its vehicle" do
+    passenger = Rosegold::Entity.new(43_u32, UUID.random, 0_u32, vehicle.position + Rosegold::Vec3d.new(0, 0.75, 0),
+      0_f32, 0_f32, 0_f32, Rosegold::Vec3d::ORIGIN)
+    bot_client.dimension_for_test.entities[43_u64] = passenger
+    passenger_position = passenger.position
+    server_position = seated_position + Rosegold::Vec3d.new(1, 0.5, -1)
+    bot_client.player.feet = server_position
+    Rosegold::Clientbound::SetPassengers.new(43_u32, [300_u32]).callback(bot_client)
+
+    2.times { Rosegold::Clientbound::SetPassengers.new(42_u32, [43_u32]).callback(bot_client) }
+
+    expect(bot_client.player.feet).to eq(server_position)
+    expect(passenger.position).to eq(passenger_position)
+
+    movement = Rosegold::Vec3d.new(1, 0.5, -1)
+    Rosegold::Clientbound::EntityPosition.new(42_u64, 4096_i16, 2048_i16, -4096_i16, true).callback(bot_client)
+
+    expect(passenger.position).to eq(passenger_position + movement)
+    expect(bot_client.player.feet).to eq(server_position + movement)
+  end
+
+  it "keeps a nested player correction when its root vehicle catches up" do
+    passenger = Rosegold::Entity.new(43_u32, UUID.random, 0_u32, vehicle.position + Rosegold::Vec3d.new(0, 0.75, 0),
+      0_f32, 0_f32, 0_f32, Rosegold::Vec3d::ORIGIN)
+    bot_client.dimension_for_test.entities[43_u64] = passenger
+    Rosegold::Clientbound::SetPassengers.new(42_u32, [43_u32]).callback(bot_client)
+    Rosegold::Clientbound::SetPassengers.new(43_u32, [300_u32]).callback(bot_client)
+    destination = seated_position + Rosegold::Vec3d.new(1, 0.5, -1)
+    Rosegold::Clientbound::SynchronizePlayerPosition.new(destination.x, destination.y, destination.z,
+      0_f32, 0_f32, 0, 1_u32).callback(bot_client)
+    Rosegold::Clientbound::SetPassengers.new(43_u32, [300_u32]).callback(bot_client)
+
+    Rosegold::Clientbound::EntityPosition.new(42_u64, 4096_i16, 2048_i16, -4096_i16, true).callback(bot_client)
+
+    expect(bot_client.player.feet).to eq(destination)
+  end
+
+  it "does not move an entity twice for cyclic passenger data" do
+    passenger = Rosegold::Entity.new(43_u32, UUID.random, 0_u32, vehicle.position + Rosegold::Vec3d.new(0, 0.75, 0),
+      0_f32, 0_f32, 0_f32, Rosegold::Vec3d::ORIGIN)
+    bot_client.dimension_for_test.entities[43_u64] = passenger
+    vehicle.passenger_ids = [43_u32]
+    passenger.passenger_ids = [42_u32, 300_u32]
+    passenger_position = passenger.position
+
+    Rosegold::Clientbound::EntityPosition.new(42_u64, 4096_i16, 2048_i16, -4096_i16, true).callback(bot_client)
+
+    movement = Rosegold::Vec3d.new(1, 0.5, -1)
+    expect(vehicle.position).to eq(Rosegold::Vec3d.new(0.5, -59.9375, 0.5) + movement)
+    expect(passenger.position).to eq(passenger_position + movement)
+    expect(bot_client.player.feet).to eq(seated_position + movement)
+  end
+
   it "stops following the vehicle after dismounting" do
     Rosegold::Clientbound::SetPassengers.new(42_u32, [] of UInt32).callback(bot_client)
     Rosegold::Clientbound::EntityPosition.new(42_u64, 4096_i16, 0_i16, 0_i16, true).callback(bot_client)
