@@ -5,6 +5,9 @@ require "./attribute_snapshot"
 class Rosegold::Entity
   alias Metadata = Minecraft::Data::EntityMetadata
 
+  # EntityType's minecart passenger attachment minus Player/Avatar's vehicle attachment.
+  MINECART_PLAYER_SEAT_OFFSET = Vec3d.new(0.0, 0.1875 - 0.6, 0.0)
+
   # entities.json is embedded only for enabled versions (guarded read_file),
   # parsed and memoized per protocol on first use.
   @@metadata_cache = {} of UInt32 => Array(Metadata)
@@ -55,6 +58,8 @@ class Rosegold::Entity
 
   # SetEntityData tracked values, keyed by metadata index. Partial updates merge.
   property tracked_data : Hash(UInt8, TrackedValue) = Hash(UInt8, TrackedValue).new
+
+  @player_passenger_offset : Vec3d? = nil
 
   def entity_flags : UInt8
     tracked_data[0_u8]?.as?(UInt8) || 0_u8
@@ -145,12 +150,21 @@ class Rosegold::Entity
     !NON_PICKABLE_ENTITIES.includes?(meta.name)
   end
 
-  def update_passengers(client)
+  def update_passengers(client, previous_position : Vec3d? = nil)
+    movement = previous_position ? position - previous_position : Vec3d::ORIGIN
+    @player_passenger_offset = nil unless passenger_ids.includes?(client.player.entity_id.to_u32)
+
     passenger_ids.each do |passenger_id|
       if client.player.entity_id == passenger_id
-        client.player.feet = position
-      elsif entity = client.dimension.entities[passenger_id]?
-        entity.position = position
+        # A passenger correction can arrive before the vehicle's teleport update.
+        offset = @player_passenger_offset ||= if metadata.try(&.name) == "minecart"
+                                                MINECART_PLAYER_SEAT_OFFSET
+                                              else
+                                                client.player.feet - (previous_position || position)
+                                              end
+        client.player.feet = position + offset if previous_position
+      elsif passenger = client.dimension.entities[passenger_id]?
+        passenger.position = previous_position ? passenger.position + movement : position
       end
     end
   end

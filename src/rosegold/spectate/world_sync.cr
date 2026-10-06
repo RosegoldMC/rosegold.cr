@@ -117,6 +117,12 @@ module Rosegold::Spectate::WorldSync
       entity_count += 1
     end
 
+    bot.dimension.entities.each do |entity_id, entity|
+      next if entity.passenger_ids.empty?
+      packet = Rosegold::Clientbound::SetPassengers.new(entity_id.to_u32, entity.passenger_ids)
+      send_packet(remap_passengers(packet, bot.player.entity_id))
+    end
+
     Log.info { "Sent #{entity_count} existing entities to spectator #{@username}" }
   end
 

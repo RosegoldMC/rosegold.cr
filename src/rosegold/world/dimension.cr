@@ -125,7 +125,7 @@ class Rosegold::Dimension
     @chunks[chunk_pos]?.try &.set_block_state(x, y, z, block_state)
   end
 
-  def raycast_entity(start : Vec3d, look : Vec3d, max_distance : Float64) : Entity?
+  def raycast_entity(start : Vec3d, look : Vec3d, max_distance : Float64, passenger_id : UInt32? = nil) : Entity?
     closest_entity = nil
     closest_distance = Float64::INFINITY
 
@@ -135,6 +135,10 @@ class Rosegold::Dimension
       next unless entity.pickable?
 
       bounding_box = entity.bounding_box
+      if passenger_id && entity.passenger_ids.includes?(passenger_id)
+        return entity if bounding_box.contains?(start)
+        next
+      end
       distance = bounding_box.ray_intersection(start, ray_end)
       next if distance.nil?
 

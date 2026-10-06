@@ -40,7 +40,9 @@ module Rosegold::Spectate::PacketRelay
       next unless pkt_id
 
       if _packet_name = forwarded[pkt_id]?
-        remapped = if self_targeted.includes?(pkt_id)
+        remapped = if pkt_id == Rosegold::Clientbound::SetPassengers[protocol_version]
+                     try_remap_passengers(raw_bytes, bot_entity_id)
+                   elsif self_targeted.includes?(pkt_id)
                      try_remap_entity_id(raw_bytes, pkt_id, bot_entity_id)
                    end
         relay_bytes = remapped || raw_bytes
@@ -55,6 +57,24 @@ module Rosegold::Spectate::PacketRelay
         end
       end
     end
+  end
+
+  private def try_remap_passengers(raw_bytes : Bytes, bot_entity_id : UInt64) : Bytes?
+    io = Minecraft::IO::Memory.new(raw_bytes)
+    io.read_var_int
+    remap_passengers(Rosegold::Clientbound::SetPassengers.read(io), bot_entity_id).write
+  rescue ex
+    Log.debug { "Failed to remap passengers: #{ex}" }
+    nil
+  end
+
+  private def remap_passengers(packet : Rosegold::Clientbound::SetPassengers, bot_entity_id : UInt64)
+    spectator_id = Server::DEFAULT_SPECTATOR_ENTITY_ID.to_u32
+    entity_id = packet.entity_id.to_u64 == bot_entity_id ? spectator_id : packet.entity_id
+    passengers = packet.passengers.map do |id|
+      id.to_u64 == bot_entity_id ? spectator_id : id
+    end
+    Rosegold::Clientbound::SetPassengers.new(entity_id, passengers)
   end
 
   private def setup_position_event_listener

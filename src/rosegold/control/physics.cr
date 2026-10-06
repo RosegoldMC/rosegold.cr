@@ -319,6 +319,17 @@ class Rosegold::Physics
     input = convert_movement_goals_to_input
     process_virtual_input(input)
 
+    if riding?
+      player.velocity = Vec3d::ORIGIN
+      player.on_ground = false
+      track_stuck_movement(player.feet)
+      send_input_if_changed(input)
+      sync_with_server(riding: true)
+      complete_actions(player.feet, riding: true)
+      client.emit_event Event::PhysicsTick.new Vec3d::ORIGIN
+      return
+    end
+
     movement, next_velocity, new_feet, on_ground = execute_movement_physics
 
     player.feet = new_feet
@@ -727,9 +738,21 @@ class Rosegold::Physics
     )
   end
 
-  private def sync_with_server
+  private def riding? : Bool
+    dimension.entities.each_value.any? do |entity|
+      entity.passenger_ids.includes?(player.entity_id.to_u32)
+    end
+  end
+
+  private def sync_with_server(riding : Bool = false)
     if look_action = @look_action
       player.look = look_action.target
+    end
+
+    if riding
+      client.send_packet! Serverbound::PlayerLook.new player.look, player.on_ground?
+      client.emit_event Event::PlayerPositionUpdate.new(player.feet, player.look)
+      return
     end
 
     should_send_packet = movement_changed? || ticks_since_last_packet >= MOVEMENT_PACKET_KEEP_ALIVE_INTERVAL
@@ -742,13 +765,15 @@ class Rosegold::Physics
     end
   end
 
-  private def complete_actions(new_feet : Vec3d)
+  private def complete_actions(new_feet : Vec3d, riding : Bool = false)
     action_mutex.synchronize do
       @movement_action.try do |movement_action|
         if very_close_to?(movement_action.target)
-          target_with_y = Vec3d.new(movement_action.target.x, new_feet.y, movement_action.target.z)
-          player.feet = target_with_y
-          player.velocity = Vec3d.new(0.0, player.velocity.y, 0.0)
+          unless riding
+            target_with_y = Vec3d.new(movement_action.target.x, new_feet.y, movement_action.target.z)
+            player.feet = target_with_y
+            player.velocity = Vec3d.new(0.0, player.velocity.y, 0.0)
+          end
           movement_action.succeed
           @movement_action = nil
           keys.release_all

@@ -72,6 +72,7 @@ class Rosegold::Clientbound::EntityPosition < Rosegold::Clientbound::Packet
       return
     end
 
+    previous_position = entity.position
     if delta = position_delta
       entity.position = delta.resolve_position(entity.position)
       entity.on_ground = on_ground?
@@ -79,5 +80,6 @@ class Rosegold::Clientbound::EntityPosition < Rosegold::Clientbound::Packet
       entity.position = entity.position.plus(delta_x / 128.0 / 32.0, delta_y / 128.0 / 32.0, delta_z / 128.0 / 32.0)
       entity.velocity = Vec3d.new(delta_x / 128.0 / 32.0, delta_y / 128.0 / 32.0, delta_z / 128.0 / 32.0)
     end
+    entity.update_passengers(client, previous_position)
   end
 end
