@@ -84,6 +84,7 @@ class Rosegold::Clientbound::EntityPositionAndRotation < Rosegold::Clientbound::
       return
     end
 
+    previous_position = entity.position
     if delta = position_delta
       entity.position = delta.resolve_position(entity.position)
     else
@@ -93,5 +94,6 @@ class Rosegold::Clientbound::EntityPositionAndRotation < Rosegold::Clientbound::
     entity.yaw = yaw
     entity.pitch = pitch
     entity.on_ground = on_ground?
+    entity.update_passengers(client, previous_position)
   end
 end

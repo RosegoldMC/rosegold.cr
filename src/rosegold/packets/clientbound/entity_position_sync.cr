@@ -89,11 +89,13 @@ class Rosegold::Clientbound::EntityPositionSync < Rosegold::Clientbound::Packet
   def callback(client)
     Log.debug { "Received entity position sync for entity ID #{entity_id}: (#{x}, #{y}, #{z})" }
     if entity = client.dimension.entities[entity_id]?
+      previous_position = entity.position
       entity.position = position_path.try(&.end_position) || Vec3d.new(x, y, z)
       entity.velocity = Vec3d.new(velocity_x, velocity_y, velocity_z) unless Client.protocol_version >= 777_u32
       entity.pitch = pitch
       entity.yaw = yaw
       entity.on_ground = on_ground? if Client.protocol_version >= 777_u32
+      entity.update_passengers(client, previous_position)
     end
   end
 end

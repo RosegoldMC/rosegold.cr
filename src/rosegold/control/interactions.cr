@@ -402,7 +402,7 @@ class Rosegold::Interactions
   end
 
   private def reach_entity : Rosegold::Entity?
-    client.dimension.raycast_entity client.player.eyes, entity_reach_vec, entity_reach_length
+    client.dimension.raycast_entity client.player.eyes, entity_reach_vec, entity_reach_length, client.player.entity_id.to_u32
   end
 
   # Unified raytracing that properly handles both entities and blocks
@@ -423,6 +423,10 @@ class Rosegold::Interactions
       next unless entity.pickable?
 
       entity_bounding_box = entity.bounding_box
+      if entity.passenger_ids.includes?(client.player.entity_id.to_u32)
+        return entity if entity_bounding_box.contains?(eyes)
+        next
+      end
       # Only include entities that could potentially be hit
       if reach_aabb.intersects?(entity_bounding_box)
         entity_boxes << entity_bounding_box
