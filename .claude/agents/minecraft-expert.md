@@ -66,51 +66,31 @@ Note: The Packets page always shows the CURRENT version's protocol. For older ve
 curl -sL "https://minecraft.wiki/w/Java_Edition_protocol/Data_types?action=raw" -o tmp/protocol_docs/<version>_data_types.wiki
 ```
 
-### PrismarineJS minecraft-data
-
-Pre-extracted game data (blocks, items, entities, protocol info) is available from PrismarineJS:
-https://github.com/PrismarineJS/minecraft-data
-
-The `data/pc/` directory contains version-specific folders with JSON files. This is the authoritative source for:
-- Packet ID mappings (protocol.json)
-- Block data (blocks.json, blockCollisionShapes.json)
-- Item data (items.json)
-- Entity data (entities.json)
-- Biome data (biomes.json)
-
-You can browse it on GitHub or get it locally with `npm pack minecraft-data` (avoids needing a package.json).
-
 ## Protocol Upgrade Workflow
 
 When adding support for a new Minecraft version, follow these steps in order:
 
-### Step 1: Get PrismarineJS data first
-PrismarineJS is the most reliable, machine-readable source. Start here, not with web searches.
-```bash
-cd /tmp && npm pack minecraft-data && tar -xzf minecraft-data-*.tgz -C /tmp/mc-data
-```
-
-### Step 2: Diff packet IDs between versions
+### Step 1: Diff packet IDs between versions
 Write a node script to a .js file (e.g., `tmp/scripts/diff_protocol.js`) and run with `node`. Avoid inline `node -e` with double quotes as `!==` and other operators get mangled by shell escaping.
 
 The packet ID mappings live at `data.play.toClient.types.packet[1][0].type[1].mappings` (for clientbound play). Iterate over ALL states: `handshaking, status, login, configuration, play` - config packets also change between versions.
 
 Build name->id maps and diff them. Look for the **shift pattern** (e.g., "packets after 0x1A shift +4 due to 4 new packets inserted") rather than listing individual changes - this makes verification trivial.
 
-### Step 3: Diff packet structures
+### Step 2: Diff packet structures
 Compare `packet_<name>` type definitions for EVERY packet the codebase handles, not just ones that fail. Catch structural changes proactively.
 
-### Step 4: Diff data types
+### Step 3: Diff data types
 Compare top-level types via `data.types.SlotComponentType` (the `types` key at the JSON root, not under `data.play.toClient.types`). SlotComponentType enum IDs shift independently of packet IDs - new types get inserted in the middle, breaking hardcoded ID maps.
 
 Data type encoding specs (LpVec3, Slot format, etc.) are documented at:
 https://minecraft.wiki/w/Java_Edition_protocol/Data_types
 This page is separate from the packets page and much more fetchable.
 
-### Step 5: Diff game data
+### Step 4: Diff game data
 Compare blocks.json, entities.json, items.json for new entries and count changes.
 
-### Step 6: Change the repository as one versioned surface
+### Step 5: Change the repository as one versioned surface
 
 `src/rosegold/versions.cr` is the sole protocol/version registry. Keep it,
 every exact-version entrypoint in `src/rosegold/`, the pinned minecraft-data
