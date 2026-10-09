@@ -18,7 +18,6 @@ end
 
 {% for protocol in Rosegold::ENABLED_PROTOCOLS.keys %}
   Spectator.describe "Digging firefly bushes (protocol {{protocol}})" do
-    let(previous_protocol) { Rosegold::Client.protocol_version }
     let(bot_client) { DiggingSpecClient.new("localhost") }
     let(interactions) { bot_client.interactions_for_test }
     let(target) { Rosegold::Vec3i.new(0, 0, 2) }
@@ -38,7 +37,6 @@ end
     end
 
     before_each do
-      previous_protocol
       Rosegold::Client.protocol_version = {{protocol}}_u32
       dimension = bot_client.dimension_for_test
       data = Minecraft::IO::Memory.new
@@ -49,7 +47,7 @@ end
     end
 
     after_each do
-      Rosegold::Client.protocol_version = previous_protocol
+      Rosegold::Client.reset_protocol_version!
     end
 
     it "digs through the upper part of the vanilla outline" do
