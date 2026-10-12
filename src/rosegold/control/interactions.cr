@@ -502,9 +502,11 @@ class Rosegold::Interactions
   private def get_interaction_hitboxes(block_state : UInt16, x : Int32, y : Int32, z : Int32) : Array(AABBd)
     block = Block.from_block_state_id(block_state)
     case block.id_str
-    when "firefly_bush"
+    when "firefly_bush", "large_fern"
       # Vanilla inherits a full outline even though this block has no collision.
       [AABBd.new(x.to_f64, y.to_f64, z.to_f64, x + 1.0, y + 1.0, z + 1.0)]
+    when "fern"
+      [AABBd.new(x + 0.125, y.to_f64, z + 0.125, x + 0.875, y + 0.8125, z + 0.875)]
     when .includes?("sapling"), .includes?("propagule"),
          .includes?("flower"), .includes?("grass"), .includes?("fern"),
          .includes?("dead_bush"), .includes?("bush"), .includes?("fungus"),
