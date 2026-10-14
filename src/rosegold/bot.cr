@@ -54,7 +54,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # A snapshot keeps a retained mount from exposing entity updates after dismounting.
   record Mount, type : String?, location : Vec3d
 
-  private getter client : Client
+  # The underlying client for protocol and engine access.
+  getter client : Client
 
   # The inventory facade for the player and currently open menu.
   getter inventory : Inventory
@@ -1153,3 +1154,5 @@ class Rosegold::Bot < Rosegold::EventEmitter
     self.off Rosegold::Clientbound::SystemChatMessage, handler_id if handler_id
   end
 end
+
+require "./bot/world_api"
