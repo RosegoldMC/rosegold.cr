@@ -152,6 +152,11 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/Bot/BlockSnapshot" data-name="rosegold::bot::blocksnapshot">
+      <a href="Rosegold/Bot/BlockSnapshot.html">BlockSnapshot</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Bot/ContainerOpenError" data-name="rosegold::bot::containeropenerror">
       <a href="Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a>
       
@@ -159,6 +164,11 @@
   
   <li class=" " data-id="rosegold/Rosegold/Bot/CraftingError" data-name="rosegold::bot::craftingerror">
       <a href="Rosegold/Bot/CraftingError.html">CraftingError</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Bot/EntitySnapshot" data-name="rosegold::bot::entitysnapshot">
+      <a href="Rosegold/Bot/EntitySnapshot.html">EntitySnapshot</a>
       
     </li>
   
@@ -2459,7 +2469,8 @@
   </svg>
 </a>Rosegold</h1>
 <p>Rosegold is a Crystal client library for Minecraft bots. It handles the wire protocol, local physics, inventory windows, recipes, and a live spectator bridge. You write the bot's behaviour.</p>
-<p>It was built for <a href="https://civwiki.org/wiki/CivMC">CivMC</a>. Its public bot API is deliberately constrained by the <a href="server-rules/civmc.md">repository rules snapshot</a>: scripts use their own player state, not environmental scans. Bot authors still need to follow the server’s current rules.</p>
+<p>Rosegold exposes a server-independent API, including received block states and entities. For CivMC, use <a href="https://github.com/RosegoldMC/civmc.cr">rosegold-civmc</a> and its <a href="https://github.com/RosegoldMC/example-civmc">example template</a>. That library provides a restricted scripting API based on CivMC’s rules. Bot authors still need to follow their server’s current rules.</p>
+<p>See <a href="guide/universal-api.md">universal API and server libraries</a> for the boundary and remaining feature gaps.</p>
 <pre><code class="language-crystal">bot.move_to(<span class="n">100</span>, <span class="n">200</span>)
 bot.inventory.pick!(<span class="s">&quot;diamond_pickaxe&quot;</span>)
 bot.dig(<span class="n">20</span>)
@@ -2470,12 +2481,20 @@ bot.eat</code></pre>
   </svg>
 </a>Start here</h2>
 <p><strong>Writing a bot? Start with the <a href="https://rosegoldmc.github.io/rosegold.cr/Rosegold/Bot.html">Bot API</a>.</strong>
-It brings together connection, movement, interactions, inventory, crafting, and
-events, with task links and examples. Use it as your main scripting reference.</p>
+It brings together connection, movement, world queries, interactions, inventory,
+crafting, and events, with task links and examples. Use it as your main scripting reference.</p>
 <p>Install <a href="https://crystal-lang.org/install/">Crystal</a>, then create a bot from the <a href="https://github.com/RosegoldMC/example">example template</a>. The template includes a dependency declaration and release builds for Linux and Windows.</p>
 <pre><code class="language-sh">git clone https://github.com/YOUR_USERNAME/my-bot.git
-cd my-bot
-shards install
+cd my-bot</code></pre>
+<p>These docs describe the development API on <code>main</code>. Select that branch in your
+bot's <code>shard.yml</code> to use the APIs shown here:</p>
+<pre><code class="language-yaml">dependencies:
+  rosegold:
+    github: RosegoldMC/rosegold.cr
+    branch: main</code></pre>
+<p>For a tagged release, use a <code>version</code> constraint and read the README and source
+for that tag. Install dependencies and build your bot after choosing the revision:</p>
+<pre><code class="language-sh">shards install
 shards build
 ./bin/attack</code></pre>
 <p>The first connection asks you to sign in through Microsoft's device-login page. The token is cached after that; keep the authentication cache private and out of version control.</p>
@@ -2505,6 +2524,21 @@ bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</
   bot.disconnect(<span class="s">&quot;Script finished&quot;</span>) <span class="k">if</span> bot.connected?
 <span class="k">end</span></code></pre>
 <p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result.</p>
+<h2><a id="received-world-state" class="anchor" href="#received-world-state">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Received world state</h2>
+<pre><code class="language-crystal"><span class="k">if</span> block <span class="o">=</span> bot.block_at(bot.location)
+  puts <span class="s">&quot;</span><span class="i">#{</span>block.name<span class="i">}</span><span class="s">: </span><span class="i">#{</span>block.properties<span class="i">}</span><span class="s">&quot;</span>
+<span class="k">end</span>
+
+nearby <span class="o">=</span> bot.find_blocks(<span class="s">&quot;oak_log&quot;</span>, radius: <span class="n">8</span>, limit: <span class="n">16</span>)
+entity <span class="o">=</span> bot.nearest_entity(max_distance: <span class="n">12</span>) { <span class="o">|</span>candidate<span class="o">|</span> candidate.<span class="k">type</span> <span class="o">==</span> <span class="s">&quot;item&quot;</span> }</code></pre>
+<p>Queries read loaded state without requesting chunks. An unloaded or unknown block
+returns <code>nil</code>; air has its own snapshot. Snapshots do not change with later world
+updates. <code>bot.world</code> and <code>bot.client</code> expose live state for advanced callers.
+These APIs are unavailable through the CivMC facade.</p>
 <h2><a id="riding" class="anchor" href="#riding">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -2548,6 +2582,8 @@ the snapshot's <code>type</code> is <code>nil</code>.</p>
 | Work with containers | <code>open_container_handle</code> |
 | Enchant a selected item | <code>enchant</code> |
 | Craft | <code>craft</code>, <code>craft_all</code>, <code>craft_pattern</code> |
+| Query received blocks and entities | <code>block_at</code>, <code>find_blocks</code>, <code>entity</code>, <code>nearest_entity</code> |
+| Inspect advanced live state | <code>client</code>, <code>world</code> |
 | React to the game | <code>on</code>, <code>once</code>, <code>wait_for</code>, <code>wait_ticks</code> |
 | Watch the bot in Minecraft | <code>SpectateServer</code> |</p>
 <p>The generated <a href="https://rosegoldmc.github.io/rosegold.cr/">API reference</a> has every overload and type. The sections below cover the calls people usually need first.</p>
@@ -2633,7 +2669,7 @@ bot.craft(<span class="s">&quot;diamond_pickaxe&quot;</span>, table: table)</cod
     <use href="#octicon-link"/>
   </svg>
 </a>Events and timing</h2>
-<p><code>Bot</code> forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Subscribe to <code>Bot</code>, not an internal client. Event handlers run on Rosegold's packet-processing path, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.</p>
+<p><code>Bot</code> forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Use these high-level events for common workflows; advanced core scripts can subscribe through <code>bot.client</code>. Event handlers run on Rosegold's packet-processing path, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.</p>
 <pre><code class="language-crystal">eating <span class="o">=</span> <span class="n">false</span>
 
 bot.on <span class="t">Rosegold</span><span class="t">::</span><span class="t">Clientbound</span><span class="t">::</span><span class="t">PlayerChatMessage</span> <span class="k">do</span> <span class="o">|</span>event<span class="o">|</span>
