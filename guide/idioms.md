@@ -4,6 +4,11 @@ Rosegold is not a JavaScript client API in Crystal syntax. Keep the useful shape
 
 This guide compares a small, common slice of JsMacros with Rosegold. It is not a complete conversion catalogue. The JsMacros calls below were checked against [grepsedawk/JsMacros commit e293c63](#jsmacros-sources); Rosegold examples are checked against this repository's public `Bot` API.
 
+This guide describes the unrestricted core. CivMC scripts should use
+[`Rosegold::CivMC::Bot`](https://github.com/RosegoldMC/civmc.cr) and check its
+[migration guide](https://github.com/RosegoldMC/civmc.cr/blob/main/MIGRATION.md)
+for supported operations. Other servers need their own reviewed policies.
+
 ## Start with a bot, and always close it
 
 JsMacros scripts run inside an already-connected client. A Rosegold script owns its connection, so establish its lifetime at the top level:
@@ -98,7 +103,10 @@ support = Rosegold::Vec3i.new(configured_x, configured_y, configured_z)
 bot.place_block_against(support, BlockFace::Top)
 ```
 
-`bot.attack` taps the attack button for a fixed task. Do not use it to directly help a player during combat on CivMC. Do not translate JsMacros entity-selection or target-override code into a bot loop. Rosegold intentionally has no public entity-query or entity-target operation, and CivMC rules restrict bots from reading environmental entity and block data.
+`bot.attack` taps the attack button at the current or supplied aim. Core scripts
+can query entities with `entities`, `entity`, and `nearest_entity`, but there is
+no attack-by-entity helper. CivMC prohibits environmental reads and direct combat
+assistance; use its restricted facade when translating CivMC scripts.
 
 Keep held actions bounded by an `ensure`. This is the Rosegold equivalent of releasing a held key even when a surrounding workflow fails:
 
@@ -118,7 +126,10 @@ ensure
 end
 ```
 
-Confirm an operation only through allowed state, such as a container update, inventory count, hunger, chat response, or a configured workflow boundary. A bot must not inspect surrounding blocks or entities to decide whether to continue.
+Confirm an operation through state your server permits. On CivMC, use container
+updates, inventory counts, hunger, server chat, or configured workflow boundaries.
+Environmental block and entity reads are available in the core, but prohibited
+for CivMC bot decisions.
 
 ## Inventory and containers
 
@@ -286,19 +297,26 @@ bot.join_game
 That is a new connection, not a guarantee that the previous workflow is safe to
 resume. Re-establish any script-owned invariants before taking another action.
 
-## Deliberately not mapped
+## World access and remaining gaps
 
-Some JsMacros facilities are unavailable by design, not missing spelling:
-
-| JsMacros facility | Rosegold position |
+| JsMacros facility | Rosegold core equivalent |
 | --- | --- |
-| `World.getEntities`, `World.findBlocksMatching`, chunk/block inspection, and target-block reads | Do not use them for bot logic. CivMC's bot boundary prohibits environmental block/entity reads. Supply approved, known target positions as configuration instead. |
-| `interactEntity`, attack-by-entity, target overrides, and entity-selection helpers | No public Rosegold mapping. Do not replace them with world/entity queries. |
-| Arbitrary `KeyBind` keys, GUI screens, HUD drawing, raw `Client.getMinecraft()`, or client-side packet injection | No Rosegold public equivalent. Rosegold is headless and does not expose a Minecraft GUI client. Directional movement input is the explicit exception: use `bot.keys`. |
-| JsMacros inventory GUI slot choreography | Available only at lower-level menu APIs, but not the recommended Rosegold idiom. Prefer `Inventory` and `ContainerHandle` intent methods. |
-| JsMacros world scanning and pathfinding libraries | No built-in Rosegold mapping. `move_to` is straight-line only. |
+| `World.getEntities` | `bot.entities`, `bot.entity(id)`, or `bot.nearest_entity(max_distance: ...)` |
+| Block state inspection | `bot.block_at(position)` returns a detached snapshot, or `nil` for unknown/unloaded state. |
+| Block-name searches | `bot.find_blocks(name, radius: ..., center: ..., limit: ...)` searches loaded blocks, nearest first. |
+| Direct world and client access | `bot.world` and `bot.client` expose live core objects. |
+| Attack-by-entity and target overrides | No direct helper; the existing attack DSL uses aim and vanilla reach/occlusion. |
+| GUI screens and HUD drawing | No headful GUI client API; the spectator bridge supplies a human viewer. |
+| Pathfinding libraries | No built-in pathfinder. `move_to` remains straight-line movement. |
 
-The restriction is about bot decision-making, not a promise that a method cannot technically exist elsewhere in the codebase. Keep scripts on `Bot` and the allowed server-provided state: their own position, inventory, health, food, effects, experience, chat, kick reason, and player-list events.
+The CivMC facade excludes world queries, raw client access, arbitrary packet
+subscriptions, and nested menu/client escape routes. Supply already known target
+positions as configuration there. Its allowed observations include own position,
+inventory, health, food, effects, experience, server chat, kick reasons, tab list,
+and the type and position of the direct mount. Human-client mapping exceptions
+do not permit feeding environmental information into scripts.
+
+See [universal API and server libraries](universal-api.md) for query semantics.
 
 ## JsMacros sources
 

@@ -45,8 +45,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
   delegate disconnect, to: connection
 
-  # Internal engine state — not exposed through Bot API.
-  # Protected: accessible within Rosegold:: namespace only.
+  # Engine accessors stay protected; Bot#world exposes the current dimension.
   protected property \
     connection : Connection::Client?,
     dimension : Dimension = Dimension.new,
