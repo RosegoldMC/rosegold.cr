@@ -2,8 +2,7 @@ require "../src/rosegold"
 require "spectator"
 require "./support/admin_bot"
 
-# Test helper: access protected dimension from outside Rosegold:: namespace.
-# Production code should use Bot (which hides Client.dimension).
+# Retained for existing specs; application code can use Bot#world.
 module Rosegold
   class Client
     def dimension_for_test

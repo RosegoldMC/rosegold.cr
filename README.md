@@ -2,7 +2,9 @@
 
 Rosegold is a Crystal client library for Minecraft bots. It handles the wire protocol, local physics, inventory windows, recipes, and a live spectator bridge. You write the bot's behaviour.
 
-It was built for [CivMC](https://civwiki.org/wiki/CivMC). Its public bot API is deliberately constrained by the [repository rules snapshot](server-rules/civmc.md): scripts use their own player state, not environmental scans. Bot authors still need to follow the server’s current rules.
+Rosegold exposes a server-independent API, including received block states and entities. For CivMC, use [rosegold-civmc](https://github.com/RosegoldMC/civmc.cr) and its [example template](https://github.com/RosegoldMC/example-civmc). That library provides a restricted scripting API based on CivMC’s rules. Bot authors still need to follow their server’s current rules.
+
+See [universal API and server libraries](guide/universal-api.md) for the boundary and remaining feature gaps.
 
 ```crystal
 bot.move_to(100, 200)
@@ -67,6 +69,22 @@ end
 
 That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result.
 
+## Received world state
+
+```crystal
+if block = bot.block_at(bot.location)
+  puts "#{block.name}: #{block.properties}"
+end
+
+nearby = bot.find_blocks("oak_log", radius: 8, limit: 16)
+entity = bot.nearest_entity(max_distance: 12) { |candidate| candidate.type == "item" }
+```
+
+Queries read loaded state without requesting chunks. An unloaded or unknown block
+returns `nil`; air has its own snapshot. Snapshots do not change with later world
+updates. `bot.world` and `bot.client` expose live state for advanced callers.
+These APIs are unavailable through the CivMC facade.
+
 ## Riding
 
 ```crystal
@@ -111,6 +129,8 @@ Use a version-specific entrypoint only when the target server is known. Availabl
 | Work with containers | `open_container_handle` |
 | Enchant a selected item | `enchant` |
 | Craft | `craft`, `craft_all`, `craft_pattern` |
+| Query received blocks and entities | `block_at`, `find_blocks`, `entity`, `nearest_entity` |
+| Inspect advanced live state | `client`, `world` |
 | React to the game | `on`, `once`, `wait_for`, `wait_ticks` |
 | Watch the bot in Minecraft | `SpectateServer` |
 
@@ -208,7 +228,7 @@ bot.craft("diamond_pickaxe", table: table)
 
 ## Events and timing
 
-`Bot` forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Subscribe to `Bot`, not an internal client. Event handlers run on Rosegold's packet-processing path, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.
+`Bot` forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Use these high-level events for common workflows; advanced core scripts can subscribe through `bot.client`. Event handlers run on Rosegold's packet-processing path, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.
 
 ```crystal
 eating = false

@@ -254,8 +254,16 @@ or public interface without an authenticated access boundary.
 Preserve Rosegold's direct, expressive Bot DSL. Operations that wait for server
 progress cooperate through ticks; event handlers run synchronously in the
 emitting fiber, so handlers that wait for ticks or packets must `spawn` their
-work. Prefer Bot and control-layer APIs over exposing raw packets or internal
-world state as a shortcut.
+work. Prefer Bot and control-layer operations for vanilla actions. `Bot#client`
+and `Bot#world` expose live state for advanced uses; query helpers return detached
+snapshots. See [guide/universal-api.md](guide/universal-api.md).
+
+The core is server-independent. CivMC observation restrictions belong to
+[rosegold-civmc](https://github.com/RosegoldMC/civmc.cr), which composes the core
+and explicitly delegates reviewed operations. New core methods must never become
+automatically available through that facade. Core access does not imply that a
+server permits using the information. Keep vanilla physics, reach, collision,
+and occlusion intact.
 
 Keep one press and a held use distinct in public guidance. `Bot#use_hand` queues
 one use on the next eligible tick. `Bot#start_using_hand` holds use until
