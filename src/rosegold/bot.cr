@@ -4,13 +4,20 @@ require "./control/*"
 # Start here to write a Minecraft bot.
 #
 # `Bot` is Rosegold's main scripting API. This page is the starting point for
-# connecting, moving, interacting, managing inventory, and reacting to events.
+# connecting, moving, interacting, reading world state, managing inventory, and
+# reacting to events.
 # Use the task links below to find an operation, then its method documentation
 # for arguments, overloads, and examples.
+#
+# CivMC bots should use the restricted [rosegold-civmc API](https://github.com/RosegoldMC/civmc.cr)
+# and its [example template](https://github.com/RosegoldMC/example-civmc).
+# The core API below exposes world observations that CivMC bots cannot use.
 #
 # ## Your first bot
 #
 # Create a project from the [example template](https://github.com/RosegoldMC/example),
+# select the `main` dependency branch as shown in the
+# [installation guide](https://github.com/RosegoldMC/rosegold.cr#start-here),
 # then use `Bot` to connect and run your script:
 #
 # ```
@@ -30,6 +37,9 @@ require "./control/*"
 #
 # - **Connect and read player state:** `.new`, `#join_game`, `#disconnect`,
 #   `#location`, `#health`, `#food`, `#chat`.
+# - **Read received world state:** `#block_at`, `#find_block`, `#find_blocks`,
+#   `#entity`, `#entities`, `#nearest_entity`. `#world` and `#client` expose live
+#   state for advanced callers.
 # - **Move and look:** `#move_to`, `#look_at`, `#look`, `#sprint`, `#sneak`.
 # - **Mine, place, use, and eat:** `#dig`, `#place_block_against`, `#use_hand`,
 #   `#start_using_hand`, `#stop_using_hand`, `#eat`, `#eat!`.
@@ -54,7 +64,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # A snapshot keeps a retained mount from exposing entity updates after dismounting.
   record Mount, type : String?, location : Vec3d
 
-  private getter client : Client
+  # The underlying client for protocol and engine access.
+  getter client : Client
 
   # The inventory facade for the player and currently open menu.
   getter inventory : Inventory
@@ -1153,3 +1164,5 @@ class Rosegold::Bot < Rosegold::EventEmitter
     self.off Rosegold::Clientbound::SystemChatMessage, handler_id if handler_id
   end
 end
+
+require "./bot/world_api"
