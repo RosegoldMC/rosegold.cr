@@ -121,6 +121,14 @@ CI matrix, and slim-build coverage as one change. Compression is enabled during
 LOGIN via SetCompression. `Client.protocol_version` is class-wide state, so one
 process cannot safely connect to different protocol versions concurrently.
 
+`Bot.run` owns a reconnecting session loop, yielding a fresh Bot/Client after
+each successful join. Normal block completion while connected and explicit
+`Bot#disconnect` stop it; network failures and remote disconnects retry with
+backoff. Reconnect policy is server-independent and honors typed authentication
+failures and `Retry-After`. A TCP probe checks the server before authentication;
+Minecraft authentication is cached in memory until its expiry margin. Temporary
+Microsoft refresh failures must never fall through to interactive login.
+
 ### Packet System
 
 Concrete packets extend `Rosegold::Event`, so they flow through the event system.

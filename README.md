@@ -47,6 +47,11 @@ shards build
 
 The first connection asks you to sign in through Microsoft's device-login page. The token is cached after that; keep the authentication cache private and out of version control.
 
+Rosegold also reuses unexpired Minecraft authentication in memory across connections.
+It checks TCP reachability before authenticating, so an unreachable server does
+not generate Microsoft or Xbox requests. A temporary refresh failure preserves
+the saved login instead of prompting for a new one.
+
 For this checkout, patrol and events default to `localhost:25565`. Set `ROSEGOLD_SERVER` to a `host:port` pair for another server:
 
 ```sh
@@ -84,6 +89,34 @@ end
 ```
 
 That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result.
+
+For automatic reconnects, use `Bot.run`. It waits for spawn and gives the block a
+fresh bot for each session:
+
+```crystal
+Rosegold::Bot.run("play.example.net") do |bot|
+  bot.on Rosegold::Clientbound::PlayerChatMessage do |event|
+    puts "#{event.network_name}: #{event.message}"
+  end
+
+  while bot.connected?
+    bot.wait_tick
+  end
+end
+```
+
+Server disconnects and network failures retry after 10 seconds, doubling up to
+five minutes. Authentication failures use separate cooldowns per phase: rate
+limits and HTTP 403 responses wait 5, 10, then 15 minutes; other auth failures
+wait 1, 2, 4, 8, then 15 minutes. `Retry-After` can extend these waits. A rejected
+cached session token is discarded and gets one fresh-token attempt after 10
+seconds, unless the provider supplied `Retry-After`.
+
+Call `bot.disconnect("Finished")` or return from the block while still connected
+to stop. Other script exceptions and declined device login propagate after
+cleanup. The block must check `connected?` or perform network operations to notice
+a disconnect. Re-establish script-owned state each session; reconnecting does
+not make replaying an interrupted action safe. See [examples/reconnect.cr](examples/reconnect.cr).
 
 ## Received world state
 
