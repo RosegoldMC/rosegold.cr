@@ -43,6 +43,10 @@ class Rosegold::Client < Rosegold::EventEmitter
   property host : String, port : Int32
   property current_protocol_state : ProtocolState = ProtocolState::HANDSHAKING
 
+  getter authentication_failure : Minecraft::AuthenticationError?
+  getter? authentication_cache_reused = false
+  getter successful_auth_phases = [] of String
+
   delegate disconnect, to: connection
 
   # Engine accessors stay protected; Bot#world exposes the current dimension.
@@ -74,7 +78,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     known_packs : Array(NamedTuple(namespace: String, id: String, version: String)) = [] of NamedTuple(namespace: String, id: String, version: String),
     post_effects : Array(String) = [] of String,
     tags : Clientbound::UpdateTags? = nil,
-    ticker_done : Channel(Nil) = Channel(Nil).new,
+    ticker_done : Channel(Nil) = Channel(Nil).new(1),
     recipe_registry : RecipeRegistry = RecipeRegistry.new
 
   # A headless client cannot apply a resource pack, so decline unless a caller
@@ -245,7 +249,12 @@ class Rosegold::Client < Rosegold::EventEmitter
     until spawned?
       sleep (1.0/20).seconds
       timeout_ticks -= 1
-      raise NotConnected.new "Disconnected while joining game: #{connection.close_reason}" unless connected?
+      unless connected?
+        if failure = authentication_failure
+          raise failure
+        end
+        raise NotConnected.new "Disconnected while joining game: #{connection?.try &.close_reason}"
+      end
       raise NotConnected.new "Took too long to join the game" if timeout_ticks <= 0
     end
 
@@ -271,12 +280,14 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def start_ticker
-    @ticker_done = Channel(Nil).new
+    @ticker_done = Channel(Nil).new(1)
+    done = @ticker_done
+    session = connection
     spawn do
       next_tick_time = Time.instant
 
       loop do
-        break unless connected?
+        break unless session.open? && @connection == session
 
         next_tick_time = {next_tick_time + tick_interval, Time.instant}.max
 
@@ -326,8 +337,8 @@ class Rosegold::Client < Rosegold::EventEmitter
         drift_ms = (Time.instant - next_tick_time).total_nanoseconds / 1_000_000.0
         Log.trace { "Tick drift: #{drift_ms.round(2)}ms (rate: #{@tick_rate} TPS)" } if drift_ms.abs > 5
       end
-
-      @ticker_done.send nil
+    ensure
+      done.send nil
     end
   end
 
@@ -336,11 +347,19 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     clear_boss_bars
 
-    authenticate!
+    @authentication_failure = nil
+    @authentication_cache_reused = false
+    @successful_auth_phases.clear
+
+    # Probe before authenticating, but do not hold a socket during device login.
+    probe = TCPSocket.new(host, port, connect_timeout: 5.seconds)
+    probe.close
 
     detect_protocol_version
 
-    socket = TCPSocket.new(host, port)
+    authenticate!
+
+    socket = TCPSocket.new(host, port, connect_timeout: 5.seconds)
     socket.tcp_nodelay = true
     io = Minecraft::IO::Wrap.new socket
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING, protocol_version, self
@@ -357,16 +376,25 @@ class Rosegold::Client < Rosegold::EventEmitter
     queue_packet Serverbound::LoginStart.new player.username.not_nil!, player.uuid, protocol_version # ameba:disable Lint/NotNil
 
     spawn do
-      while connected?
+      while connection.open? && @connection == connection
         read_packet
       end
-    rescue e : IO::Error
+    rescue error : Minecraft::AuthenticationError
+      @authentication_failure = error
+      connection.disconnect("Authentication failed")
+    rescue e : IO::Error | NotConnected
       if connected?
         Log.warn { "Reader stopped unexpectedly: #{e}" }
       else
         Log.debug { "Reader stopped: cleanly disconnected" }
       end
     end
+  rescue error
+    if socket
+      socket.close
+      @connection.try &.disconnect("Connection failed")
+    end
+    raise error
   end
 
   def transfer_to(new_host : String, new_port : UInt32)
@@ -410,7 +438,9 @@ class Rosegold::Client < Rosegold::EventEmitter
       return
     end
 
-    auth = Minecraft::Auth.authenticate
+    result = Minecraft::Auth.authenticate_with_cache_status(->(phase : String) { @successful_auth_phases << phase; nil })
+    auth = result[:auth]
+    @authentication_cache_reused = result[:reused]
     player.uuid = UUID.new auth[:uuid]
     player.username = auth[:mc_name]
     self.access_token = auth[:access_token]
@@ -453,7 +483,8 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def self.status(host : String, port : UInt16 = 25565)
-    socket = TCPSocket.new(host, port)
+    socket = TCPSocket.new(host, port, connect_timeout: 5.seconds)
+    socket.read_timeout = 5.seconds
     socket.tcp_nodelay = true
     io = Minecraft::IO::Wrap.new socket
     connection = Connection::Client.new io, ProtocolState::HANDSHAKING, Client.protocol_version
@@ -474,6 +505,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     else
       raise "Unexpected packet type: #{packet.class}"
     end
+  ensure
+    socket.try &.close
   end
 
   # Send a packet to the server concurrently.

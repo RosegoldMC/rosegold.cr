@@ -30,9 +30,10 @@ class Rosegold::Clientbound::EncryptionRequest < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
-    encryption_response = Serverbound::EncryptionResponse.new self, client.player.uuid.to_s, client.access_token
+    encryption_response = Serverbound::EncryptionResponse.new self, client.player.uuid.to_s, client.access_token, client.authentication_cache_reused?
 
     client.send_packet! encryption_response
+    client.successful_auth_phases << "session_join" if should_authenticate
 
     client.connection.io = Minecraft::EncryptedTCPSocket.new \
       client.connection.io,

@@ -283,19 +283,21 @@ Long-running work should remain interruptible. Check the conditions your script 
 end
 ```
 
-After a failed connection, allocate a fresh bot for the next attempt. Keep retry
-policy outside the bot primitive, with a bounded delay and a reason you can log:
+Use `Bot.run` for automatic reconnection. It creates a fresh bot per session and
+handles network backoff, authentication cooldowns, and `Retry-After`:
 
 ```crystal
-Log.info { "Retrying after #{bot.disconnect_reason}" }
-sleep 5.seconds
-
-bot = Rosegold::Bot.new(server)
-bot.join_game
+Rosegold::Bot.run(server) do |bot|
+  while bot.connected?
+    bot.wait_tick
+  end
+end
 ```
 
-That is a new connection, not a guarantee that the previous workflow is safe to
-resume. Re-establish any script-owned invariants before taking another action.
+The block runs again only after the new player has spawned. Call
+`bot.disconnect("Finished")` or finish the block while connected to stop.
+Re-establish script-owned invariants before taking another action; an
+interrupted workflow may already have changed server state.
 
 ## World access and remaining gaps
 

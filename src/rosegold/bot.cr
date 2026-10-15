@@ -1,5 +1,6 @@
 require "../rosegold"
 require "./control/*"
+require "./reconnect_policy"
 
 # Start here to write a Minecraft bot.
 #
@@ -73,6 +74,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Whether a death automatically starts a background `#respawn` attempt.
   # Enabled by default.
   property? auto_respawn : Bool = true
+  protected getter? disconnect_requested = false
   @swapping_hands = false
   @enchanting = false
 
@@ -120,6 +122,60 @@ class Rosegold::Bot < Rosegold::EventEmitter
     new Client.new(address).join_game(timeout_ticks)
   end
 
+  # Joins *address* and runs the block with a fresh bot after each reconnect.
+  # A server disconnect or network error retries with backoff; authentication
+  # failures honor provider cooldowns. Other script errors propagate.
+  # Return while connected or call `Bot#disconnect` to stop. The block must
+  # check `#connected?` or perform network operations to notice a disconnect.
+  # Re-establish script-owned state each time the block runs.
+  def self.run(address : String, port : Int32 = 25565,
+               offline : NamedTuple(uuid: String, username: String)? = nil,
+               timeout_ticks : Int32 = 1200, &)
+    reconnect = ReconnectPolicy.new
+
+    loop do
+      client = build_client(address, port, offline)
+      bot = new(client)
+      connected_at = nil.as(Time::Instant?)
+      disconnected_at = nil.as(Time::Instant?)
+      client.on(Event::Disconnected) { disconnected_at ||= Time.instant }
+      failure = nil.as(Minecraft::AuthenticationError?)
+
+      begin
+        bot.join_game(timeout_ticks)
+        connected_at = Time.instant
+        yield bot
+        return if bot.connected? || bot.disconnect_requested?
+      rescue error : Minecraft::AuthenticationError
+        raise error if error.phase == "microsoft_device" && !error.transient?
+        failure = error
+      rescue error : File::Error
+        raise error
+      rescue error : Client::NotConnected | IO::Error | Socket::Error
+        return if bot.disconnect_requested?
+        Log.warn { "Connection lost: #{error.message}" }
+      ensure
+        client.connection?.try &.disconnect("Session finished")
+      end
+
+      failure ||= client.authentication_failure
+      client.successful_auth_phases.each { |phase| reconnect.record_auth_success(phase) }
+      connected_for = nil.as(Time::Span?)
+      if started_at = connected_at
+        ended_at = disconnected_at
+        ended_at ||= Time.instant
+        connected_for = ended_at - started_at
+      end
+      delay = reconnect.next_delay(failure, connected_for)
+      Log.info { "Reconnecting in #{delay}#{failure.try { |auth_error| " after #{auth_error.phase}: #{auth_error.message}" }}" }
+      sleep delay
+    end
+  end
+
+  protected def self.build_client(address, port, offline)
+    Client.new(address, port, offline)
+  end
+
   # The configured Minecraft server hostname.
   def host
     client.host
@@ -144,6 +200,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Closes the connection with the server-visible *reason*.
   def disconnect(reason : String)
+    @disconnect_requested = true
     client.disconnect reason
   end
 

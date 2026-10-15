@@ -27,6 +27,7 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
     @encryption_request : Rosegold::Clientbound::EncryptionRequest,
     @uuid : String,
     @access_token : String,
+    @cache_reused : Bool = false,
   )
     @shared_secret = Random::Secure.random_bytes(16)
   end
@@ -41,7 +42,15 @@ class Rosegold::Serverbound::EncryptionResponse < Rosegold::Serverbound::Packet
 
   def send_join_request!
     response = send_join_request
-    raise "Session join request failed (HTTP #{response.status_code})" unless response.status_code == 204
+    return if response.status_code == 204
+
+    rejected = response.status_code == 401 || response.status_code == 403
+    Minecraft::Auth.invalidate_access_token(access_token) if rejected
+    failure = Minecraft::Auth.failure("session_join", response, "Minecraft session join failed (HTTP #{response.status_code})")
+    failure.refresh_cached_token = @cache_reused && rejected && failure.retry_after.nil?
+    raise failure
+  rescue error : IO::Error | Socket::Error | OpenSSL::SSL::Error
+    raise Minecraft::AuthenticationError.new("Minecraft session join is temporarily unavailable", phase: "session_join", transient: true)
   end
 
   private def send_join_request
