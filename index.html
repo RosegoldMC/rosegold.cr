@@ -1872,6 +1872,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/ReconnectPolicy" data-name="rosegold::reconnectpolicy">
+      <a href="Rosegold/ReconnectPolicy.html">ReconnectPolicy</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/RemoteSlot" data-name="rosegold::remoteslot">
       <a href="Rosegold/RemoteSlot.html">RemoteSlot</a>
       
@@ -2498,6 +2503,10 @@ for that tag. Install dependencies and build your bot after choosing the revisio
 shards build
 ./bin/attack</code></pre>
 <p>The first connection asks you to sign in through Microsoft's device-login page. The token is cached after that; keep the authentication cache private and out of version control.</p>
+<p>Rosegold also reuses unexpired Minecraft authentication in memory across connections.
+It checks TCP reachability before authenticating, so an unreachable server does
+not generate Microsoft or Xbox requests. A temporary refresh failure preserves
+the saved login instead of prompting for a new one.</p>
 <p>For this checkout, patrol and events default to <code>localhost:25565</code>. Set <code>ROSEGOLD_SERVER</code> to a <code>host:port</code> pair for another server:</p>
 <pre><code class="language-sh">ROSEGOLD_SERVER=localhost:25565 crystal run examples/patrol.cr</code></pre>
 <p><code>examples/patrol.cr</code> walks a small square from the bot's current position. <code>examples/events.cr</code> prints chat for one minute and starts guarded eating work after low-food events. <code>examples/spectate.cr</code> opens the spectator bridge and walks the same kind of short route.</p>
@@ -2524,6 +2533,28 @@ bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</
   bot.disconnect(<span class="s">&quot;Script finished&quot;</span>) <span class="k">if</span> bot.connected?
 <span class="k">end</span></code></pre>
 <p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result.</p>
+<p>For automatic reconnects, use <code>Bot.run</code>. It waits for spawn and gives the block a
+fresh bot for each session:</p>
+<pre><code class="language-crystal"><span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.run(<span class="s">&quot;play.example.net&quot;</span>) <span class="k">do</span> <span class="o">|</span>bot<span class="o">|</span>
+  bot.on <span class="t">Rosegold</span><span class="t">::</span><span class="t">Clientbound</span><span class="t">::</span><span class="t">PlayerChatMessage</span> <span class="k">do</span> <span class="o">|</span>event<span class="o">|</span>
+    puts <span class="s">&quot;</span><span class="i">#{</span>event.network_name<span class="i">}</span><span class="s">: </span><span class="i">#{</span>event.message<span class="i">}</span><span class="s">&quot;</span>
+  <span class="k">end</span>
+
+  <span class="k">while</span> bot.connected?
+    bot.wait_tick
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+<p>Server disconnects and network failures retry after 10 seconds, doubling up to
+five minutes. Authentication failures use separate cooldowns per phase: rate
+limits and HTTP 403 responses wait 5, 10, then 15 minutes; other auth failures
+wait 1, 2, 4, 8, then 15 minutes. <code>Retry-After</code> can extend these waits. A rejected
+cached session token is discarded and gets one fresh-token attempt after 10
+seconds, unless the provider supplied <code>Retry-After</code>.</p>
+<p>Call <code>bot.disconnect(&quot;Finished&quot;)</code> or return from the block while still connected
+to stop. Other script exceptions and declined device login propagate after
+cleanup. The block must check <code>connected?</code> or perform network operations to notice
+a disconnect. Re-establish script-owned state each session; reconnecting does
+not make replaying an interrupted action safe. See <a href="examples/reconnect.cr">examples/reconnect.cr</a>.</p>
 <h2><a id="received-world-state" class="anchor" href="#received-world-state">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
