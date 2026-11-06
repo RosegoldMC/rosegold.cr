@@ -27,6 +27,7 @@ class Rosegold::MountedInteractionClient < Rosegold::Client
 end
 
 Spectator.describe "Mounted entity raytracing" do
+  let(protocol) { Rosegold::Client::LATEST_PROTOCOL }
   let(bot_client) { Rosegold::MountedInteractionClient.new("localhost") }
   let(minecart_type) { Rosegold::Entity.metadata_for_protocol.find! { |entry| entry.name == "minecart" }.id.to_u32 }
   let(vehicle) do
@@ -39,7 +40,10 @@ Spectator.describe "Mounted entity raytracing" do
   end
   let(interactions) { Rosegold::Interactions.new(bot_client) }
 
+  after_each { Rosegold::Client.reset_protocol_version! }
+
   before_each do
+    Rosegold::Client.protocol_version = protocol
     bot_client.player.entity_id = 300_u64
     bot_client.player.feet = Rosegold::Vec3d.new(0.5, -60.35, 0.5)
     bot_client.player.look = Rosegold::Look.new(0_f32, 90_f32)
@@ -71,14 +75,30 @@ Spectator.describe "Mounted entity raytracing" do
     expect(reached).to eq(other_cart)
   end
 
-  it "attacks the aimed entity instead of the ridden minecart" do
-    bot_client.interactions_for_test.start_digging
-    bot_client.interactions_for_test.tick
-    bot_client.interactions_for_test.stop_digging
+  {% for protocol in Rosegold::ENABLED_PROTOCOLS.keys %}
+    context "protocol {{protocol}}" do
+      let(protocol) { {{protocol}}_u32 }
 
-    attack = bot_client.sent_packets.select(Rosegold::Serverbound::Attack).first
-    expect(attack.entity_id).to eq(other_cart.entity_id)
-  end
+      it "attacks the aimed entity instead of the ridden minecart" do
+        bot_client.interactions_for_test.start_digging
+        bot_client.interactions_for_test.tick
+        bot_client.interactions_for_test.stop_digging
+
+        {% if protocol >= 775 %}
+          attacks = bot_client.sent_packets.select(Rosegold::Serverbound::Attack)
+          expect(bot_client.sent_packets.select(Rosegold::Serverbound::InteractEntity)).to be_empty
+        {% else %}
+          attacks = bot_client.sent_packets.select(Rosegold::Serverbound::InteractEntity)
+          expect(bot_client.sent_packets.select(Rosegold::Serverbound::Attack)).to be_empty
+        {% end %}
+        expect(attacks.size).to eq(1)
+        {% if protocol < 775 %}
+          expect(attacks.first.action).to eq(Rosegold::Serverbound::InteractEntity::Action::Attack)
+        {% end %}
+        expect(attacks.first.entity_id).to eq(other_cart.entity_id)
+      end
+    end
+  {% end %}
 
   it "keeps unscoped entity raycasts unchanged" do
     reached = bot_client.dimension_for_test.raycast_entity(bot_client.player.eyes, bot_client.player.look.to_vec3, 3.0)
