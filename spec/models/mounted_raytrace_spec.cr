@@ -10,8 +10,24 @@ class Rosegold::Interactions
   end
 end
 
+class Rosegold::MountedInteractionClient < Rosegold::Client
+  getter sent_packets = [] of Rosegold::Serverbound::Packet
+
+  def interactions_for_test
+    interactions
+  end
+
+  def connected?
+    true
+  end
+
+  def send_packet!(packet : Rosegold::Serverbound::Packet)
+    @sent_packets << packet
+  end
+end
+
 Spectator.describe "Mounted entity raytracing" do
-  let(bot_client) { client() }
+  let(bot_client) { Rosegold::MountedInteractionClient.new("localhost") }
   let(minecart_type) { Rosegold::Entity.metadata_for_protocol.find! { |entry| entry.name == "minecart" }.id.to_u32 }
   let(vehicle) do
     Rosegold::Entity.new(42_u32, UUID.random, minecart_type, Rosegold::Vec3d.new(0.5, -59.9375, 0.5),
@@ -53,6 +69,15 @@ Spectator.describe "Mounted entity raytracing" do
       3.0, bot_client.player.entity_id.to_u32)
 
     expect(reached).to eq(other_cart)
+  end
+
+  it "attacks the aimed entity instead of the ridden minecart" do
+    bot_client.interactions_for_test.start_digging
+    bot_client.interactions_for_test.tick
+    bot_client.interactions_for_test.stop_digging
+
+    attack = bot_client.sent_packets.select(Rosegold::Serverbound::Attack).first
+    expect(attack.entity_id).to eq(other_cart.entity_id)
   end
 
   it "keeps unscoped entity raycasts unchanged" do
