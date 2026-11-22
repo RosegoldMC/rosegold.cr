@@ -104,8 +104,8 @@ Spectator.describe "Rosegold::Bot interactions" do
         end
         bot.stop_digging
 
-        final_state = dimension.block_state(target).not_nil!
-        expect(Rosegold::Block.from_block_state_id(final_state).id_str).to eq("air")
+        final_name = dimension.block_state(target).try { |state| Rosegold::Block.from_block_state_id(state).id_str }
+        expect(final_name).to eq("air")
       end
     ensure
       admin.fill 0, -60, -1, 0, -57, 3, "air"

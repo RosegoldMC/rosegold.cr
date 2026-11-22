@@ -458,22 +458,22 @@ class Rosegold::Interactions
     mcdata = MCData.default
     held = inventory.main_hand
     held_id = held.item_id_int unless held.empty?
-    each_traversed_cell(start, reach) do |x, y, z|
+    each_traversed_cell(start, reach) do |cell_x, cell_y, cell_z|
       # outside world or outside loaded chunks
-      block_state = client.dimension.block_state(x, y, z) || next
+      block_state = client.dimension.block_state(cell_x, cell_y, cell_z) || next
       shape = mcdata.block_state_outline_shapes[block_state]
       if held_id && (by_item = mcdata.held_outline_shapes[block_state]?)
         shape = by_item[held_id]? || shape
       end
       next if shape.empty?
       dx = dy = dz = 0.0
-      if offset = mcdata.outline_offset(block_state, x, z)
+      if offset = mcdata.outline_offset(block_state, cell_x, cell_z)
         dx, dy, dz = offset
       end
-      boxes = shape.map { |box| box.to_f64.offset(x + dx, y + dy, z + dz) }
-      hit = inside_block_hit(start, reach, boxes, Vec3i.new(x, y, z)) ||
+      boxes = shape.map &.to_f64.offset(cell_x + dx, cell_y + dy, cell_z + dz)
+      hit = inside_block_hit(start, reach, boxes, Vec3i.new(cell_x, cell_y, cell_z)) ||
             Raytrace.raytrace(start, reach, boxes).try do |reached|
-              ReachedBlock.new reached.intercept, Vec3i.new(x, y, z), reached.face
+              ReachedBlock.new reached.intercept, Vec3i.new(cell_x, cell_y, cell_z), reached.face
             end
       return hit if hit
     end
