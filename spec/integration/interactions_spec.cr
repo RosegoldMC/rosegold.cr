@@ -7,6 +7,10 @@ Spectator.describe "Rosegold::Bot interactions" do
     admin.wait_ticks 3
   end
 
+  def block_name(client, pos)
+    client.dimension_for_test.block_state(pos).try { |state| Rosegold::Block.from_block_state_id(state).id_str }
+  end
+
   it "should be able to chat" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
@@ -139,6 +143,40 @@ Spectator.describe "Rosegold::Bot interactions" do
         expect(vines.map { |pos| client.dimension_for_test.block_state(pos) }).to eq([0_u16] * 3)
       end
     end
+  end
+
+  it "server confirms held attacks breaking several seagrasses" do
+    admin.fill -12, -60, 7, -4, -58, 9, "air"
+    admin.fill -12, -60, 7, -4, -58, 9, "water"
+    admin.fill -8, -60, 8, -6, -60, 8, "stone"
+    admin.wait_ticks 3
+    grass = (-8..-6).map { |x| Rosegold::Vec3i.new(x, -59, 8) }
+    grass.each { |pos| admin.setblock pos.x, pos.y, pos.z, "seagrass" }
+    admin.wait_ticks 3
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        admin.clear
+        admin.tp -9.5, -60, 8.5
+        bot.wait_ticks 10
+        bot.look_at Rosegold::Vec3d.new(-7.5, -58.62, 8.5)
+        bot.wait_ticks 3
+
+        expect(grass.map { |pos| block_name(client, pos) }).to eq(["seagrass"] * 3)
+
+        bot.start_digging
+        ticks = 0
+        until grass.none? { |pos| block_name(client, pos) == "seagrass" } || ticks >= 80
+          bot.wait_tick
+          ticks += 1
+        end
+        bot.stop_digging
+
+        expect(grass.map { |pos| block_name(client, pos) }).to eq(["water"] * 3)
+      end
+    end
+  ensure
+    admin.fill -12, -60, 7, -4, -58, 9, "air"
+    admin.wait_ticks 3
   end
 
   it "should stop digging when bot.stop_digging is called" do

@@ -34,7 +34,7 @@ Spectator.describe Rosegold::Block do
       end
 
       context "with a diamond shovel" do
-        let(:main_hand) { Rosegold::Slot.new(item_id_int: diamond_shovel_id) }
+        let(:main_hand) { Rosegold::Slot.new(count: 1_u32, item_id_int: diamond_shovel_id) }
 
         it "calculates the break time properly with proper tool" do
           expect(Rosegold::Block.from_block_state_id(stone_state).break_time(main_hand, player)).to eq 150 # stone — shovel is wrong tool
@@ -43,7 +43,7 @@ Spectator.describe Rosegold::Block do
       end
 
       context "with a diamond pickaxe" do
-        let(:main_hand) { Rosegold::Slot.new(item_id_int: diamond_pickaxe_id) }
+        let(:main_hand) { Rosegold::Slot.new(count: 1_u32, item_id_int: diamond_pickaxe_id) }
 
         it "calculates the break time properly with proper tool" do
           expect(Rosegold::Block.from_block_state_id(stone_state).break_time(main_hand, player)).to eq 6 # stone — pickaxe is correct tool
@@ -60,6 +60,8 @@ Spectator.describe Rosegold::Block do
             components_to_add["enchantments"] = enchantments
 
             Rosegold::Slot.new(
+              count: 1_u32,
+
               item_id_int: diamond_pickaxe_id,
               components_to_add: components_to_add
             )

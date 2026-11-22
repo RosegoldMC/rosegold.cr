@@ -191,7 +191,41 @@ Crafting supports: recipe lookup, can_craft? check, auto-craft by name, craft_al
 
 ### Interactions
 
-Block breaking: `start_digging` → tick accumulates `block_damage_progress` via `Block#break_damage` → `finish_digging`. Continuous mode auto-targets next block. In survival, zero-hardness blocks are START-only like vanilla: no FINISH or CANCEL, at most one START per client tick, and the next confirmed block starts on a later tick. The server stays authoritative and the world is never changed locally, so an unconfirmed block may be re-sent each tick. Break speed accounts for tool type, efficiency enchantment, haste effect.
+Block breaking follows vanilla's held-attack cadence. A press starts the target;
+each held tick adds `Block#break_damage` to `block_damage_progress`, sending FINISH
+at full progress. A block whose first-tick damage is already full (including
+zero hardness) is START-only: no FINISH or CANCEL. After a FINISH, and between
+creative breaks, a held attack waits five eligible ticks before the next START;
+on 26.3 a creative entity attack sets the same delay.
+A fresh creative press whose target is not predicted to become air spends the
+first of those ticks at once. Mining sends at most one START per client tick, and
+a survival miss waits ten ticks. Creative cadence and creative tool limits follow
+the synchronized instabuild ability; a game mode change resets it, and
+PlayerAbilities can override it.
+
+Attack presses run before use presses, and a held attack continues after use
+each tick. Use presses are dropped during a staged survival break, while a held
+use retries. Only active item use reported by the server's living-entity flags
+pauses mining; it drops attack presses until it ends.
+
+Mining targets may use predicted block state so a held break can move on before
+the server confirms the last one. That prediction is a short-lived overlay for
+mining only. Public world reads, physics, collision, and spectate relays see
+authoritative server state. Server block and chunk packets update that state;
+a cumulative acknowledgement ends predictions up to its sequence, and chunk
+loads or unloads drop their predictions. Prediction never changes what the
+server accepts, and an unconfirmed block may be re-sent.
+`Client#reset_mining_session` clears the overlay, pending acknowledgements,
+active item use, and mining control state (no packets) on Login, Respawn, PLAY
+to CONFIGURATION, connect, and disconnect. The sequence counter keeps increasing
+across resets so stale acknowledgements cannot match.
+
+Mining reach uses the synchronized block interaction range attribute, falling
+back to the mode default. Break speed uses the held item's tool data, synchronized
+mining attributes, Efficiency, Haste, Conduit Power, Mining Fatigue, eyes in
+water, Aqua Affinity, and being on the ground. Block tags come from the
+configuration phase; PLAY tag reloads are not handled, so speed can be stale
+after a datapack reload.
 
 Block placement: `place_block_against(block, face)` → raytrace → PlayerBlockPlacement packet.
 

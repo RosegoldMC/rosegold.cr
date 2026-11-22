@@ -24,6 +24,10 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
     :humanoid_arm, :dye_color,
   }
 
+  # LivingEntity's first tracked field follows Entity's eight in every supported
+  # protocol; bit 0 is isUsingItem.
+  private LIVING_ENTITY_FLAGS_INDEX = 8_u8
+
   record Entry, index : UInt8, serializer_id : UInt32, value : Rosegold::Entity::TrackedValue
 
   property entity_id : UInt64
@@ -165,6 +169,12 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
   end
 
   def callback(client)
+    if entity_id == client.player.entity_id
+      entries.each do |entry|
+        next unless entry.index == LIVING_ENTITY_FLAGS_INDEX && (flags = entry.value).is_a?(UInt8)
+        client.player.using_item = (flags & 1) != 0
+      end
+    end
     if entity = client.dimension.entities[entity_id]?
       entity.tracked_data.merge!(values)
     end

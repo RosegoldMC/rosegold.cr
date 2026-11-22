@@ -53,7 +53,15 @@ class Rosegold::Player
     invulnerable : Bool = false,
     flying : Bool = false,
     allow_flying : Bool = false,
-    creative_mode : Bool = false
+    creative_mode : Bool = false,
+    using_item : Bool = false
+
+  # Like a vanilla local game mode change, resets the instabuild ability that
+  # a later PlayerAbilities packet may override.
+  def gamemode=(value : Int8)
+    @gamemode = value
+    @creative_mode = value == 1
+  end
 
   def feet
     @mutex.synchronize { @feet }
@@ -126,6 +134,34 @@ class Rosegold::Player
   def movement_speed_attribute : AttributeSnapshot?
     id = MOVEMENT_SPEED_ATTRIBUTE_IDS[Rosegold::Client.protocol_version]?
     id ? attributes[id]? : nil
+  end
+
+  def mining_efficiency : Float32?
+    block_attribute_value(20_u32, 24_u32, 1024.0).try(&.to_f32)
+  end
+
+  def block_break_speed : Float32
+    block_attribute_value(5_u32, 7_u32, 1024.0).try(&.to_f32) || 1.0_f32
+  end
+
+  def submerged_mining_speed(aqua_affinity : Bool) : Float32
+    block_attribute_value(29_u32, 34_u32, 20.0).try(&.to_f32) || (aqua_affinity ? 1.0_f32 : 0.2_f32)
+  end
+
+  def block_interaction_range : Float64
+    block_attribute_value(6_u32, 8_u32, 64.0) || (gamemode == 1 ? 5.0 : 4.5)
+  end
+
+  private def block_attribute_value(legacy_id : UInt32, current_id : UInt32, max : Float64) : Float64?
+    id = case Client.protocol_version
+         when 772, 773, 774, 775 then legacy_id
+         when 776, 777           then current_id
+         else                         return
+         end
+    if attribute = attributes[id]?
+      value = attribute.effective_value
+      value.nan? ? 0.0 : value.clamp(0.0, max)
+    end
   end
 
   # Synced attribute already folds in Speed/Slowness; sprint is excluded here because
