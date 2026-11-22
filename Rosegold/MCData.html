@@ -2521,7 +2521,7 @@ into rosegold's AABBf geometry.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L10" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L10" target="_blank">
         rosegold/world/mcdata.cr
       </a>
     
@@ -2632,6 +2632,20 @@ into rosegold's AABBf geometry.</p>
       </li>
     
       <li class="entry-summary">
+        <a href="#block_state_outline_offsets%3AHash%28UInt16%2CTuple%28Float64%2CFloat64%29%29-instance-method" class="signature"><strong>#block_state_outline_offsets</strong> : Hash(UInt16, Tuple(Float64, Float64))</a>
+        
+          <div class="summary"><p>state nr -&gt; {max horizontal, max vertical} position offset.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#block_state_outline_shapes%3AArray%28Array%28AABBf%29%29-instance-method" class="signature"><strong>#block_state_outline_shapes</strong> : Array(Array(AABBf))</a>
+        
+          <div class="summary"><p>block state nr -&gt; boxes of the block's outline (the selection/targeting shape), independent of collision.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#blocks%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#blocks</strong>(*args, **options)</a>
         
       </li>
@@ -2657,6 +2671,11 @@ into rosegold's AABBf geometry.</p>
       </li>
     
       <li class="entry-summary">
+        <a href="#held_outline_shapes%3AHash%28UInt16%2CHash%28UInt32%2CArray%28AABBf%29%29%29-instance-method" class="signature"><strong>#held_outline_shapes</strong> : Hash(UInt16, Hash(UInt32, Array(AABBf)))</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#items%28%2Aargs%2C%2A%2Aoptions%29-instance-method" class="signature"><strong>#items</strong>(*args, **options)</a>
         
       </li>
@@ -2673,6 +2692,13 @@ into rosegold's AABBf geometry.</p>
     
       <li class="entry-summary">
         <a href="#materials%28%2Aargs%2C%2A%2Aoptions%2C%26%29-instance-method" class="signature"><strong>#materials</strong>(*args, **options, &)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#outline_offset%28state%3AUInt16%2Cx%3AInt32%2Cz%3AInt32%29%3ATuple%28Float64%2CFloat64%2CFloat64%29%7CNil-instance-method" class="signature"><strong>#outline_offset</strong>(state : UInt16, x : Int32, z : Int32) : Tuple(Float64, Float64, Float64) | Nil</a>
+        
+          <div class="summary"><p>Vanilla Mth.getSeed(x, 0, z) based position offset for the block at x, z.</p></div>
         
       </li>
     
@@ -2731,7 +2757,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L32" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2747,7 +2773,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2763,7 +2789,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L79" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L149" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2795,7 +2821,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2811,7 +2837,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2832,7 +2858,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2848,7 +2874,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2864,7 +2890,51 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block_state_outline_offsets:Hash(UInt16,Tuple(Float64,Float64))-instance-method">
+      <div class="signature">
+        
+        def <strong>block_state_outline_offsets</strong> : Hash(UInt16, Tuple(Float64, Float64))
+
+        <a class="method-permalink" href="#block_state_outline_offsets%3AHash%28UInt16%2CTuple%28Float64%2CFloat64%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>state nr -&gt; {max horizontal, max vertical} position offset. Outline boxes of
+these states are stored neutral and shifted by <code><a href="../Rosegold/MCData.html#outline_offset%28state%3AUInt16%2Cx%3AInt32%2Cz%3AInt32%29%3ATuple%28Float64%2CFloat64%2CFloat64%29%7CNil-instance-method">#outline_offset</a></code> at use.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L65" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block_state_outline_shapes:Array(Array(AABBf))-instance-method">
+      <div class="signature">
+        
+        def <strong>block_state_outline_shapes</strong> : Array(Array(<a href="../Rosegold/AABBf.html">AABBf</a>))
+
+        <a class="method-permalink" href="#block_state_outline_shapes%3AArray%28Array%28AABBf%29%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>block state nr -&gt; boxes of the block's outline (the selection/targeting
+shape), independent of collision. States share one array per shape ID.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L61" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2880,7 +2950,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2896,7 +2966,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2912,7 +2982,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2928,7 +2998,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2944,7 +3014,23 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="held_outline_shapes:Hash(UInt16,Hash(UInt32,Array(AABBf)))-instance-method">
+      <div class="signature">
+        
+        def <strong>held_outline_shapes</strong> : Hash(UInt16, Hash(UInt32, Array(<a href="../Rosegold/AABBf.html">AABBf</a>)))
+
+        <a class="method-permalink" href="#held_outline_shapes%3AHash%28UInt16%2CHash%28UInt32%2CArray%28AABBf%29%29%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2960,7 +3046,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2976,7 +3062,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2992,7 +3078,7 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3008,7 +3094,28 @@ into rosegold's AABBf geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d0e044d511feea58f18960490ff6111980d76666/src/rosegold/world/mcdata.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L69" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="outline_offset(state:UInt16,x:Int32,z:Int32):Tuple(Float64,Float64,Float64)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>outline_offset</strong>(state : UInt16, x : <a href="../Int32.html">Int32</a>, z : <a href="../Int32.html">Int32</a>) : Tuple(Float64, Float64, Float64) | Nil
+
+        <a class="method-permalink" href="#outline_offset%28state%3AUInt16%2Cx%3AInt32%2Cz%3AInt32%29%3ATuple%28Float64%2CFloat64%2CFloat64%29%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Vanilla Mth.getSeed(x, 0, z) based position offset for the block at x, z.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/14cdaed429ae064a70bc08b8242a48f0e847f5bf/src/rosegold/world/mcdata.cr#L138" target="_blank">View source</a>]
         
       </div>
     </div>
