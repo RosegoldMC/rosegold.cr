@@ -104,3 +104,101 @@ Spectator.describe "Physics collision with block above head" do
     expect(ceiling_block.contains?(player_head)).to be_false
   end
 end
+
+Spectator.describe "Physics stepping under a ceiling" do
+  def step_obstacles(ceiling_bottom : Float64?, step_top = 0.5)
+    grow_aabb = Rosegold::Player::DEFAULT_AABB.to_f64 * -1
+    boxes = [
+      Rosegold::AABBd.new(0.0, -1.0, 0.0, 1.0, 0.0, 1.0),
+      Rosegold::AABBd.new(1.0, -1.0, 0.0, 2.0, step_top, 1.0),
+    ]
+    ceiling_bottom.try do |bottom|
+      boxes << Rosegold::AABBd.new(1.0, bottom, 0.0, 2.0, bottom + 1.0, 1.0)
+    end
+    boxes.map &.grow(grow_aabb)
+  end
+
+  def walk(obstacles)
+    start = Rosegold::Vec3d.new(0.6, 0.0, 0.5)
+    velocity = Rosegold::Vec3d.new(0.13, -0.0784, 0.0)
+    Rosegold::Physics.predict_movement_collision(start, velocity, obstacles)
+  end
+
+  it "steps up a slab when the ceiling clears the stepped height but not a full 0.6 lift" do
+    movement, _ = walk step_obstacles(2.35)
+    expect(movement.x).to be_within(1e-6).of(0.13)
+    expect(movement.y).to be_within(1e-6).of(0.5)
+  end
+
+  it "still steps without a ceiling" do
+    movement, _ = walk step_obstacles(nil)
+    expect(movement.x).to be_within(1e-6).of(0.13)
+    expect(movement.y).to be_within(1e-6).of(0.5)
+  end
+
+  it "is blocked when the ceiling leaves no room at the stepped height" do
+    movement, _ = walk step_obstacles(2.2)
+    expect(movement.x).to be < 0.1
+    expect(movement.y).to be_within(1e-6).of(0.0)
+  end
+
+  it "is blocked by a step taller than the maximum lift" do
+    movement, _ = walk step_obstacles(nil, 0.7)
+    expect(movement.x).to be < 0.1
+  end
+end
+
+Spectator.describe "Physics stepping from farmland onto a slab under a ceiling" do
+  def walk_onto_slab(aabb, floor_top, slab_top, ceiling_bottom)
+    grow_aabb = aabb.to_f64 * -1
+    boxes = [
+      Rosegold::AABBd.new(0.0, -100.0, 0.0, 1.0, floor_top, 1.0),
+      Rosegold::AABBd.new(1.0, -100.0, 0.0, 2.0, slab_top, 1.0),
+      Rosegold::AABBd.new(1.0, ceiling_bottom, 0.0, 2.0, ceiling_bottom + 1.0, 1.0),
+    ].map &.grow(grow_aabb)
+    start = Rosegold::Vec3d.new(0.6, floor_top, 0.5)
+    Rosegold::Physics.predict_movement_collision(start, Rosegold::Vec3d.new(0.13, -0.0784, 0.0), boxes)
+  end
+
+  it "stands onto a flush top slab with 2.0 clearance above it" do
+    movement, _ = walk_onto_slab(Rosegold::Player::DEFAULT_AABB, 0.9375, 1.0, 3.0)
+    expect(movement.x).to be_within(1e-6).of(0.13)
+    expect(movement.y).to be_within(1e-6).of(0.0625)
+  end
+
+  it "stays blocked standing when the slab clearance is under the player height" do
+    movement, _ = walk_onto_slab(Rosegold::Player::DEFAULT_AABB, 0.9375, 1.0, 2.7)
+    expect(movement.x).to be < 0.1
+  end
+
+  it "sneaks onto a bottom slab with 1.5 clearance above it" do
+    movement, _ = walk_onto_slab(Rosegold::Player::SNEAKING_AABB, -60.0625, -59.5, -58.0)
+    expect(movement.x).to be_within(1e-6).of(0.13)
+    expect(movement.y).to be_within(1e-6).of(0.5625)
+  end
+
+  it "stays blocked sneaking when the slab clearance is under 1.5" do
+    movement, _ = walk_onto_slab(Rosegold::Player::SNEAKING_AABB, -60.0625, -59.5, -58.1)
+    expect(movement.x).to be < 0.1
+  end
+
+  it "keeps ground progress instead of stepping into a diagonal wall" do
+    grow_aabb = Rosegold::Player::SNEAKING_AABB.to_f64 * -1
+    obstacles = [
+      Rosegold::AABBd.new(0.0, 0.0, 0.0, 1.0, 0.9375, 1.0),
+      Rosegold::AABBd.new(1.0, 1.0, 0.0, 2.0, 1.5, 1.0),
+      Rosegold::AABBd.new(1.0, 3.0, 0.0, 2.0, 4.0, 1.0),
+      Rosegold::AABBd.new(1.0, 1.0, 1.0, 2.0, 2.0, 2.0),
+    ].map &.grow(grow_aabb)
+    start = Rosegold::Vec3d.new(0.68, 0.9375, 0.68)
+    velocity = Rosegold::Vec3d.new(0.022, -0.0784, 0.022)
+    wall = obstacles.last
+
+    movement, _ = Rosegold::Physics.predict_movement_collision(start, velocity, obstacles)
+
+    ground_progress = Rosegold::Vec3d.new(wall.min.x - start.x, 0, velocity.z).length
+    expect(wall.contains?(start + movement)).to be_false
+    expect(movement.with_y(0).length).to be_within(1e-6).of(ground_progress)
+    expect(movement.y).to be_within(1e-6).of(0.0)
+  end
+end
