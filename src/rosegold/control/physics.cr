@@ -872,15 +872,29 @@ class Rosegold::Physics
     collided_z = (movement.z - velocity.z).abs > EPSILON_COLLISION
 
     if collided_x || collided_z
-      step_up_movement = slide start, Vec3d.new(0, MAX_UP_STEP, 0), obstacles
-      step_up = start + step_up_movement
-      # gravity would pull us into the step, preventing stepping
-      over_velocity = velocity.with_y 0
-      step_over_movement = slide step_up, over_velocity, obstacles
+      horizontal_progress = movement.x ** 2 + movement.z ** 2
+      over_x = Vec3d.new(velocity.x, 0, 0)
+      over_z = Vec3d.new(0, 0, velocity.z)
+      first_axis, second_axis = velocity.x.abs >= velocity.z.abs ? {over_x, over_z} : {over_z, over_x}
+      # like vanilla, try each obstacle surface height up to the step limit, lowest first
+      candidate_heights = obstacles.map { |obstacle| obstacle.max.y - start.y }
+        .select! { |height| height >= 0 && height != movement.y && height <= MAX_UP_STEP }
+        .uniq!.sort!
+      stepped = nil
+      candidate_heights.each do |height|
+        lift = slide start, Vec3d.new(0, height, 0), obstacles
+        step_up = start + lift
+        first_move = slide step_up, first_axis, obstacles
+        over = first_move + slide(step_up + first_move, second_axis, obstacles)
+        if over.x ** 2 + over.z ** 2 > horizontal_progress + EPSILON_COLLISION
+          stepped = {lift, over}
+          break
+        end
+      end
 
-      step_different_x = step_over_movement.x != movement.x
-      step_different_z = step_over_movement.z != movement.z
-      if step_different_x || step_different_z
+      if stepped
+        step_up_movement, step_over_movement = stepped
+        step_up = start + step_up_movement
         # we may have stepped too far up, land on top surface of step block
         step_over = step_up + step_over_movement
         down_velocity = Vec3d.new(0, velocity.y - step_up_movement.y, 0)
