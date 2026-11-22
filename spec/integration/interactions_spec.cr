@@ -113,6 +113,34 @@ Spectator.describe "Rosegold::Bot interactions" do
     end
   end
 
+  it "server confirms a held attack breaking a column of zero-hardness vines" do
+    admin.fill 9, -59, 8, 9, -52, 8, "air"
+    admin.fill 9, -54, 8, 9, -54, 8, "dirt"
+    admin.fill 9, -57, 8, 9, -55, 8, "weeping_vines_plant"
+    admin.fill 9, -60, 8, 9, -60, 8, "stone"
+    admin.wait_ticks 3
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        admin.clear
+        admin.tp 9.5, -59, 8.5
+        bot.wait_ticks 10
+        bot.look &.up
+        bot.wait_ticks 3
+
+        vines = (-57..-55).map { |y| Rosegold::Vec3i.new(9, y, 8) }
+        bot.start_digging
+        ticks = 0
+        until vines.none? { |pos| client.dimension_for_test.block_state(pos) != 0_u16 } || ticks >= 30
+          bot.wait_tick
+          ticks += 1
+        end
+        bot.stop_digging
+
+        expect(vines.map { |pos| client.dimension_for_test.block_state(pos) }).to eq([0_u16] * 3)
+      end
+    end
+  end
+
   it "should stop digging when bot.stop_digging is called" do
     admin.fill 10, -60, 9, 10, -57, 9, "dirt"
     admin.wait_tick

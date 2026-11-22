@@ -191,7 +191,7 @@ Crafting supports: recipe lookup, can_craft? check, auto-craft by name, craft_al
 
 ### Interactions
 
-Block breaking: `start_digging` → tick accumulates `block_damage_progress` via `Block#break_damage` → `finish_digging`. Continuous mode auto-targets next block. Break speed accounts for tool type, efficiency enchantment, haste effect.
+Block breaking: `start_digging` → tick accumulates `block_damage_progress` via `Block#break_damage` → `finish_digging`. Continuous mode auto-targets next block. In survival, zero-hardness blocks are START-only like vanilla: no FINISH or CANCEL, at most one START per client tick, and the next confirmed block starts on a later tick. The server stays authoritative and the world is never changed locally, so an unconfirmed block may be re-sent each tick. Break speed accounts for tool type, efficiency enchantment, haste effect.
 
 Block placement: `place_block_against(block, face)` → raytrace → PlayerBlockPlacement packet.
 

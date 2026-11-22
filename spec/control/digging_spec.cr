@@ -343,7 +343,7 @@ Spectator.describe "Digging block outlines" do
     interactions.start_digging
     interactions.tick
     Rosegold::Clientbound::BlockChange.new(foreground, 0_u16).callback(bot_client)
-    2.times { interactions.tick }
+    interactions.tick
 
     expect(starts.map(&.location)).to eq([foreground, target])
   end
@@ -453,8 +453,97 @@ Spectator.describe "Digging block outlines" do
     interactions.tick
     Rosegold::Clientbound::BlockChange.new(foreground, 0_u16).callback(bot_client)
     interactions.start_digging
-    2.times { interactions.tick }
+    interactions.tick
 
     expect(starts.map(&.location)).to eq([foreground, target])
+  end
+
+  context "with zero-hardness blocks in survival" do
+    let(second) { Rosegold::Vec3i.new(0, 0, 3) }
+
+    def actions
+      bot_client.sent_packets.select(Rosegold::Serverbound::PlayerAction).map { |packet| {packet.status, packet.location} }
+    end
+
+    before_each do
+      set_block(target, "seagrass")
+      set_block(second, "seagrass")
+      aim(0.5, 0.4)
+      interactions.tick
+    end
+
+    it "starts each confirmed block on its own tick without finishing or cancelling" do
+      state = bot_client.dimension_for_test.block_state(second)
+      interactions.start_digging
+      interactions.tick
+      expect(actions).to eq([{Rosegold::Serverbound::PlayerAction::Status::Start, target}])
+
+      Rosegold::Clientbound::BlockChange.new(target, 0_u16).callback(bot_client)
+      interactions.tick
+
+      expect(actions).to eq([
+        {Rosegold::Serverbound::PlayerAction::Status::Start, target},
+        {Rosegold::Serverbound::PlayerAction::Status::Start, second},
+      ])
+      expect(bot_client.dimension_for_test.block_state(second)).to eq(state)
+      expect(bot_client.dimension_for_test.block_state(target)).to eq(0_u16)
+    end
+
+    it "cancels a staged dig before starting an instant dig at the same position" do
+      set_block(target, "stone")
+      interactions.start_digging
+      interactions.tick
+
+      interactions.stop_digging
+      state = bot_client.dimension_for_test.block_state(second) || raise "Missing seagrass state"
+      Rosegold::Clientbound::BlockChange.new(target, state).callback(bot_client)
+      interactions.start_digging
+      interactions.tick
+
+      expect(actions).to eq([
+        {Rosegold::Serverbound::PlayerAction::Status::Start, target},
+        {Rosegold::Serverbound::PlayerAction::Status::Cancel, target},
+        {Rosegold::Serverbound::PlayerAction::Status::Start, target},
+      ])
+    end
+
+    it "sends at most one start per tick" do
+      interactions.start_digging
+      3.times do
+        before = starts.size
+        interactions.tick
+        expect(starts.size - before).to eq(1)
+      end
+    end
+
+    it "does not send a stop or cancel when the held attack ends" do
+      interactions.start_digging
+      interactions.tick
+      interactions.stop_digging
+      interactions.tick
+
+      expect(actions.map(&.first)).to eq([Rosegold::Serverbound::PlayerAction::Status::Start])
+    end
+
+    it "keeps staged digging for blocks with hardness" do
+      set_block(target, "stone")
+      interactions.start_digging
+      interactions.tick
+      interactions.tick
+
+      expect(starts.size).to eq(1)
+      expect(interactions.block_damage_progress).to be > 0
+    end
+
+    it "keeps the staged finish for zero-hardness blocks in creative" do
+      bot_client.player.gamemode = 1_i8
+      interactions.start_digging
+      interactions.tick
+
+      expect(actions.map(&.first)).to eq([
+        Rosegold::Serverbound::PlayerAction::Status::Start,
+        Rosegold::Serverbound::PlayerAction::Status::Finish,
+      ])
+    end
   end
 end
