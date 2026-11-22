@@ -1,5 +1,5 @@
 name: rosegold
-version: 0.11.0
+version: 0.11.1
 
 authors:
   - grepsedawk <grepsedawk@users.noreply.github.com>
@@ -13,7 +13,7 @@ dependencies:
     github: luckyframework/habitat
   minecraft-data:
     github: rosegoldmc/minecraft-data.cr
-    commit: bdc1033ea023feddea03d0869137a36b70a64a9e
+    commit: e4fda1fb3edd7c3f416aefe64972d4eebb7664f3
   openssl_ext:
     github: spider-gazelle/openssl_ext
     version: ~> 2.0

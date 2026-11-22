@@ -197,6 +197,16 @@ Block placement: `place_block_against(block, face)` → raytrace → PlayerBlock
 
 Reach: 4.5 blocks (survival), 5.0 (creative). Entity reach: 3.0 / 5.0. Unified raytrace prevents hitting entities through blocks.
 
+Block targeting uses vanilla per-state outline shapes, separate from movement
+collision. Version-matched outline tables (`blockOutlines.json`) and the
+extractor (`tools/block-outlines`) live in the
+[minecraft-data shard](https://github.com/rosegoldmc/minecraft-data.cr); refresh
+them there whenever supported versions change. Runtime applies the outline
+tables, parsed as `Minecraft::Data::BlockOutlines`, with their offsets and
+held-item alternatives.
+Shulker box lid animation and vanilla interaction-shape face overrides are not
+modeled.
+
 ### SpectateServer
 
 "Headless with headful feel": vanilla clients connect to `127.0.0.1:25566` by

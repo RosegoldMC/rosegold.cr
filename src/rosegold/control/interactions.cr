@@ -6,8 +6,9 @@ require "./physics"
 class Rosegold::Interactions
   private class ReachedBlock
     getter intercept : Vec3d, block : Vec3i, face : BlockFace
+    getter? inside_block : Bool
 
-    def initialize(@intercept, @block, @face); end
+    def initialize(@intercept, @block, @face, @inside_block = false); end
   end
 
   # Random 3-6 ticks between attacks (~3.3-6.7 CPS), under CivMC 8 CPS cap.
@@ -285,7 +286,6 @@ class Rosegold::Interactions
 
   private def place_block(hand : Hand, reached : ReachedBlock, hand_tap : Bool = false)
     cursor = (reached.intercept - reached.block.to_f64).to_f32
-    inside_block = false # TODO
 
     sequence = client.next_sequence
     operation = BlockOperation.new(reached.block, :place)
@@ -293,7 +293,7 @@ class Rosegold::Interactions
     @last_hand_tap_sequence = sequence if hand_tap
 
     send_packet Serverbound::PlayerBlockPlacement.new \
-      hand, reached.block, reached.face, cursor, inside_block, sequence
+      hand, reached.block, reached.face, cursor, reached.inside_block?, sequence
     send_swing hand
   end
 
@@ -394,11 +394,7 @@ class Rosegold::Interactions
 
   private def reach_block : ReachedBlock?
     eyes = client.player.eyes
-    boxes = get_block_hitboxes(eyes, reach_vec)
-    Raytrace.raytrace(eyes, reach_vec, boxes).try do |reached|
-      block = boxes[reached.box_nr].min.block
-      ReachedBlock.new reached.intercept, block, reached.face
-    end
+    reach_block_along eyes, reach_vec
   end
 
   private def reach_entity : Rosegold::Entity?
@@ -411,10 +407,6 @@ class Rosegold::Interactions
     eyes = client.player.eyes
     reach_vector = reach_vec
 
-    # Get all block collision boxes
-    block_boxes = get_block_hitboxes(eyes, reach_vector)
-
-    # Get all entity bounding boxes for pickable entities within reach
     entity_boxes = [] of AABBd
     entity_map = [] of Rosegold::Entity
 
@@ -427,33 +419,20 @@ class Rosegold::Interactions
         return entity if entity_bounding_box.contains?(eyes)
         next
       end
-      # Only include entities that could potentially be hit
       if reach_aabb.intersects?(entity_bounding_box)
         entity_boxes << entity_bounding_box
         entity_map << entity
       end
     end
 
-    # Combine all boxes for unified raytracing
-    all_boxes = block_boxes + entity_boxes
-    block_count = block_boxes.size
+    block_hit = reach_block_along eyes, reach_vector
+    entity_hit = Raytrace.raytrace(eyes, reach_vector, entity_boxes)
+    return block_hit unless entity_hit
 
-    # Perform unified raytracing
-    result = Raytrace.raytrace(eyes, reach_vector, all_boxes)
-    return nil unless result
+    entity_distance_sq = eyes.dist_sq(entity_hit.intercept)
+    return block_hit if block_hit && entity_distance_sq >= eyes.dist_sq(block_hit.intercept)
 
-    # Determine if we hit a block or entity based on box index
-    if result.box_nr < block_count
-      # Hit a block
-      block = block_boxes[result.box_nr].min.block
-      ReachedBlock.new result.intercept, block, result.face
-    else
-      # Hit an entity - check if within entity reach distance
-      hit_distance = (result.intercept - eyes).length
-      return nil if hit_distance > entity_reach_length
-      entity_index = result.box_nr - block_count
-      entity_map[entity_index]
-    end
+    entity_map[entity_hit.box_nr] if entity_distance_sq < entity_reach_length ** 2
   end
 
   private def block_reach_length
@@ -472,168 +451,92 @@ class Rosegold::Interactions
     client.player.look.to_vec3 * entity_reach_length
   end
 
-  # Returns all block collision boxes that may intersect from `start` towards `reach`.
-  private def get_block_hitboxes(start : Vec3d, reach : Vec3d) : Array(AABBd)
-    bounds = AABBd.new(start, start + reach)
-    # fences are 1.5m tall
-    min_block = bounds.min.down(0.5).block
-    max_block = bounds.max.block
-    blocks_coords = Indexable.cartesian_product({
-      (min_block.x..max_block.x).to_a,
-      (min_block.y..max_block.y).to_a,
-      (min_block.z..max_block.z).to_a,
-    })
-    blocks_coords.flat_map do |block_coords|
-      x, y, z = block_coords
-      client.dimension.block_state(x, y, z).try do |block_state|
-        block_shape = MCData.default.block_state_collision_shapes[block_state]
+  # Like vanilla's BlockGetter.clip: visits the cells the ray passes through in
+  # order and returns the first whose outline is hit. A cell owns its outline even
+  # where it extends outside the cell (piston arms, offset plants).
+  private def reach_block_along(start : Vec3d, reach : Vec3d) : ReachedBlock?
+    mcdata = MCData.default
+    held = inventory.main_hand
+    held_id = held.item_id_int unless held.empty?
+    each_traversed_cell(start, reach) do |cell_x, cell_y, cell_z|
+      # outside world or outside loaded chunks
+      block_state = client.dimension.block_state(cell_x, cell_y, cell_z) || next
+      shape = mcdata.block_state_outline_shapes[block_state]
+      if held_id && (by_item = mcdata.held_outline_shapes[block_state]?)
+        shape = by_item[held_id]? || shape
+      end
+      next if shape.empty?
+      dx = dy = dz = 0.0
+      if offset = mcdata.outline_offset(block_state, cell_x, cell_z)
+        dx, dy, dz = offset
+      end
+      boxes = shape.map &.to_f64.offset(cell_x + dx, cell_y + dy, cell_z + dz)
+      hit = inside_block_hit(start, reach, boxes, Vec3i.new(cell_x, cell_y, cell_z)) ||
+            Raytrace.raytrace(start, reach, boxes).try do |reached|
+              ReachedBlock.new reached.intercept, Vec3i.new(cell_x, cell_y, cell_z), reached.face
+            end
+      return hit if hit
+    end
+    nil
+  end
 
-        # If no collision shapes, check if it's an interactive block and use interaction hitbox
-        if block_shape.empty?
-          get_interaction_hitboxes(block_state, x, y, z)
-        else
-          block_shape.map &.to_f64.offset(x, y, z)
-        end
-      end || Array(AABBd).new 0 # outside world or outside loaded chunks - XXX make solid so we don't fall through unloaded chunks
+  private def each_traversed_cell(start : Vec3d, reach : Vec3d, &)
+    finish = start + reach
+    span = finish - start
+    return if span.x.zero? && span.y.zero? && span.z.zero?
+
+    padding = span * 1e-7
+    origin = start - padding
+    delta = (finish + padding) - origin
+    x, y, z = origin.x.floor.to_i32, origin.y.floor.to_i32, origin.z.floor.to_i32
+    step_x, step_y, step_z = delta.x.sign, delta.y.sign, delta.z.sign
+    inf = Float64::INFINITY
+    delta_x = step_x == 0 ? inf : 1.0 / delta.x.abs
+    delta_y = step_y == 0 ? inf : 1.0 / delta.y.abs
+    delta_z = step_z == 0 ? inf : 1.0 / delta.z.abs
+    frac_x, frac_y, frac_z = origin.x - x, origin.y - y, origin.z - z
+    max_x = step_x == 0 ? inf : delta_x * (step_x > 0 ? 1.0 - frac_x : frac_x)
+    max_y = step_y == 0 ? inf : delta_y * (step_y > 0 ? 1.0 - frac_y : frac_y)
+    max_z = step_z == 0 ? inf : delta_z * (step_z > 0 ? 1.0 - frac_z : frac_z)
+    yield x, y, z
+    while max_x <= 1.0 || max_y <= 1.0 || max_z <= 1.0
+      if max_x < max_y && max_x < max_z
+        x += step_x
+        max_x += delta_x
+      elsif max_y < max_z
+        y += step_y
+        max_y += delta_y
+      else
+        z += step_z
+        max_z += delta_z
+      end
+      yield x, y, z
     end
   end
 
-  # Returns interaction hitboxes for blocks that have no collision shapes but can be interacted with
-  private def get_interaction_hitboxes(block_state : UInt16, x : Int32, y : Int32, z : Int32) : Array(AABBd)
-    block = Block.from_block_state_id(block_state)
-    case block.id_str
-    when "firefly_bush", "large_fern"
-      # Vanilla inherits a full outline even though this block has no collision.
-      [AABBd.new(x.to_f64, y.to_f64, z.to_f64, x + 1.0, y + 1.0, z + 1.0)]
-    when "fern"
-      [AABBd.new(x + 0.125, y.to_f64, z + 0.125, x + 0.875, y + 0.8125, z + 0.875)]
-    when .includes?("sapling"), .includes?("propagule"),
-         .includes?("flower"), .includes?("grass"), .includes?("fern"),
-         .includes?("dead_bush"), .includes?("bush"), .includes?("fungus"),
-         .includes?("roots"), "sugar_cane", "kelp", "seagrass",
-         "nether_sprouts", "warped_fungus", "crimson_fungus"
-      [AABBd.new(
-        x + 0.125, y + 0.0, z + 0.125,
-        x + 0.875, y + 0.75, z + 0.875
-      )]
-    when "carrots", "potatoes"
-      age = extract_age_property(block_state)
-      height = (2 + age) / 16.0
-      [AABBd.new(
-        x + 0.0, y + 0.0, z + 0.0,
-        x + 1.0, y + height, z + 1.0
-      )]
-    when "wheat", "beetroots", "melon_stem", "pumpkin_stem"
-      age = extract_age_property(block_state)
-      height = (2 + age * 2) / 16.0
-      [AABBd.new(
-        x + 0.0, y + 0.0, z + 0.0,
-        x + 1.0, y + height, z + 1.0
-      )]
-    when "nether_wart"
-      age = extract_age_property(block_state)
-      height = (5 + age * 3) / 16.0
-      [AABBd.new(
-        x + 0.0, y + 0.0, z + 0.0,
-        x + 1.0, y + height, z + 1.0
-      )]
-    when "torchflower_crop"
-      age = extract_age_property(block_state)
-      height = (6 + age * 4) / 16.0
-      [AABBd.new(
-        x + 0.0, y + 0.0, z + 0.0,
-        x + 1.0, y + height, z + 1.0
-      )]
-    when "sweet_berry_bush"
-      age = extract_age_property(block_state)
-      height = age == 0 ? 0.5 : 1.0
-      [AABBd.new(
-        x + 0.0, y + 0.0, z + 0.0,
-        x + 1.0, y + height, z + 1.0
-      )]
-    when "lever"
-      [get_lever_hitbox(block_state, x, y, z)]
-    when .includes?("button")
-      [get_button_hitbox(block_state, x, y, z)]
-    when "vine"
-      get_vine_hitboxes(block_state, x, y, z)
-    else
-      Array(AABBd).new 0
+  # Vanilla treats a ray whose first sliver lies inside an outline (cobweb,
+  # portal, vine) as hitting it at that point, facing against the dominant look axis.
+  private def inside_block_hit(start : Vec3d, reach : Vec3d, boxes : Array(AABBd), block : Vec3i) : ReachedBlock?
+    return nil if reach.x * reach.x + reach.y * reach.y + reach.z * reach.z < 1e-7
+    point = start + reach * 0.001
+    inside = boxes.any? do |box|
+      (box.min.x <= point.x < box.max.x) &&
+        (box.min.y <= point.y < box.max.y) &&
+        (box.min.z <= point.z < box.max.z)
     end
-  end
-
-  # Returns hitboxes for vine blocks based on which faces are active
-  # Each face is a 1/16-thick slab flush against the attached surface
-  private def get_vine_hitboxes(block_state : UInt16, x : Int32, y : Int32, z : Int32) : Array(AABBd)
-    block_state_name = MCData.default.block_state_names[block_state]
-    hitboxes = Array(AABBd).new
-    hitboxes << AABBd.new(x + 0.0, y + 0.0, z + 0.0, x + 1.0, y + 1.0, z + 0.0625) if block_state_name.includes?("north=true")
-    hitboxes << AABBd.new(x + 0.0, y + 0.0, z + 0.9375, x + 1.0, y + 1.0, z + 1.0) if block_state_name.includes?("south=true")
-    hitboxes << AABBd.new(x + 0.9375, y + 0.0, z + 0.0, x + 1.0, y + 1.0, z + 1.0) if block_state_name.includes?("east=true")
-    hitboxes << AABBd.new(x + 0.0, y + 0.0, z + 0.0, x + 0.0625, y + 1.0, z + 1.0) if block_state_name.includes?("west=true")
-    hitboxes << AABBd.new(x + 0.0, y + 0.9375, z + 0.0, x + 1.0, y + 1.0, z + 1.0) if block_state_name.includes?("up=true")
-    # Faceless vine: thin bottom slab matching vanilla
-    hitboxes << AABBd.new(x + 0.0, y + 0.0, z + 0.0, x + 1.0, y + 0.0625, z + 1.0) if hitboxes.empty?
-    hitboxes
-  end
-
-  private def get_lever_hitbox(block_state : UInt16, x : Int32, y : Int32, z : Int32) : AABBd
-    state = MCData.default.block_state_names[block_state]
-    if state.includes?("face=wall")
-      if state.includes?("facing=north")
-        AABBd.new(0.3125, 0.25, 0.625, 0.6875, 0.75, 1.0)
-      elsif state.includes?("facing=south")
-        AABBd.new(0.3125, 0.25, 0.0, 0.6875, 0.75, 0.375)
-      elsif state.includes?("facing=east")
-        AABBd.new(0.0, 0.25, 0.3125, 0.375, 0.75, 0.6875)
-      else
-        AABBd.new(0.625, 0.25, 0.3125, 1.0, 0.75, 0.6875)
-      end
-    else
-      min_y = state.includes?("face=ceiling") ? 0.625 : 0.0
-      if state.includes?("facing=north") || state.includes?("facing=south")
-        AABBd.new(0.3125, min_y, 0.25, 0.6875, min_y + 0.375, 0.75)
-      else
-        AABBd.new(0.25, min_y, 0.3125, 0.75, min_y + 0.375, 0.6875)
-      end
-    end.offset(x, y, z)
-  end
-
-  private def get_button_hitbox(block_state : UInt16, x : Int32, y : Int32, z : Int32) : AABBd
-    block_state_name = MCData.default.block_state_names[block_state]
-    if block_state_name.includes?("face=floor")
-      AABBd.new(x + 0.3125, y + 0.0, z + 0.3125, x + 0.6875, y + 0.0625, z + 0.6875)
-    elsif block_state_name.includes?("face=wall")
-      if block_state_name.includes?("facing=north")
-        AABBd.new(x + 0.3125, y + 0.375, z + 0.875, x + 0.6875, y + 0.625, z + 1.0)
-      elsif block_state_name.includes?("facing=south")
-        AABBd.new(x + 0.3125, y + 0.375, z + 0.0, x + 0.6875, y + 0.625, z + 0.125)
-      elsif block_state_name.includes?("facing=east")
-        AABBd.new(x + 0.0, y + 0.375, z + 0.3125, x + 0.125, y + 0.625, z + 0.6875)
-      elsif block_state_name.includes?("facing=west")
-        AABBd.new(x + 0.875, y + 0.375, z + 0.3125, x + 1.0, y + 0.625, z + 0.6875)
-      else
-        AABBd.new(x + 0.3125, y + 0.375, z + 0.3125, x + 0.6875, y + 0.625, z + 0.6875)
-      end
-    elsif block_state_name.includes?("face=ceiling")
-      AABBd.new(x + 0.3125, y + 0.9375, z + 0.3125, x + 0.6875, y + 1.0, z + 0.6875)
-    else
-      AABBd.new(x + 0.3125, y + 0.0, z + 0.3125, x + 0.6875, y + 0.0625, z + 0.6875)
-    end
+    return nil unless inside
+    ax, ay, az = reach.x.abs, reach.y.abs, reach.z.abs
+    face = if ay >= ax && ay >= az
+             reach.y > 0 ? BlockFace::Bottom : BlockFace::Top
+           elsif az >= ax
+             reach.z > 0 ? BlockFace::North : BlockFace::South
+           else
+             reach.x > 0 ? BlockFace::West : BlockFace::East
+           end
+    ReachedBlock.new point, block, face, inside_block: true
   end
 
   private def inventory : Inventory
     @inventory ||= Inventory.new client
-  end
-
-  # Extracts the age property from a block state ID
-  # Returns 0 if the block doesn't have an age property
-  private def extract_age_property(block_state : UInt16) : Int32
-    block_state_name = MCData.default.block_state_names[block_state]
-    if match = block_state_name.match(/age=(\d+)/)
-      match[1].to_i
-    else
-      0
-    end
   end
 end
