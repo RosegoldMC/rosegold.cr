@@ -1707,6 +1707,41 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/MiningBlockTags" data-name="rosegold::miningblocktags">
+      <a href="Rosegold/MiningBlockTags.html">MiningBlockTags</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/MiningPrediction" data-name="rosegold::miningprediction">
+      <a href="Rosegold/MiningPrediction.html">MiningPrediction</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/MiningPrediction/BlockPos" data-name="rosegold::miningprediction::blockpos">
+      <a href="Rosegold/MiningPrediction/BlockPos.html">BlockPos</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/MiningPrediction/ChunkPos" data-name="rosegold::miningprediction::chunkpos">
+      <a href="Rosegold/MiningPrediction/ChunkPos.html">ChunkPos</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/MiningPrediction/Entry" data-name="rosegold::miningprediction::entry">
+      <a href="Rosegold/MiningPrediction/Entry.html">Entry</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/MiningPrediction/FluidTable" data-name="rosegold::miningprediction::fluidtable">
+      <a href="Rosegold/MiningPrediction/FluidTable.html">FluidTable</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/MovementKeys" data-name="rosegold::movementkeys">
       <a href="Rosegold/MovementKeys.html">MovementKeys</a>
       
@@ -2532,7 +2567,7 @@ bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</
 <span class="k">ensure</span>
   bot.disconnect(<span class="s">&quot;Script finished&quot;</span>) <span class="k">if</span> bot.connected?
 <span class="k">end</span></code></pre>
-<p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result.</p>
+<p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result. During a block break that takes multiple ticks, <code>use_hand</code> taps are dropped and held use waits. Call <code>stop_digging</code> before using a hand or eating if that should go first.</p>
 <p>For automatic reconnects, use <code>Bot.run</code>. It waits for spawn and gives the block a
 fresh bot for each session:</p>
 <pre><code class="language-crystal"><span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.run(<span class="s">&quot;play.example.net&quot;</span>) <span class="k">do</span> <span class="o">|</span>bot<span class="o">|</span>
