@@ -24,6 +24,7 @@ class Rosegold::Interactions
   getter digging_block : ReachedBlock?
   @dig_hand_swing_countdown = 0_i8
   @attack_queued = false
+  @started_instant_dig = false
   @digging = false
   @attack_cooldown_ticks : Int32 = 0
   getter block_damage_progress = 0_f32
@@ -90,6 +91,7 @@ class Rosegold::Interactions
   def tick
     return unless client.connected?
     tick_held_item
+    @started_instant_dig = false
     tick_attack
     tick_digging
     tick_using_hand
@@ -132,6 +134,8 @@ class Rosegold::Interactions
   end
 
   private def tick_digging
+    return if @started_instant_dig
+
     reached = reach_block_or_entity
     if @digging_block
       if !digging?
@@ -346,8 +350,13 @@ class Rosegold::Interactions
   end
 
   private def start_digging(reached : ReachedBlock)
-    @digging_block = reached
-    @dig_hand_swing_countdown = 6
+    if instant_break?(reached)
+      cancel_digging
+      @started_instant_dig = true
+    else
+      @digging_block = reached
+      @dig_hand_swing_countdown = 6
+    end
 
     sequence = client.next_sequence
     operation = BlockOperation.new(reached.block, :dig)
@@ -356,6 +365,15 @@ class Rosegold::Interactions
     send_packet Serverbound::PlayerAction.new \
       :start, reached.block, reached.face, sequence
     send_swing attack: true
+  end
+
+  # Vanilla survival destroys zero-hardness blocks on START alone, so no digging
+  # state is kept and no FINISH or CANCEL follows. The server stays authoritative.
+  private def instant_break?(reached : ReachedBlock) : Bool
+    return false unless client.player.gamemode == 0
+    state = client.dimension.block_state(reached.block)
+    return false unless state
+    Block.from_block_state_id(state).hardness == 0
   end
 
   private def finish_digging
