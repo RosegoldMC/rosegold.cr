@@ -70,6 +70,49 @@ Spectator.describe "Rosegold::Bot interactions" do
     end
   end
 
+  it "digs cobwebs, cave vines, and glow lichen by their outlines" do
+    client.join_game do |client|
+      bot = Rosegold::Bot.new(client)
+      admin.setblock 0, -60, 3, "stone"
+      admin.setblock 0, -57, 0, "stone"
+      admin.setblock 0, -58, -1, "stone"
+      admin.tp 0.5, -59, 3.5
+      admin.clear
+      admin.give "shears"
+      bot.wait_ticks 10
+      bot.inventory.pick! "shears"
+
+      target = Rosegold::Vec3i.new(0, -58, 0)
+      dimension = client.dimension_for_test
+      [{"cobweb", "cobweb"}, {"cave_vines", "cave_vines"}, {"glow_lichen[north=true]", "glow_lichen"}].each do |placement, name|
+        admin.setblock target.x, target.y, target.z, placement
+        initial_state = nil
+        initial_name = nil
+        60.times do
+          initial_state = dimension.block_state(target)
+          initial_name = initial_state.try { |state| Rosegold::Block.from_block_state_id(state).id_str }
+          break if initial_name == name
+          bot.wait_tick
+        end
+        expect(initial_name).to eq(name)
+
+        bot.look_at Rosegold::Vec3d.new(0.5, -57.5, 0.5)
+        bot.start_digging
+        60.times do
+          break if dimension.block_state(target) != initial_state
+          bot.wait_tick
+        end
+        bot.stop_digging
+
+        final_state = dimension.block_state(target).not_nil!
+        expect(Rosegold::Block.from_block_state_id(final_state).id_str).to eq("air")
+      end
+    ensure
+      admin.fill 0, -60, -1, 0, -57, 3, "air"
+      admin.wait_ticks 3
+    end
+  end
+
   it "should stop digging when bot.stop_digging is called" do
     admin.fill 10, -60, 9, 10, -57, 9, "dirt"
     admin.wait_tick
