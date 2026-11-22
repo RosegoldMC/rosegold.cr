@@ -14,6 +14,10 @@ class Rosegold::Interactions
   # Random 3-6 ticks between attacks (~3.3-6.7 CPS), under CivMC 8 CPS cap.
   ATTACK_COOLDOWN_RANGE = 3..6
 
+  private HELD_DESTROY_DELAY =  5
+  private MINING_MISS_DELAY  = 10
+  private alias MiningItem = {UInt32, Hash(String, Bytes), Set(String)}
+
   @using_hand = nil
   @using_hand_started = false
   @queued_hand_tap = nil
@@ -22,13 +26,13 @@ class Rosegold::Interactions
   # Releasing food cancels its repeat delay, but must not bypass the click cooldown.
   @use_cooldown_ticks = 0_i32
   getter digging_block : ReachedBlock?
-  @dig_hand_swing_countdown = 0_i8
   @attack_queued = false
-  @started_instant_dig = false
-  @digging = false
+  @dig_released = false
+  @destroy_delay = 0
+  @mining_miss_ticks = 0
+  @destroying_item : MiningItem?
   @attack_cooldown_ticks : Int32 = 0
   getter block_damage_progress = 0_f32
-  @last_tick_held_item : Slot = Slot.new
   @sent_held_item_index : UInt32?
 
   getter client : Client
@@ -65,6 +69,7 @@ class Rosegold::Interactions
   end
 
   private def finish_using_hand
+    client.player.using_item = false
     sequence = client.next_sequence
     operation = BlockOperation.new(Vec3i::ORIGIN, :use)
     client.pending_block_operations[sequence] = operation
@@ -75,7 +80,6 @@ class Rosegold::Interactions
   # Activates the "attack" button.
   def start_digging
     return if digging?
-    return if @using_hand || @queued_hand_tap # Vanilla: suppress attacks while using item
 
     self.digging = true
     @attack_queued = true
@@ -86,16 +90,27 @@ class Rosegold::Interactions
     return unless digging?
 
     self.digging = false
+    @dig_released = true
+  end
+
+  def reset_mining
+    self.digging = false
+    @attack_queued = false
+    @dig_released = false
+    @destroy_delay = 0
+    @mining_miss_ticks = 0
+    @sent_held_item_index = nil
+    clear_dig_target
   end
 
   def tick
     return unless client.connected?
     tick_held_item
-    @started_instant_dig = false
-    tick_attack
-    tick_digging
+    # Vanilla order: attack presses, use, then the held attack, so use sees a
+    # staged break that this tick's press started.
+    continuation = tick_attack
     tick_using_hand
-    @last_tick_held_item = inventory.main_hand
+    tick_continue_attack(continuation)
   end
 
   private def tick_held_item
@@ -110,89 +125,133 @@ class Rosegold::Interactions
     send_packet Serverbound::PlayerAction.new :swap_hands
   end
 
-  private def tick_attack
-    if @attack_cooldown_ticks > 0
-      @attack_cooldown_ticks -= 1
+  # Returns the press's cached block hit to continue on, true to continue a
+  # held attack on a fresh ray, or false to skip the held attack this tick.
+  private def tick_attack : ReachedBlock | Bool
+    click_ready = @attack_cooldown_ticks == 0
+    @attack_cooldown_ticks -= 1 unless click_ready
+
+    if @dig_released
+      @dig_released = false
+      @mining_miss_ticks = 0
+      cancel_digging
+    end
+
+    miss_delayed = @mining_miss_ticks > 0
+    @mining_miss_ticks -= 1 if miss_delayed
+
+    if client.player.using_item?
+      @attack_queued = false
+      return false
+    end
+
+    fresh_click = click_ready && @attack_queued
+    if fresh_click
+      @attack_queued = false
+      if (entity = reach_block_or_entity).is_a?(Entity)
+        if Client.protocol_version >= 775_u32
+          send_packet Serverbound::Attack.new entity.entity_id
+        else
+          send_packet Serverbound::InteractEntity.new entity.entity_id, :attack
+        end
+        send_swing attack: true
+        @attack_cooldown_ticks = rand(ATTACK_COOLDOWN_RANGE)
+        @destroy_delay = HELD_DESTROY_DELAY if Client.protocol_version >= 777_u32 && client.player.creative_mode?
+        cancel_digging
+        return false
+      end
+    end
+
+    return false if miss_delayed
+    fresh_click ? start_attack_block : true
+  end
+
+  private def start_attack_block : ReachedBlock | Bool
+    unless can_mine?
+      cancel_digging
+      return false
+    end
+
+    reached = reach_block_or_entity_unified(mining: true)
+    unless reached.is_a?(ReachedBlock)
+      if reached.nil? && digging? && client.player.gamemode != 1
+        @mining_miss_ticks = MINING_MISS_DELAY - 1
+      end
+      cancel_digging
+      return false
+    end
+
+    if start_digging(reached)
+      return reached if @digging_block
+      return reached if client.player.creative_mode? && !mining_air?(reached)
+    end
+    cancel_digging unless digging?
+    false
+  end
+
+  private def tick_continue_attack(continuation : ReachedBlock | Bool) : Nil
+    return if client.player.using_item?
+
+    case continuation
+    when ReachedBlock
+      digging? ? continue_digging(continuation) : cancel_digging
+    when true
+      continue_held_attack
+    end
+  end
+
+  private def continue_held_attack
+    unless digging? && can_mine?
+      cancel_digging
       return
     end
 
-    return unless @attack_queued
+    reached = reach_block_or_entity_unified(mining: true)
+    unless reached.is_a?(ReachedBlock)
+      cancel_digging
+      return
+    end
+
     @attack_queued = false
+    continue_digging(reached)
+  end
 
-    case reached = reach_block_or_entity
-    when Entity
-      if Client.protocol_version >= 775_u32
-        send_packet Serverbound::Attack.new reached.entity_id
-      else
-        send_packet Serverbound::InteractEntity.new reached.entity_id, :attack
-      end
+  private def continue_digging(reached : ReachedBlock)
+    if @destroy_delay > 0
+      @destroy_delay -= 1
       send_swing attack: true
-      @attack_cooldown_ticks = rand(ATTACK_COOLDOWN_RANGE)
-    when ReachedBlock
-      start_digging reached
+      return
     end
-  end
 
-  private def tick_digging
-    return if @started_instant_dig
-
-    reached = reach_block_or_entity
-    if @digging_block
-      if !digging?
-        cancel_digging
-        return
-      end
-
-      case reached
-      when Entity
-        # do nothing, but retain @block_damage_progress like vanilla client
-      when ReachedBlock
-        tick_digging_block reached
-      when nil
-        cancel_digging
-      end
-    else
-      return unless digging?
-
-      if reached.is_a? ReachedBlock
-        start_digging reached
-      end
+    active = @digging_block
+    if client.player.creative_mode? || !active || !same_dig_target?(reached)
+      start_digging(reached)
+      return
     end
-  end
 
-  private def tick_digging_block(reached)
-    if digging_block = @digging_block
-      if reached.block != digging_block.block
-        cancel_digging
-        return
-      end
+    return unless state = mining_block_state(reached)
+    @block_damage_progress += break_damage(state)
 
-      if @last_tick_held_item != inventory.main_hand
-        cancel_digging
-        return
-      end
-
-      client.dimension.block_state(digging_block.block).try do |block_state|
-        block = Block.from_block_state_id block_state
-        @block_damage_progress += block.break_damage inventory.main_hand, client.player
-      end
-
-      if @block_damage_progress >= 1.0
-        finish_digging
-        @block_damage_progress = 0.0
-      end
-
-      @dig_hand_swing_countdown -= 1
-      if @dig_hand_swing_countdown <= 0
-        @dig_hand_swing_countdown = 6
-        send_swing attack: true
-      end
+    if @block_damage_progress >= 1_f32
+      clear_dig_target
+      @destroy_delay = HELD_DESTROY_DELAY
+      send_dig_action(:finish, reached, predict: can_predict_break?(state))
+    elsif Client.protocol_version >= 777_u32 && active.face != reached.face
+      @digging_block = reached
+      send_packet Serverbound::PlayerAction.new(:change_destroy_direction, reached.block, reached.face)
     end
+
+    send_swing attack: true
   end
 
   private def tick_using_hand
     @using_hand_delay -= 1 if @using_hand_delay > 0
     @use_cooldown_ticks -= 1 if @use_cooldown_ticks > 0
+    # Vanilla ignores use presses during a staged break; a held use retries.
+    if @digging_block
+      @queued_hand_tap = nil
+      return
+    end
     return if @using_hand_delay > 0 || @use_cooldown_ticks > 0
 
     if using_hand = @using_hand || @queued_hand_tap
@@ -349,61 +408,123 @@ class Rosegold::Interactions
     end
   end
 
-  private def start_digging(reached : ReachedBlock)
-    if instant_break?(reached)
-      cancel_digging
-      @started_instant_dig = true
+  private def start_digging(reached : ReachedBlock) : Bool
+    creative = client.player.creative_mode?
+    return false unless state = mining_block_state(reached)
+    return true if !creative && same_dig_target?(reached)
+
+    cancel_digging(reached.face)
+    if creative
+      @destroy_delay = HELD_DESTROY_DELAY
+      send_dig_action(:start, reached, predict: can_predict_break?(state))
+    elsif break_damage(state) >= 1_f32
+      send_dig_action(:start, reached, predict: can_predict_break?(state))
     else
       @digging_block = reached
-      @dig_hand_swing_countdown = 6
+      @destroying_item = mining_item_snapshot(inventory.main_hand)
+      send_dig_action(:start, reached, predict: false)
+    end
+    send_swing attack: true
+    true
+  end
+
+  private def mining_block_state(reached : ReachedBlock) : UInt16?
+    block = reached.block
+    client.dimension.mining_block_state(block.x, block.y, block.z)
+  end
+
+  private def mining_air?(reached : ReachedBlock) : Bool
+    state = mining_block_state(reached)
+    state.nil? || MCData.default.air_states.includes?(state)
+  end
+
+  private def break_damage(state : UInt16) : Float32
+    Block.from_block_state_id(state).break_damage(inventory.main_hand, client.player, **client.mining_context).to_f32
+  end
+
+  private def can_mine? : Bool
+    held = inventory.main_hand
+    return false if held.components_to_add.has_key?("piercing_weapon")
+    if Client.protocol_version >= 774_u32 && !held.empty? && !held.components_to_remove.includes?("piercing_weapon")
+      return false if held_item_name(held).try(&.ends_with?("_spear"))
     end
 
+    case client.player.gamemode
+    when 0, 1 then true
+    when 2    then held.components_to_add.has_key?("can_break")
+    else           false
+    end
+  end
+
+  private def held_item_name(held : Slot) : String?
+    MCData.default.items.find { |item| item.id == held.item_id_int }.try(&.name)
+  end
+
+  private def can_predict_break?(state : UInt16) : Bool
+    return false if client.player.gamemode == 2
+    case Block.from_block_state_id(state).id_str
+    when "command_block", "chain_command_block", "repeating_command_block", "structure_block", "jigsaw", "test_block", "test_instance_block"
+      return false
+    end
+
+    held = inventory.main_hand
+    name = held_item_name(held) unless held.empty?
+    return false if name == "debug_stick"
+    return true unless client.player.creative_mode?
+
+    return true if held.empty?
+    if tool = held.tool_component
+      return tool.can_destroy_blocks_in_creative?
+    end
+    return true if held.components_to_remove.includes?("tool")
+
+    return false unless name
+    !name.ends_with?("_sword") && name != "mace" && name != "trident"
+  end
+
+  private def same_dig_target?(reached : ReachedBlock) : Bool
+    @digging_block.try(&.block) == reached.block && @destroying_item == mining_item_snapshot(inventory.main_hand)
+  end
+
+  private def mining_item_snapshot(slot : Slot) : MiningItem
+    components = {} of String => Bytes
+    return {0_u32, components, Set(String).new} if slot.empty?
+
+    slot.components_to_add.each do |name, component|
+      buffer = Minecraft::IO::Memory.new
+      if component.is_a?(DataComponents::Enchantments)
+        buffer.write component.enchantments.size
+        component.enchantments.keys.sort!.each do |id|
+          buffer.write id
+          buffer.write component.enchantments[id]
+        end
+      else
+        component.write(buffer)
+      end
+      components[name] = buffer.to_slice
+    end
+    {slot.item_id_int, components, slot.components_to_remove.dup}
+  end
+
+  private def send_dig_action(status : Serverbound::PlayerAction::Status, reached : ReachedBlock, *, predict : Bool)
     sequence = client.next_sequence
-    operation = BlockOperation.new(reached.block, :dig)
-    client.pending_block_operations[sequence] = operation
-
-    send_packet Serverbound::PlayerAction.new \
-      :start, reached.block, reached.face, sequence
-    send_swing attack: true
+    client.pending_block_operations[sequence] = BlockOperation.new(reached.block, :dig)
+    client.dimension.predict_block_break(reached.block, sequence) if predict
+    send_packet Serverbound::PlayerAction.new(status, reached.block, reached.face, sequence)
   end
 
-  # Vanilla survival destroys zero-hardness blocks on START alone, so no digging
-  # state is kept and no FINISH or CANCEL follows. The server stays authoritative.
-  private def instant_break?(reached : ReachedBlock) : Bool
-    return false unless client.player.gamemode == 0
-    state = client.dimension.block_state(reached.block)
-    return false unless state
-    Block.from_block_state_id(state).hardness == 0
-  end
-
-  private def finish_digging
+  private def cancel_digging(face : BlockFace = :bottom)
     reached = @digging_block
     return unless reached
 
-    # Reset digging block but keep digging state for continuous digging
-    @digging_block = nil
-    # Don't set self.digging = false here to allow continuous digging
-
-    sequence = client.next_sequence
-    operation = BlockOperation.new(reached.block, :dig)
-    client.pending_block_operations[sequence] = operation
-
-    send_packet Serverbound::PlayerAction.new \
-      :finish, reached.block, reached.face, sequence
+    clear_dig_target
+    send_packet Serverbound::PlayerAction.new(:cancel, reached.block, face)
   end
 
-  private def cancel_digging
-    reached = @digging_block
-    return unless reached
+  private def clear_dig_target
     @digging_block = nil
-    @block_damage_progress = 0.0
-
-    sequence = client.next_sequence
-    operation = BlockOperation.new(reached.block, :dig)
-    client.pending_block_operations[sequence] = operation
-
-    send_packet Serverbound::PlayerAction.new \
-      :cancel, reached.block, reached.face, sequence
+    @destroying_item = nil
+    @block_damage_progress = 0_f32
   end
 
   private def reach_block_or_entity : ReachedBlock? | Rosegold::Entity?
@@ -421,9 +542,9 @@ class Rosegold::Interactions
 
   # Unified raytracing that properly handles both entities and blocks
   # ensuring entities cannot be hit through blocks
-  private def reach_block_or_entity_unified : ReachedBlock? | Rosegold::Entity?
+  private def reach_block_or_entity_unified(*, mining : Bool = false) : ReachedBlock? | Rosegold::Entity?
     eyes = client.player.eyes
-    reach_vector = reach_vec
+    reach_vector = mining ? client.player.look.to_vec3 * client.player.block_interaction_range : reach_vec
 
     entity_boxes = [] of AABBd
     entity_map = [] of Rosegold::Entity
@@ -437,13 +558,15 @@ class Rosegold::Interactions
         return entity if entity_bounding_box.contains?(eyes)
         next
       end
+      # Vanilla picks an entity around the eyes, which an entry-face ray misses.
+      return entity if mining && entity_bounding_box.contains?(eyes)
       if reach_aabb.intersects?(entity_bounding_box)
         entity_boxes << entity_bounding_box
         entity_map << entity
       end
     end
 
-    block_hit = reach_block_along eyes, reach_vector
+    block_hit = reach_block_along eyes, reach_vector, mining: mining
     entity_hit = Raytrace.raytrace(eyes, reach_vector, entity_boxes)
     return block_hit unless entity_hit
 
@@ -472,13 +595,18 @@ class Rosegold::Interactions
   # Like vanilla's BlockGetter.clip: visits the cells the ray passes through in
   # order and returns the first whose outline is hit. A cell owns its outline even
   # where it extends outside the cell (piston arms, offset plants).
-  private def reach_block_along(start : Vec3d, reach : Vec3d) : ReachedBlock?
+  private def reach_block_along(start : Vec3d, reach : Vec3d, *, mining : Bool = false) : ReachedBlock?
     mcdata = MCData.default
     held = inventory.main_hand
     held_id = held.item_id_int unless held.empty?
     each_traversed_cell(start, reach) do |cell_x, cell_y, cell_z|
       # outside world or outside loaded chunks
-      block_state = client.dimension.block_state(cell_x, cell_y, cell_z) || next
+      state = if mining
+                client.dimension.mining_block_state(cell_x, cell_y, cell_z)
+              else
+                client.dimension.block_state(cell_x, cell_y, cell_z)
+              end
+      next unless block_state = state
       shape = mcdata.block_state_outline_shapes[block_state]
       if held_id && (by_item = mcdata.held_outline_shapes[block_state]?)
         shape = by_item[held_id]? || shape

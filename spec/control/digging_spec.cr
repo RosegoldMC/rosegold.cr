@@ -52,6 +52,7 @@ end
 DIGGING_TEST_PROTOCOL = DiggingSpecClient.server_protocol
 
 Spectator.describe "Digging block outlines" do
+  alias Action = Rosegold::Serverbound::PlayerAction::Status
   let(bot_client) { DiggingSpecClient.new("localhost") }
   let(interactions) { bot_client.interactions_for_test }
   let(target) { Rosegold::Vec3i.new(0, 0, 2) }
@@ -82,8 +83,7 @@ Spectator.describe "Digging block outlines" do
   end
 
   def dig_at(x, y, z = 0.5, look = Rosegold::Look::SOUTH)
-    interactions.stop_digging
-    interactions.tick
+    bot_client.reset_mining_session
     bot_client.sent_packets.clear
     aim(x, y, z, look)
     interactions.start_digging
@@ -393,7 +393,7 @@ Spectator.describe "Digging block outlines" do
       set_block(target, "large_fern", "half=#{half}")
       interactions.start_digging
       interactions.tick
-      interactions.stop_digging
+      bot_client.reset_mining_session
     end
 
     expect(starts.map(&.location)).to eq([target, target])
@@ -405,7 +405,7 @@ Spectator.describe "Digging block outlines" do
       set_block(target, "large_fern", "half=#{half}")
       interactions.start_digging
       interactions.tick
-      interactions.stop_digging
+      bot_client.reset_mining_session
     end
 
     expect(starts.map(&.location)).to eq([target, target])
@@ -458,7 +458,7 @@ Spectator.describe "Digging block outlines" do
     expect(starts.map(&.location)).to eq([foreground, target])
   end
 
-  context "with zero-hardness blocks in survival" do
+  context "with adjacent seagrass" do
     let(second) { Rosegold::Vec3i.new(0, 0, 3) }
 
     def actions
@@ -472,21 +472,42 @@ Spectator.describe "Digging block outlines" do
       interactions.tick
     end
 
-    it "starts each confirmed block on its own tick without finishing or cancelling" do
-      state = bot_client.dimension_for_test.block_state(second)
+    it "starts consecutive seagrass blocks before any authoritative updates" do
+      dimension = bot_client.dimension_for_test
+      state = dimension.block_state(target)
       interactions.start_digging
       interactions.tick
       expect(actions).to eq([{Rosegold::Serverbound::PlayerAction::Status::Start, target}])
 
-      Rosegold::Clientbound::BlockChange.new(target, 0_u16).callback(bot_client)
       interactions.tick
-
       expect(actions).to eq([
         {Rosegold::Serverbound::PlayerAction::Status::Start, target},
         {Rosegold::Serverbound::PlayerAction::Status::Start, second},
       ])
-      expect(bot_client.dimension_for_test.block_state(second)).to eq(state)
-      expect(bot_client.dimension_for_test.block_state(target)).to eq(0_u16)
+      expect(dimension.block_state(target)).to eq(state)
+      expect(dimension.block_state(second)).to eq(state)
+      interactions.tick
+      expect(starts.size).to eq(2)
+    end
+
+    it "reconciles accepted and rejected predictions by acknowledged sequence" do
+      dimension = bot_client.dimension_for_test
+      seagrass = dimension.block_state(second)
+      interactions.start_digging
+      interactions.tick
+      interactions.tick
+      first, latest = starts
+
+      Rosegold::Clientbound::BlockChange.new(target, 0_u16).callback(bot_client)
+      Rosegold::Clientbound::AcknowledgeBlockChange.new(first.sequence).callback(bot_client)
+      interactions.tick
+      expect(starts.size).to eq(2)
+      expect(dimension.block_state(target)).to eq(0_u16)
+      expect(dimension.block_state(second)).to eq(seagrass)
+
+      Rosegold::Clientbound::AcknowledgeBlockChange.new(latest.sequence).callback(bot_client)
+      interactions.tick
+      expect(starts.map(&.location)).to eq([target, second, second])
     end
 
     it "cancels a staged dig before starting an instant dig at the same position" do
@@ -509,7 +530,7 @@ Spectator.describe "Digging block outlines" do
 
     it "sends at most one start per tick" do
       interactions.start_digging
-      3.times do
+      2.times do
         before = starts.size
         interactions.tick
         expect(starts.size - before).to eq(1)
@@ -535,15 +556,407 @@ Spectator.describe "Digging block outlines" do
       expect(interactions.block_damage_progress).to be > 0
     end
 
-    it "keeps the staged finish for zero-hardness blocks in creative" do
+    it "keeps an unconfirmed block in the way of an entity attack and block use" do
+      set_block(second, "air")
+      zombie_type = Rosegold::Entity.metadata_for_protocol.find! { |entity| entity.name == "zombie" }
+      zombie = Rosegold::Entity.new(1_u32, UUID.random, zombie_type.id.to_u32, Rosegold::Vec3d.new(0.5, 0.0, 3.1), 0_f32, 0_f32, 0_f32, Rosegold::Vec3d::ORIGIN)
+      bot_client.dimension_for_test.entities[zombie.entity_id.to_u64] = zombie
+
+      interactions.start_digging
+      interactions.tick
+      interactions.stop_digging
+      interactions.start_digging
+      interactions.tick
+      expect(starts.map(&.location)).to eq([target])
+      expect(bot_client.sent_packets.select(Rosegold::Serverbound::Attack)).to be_empty
+      expect(bot_client.sent_packets.select(Rosegold::Serverbound::InteractEntity)).to be_empty
+
+      interactions.stop_digging
+      interactions.tap_using_hand
+      interactions.tick
+      expect(bot_client.sent_packets.select(Rosegold::Serverbound::PlayerBlockPlacement).first.location).to eq(target)
+    end
+
+    it "spends one delay tick on a creative press that leaves water, then waits four held ticks" do
       bot_client.player.gamemode = 1_i8
       interactions.start_digging
       interactions.tick
+      expect(starts.map(&.location)).to eq([target])
+      expect(mining_swings).to eq(2)
 
-      expect(actions.map(&.first)).to eq([
-        Rosegold::Serverbound::PlayerAction::Status::Start,
-        Rosegold::Serverbound::PlayerAction::Status::Finish,
+      aim(0.5, 0.4, 0.5, Rosegold::Look::NORTH)
+      3.times { interactions.tick }
+      aim(0.5, 0.4)
+      4.times do
+        interactions.tick
+        expect(starts.map(&.location)).to eq([target])
+      end
+      interactions.tick
+      expect(actions).to eq([
+        {Rosegold::Serverbound::PlayerAction::Status::Start, target},
+        {Rosegold::Serverbound::PlayerAction::Status::Start, second},
       ])
     end
+
+    it "waits five held ticks after a creative press predicted to leave air" do
+      set_block(target, "stone")
+      set_block(second, "stone")
+      bot_client.player.gamemode = 1_i8
+      interactions.start_digging
+      interactions.tick
+      expect(mining_swings).to eq(1)
+      5.times do
+        interactions.tick
+        expect(starts.map(&.location)).to eq([target])
+      end
+      interactions.tick
+      expect(starts.map(&.location)).to eq([target, second])
+    end
+
+    sample ["wooden_sword", "mace", "trident"] do |name|
+      it "leaves default creative #{name} breaks to the server" do
+        bot_client.player.gamemode = 1_i8
+        equip(name)
+        interactions.start_digging
+        5.times { interactions.tick }
+        expect(starts.map(&.location)).to eq([target])
+        interactions.tick
+        expect(starts.map(&.location)).to eq([target, target])
+        expect(bot_client.dimension_for_test.mining_block_state(target.x, target.y, target.z)).to eq(bot_client.dimension_for_test.block_state(target))
+      end
+    end
+
+    it "honors an explicit Tool that lets a mace break in creative" do
+      bot_client.player.gamemode = 1_i8
+      mace = equip("mace")
+      mace.components_to_add["tool"] = Rosegold::DataComponents::Tool.new
+      interactions.start_digging
+      interactions.tick
+      expect(bot_client.dimension_for_test.mining_block_state(target.x, target.y, target.z)).not_to eq(bot_client.dimension_for_test.block_state(target))
+    end
+
+    sample [0_i8, 1_i8] do |mode|
+      it "sends START but never predicts a debug stick break in game mode #{mode}" do
+        bot_client.player.gamemode = mode
+        equip("debug_stick")
+        interactions.start_digging
+        interactions.tick
+        expect(starts.map(&.location)).to eq([target])
+        expect(bot_client.dimension_for_test.mining_block_state(target.x, target.y, target.z)).to eq(bot_client.dimension_for_test.block_state(target))
+      end
+    end
+
+    it "keeps Adventure CanBreak requests authoritative" do
+      bot_client.player.gamemode = 2_i8
+      equip("wooden_pickaxe")
+      interactions.start_digging
+      interactions.tick
+      expect(starts).to be_empty
+
+      tool = equip("wooden_pickaxe")
+      tool.components_to_add["can_break"] = Rosegold::DataComponents::BlockPredicates.new
+      interactions.tick
+      expect(starts.map(&.location)).to eq([target])
+      interactions.tick
+      expect(starts.map(&.location)).to eq([target, target])
+    end
+  end
+
+  def equip(name, count = 1_u32)
+    item = Rosegold::MCData.default.items.find! { |entry| entry.name == name }
+    slot = Rosegold::Slot.new(count, item.id)
+    bot_client.inventory_menu[36] = slot
+    slot
+  end
+
+  def mining_actions
+    bot_client.sent_packets.select(Rosegold::Serverbound::PlayerAction)
+  end
+
+  def set_break_speed(value)
+    id = Rosegold::Client.protocol_version >= 776_u32 ? 7_u32 : 5_u32
+    bot_client.player.on_ground = true
+    bot_client.player.apply_attribute_snapshots([Rosegold::AttributeSnapshot.new(id, value)])
+  end
+
+  def mining_swings
+    bot_client.sent_packets.count do |packet|
+      packet.is_a?(Rosegold::Serverbound::Punch) || packet.is_a?(Rosegold::Serverbound::SwingArm)
+    end
+  end
+
+  it "advances on the initial normal click and only starts the held target after five delay ticks" do
+    set_block(target, "stone")
+    second = Rosegold::Vec3i.new(0, 0, 3)
+    set_block(second, "stone")
+    set_break_speed(40.0)
+    interactions.start_digging
+    interactions.tick
+    expect(interactions.block_damage_progress).to be > 0_f32
+    expect(mining_swings).to eq(2)
+    2.times { interactions.tick }
+    expect(mining_actions.map(&.status)).to eq([Action::Start])
+    interactions.tick
+    expect(mining_actions.map(&.status)).to eq([Action::Start, Action::Finish])
+    expect(bot_client.dimension_for_test.block_state(target)).not_to eq(0_u16)
+
+    5.times do
+      interactions.tick
+      expect(starts.map(&.location)).to eq([target])
+    end
+    expect(mining_swings).to eq(10)
+    interactions.tick
+    expect(starts.map(&.location)).to eq([target, second])
+    expect(interactions.block_damage_progress).to eq(0_f32)
+    interactions.tick
+    expect(interactions.block_damage_progress).to be > 0_f32
+  end
+
+  it "uses START alone when nonzero hardness is still instant with live mining speed" do
+    set_block(target, "stone")
+    set_break_speed(200.0)
+    interactions.start_digging
+    interactions.tick
+    expect(mining_actions.map(&.status)).to eq([Action::Start])
+    expect(interactions.block_damage_progress).to eq(0_f32)
+    expect(mining_swings).to eq(1)
+  end
+
+  it "aborts with the new hit face before starting a changed target without advancing" do
+    first = Rosegold::Vec3i.new(0, 0, 1)
+    set_block(first, "stone")
+    set_block(target, "stone")
+    aim(0.5, 0.5)
+    interactions.start_digging
+    interactions.tick
+
+    aim(0.5, 0.5, 3.5, Rosegold::Look::NORTH)
+    interactions.tick
+    start, abort, restart = mining_actions
+    expect({start.status, abort.status, restart.status}).to eq({Action::Start, Action::Cancel, Action::Start})
+    expect({abort.location, abort.face, abort.sequence}).to eq({first, BlockFace::South, 0})
+    expect({restart.location, restart.face, restart.sequence}).to eq({target, BlockFace::South, start.sequence + 1})
+    expect(interactions.block_damage_progress).to eq(0_f32)
+  end
+
+  it "retains progress across equivalent stack updates but restarts for a changed component" do
+    set_block(target, "stone")
+    slot = equip("wooden_pickaxe")
+    slot.components_to_add["damage"] = Rosegold::DataComponents::Damage.new(1_u32)
+    interactions.start_digging
+    interactions.tick
+    initial_progress = interactions.block_damage_progress
+
+    slot = equip("wooden_pickaxe", 2_u32)
+    damage = Rosegold::DataComponents::Damage.new(1_u32)
+    slot.components_to_add["damage"] = damage
+    interactions.tick
+    expect(mining_actions.map(&.status)).to eq([Action::Start])
+    expect(interactions.block_damage_progress).to be > initial_progress
+
+    damage.value = 2_u32
+    interactions.tick
+    expect(mining_actions.map(&.status)).to eq([Action::Start, Action::Cancel, Action::Start])
+    expect(interactions.block_damage_progress).to eq(0_f32)
+
+    equip("stone_pickaxe")
+    interactions.tick
+    expect(mining_actions.map(&.status)).to eq([Action::Start, Action::Cancel, Action::Start, Action::Cancel, Action::Start])
+  end
+
+  def report_using_item(using : Bool, entity_id : UInt64 = bot_client.player.entity_id)
+    entry = Rosegold::Clientbound::SetEntityData::Entry.new(8_u8, 0_u32, using ? 1_u8 : 0_u8)
+    Rosegold::Clientbound::SetEntityData.new(entity_id, [entry]).callback(bot_client)
+  end
+
+  def use_packets
+    bot_client.sent_packets.count do |packet|
+      packet.is_a?(Rosegold::Serverbound::PlayerBlockPlacement) || packet.is_a?(Rosegold::Serverbound::UseItem)
+    end
+  end
+
+  def zombie_at(x, y, z)
+    zombie_type = Rosegold::Entity.metadata_for_protocol.find! { |entity| entity.name == "zombie" }
+    zombie = Rosegold::Entity.new(1_u32, UUID.random, zombie_type.id.to_u32, Rosegold::Vec3d.new(x, y, z), 0_f32, 0_f32, 0_f32, Rosegold::Vec3d::ORIGIN)
+    bot_client.dimension_for_test.entities[zombie.entity_id.to_u64] = zombie
+  end
+
+  def entity_actions
+    bot_client.sent_packets.compact_map do |packet|
+      case packet
+      when Rosegold::Serverbound::Attack         then :attack
+      when Rosegold::Serverbound::InteractEntity then packet.action.attack? ? :attack : :interact
+      end
+    end
+  end
+
+  it "attacks before using an entity when both are pressed on the same tick" do
+    set_block(target, "air")
+    zombie_at(0.5, 0.0, 2.0)
+    interactions.start_digging
+    interactions.tap_using_hand
+    interactions.tick
+
+    expect(entity_actions).to eq([:attack, :interact])
+  end
+
+  it "keeps staged progress and drops a use press while the break is staged" do
+    set_block(target, "stone")
+    interactions.start_digging
+    interactions.tick
+    progress = interactions.block_damage_progress
+    interactions.tap_using_hand
+    interactions.tick
+    expect(interactions.block_damage_progress).to be > progress
+    expect(use_packets).to eq(0)
+
+    interactions.stop_digging
+    2.times { interactions.tick }
+    expect(use_packets).to eq(0)
+  end
+
+  it "retries a held use once a staged break ends" do
+    set_block(target, "stone")
+    interactions.start_digging
+    interactions.tick
+    interactions.start_using_hand
+    progress = interactions.block_damage_progress
+    interactions.tick
+    expect(interactions.block_damage_progress).to be > progress
+    expect(use_packets).to eq(0)
+
+    interactions.stop_digging
+    interactions.tick
+    expect(mining_actions.map(&.status)).to eq([Action::Start, Action::Cancel])
+    expect(use_packets).to be > 0
+  end
+
+  it "pauses staged progress only while the server reports the bot using an item" do
+    bot_client.player.entity_id = 42_u64
+    set_block(target, "stone")
+    interactions.start_digging
+    interactions.tick
+    progress = interactions.block_damage_progress
+
+    report_using_item(true, 7_u64)
+    interactions.tick
+    expect(interactions.block_damage_progress).to be > progress
+
+    progress = interactions.block_damage_progress
+    report_using_item(true)
+    3.times { interactions.tick }
+    expect(interactions.block_damage_progress).to eq(progress)
+    expect(mining_actions.map(&.status)).to eq([Action::Start])
+
+    report_using_item(false)
+    interactions.tick
+    expect(interactions.block_damage_progress).to be > progress
+    interactions.stop_digging
+    interactions.tick
+    abort_packet = mining_actions.last
+    expect({abort_packet.status, abort_packet.face, abort_packet.sequence}).to eq({Action::Cancel, BlockFace::Bottom, 0})
+  end
+
+  it "drops an attack press during active use but resumes the held attack after it" do
+    bot_client.player.entity_id = 42_u64
+    set_block(target, "stone")
+    report_using_item(true)
+    interactions.start_digging
+    interactions.tick
+    expect(starts).to be_empty
+
+    report_using_item(false)
+    interactions.tick
+    expect(starts.map(&.location)).to eq([target])
+  end
+
+  it "does not mine through a pickable entity around the eyes or attack it" do
+    set_block(target, "stone")
+    zombie_at(0.5, 0.0, 0.5)
+    interactions.start_digging
+    interactions.tick
+    expect(starts).to be_empty
+    expect(entity_actions).to be_empty
+
+    bot_client.dimension_for_test.entities.clear
+    interactions.tick
+    expect(starts.map(&.location)).to eq([target])
+  end
+
+  it "uses the synchronized instabuild ability for creative mining in survival mode" do
+    second = Rosegold::Vec3i.new(0, 0, 3)
+    set_block(target, "stone")
+    set_block(second, "stone")
+    Rosegold::Clientbound::PlayerAbilities.new(0x08_u8, 0.05_f32, 0.1_f32).callback(bot_client)
+    expect(Rosegold::Bot.new(bot_client).estimated_break_ticks("stone", buffer_ticks: 0)).to eq(0)
+
+    interactions.start_digging
+    interactions.tick
+    expect(interactions.block_damage_progress).to eq(0_f32)
+    6.times { interactions.tick }
+    expect(starts.map(&.location)).to eq([target, second])
+  end
+
+  it "mines in stages when creative mode lacks the instabuild ability" do
+    set_block(target, "stone")
+    bot_client.player.gamemode = 1_i8
+    Rosegold::Clientbound::PlayerAbilities.new(0x00_u8, 0.05_f32, 0.1_f32).callback(bot_client)
+    expect(Rosegold::Bot.new(bot_client).estimated_break_ticks("stone", buffer_ticks: 0)).to be > 0
+
+    interactions.start_digging
+    2.times { interactions.tick }
+    expect(starts.map(&.location)).to eq([target])
+    expect(interactions.block_damage_progress).to be > 0_f32
+
+    bot_client.player.gamemode = 1_i8
+    expect(bot_client.player.creative_mode?).to be_true
+  end
+
+  sample [{776_u32, 1}, {777_u32, 6}] do |protocol, held_ticks|
+    it "waits #{held_ticks} held ticks to mine after a creative entity attack on protocol #{protocol}" do
+      Rosegold::Client.protocol_version = protocol
+      set_block(target, "stone")
+      bot_client.player.gamemode = 1_i8
+      zombie_at(0.5, 0.0, 1.5)
+      interactions.start_digging
+      interactions.tick
+      expect(entity_actions).to eq([:attack])
+
+      bot_client.dimension_for_test.entities.clear
+      (held_ticks - 1).times { interactions.tick }
+      expect(starts).to be_empty
+      interactions.tick
+      expect(starts.map(&.location)).to eq([target])
+    end
+  end
+
+  it "waits out the initial survival miss before mining a newly acquired target" do
+    set_block(target, "stone")
+    aim(0.5, 0.5, 0.5, Rosegold::Look::NORTH)
+    interactions.start_digging
+    interactions.tick
+    aim(0.5, 0.5)
+    9.times do
+      interactions.tick
+      expect(starts).to be_empty
+    end
+    interactions.tick
+    expect(starts.map(&.location)).to eq([target])
+    expect(interactions.block_damage_progress).to eq(0_f32)
+  end
+
+  it "sends a 26.3 direction action only for a new face during staged progress" do
+    Rosegold::Client.protocol_version = 777_u32
+    set_block(target, "stone")
+    aim(0.5, 0.5)
+    interactions.start_digging
+    interactions.tick
+    aim(0.5, 0.5, 3.5, Rosegold::Look::NORTH)
+    interactions.tick
+    interactions.tick
+
+    expect(mining_actions.map(&.status)).to eq([Action::Start, Action::ChangeDestroyDirection])
+    change = mining_actions.last
+    expect({change.location, change.face, change.sequence}).to eq({target, BlockFace::South, 0})
   end
 end

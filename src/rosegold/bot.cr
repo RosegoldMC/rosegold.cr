@@ -660,6 +660,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   # Holds the use button for *hand*. Call `#stop_using_hand` to release it.
+  # Held use waits while a staged block break is in progress. To give use priority,
+  # call `#stop_digging` first. Call `#start_digging` again when you want to resume.
   def start_using_hand(hand : Hand = :main_hand)
     # can't delegate this because it wouldn't pick up the symbol as a Hand value
     client.interactions.start_using_hand hand
@@ -667,8 +669,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Queues one press and release of use in *hand*, optionally aiming at *target* first.
   # Releases any held use action. Repeated calls before a tick coalesce into one press.
-  # The target raytrace happens on the next tick eligible under the use cooldown.
-  # This does not wait for a world-result confirmation.
+  # A staged block break drops the queued tap, even during the use cooldown.
+  # Predicted instant breaks do not block use this way. Call `#stop_digging` before
+  # queuing the tap to give it priority over a staged break.
+  # If the tap is still queued when the cooldown allows it, the target raytrace
+  # happens then. This does not wait for a world-result confirmation.
   def use_hand(target : Vec3d? | Look? = nil, hand : Hand = :main_hand)
     look_at target if target.is_a? Vec3d
     self.look = target if target.is_a? Look
@@ -783,6 +788,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Eats allowed food from inventory when `should_eat?` is true.
   # Does nothing at 18+ food, or at 15+ food with full health. Otherwise,
   # blocks until food reaches 18, the held food runs out, or eating times out.
+  # After picking food, this can wait on a staged block break. Call
+  # `#stop_digging` before `#eat!` to give eating priority.
   # Raises when no allowed food is available and propagates interaction errors.
   # A timeout only logs a warning. Use `eat` for best-effort eating instead.
   def eat!
@@ -1110,7 +1117,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
   class CraftingError < Exception; end
 
   # Optionally aims at *target*, then holds the attack button to begin digging.
-  # Call `#stop_digging` to release it.
+  # Call `#stop_digging` to release it. Login, respawn, reconfiguration, and
+  # disconnect also release the hold.
   def start_digging(target : Vec3d? | Look? = nil)
     look_at target if target.is_a? Vec3d
     self.look = target if target.is_a? Look
@@ -1133,8 +1141,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Estimates how many ticks it will take this bot to break the named block.
   #
   # Uses the bot's current main-hand item and live player state (Haste,
-  # gamemode, on_ground, etc.), so the estimate reflects what the bot would
-  # actually experience right now — not a fresh `Player.new` baseline.
+  # gamemode, on_ground, eyes in water, Aqua Affinity, etc.), so the estimate
+  # reflects what the bot would actually experience right now, not a fresh
+  # `Player.new` baseline. It is a client-side estimate; the server decides
+  # when a break completes. It excludes the destroy delay left by a previous
+  # break, and a held dig's Float32 progress sum can need one tick more.
   #
   # *buffer_ticks* is added on top of the computed mining time to absorb
   # network latency and server tick variance; tune it down to 0 for a pure
@@ -1149,8 +1160,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
   def estimated_break_ticks(block_name : String, *, buffer_ticks : Int32 = 10) : Int32
     block = MCData.default.blocks.find { |entry| entry.id_str == block_name } ||
             raise ArgumentError.new("Unknown block name: #{block_name}")
-    creative = client.player.gamemode == 1
-    block.break_time(main_hand, client.player, creative) + buffer_ticks
+    creative = client.player.creative_mode?
+    block.break_time(main_hand, client.player, creative, **client.mining_context) + buffer_ticks
   end
 
   # Runs a slash command and waits for a confirmation message from the server.

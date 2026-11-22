@@ -13,7 +13,7 @@ class Rosegold::Serverbound::PlayerAction < Rosegold::Serverbound::Packet
   })
 
   enum Status
-    Start; Cancel; Finish; DropHandFull; DropHandSingle; FinishUsingHand; SwapHands
+    Start; Cancel; Finish; DropHandFull; DropHandSingle; FinishUsingHand; SwapHands; ChangeDestroyDirection
   end
 
   property \
@@ -32,9 +32,14 @@ class Rosegold::Serverbound::PlayerAction < Rosegold::Serverbound::Packet
   def write : Bytes
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
-      wire_status = status.value
-      # 26.3 inserts CHANGE_DESTROY_DIRECTION after START_DESTROY_BLOCK.
-      wire_status += 1 if Client.protocol_version >= 777_u32 && !status.start?
+      wire_status = if status.change_destroy_direction?
+                      raise ArgumentError.new("ChangeDestroyDirection requires protocol 777 or later") if Client.protocol_version < 777_u32
+                      1
+                    elsif Client.protocol_version >= 777_u32 && !status.start?
+                      status.value + 1
+                    else
+                      status.value
+                    end
       buffer.write wire_status
       buffer.write location
       buffer.write face.value

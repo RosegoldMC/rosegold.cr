@@ -1,5 +1,6 @@
 require "./chunk"
 require "./entity"
+require "./mining_prediction"
 
 class Rosegold::Dimension
   alias ChunkPos = {Int32, Int32}
@@ -17,6 +18,8 @@ class Rosegold::Dimension
   property entities : Hash(UInt64, Entity) = Hash(UInt64, Entity).new
   property time_of_day : Int64 = 6000_i64
   property world_age : Int64 = 0_i64
+
+  @mining_predictions = MiningPrediction.new
 
   def initialize(@name, @nbt)
     if (compound = @nbt).is_a?(Minecraft::NBT::CompoundTag)
@@ -90,6 +93,7 @@ class Rosegold::Dimension
 
   def load_chunk(chunk : Chunk)
     chunk_pos = {chunk.x, chunk.z}
+    @mining_predictions.clear_chunk chunk_pos
     @chunks[chunk_pos] = chunk
   end
 
@@ -99,6 +103,7 @@ class Rosegold::Dimension
   end
 
   def unload_chunk(chunk_pos : ChunkPos)
+    @mining_predictions.clear_chunk chunk_pos
     @chunks.delete chunk_pos
   end
 
@@ -123,6 +128,48 @@ class Rosegold::Dimension
   def set_block_state(x : Int32, y : Int32, z : Int32, block_state : UInt16)
     chunk_pos = {x >> 4, z >> 4}
     @chunks[chunk_pos]?.try &.set_block_state(x, y, z, block_state)
+  end
+
+  # Registers the client-side result of breaking the loaded, non-air block at
+  # `location` (its fluid's block state, else air) under `sequence`. Only
+  # `mining_block_state` sees it; chunk data stays server-authoritative.
+  # Returns whether a prediction was registered.
+  def predict_block_break(location : Vec3i, sequence : Int32) : Bool
+    x, y, z = location.x, location.y, location.z
+    current = mining_block_state(x, y, z) || return false
+    mc = MCData.default
+    return false if mc.air_states.includes?(current)
+    @mining_predictions.predict x, y, z, sequence, MiningPrediction.replacement_state(current, mc)
+    true
+  end
+
+  # Block state for choosing a mining target: the pending prediction, else the
+  # authoritative state.
+  def mining_block_state(x : Int32, y : Int32, z : Int32) : UInt16?
+    @mining_predictions[x, y, z] || block_state(x, y, z)
+  end
+
+  # Ends predictions with sequence <= `sequence`, as a cumulative
+  # ClientboundBlockChangedAck does.
+  def acknowledge_mining_predictions(sequence : Int32) : Nil
+    @mining_predictions.acknowledge sequence
+  end
+
+  def clear_mining_predictions : Nil
+    @mining_predictions.clear
+  end
+
+  # Vanilla Entity#updateFluidOnEyes: the water at the eye block, raised to a
+  # full block when water is also above it, must reach above the eye. Uses
+  # authoritative geometry.
+  def eye_in_water?(eyes : Vec3d) : Bool
+    x, y, z = eyes.block.x, eyes.block.y, eyes.block.z
+    mc = MCData.default
+    state = block_state(x, y, z) || return false
+    own_height = MiningPrediction.water_own_height(state, mc) || return false
+    above = block_state(x, y + 1, z)
+    height = above && MiningPrediction.water_own_height(above, mc) ? 1.0 : own_height
+    y + height > eyes.y
   end
 
   def raycast_entity(start : Vec3d, look : Vec3d, max_distance : Float64, passenger_id : UInt32? = nil) : Entity?

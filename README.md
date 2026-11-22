@@ -88,7 +88,7 @@ ensure
 end
 ```
 
-That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result.
+That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result. During a block break that takes multiple ticks, `use_hand` taps are dropped and held use waits. Call `stop_digging` before using a hand or eating if that should go first.
 
 For automatic reconnects, use `Bot.run`. It waits for spawn and gives the block a
 fresh bot for each session:

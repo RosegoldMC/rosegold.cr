@@ -96,6 +96,25 @@ class Rosegold::Client < Rosegold::EventEmitter
     @sequence_counter += 1
   end
 
+  # Live inputs for break speed, read on demand so equipment, water and tag
+  # updates apply. Enchantment names are registry names without "minecraft:".
+  def mining_context
+    {
+      submerged:     dimension.eye_in_water?(player.eyes),
+      aqua_affinity: !!inventory_menu.helmet.enchantments["aqua_affinity"]?,
+      block_tags:    tags.try(&.tag_types.find { |tag_type| tag_type[:type] == "minecraft:block" }).try(&.[:tags]),
+    }
+  end
+
+  # Drops predicted mining state tied to the current world or connection. The
+  # sequence counter keeps increasing so stale acknowledgements cannot match.
+  def reset_mining_session
+    dimension.clear_mining_predictions
+    pending_block_operations.clear
+    player.using_item = false
+    interactions.reset_mining
+  end
+
   def add_chunk_batch_sample(millis_per_chunk : Float64, batch_size : Int32)
     # Add new sample
     @chunk_batch_samples << ChunkBatchSample.new(millis_per_chunk, batch_size)
@@ -183,6 +202,13 @@ class Rosegold::Client < Rosegold::EventEmitter
     @inventory_menu = PlayerMenu.new self
     @container_menu = @inventory_menu
     @chat_manager = ChatManager.new self
+    on Event::Disconnected do |_event|
+      # Shared emitter: a late event from a replaced connection must not reset the live one.
+      next unless @connection.try(&.closed?)
+      clear_boss_bars
+      reset_mining_session
+      physics.handle_disconnect
+    end
   end
 
   def connection? : Connection::Client?
@@ -207,7 +233,10 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def set_protocol_state(protocol_state : ProtocolState)
-    clear_boss_bars if @current_protocol_state == ProtocolState::PLAY && protocol_state == ProtocolState::CONFIGURATION
+    if @current_protocol_state == ProtocolState::PLAY && protocol_state == ProtocolState::CONFIGURATION
+      clear_boss_bars
+      reset_mining_session
+    end
     @current_protocol_state = protocol_state
     connection.protocol_state = protocol_state
   end
@@ -346,6 +375,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     raise NotConnected.new "Already connected" if connected?
 
     clear_boss_bars
+    reset_mining_session
 
     @authentication_failure = nil
     @authentication_cache_reused = false
@@ -364,10 +394,6 @@ class Rosegold::Client < Rosegold::EventEmitter
     io = Minecraft::IO::Wrap.new socket
     connection = @connection = Connection::Client.new io, ProtocolState::HANDSHAKING, protocol_version, self
     @current_protocol_state = ProtocolState::HANDSHAKING
-    connection.handler.try &.on Event::Disconnected do |_event|
-      clear_boss_bars
-      physics.handle_disconnect
-    end
     Log.info { "Connected to #{host}:#{port}" }
 
     send_packet! Serverbound::Handshake.new protocol_version, host, port, 2
