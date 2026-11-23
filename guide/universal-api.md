@@ -16,9 +16,8 @@ may expose an older API. Server libraries pin the core revisions they were teste
 | [rosegold-civmc](https://github.com/RosegoldMC/civmc.cr) | Explicitly reviewed CivMC facade and permitted shared helpers |
 | [example-civmc](https://github.com/RosegoldMC/example-civmc) | CivMC application template |
 
-EdenMC, CivNodes, and Devoted4 need independent policy reviews and example
-repositories. In particular, an elevator helper that reads own position cannot
-be reused unchanged on a server that prohibits that observation.
+Other servers need their own policy review and library. Reusing a helper from
+one server library on another is not safe without that review.
 
 ## Query received state
 
@@ -57,20 +56,19 @@ use server-confirmed state.
 Scripted taps such as `use_hand` choose the hand automatically unless given an
 explicit one. They queue for the next tick.
 
-## CivMC boundary
+## Server libraries
 
-`Rosegold::CivMC::Bot` composes the core and explicitly delegates its public API.
-It does not inherit new core methods or expose raw clients through connection
-helpers, menus, containers, callbacks, or spectator controls. Its local
-`ContainerOpened` event wraps a restricted menu.
-
-The historical [CivMC snapshot](../server-rules/civmc.md) records the core's
-original policy. The CivMC library owns its current snapshot and migration guide.
-Human-client mod exceptions do not grant bot access to environmental data.
+A server library such as [rosegold-civmc](https://github.com/RosegoldMC/civmc.cr)
+composes the core and explicitly delegates the operations it has reviewed. It
+does not inherit new core methods, so a core addition is not available through
+a facade until that library adds it. Its documentation owns its rules and
+migration guidance. The core makes no claim about what a particular server
+permits.
 
 This is an API boundary against accidental misuse. Crystal code can deliberately
-import the core or reopen classes. The library cannot establish server approval
-or enforce every rule about how a script is used.
+import the core or reopen classes. A library cannot establish server approval
+or enforce every rule about how a script is used. The historical
+[snapshot](../server-rules/civmc.md) records only the core's original policy.
 
 ## Feature coverage and follow-ups
 
@@ -85,7 +83,7 @@ API work. This inventory describes Rosegold's scope, not an audited parity claim
 | Interaction | Aim-based attack/use, digging, placement, eating | Additional task-level workflows; no attack-by-entity convenience |
 | Inventory | Containers, crafting, enchanting, synchronized item data | Broader task automation without promising per-click acknowledgement |
 | Protocol | Existing supported-version entrypoints and packet implementations | New versions and missing subsystems need separate source-backed protocol work |
-| Civ mechanics | Known jump/sneak elevators and observed XP-item consumption via shared helpers | Other elevator variants and server-specific mechanics after rule/plugin verification |
+| Server mechanics | Opt-in helpers in server libraries | Server-specific mechanics after rule and plugin verification |
 
 Compile and unit checks establish local behavior. Controlled-server tests and
 live plugin verification remain separate evidence.
