@@ -4,10 +4,10 @@ Rosegold is not a JavaScript client API in Crystal syntax. Keep the useful shape
 
 This guide compares a small, common slice of JsMacros with Rosegold. It is not a complete conversion catalogue. The JsMacros calls below were checked against [grepsedawk/JsMacros commit e293c63](#jsmacros-sources); Rosegold examples are checked against this repository's public `Bot` API.
 
-This guide describes the unrestricted core. CivMC scripts should use
-[`Rosegold::CivMC::Bot`](https://github.com/RosegoldMC/civmc.cr) and check its
-[migration guide](https://github.com/RosegoldMC/civmc.cr/blob/main/MIGRATION.md)
-for supported operations. Other servers need their own reviewed policies.
+This guide describes the server-independent core. Server libraries, such as the
+[CivMC facade](https://github.com/RosegoldMC/civmc.cr), choose which of these
+operations they expose; check their docs, not this guide, for their rules.
+Coding agents should start with [Rosegold for coding agents](agents.md).
 
 ## Start with a bot, and always close it
 
@@ -27,7 +27,7 @@ ensure
 end
 ```
 
-`join_game` waits until player and world state are ready. It does not make a block exception safe by itself, so keep the `ensure`. The script reads as a sequence because actions that need ticks wait internally.
+`join_game` waits until player and world state are ready. The block form disconnects only when the block returns normally; if it raises, the connection stays open. Keep the `ensure` either way. The script reads as a sequence because actions that need ticks wait internally.
 
 ## Mapping the useful parts
 
@@ -40,6 +40,7 @@ end
 | `Chat.say(message)` | `bot.chat(message)` | Both send chat or a slash command. `bot.chat` returns whether sending succeeded, not whether the server accepted it. |
 | `player.interact()` / `interactions.interactItem(...)` | `bot.use_hand` | Rosegold queues one tap for the next tick with automatic hand fallback (main first, off hand only when the previous local result permits, both hand attempts are part of the same click and tick) unless you pass `hand: :main_hand` or `:off_hand`; same-tick taps coalesce, and an active use or a staged break drops it. It does not mean the server accepted the action. |
 | `interactions.interactBlock(x, y, z, face, ...)` | `bot.place_block_against(block, BlockFace::Top)` | Pass a configured `Vec3i` and top-level `BlockFace`; Rosegold aims at that face before use. |
+| `KeyBind.pressKeyBind("key.attack")` and release (or `key.use`) | `bot.start_digging` / `bot.stop_digging` (or `start_using_hand` / `stop_using_hand`) | A held button. Release in `ensure`; the release is processed on the next tick. See [Use, mine, and place](#use-mine-and-place). |
 | `player.attack()` | `bot.attack` | Taps the attack button at the current aim, or a configured `Vec3d`/ `Look`. There is no public entity-target API. |
 | `player.openInventory().findItem(...)` / slot clicks | `bot.inventory.pick!`, `count`, `throw_all_of` | Prefer item intent. Rosegold selects matching stacks and tracks the synchronized menu. |
 | open-screen inventory clicks | `bot.open_container_handle { |container| ... }` | The handle offers `withdraw` and `deposit`, reports a menu-observed transfer after each tick, and closes in `ensure`. |
@@ -105,10 +106,11 @@ bot.place_block_against(support, BlockFace::Top)
 
 `bot.attack` taps the attack button at the current or supplied aim. Core scripts
 can query entities with `entities`, `entity`, and `nearest_entity`, but there is
-no attack-by-entity helper. CivMC prohibits environmental reads and direct combat
-assistance; use its restricted facade when translating CivMC scripts.
+no attack-by-entity helper.
 
-Keep held actions bounded by an `ensure`. This is the Rosegold equivalent of releasing a held key even when a surrounding workflow fails:
+A held action is a start, a bounded wait, and a stop in `ensure`. This is the
+Rosegold equivalent of releasing a held key even when a surrounding workflow
+fails:
 
 ```crystal
 bot.start_digging
@@ -126,10 +128,93 @@ ensure
 end
 ```
 
-Confirm an operation through state your server permits. On CivMC, use container
-updates, inventory counts, hunger, server chat, or configured workflow boundaries.
-Environmental block and entity reads are available in the core, but prohibited
-for CivMC bot decisions.
+Both stop calls are processed on the next tick, not immediately. A `use_hand`
+tap issued right after `stop_digging` still sees the staged break and is
+dropped, so wait one tick first. A held use retries by itself and needs no tap.
+
+Do not send FINISH or other dig packets yourself. Holding attack lets
+`Interactions` accumulate break progress and send FINISH at full progress.
+
+`dig(ticks)` performs that many tick waits and then releases; an individual wait
+can time out after one second. Choosing the
+number is your job, and a hold that is too short leaves the block unbroken.
+`estimated_break_ticks(name)` helps. Pass the exact bare block name, for
+example `bot.estimated_break_ticks("deepslate")`, with these limits:
+
+- It computes from the block name you pass, which is an assumption. It uses the
+  bot's live held item, effects, and ground state, but it never looks at the
+  world, so the name may not match what is actually under the crosshair.
+- It is a client-side estimate in `Int32` ticks from float progress sums. A held
+  dig can need a tick more, and a previous break's delay is not included.
+  `buffer_ticks` absorbs some of that and some server variance.
+- The server decides when a break completes.
+
+### Confirm a mined block
+
+An intended result is not a harvest proof. A broken block does not show that a
+drop was collected, and an unchanged block does not show the server refused.
+For a known target, read received state with a bounded wait and report what you
+saw:
+
+```crystal
+enum MineResult
+  Cleared
+  Changed
+  Unchanged
+  Unknown
+end
+
+def mine_known_block(bot : Rosegold::Bot, target : Rosegold::Vec3i, expected : String, max_ticks : Int32) : MineResult
+  raise ArgumentError.new("max_ticks must be positive") if max_ticks <= 0
+
+  world = bot.world
+  before = bot.block_at(target)
+  return MineResult::Unknown unless before
+  raise "Expected #{expected} at target, found #{before.name}" unless before.name == expected
+
+  limit = Math.min(bot.estimated_break_ticks(expected).to_i64 + 20, max_ticks.to_i64)
+  bot.look_at(target.centered_3d)
+  return MineResult::Unknown unless bot.connected? && bot.world.same?(world)
+
+  bot.start_digging
+  begin
+    limit.times do
+      return MineResult::Unknown unless bot.wait_tick && bot.connected? && bot.world.same?(world)
+      current = bot.block_at(target)
+      return MineResult::Unknown unless current
+      return MineResult::Cleared if current.name == "air"
+      return MineResult::Changed if current.name != expected
+    end
+  ensure
+    bot.stop_digging if bot.connected?
+  end
+  MineResult::Unchanged
+end
+```
+
+Points to keep when you adapt it:
+
+- `block_at` returns `nil` for an unloaded or unknown position. That is not air.
+  Air is a known snapshot named `"air"`.
+- `max_ticks` must be positive. It caps the hold even when unusual mining
+  modifiers make the estimate very long.
+- `Unchanged` means the block still matched when the bound ended. It is a timeout,
+  not a refusal: the server may still apply the break afterward. Decide whether
+  to wait longer, read again later, or give up. Do not replay blindly.
+- `Cleared` and `Changed` describe what was received, not what caused it. Another
+  player or a server rule can replace the block, and neither result shows that
+  an item was collected. Check inventory counts if that matters.
+- `wait_tick` returns `nil` after one second without a tick, so the loop's
+  tick count is a bound on attempts, not a wall-clock guarantee. The recipe
+  returns `Unknown` on `nil`.
+- A respawn can replace the world without disconnecting. If the world changes
+  while aiming or waiting for a tick, the recipe returns `Unknown`.
+- The target must be in reach and unobstructed under the crosshair. If the aim
+  is blocked, the hold acts on whatever is under the crosshair instead. A hold
+  can also keep going into the next block after a break is predicted, until the
+  release is processed.
+- The `ensure` releases the hold, and the release is processed on the next tick.
+  Wait one tick before a following `use_hand`.
 
 ## Inventory and containers
 
@@ -221,7 +306,7 @@ end
 
 ## Events should schedule work, not do it
 
-Rosegold delivers events on its packet-processing path. Chat logging is fine in a handler. Eating, movement, or any action that waits for ticks belongs in a spawned fiber, with a guard to prevent duplicate work:
+Handlers run synchronously in the emitting fiber, including for ticks. Chat logging is fine in a handler. Eating, movement, or any action that waits for ticks belongs in a spawned fiber, with a guard to prevent duplicate work:
 
 ```crystal
 eating = false
@@ -268,9 +353,13 @@ ensure
 end
 ```
 
-`wait_for` still fits when any event of a type is sufficient. Use an explicit
-handler and predicate when the event's content decides whether the action
-completed.
+`wait_for` still fits when any event of a type is sufficient. Its block is only
+the trigger: it runs after the listener is registered, and the first event of
+that type satisfies the wait, whatever its content. Use an explicit handler and
+predicate when the event's content decides whether the action completed. On
+timeout, `wait_for` returns `nil` (no block) or raises (with a block). Neither
+replays the action; `run_command_with_confirmation` does replay, so use it only
+for commands that are safe to repeat.
 
 Long-running work should remain interruptible. Check the conditions your script is allowed to observe between ticks:
 
@@ -311,12 +400,9 @@ interrupted workflow may already have changed server state.
 | GUI screens and HUD drawing | No headful GUI client API; the spectator bridge supplies a human viewer. |
 | Pathfinding libraries | No built-in pathfinder. `move_to` remains straight-line movement. |
 
-The CivMC facade excludes world queries, raw client access, arbitrary packet
-subscriptions, and nested menu/client escape routes. Supply already known target
-positions as configuration there. Its allowed observations include own position,
-inventory, health, food, effects, experience, server chat, kick reasons, tab list,
-and the type and position of the direct mount. Human-client mapping exceptions
-do not permit feeding environmental information into scripts.
+A server library may expose less than the core. Supply already known target
+positions as configuration when it does, and read its own documentation for
+what it allows.
 
 See [universal API and server libraries](universal-api.md) for query semantics.
 

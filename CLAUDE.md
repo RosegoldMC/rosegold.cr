@@ -327,10 +327,12 @@ progress cooperate through ticks; event handlers run synchronously in the
 emitting fiber, so handlers that wait for ticks or packets must `spawn` their
 work. Prefer Bot and control-layer operations for vanilla actions. `Bot#client`
 and `Bot#world` expose live state for advanced uses; query helpers return detached
-snapshots. See [guide/universal-api.md](guide/universal-api.md).
+snapshots. See [guide/universal-api.md](guide/universal-api.md). Agent-facing recipes live
+in [guide/agents.md](guide/agents.md) and [guide/idioms.md](guide/idioms.md);
+update them with the behavior they describe.
 
-The core is server-independent. CivMC observation restrictions belong to
-[rosegold-civmc](https://github.com/RosegoldMC/civmc.cr), which composes the core
+The core is server-independent. Server-specific observation restrictions, such
+as CivMC's, belong to its library, e.g. [rosegold-civmc](https://github.com/RosegoldMC/civmc.cr), which composes the core
 and explicitly delegates reviewed operations. New core methods must never become
 automatically available through that facade. Core access does not imply that a
 server permits using the information. Keep vanilla physics, reach, collision,

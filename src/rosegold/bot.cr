@@ -10,9 +10,9 @@ require "./reconnect_policy"
 # Use the task links below to find an operation, then its method documentation
 # for arguments, overloads, and examples.
 #
-# CivMC bots should use the restricted [rosegold-civmc API](https://github.com/RosegoldMC/civmc.cr)
-# and its [example template](https://github.com/RosegoldMC/example-civmc).
-# The core API below exposes world observations that CivMC bots cannot use.
+# This is the server-independent core. Server libraries, such as
+# [rosegold-civmc](https://github.com/RosegoldMC/civmc.cr), choose which
+# operations they expose; read their documentation for their rules.
 #
 # ## Your first bot
 #
@@ -40,7 +40,11 @@ require "./reconnect_policy"
 #   `#location`, `#health`, `#food`, `#chat`.
 # - **Read received world state:** `#block_at`, `#find_block`, `#find_blocks`,
 #   `#entity`, `#entities`, `#nearest_entity`. `#world` and `#client` expose live
-#   state for advanced callers.
+#   state for advanced callers. `#block_at` is `nil` for unknown state, and air
+#   is a known block.
+# - **Tick and hold:** `#wait_tick`, `#wait_ticks`, `#start_digging` and
+#   `#start_using_hand` with `#stop_digging` and `#stop_using_hand`, which take
+#   effect on the next tick. `#estimated_break_ticks` sizes a hold.
 # - **Move and look:** `#move_to`, `#look_at`, `#look`, `#sprint`, `#sneak`.
 # - **Mine, place, use, and eat:** `#dig`, `#place_block_against`, `#use_hand`,
 #   `#start_using_hand`, `#stop_using_hand`, `#eat`, `#eat!`.
@@ -53,6 +57,8 @@ require "./reconnect_policy"
 #
 # For longer scripts, see the [runnable examples](https://github.com/RosegoldMC/rosegold.cr/tree/main/examples)
 # and [idiom guide](https://github.com/RosegoldMC/rosegold.cr/blob/main/guide/idioms.md).
+# Coding agents: start with the [agent guide](https://github.com/RosegoldMC/rosegold.cr/blob/main/guide/agents.md)
+# and read the installed source your project pins.
 #
 # ## Execution model
 #
@@ -1156,7 +1162,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   # Optionally aims at *target*, holds attack for *ticks*, then releases it.
-  # Waits exactly *ticks* client ticks after starting the dig.
+  # Performs *ticks* tick waits; an individual wait can time out.
   def dig(ticks : Int32, target : Vec3d? | Look? = nil)
     start_digging target
     wait_ticks ticks
