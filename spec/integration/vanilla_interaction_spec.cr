@@ -6,14 +6,25 @@ class Rosegold::Client
   end
 end
 
+class VanillaInteractionClient < Rosegold::Client
+  getter entity_interactions = [] of Rosegold::Serverbound::InteractEntity
+
+  def send_packet!(packet : Rosegold::Serverbound::Packet)
+    super
+    entity_interactions << packet if packet.is_a?(Rosegold::Serverbound::InteractEntity)
+  end
+end
+
 module VanillaInteractionFixture
   ORIGIN    = Rosegold::Vec3i.new(60, -60, 60)
   STONE     = Rosegold::Vec3i.new(60, -59, 58)
   LEVER     = Rosegold::Vec3i.new(60, -59, 59)
   LEVER_AIM = Rosegold::Vec3d.new(60.5, -58.5, 59.1)
+  CART      = Rosegold::Vec3d.new(60.5, -59.9375, 62.5)
 
   def self.clear
     admin.chat "/kill @e[type=minecraft:cow,tag=rg_vanilla_use]"
+    admin.chat "/kill @e[type=minecraft:minecart,tag=rg_vanilla_use]"
     admin.chat "/kill @e[type=minecraft:item,x=58,y=-60,z=56,dx=4,dy=4,dz=8]"
     admin.fill 58, -60, 56, 62, -56, 64, "air"
     admin.wait_ticks 2
@@ -29,6 +40,10 @@ module VanillaInteractionFixture
     admin.setblock STONE.x, STONE.y, STONE.z, "stone"
     admin.setblock LEVER.x, LEVER.y, LEVER.z, "lever[face=wall,facing=south,powered=false]"
     wait_until(bot, 40) { powered?(bot.client) == false }
+  end
+
+  def self.block_name(client : Rosegold::Client, position : Rosegold::Vec3i)
+    client.dimension_for_test.block_state(position).try { |state| Rosegold::Block.from_block_state_id(state).id_str }
   end
 
   def self.powered?(client : Rosegold::Client) : Bool?
@@ -49,6 +64,16 @@ module VanillaInteractionFixture
 
   def self.settle(bot : Rosegold::Bot) : Bool
     wait_until(bot) { powered?(bot.client) == false }
+  end
+
+  def self.watch_use_flags(client : Rosegold::Client) : Array(UInt8)
+    use_flags = [] of UInt8
+    client.on Rosegold::Clientbound::SetEntityData do |packet|
+      if packet.entity_id == client.player.entity_id && (flags = packet.values[8_u8]?).is_a?(UInt8)
+        use_flags << ((flags & 1_u8) == 0 ? 0_u8 : flags & 3_u8)
+      end
+    end
+    use_flags
   end
 end
 
@@ -124,6 +149,112 @@ Spectator.describe "Rosegold::Bot vanilla interaction ordering" do
         expect(VanillaInteractionFixture.wait_until(bot) { VanillaInteractionFixture.powered?(client) == false }).to be_true
         bot.wait_ticks 12
         expect(VanillaInteractionFixture.powered?(client)).to eq(false)
+      end
+    end
+  end
+
+  it "places with the off hand after a main-hand pass only when the hand is selected automatically" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        expect(VanillaInteractionFixture.prepare(bot)).to be_true
+        anchor = VanillaInteractionFixture::STONE
+        target = VanillaInteractionFixture::LEVER
+        admin.setblock target.x, target.y, target.z, "air"
+        admin.item_replace "weapon.offhand", "cobblestone"
+        expect(VanillaInteractionFixture.wait_until(bot, 40) {
+          bot.main_hand.empty? && bot.inventory.off_hand.name == "cobblestone" &&
+            VanillaInteractionFixture.block_name(client, anchor) == "stone" &&
+            VanillaInteractionFixture.block_name(client, target) == "air"
+        }).to be_true
+        bot.look_at anchor.to_f64 + Rosegold::Vec3d.new(0.5, 0.5, 0.5)
+
+        bot.use_hand hand: :main_hand
+        bot.wait_ticks 8
+        expect(VanillaInteractionFixture.block_name(client, target)).to eq("air")
+
+        bot.use_hand
+        expect(VanillaInteractionFixture.wait_until(bot, 40) {
+          VanillaInteractionFixture.block_name(client, target) == "cobblestone"
+        }).to be_true
+      end
+    end
+  end
+
+  it "stops automatic hand selection when the main hand toggles a lever" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        expect(VanillaInteractionFixture.prepare(bot)).to be_true
+        admin.item_replace "weapon.offhand", "cobblestone"
+        expect(VanillaInteractionFixture.wait_until(bot, 40) {
+          bot.main_hand.empty? && bot.inventory.off_hand.name == "cobblestone"
+        }).to be_true
+        bot.look_at VanillaInteractionFixture::LEVER_AIM
+
+        bot.use_hand
+        expect(VanillaInteractionFixture.wait_until(bot) { VanillaInteractionFixture.powered?(client) == true }).to be_true
+        bot.wait_ticks 8
+        expect(VanillaInteractionFixture.powered?(client)).to eq(true)
+        expect(bot.inventory.off_hand.name).to eq("cobblestone")
+      end
+    end
+  end
+
+  it "keeps the automatically selected off-hand shield active until released" do
+    client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        expect(VanillaInteractionFixture.prepare(bot)).to be_true
+        admin.item_replace "weapon.offhand", "shield"
+        expect(VanillaInteractionFixture.wait_until(bot, 40) {
+          bot.main_hand.empty? && bot.inventory.off_hand.name == "shield"
+        }).to be_true
+        bot.look_at Rosegold::Vec3d.new(bot.x, bot.y + 5, bot.z)
+
+        use_flags = VanillaInteractionFixture.watch_use_flags(client)
+        bot.start_using_hand
+        expect(VanillaInteractionFixture.wait_until(bot, 40) { use_flags.includes?(3_u8) }).to be_true
+        bot.wait_ticks 12
+        expect(use_flags.all? { |flags| flags == 3_u8 }).to be_true
+
+        bot.stop_using_hand
+        expect(VanillaInteractionFixture.wait_until(bot, 40) { use_flags.last? == 0_u8 }).to be_true
+      end
+    end
+  end
+
+  it "raises the off-hand shield when held use passes through a minecart while sneaking" do
+    observed_client = VanillaInteractionClient.new(MC_TEST_HOST, MC_TEST_PORT, offline: {
+      uuid:     "00000000-0000-0000-0000-000000000000",
+      username: AdminBot::TEST_PLAYER,
+    })
+    observed_client.join_game do |client|
+      Rosegold::Bot.new(client).try do |bot|
+        expect(VanillaInteractionFixture.prepare(bot)).to be_true
+        position = VanillaInteractionFixture::CART
+        admin.chat %(/summon minecraft:minecart #{position.x} #{position.y} #{position.z} {NoGravity:1b,Tags:["rg_vanilla_use"]})
+        admin.item_replace "weapon.offhand", "shield"
+        find_cart = -> {
+          client.dimension_for_test.entities.values.find do |entity|
+            entity.metadata.try(&.name) == "minecart" && (entity.position - position).length < 0.5
+          end
+        }
+        bot.sneak
+        expect(VanillaInteractionFixture.wait_until(bot, 40) {
+          bot.sneaking? && bot.main_hand.empty? && bot.inventory.off_hand.name == "shield" && !find_cart.call.nil?
+        }).to be_true
+        cart = find_cart.call || raise "Minecart did not spawn"
+        bot.wait_tick
+        bot.look_at cart.position.up(0.3)
+
+        use_flags = VanillaInteractionFixture.watch_use_flags(client)
+        bot.start_using_hand
+        expect(VanillaInteractionFixture.wait_until(bot, 40) { use_flags.includes?(3_u8) }).to be_true
+        expect(observed_client.entity_interactions.any? { |packet|
+          packet.entity_id == cart.entity_id && packet.sneaking? && packet.hand == Rosegold::Hand::OffHand
+        }).to be_true
+        expect(bot.riding?).to be_false
+
+        bot.stop_using_hand
+        expect(VanillaInteractionFixture.wait_until(bot, 40) { use_flags.last? == 0_u8 }).to be_true
       end
     end
   end

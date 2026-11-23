@@ -632,7 +632,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
     @enchanting = true
     begin
-      client.enchantment_workflow.run(spec, option, timeout) { use_hand }
+      client.enchantment_workflow.run(spec, option, timeout) { use_hand(hand: :main_hand) }
     ensure
       @enchanting = false
     end
@@ -662,24 +662,31 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.queue_packet Serverbound::PickItemFromBlock.new pos, include_data
   end
 
-  # Holds the use button for *hand*. Call `#stop_using_hand` to release it.
+  # Holds the use button until `#stop_using_hand`. With no *hand*, or `nil`, the
+  # client chooses automatically: it tries the main hand first and tries the
+  # off hand only when the previous local result for that attempt permits it.
+  # An unknown or modded item result does not trigger an unproven off-hand use.
+  # Pass `:main_hand` or `:off_hand` to use exactly that hand with no fallback.
   # Held use retries every tick it is blocked, then repeats every four ticks
   # when idle. It waits while a staged block break is in progress. To give use
   # priority, call `#stop_digging` and wait one tick. Call `#start_digging` again
   # to resume.
-  def start_using_hand(hand : Hand = :main_hand)
-    # can't delegate this because it wouldn't pick up the symbol as a Hand value
+  def start_using_hand(hand : Hand? = nil)
     client.interactions.start_using_hand hand
   end
 
-  # Queues one press and release of use in *hand*, optionally aiming at *target* first.
+  # Queues one press and release of use, optionally aiming at *target* first.
+  # With no *hand*, or `nil`, the client chooses automatically: main hand first,
+  # then the off hand only when the previous local result permits it. Both hand
+  # attempts are part of the same click and tick, and this does not claim
+  # broader vanilla parity. Pass `:main_hand` or `:off_hand` for exactly that hand.
   # Releases any held use action. Repeated calls before a tick coalesce into one press
   # on the next tick, with no hold-repeat cooldown. The target raytrace happens on
   # that tick. An active use or a staged block break drops the queued tap.
   # Predicted instant breaks do not block use this way. Call `#stop_digging` and
   # wait one tick before the tap to give it priority. This does not wait for a
   # world-result confirmation.
-  def use_hand(target : Vec3d? | Look? = nil, hand : Hand = :main_hand)
+  def use_hand(target : Vec3d? | Look? = nil, hand : Hand? = nil)
     look_at target if target.is_a? Vec3d
     self.look = target if target.is_a? Look
     client.interactions.tap_using_hand hand
@@ -689,7 +696,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   class ContainerOpenError < Exception; end
 
   # Opens a container (chest, barrel, etc.) and yields control for interaction.
-  # Automatically uses the main hand, waits for container content to load,
+  # Uses the main hand only, with no automatic fallback, waits for container content to load,
   # executes the provided block, then closes the container.
   #
   # ```
@@ -703,7 +710,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # The container is closed even if the block raises.
   def open_container(timeout : Time::Span = 5.seconds, &)
     begin
-      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
+      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand(hand: :main_hand) }
     rescue ex
       raise ContainerOpenError.new("Failed to open container: #{ex.message}")
     end
@@ -734,7 +741,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # The handle is closed even if the block raises.
   def open_container_handle(timeout : Time::Span = 5.seconds, &)
     begin
-      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand }
+      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand(hand: :main_hand) }
     rescue ex
       raise ContainerOpenError.new("Failed to open container: #{ex.message}")
     end
@@ -767,10 +774,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
     end
   end
 
-  # Aims at *face* of *block*, then presses and releases use with the main hand.
+  # Aims at *face* of *block*, then presses and releases use with the main hand
+  # only; it does not use automatic hand fallback.
   # It queues the placement attempt without waiting for confirmation.
   def place_block_against(block : Vec3i, face : BlockFace)
-    use_hand block + face
+    use_hand block + face, :main_hand
   end
 
   # Whether `#eat!` will attempt to consume food at the current health and hunger.
@@ -861,7 +869,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
     attempts = 0
 
     begin
-      start_using_hand
+      start_using_hand :main_hand
       until food >= 18 || attempts >= max_attempts
         break unless main_hand.edible? # Stop if no food equipped anymore
         wait_ticks 33
@@ -1027,7 +1035,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   private def with_table(table_pos : Vec3i, &)
     look_at Vec3d.new(table_pos.x + 0.5, table_pos.y + 0.5, table_pos.z + 0.5)
-    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: 5.seconds) { use_hand }
+    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: 5.seconds) { use_hand(hand: :main_hand) }
     begin
       yield
     ensure

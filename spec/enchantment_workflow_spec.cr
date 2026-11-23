@@ -12,8 +12,8 @@ class Rosegold::EnchantmentWorkflowSpecClient < Rosegold::Client
     @sent_packets << packet
   end
 
-  def sent_hand_tap_for_test
-    interactions.tap_using_hand
+  def sent_hand_tap_for_test(hand : Rosegold::Hand? = :main_hand)
+    interactions.tap_using_hand hand
     tick_inputs_for_test
   end
 
@@ -31,8 +31,9 @@ class CancelledOpeningSpecBot < Rosegold::Bot
     super(@opening_client)
   end
 
-  def use_hand(target : Rosegold::Vec3d? | Rosegold::Look? = nil, hand : Rosegold::Hand = :main_hand)
-    @opening_client.sent_hand_tap_for_test
+  def use_hand(target : Rosegold::Vec3d? | Rosegold::Look? = nil, hand : Rosegold::Hand? = nil)
+    raise "enchanting must pin the main hand" unless hand == Rosegold::Hand::MainHand
+    @opening_client.sent_hand_tap_for_test hand
   end
 end
 

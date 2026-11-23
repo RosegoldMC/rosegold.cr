@@ -61,10 +61,26 @@ Spectator.describe "Interaction use routing" do
     bot_client.inventory_menu[hand.main_hand? ? 36 : 45] = Rosegold::Slot.new(1_u32, item.id)
   end
 
-  def tap(hand = Rosegold::Hand::MainHand)
+  def tap(hand : Rosegold::Hand? = Rosegold::Hand::MainHand)
     input.tap_using_hand(hand)
     input.tick
   end
+
+  def wire
+    packets.map do |packet|
+      case packet
+      when Rosegold::Serverbound::PlayerBlockPlacement then {"on", packet.hand, packet.sequence}
+      when Rosegold::Serverbound::UseItem              then {"use", packet.hand, packet.sequence}
+      when Rosegold::Serverbound::InteractEntity       then {"entity", packet.hand, 0}
+      when Rosegold::Serverbound::SwingArm             then {"swing", packet.hand, 0}
+      when Rosegold::Serverbound::PlayerAction         then {"action", Rosegold::Hand::MainHand, packet.sequence}
+      else                                                  {packet.class.to_s, Rosegold::Hand::MainHand, 0}
+      end
+    end
+  end
+
+  let(main) { Rosegold::Hand::MainHand }
+  let(off) { Rosegold::Hand::OffHand }
 
   def spawn_target(name : String)
     type = Rosegold::Entity.metadata_for_protocol.find! { |entry| entry.name == name }.id.to_u32
@@ -162,29 +178,180 @@ Spectator.describe "Interaction use routing" do
     end
   end
 
+  sample Rosegold::Client::SUPPORTED_PROTOCOLS do |protocol|
+    it "automatically uses the block with both hands, then the offhand item, after an empty main hand passes" do
+      Rosegold::Client.protocol_version = protocol
+      dimension.set_block_state(target, state("stone"))
+      hold("apple", off)
+
+      tap(nil)
+
+      expect(wire).to eq([{"on", main, 1}, {"on", off, 2}, {"use", off, 3}])
+      expect(input.last_hand_tap_sequence).to eq(3)
+      expect(bot_client.pending_block_operations.values.map(&.operation_type)).to eq([:place, :place, :use])
+      expect(swings).to be_empty
+
+      input.tick
+      expect(wire.last).to eq({"action", main, 0})
+      expect(input.last_hand_tap_sequence).to eq(3)
+    end
+
+    it "automatically stops after a main-hand block success or an unproven entity result" do
+      Rosegold::Client.protocol_version = protocol
+      dimension.set_block_state(target, state("stone_button", "face=wall", "facing=north", "powered=false"))
+      hold("apple", off)
+
+      tap(nil)
+
+      swing = protocol < 777 ? [{"swing", main, 0}] : [] of {String, Rosegold::Hand, Int32}
+      expect(wire).to eq([{"on", main, 1}] + swing)
+
+      4.times { input.tick }
+      packets.clear
+      spawn_target("cow")
+      tap(nil)
+
+      entity = Array.new(protocol < 775 ? 2 : 1, {"entity", main, 0})
+      expect(wire).to eq(entity + swing)
+    end
+
+    it "automatically interacts with the same entity using the offhand after an empty main hand passes" do
+      Rosegold::Client.protocol_version = protocol
+      spawn_target("player")
+      hold("apple", off)
+
+      tap(nil)
+
+      interactions = protocol < 775 ? 2 : 1
+      main_entity = Array.new(interactions, {"entity", main, 0})
+      off_entity = Array.new(interactions, {"entity", off, 0})
+      expect(wire).to eq(main_entity + off_entity + [{"use", off, 1}])
+      expect(packets.select(Rosegold::Serverbound::InteractEntity).map(&.entity_id).uniq!).to eq([81_u64])
+      expect(input.last_hand_tap_sequence).to eq(1)
+      expect(swings).to be_empty
+    end
+
+    it "interacts with an entity in both hands for a spectator without item use or swing" do
+      Rosegold::Client.protocol_version = protocol
+      spawn_target("villager")
+      player.gamemode = 3_i8
+      hold("apple")
+      hold("apple", off)
+
+      tap(nil)
+
+      interactions = protocol < 775 ? 2 : 1
+      off_entity = Array.new(interactions, {"entity", off, 0})
+      expect(wire).to eq(Array.new(interactions, {"entity", main, 0}) + off_entity)
+      expect(swings).to be_empty
+      expect(bot_client.pending_block_operations).to be_empty
+    end
+  end
+
+  it "advances an automatic miss past an empty main hand without sending it" do
+    hold("apple", off)
+
+    tap(nil)
+
+    expect(wire).to eq([{"use", off, 1}])
+    expect(input.last_hand_tap_sequence).to eq(1)
+  end
+
+  it "advances an automatic miss after a passing main item and stops after the offhand consumes" do
+    hold("stone")
+    hold("apple", off)
+
+    tap(nil)
+    expect(wire).to eq([{"use", main, 1}, {"use", off, 2}])
+    expect(input.last_hand_tap_sequence).to eq(2)
+
+    input.tick
+    expect(wire.last).to eq({"action", main, 0})
+    packets.clear
+    hold("apple")
+    hold("stone", off)
+    tap(nil)
+    expect(wire).to eq([{"use", main, 3}])
+  end
+
+  it "advances after a known generic failure that follows a block pass" do
+    dimension.set_block_state(target, state("stone"))
+    player.food = 20
+    hold("apple")
+    hold("apple", off)
+
+    tap(nil)
+
+    expect(wire).to eq([{"on", main, 1}, {"use", main, 2}, {"on", off, 3}, {"use", off, 4}])
+    expect(input.last_hand_tap_sequence).to eq(4)
+  end
+
+  it "does not try the offhand after a known block fail, a consume, or an unknown block result" do
+    hold("apple", off)
+    cases = {
+      {"cobblestone", state("stone"), 0.875, ["on"], 0},
+      {"apple", state("stone_button", "face=wall", "facing=north", "powered=true"), 0.5, ["on"], 0},
+      {"flint_and_steel", state("stone"), 0.5, ["on", "use"], 1},
+      {"flint_and_steel", state("note_block"), 0.5, ["on"], 1},
+    }
+    cases.each do |item, block, eye_z, expected, swing_count|
+      dimension.set_block_state(target, block)
+      aim(z: eye_z)
+      hold(item)
+      4.times { input.tick }
+      packets.clear
+      swings.clear
+
+      tap(nil)
+
+      expect(wire.map { |kind, hand, _| {kind, hand} }).to eq(expected.map { |kind| {kind, main} })
+      expect(swings.map(&.hand)).to eq(Array.new(swing_count, main))
+    end
+  end
+
+  it "falls through an unregistered offhand item on a cauldron after an empty main hand passes" do
+    dimension.set_block_state(target, state("cauldron"))
+    bot_client.inventory_menu[45] = Rosegold::Slot.new(1_u32, 999_999_u32)
+
+    tap(nil)
+
+    expect(wire).to eq([{"on", main, 1}, {"on", off, 2}, {"use", off, 3}])
+    expect(swings.map(&.hand)).to eq([off])
+  end
+
+  it "keeps explicit hands single for a pass" do
+    dimension.set_block_state(target, state("stone"))
+    hold("apple", off)
+
+    tap(main)
+    expect(wire).to eq([{"on", main, 1}])
+  end
+
   sample Rosegold::Client::SUPPORTED_PROTOCOLS.select { |protocol| protocol < 775_u32 } do |protocol|
     it "sends legacy Interact for armor stands only when InteractAt passes" do
       Rosegold::Client.protocol_version = protocol
-      spawn_target("armor_stand")
       interact_at = Rosegold::Serverbound::InteractEntity::Action::InteractAt
       interact = Rosegold::Serverbound::InteractEntity::Action::Interact
+
+      spawn_target("armor_stand")
 
       tap
 
       actions = packets.select(Rosegold::Serverbound::InteractEntity).map(&.action)
       expect(actions).to eq([interact_at])
-      expect(packets.last).to be_a(Rosegold::Serverbound::SwingArm)
-      expect(swings.size).to eq(1)
+      expect(wire).to eq([{"entity", main, 0}])
+      expect(swings).to be_empty
 
       4.times { input.tick }
       packets.clear
+      swings.clear
       hold("name_tag")
       tap
 
       actions = packets.select(Rosegold::Serverbound::InteractEntity).map(&.action)
       expect(actions).to eq([interact_at, interact])
-      expect(packets.last).to be_a(Rosegold::Serverbound::SwingArm)
-      expect(swings.size).to eq(2)
+      expect(wire).to eq([{"entity", main, 0}, {"entity", main, 0}, {"use", main, 1}])
+      expect(swings).to be_empty
     end
   end
 
@@ -234,7 +401,7 @@ Spectator.describe "Interaction use routing" do
   it "keeps the fallback to generic item use for a permissive unknown block result" do
     stone = state("stone")
     dimension.set_block_state(target, stone)
-    hold("stick")
+    hold("flint_and_steel")
 
     tap
 
@@ -243,6 +410,24 @@ Spectator.describe "Interaction use routing" do
     expect(input.last_hand_tap_sequence).to eq(placement.sequence + 1)
     expect(bot_client.placement_states).to eq([stone])
     expect(swings.map(&.hand)).to eq([Rosegold::Hand::MainHand])
+  end
+
+  it "starts sustained use after a permissive unknown block result" do
+    dimension.set_block_state(target, state("stone"))
+    hold("stick")
+    custom = bot_client.inventory_menu[36]
+    custom.components_to_add["food"] = Rosegold::DataComponents::Food.new
+    custom.components_to_add["consumable"] = Rosegold::DataComponents::Consumable.new
+    bot_client.inventory_menu[36] = custom
+    hold("shield", off)
+
+    tap(nil)
+
+    expect(wire).to eq([{"on", main, 1}, {"use", main, 2}])
+    expect(swings.map(&.hand)).to eq([main])
+    input.tick
+    expect(wire).to eq([{"on", main, 1}, {"use", main, 2}, {"action", main, 0}])
+    expect(packets.last.as(Rosegold::Serverbound::PlayerAction).status).to eq(Rosegold::Serverbound::PlayerAction::Status::FinishUsingHand)
   end
 
   it "keeps an unknown block's old suppression and its legacy swing" do
@@ -301,7 +486,7 @@ Spectator.describe "Interaction use routing" do
 
   it "keeps sneak bypass for a normally consuming unknown block" do
     dimension.set_block_state(target, state("note_block"))
-    hold("stick")
+    hold("flint_and_steel")
     player.sneaking = true
     aim
 

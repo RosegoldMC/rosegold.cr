@@ -52,7 +52,8 @@ class EnchantingOpeningRaceBot < Rosegold::Bot
     super(@race_client)
   end
 
-  def use_hand(target : Rosegold::Vec3d? | Rosegold::Look? = nil, hand : Rosegold::Hand = :main_hand)
+  def use_hand(target : Rosegold::Vec3d? | Rosegold::Look? = nil, hand : Rosegold::Hand? = nil)
+    raise "enchanting must pin the main hand" unless hand == Rosegold::Hand::MainHand
     @race_client.container_menu = @opening_menu
     @race_client.emit_event Rosegold::Event::ContainerOpened.new(13_u32, "Enchant", @opening_menu)
     packet = Rosegold::Clientbound::SetContainerContent.new(

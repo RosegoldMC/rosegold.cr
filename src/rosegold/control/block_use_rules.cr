@@ -10,9 +10,19 @@ module Rosegold::BlockUseRules
   alias Write = Tuple(Vec3i, UInt16)
   record Decision, result : Result, writes : Array(Write) = [] of Write
 
-  private PLAIN_CUBES = {"stone", "cobblestone", "obsidian", "oak_planks", "spruce_planks", "birch_planks"}
-  private WOODS       = %w(oak spruce birch jungle acacia cherry dark_oak pale_oak mangrove bamboo crimson warped poplar)
-  private TRAPDOORS   = WOODS.map { |name| "#{name}_trapdoor" } + %w(
+  # Plain Block registrations (no block class, one state, full-cube collision) whose
+  # BlockItem is the default one; their use methods are the inherited PASS.
+  private PLAIN_CUBES = Set(String).new(%w(
+    stone granite diorite andesite cobblestone mossy_cobblestone dirt coarse_dirt sandstone clay
+    obsidian smooth_stone stone_bricks bricks end_stone blackstone terracotta iron_block
+    gold_block diamond_block oak_planks spruce_planks birch_planks jungle_planks acacia_planks
+    dark_oak_planks cherry_planks mangrove_planks bamboo_planks crimson_planks warped_planks
+    pale_oak_planks
+  ))
+  # Block classes in these chains never override useItemOn or useWithoutItem.
+  private INERT_BLOCKS = Set(String).new(%w(grass_block podzol mycelium sand red_sand gravel netherrack))
+  private WOODS        = %w(oak spruce birch jungle acacia cherry dark_oak pale_oak mangrove bamboo crimson warped poplar)
+  private TRAPDOORS    = WOODS.map { |name| "#{name}_trapdoor" } + %w(
     copper_trapdoor exposed_copper_trapdoor weathered_copper_trapdoor oxidized_copper_trapdoor
     waxed_copper_trapdoor waxed_exposed_copper_trapdoor waxed_weathered_copper_trapdoor waxed_oxidized_copper_trapdoor
   )
@@ -23,9 +33,7 @@ module Rosegold::BlockUseRules
     crafter loom stonecutter grindstone smithing_table cartography_table shulker_box
   ) + %w(white orange magenta light_blue yellow lime pink gray light_gray cyan purple blue brown green red black).map { |color| "#{color}_shulker_box" }
   private CAULDRONS = {"cauldron", "water_cauldron", "lava_cauldron", "powder_snow_cauldron"}
-  # Registered as plain Items, so Item#useOn returns its default PASS.
-  private DEFAULT_USE_ON_ITEMS = {"apple", "bread"}
-  private FULL_CUBE            = AABBd.new(0, 0, 0, 1, 1, 1)
+  private FULL_CUBE = AABBd.new(0, 0, 0, 1, 1, 1)
 
   def self.evaluate(dimension : Dimension, player : Player, clicked : Vec3i, face : BlockFace, hand : Hand, main_hand : Slot, off_hand : Slot) : Decision
     unknown = Decision.new(Result::Unknown)
@@ -65,8 +73,9 @@ module Rosegold::BlockUseRules
       return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
     end
 
-    return unknown unless plain_cube?(mc, block) || mc.air_states.includes?(state)
+    return unknown unless INERT_BLOCKS.includes?(name) || plain_cube?(mc, block) || mc.air_states.includes?(state)
     return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
+    return unknown unless plain_cube?(mc, block) || mc.air_states.includes?(state)
     return unknown unless item && PLAIN_CUBES.includes?(item.name)
     return unknown if patched?(held)
 
@@ -114,7 +123,7 @@ module Rosegold::BlockUseRules
 
   private def self.item_use_on_passes?(item, held : Slot) : Bool
     return true if held.empty?
-    !!item && DEFAULT_USE_ON_ITEMS.includes?(item.name) && !patched?(held)
+    !!item && ItemUseRules.default_use_on_passes?(item.name, held)
   end
 
   private def self.patched?(held : Slot) : Bool

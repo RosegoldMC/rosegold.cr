@@ -185,7 +185,48 @@ Spectator.describe Rosegold::BlockUseRules do
     put "stone_button[face=wall, facing=south, powered=false]"
     player.sneaking = true
     expect(evaluate(item("bread")).result).to eq(Rosegold::BlockUseRules::Result::Pass)
-    expect(evaluate(item("stick")).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+    expect(evaluate(item("stick")).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+    expect(evaluate(item("carrot")).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+  end
+
+  it "passes only proven inert items (plain items, hunger foods, shield) to item use, never block items" do
+    {"stone", "dirt", "grass_block[snowy=false]"}.each do |name|
+      put name
+      {"stick", "shield", "apple", "bread", "iron_sword", "coal", "cooked_beef"}.each do |held|
+        decision = evaluate(item(held))
+        expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Pass)
+        expect(decision.writes).to be_empty
+      end
+    end
+    put "stone_button[face=wall, facing=south, powered=false]"
+    expect(evaluate(empty_hand, item("shield"), Rosegold::Hand::OffHand).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+    put "stone"
+    expect(evaluate(item("carrot")).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+    expect(evaluate(item("bucket")).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+    patched = item("stick")
+    patched.components_to_remove << "lore"
+    expect(evaluate(patched).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+  end
+
+  it "passes an empty main hand through block use on inert blocks and leaves unmodeled blocks unknown" do
+    {"stone", "dirt", "grass_block[snowy=false]", "sand", "netherrack", "air"}.each do |name|
+      put name
+      expect(evaluate.result).to eq(Rosegold::BlockUseRules::Result::Pass)
+      expect(evaluate(empty_hand, empty_hand, Rosegold::Hand::OffHand).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+    end
+    put "note_block[instrument=harp, note=0, powered=false]"
+    expect(evaluate.result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+  end
+
+  it "places the widened plain cubes but treats grass-like clicked blocks as pass-only" do
+    put "dirt"
+    {"granite", "dirt", "coarse_dirt", "sandstone", "bricks", "jungle_planks", "pale_oak_planks"}.each do |name|
+      next unless mc.items.any? { |entry| entry.name == name }
+      expect(evaluate(item(name)).writes).to eq([{above, state(name)}])
+    end
+    put "grass_block[snowy=false]"
+    expect(evaluate(item("dirt")).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+    expect(evaluate(item("stick")).result).to eq(Rosegold::BlockUseRules::Result::Pass)
   end
 
   it "presses a button once and consumes an already powered hit without a swing or a write" do

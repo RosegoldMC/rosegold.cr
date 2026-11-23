@@ -2,6 +2,7 @@ require "../spec_helper"
 
 class HandUseSpecClient < Rosegold::Client
   property sent_packets = [] of Rosegold::Serverbound::Packet
+  property on_send : Proc(Rosegold::Serverbound::Packet, Nil)? = nil
 
   def connected?
     true
@@ -9,6 +10,7 @@ class HandUseSpecClient < Rosegold::Client
 
   def send_packet!(packet : Rosegold::Serverbound::Packet)
     sent_packets << packet
+    on_send.try &.call(packet)
   end
 
   def interactions_for_test
@@ -334,6 +336,213 @@ Spectator.describe Rosegold::Interactions do
     inactive.callback(client)
     inputs.tick
     expect(use_packets(client).map(&.hand)).to eq([Hand::OffHand, Hand::OffHand])
+  end
+
+  it "keeps the lower-level default on the main hand and treats an explicit nil as automatic" do
+    client = interactions
+    inputs = client.interactions_for_test
+
+    inputs.tap_using_hand
+    inputs.tick
+    inputs.tap_using_hand nil
+    inputs.tick
+
+    expect(use_packets(client).map { |use| {use.hand, use.sequence} }).to eq([{Hand::MainHand, 1}, {Hand::MainHand, 2}, {Hand::OffHand, 3}])
+    expect(inputs.last_hand_tap_sequence).to eq(3)
+  end
+
+  it "keeps an automatic hold on an active offhand use and releases it once with sequence zero" do
+    client = interactions
+    inputs = client.interactions_for_test
+    client.player.entity_id = 42_u64
+    client.inventory_menu[45] = slot("shield")
+
+    inputs.start_using_hand nil
+    inputs.tick
+    report_use(client, 3_u8)
+    10.times { inputs.tick }
+
+    expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand, Hand::OffHand])
+    expect(release_packets(client)).to be_empty
+    expect(inputs.last_hand_tap_sequence).to eq(0)
+
+    inputs.stop_using_hand
+    inputs.tick
+    report_use(client, 0_u8)
+    5.times { inputs.tick }
+    expect(release_packets(client).map(&.sequence)).to eq([0])
+    expect(use_packets(client).size).to eq(2)
+  end
+
+  it "releases an offhand use that an explicit main-hand hold does not own" do
+    client = interactions
+    inputs = client.interactions_for_test
+    client.player.entity_id = 42_u64
+
+    inputs.start_using_hand
+    inputs.tick
+    report_use(client, 3_u8)
+    inputs.tick
+
+    expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand])
+    expect(release_packets(client).size).to eq(1)
+  end
+
+  it "restarts an automatic hold from the main hand on each repeat" do
+    client = interactions
+    inputs = client.interactions_for_test
+
+    inputs.start_using_hand nil
+    5.times { inputs.tick }
+
+    expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand, Hand::OffHand, Hand::MainHand, Hand::OffHand])
+  end
+
+  it "does not advance when the main-hand use becomes active during its send" do
+    client = interactions
+    inputs = client.interactions_for_test
+    client.on_send = ->(packet : Rosegold::Serverbound::Packet) do
+      client.sync_using_item(Hand::MainHand) if packet.is_a?(Rosegold::Serverbound::UseItem)
+      nil
+    end
+
+    inputs.tap_using_hand nil
+    inputs.tick
+
+    expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand])
+  end
+
+  it "drops the rest of a press that a send callback stops, resets, or replaces" do
+    {:stop, :reset, :replace}.each do |action|
+      client = interactions
+      inputs = client.interactions_for_test
+      client.on_send = ->(packet : Rosegold::Serverbound::Packet) do
+        if packet.is_a?(Rosegold::Serverbound::UseItem) && packet.hand.main_hand?
+          case action
+          when :stop  then inputs.stop_using_hand
+          when :reset then inputs.reset_use
+          else             inputs.tap_using_hand :off_hand
+          end
+        end
+        nil
+      end
+
+      inputs.tap_using_hand nil
+      inputs.tick
+      expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand])
+      expect(client.next_sequence).to eq(2)
+      expect(inputs.last_hand_tap_sequence).to eq(action == :reset ? 0 : 1)
+
+      inputs.tick
+      expected = action == :replace ? [Hand::MainHand, Hand::OffHand] : [Hand::MainHand]
+      expect(use_packets(client).map(&.hand)).to eq(expected)
+    end
+  end
+
+  it "drops a drained press and the held repeat when an attack swing handler stops or replaces use" do
+    {:stop, :replace}.each do |action|
+      client = interactions
+      inputs = client.interactions_for_test
+      client.on(Rosegold::Event::ArmSwing) do
+        action == :stop ? inputs.stop_using_hand : inputs.start_using_hand(:off_hand)
+      end
+
+      inputs.start_using_hand nil
+      inputs.start_digging
+      inputs.tick
+
+      expect(attack_swings(client)).to eq(1)
+      expect(use_packets(client)).to be_empty
+      expect(client.next_sequence).to eq(1)
+
+      inputs.stop_digging
+      inputs.tick
+      expect(use_packets(client).map(&.hand)).to eq(action == :stop ? [] of Hand : [Hand::OffHand])
+    end
+  end
+
+  it "drops a drained use press when an attack swing activates the offhand" do
+    {false, true}.each do |held|
+      client = interactions
+      client.inventory_menu[36] = slot("shield")
+      client.inventory_menu[45] = slot("shield")
+      inputs = client.interactions_for_test
+      client.on(Rosegold::Event::ArmSwing) { client.sync_using_item(Hand::OffHand) }
+
+      held ? inputs.start_using_hand(nil) : inputs.tap_using_hand(nil)
+      inputs.start_digging
+      inputs.tick
+      expect(attack_swings(client)).to eq(1)
+      expect(use_packets(client)).to be_empty
+      expect(client.next_sequence).to eq(1)
+
+      if held
+        5.times { inputs.tick }
+        expect(use_packets(client)).to be_empty
+        expect(release_packets(client)).to be_empty
+        inputs.stop_using_hand
+      end
+      inputs.tick
+      expect(release_packets(client).map(&.sequence)).to eq([0])
+      expect(use_packets(client)).to be_empty
+    end
+  end
+
+  it "starts sustained use for a patched stick on a tap or hold" do
+    {false, true}.each do |held|
+      client = interactions
+      client.player.food = 10_u32
+      custom = slot("stick")
+      custom.components_to_add["food"] = Rosegold::DataComponents::Food.new
+      custom.components_to_add["consumable"] = Rosegold::DataComponents::Consumable.new(0.05_f32)
+      client.inventory_menu[36] = custom
+      client.inventory_menu[45] = slot("shield")
+      inputs = client.interactions_for_test
+
+      held ? inputs.start_using_hand(nil) : inputs.tap_using_hand(nil)
+      inputs.tick
+      expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand])
+      expect(release_packets(client)).to be_empty
+
+      if held
+        5.times { inputs.tick }
+        expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand])
+        expect(release_packets(client)).to be_empty
+        inputs.stop_using_hand
+      end
+      inputs.tick
+      expect(release_packets(client).map(&.sequence)).to eq([0])
+      expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand])
+    end
+  end
+
+  it "consumes instantly without starting shield use when the duration rounds down to zero ticks" do
+    {0_f32, 0.049_f32}.each do |seconds|
+      client = interactions
+      custom = slot("shield")
+      custom.components_to_add["consumable"] = Rosegold::DataComponents::Consumable.new(seconds)
+      client.inventory_menu[36] = custom
+      inputs = client.interactions_for_test
+
+      inputs.tap_using_hand nil
+      2.times { inputs.tick }
+
+      expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand])
+      expect(release_packets(client)).to be_empty
+    end
+  end
+
+  it "releases legacy food outside the recognized item rules" do
+    client = interactions
+    client.player.food = 20_u32
+    client.inventory_menu[36] = slot("golden_apple")
+    inputs = client.interactions_for_test
+
+    inputs.tap_using_hand nil
+    2.times { inputs.tick }
+
+    expect(use_packets(client).map(&.hand)).to eq([Hand::MainHand])
+    expect(release_packets(client).map(&.sequence)).to eq([0])
   end
 
   it "stops predicting active use when the used item changes" do
