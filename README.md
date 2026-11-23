@@ -1,33 +1,38 @@
 # Rosegold
 
-Rosegold is a Crystal client library for Minecraft bots. It handles the wire protocol, local physics, inventory windows, recipes, and a live spectator bridge. You write the bot's behaviour.
-
-Rosegold exposes a server-independent API, including received block states and entities. For CivMC, use [rosegold-civmc](https://github.com/RosegoldMC/civmc.cr) and its [example template](https://github.com/RosegoldMC/example-civmc). That library provides a restricted scripting API based on CivMC’s rules. Bot authors still need to follow their server’s current rules.
-
-See [universal API and server libraries](guide/universal-api.md) for the boundary and remaining feature gaps.
-
-```crystal
-bot.move_to(100, 200)
-bot.inventory.pick!("diamond_pickaxe")
-bot.dig(20)
-bot.eat
-```
+Write Minecraft bots in Crystal. Rosegold handles the connection, movement,
+and inventory so your script can focus on what the bot should do.
 
 ## Start here
 
-**Writing a bot? Start with the [Bot API](https://rosegoldmc.github.io/rosegold.cr/Rosegold/Bot.html).**
-It brings together connection, movement, world queries, interactions, inventory,
-crafting, and events, with task links and examples. Use it as your main scripting reference.
+1. Install [Crystal](https://crystal-lang.org/install/) and create a project from
+   the [example template](https://github.com/RosegoldMC/example).
+2. Clone your copy, then run `shards install` and `shards build` in it.
+3. Start a supported Minecraft test server on `localhost:25565`. From your
+   template checkout, run:
 
-Install [Crystal](https://crystal-lang.org/install/), then create a bot from the [example template](https://github.com/RosegoldMC/example). The template includes a dependency declaration and release builds for Linux and Windows.
+   ```sh
+   SERVER_HOST=localhost SPECTATE_HOST=127.0.0.1 ./bin/afk
+   ```
 
-```sh
-git clone https://github.com/YOUR_USERNAME/my-bot.git
-cd my-bot
-```
+   Keep the spectator on loopback because it does not authenticate viewers.
+   On the first connection, follow the Microsoft sign-in prompt if asked.
+   Keep the login cache out of version control.
 
-These docs describe the development API on `main`. Select that branch in your
-bot's `shard.yml` to use the APIs shown here:
+The [Bot API](https://rosegoldmc.github.io/rosegold.cr/Rosegold/Bot.html) is the
+main reference once you're writing your own script.
+
+For CivMC, start with the [CivMC template](https://github.com/RosegoldMC/example-civmc)
+and [its library](https://github.com/RosegoldMC/civmc.cr). Check your server's
+current rules before running a bot.
+
+Using a coding agent? Point it at [Rosegold for coding agents](guide/agents.md).
+
+<details>
+<summary>Adding Rosegold to an existing Crystal project</summary>
+
+These docs describe the development API on `main`. To use it, add Rosegold to
+`shard.yml`, then run `shards install`:
 
 ```yaml
 dependencies:
@@ -37,58 +42,61 @@ dependencies:
 ```
 
 For a tagged release, use a `version` constraint and read the README and source
-for that tag. Install dependencies and build your bot after choosing the revision:
+for that tag. See [server libraries](guide/universal-api.md) for how they differ
+from the core API.
+
+</details>
+
+## Try an example
+
+From a checkout of this repository, with a local Minecraft test server running:
 
 ```sh
 shards install
-shards build
-./bin/attack
+crystal run examples/patrol.cr
 ```
 
-The first connection asks you to sign in through Microsoft's device-login page. The token is cached after that; keep the authentication cache private and out of version control.
+Patrol walks a short route from where the bot spawns. The examples default to
+`localhost:25565`; set `ROSEGOLD_SERVER` to a different `host:port` if needed.
 
-Rosegold also reuses unexpired Minecraft authentication in memory across connections.
-It checks TCP reachability before authenticating, so an unreachable server does
-not generate Microsoft or Xbox requests. A temporary refresh failure preserves
-the saved login instead of prompting for a new one.
+| Try this | Example |
+| --- | --- |
+| Walk a short route | [Patrol](examples/patrol.cr) |
+| Print chat and react to low hunger | [Events](examples/events.cr) |
+| Watch the bot from a normal Minecraft client | [Spectate](examples/spectate.cr) |
+| Keep a script running across reconnects | [Reconnect](examples/reconnect.cr) |
+| Count items in a reachable container | [Container](examples/container.cr), pass `-- X Y Z` |
+| Enchant a pickaxe at a reachable table | [Enchanting](examples/enchanting.cr), pass `-- YAW PITCH` to aim at it |
 
-For this checkout, patrol and events default to `localhost:25565`. Set `ROSEGOLD_SERVER` to a `host:port` pair for another server:
-
-```sh
-ROSEGOLD_SERVER=localhost:25565 crystal run examples/patrol.cr
-```
-
-`examples/patrol.cr` walks a small square from the bot's current position. `examples/events.cr` prints chat for one minute and starts guarded eating work after low-food events. `examples/spectate.cr` opens the spectator bridge and walks the same kind of short route.
-
-`examples/container.cr` opens a configured, reachable container and counts its inventory without transferring items. Pass its known coordinates as `-- X Y Z`; it does not discover containers. `examples/enchanting.cr` enchants a diamond pickaxe with a selected offer. Pass the yaw and pitch that already put a reachable enchanting table under the bot's crosshair; it does not find or route to a table:
-
-```sh
-crystal run examples/enchanting.cr -- 180 20
-```
-
-The examples use `require "../src/rosegold"` so they run in this repository. In your own shard, replace it with `require "rosegold"`.
+If you copy an example into your own project, replace `require "../src/rosegold"`
+with `require "rosegold"`.
 
 ## A small bot, with a clean lifecycle
 
-`Bot.new` builds the high-level API without connecting. `join_game` connects and waits until the player is spawned. Disconnect in `ensure`, so an exception does not leave the bot connected.
+This script joins a local server, prints where the bot spawned, and disconnects.
+It needs no tools in the bot's inventory.
 
 ```crystal
 require "rosegold"
 
-bot = Rosegold::Bot.new("play.example.net")
+bot = Rosegold::Bot.new("localhost:25565")
 
 begin
   bot.join_game
-  bot.chat "Online."
-  bot.move_to(100, 200) # integer x/z targets the centre of that block column
-  bot.inventory.pick!("diamond_pickaxe")
-  bot.dig(20)
+  puts "Spawned at #{bot.location}"
 ensure
   bot.disconnect("Script finished") if bot.connected?
 end
 ```
 
-That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. `use_hand` and `start_using_hand` choose the hand automatically when `hand:` is omitted (main first, then off hand only when the previous local result permits); pass `:main_hand` or `:off_hand` to use exactly one. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result. A `use_hand` tap is dropped during an active use or a block break that takes multiple ticks, while a held `start_using_hand` keeps retrying (every four ticks when idle). `stop_digging` and `stop_using_hand` are processed on the next tick, so wait one tick after `stop_digging` before a tap. Attack, dig, and use share a short-lived local prediction that never changes what the world, physics, or queries report; those stay server-confirmed.
+Save it as `bot.cr` in your project and run `crystal run bot.cr` with your local
+server running. `join_game` waits for spawn. Keep the disconnect in `ensure` so
+it runs even if your script raises. The block form of `join_game` only
+disconnects on normal return.
+
+Once that works, try [movement](#movement-and-looking) or [inventory](#inventory-containers-and-crafting).
+For mining or using items, see [held input and confirmation](guide/idioms.md#use-mine-and-place).
+A tap queues an action. A timed mining hold does not tell you whether the block broke.
 
 For automatic reconnects, use `Bot.run`. It waits for spawn and gives the block a
 fresh bot for each session:
@@ -132,7 +140,7 @@ entity = bot.nearest_entity(max_distance: 12) { |candidate| candidate.type == "i
 Queries read loaded state without requesting chunks. An unloaded or unknown block
 returns `nil`; air has its own snapshot. Snapshots do not change with later world
 updates. `bot.world` and `bot.client` expose live state for advanced callers.
-These APIs are unavailable through the CivMC facade.
+A server library may expose fewer of these.
 
 ## Riding
 
@@ -173,7 +181,7 @@ Use a version-specific entrypoint only when the target server is known. Availabl
 | --- | --- |
 | Connect, inspect state, and chat | `Bot.new`, `join_game`, `location`, `health`, `food`, `chat` |
 | Walk, look, jump | `move_to`, `look_at`, `look`, `start_jump`, `sprint`, `sneak` |
-| Mine, use, place, eat | `dig`, `attack`, `place_block_against`, `use_hand`, `eat!` |
+| Mine, use, place, eat | `dig`, `attack`, `place_block_against`, `use_hand`, `eat!`; for held mining with confirmation see the [mining recipe](guide/idioms.md#confirm-a-mined-block) |
 | Manage the inventory | `inventory.pick!`, `inventory.count`, `inventory.throw_all_of`, `main_hand` |
 | Work with containers | `open_container_handle` |
 | Enchant a selected item | `enchant` |
@@ -185,8 +193,7 @@ Use a version-specific entrypoint only when the target server is known. Availabl
 
 The generated [API reference](https://rosegoldmc.github.io/rosegold.cr/) has every overload and type. The sections below cover the calls people usually need first.
 
-Coming from JsMacros? Read the [Rosegold idiom guide](https://github.com/RosegoldMC/rosegold.cr/blob/main/guide/idioms.md) for the
-public API equivalents, their semantic differences, and the server-rule boundary.
+Coming from JsMacros? See the [porting guide](guide/idioms.md).
 
 ## Movement and looking
 
@@ -279,7 +286,7 @@ bot.craft("diamond_pickaxe", table: table)
 
 ## Events and timing
 
-`Bot` forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Use these high-level events for common workflows; advanced core scripts can subscribe through `bot.client`. Event handlers run on Rosegold's packet-processing path, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.
+`Bot` forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Use these high-level events for common workflows; advanced core scripts can subscribe through `bot.client`. Event handlers run synchronously in the emitting fiber, including for ticks, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.
 
 ```crystal
 eating = false
@@ -314,7 +321,7 @@ end
 bot.wait_ticks 20
 ```
 
-`wait_for` registers before running its block, so it cannot miss a quick response. It accepts the next event of that type, including unrelated chat; use a content predicate when a specific confirmation matters (see the idiom guide). `auto_respawn?` is enabled by default; set `bot.auto_respawn = false` if your own death handler should decide what happens next.
+`wait_for` registers before running its block, so it cannot miss a quick response. Its block is only the trigger. It accepts the next event of that type, including unrelated chat, and a timeout raises without replaying anything; use a content predicate when a specific confirmation matters (see the idiom guide). `auto_respawn?` is enabled by default; set `bot.auto_respawn = false` if your own death handler should decide what happens next.
 
 ## Spectate from a normal Minecraft client
 
