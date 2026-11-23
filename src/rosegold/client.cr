@@ -89,6 +89,7 @@ class Rosegold::Client < Rosegold::EventEmitter
   # deliberately opts into the compatibility-only :loaded acknowledgement.
   property resource_pack_response : Symbol = :decline
 
+  @item_cooldowns = ItemCooldowns.new
   @boss_bars = Hash(UUID, BossBarState).new
   @boss_bars_mutex = Mutex.new
 
@@ -117,6 +118,15 @@ class Rosegold::Client < Rosegold::EventEmitter
     pending_block_operations.clear
     interactions.reset_mining
     interactions.reset_use
+    @item_cooldowns = ItemCooldowns.new
+  end
+
+  def record_item_cooldown(group : String, duration : Int32) : Nil
+    @item_cooldowns.record(group, duration)
+  end
+
+  protected def item_on_cooldown?(slot : Slot) : Bool
+    @item_cooldowns.active?(slot)
   end
 
   def sync_using_item(hand : Hand?) : Nil
@@ -349,30 +359,12 @@ class Rosegold::Client < Rosegold::EventEmitter
           end
         end
 
-        should_tick = if @ticking_frozen
-                        if @pending_tick_steps > 0
-                          @pending_tick_steps -= 1
-                          true
-                        else
-                          false
-                        end
-                      else
-                        true
-                      end
+        break unless session.open? && @connection == session
 
-        # The game tick only runs in PLAY. During a server switch the proxy
-        # puts us through PLAY→CONFIGURATION→PLAY; vanilla stops ticking while
-        # configuring, and any PLAY packet sent in CONFIGURATION (e.g.
-        # ClientTickEnd) makes Velocity drop the connection.
-        if should_tick && current_protocol_state == ProtocolState::PLAY
-          begin
-            interactions.tick
-            physics.tick
-            emit_event Event::Tick.new
-            send_packet! Serverbound::ClientTickEnd.new
-          rescue NotConnected
-            break
-          end
+        begin
+          tick_frame
+        rescue NotConnected
+          break
         end
 
         drift_ms = (Time.instant - next_tick_time).total_nanoseconds / 1_000_000.0
@@ -381,6 +373,34 @@ class Rosegold::Client < Rosegold::EventEmitter
     ensure
       done.send nil
     end
+  end
+
+  private def tick_frame : Nil
+    should_tick = if @ticking_frozen
+                    if @pending_tick_steps > 0
+                      @pending_tick_steps -= 1
+                      true
+                    else
+                      false
+                    end
+                  else
+                    true
+                  end
+
+    # PLAY packets during CONFIGURATION can make proxies drop the connection.
+    return unless current_protocol_state == ProtocolState::PLAY
+
+    cooldowns = @item_cooldowns
+    cooldowns.begin_frame(physics.running?)
+    if should_tick
+      interactions.tick
+      physics.tick
+    end
+    cooldowns.advance
+    return unless should_tick
+
+    emit_event Event::Tick.new
+    send_packet! Serverbound::ClientTickEnd.new
   end
 
   def connect
@@ -574,10 +594,11 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   private def read_packet
-    raise NotConnected.new unless connected?
-    raw_packet = connection.read_raw_packet
+    session = connection
+    raw_packet = session.read_raw_packet
 
     emit_event Event::RawPacket.new raw_packet
+    raise NotConnected.new unless session.open? && @connection == session
 
     Log.trace { "[#{current_protocol_state.name}] RECV 0x#{raw_packet[0].to_s 16}" }
 
@@ -590,6 +611,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     Log.trace { "[#{current_protocol_state.name}] DCDE 0x#{raw_packet[0].to_s 16} #{packet}" }
 
+    raise NotConnected.new unless session.open? && @connection == session
     packet.callback(self)
 
     emit_event packet

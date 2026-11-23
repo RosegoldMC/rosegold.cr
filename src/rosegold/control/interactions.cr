@@ -311,7 +311,11 @@ class Rosegold::Interactions
   end
 
   private def send_use_item(hand : Hand, slot : Slot, hand_tap : Bool) : ItemUseRules::Result
-    decision = ItemUseRules.evaluate(client.player, slot)
+    decision = if client.item_on_cooldown?(slot)
+                 ItemUseRules::Decision.new(ItemUseRules::Result::Pass)
+               else
+                 ItemUseRules.evaluate(client.player, slot)
+               end
     sequence = allocate_use_sequence(Vec3i::ORIGIN, :use, hand_tap)
     starts_use = decision.result.unknown? ? starts_consuming?(slot) : decision.starts_sustained_use?
     if starts_use
