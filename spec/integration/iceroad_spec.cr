@@ -14,7 +14,8 @@ Spectator.describe "Rosegold::Bot ice road physics" do
     admin.fill 20, base_y + 2, 0, 20, base_y + 2, 40, "oak_trapdoor[half=top]"
     admin.fill 20, base_y + 3, 0, 20, base_y + 3, 40, "obsidian"
     admin.wait_tick
-    client.join_game do |client|
+    test_client = client
+    test_client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp start_pos.x, start_pos.y, start_pos.z
         admin.give "baked_potato", 64
@@ -27,15 +28,28 @@ Spectator.describe "Rosegold::Bot ice road physics" do
         measurement_start = 15.0
         measurement_end = 25.0
         start_time : Time? = nil
+        average_speed = nil
 
+        movement_deadline = Time.instant + 15.seconds
         move_done = false
+        move_error : Exception? = nil
         spawn do
           bot.move_to(end_pos.x, end_pos.z, stuck_timeout_ticks: 60)
+        rescue ex
+          move_error = ex
+        ensure
           move_done = true
         end
 
         until move_done
-          bot.wait_ticks 1
+          remaining = movement_deadline - Time.instant
+          tick = remaining.positive? && client.connected? && client.wait_tick(Math.min(remaining, 1.second))
+          break if move_done && move_error
+          raise "Ice road client disconnected during movement" unless client.connected?
+          raise "Ice road movement did not finish within 15 seconds" if !move_done && Time.instant >= movement_deadline
+          raise "Timed out waiting for an ice road movement tick" unless tick
+          next if average_speed
+
           current_z = bot.location.z
 
           if start_time.nil? && current_z >= measurement_start
@@ -48,7 +62,7 @@ Spectator.describe "Rosegold::Bot ice road physics" do
               distance = measurement_end - measurement_start
               average_speed = distance / elapsed.total_seconds
               Log.info { "Ice road speed: #{average_speed.round(1)} m/s over #{distance}m" }
-              break
+              next
             end
           end
 
@@ -56,14 +70,13 @@ Spectator.describe "Rosegold::Bot ice road physics" do
           if distance_remaining > 10.0
             bot.sprint
             bot.start_jump
-            bot.eat!
           else
             bot.sprint(false)
           end
         end
 
-        until move_done
-          bot.wait_ticks 1
+        if error = move_error
+          raise error
         end
 
         average_speed ||= 0.0
@@ -75,7 +88,15 @@ Spectator.describe "Rosegold::Bot ice road physics" do
         expect(average_speed).to be <= 27.0
 
         Log.info { "Ice road speed test: #{average_speed.round(2)} m/s over #{distance_traveled.round(1)}m" }
+      ensure
+        bot.stop_moving if move_done == false
       end
+    end
+  ensure
+    begin
+      test_client.try &.connection?.try &.disconnect("End of ice road spec")
+    rescue ex
+      Log.warn(exception: ex) { "Could not disconnect the ice road spec client" }
     end
   end
 end

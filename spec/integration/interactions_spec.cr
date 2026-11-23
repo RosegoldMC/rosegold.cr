@@ -11,6 +11,47 @@ Spectator.describe "Rosegold::Bot interactions" do
     client.dimension_for_test.block_state(pos).try { |state| Rosegold::Block.from_block_state_id(state).id_str }
   end
 
+  private def wait_for_fixture(bot, &) : Bool
+    40.times do
+      return true if yield
+      return false unless bot.connected? && bot.wait_tick
+    end
+    yield
+  end
+
+  private def move_admin(bot, position) : Bool
+    return false unless bot.connected? && bot.chat("/tp @s #{position.x} #{position.y} #{position.z}")
+    wait_for_fixture(bot) { bot.location.dist_sq(position) < 0.01 }
+  end
+
+  private def restore_admin(bot, position)
+    Log.warn { "Could not restore the interactions spec admin's position" } unless move_admin(bot, position)
+  rescue ex
+    Log.warn(exception: ex) { "Could not restore the interactions spec admin's position" }
+  end
+
+  private def join_with_cleanup(&)
+    test_client = client
+    test_client.join_game { |connected| yield connected }
+  ensure
+    begin
+      test_client.try &.connection?.try &.disconnect("End of interactions spec")
+    rescue ex
+      Log.warn(exception: ex) { "Could not disconnect the interactions spec client" }
+    end
+  end
+
+  private def join_with_admin_parked(&)
+    admin_bot = admin.bot
+    original_position = admin_bot.location
+    safe_position = Rosegold::Vec3d.new(12.5, -60, 12.5)
+    raise "Could not park the interactions spec admin" unless move_admin(admin_bot, safe_position)
+
+    join_with_cleanup { |test_client| yield test_client }
+  ensure
+    restore_admin(admin_bot, original_position) if admin_bot && original_position
+  end
+
   it "should be able to chat" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
@@ -301,13 +342,22 @@ Spectator.describe "Rosegold::Bot interactions" do
   it "should be able to place blocks" do
     admin.kill_entities
     admin.wait_tick
-    client.join_game do |client|
+    join_with_cleanup do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp 10, -60, 10
         bot.wait_ticks 10
+        raise "Could not clear the placement column" unless admin.fill(10, -60, 10, 10, -58, 10, "air")
+        unless wait_for_fixture(bot) { (-60..-58).all? { |y| client.dimension_for_test.block_state(10, y, 10) == 0_u16 } }
+          raise "Placement column did not clear"
+        end
         admin.clear
+        unless wait_for_fixture(bot) { bot.inventory.count("obsidian") == 0 }
+          raise "Placement obsidian did not clear"
+        end
         admin.give "obsidian", 64
-        bot.wait_ticks 3
+        unless wait_for_fixture(bot) { bot.inventory.count("obsidian") == 64 }
+          raise "Placement obsidian did not arrive"
+        end
 
         bot.inventory.pick! "obsidian"
         bot.wait_ticks 5
@@ -331,7 +381,7 @@ Spectator.describe "Rosegold::Bot interactions" do
   sample Indexable.cartesian_product({["floor", "wall", "ceiling"], ["north", "south", "east", "west"]}) do |mount|
     it "toggles the lever on and off" do
       face, facing = mount
-      client.join_game do |client|
+      join_with_admin_parked do |client|
         bot = Rosegold::Bot.new(client)
         admin.clear
         admin.fill -2, -60, -2, 2, -58, 2, "air"
@@ -374,10 +424,10 @@ Spectator.describe "Rosegold::Bot interactions" do
   end
 
   it "picks up water from a cauldron with one bucket" do
-    admin.setblock 0, -60, 0, "water_cauldron[level=3]"
-    admin.wait_ticks 3
+    join_with_admin_parked do |client|
+      admin.setblock 0, -60, 0, "water_cauldron[level=3]"
+      admin.wait_ticks 3
 
-    client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.clear
         admin.give "bucket"
@@ -407,7 +457,7 @@ Spectator.describe "Rosegold::Bot interactions" do
   end
 
   it "uses each filled bucket on an occupied cauldron" do
-    client.join_game do |client|
+    join_with_admin_parked do |client|
       Rosegold::Bot.new(client).try do |bot|
         admin.tp 0.5, -60, 2.5
         bot.wait_ticks 5
@@ -440,12 +490,15 @@ Spectator.describe "Rosegold::Bot interactions" do
   end
 
   it "should be able to harvest a hanging vine while walking east with pitch=40" do
-    client.join_game do |client|
+    join_with_cleanup do |client|
       Rosegold::Bot.new(client).try do |bot|
         # Mimic vine farm: stone above, vine hangs below with inherited face
         admin.setblock 5, -59, 6, "stone"
         admin.setblock 5, -60, 6, "vine[west=true]"
-        admin.wait_ticks 5
+        vine = Rosegold::Vec3i.new(5, -60, 6)
+        unless wait_for_fixture(bot) { block_name(client, vine.up) == "stone" && block_name(client, vine) == "vine" }
+          raise "Hanging vine fixture did not synchronize"
+        end
 
         vine_state = client.dimension_for_test.block_state(5, -60, 6)
         vine_name = Rosegold::MCData.default.block_state_names[vine_state.as(UInt16)]
