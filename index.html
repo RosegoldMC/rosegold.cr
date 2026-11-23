@@ -2568,66 +2568,92 @@
     <use href="#octicon-link"/>
   </svg>
 </a>Rosegold</h1>
-<p>Rosegold is a Crystal client library for Minecraft bots. It handles the wire protocol, local physics, inventory windows, recipes, and a live spectator bridge. You write the bot's behaviour.</p>
-<p>Rosegold exposes a server-independent API, including received block states and entities. For CivMC, use <a href="https://github.com/RosegoldMC/civmc.cr">rosegold-civmc</a> and its <a href="https://github.com/RosegoldMC/example-civmc">example template</a>. That library provides a restricted scripting API based on CivMC’s rules. Bot authors still need to follow their server’s current rules.</p>
-<p>See <a href="guide/universal-api.md">universal API and server libraries</a> for the boundary and remaining feature gaps.</p>
-<pre><code class="language-crystal">bot.move_to(<span class="n">100</span>, <span class="n">200</span>)
-bot.inventory.pick!(<span class="s">&quot;diamond_pickaxe&quot;</span>)
-bot.dig(<span class="n">20</span>)
-bot.eat</code></pre>
+<p>Write Minecraft bots in Crystal. Rosegold handles the connection, movement,
+and inventory so your script can focus on what the bot should do.</p>
 <h2><a id="start-here" class="anchor" href="#start-here">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Start here</h2>
-<p><strong>Writing a bot? Start with the <a href="https://rosegoldmc.github.io/rosegold.cr/Rosegold/Bot.html">Bot API</a>.</strong>
-It brings together connection, movement, world queries, interactions, inventory,
-crafting, and events, with task links and examples. Use it as your main scripting reference.</p>
-<p>Install <a href="https://crystal-lang.org/install/">Crystal</a>, then create a bot from the <a href="https://github.com/RosegoldMC/example">example template</a>. The template includes a dependency declaration and release builds for Linux and Windows.</p>
-<pre><code class="language-sh">git clone https://github.com/YOUR_USERNAME/my-bot.git
-cd my-bot</code></pre>
-<p>These docs describe the development API on <code>main</code>. Select that branch in your
-bot's <code>shard.yml</code> to use the APIs shown here:</p>
+<ol>
+<li>
+<p>Install <a href="https://crystal-lang.org/install/">Crystal</a> and create a project from
+the <a href="https://github.com/RosegoldMC/example">example template</a>.</p>
+</li>
+<li>
+<p>Clone your copy, then run <code>shards install</code> and <code>shards build</code> in it.</p>
+</li>
+<li>
+<p>Start a supported Minecraft test server on <code>localhost:25565</code>. From your
+template checkout, run:</p>
+<pre><code class="language-sh">SERVER_HOST=localhost SPECTATE_HOST=127.0.0.1 ./bin/afk</code></pre>
+<p>Keep the spectator on loopback because it does not authenticate viewers.
+On the first connection, follow the Microsoft sign-in prompt if asked.
+Keep the login cache out of version control.</p>
+</li>
+</ol>
+<p>The <a href="https://rosegoldmc.github.io/rosegold.cr/Rosegold/Bot.html">Bot API</a> is the
+main reference once you're writing your own script.</p>
+<p>For CivMC, start with the <a href="https://github.com/RosegoldMC/example-civmc">CivMC template</a>
+and <a href="https://github.com/RosegoldMC/civmc.cr">its library</a>. Check your server's
+current rules before running a bot.</p>
+<p>Using a coding agent? Point it at <a href="guide/agents.md">Rosegold for coding agents</a>.</p>
+<details>
+<summary>Adding Rosegold to an existing Crystal project</summary>
+<p>These docs describe the development API on <code>main</code>. To use it, add Rosegold to
+<code>shard.yml</code>, then run <code>shards install</code>:</p>
 <pre><code class="language-yaml">dependencies:
   rosegold:
     github: RosegoldMC/rosegold.cr
     branch: main</code></pre>
 <p>For a tagged release, use a <code>version</code> constraint and read the README and source
-for that tag. Install dependencies and build your bot after choosing the revision:</p>
+for that tag. See <a href="guide/universal-api.md">server libraries</a> for how they differ
+from the core API.</p>
+</details>
+<h2><a id="try-an-example" class="anchor" href="#try-an-example">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Try an example</h2>
+<p>From a checkout of this repository, with a local Minecraft test server running:</p>
 <pre><code class="language-sh">shards install
-shards build
-./bin/attack</code></pre>
-<p>The first connection asks you to sign in through Microsoft's device-login page. The token is cached after that; keep the authentication cache private and out of version control.</p>
-<p>Rosegold also reuses unexpired Minecraft authentication in memory across connections.
-It checks TCP reachability before authenticating, so an unreachable server does
-not generate Microsoft or Xbox requests. A temporary refresh failure preserves
-the saved login instead of prompting for a new one.</p>
-<p>For this checkout, patrol and events default to <code>localhost:25565</code>. Set <code>ROSEGOLD_SERVER</code> to a <code>host:port</code> pair for another server:</p>
-<pre><code class="language-sh">ROSEGOLD_SERVER=localhost:25565 crystal run examples/patrol.cr</code></pre>
-<p><code>examples/patrol.cr</code> walks a small square from the bot's current position. <code>examples/events.cr</code> prints chat for one minute and starts guarded eating work after low-food events. <code>examples/spectate.cr</code> opens the spectator bridge and walks the same kind of short route.</p>
-<p><code>examples/container.cr</code> opens a configured, reachable container and counts its inventory without transferring items. Pass its known coordinates as <code>-- X Y Z</code>; it does not discover containers. <code>examples/enchanting.cr</code> enchants a diamond pickaxe with a selected offer. Pass the yaw and pitch that already put a reachable enchanting table under the bot's crosshair; it does not find or route to a table:</p>
-<pre><code class="language-sh">crystal run examples/enchanting.cr -- 180 20</code></pre>
-<p>The examples use <code>require &quot;../src/rosegold&quot;</code> so they run in this repository. In your own shard, replace it with <code>require &quot;rosegold&quot;</code>.</p>
+crystal run examples/patrol.cr</code></pre>
+<p>Patrol walks a short route from where the bot spawns. The examples default to
+<code>localhost:25565</code>; set <code>ROSEGOLD_SERVER</code> to a different <code>host:port</code> if needed.</p>
+<p>| Try this | Example |
+| --- | --- |
+| Walk a short route | <a href="examples/patrol.cr">Patrol</a> |
+| Print chat and react to low hunger | <a href="examples/events.cr">Events</a> |
+| Watch the bot from a normal Minecraft client | <a href="examples/spectate.cr">Spectate</a> |
+| Keep a script running across reconnects | <a href="examples/reconnect.cr">Reconnect</a> |
+| Count items in a reachable container | <a href="examples/container.cr">Container</a>, pass <code>-- X Y Z</code> |
+| Enchant a pickaxe at a reachable table | <a href="examples/enchanting.cr">Enchanting</a>, pass <code>-- YAW PITCH</code> to aim at it |</p>
+<p>If you copy an example into your own project, replace <code>require &quot;../src/rosegold&quot;</code>
+with <code>require &quot;rosegold&quot;</code>.</p>
 <h2><a id="a-small-bot-with-a-clean-lifecycle" class="anchor" href="#a-small-bot-with-a-clean-lifecycle">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>A small bot, with a clean lifecycle</h2>
-<p><code>Bot.new</code> builds the high-level API without connecting. <code>join_game</code> connects and waits until the player is spawned. Disconnect in <code>ensure</code>, so an exception does not leave the bot connected.</p>
+<p>This script joins a local server, prints where the bot spawned, and disconnects.
+It needs no tools in the bot's inventory.</p>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;rosegold&quot;</span>
 
-bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.new(<span class="s">&quot;play.example.net&quot;</span>)
+bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.new(<span class="s">&quot;localhost:25565&quot;</span>)
 
 <span class="k">begin</span>
   bot.join_game
-  bot.chat <span class="s">&quot;Online.&quot;</span>
-  bot.move_to(<span class="n">100</span>, <span class="n">200</span>) <span class="c"># integer x/z targets the centre of that block column</span>
-  bot.inventory.pick!(<span class="s">&quot;diamond_pickaxe&quot;</span>)
-  bot.dig(<span class="n">20</span>)
+  puts <span class="s">&quot;Spawned at </span><span class="i">#{</span>bot.location<span class="i">}</span><span class="s">&quot;</span>
 <span class="k">ensure</span>
   bot.disconnect(<span class="s">&quot;Script finished&quot;</span>) <span class="k">if</span> bot.connected?
 <span class="k">end</span></code></pre>
-<p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. <code>use_hand</code> and <code>start_using_hand</code> choose the hand automatically when <code>hand:</code> is omitted (main first, then off hand only when the previous local result permits); pass <code>:main_hand</code> or <code>:off_hand</code> to use exactly one. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result. A <code>use_hand</code> tap is dropped during an active use or a block break that takes multiple ticks, while a held <code>start_using_hand</code> keeps retrying (every four ticks when idle). <code>stop_digging</code> and <code>stop_using_hand</code> are processed on the next tick, so wait one tick after <code>stop_digging</code> before a tap. Attack, dig, and use share a short-lived local prediction that never changes what the world, physics, or queries report; those stay server-confirmed.</p>
+<p>Save it as <code>bot.cr</code> in your project and run <code>crystal run bot.cr</code> with your local
+server running. <code>join_game</code> waits for spawn. Keep the disconnect in <code>ensure</code> so
+it runs even if your script raises. The block form of <code>join_game</code> only
+disconnects on normal return.</p>
+<p>Once that works, try <a href="#movement-and-looking">movement</a> or <a href="#inventory-containers-and-crafting">inventory</a>.
+For mining or using items, see <a href="guide/idioms.md#use-mine-and-place">held input and confirmation</a>.
+A tap queues an action. A timed mining hold does not tell you whether the block broke.</p>
 <p>For automatic reconnects, use <code>Bot.run</code>. It waits for spawn and gives the block a
 fresh bot for each session:</p>
 <pre><code class="language-crystal"><span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.run(<span class="s">&quot;play.example.net&quot;</span>) <span class="k">do</span> <span class="o">|</span>bot<span class="o">|</span>
@@ -2664,7 +2690,7 @@ entity <span class="o">=</span> bot.nearest_entity(max_distance: <span class="n"
 <p>Queries read loaded state without requesting chunks. An unloaded or unknown block
 returns <code>nil</code>; air has its own snapshot. Snapshots do not change with later world
 updates. <code>bot.world</code> and <code>bot.client</code> expose live state for advanced callers.
-These APIs are unavailable through the CivMC facade.</p>
+A server library may expose fewer of these.</p>
 <h2><a id="riding" class="anchor" href="#riding">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -2703,7 +2729,7 @@ the snapshot's <code>type</code> is <code>nil</code>.</p>
 | --- | --- |
 | Connect, inspect state, and chat | <code>Bot.new</code>, <code>join_game</code>, <code>location</code>, <code>health</code>, <code>food</code>, <code>chat</code> |
 | Walk, look, jump | <code>move_to</code>, <code>look_at</code>, <code>look</code>, <code>start_jump</code>, <code>sprint</code>, <code>sneak</code> |
-| Mine, use, place, eat | <code>dig</code>, <code>attack</code>, <code>place_block_against</code>, <code>use_hand</code>, <code>eat!</code> |
+| Mine, use, place, eat | <code>dig</code>, <code>attack</code>, <code>place_block_against</code>, <code>use_hand</code>, <code>eat!</code>; for held mining with confirmation see the <a href="guide/idioms.md#confirm-a-mined-block">mining recipe</a> |
 | Manage the inventory | <code>inventory.pick!</code>, <code>inventory.count</code>, <code>inventory.throw_all_of</code>, <code>main_hand</code> |
 | Work with containers | <code>open_container_handle</code> |
 | Enchant a selected item | <code>enchant</code> |
@@ -2713,8 +2739,7 @@ the snapshot's <code>type</code> is <code>nil</code>.</p>
 | React to the game | <code>on</code>, <code>once</code>, <code>wait_for</code>, <code>wait_ticks</code> |
 | Watch the bot in Minecraft | <code>SpectateServer</code> |</p>
 <p>The generated <a href="https://rosegoldmc.github.io/rosegold.cr/">API reference</a> has every overload and type. The sections below cover the calls people usually need first.</p>
-<p>Coming from JsMacros? Read the <a href="https://github.com/RosegoldMC/rosegold.cr/blob/main/guide/idioms.md">Rosegold idiom guide</a> for the
-public API equivalents, their semantic differences, and the server-rule boundary.</p>
+<p>Coming from JsMacros? See the <a href="guide/idioms.md">porting guide</a>.</p>
 <h2><a id="movement-and-looking" class="anchor" href="#movement-and-looking">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -2797,7 +2822,7 @@ bot.craft(<span class="s">&quot;diamond_pickaxe&quot;</span>, table: table)</cod
     <use href="#octicon-link"/>
   </svg>
 </a>Events and timing</h2>
-<p><code>Bot</code> forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Use these high-level events for common workflows; advanced core scripts can subscribe through <code>bot.client</code>. Event handlers run on Rosegold's packet-processing path, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.</p>
+<p><code>Bot</code> forwards chat, tick, health, death, experience, player-list, slot, and container-open events. Use these high-level events for common workflows; advanced core scripts can subscribe through <code>bot.client</code>. Event handlers run synchronously in the emitting fiber, including for ticks, so keep them short. Start a fiber for work that waits on ticks, moves, opens a container, or eats.</p>
 <pre><code class="language-crystal">eating <span class="o">=</span> <span class="n">false</span>
 
 bot.on <span class="t">Rosegold</span><span class="t">::</span><span class="t">Clientbound</span><span class="t">::</span><span class="t">PlayerChatMessage</span> <span class="k">do</span> <span class="o">|</span>event<span class="o">|</span>
@@ -2828,7 +2853,7 @@ bot.wait_for(<span class="t">Rosegold</span><span class="t">::</span><span class
 <span class="k">end</span>
 
 bot.wait_ticks <span class="n">20</span></code></pre>
-<p><code>wait_for</code> registers before running its block, so it cannot miss a quick response. It accepts the next event of that type, including unrelated chat; use a content predicate when a specific confirmation matters (see the idiom guide). <code>auto_respawn?</code> is enabled by default; set <code>bot.auto_respawn = false</code> if your own death handler should decide what happens next.</p>
+<p><code>wait_for</code> registers before running its block, so it cannot miss a quick response. Its block is only the trigger. It accepts the next event of that type, including unrelated chat, and a timeout raises without replaying anything; use a content predicate when a specific confirmation matters (see the idiom guide). <code>auto_respawn?</code> is enabled by default; set <code>bot.auto_respawn = false</code> if your own death handler should decide what happens next.</p>
 <h2><a id="spectate-from-a-normal-minecraft-client" class="anchor" href="#spectate-from-a-normal-minecraft-client">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
