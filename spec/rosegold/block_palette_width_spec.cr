@@ -58,6 +58,12 @@ private def raw_block_container(section : Rosegold::Section) : {Int32, Array(UIn
   {bits, values}
 end
 
+private def block_bits(section : Rosegold::Section) : Int32
+  io = Minecraft::IO::Memory.new
+  section.write io
+  io.to_slice[Rosegold::Client.protocol_version >= 775_u32 ? 4 : 2].to_i
+end
+
 Spectator.describe Rosegold::Section do
   def check_promoted(section, expected_bits, old_states)
     new_state = 1001_u16
@@ -96,6 +102,27 @@ Spectator.describe Rosegold::Section do
       Rosegold::Client.with_block_palette_spec_protocol(protocol) do
         states = distinct_states
         check_promoted(wire_indirect_section(states), expected_bits, states)
+      end
+    end
+  end
+
+  it "keeps the final representable palette index before widening" do
+    EXPECTED_BITS.each_key do |protocol|
+      Rosegold::Client.with_block_palette_spec_protocol(protocol) do
+        {16 => 4, 256 => 8}.each do |count, bits|
+          section = Rosegold::Section.empty
+          (1...count).each { |i| section.set_block_state(i.to_u32, (1000 + i).to_u16) }
+          expect(block_bits(section)).to eq bits
+
+          section.set_block_state(0_u32, 1001_u16)
+          section.set_block_state(1_u32, 0_u16)
+          expect(block_bits(section)).to eq bits
+
+          section.set_block_state(count.to_u32, (1000 + count).to_u16)
+          expect(block_bits(section)).to be > bits
+          (2...count).each { |i| expect(section.block_state(i.to_u32)).to eq((1000 + i).to_u16) }
+          expect(section.block_state(count.to_u32)).to eq((1000 + count).to_u16)
+        end
       end
     end
   end
