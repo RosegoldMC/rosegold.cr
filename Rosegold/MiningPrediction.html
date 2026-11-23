@@ -142,6 +142,31 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/BlockUseRules" data-name="rosegold::blockuserules">
+      <a href="../Rosegold/BlockUseRules.html">BlockUseRules</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/BlockUseRules/Decision" data-name="rosegold::blockuserules::decision">
+      <a href="../Rosegold/BlockUseRules/Decision.html">Decision</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/BlockUseRules/Result" data-name="rosegold::blockuserules::result">
+      <a href="../Rosegold/BlockUseRules/Result.html">Result</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/BlockUseRules/Write" data-name="rosegold::blockuserules::write">
+      <a href="../Rosegold/BlockUseRules/Write.html">Write</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/BossBarState" data-name="rosegold::bossbarstate">
       <a href="../Rosegold/BossBarState.html">BossBarState</a>
       
@@ -2527,11 +2552,8 @@
     Overview
   </h2>
 
-  <p>Client-side mining prediction, mirroring the Notchian client's
-MultiPlayerGameMode#destroyBlock (the broken block becomes its fluid state's
-legacy block) and BlockStatePredictionHandler#endPredictionsUpTo (entries
-end at a cumulative acknowledgement). Kept apart from authoritative chunk
-data: it is only queried for mining targets.</p>
+  <p>Pending block interaction states, separate from authoritative chunk data.
+Each position keeps its latest prediction until a cumulative acknowledgement.</p>
 
 
 
@@ -2558,7 +2580,7 @@ data: it is only queried for mining targets.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L8" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L5" target="_blank">
         rosegold/world/mining_prediction.cr
       </a>
     
@@ -2660,7 +2682,7 @@ data: it is only queried for mining targets.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#predict%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%2Csequence%3AInt32%2Cstate%3AUInt16%29%3ANil-instance-method" class="signature"><strong>#predict</strong>(x : Int32, y : Int32, z : Int32, sequence : Int32, state : UInt16) : Nil</a>
+        <a href="#predict%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%2Csequence%3AInt32%2Cstate%3AUInt16%29%3ABool-instance-method" class="signature"><strong>#predict</strong>(x : Int32, y : Int32, z : Int32, sequence : Int32, state : UInt16) : Bool</a>
         
       </li>
     
@@ -2719,7 +2741,7 @@ data: it is only queried for mining targets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L74" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2747,7 +2769,7 @@ data: it is only queried for mining targets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2769,7 +2791,7 @@ or lava block state, otherwise air.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L56" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L53" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2791,7 +2813,7 @@ amount / 9), or nil when it holds no water.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L70" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2821,7 +2843,7 @@ amount / 9), or nil when it holds no water.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L85" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2837,7 +2859,7 @@ amount / 9), or nil when it holds no water.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L96" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L94" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2853,7 +2875,7 @@ amount / 9), or nil when it holds no water.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L107" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L105" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2869,7 +2891,7 @@ amount / 9), or nil when it holds no water.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L103" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2885,23 +2907,23 @@ amount / 9), or nil when it holds no water.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L78" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="predict(x:Int32,y:Int32,z:Int32,sequence:Int32,state:UInt16):Nil-instance-method">
+    <div class="entry-detail" id="predict(x:Int32,y:Int32,z:Int32,sequence:Int32,state:UInt16):Bool-instance-method">
       <div class="signature">
         
-        def <strong>predict</strong>(x : <a href="../Int32.html">Int32</a>, y : <a href="../Int32.html">Int32</a>, z : <a href="../Int32.html">Int32</a>, sequence : <a href="../Int32.html">Int32</a>, state : UInt16) : Nil
+        def <strong>predict</strong>(x : <a href="../Int32.html">Int32</a>, y : <a href="../Int32.html">Int32</a>, z : <a href="../Int32.html">Int32</a>, sequence : <a href="../Int32.html">Int32</a>, state : UInt16) : Bool
 
-        <a class="method-permalink" href="#predict%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%2Csequence%3AInt32%2Cstate%3AUInt16%29%3ANil-instance-method">#</a>
+        <a class="method-permalink" href="#predict%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%2Csequence%3AInt32%2Cstate%3AUInt16%29%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/mining_prediction.cr#L89" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/mining_prediction.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>

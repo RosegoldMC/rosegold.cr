@@ -142,6 +142,31 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/BlockUseRules" data-name="rosegold::blockuserules">
+      <a href="Rosegold/BlockUseRules.html">BlockUseRules</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/BlockUseRules/Decision" data-name="rosegold::blockuserules::decision">
+      <a href="Rosegold/BlockUseRules/Decision.html">Decision</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/BlockUseRules/Result" data-name="rosegold::blockuserules::result">
+      <a href="Rosegold/BlockUseRules/Result.html">Result</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/BlockUseRules/Write" data-name="rosegold::blockuserules::write">
+      <a href="Rosegold/BlockUseRules/Write.html">Write</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/BossBarState" data-name="rosegold::bossbarstate">
       <a href="Rosegold/BossBarState.html">BossBarState</a>
       
@@ -2567,7 +2592,7 @@ bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</
 <span class="k">ensure</span>
   bot.disconnect(<span class="s">&quot;Script finished&quot;</span>) <span class="k">if</span> bot.connected?
 <span class="k">end</span></code></pre>
-<p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result. During a block break that takes multiple ticks, <code>use_hand</code> taps are dropped and held use waits. Call <code>stop_digging</code> before using a hand or eating if that should go first.</p>
+<p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result. A <code>use_hand</code> tap is dropped during an active use or a block break that takes multiple ticks, while a held <code>start_using_hand</code> keeps retrying (every four ticks when idle). <code>stop_digging</code> and <code>stop_using_hand</code> are processed on the next tick, so wait one tick after <code>stop_digging</code> before a tap. Attack, dig, and use share a short-lived local prediction that never changes what the world, physics, or queries report; those stay server-confirmed.</p>
 <p>For automatic reconnects, use <code>Bot.run</code>. It waits for spawn and gives the block a
 fresh bot for each session:</p>
 <pre><code class="language-crystal"><span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.run(<span class="s">&quot;play.example.net&quot;</span>) <span class="k">do</span> <span class="o">|</span>bot<span class="o">|</span>
@@ -2685,8 +2710,10 @@ bot.start_jump</code></pre>
 <p><code>bot.eat</code> is best effort: it logs errors rather than raising. Use <code>bot.eat!</code>
 when missing food or an interaction error should stop the task. Both skip
 at 18+ food, or 15+ food with full health, and may wait up to about 165 seconds
-at 20 TPS. A timeout logs a warning even with <code>eat!</code>. Neither restores the
-previous item selection. <code>eat</code> returns <code>nil</code>; check <code>bot.food</code> for the result.</p>
+at 20 TPS. Reaching the eating retry limit only logs a warning. <code>eat!</code> raises
+if the bot is still connected and use is still not released one second after
+eating stops. Neither restores the previous item selection. <code>eat</code>
+returns <code>nil</code>; check <code>bot.food</code> for the result.</p>
 <h2><a id="inventory-containers-and-crafting" class="anchor" href="#inventory-containers-and-crafting">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>

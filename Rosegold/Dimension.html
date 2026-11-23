@@ -142,6 +142,31 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/BlockUseRules" data-name="rosegold::blockuserules">
+      <a href="../Rosegold/BlockUseRules.html">BlockUseRules</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/BlockUseRules/Decision" data-name="rosegold::blockuserules::decision">
+      <a href="../Rosegold/BlockUseRules/Decision.html">Decision</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/BlockUseRules/Result" data-name="rosegold::blockuserules::result">
+      <a href="../Rosegold/BlockUseRules/Result.html">Result</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/BlockUseRules/Write" data-name="rosegold::blockuserules::write">
+      <a href="../Rosegold/BlockUseRules/Write.html">Write</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/BossBarState" data-name="rosegold::bossbarstate">
       <a href="../Rosegold/BossBarState.html">BossBarState</a>
       
@@ -2543,7 +2568,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L5" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L5" target="_blank">
         rosegold/world/dimension.cr
       </a>
     
@@ -2647,9 +2672,14 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#acknowledge_mining_predictions%28sequence%3AInt32%29%3ANil-instance-method" class="signature"><strong>#acknowledge_mining_predictions</strong>(sequence : Int32) : Nil</a>
+        <a href="#acknowledge_interaction_predictions%28sequence%3AInt32%29%3ANil-instance-method" class="signature"><strong>#acknowledge_interaction_predictions</strong>(sequence : Int32) : Nil</a>
         
-          <div class="summary"><p>Ends predictions with sequence &lt;= <code>sequence</code>, as a cumulative ClientboundBlockChangedAck does.</p></div>
+          <div class="summary"><p>Ends predictions up to and including <code>sequence</code>, revealing the latest authoritative block state wherever a prediction ends.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#acknowledge_mining_predictions%28sequence%3AInt32%29%3ANil-instance-method" class="signature"><strong>#acknowledge_mining_predictions</strong>(sequence : Int32) : Nil</a>
         
       </li>
     
@@ -2675,6 +2705,11 @@
     
       <li class="entry-summary">
         <a href="#chunks%3AHash%28%7BInt32%2CInt32%7D%2CRosegold%3A%3AChunk%29-instance-method" class="signature"><strong>#chunks</strong> : Hash({Int32, Int32}, Rosegold::Chunk)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#clear_interaction_predictions%3ANil-instance-method" class="signature"><strong>#clear_interaction_predictions</strong> : Nil</a>
         
       </li>
     
@@ -2711,6 +2746,18 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#interaction_block_state%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29%3AUInt16%7CNil-instance-method" class="signature"><strong>#interaction_block_state</strong>(x : Int32, y : Int32, z : Int32) : UInt16 | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#interaction_block_state%28location%3AVec3i%29%3AUInt16%7CNil-instance-method" class="signature"><strong>#interaction_block_state</strong>(location : Vec3i) : UInt16 | Nil</a>
+        
+          <div class="summary"><p>Returns the pending interaction state or the authoritative block state.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#load_chunk%28chunk%3AChunk%29-instance-method" class="signature"><strong>#load_chunk</strong>(chunk : Chunk)</a>
         
       </li>
@@ -2722,8 +2769,6 @@
     
       <li class="entry-summary">
         <a href="#mining_block_state%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29%3AUInt16%7CNil-instance-method" class="signature"><strong>#mining_block_state</strong>(x : Int32, y : Int32, z : Int32) : UInt16 | Nil</a>
-        
-          <div class="summary"><p>Block state for choosing a mining target: the pending prediction, else the authoritative state.</p></div>
         
       </li>
     
@@ -2740,7 +2785,14 @@
       <li class="entry-summary">
         <a href="#predict_block_break%28location%3AVec3i%2Csequence%3AInt32%29%3ABool-instance-method" class="signature"><strong>#predict_block_break</strong>(location : Vec3i, sequence : Int32) : Bool</a>
         
-          <div class="summary"><p>Registers the client-side result of breaking the loaded, non-air block at <code>location</code> (its fluid's block state, else air) under <code>sequence</code>.</p></div>
+          <div class="summary"><p>Predicts the fluid block state (or air) left by breaking a loaded non-air block.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#predict_interaction_block_state%28location%3AVec3i%2Cstate%3AUInt16%2Csequence%3AInt32%29%3ABool-instance-method" class="signature"><strong>#predict_interaction_block_state</strong>(location : Vec3i, state : UInt16, sequence : Int32) : Bool</a>
+        
+          <div class="summary"><p>Records a verified interaction result separately from chunk data.</p></div>
         
       </li>
     
@@ -2844,7 +2896,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2860,7 +2912,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2888,7 +2940,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L66" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L66" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2913,7 +2965,7 @@ or the entry is unparseable.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L59" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2929,7 +2981,7 @@ or the entry is unparseable.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2945,7 +2997,7 @@ or the entry is unparseable.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2964,6 +3016,28 @@ or the entry is unparseable.</p>
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="acknowledge_interaction_predictions(sequence:Int32):Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>acknowledge_interaction_predictions</strong>(sequence : <a href="../Int32.html">Int32</a>) : Nil
+
+        <a class="method-permalink" href="#acknowledge_interaction_predictions%28sequence%3AInt32%29%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Ends predictions up to and including <code>sequence</code>, revealing the latest
+authoritative block state wherever a prediction ends.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L163" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="acknowledge_mining_predictions(sequence:Int32):Nil-instance-method">
       <div class="signature">
         
@@ -2972,16 +3046,10 @@ or the entry is unparseable.</p>
         <a class="method-permalink" href="#acknowledge_mining_predictions%28sequence%3AInt32%29%3ANil-instance-method">#</a>
       </div>
       
-        <div class="doc">
-          
-          <p>Ends predictions with sequence &lt;= <code>sequence</code>, as a cumulative
-ClientboundBlockChangedAck does.</p>
-        </div>
-      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L154" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L175" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2997,7 +3065,7 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L119" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L119" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3013,7 +3081,7 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L110" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3029,7 +3097,7 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L114" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L114" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3045,7 +3113,7 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L100" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3061,7 +3129,23 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L10" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="clear_interaction_predictions:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>clear_interaction_predictions</strong> : Nil
+
+        <a class="method-permalink" href="#clear_interaction_predictions%3ANil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L167" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3077,7 +3161,7 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L158" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L179" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3093,7 +3177,7 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3109,7 +3193,7 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3125,7 +3209,7 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3141,7 +3225,7 @@ ClientboundBlockChangedAck does.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3164,7 +3248,44 @@ authoritative geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L165" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L186" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="interaction_block_state(x:Int32,y:Int32,z:Int32):UInt16|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>interaction_block_state</strong>(x : <a href="../Int32.html">Int32</a>, y : <a href="../Int32.html">Int32</a>, z : <a href="../Int32.html">Int32</a>) : UInt16 | Nil
+
+        <a class="method-permalink" href="#interaction_block_state%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29%3AUInt16%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L146" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="interaction_block_state(location:Vec3i):UInt16|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>interaction_block_state</strong>(location : <a href="../Rosegold/Vec3i.html">Vec3i</a>) : UInt16 | Nil
+
+        <a class="method-permalink" href="#interaction_block_state%28location%3AVec3i%29%3AUInt16%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the pending interaction state or the authoritative block state.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L142" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3180,7 +3301,7 @@ authoritative geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L94" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3196,7 +3317,7 @@ authoritative geometry.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3209,16 +3330,10 @@ authoritative geometry.</p>
         <a class="method-permalink" href="#mining_block_state%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29%3AUInt16%7CNil-instance-method">#</a>
       </div>
       
-        <div class="doc">
-          
-          <p>Block state for choosing a mining target: the pending prediction, else the
-authoritative state.</p>
-        </div>
-      
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L148" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L171" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3234,7 +3349,7 @@ authoritative state.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3250,7 +3365,7 @@ authoritative state.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L13" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3265,16 +3380,36 @@ authoritative state.</p>
       
         <div class="doc">
           
-          <p>Registers the client-side result of breaking the loaded, non-air block at
-<code>location</code> (its fluid's block state, else air) under <code>sequence</code>. Only
-<code><a href="../Rosegold/Dimension.html#mining_block_state%28x%3AInt32%2Cy%3AInt32%2Cz%3AInt32%29%3AUInt16%7CNil-instance-method">#mining_block_state</a></code> sees it; chunk data stays server-authoritative.
-Returns whether a prediction was registered.</p>
+          <p>Predicts the fluid block state (or air) left by breaking a loaded non-air block.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L137" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L134" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="predict_interaction_block_state(location:Vec3i,state:UInt16,sequence:Int32):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>predict_interaction_block_state</strong>(location : <a href="../Rosegold/Vec3i.html">Vec3i</a>, state : UInt16, sequence : <a href="../Int32.html">Int32</a>) : Bool
+
+        <a class="method-permalink" href="#predict_interaction_block_state%28location%3AVec3i%2Cstate%3AUInt16%2Csequence%3AInt32%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Records a verified interaction result separately from chunk data. Returns
+false for unknown states, unloaded or out-of-bounds positions, or a sequence
+older than the prediction already pending at this position.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L153" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3290,7 +3425,7 @@ Returns whether a prediction was registered.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L175" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L196" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3306,7 +3441,7 @@ Returns whether a prediction was registered.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L128" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L128" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3322,7 +3457,7 @@ Returns whether a prediction was registered.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L124" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L124" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3338,7 +3473,7 @@ Returns whether a prediction was registered.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3354,7 +3489,7 @@ Returns whether a prediction was registered.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3370,7 +3505,7 @@ Returns whether a prediction was registered.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L105" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L105" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3386,7 +3521,7 @@ Returns whether a prediction was registered.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3402,7 +3537,7 @@ Returns whether a prediction was registered.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3418,7 +3553,7 @@ Returns whether a prediction was registered.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/f7c1dce50357ce25c3d55c27c8e343e2d0051685/src/rosegold/world/dimension.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/88186494390ea54caa33f188c8fe2009c64743cc/src/rosegold/world/dimension.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
