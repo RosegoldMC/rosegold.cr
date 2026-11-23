@@ -1,10 +1,7 @@
 require "./mcdata"
 
-# Client-side mining prediction, mirroring the Notchian client's
-# MultiPlayerGameMode#destroyBlock (the broken block becomes its fluid state's
-# legacy block) and BlockStatePredictionHandler#endPredictionsUpTo (entries
-# end at a cumulative acknowledgement). Kept apart from authoritative chunk
-# data: it is only queried for mining targets.
+# Pending block interaction states, separate from authoritative chunk data.
+# Each position keeps its latest prediction until a cumulative acknowledgement.
 class Rosegold::MiningPrediction
   alias ChunkPos = {Int32, Int32}
   alias BlockPos = {Int32, Int32, Int32}
@@ -86,11 +83,12 @@ class Rosegold::MiningPrediction
     @chunks[{x >> 4, z >> 4}]?.try(&.[{x, y, z}]?).try(&.state)
   end
 
-  def predict(x : Int32, y : Int32, z : Int32, sequence : Int32, state : UInt16) : Nil
+  def predict(x : Int32, y : Int32, z : Int32, sequence : Int32, state : UInt16) : Bool
     entries = (@chunks[{x >> 4, z >> 4}] ||= Hash(BlockPos, Entry).new)
     existing = entries[{x, y, z}]?
-    return if existing && existing.sequence > sequence
+    return false if existing && existing.sequence > sequence
     entries[{x, y, z}] = Entry.new(sequence, state)
+    true
   end
 
   def acknowledge(sequence : Int32) : Nil

@@ -197,26 +197,45 @@ at full progress. A block whose first-tick damage is already full (including
 zero hardness) is START-only: no FINISH or CANCEL. After a FINISH, and between
 creative breaks, a held attack waits five eligible ticks before the next START;
 on 26.3 a creative entity attack sets the same delay.
-A fresh creative press whose target is not predicted to become air spends the
-first of those ticks at once. Mining sends at most one START per client tick, and
-a survival miss waits ten ticks. Creative cadence and creative tool limits follow
-the synchronized instabuild ability; a game mode change resets it, and
-PlayerAbilities can override it.
+A fresh creative press whose target is not already predicted to be air spends
+the first of those ticks at once, with no duplicate creative START. After a fresh
+survival instant hit, a second same-tick START follows as in vanilla when the
+cached cell is still non-air (water left by seagrass, or a refused break); that
+new staged attempt can ABORT if the crosshair advances. A dry instant break that
+becomes air skips the continuation. A survival miss waits ten ticks. Creative
+cadence and creative tool limits follow the synchronized instabuild ability; a
+game mode change resets it, and PlayerAbilities can override it.
 
 Attack presses run before use presses, and a held attack continues after use
-each tick. Use presses are dropped during a staged survival break, while a held
-use retries. Only active item use reported by the server's living-entity flags
+each tick. A tap (`use_hand`, hand defaults to main) is queued for the next tick,
+coalesces with other taps, and has no hold-repeat cooldown. It is dropped during
+an existing active use or a staged survival break. A held use retries each tick
+and, once idle, repeats every four ticks. `stop_digging` and `stop_using_hand`
+take effect when the tick processes them, so an attack release followed by a use
+tap in the same tick still sees the staged break; wait one tick before the tap
+(a held use retries by itself). Active sustained use is released in the tick
+that processes it, and local input state is predicted only for use items known
+to be safe. Server-reported use lasts until the server, an item change, or a
+release ends it. Vanilla clients never complete a use locally, so the expiry of an
+unconfirmed prediction (a few ticks after its acknowledgement, or one second
+without one) is a defensive bound, not vanilla behavior. Only active item use
 pauses mining; it drops attack presses until it ends.
 
-Mining targets may use predicted block state so a held break can move on before
-the server confirms the last one. That prediction is a short-lived overlay for
-mining only. Public world reads, physics, collision, and spectate relays see
-authoritative server state. Server block and chunk packets update that state;
+Native attack, dig, and use share one recent interaction prediction. Each tick
+resolves one crosshair hit (block and entity reach synchronized) and reuses it,
+consulting actual block state when the cached hit is used. A small set of basic,
+verified placement and toggle results is predicted locally; outcomes only the
+server knows stay server-only. This is selective, not a full model of buckets,
+placement, shape cascades, inventory, spectator or weapon rules, custom server
+rules, or a desktop hand fallback.
+
+Predictions are a short-lived overlay. Public world reads, physics, collision,
+spectate relays, and query surfaces see authoritative server state. Server block and chunk packets update that state;
 a cumulative acknowledgement ends predictions up to its sequence, and chunk
 loads or unloads drop their predictions. Prediction never changes what the
 server accepts, and an unconfirmed block may be re-sent.
 `Client#reset_mining_session` clears the overlay, pending acknowledgements,
-active item use, and mining control state (no packets) on Login, Respawn, PLAY
+active, held, and queued use, and mining control state (no packets) on Login, Respawn, PLAY
 to CONFIGURATION, connect, and disconnect. The sequence counter keeps increasing
 across resets so stale acknowledgements cannot match.
 

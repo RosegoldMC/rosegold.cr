@@ -136,7 +136,7 @@ Spectator.describe "Digging block outlines" do
       name, property, hit, miss = outline
       set_block(target, name, property)
 
-      expect(dig_at(*hit).map(&.location)).to eq([target])
+      expect(dig_at(*hit).map(&.location).uniq!).to eq([target])
       expect(dig_at(*miss)).to be_empty
     end
   end
@@ -477,17 +477,19 @@ Spectator.describe "Digging block outlines" do
       state = dimension.block_state(target)
       interactions.start_digging
       interactions.tick
-      expect(actions).to eq([{Rosegold::Serverbound::PlayerAction::Status::Start, target}])
+      expect(actions).to eq([{Action::Start, target}, {Action::Start, target}])
 
       interactions.tick
       expect(actions).to eq([
-        {Rosegold::Serverbound::PlayerAction::Status::Start, target},
-        {Rosegold::Serverbound::PlayerAction::Status::Start, second},
+        {Action::Start, target},
+        {Action::Start, target},
+        {Action::Cancel, target},
+        {Action::Start, second},
       ])
       expect(dimension.block_state(target)).to eq(state)
       expect(dimension.block_state(second)).to eq(state)
       interactions.tick
-      expect(starts.size).to eq(2)
+      expect(starts.size).to eq(3)
     end
 
     it "reconciles accepted and rejected predictions by acknowledged sequence" do
@@ -496,21 +498,21 @@ Spectator.describe "Digging block outlines" do
       interactions.start_digging
       interactions.tick
       interactions.tick
-      first, latest = starts
+      first, _, latest = starts
 
       Rosegold::Clientbound::BlockChange.new(target, 0_u16).callback(bot_client)
       Rosegold::Clientbound::AcknowledgeBlockChange.new(first.sequence).callback(bot_client)
       interactions.tick
-      expect(starts.size).to eq(2)
+      expect(starts.size).to eq(3)
       expect(dimension.block_state(target)).to eq(0_u16)
       expect(dimension.block_state(second)).to eq(seagrass)
 
       Rosegold::Clientbound::AcknowledgeBlockChange.new(latest.sequence).callback(bot_client)
       interactions.tick
-      expect(starts.map(&.location)).to eq([target, second, second])
+      expect(starts.map(&.location)).to eq([target, target, second, second])
     end
 
-    it "cancels a staged dig before starting an instant dig at the same position" do
+    it "does not cancel the staged target when the attack is released and pressed again between ticks" do
       set_block(target, "stone")
       interactions.start_digging
       interactions.tick
@@ -521,29 +523,34 @@ Spectator.describe "Digging block outlines" do
       interactions.start_digging
       interactions.tick
 
-      expect(actions).to eq([
-        {Rosegold::Serverbound::PlayerAction::Status::Start, target},
-        {Rosegold::Serverbound::PlayerAction::Status::Cancel, target},
-        {Rosegold::Serverbound::PlayerAction::Status::Start, target},
-      ])
+      expect(actions).to eq([{Action::Start, target}, {Action::Finish, target}])
     end
 
-    it "sends at most one start per tick" do
+    it "starts a staged fluid break on the cached hit when the survival press leaves water" do
       interactions.start_digging
-      2.times do
-        before = starts.size
-        interactions.tick
-        expect(starts.size - before).to eq(1)
-      end
+      interactions.tick
+
+      first, continuation = starts
+      expect(first.location).to eq(target)
+      expect(continuation.location).to eq(target)
+      expect(continuation.sequence).to eq(first.sequence + 1)
+      expect(mining_swings).to eq(2)
+      expect(interactions.digging_block).not_to be_nil
+
+      interactions.stop_digging
+      interactions.tick
+      expect(actions).to eq([{Action::Start, target}, {Action::Start, target}, {Action::Cancel, target}])
     end
 
-    it "does not send a stop or cancel when the held attack ends" do
+    it "does not send a stop or cancel when the held instant-air attack ends" do
+      set_block(target, "firefly_bush")
+      aim(0.5, 0.8)
       interactions.start_digging
       interactions.tick
       interactions.stop_digging
       interactions.tick
 
-      expect(actions.map(&.first)).to eq([Rosegold::Serverbound::PlayerAction::Status::Start])
+      expect(actions.map(&.first)).to eq([Action::Start])
     end
 
     it "keeps staged digging for blocks with hardness" do
@@ -556,25 +563,31 @@ Spectator.describe "Digging block outlines" do
       expect(interactions.block_damage_progress).to be > 0
     end
 
-    it "keeps an unconfirmed block in the way of an entity attack and block use" do
+    it "uses the interaction prediction for occlusion until a rejected break is acknowledged" do
+      state = set_block(target, "firefly_bush")
       set_block(second, "air")
-      zombie_type = Rosegold::Entity.metadata_for_protocol.find! { |entity| entity.name == "zombie" }
-      zombie = Rosegold::Entity.new(1_u32, UUID.random, zombie_type.id.to_u32, Rosegold::Vec3d.new(0.5, 0.0, 3.1), 0_f32, 0_f32, 0_f32, Rosegold::Vec3d::ORIGIN)
-      bot_client.dimension_for_test.entities[zombie.entity_id.to_u64] = zombie
+      zombie_at(0.5, 0.0, 3.1)
+      equip("stone")
+      aim(0.5, 0.8)
 
       interactions.start_digging
-      interactions.tick
       interactions.stop_digging
-      interactions.start_digging
       interactions.tick
-      expect(starts.map(&.location)).to eq([target])
-      expect(bot_client.sent_packets.select(Rosegold::Serverbound::Attack)).to be_empty
-      expect(bot_client.sent_packets.select(Rosegold::Serverbound::InteractEntity)).to be_empty
+      first = starts.first
+      expect(bot_client.dimension_for_test.block_state(target)).to eq(state)
 
+      interactions.start_digging
       interactions.stop_digging
       interactions.tap_using_hand
       interactions.tick
-      expect(bot_client.sent_packets.select(Rosegold::Serverbound::PlayerBlockPlacement).first.location).to eq(target)
+      expect(starts.map(&.location)).to eq([target])
+      expect(entity_actions).to eq(expected_entity_attack_then_use)
+      expect(bot_client.sent_packets.select(Rosegold::Serverbound::PlayerBlockPlacement)).to be_empty
+
+      Rosegold::Clientbound::AcknowledgeBlockChange.new(first.sequence).callback(bot_client)
+      interactions.tap_using_hand
+      interactions.tick
+      expect(bot_client.sent_packets.select(Rosegold::Serverbound::PlayerBlockPlacement).last.location).to eq(target)
     end
 
     it "spends one delay tick on a creative press that leaves water, then waits four held ticks" do
@@ -641,7 +654,7 @@ Spectator.describe "Digging block outlines" do
         equip("debug_stick")
         interactions.start_digging
         interactions.tick
-        expect(starts.map(&.location)).to eq([target])
+        expect(starts.map(&.location)).to eq(mode == 1 ? [target] : [target, target])
         expect(bot_client.dimension_for_test.mining_block_state(target.x, target.y, target.z)).to eq(bot_client.dimension_for_test.block_state(target))
       end
     end
@@ -784,9 +797,22 @@ Spectator.describe "Digging block outlines" do
   def entity_actions
     bot_client.sent_packets.compact_map do |packet|
       case packet
-      when Rosegold::Serverbound::Attack         then :attack
-      when Rosegold::Serverbound::InteractEntity then packet.action.attack? ? :attack : :interact
+      when Rosegold::Serverbound::Attack then :attack
+      when Rosegold::Serverbound::InteractEntity
+        case packet.action
+        when .attack?      then :attack
+        when .interact_at? then :interact_at
+        when .interact?    then :interact
+        end
       end
+    end
+  end
+
+  def expected_entity_attack_then_use
+    if Rosegold::Client.protocol_version >= 775_u32
+      [:attack, :interact_at]
+    else
+      [:attack, :interact_at, :interact]
     end
   end
 
@@ -797,7 +823,7 @@ Spectator.describe "Digging block outlines" do
     interactions.tap_using_hand
     interactions.tick
 
-    expect(entity_actions).to eq([:attack, :interact])
+    expect(entity_actions).to eq(expected_entity_attack_then_use)
   end
 
   it "keeps staged progress and drops a use press while the break is staged" do
@@ -815,7 +841,19 @@ Spectator.describe "Digging block outlines" do
     expect(use_packets).to eq(0)
   end
 
-  it "retries a held use once a staged break ends" do
+  it "drops a use tap from the tick that releases a staged break" do
+    set_block(target, "stone")
+    interactions.start_digging
+    interactions.tick
+
+    interactions.stop_digging
+    interactions.tap_using_hand
+    2.times { interactions.tick }
+    expect(mining_actions.map(&.status)).to eq([Action::Start, Action::Cancel])
+    expect(use_packets).to eq(0)
+  end
+
+  it "retries held use on the tick after the staged break is canceled" do
     set_block(target, "stone")
     interactions.start_digging
     interactions.tick
@@ -828,14 +866,19 @@ Spectator.describe "Digging block outlines" do
     interactions.stop_digging
     interactions.tick
     expect(mining_actions.map(&.status)).to eq([Action::Start, Action::Cancel])
+    expect(use_packets).to eq(0)
+
+    interactions.tick
     expect(use_packets).to be > 0
   end
 
   it "pauses staged progress only while the server reports the bot using an item" do
     bot_client.player.entity_id = 42_u64
+    equip("stone")
     set_block(target, "stone")
     interactions.start_digging
     interactions.tick
+    interactions.start_using_hand
     progress = interactions.block_damage_progress
 
     report_using_item(true, 7_u64)
@@ -849,6 +892,7 @@ Spectator.describe "Digging block outlines" do
     expect(mining_actions.map(&.status)).to eq([Action::Start])
 
     report_using_item(false)
+    interactions.stop_using_hand
     interactions.tick
     expect(interactions.block_damage_progress).to be > progress
     interactions.stop_digging
@@ -857,30 +901,61 @@ Spectator.describe "Digging block outlines" do
     expect({abort_packet.status, abort_packet.face, abort_packet.sequence}).to eq({Action::Cancel, BlockFace::Bottom, 0})
   end
 
-  it "drops an attack press during active use but resumes the held attack after it" do
+  it "drains an attack press while releasing active use, then continues an eligible held attack" do
     bot_client.player.entity_id = 42_u64
+    equip("stone")
     set_block(target, "stone")
+    zombie_at(0.5, 0.0, 1.5)
     report_using_item(true)
     interactions.start_digging
     interactions.tick
     expect(starts).to be_empty
+    expect(entity_actions).to be_empty
+    expect(mining_actions.map { |packet| {packet.status, packet.sequence} }).to eq([{Action::FinishUsingHand, 0}])
 
-    report_using_item(false)
+    bot_client.dimension_for_test.entities.clear
     interactions.tick
     expect(starts.map(&.location)).to eq([target])
   end
 
-  it "does not mine through a pickable entity around the eyes or attack it" do
+  it "attacks a pickable entity around the eyes without mining through it" do
     set_block(target, "stone")
     zombie_at(0.5, 0.0, 0.5)
     interactions.start_digging
     interactions.tick
     expect(starts).to be_empty
-    expect(entity_actions).to be_empty
+    expect(entity_actions).to eq([:attack])
 
     bot_client.dimension_for_test.entities.clear
     interactions.tick
     expect(starts.map(&.location)).to eq([target])
+  end
+
+  it "accepts one explicit entity attack per tick without a random cooldown" do
+    set_block(target, "air")
+    zombie_at(0.5, 0.0, 2.0)
+    bot = Rosegold::Bot.new(bot_client)
+
+    3.times do
+      bot.attack
+      bot.attack
+      interactions.tick
+    end
+    expect(entity_actions).to eq([:attack, :attack, :attack])
+  end
+
+  it "reuses the block hit for a use tap after the same tick's instant break" do
+    set_block(target, "firefly_bush")
+    aim(0.5, 0.8)
+    equip("stone")
+    interactions.start_digging
+    interactions.tap_using_hand
+    interactions.tick
+
+    expect(starts.map(&.location)).to eq([target])
+    placement = bot_client.sent_packets.select(Rosegold::Serverbound::PlayerBlockPlacement).first
+    expect(placement.location).to eq(target)
+    expect(placement.sequence).to be > starts.first.sequence
   end
 
   it "uses the synchronized instabuild ability for creative mining in survival mode" do
@@ -943,6 +1018,22 @@ Spectator.describe "Digging block outlines" do
     interactions.tick
     expect(starts.map(&.location)).to eq([target])
     expect(interactions.block_damage_progress).to eq(0_f32)
+  end
+
+  it "swings on an attack miss and clears the miss delay in the release phase" do
+    set_block(target, "stone")
+    aim(0.5, 0.5, 0.5, Rosegold::Look::NORTH)
+    interactions.start_digging
+    interactions.tick
+    expect(mining_swings).to eq(1)
+    expect(starts).to be_empty
+
+    interactions.stop_digging
+    interactions.tick
+    aim(0.5, 0.5)
+    interactions.start_digging
+    interactions.tick
+    expect(starts.map(&.location)).to eq([target])
   end
 
   it "sends a 26.3 direction action only for a new face during staged progress" do

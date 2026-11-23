@@ -38,7 +38,7 @@ end
 | `KeyBind.pressKeyBind("key.forward")` plus `Client.waitTick()` | `bot.move_to { |feet| ... }`, or `bot.keys.press`/`release` | Prefer an intent and completion over manually holding keys. Directional input is available when a custom movement loop needs it; Rosegold movement is straight-line, not pathfinding. |
 | `Client.waitTick()` or `Client.waitTick(n)` | `bot.wait_tick` or `bot.wait_ticks(n)` | Both express game-tick timing. Rosegold waits for its client tick event. |
 | `Chat.say(message)` | `bot.chat(message)` | Both send chat or a slash command. `bot.chat` returns whether sending succeeded, not whether the server accepted it. |
-| `player.interact()` / `interactions.interactItem(...)` | `bot.use_hand` | Rosegold taps use through its interaction cooldown. It does not mean the server accepted the action. |
+| `player.interact()` / `interactions.interactItem(...)` | `bot.use_hand` | Rosegold queues one tap for the next tick in the main hand unless you pass `hand:`; same-tick taps coalesce, and an active use or a staged break drops it. It does not mean the server accepted the action. |
 | `interactions.interactBlock(x, y, z, face, ...)` | `bot.place_block_against(block, BlockFace::Top)` | Pass a configured `Vec3i` and top-level `BlockFace`; Rosegold aims at that face before use. |
 | `player.attack()` | `bot.attack` | Taps the attack button at the current aim, or a configured `Vec3d`/ `Look`. There is no public entity-target API. |
 | `player.openInventory().findItem(...)` / slot clicks | `bot.inventory.pick!`, `count`, `throw_all_of` | Prefer item intent. Rosegold selects matching stacks and tracks the synchronized menu. |

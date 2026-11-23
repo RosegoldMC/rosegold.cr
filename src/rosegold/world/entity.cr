@@ -147,6 +147,10 @@ class Rosegold::Entity
   def pickable?
     meta = metadata
     return false unless meta
+    if meta.name == "armor_stand"
+      flags = tracked_data[15_u8]?.as?(UInt8) || 0_u8
+      return false if (flags & 0x10_u8) != 0
+    end
     !NON_PICKABLE_ENTITIES.includes?(meta.name)
   end
 

@@ -2,6 +2,7 @@ require "./spec_helper"
 
 class MiningResetSpecClient < Rosegold::Client
   getter transport = Minecraft::IO::Memory.new
+  getter sent_packets = [] of Rosegold::Serverbound::Packet
 
   def initialize
     super("localhost", offline: {uuid: "00000000-0000-0000-0000-000000000000", username: "miningreset"})
@@ -17,6 +18,15 @@ class MiningResetSpecClient < Rosegold::Client
     old = connection
     @connection = Rosegold::Connection::Client.new(Minecraft::IO::Memory.new, Rosegold::ProtocolState::PLAY, protocol_version, self)
     old
+  end
+
+  def send_packet!(packet : Rosegold::Serverbound::Packet)
+    super
+    sent_packets << packet
+  end
+
+  def interactions_for_test
+    interactions
   end
 
   def physics_paused? : Bool
@@ -92,6 +102,28 @@ Spectator.describe "mining session reset" do
     client.player.using_item = true
     respawn.callback(client)
     expect(client.player.using_item?).to be_false
+  end
+
+  it "drops a held use, its prediction and its tap sequence when PLAY ends" do
+    inputs = client.interactions_for_test
+    apple = Rosegold::MCData.default.items.find! { |item| item.name == "apple" }
+    client.inventory_menu[36] = Rosegold::Slot.new(1_u32, apple.id)
+    inputs.tap_using_hand
+    inputs.tick
+    sequence = inputs.last_hand_tap_sequence
+    expect(sequence).to be > 0
+
+    inputs.start_using_hand
+    client.sent_packets.clear
+    client.leave_play
+    client.set_protocol_state(Rosegold::ProtocolState::PLAY)
+    inputs.tick
+
+    expect(client.sent_packets.select(Rosegold::Serverbound::PlayerAction)).to be_empty
+    expect(client.sent_packets.select(Rosegold::Serverbound::UseItem)).to be_empty
+    expect(inputs.last_hand_tap_sequence).to eq(0)
+    expect(client.pending_block_operations).to be_empty
+    expect(client.next_sequence).to eq(sequence + 1)
   end
 
   it "cleans up when the active connection closes" do

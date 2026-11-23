@@ -88,7 +88,7 @@ ensure
 end
 ```
 
-That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result. During a block break that takes multiple ticks, `use_hand` taps are dropped and held use waits. Call `stop_digging` before using a hand or eating if that should go first.
+That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result. A `use_hand` tap is dropped during an active use or a block break that takes multiple ticks, while a held `start_using_hand` keeps retrying (every four ticks when idle). `stop_digging` and `stop_using_hand` are processed on the next tick, so wait one tick after `stop_digging` before a tap. Attack, dig, and use share a short-lived local prediction that never changes what the world, physics, or queries report; those stay server-confirmed.
 
 For automatic reconnects, use `Bot.run`. It waits for spawn and gives the block a
 fresh bot for each session:
@@ -220,8 +220,10 @@ bot.place_block_against(Rosegold::Vec3i.new(100, 63, 200), BlockFace::Top)
 `bot.eat` is best effort: it logs errors rather than raising. Use `bot.eat!`
 when missing food or an interaction error should stop the task. Both skip
 at 18+ food, or 15+ food with full health, and may wait up to about 165 seconds
-at 20 TPS. A timeout logs a warning even with `eat!`. Neither restores the
-previous item selection. `eat` returns `nil`; check `bot.food` for the result.
+at 20 TPS. Reaching the eating retry limit only logs a warning. `eat!` raises
+if the bot is still connected and use is still not released one second after
+eating stops. Neither restores the previous item selection. `eat`
+returns `nil`; check `bot.food` for the result.
 
 ## Inventory, containers, and crafting
 
