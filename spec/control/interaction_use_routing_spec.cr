@@ -20,6 +20,12 @@ class InteractionUseRoutingSpecClient < Rosegold::Client
   def use_input
     interactions
   end
+
+  def frame
+    self.current_protocol_state = Rosegold::ProtocolState::PLAY
+    physics.paused = false
+    tick_frame
+  end
 end
 
 Spectator.describe "Interaction use routing" do
@@ -66,6 +72,13 @@ Spectator.describe "Interaction use routing" do
   def tap(hand : Rosegold::Hand? = Rosegold::Hand::MainHand)
     input.tap_using_hand(hand)
     input.tick
+  end
+
+  def cool(name : String, duration = 30)
+    bot_client.record_item_cooldown("minecraft:#{name}", duration)
+    bot_client.frame
+    aim
+    packets.clear
   end
 
   def wire
@@ -536,6 +549,62 @@ Spectator.describe "Interaction use routing" do
     input.tick
     expect(wire).to eq([{"on", main, 1}, {"use", main, 2}, {"action", main, 0}])
     expect(packets.last.as(Rosegold::Serverbound::PlayerAction).status).to eq(Rosegold::Serverbound::PlayerAction::Status::FinishUsingHand)
+  end
+
+  it "skips a cooled block item on an inert block and passes to generic use, then the offhand" do
+    dimension.set_block_state(target, state("stone"))
+    hold("stone")
+    custom = bot_client.inventory_menu[36]
+    custom.components_to_add["max_stack_size"] = Rosegold::DataComponents::MaxStackSize.new(16_u32)
+    hold("shield", off)
+    cool("stone")
+
+    tap(nil)
+
+    expect(wire).to eq([{"on", main, 1}, {"use", main, 2}, {"on", off, 3}, {"use", off, 4}])
+    placements = packets.select(Rosegold::Serverbound::PlayerBlockPlacement)
+    expect(placements.map { |packet| {packet.location, packet.face} }).to eq([{target, BlockFace::North}, {target, BlockFace::North}])
+    expect(bot_client.placement_states).to eq([state("stone"), state("stone")])
+    expect(dimension.interaction_block_state(target.north)).to eq(state("air"))
+    expect(swings).to be_empty
+  end
+
+  it "skips a cooled block item during secondary use and for an explicit single hand" do
+    dimension.set_block_state(target, state("stone"))
+    hold("stone")
+    cool("stone")
+    player.sneaking = true
+    aim
+
+    tap(main)
+
+    expect(wire).to eq([{"on", main, 1}, {"use", main, 2}])
+    expect(swings).to be_empty
+  end
+
+  it "still opens a known door with a matching cooled item and does not fall back" do
+    dimension.set_block_state(target, state("oak_door", "facing=north", "half=lower", "hinge=left", "open=false", "powered=false"))
+    dimension.set_block_state(target.up, state("oak_door", "facing=north", "half=upper", "hinge=left", "open=false", "powered=false"))
+    hold("stone")
+    hold("shield", off)
+    cool("stone")
+    aim(x: 2.125)
+
+    tap(nil)
+
+    swing = Rosegold::Client.protocol_version < 777 ? [{"swing", main, 0}] : [] of {String, Rosegold::Hand, Int32}
+    expect(wire).to eq([{"on", main, 1}] + swing)
+  end
+
+  it "keeps an unknown unsuppressed block conservative with a cooled item" do
+    dimension.set_block_state(target, state("note_block"))
+    hold("stone")
+    cool("stone")
+
+    tap(main)
+
+    expect(packets.first).to be_a(Rosegold::Serverbound::PlayerBlockPlacement)
+    expect(swings.map(&.hand)).to eq([main])
   end
 
   it "keeps an unknown block's old suppression and its legacy swing" do

@@ -39,7 +39,7 @@ module Rosegold::BlockUseRules
   private CAULDRONS = {"cauldron", "water_cauldron", "lava_cauldron", "powder_snow_cauldron"}
   private FULL_CUBE = AABBd.new(0, 0, 0, 1, 1, 1)
 
-  def self.evaluate(dimension : Dimension, player : Player, clicked : Vec3i, face : BlockFace, hand : Hand, main_hand : Slot, off_hand : Slot) : Decision
+  def self.evaluate(dimension : Dimension, player : Player, clicked : Vec3i, face : BlockFace, hand : Hand, main_hand : Slot, off_hand : Slot, *, cooled : Bool = false) : Decision
     unknown = Decision.new(Result::Unknown)
     return unknown unless {0, 1, 2}.includes?(player.gamemode) && player.creative_mode? == (player.gamemode == 1)
     return unknown unless state = block_state(dimension, clicked)
@@ -51,7 +51,7 @@ module Rosegold::BlockUseRules
 
     name = block.id_str
     if player.sneaking? && (!main_hand.empty? || !off_hand.empty?)
-      return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
+      return Decision.new(Result::Pass) if cooled || item_use_on_passes?(item, held)
     elsif CAULDRONS.includes?(name)
       return Decision.new(Result::Pass) unless item
       return unknown if patched?(held)
@@ -87,7 +87,7 @@ module Rosegold::BlockUseRules
     end
 
     return unknown unless INERT_BLOCKS.includes?(name) || plain_cube?(mc, block) || mc.air_states.includes?(state)
-    return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
+    return Decision.new(Result::Pass) if cooled || item_use_on_passes?(item, held)
     return unknown unless plain_cube?(mc, block) || mc.air_states.includes?(state)
     return unknown if player.gamemode == 2
     return unknown unless item && PLAIN_CUBES.includes?(item.name)

@@ -56,7 +56,10 @@ use server-confirmed state.
 Scripted taps such as `use_hand` choose the hand automatically unless given an
 explicit one. They queue for the next tick. For generic item use, a known
 group on server-reported cooldown still sends the use packet and allows automatic
-hand fallback; block and entity actions keep their existing rules.
+hand fallback. For a cooled item, Rosegold still sends the block-use packet on a
+known inert or plain block, or when sneaking with an item skips the block's own
+action. It skips local placement prediction and the swing, then follows the
+normal hand order. Other block and entity actions keep their existing rules.
 
 ## Server libraries
 

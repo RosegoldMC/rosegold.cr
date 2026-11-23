@@ -24,7 +24,8 @@ class Rosegold::Interactions
   private def route_block_use(hand : Hand, reached : ReachedBlock, revision : UInt64, hand_tap : Bool) : Bool
     dimension = client.dimension
     player = client.player
-    decision = BlockUseRules.evaluate(dimension, player, reached.block, reached.face, hand, inventory.main_hand, inventory.off_hand)
+    decision = BlockUseRules.evaluate(dimension, player, reached.block, reached.face, hand, inventory.main_hand, inventory.off_hand,
+      cooled: client.item_on_cooldown?(hand_slot(hand)))
     result = decision.result
     unknown_fall_through = result.unknown? && can_route_item_use?(hand) &&
                            (player.sneaking? || !block_use_consumes_click?(reached, hand))
