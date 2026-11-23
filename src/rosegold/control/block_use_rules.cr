@@ -22,12 +22,14 @@ module Rosegold::BlockUseRules
   # Block classes in these chains never override useItemOn or useWithoutItem.
   private INERT_BLOCKS = Set(String).new(%w(grass_block podzol mycelium sand red_sand gravel netherrack))
   private WOODS        = %w(oak spruce birch jungle acacia cherry dark_oak pale_oak mangrove bamboo crimson warped poplar)
-  private TRAPDOORS    = WOODS.map { |name| "#{name}_trapdoor" } + %w(
-    copper_trapdoor exposed_copper_trapdoor weathered_copper_trapdoor oxidized_copper_trapdoor
-    waxed_copper_trapdoor waxed_exposed_copper_trapdoor waxed_weathered_copper_trapdoor waxed_oxidized_copper_trapdoor
-  )
-  private BUTTONS = WOODS.map { |name| "#{name}_button" } + %w(stone_button polished_blackstone_button)
-  private MENUS   = %w(
+  private COPPERS      = %w(copper exposed_copper weathered_copper oxidized_copper
+    waxed_copper waxed_exposed_copper waxed_weathered_copper waxed_oxidized_copper)
+  private DOORS                 = (WOODS + COPPERS).map { |name| "#{name}_door" }
+  private TRAPDOORS             = (WOODS + COPPERS).map { |name| "#{name}_trapdoor" }
+  private FENCE_GATES           = WOODS.map { |name| "#{name}_fence_gate" }
+  private HORIZONTAL_DIRECTIONS = {"south", "west", "north", "east"}
+  private BUTTONS               = WOODS.map { |name| "#{name}_button" } + %w(stone_button polished_blackstone_button)
+  private MENUS                 = %w(
     chest trapped_chest ender_chest barrel furnace blast_furnace smoker crafting_table
     anvil chipped_anvil damaged_anvil enchanting_table brewing_stand beacon hopper dispenser dropper
     crafter loom stonecutter grindstone smithing_table cartography_table shulker_box
@@ -52,6 +54,12 @@ module Rosegold::BlockUseRules
       return Decision.new(Result::Pass) unless item
       return unknown if patched?(held)
       return Decision.new(cauldron_result(dimension, mc, clicked, block, state, item.name))
+    elsif DOORS.includes?(name)
+      return toggle_door(dimension, mc, clicked, block, state) if hand.main_hand?
+      return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
+    elsif FENCE_GATES.includes?(name)
+      return toggle_fence_gate(mc, clicked, block, state, player.look.yaw) if hand.main_hand?
+      return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
     elsif TRAPDOORS.includes?(name)
       return change_property(mc, clicked, block, state, "open") if hand.main_hand?
       return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
@@ -138,18 +146,66 @@ module Rosegold::BlockUseRules
 
   private def self.change_property(mc : MCData, clicked : Vec3i, block : Block, state : UInt16, property : String) : Decision
     name = mc.block_state_names[state]
+    if (changed = toggle_property(name, property)) && (replacement = state_id(mc, block, changed))
+      Decision.new(Result::Success, [{clicked, replacement}])
+    else
+      Decision.new(Result::Unknown)
+    end
+  end
+
+  private def self.toggle_door(dimension : Dimension, mc : MCData, clicked : Vec3i, block : Block, state : UInt16) : Decision
+    success = Decision.new(Result::Success)
+    return success unless name = mc.block_state_names[state]?
+    return success unless (changed = toggle_property(name, "open")) && (replacement = state_id(mc, block, changed))
+
+    if name.includes?("half=lower")
+      partner = adjacent(clicked, BlockFace::Top)
+      half, other_half = "half=lower", "half=upper"
+    elsif name.includes?("half=upper")
+      partner = adjacent(clicked, BlockFace::Bottom)
+      half, other_half = "half=upper", "half=lower"
+    else
+      return success
+    end
+
+    writes = [{clicked, replacement}]
+    if (partner_state = block_state(dimension, partner)) &&
+       (partner_block = block_for(mc, partner_state)) &&
+       (DOORS.includes?(partner_block.id_str) || partner_block.id_str == "iron_door") &&
+       mc.block_state_names[partner_state]?.try(&.includes?(other_half)) &&
+       (partner_replacement = state_id(mc, block, changed.sub(half, other_half)))
+      writes << {partner, partner_replacement}
+    end
+    Decision.new(Result::Success, writes)
+  end
+
+  private def self.toggle_fence_gate(mc : MCData, clicked : Vec3i, block : Block, state : UInt16, yaw : Float32) : Decision
+    success = Decision.new(Result::Success)
+    return success unless name = mc.block_state_names[state]?
+    return success unless changed = toggle_property(name, "open")
+    if name.includes?("open=false")
+      return success unless yaw.finite?
+      direction = (Look.wrap_yaw(yaw).to_f64 / 90.0 + 0.5).floor
+      index = direction.to_i32 & 3
+      opposite = HORIZONTAL_DIRECTIONS[(index + 2) & 3]
+      changed = changed.sub("facing=#{opposite}", "facing=#{HORIZONTAL_DIRECTIONS[index]}")
+    end
+    return success unless replacement = state_id(mc, block, changed)
+    Decision.new(Result::Success, [{clicked, replacement}])
+  end
+
+  private def self.toggle_property(name : String, property : String) : String?
     enabled = "#{property}=true"
     disabled = "#{property}=false"
     if name.includes?(enabled)
-      changed = name.sub(enabled, disabled)
+      name.sub(enabled, disabled)
     elsif name.includes?(disabled)
-      changed = name.sub(disabled, enabled)
-    else
-      return Decision.new(Result::Unknown)
+      name.sub(disabled, enabled)
     end
+  end
 
-    replacement = (block.min_state_id..block.max_state_id).find { |id| mc.block_state_names[id] == changed }
-    replacement ? Decision.new(Result::Success, [{clicked, replacement}]) : Decision.new(Result::Unknown)
+  private def self.state_id(mc : MCData, block : Block, name : String) : UInt16?
+    (block.min_state_id..block.max_state_id).find { |id| mc.block_state_names[id]? == name }
   end
 
   private def self.cauldron_result(dimension : Dimension, mc : MCData, clicked : Vec3i, block : Block, state : UInt16, item : String) : Result

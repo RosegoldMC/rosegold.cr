@@ -143,6 +143,126 @@ Spectator.describe Rosegold::BlockUseRules do
     expect(evaluate.writes).to be_empty
   end
 
+  sample Rosegold::Client::SUPPORTED_PROTOCOLS do |protocol|
+    it "toggles both halves from either side for every hand-openable door variant" do
+      Rosegold::Client.protocol_version = protocol
+      woods = %w(oak spruce birch jungle acacia cherry dark_oak pale_oak mangrove bamboo crimson warped)
+      copper = %w(copper exposed_copper weathered_copper oxidized_copper
+        waxed_copper waxed_exposed_copper waxed_weathered_copper waxed_oxidized_copper)
+      names = woods + copper
+      names << "poplar" if protocol >= 777_u32
+      names.each do |name|
+        %w(false true).each do |open|
+          lower = "#{name}_door[facing=east, half=lower, hinge=right, open=#{open}, powered=true]"
+          upper = lower.sub("half=lower", "half=upper")
+          next_open = open == "false" ? "true" : "false"
+          lower_next = state(lower.sub("open=#{open}", "open=#{next_open}"))
+          upper_next = state(upper.sub("open=#{open}", "open=#{next_open}"))
+          put lower
+          put upper, above
+          decision = evaluate
+          expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Success)
+          expect(decision.writes).to eq([{clicked, lower_next}, {above, upper_next}])
+          decision = evaluate(position: above)
+          expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Success)
+          expect(decision.writes).to eq([{above, upper_next}, {clicked, lower_next}])
+        end
+      end
+      put "iron_door[facing=east, half=lower, hinge=right, open=false, powered=false]"
+      expect(evaluate.result).to eq(Rosegold::BlockUseRules::Result::Pass)
+      expect(evaluate.writes).to be_empty
+    end
+  end
+
+  it "copies the clicked door's toggled variant and properties to a loaded opposite door half" do
+    lower = "oak_door[facing=east, half=lower, hinge=right, open=false, powered=true]"
+    put lower
+    put "iron_door[facing=south, half=upper, hinge=left, open=true, powered=false]", above
+
+    expect(evaluate.writes).to eq([
+      {clicked, state(lower.sub("open=false", "open=true"))},
+      {above, state(lower.sub("half=lower", "half=upper").sub("open=false", "open=true"))},
+    ])
+  end
+
+  it "only toggles the clicked half when the relative cell is missing or is not an opposite door half" do
+    lower = "oak_door[facing=east, half=lower, hinge=right, open=false, powered=false]"
+    opened = lower.sub("open=false", "open=true")
+    put lower
+    {"air", "stone", lower}.each do |neighbor|
+      put neighbor, above
+      decision = evaluate
+      expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Success)
+      expect(decision.writes).to eq([{clicked, state(opened)}])
+    end
+    dimension.set_block_state above, UInt16::MAX
+    expect(evaluate.writes).to eq([{clicked, state(opened)}])
+
+    summit = Rosegold::Vec3i.new(clicked.x, dimension.min_y + dimension.world_height - 1, clicked.z)
+    put lower, summit
+    decision = evaluate(position: summit)
+    expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Success)
+    expect(decision.writes).to eq([{summit, state(opened)}])
+  end
+
+  it "opens verified wooden fence gates toward the player direction only when facing opposite" do
+    woods = %w(oak spruce birch jungle acacia cherry dark_oak pale_oak mangrove bamboo crimson warped)
+    Rosegold::Client::SUPPORTED_PROTOCOLS.each do |protocol|
+      Rosegold::Client.protocol_version = protocol
+      names = woods.dup
+      names << "poplar" if protocol >= 777_u32
+      names.each do |name|
+        closed = "#{name}_fence_gate[facing=north, in_wall=true, open=false, powered=true]"
+        opened = closed.sub("facing=north", "facing=south").sub("open=false", "open=true")
+        player.look = Rosegold::Look::SOUTH
+        put closed
+        decision = evaluate
+        expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Success)
+        expect(decision.writes).to eq([{clicked, state(opened)}])
+        put opened
+        player.look = Rosegold::Look::NORTH
+        expect(evaluate.writes).to eq([{clicked, state(opened.sub("open=true", "open=false"))}])
+      end
+    end
+  end
+
+  it "rounds the horizontal fence gate direction at vanilla yaw boundaries, independent of pitch" do
+    cases = {
+      {-45.001_f32, "west", "east"}, {-45_f32, "north", "south"},
+      {44.999_f32, "north", "south"}, {45_f32, "east", "west"},
+      {135_f32, "south", "north"}, {225_f32, "west", "east"},
+      {405_f32, "north", "north"}, {193273528320_f32, "north", "south"},
+    }
+    cases.each do |yaw, facing, opened_facing|
+      closed = "oak_fence_gate[facing=#{facing}, in_wall=false, open=false, powered=false]"
+      opened = closed.sub("facing=#{facing}", "facing=#{opened_facing}").sub("open=false", "open=true")
+      put closed
+      player.look = Rosegold::Look.new(yaw, 90_f32)
+      expect(evaluate.writes).to eq([{clicked, state(opened)}])
+    end
+  end
+
+  it "skips manual door and gate use off hand or with either hand populated during secondary use" do
+    {
+      "oak_door[facing=east, half=lower, hinge=right, open=false, powered=false]",
+      "oak_fence_gate[facing=north, in_wall=false, open=false, powered=false]",
+    }.each do |name|
+      put name
+      held = item("stick")
+      player.sneaking = false
+      expect(evaluate(held).result).to eq(Rosegold::BlockUseRules::Result::Success)
+      expect(evaluate(empty_hand, held, Rosegold::Hand::OffHand).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+      expect(evaluate(empty_hand, item("stone"), Rosegold::Hand::OffHand).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+      player.sneaking = true
+      expect(evaluate.result).to eq(Rosegold::BlockUseRules::Result::Success)
+      [{held, empty_hand}, {empty_hand, held}].each do |main, off|
+        decision = evaluate(main, off)
+        expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Pass)
+        expect(decision.writes).to be_empty
+      end
+    end
+  end
+
   it "needs the main hand for default block use and skips it with either hand occupied while sneaking" do
     put "oak_trapdoor[facing=east, half=top, open=false, powered=false, waterlogged=false]"
     expect(evaluate(hand: Rosegold::Hand::OffHand).result).to eq(Rosegold::BlockUseRules::Result::Pass)
@@ -253,8 +373,6 @@ Spectator.describe Rosegold::BlockUseRules do
       expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Success)
       expect(decision.writes).to be_empty
     end
-    put "oak_fence_gate[facing=north, in_wall=false, open=false, powered=false]"
-    expect(evaluate.result).to eq(Rosegold::BlockUseRules::Result::Unknown)
   end
 
   it "consumes a plain apple or bread in the main hand on a bookless lectern" do

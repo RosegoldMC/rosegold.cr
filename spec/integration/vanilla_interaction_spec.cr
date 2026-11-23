@@ -8,10 +8,35 @@ end
 
 class VanillaInteractionClient < Rosegold::Client
   getter entity_interactions = [] of Rosegold::Serverbound::InteractEntity
+  getter use_hands = [] of Rosegold::Hand
+  getter block_uses = [] of {Rosegold::Vec3i, Array(String?), Array(String?)}
+  property watched_blocks = [] of Rosegold::Vec3i
 
   def send_packet!(packet : Rosegold::Serverbound::Packet)
+    unless watched_blocks.empty?
+      case packet
+      when Rosegold::Serverbound::PlayerBlockPlacement
+        use_hands << packet.hand
+        block_uses << {packet.location, confirmed_states, block_states(predicted: true)}
+      when Rosegold::Serverbound::UseItem
+        use_hands << packet.hand
+      end
+    end
     super
     entity_interactions << packet if packet.is_a?(Rosegold::Serverbound::InteractEntity)
+  end
+
+  def confirmed_states
+    block_states(predicted: false)
+  end
+
+  private def block_states(*, predicted)
+    world = dimension_for_test
+    names = Rosegold::MCData.default.block_state_names
+    watched_blocks.map do |position|
+      state = predicted ? world.interaction_block_state(position) : world.block_state(position)
+      state.try { |id| names[id] }
+    end
   end
 end
 
@@ -21,6 +46,13 @@ module VanillaInteractionFixture
   LEVER     = Rosegold::Vec3i.new(60, -59, 59)
   LEVER_AIM = Rosegold::Vec3d.new(60.5, -58.5, 59.1)
   CART      = Rosegold::Vec3d.new(60.5, -59.9375, 62.5)
+
+  def self.observed_client
+    VanillaInteractionClient.new(MC_TEST_HOST, MC_TEST_PORT, offline: {
+      uuid:     "00000000-0000-0000-0000-000000000000",
+      username: AdminBot::TEST_PLAYER,
+    })
+  end
 
   def self.clear
     admin.chat "/kill @e[type=minecraft:cow,tag=rg_vanilla_use]"
@@ -199,6 +231,70 @@ Spectator.describe "Rosegold::Bot vanilla interaction ordering" do
     end
   end
 
+  def expect_block_use(bot, observed_client, target, before, after)
+    observed_client.block_uses.clear
+    observed_client.use_hands.clear
+    bot.use_hand
+
+    expect(VanillaInteractionFixture.wait_until(bot, 40) {
+      observed_client.confirmed_states == after
+    }).to be_true
+    expect(observed_client.block_uses).to eq([{target, before, after}])
+    expect(observed_client.use_hands).to eq([Rosegold::Hand::MainHand])
+  end
+
+  it "predicts and confirms both halves when opening and closing doors without using the off hand" do
+    observed_client = VanillaInteractionFixture.observed_client
+    observed_client.join_game do |client|
+      bot = Rosegold::Bot.new(client)
+      expect(VanillaInteractionFixture.prepare(bot)).to be_true
+      lower = VanillaInteractionFixture::ORIGIN.south(2)
+      upper = lower.up
+      observed_client.watched_blocks = [lower, upper]
+      admin.item_replace "weapon.offhand", "cobblestone"
+      expect(VanillaInteractionFixture.wait_until(bot, 40) {
+        bot.main_hand.empty? && bot.inventory.off_hand.name == "cobblestone"
+      }).to be_true
+
+      {"oak_door", "waxed_copper_door"}.each do |door|
+        closed = ["lower", "upper"].map { |half| "#{door}[facing=south, half=#{half}, hinge=left, open=false, powered=false]" }
+        opened = closed.map &.sub("open=false", "open=true")
+        admin.setblock lower.x, lower.y, lower.z, "air"
+        admin.setblock lower.x, lower.y, lower.z, closed[0].delete(' ')
+        admin.setblock upper.x, upper.y, upper.z, closed[1].delete(' ')
+        expect(VanillaInteractionFixture.wait_until(bot, 40) {
+          observed_client.confirmed_states == closed
+        }).to be_true
+
+        bot.look_at upper.to_f64.plus(0.5, 0.5, 0.1)
+        expect_block_use(bot, observed_client, upper, closed, opened)
+        bot.look_at lower.to_f64.plus(0.9375, 0.5, 0.5)
+        expect_block_use(bot, observed_client, lower, opened, closed)
+        expect(bot.inventory.off_hand.name).to eq("cobblestone")
+      end
+    end
+  end
+
+  it "predicts and confirms a gate turning to the player's facing when it opens" do
+    observed_client = VanillaInteractionFixture.observed_client
+    observed_client.join_game do |client|
+      bot = Rosegold::Bot.new(client)
+      expect(VanillaInteractionFixture.prepare(bot)).to be_true
+      gate = VanillaInteractionFixture::ORIGIN.south(2)
+      observed_client.watched_blocks = [gate]
+      closed = ["oak_fence_gate[facing=north, in_wall=false, open=false, powered=false]"]
+      opened = ["oak_fence_gate[facing=south, in_wall=false, open=true, powered=false]"]
+      admin.setblock gate.x, gate.y, gate.z, closed[0].delete(' ')
+      expect(VanillaInteractionFixture.wait_until(bot, 40) {
+        observed_client.confirmed_states == closed
+      }).to be_true
+
+      bot.look_at gate.to_f64.plus(0.5, 0.5, 0.5)
+      expect_block_use(bot, observed_client, gate, closed, opened)
+      expect_block_use(bot, observed_client, gate, opened, [opened[0].sub("open=true", "open=false")])
+    end
+  end
+
   it "keeps the automatically selected off-hand shield active until released" do
     client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
@@ -222,10 +318,7 @@ Spectator.describe "Rosegold::Bot vanilla interaction ordering" do
   end
 
   it "raises the off-hand shield when held use passes through a minecart while sneaking" do
-    observed_client = VanillaInteractionClient.new(MC_TEST_HOST, MC_TEST_PORT, offline: {
-      uuid:     "00000000-0000-0000-0000-000000000000",
-      username: AdminBot::TEST_PLAYER,
-    })
+    observed_client = VanillaInteractionFixture.observed_client
     observed_client.join_game do |client|
       Rosegold::Bot.new(client).try do |bot|
         expect(VanillaInteractionFixture.prepare(bot)).to be_true

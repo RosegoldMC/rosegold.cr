@@ -50,10 +50,12 @@ that it remains current across respawns or dimension changes.
 `experience_level`, `experience_progress`, and `total_experience` expose the
 player's server-reported experience. Movement and interaction methods still use
 vanilla physics, reach, collision, and occlusion. Native attack, dig, and use
-may target from a short-lived local prediction, but every observation the API
-returns (world, physics, queries) stays server-confirmed. Scripted taps such as
-`use_hand` choose the hand automatically unless given an explicit one, and queue for the next tick, which differs from
-desktop input.
+may target from a short-lived local prediction. For example, opening a door by
+hand in Survival or Creative can change what the next click targets before the
+server confirms either half. World reads, physics, and queries still use
+server-confirmed state.
+Scripted taps such as `use_hand` choose the hand automatically unless given an
+explicit one. They queue for the next tick.
 
 ## CivMC boundary
 
