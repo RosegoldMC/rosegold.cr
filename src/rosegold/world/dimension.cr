@@ -1,6 +1,7 @@
 require "./chunk"
 require "./entity"
 require "./mining_prediction"
+require "./world_border"
 
 class Rosegold::Dimension
   alias ChunkPos = {Int32, Int32}
@@ -11,6 +12,7 @@ class Rosegold::Dimension
 
   getter name : String
   getter nbt : Minecraft::NBT::Tag
+  getter world_border : WorldBorder
   getter min_y = -64
   getter world_height = 256 + 64 + 64
 
@@ -21,7 +23,7 @@ class Rosegold::Dimension
 
   @interaction_predictions = MiningPrediction.new
 
-  def initialize(@name, @nbt)
+  def initialize(@name, @nbt, @world_border = WorldBorder.new)
     if (compound = @nbt).is_a?(Minecraft::NBT::CompoundTag)
       @min_y = compound["min_y"]?.try(&.as_i32) || @min_y
       @world_height = compound["height"]?.try(&.as_i32) || @world_height
@@ -56,9 +58,10 @@ class Rosegold::Dimension
   # carries the authoritative `min_y` / `height` for this server. Falls back
   # to vanilla defaults keyed by dimension name when the registry is missing
   # or the entry is unparseable.
-  def self.from_registry(name : String, dimension_type : UInt32, registries : Hash(String, Rosegold::Clientbound::RegistryData))
-    nbt = registry_dimension_nbt(dimension_type, registries)
-    dim = nbt ? new(name, nbt) : for_dimension_name(name)
+  def self.from_registry(name : String, dimension_type : UInt32, registries : Hash(String, Rosegold::Clientbound::RegistryData),
+                         *, world_border : WorldBorder? = nil)
+    nbt = registry_dimension_nbt(dimension_type, registries) || for_dimension_name(name).nbt
+    dim = new(name, nbt, world_border || WorldBorder.new(center_scale: border_center_scale(nbt)))
     dim.dimension_type = dimension_type
     dim
   end
@@ -72,6 +75,23 @@ class Rosegold::Dimension
     else
       new # defaults to overworld
     end
+  end
+
+  private def self.border_center_scale(nbt : Minecraft::NBT::Tag) : Float64?
+    # Only 1.21.8 wraps the client border's center getters with dimension scaling.
+    return 1.0 unless Client.protocol_version == 772_u32
+    return unless nbt.is_a?(Minecraft::NBT::CompoundTag)
+
+    scale = case tag = nbt["coordinate_scale"]?
+            when Minecraft::NBT::ByteTag
+              tag.as_i8.to_f64
+            when Minecraft::NBT::ShortTag, Minecraft::NBT::IntTag, Minecraft::NBT::LongTag,
+                 Minecraft::NBT::FloatTag, Minecraft::NBT::DoubleTag
+              tag.value.to_f64
+            else
+              return
+            end
+    scale if (1e-5_f32.to_f64..30_000_000.0).includes?(scale)
   end
 
   private def self.registry_dimension_nbt(dimension_type : UInt32, registries : Hash(String, Rosegold::Clientbound::RegistryData)) : Minecraft::NBT::CompoundTag?

@@ -61,6 +61,15 @@ known inert or plain block, or when sneaking with an item skips the block's own
 action. It skips local placement prediction and the swing, then follows the
 normal hand order. Other block and entity actions keep their existing rules.
 
+A normal use press stops if the clicked block is outside the world border. It
+checks the block under the crosshair, even when placing against its face would
+put the new block outside. On 1.21.8, a nonzero border center requires a valid
+coordinate scale from the dimension type. Rosegold tracks moving borders on
+1.21.8 and 1.21.9. On newer versions, a moving border leaves the bounds unknown
+until the server sends a static size or initializes a static border. Unknown
+bounds do not stop the press. This check does not change movement, collision,
+or ray targeting.
+
 ## Server libraries
 
 A server library such as [rosegold-civmc](https://github.com/RosegoldMC/civmc.cr)

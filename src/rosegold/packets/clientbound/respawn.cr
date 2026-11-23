@@ -99,7 +99,9 @@ class Rosegold::Clientbound::Respawn < Rosegold::Clientbound::Packet
     client.player.gamemode = gamemode.to_i8
 
     client.reset_mining_session
-    client.dimension = Dimension.from_registry(dimension_name, dimension_type, client.registries)
+    old_dimension = client.dimension
+    border = old_dimension.world_border if old_dimension.name == dimension_name
+    client.dimension = Dimension.from_registry(dimension_name, dimension_type, client.registries, world_border: border)
 
     Log.debug { "Respawned in #{dimension_name} gamemode=#{gamemode} dimension_type=#{dimension_type}" }
   end

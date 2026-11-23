@@ -55,9 +55,9 @@ Spectator.describe "mining session reset" do
     )
   end
 
-  def respawn
+  def respawn(name = "minecraft:overworld", dimension_type = 0_u32)
     Rosegold::Clientbound::Respawn.new(
-      0_u32, "minecraft:overworld", 0_i64, 0_u8, -1_i8,
+      dimension_type, name, 0_i64, 0_u8, -1_i8,
       false, false, false, nil, nil, 0_u32, 63_u32, 0_u8
     )
   end
@@ -90,6 +90,141 @@ Spectator.describe "mining session reset" do
     track_operation(client)
     respawn.callback(client)
     expect(client.pending_block_operations).to be_empty
+  end
+
+  it "starts with a fresh border on login even when the world key is unchanged" do
+    old_border = client.dimension_for_test.world_border
+    point = Rosegold::Vec3i.new(5, 0, 0)
+    Rosegold::Clientbound::SetBorderSize.new(2.0).callback(client)
+    expect(old_border.outside?(point)).to be_true
+
+    login.callback(client)
+
+    border = client.dimension_for_test.world_border
+    expect(border.same?(old_border)).to be_false
+    expect(border.outside?(point)).to be_false
+  end
+
+  it "retains only the border across same-world respawns without a registry" do
+    world_key = "example:first"
+    respawn(world_key).callback(client)
+    old_world = client.dimension_for_test
+    expect(old_world.name).to eq(world_key)
+    expect({old_world.min_y, old_world.world_height}).to eq({-64, 384})
+    data = Minecraft::IO::Memory.new
+    (old_world.world_height >> 4).times { Rosegold::Section.empty.write(data) }
+    old_world.load_chunk(Rosegold::Chunk.new(0, 0, Minecraft::IO::Memory.new(data.to_slice), old_world))
+    old_world.world_age = 12_i64
+    old_world.time_of_day = 34_i64
+    point = Rosegold::Vec3i.new(5, 0, 0)
+    Rosegold::Clientbound::SetBorderSize.new(2.0).callback(client)
+
+    respawn(world_key, 1_u32).callback(client)
+
+    same_world = client.dimension_for_test
+    expect(same_world.name).to eq(world_key)
+    expect(same_world.chunks).to be_empty
+    expect({same_world.world_age, same_world.time_of_day}).to eq({0_i64, 6_000_i64})
+    expect(same_world.world_border.same?(old_world.world_border)).to be_true
+    expect(same_world.world_border.outside?(point)).to be_true
+
+    other_key = "example:second"
+    respawn(other_key, 1_u32).callback(client)
+
+    other_world = client.dimension_for_test
+    expect(other_world.name).to eq(other_key)
+    expect(other_world.world_border.same?(same_world.world_border)).to be_false
+    expect(other_world.world_border.outside?(point)).to be_false
+  end
+
+  def register_border_scales(client, *scales : Minecraft::NBT::Tag?)
+    registry = Rosegold::Dimension::REGISTRY_ID
+    entries = scales.to_a.map_with_index do |scale, index|
+      nbt = Minecraft::NBT::CompoundTag.new
+      nbt["coordinate_scale"] = scale if scale
+      io = Minecraft::IO::Memory.new
+      io.write_byte(nbt.tag_type)
+      nbt.write(io)
+      {id: "example:dimension_#{index}", data: io.to_slice.as(Bytes?)}
+    end
+    client.registries[registry] = Rosegold::Clientbound::RegistryData.new(registry, entries)
+  end
+
+  sample [772_u32, 773_u32] do |protocol|
+    it "scales only the 1.21.8 border center using the dimension type from login" do
+      Rosegold::Client.protocol_version = protocol
+      register_border_scales(client, Minecraft::NBT::DoubleTag.new(8.0))
+      login.callback(client)
+      Rosegold::Clientbound::InitializeBorder.new(80.0, -80.0, 8.0, 8.0, 0_i64, 100, 5, 15).callback(client)
+
+      border = client.dimension_for_test.world_border
+      expect(border.outside?(Rosegold::Vec3i.new(13, 0, -7))).to eq(protocol != 772_u32)
+      expect(border.outside?(Rosegold::Vec3i.new(83, 0, -77))).to eq(protocol == 772_u32)
+    ensure
+      Rosegold::Client.reset_protocol_version!
+    end
+  end
+
+  it "keeps the 1.21.8 center scale for the same world and reads it anew for another world" do
+    Rosegold::Client.protocol_version = 772_u32
+    register_border_scales(client, Minecraft::NBT::DoubleTag.new(8.0), Minecraft::NBT::DoubleTag.new(2.0))
+    login.callback(client)
+    Rosegold::Clientbound::SetBorderCenter.new(80.0, -80.0).callback(client)
+    Rosegold::Clientbound::SetBorderSize.new(8.0).callback(client)
+    scaled_point = Rosegold::Vec3i.new(10, 0, -10)
+
+    respawn("minecraft:overworld", 1_u32).callback(client)
+    expect(client.dimension_for_test.world_border.outside?(scaled_point)).to be_false
+
+    respawn("example:second", 1_u32).callback(client)
+    Rosegold::Clientbound::SetBorderCenter.new(80.0, -80.0).callback(client)
+    Rosegold::Clientbound::SetBorderSize.new(8.0).callback(client)
+    border = client.dimension_for_test.world_border
+    expect(border.outside?(scaled_point)).to be_true
+    expect(border.outside?(Rosegold::Vec3i.new(40, 0, -40))).to be_false
+  ensure
+    Rosegold::Client.reset_protocol_version!
+  end
+
+  it "accepts non-double 1.21.8 scales including both codec limits" do
+    Rosegold::Client.protocol_version = 772_u32
+    cases = {
+      {Minecraft::NBT::ByteTag.new(8_u8), 8.0},
+      {Minecraft::NBT::ShortTag.new(8_i16), 8.0},
+      {Minecraft::NBT::IntTag.new(8_i32), 8.0},
+      {Minecraft::NBT::LongTag.new(30_000_000_i64), 30_000_000.0},
+      {Minecraft::NBT::FloatTag.new(1e-5_f32), 1e-5_f32.to_f64},
+    }
+    register_border_scales(client, *cases.map(&.first))
+    cases.each_with_index do |(_, scale), index|
+      respawn("example:scale_#{index}", index.to_u32).callback(client)
+      Rosegold::Clientbound::InitializeBorder.new(10 * scale, -10 * scale, 8.0, 8.0, 0_i64, 100, 5, 15).callback(client)
+      border = client.dimension_for_test.world_border
+      expect(border.outside?(Rosegold::Vec3i.new(10, 0, -10))).to be_false
+      expect(border.outside?(Rosegold::Vec3i.new(20, 0, -20))).to be_true
+    end
+  ensure
+    Rosegold::Client.reset_protocol_version!
+  end
+
+  it "does not reject with unknown 1.21.8 scale unless the center is zero" do
+    Rosegold::Client.protocol_version = 772_u32
+    scales = [nil, Minecraft::NBT::StringTag.new("8"), Minecraft::NBT::ByteTag.new(0xff_u8)] of Minecraft::NBT::Tag?
+    [0.0, -8.0, 1e-6, 30_000_001.0, Float64::INFINITY, Float64::NAN].each { |scale| scales << Minecraft::NBT::DoubleTag.new(scale) }
+    scales.each do |scale|
+      register_border_scales(client, scale)
+      respawn("minecraft:the_nether").callback(client)
+      Rosegold::Clientbound::InitializeBorder.new(80.0, -80.0, 8.0, 8.0, 0_i64, 100, 5, 15).callback(client)
+      border = client.dimension_for_test.world_border
+      point = Rosegold::Vec3i.new(10, 0, -10)
+      expect(border.outside?(point)).to be_false
+
+      Rosegold::Clientbound::SetBorderCenter.new(0.0, 0.0).callback(client)
+      expect(border.outside?(point)).to be_true
+      respawn("minecraft:overworld").callback(client)
+    end
+  ensure
+    Rosegold::Client.reset_protocol_version!
   end
 
   it "clears pending operations when PLAY moves to CONFIGURATION" do
