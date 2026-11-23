@@ -49,7 +49,11 @@ that it remains current across respawns or dimension changes.
 
 `experience_level`, `experience_progress`, and `total_experience` expose the
 player's server-reported experience. Movement and interaction methods still use
-vanilla physics, reach, collision, and occlusion.
+vanilla physics, reach, collision, and occlusion. Native attack, dig, and use
+may target from a short-lived local prediction, but every observation the API
+returns (world, physics, queries) stays server-confirmed. Scripted taps such as
+`use_hand` take an explicit hand and queue for the next tick, which differs from
+desktop input.
 
 ## CivMC boundary
 

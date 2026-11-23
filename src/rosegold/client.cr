@@ -111,8 +111,16 @@ class Rosegold::Client < Rosegold::EventEmitter
   def reset_mining_session
     dimension.clear_mining_predictions
     pending_block_operations.clear
-    player.using_item = false
     interactions.reset_mining
+    interactions.reset_use
+  end
+
+  def sync_using_item(hand : Hand?) : Nil
+    interactions.sync_using_item(hand)
+  end
+
+  def acknowledge_use(sequence : Int32) : Nil
+    interactions.acknowledge_use(sequence)
   end
 
   def add_chunk_batch_sample(millis_per_chunk : Float64, batch_size : Int32)
@@ -164,8 +172,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
   end
 
-  def wait_tick
-    wait_for Event::Tick, timeout: 1.second
+  def wait_tick(timeout : Time::Span = 1.second)
+    wait_for Event::Tick, timeout: timeout
   end
 
   # Calculate tick interval based on current tick rate

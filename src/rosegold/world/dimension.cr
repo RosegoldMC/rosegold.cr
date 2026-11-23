@@ -19,7 +19,7 @@ class Rosegold::Dimension
   property time_of_day : Int64 = 6000_i64
   property world_age : Int64 = 0_i64
 
-  @mining_predictions = MiningPrediction.new
+  @interaction_predictions = MiningPrediction.new
 
   def initialize(@name, @nbt)
     if (compound = @nbt).is_a?(Minecraft::NBT::CompoundTag)
@@ -93,7 +93,7 @@ class Rosegold::Dimension
 
   def load_chunk(chunk : Chunk)
     chunk_pos = {chunk.x, chunk.z}
-    @mining_predictions.clear_chunk chunk_pos
+    @interaction_predictions.clear_chunk chunk_pos
     @chunks[chunk_pos] = chunk
   end
 
@@ -103,7 +103,7 @@ class Rosegold::Dimension
   end
 
   def unload_chunk(chunk_pos : ChunkPos)
-    @mining_predictions.clear_chunk chunk_pos
+    @interaction_predictions.clear_chunk chunk_pos
     @chunks.delete chunk_pos
   end
 
@@ -130,33 +130,54 @@ class Rosegold::Dimension
     @chunks[chunk_pos]?.try &.set_block_state(x, y, z, block_state)
   end
 
-  # Registers the client-side result of breaking the loaded, non-air block at
-  # `location` (its fluid's block state, else air) under `sequence`. Only
-  # `mining_block_state` sees it; chunk data stays server-authoritative.
-  # Returns whether a prediction was registered.
+  # Predicts the fluid block state (or air) left by breaking a loaded non-air block.
   def predict_block_break(location : Vec3i, sequence : Int32) : Bool
-    x, y, z = location.x, location.y, location.z
-    current = mining_block_state(x, y, z) || return false
+    current = interaction_block_state(location) || return false
     mc = MCData.default
     return false if mc.air_states.includes?(current)
-    @mining_predictions.predict x, y, z, sequence, MiningPrediction.replacement_state(current, mc)
-    true
+    predict_interaction_block_state location, MiningPrediction.replacement_state(current, mc), sequence
   end
 
-  # Block state for choosing a mining target: the pending prediction, else the
-  # authoritative state.
+  # Returns the pending interaction state or the authoritative block state.
+  def interaction_block_state(location : Vec3i) : UInt16?
+    interaction_block_state location.x, location.y, location.z
+  end
+
+  def interaction_block_state(x : Int32, y : Int32, z : Int32) : UInt16?
+    @interaction_predictions[x, y, z] || block_state(x, y, z)
+  end
+
+  # Records a verified interaction result separately from chunk data. Returns
+  # false for unknown states, unloaded or out-of-bounds positions, or a sequence
+  # older than the prediction already pending at this position.
+  def predict_interaction_block_state(location : Vec3i, state : UInt16, sequence : Int32) : Bool
+    y_offset = location.y.to_i64 - min_y
+    return false unless 0 <= y_offset < world_height && block_state(location)
+    state_name = MCData.default.block_state_names[state]? || return false
+    return false if state_name.empty?
+    @interaction_predictions.predict location.x, location.y, location.z, sequence, state
+  end
+
+  # Ends predictions up to and including `sequence`, revealing the latest
+  # authoritative block state wherever a prediction ends.
+  def acknowledge_interaction_predictions(sequence : Int32) : Nil
+    @interaction_predictions.acknowledge sequence
+  end
+
+  def clear_interaction_predictions : Nil
+    @interaction_predictions.clear
+  end
+
   def mining_block_state(x : Int32, y : Int32, z : Int32) : UInt16?
-    @mining_predictions[x, y, z] || block_state(x, y, z)
+    interaction_block_state x, y, z
   end
 
-  # Ends predictions with sequence <= `sequence`, as a cumulative
-  # ClientboundBlockChangedAck does.
   def acknowledge_mining_predictions(sequence : Int32) : Nil
-    @mining_predictions.acknowledge sequence
+    acknowledge_interaction_predictions sequence
   end
 
   def clear_mining_predictions : Nil
-    @mining_predictions.clear
+    clear_interaction_predictions
   end
 
   # Vanilla Entity#updateFluidOnEyes: the water at the eye block, raised to a

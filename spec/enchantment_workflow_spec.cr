@@ -1,11 +1,5 @@
 require "./spec_helper"
 
-class Rosegold::Interactions
-  def queued_hand_tap_for_test?
-    !@queued_hand_tap.nil?
-  end
-end
-
 class Rosegold::EnchantmentWorkflowSpecClient < Rosegold::Client
   getter sent_packets = [] of Rosegold::Serverbound::Packet
 
@@ -20,15 +14,15 @@ class Rosegold::EnchantmentWorkflowSpecClient < Rosegold::Client
 
   def sent_hand_tap_for_test
     interactions.tap_using_hand
+    tick_inputs_for_test
+  end
+
+  def tick_inputs_for_test
     interactions.tick
   end
 
   def hand_tap_sequence_for_test
     interactions.last_hand_tap_sequence
-  end
-
-  def queued_hand_tap_for_test?
-    interactions.queued_hand_tap_for_test?
   end
 end
 
@@ -50,6 +44,14 @@ Spectator.describe Rosegold::EnchantmentWorkflow do
       Rosegold::ProtocolState::PLAY, Rosegold::Client.protocol_version, client)
     client.connection_for_test = connection
     client.set_protocol_state(Rosegold::ProtocolState::PLAY)
+    dimension = client.dimension_for_test
+    chunk_data = Minecraft::IO::Memory.new
+    (dimension.world_height >> 4).times { Rosegold::Section.empty.write(chunk_data) }
+    dimension.load_chunk(Rosegold::Chunk.new(0, 0, Minecraft::IO::Memory.new(chunk_data.to_slice), dimension))
+    table = Rosegold::MCData.default.blocks.find! { |block| block.id_str == "enchanting_table" }
+    dimension.set_block_state(Rosegold::Vec3i.new(0, 0, 2), table.min_state_id)
+    client.player.feet = Rosegold::Vec3d.new(0.5, 0.5 - Rosegold::Player::DEFAULT_EYE_HEIGHT, 0.5)
+    client.player.look = Rosegold::Look::SOUTH
     client
   end
 
@@ -144,23 +146,28 @@ Spectator.describe Rosegold::EnchantmentWorkflow do
     handlers = temporary_opening_handlers(client)
     timeout_opening(bot)
 
+    client.tick_inputs_for_test
     expect(client.sequence_counter).to eq(0)
-    expect(client.queued_hand_tap_for_test?).to be_false
+    expect(client.sent_packets.select(Rosegold::Serverbound::PlayerBlockPlacement)).to be_empty
     expect(temporary_opening_handlers(client)).to eq(handlers)
     Rosegold::Clientbound::OpenWindow.new(8_u32, 13_u32, Rosegold::Chat.new("Later")).callback(client)
     expect(client.container_menu.id).to eq(8_u8)
     expect(client.sent_packets.any?(Rosegold::Serverbound::CloseWindow)).to be_false
   end
 
-  it "settles on the use acknowledgement without waiting for an unacknowledged hand release" do
+  it "settles on the table-use acknowledgement without a hand-release packet" do
     client = opening_client
     bot = CancelledOpeningSpecBot.new(client)
     handlers = temporary_opening_handlers(client)
     timeout_opening(bot)
-    release = client.sent_packets.last.as(Rosegold::Serverbound::PlayerAction)
-    expect(release.sequence).to be > client.hand_tap_sequence_for_test
+    client.tick_inputs_for_test
+    placement = client.sent_packets.select(Rosegold::Serverbound::PlayerBlockPlacement).first
+    expect(placement.location).to eq(Rosegold::Vec3i.new(0, 0, 2))
+    expect(placement.sequence).to eq(client.hand_tap_sequence_for_test)
+    expect(placement.sequence).to eq(client.sequence_counter)
+    expect(client.sent_packets.select(Rosegold::Serverbound::PlayerAction)).to be_empty
 
-    acknowledge(client, client.hand_tap_sequence_for_test)
+    acknowledge(client, placement.sequence)
     expect(temporary_opening_handlers(client)).to eq(handlers)
     Rosegold::Clientbound::OpenWindow.new(8_u32, 13_u32, Rosegold::Chat.new("Later")).callback(client)
     expect(client.container_menu.id).to eq(8_u8)

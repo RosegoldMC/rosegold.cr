@@ -318,12 +318,15 @@ class Rosegold::Bot < Rosegold::EventEmitter
     inventory.main_hand
   end
 
-  # Releases an active use action immediately.
+  # Releases held and queued use. The release is processed on the next tick,
+  # which also ends any active sustained use. A `#use_hand` queued before that
+  # tick is dropped while the use is still active; wait one tick before it.
   def stop_using_hand
     client.interactions.stop_using_hand
   end
 
-  # Releases an active dig action immediately.
+  # Releases the held attack. The release is processed on the next tick, so a
+  # same-tick `#use_hand` still sees the staged break; wait one tick before it.
   def stop_digging
     client.interactions.stop_digging
   end
@@ -660,20 +663,22 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   # Holds the use button for *hand*. Call `#stop_using_hand` to release it.
-  # Held use waits while a staged block break is in progress. To give use priority,
-  # call `#stop_digging` first. Call `#start_digging` again when you want to resume.
+  # Held use retries every tick it is blocked, then repeats every four ticks
+  # when idle. It waits while a staged block break is in progress. To give use
+  # priority, call `#stop_digging` and wait one tick. Call `#start_digging` again
+  # to resume.
   def start_using_hand(hand : Hand = :main_hand)
     # can't delegate this because it wouldn't pick up the symbol as a Hand value
     client.interactions.start_using_hand hand
   end
 
   # Queues one press and release of use in *hand*, optionally aiming at *target* first.
-  # Releases any held use action. Repeated calls before a tick coalesce into one press.
-  # A staged block break drops the queued tap, even during the use cooldown.
-  # Predicted instant breaks do not block use this way. Call `#stop_digging` before
-  # queuing the tap to give it priority over a staged break.
-  # If the tap is still queued when the cooldown allows it, the target raytrace
-  # happens then. This does not wait for a world-result confirmation.
+  # Releases any held use action. Repeated calls before a tick coalesce into one press
+  # on the next tick, with no hold-repeat cooldown. The target raytrace happens on
+  # that tick. An active use or a staged block break drops the queued tap.
+  # Predicted instant breaks do not block use this way. Call `#stop_digging` and
+  # wait one tick before the tap to give it priority. This does not wait for a
+  # world-result confirmation.
   def use_hand(target : Vec3d? | Look? = nil, hand : Hand = :main_hand)
     look_at target if target.is_a? Vec3d
     self.look = target if target.is_a? Look
@@ -775,6 +780,20 @@ class Rosegold::Bot < Rosegold::EventEmitter
     true
   end
 
+  private def use_release_pending?
+    connected? && client.interactions.use_release_pending?
+  end
+
+  # A Tick can come from a tick whose interaction phase ran before the release was requested.
+  private def wait_for_use_release : Nil
+    deadline = Time.instant + 1.second
+    while use_release_pending?
+      remaining = deadline - Time.instant
+      break unless remaining.positive? && client.wait_tick(remaining)
+    end
+    raise "Timed out waiting for the eating release tick" if use_release_pending?
+  end
+
   # Best-effort version of `eat!`. Logs a warning if eating raises, including
   # when no allowed food is available, and returns `nil` without re-raising.
   # Uses the same hunger thresholds and food selection as `eat!`.
@@ -787,11 +806,13 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Eats allowed food from inventory when `should_eat?` is true.
   # Does nothing at 18+ food, or at 15+ food with full health. Otherwise,
-  # blocks until food reaches 18, the held food runs out, or eating times out.
+  # blocks until food reaches 18, the held food runs out, or the retry limit
+  # is reached. If use is still active, it waits for the tick that releases it.
   # After picking food, this can wait on a staged block break. Call
-  # `#stop_digging` before `#eat!` to give eating priority.
-  # Raises when no allowed food is available and propagates interaction errors.
-  # A timeout only logs a warning. Use `eat` for best-effort eating instead.
+  # `#stop_digging`, wait one tick, then call `#eat!` to give eating priority.
+  # Reaching the eating retry limit only logs a warning. Raises when no allowed
+  # food is available or, while connected, use is still not released one second
+  # after eating stops. Propagates interaction errors. Use `eat` for best effort.
   def eat!
     return unless should_eat?
 
@@ -849,6 +870,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
     ensure
       stop_using_hand
     end
+    wait_for_use_release
 
     if attempts >= max_attempts
       Log.warn { "Eating timed out after #{max_attempts} attempts, food is #{food}" }
@@ -1117,8 +1139,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
   class CraftingError < Exception; end
 
   # Optionally aims at *target*, then holds the attack button to begin digging.
-  # Call `#stop_digging` to release it. Login, respawn, reconfiguration, and
-  # disconnect also release the hold.
+  # Call `#stop_digging` to release it; the release is processed on the next
+  # tick. Login, respawn, reconfiguration, and disconnect also release the hold.
   def start_digging(target : Vec3d? | Look? = nil)
     look_at target if target.is_a? Vec3d
     self.look = target if target.is_a? Look

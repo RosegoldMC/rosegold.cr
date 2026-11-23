@@ -172,7 +172,8 @@ class Rosegold::Clientbound::SetEntityData < Rosegold::Clientbound::Packet
     if entity_id == client.player.entity_id
       entries.each do |entry|
         next unless entry.index == LIVING_ENTITY_FLAGS_INDEX && (flags = entry.value).is_a?(UInt8)
-        client.player.using_item = (flags & 1) != 0
+        hand = (flags & 2) == 0 ? Hand::MainHand : Hand::OffHand
+        client.sync_using_item((flags & 1) == 0 ? nil : hand)
       end
     end
     if entity = client.dimension.entities[entity_id]?

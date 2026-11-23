@@ -2,11 +2,11 @@ require "../spec_helper"
 
 class Rosegold::Interactions
   def reached_entity_for_mounted_test
-    reach_block_or_entity_unified.as?(Entity)
+    reach_block_or_entity.as?(ReachedEntity).try(&.entity)
   end
 
   def reached_block_for_mounted_test
-    reach_block_or_entity_unified.as?(ReachedBlock).try(&.block)
+    reach_block_or_entity.as?(ReachedBlock).try(&.block)
   end
 end
 

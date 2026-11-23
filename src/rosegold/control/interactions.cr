@@ -11,27 +11,48 @@ class Rosegold::Interactions
     def initialize(@intercept, @block, @face, @inside_block = false); end
   end
 
-  # Random 3-6 ticks between attacks (~3.3-6.7 CPS), under CivMC 8 CPS cap.
-  ATTACK_COOLDOWN_RANGE = 3..6
+  private struct ReachedEntity
+    getter entity : Entity, intercept : Vec3d
+
+    def initialize(@entity, @intercept); end
+  end
+
+  private class ActiveUse
+    getter hand : Hand, item_id : UInt32, sequence : Int32?
+    property ticks_left : Int32
+    property? acknowledged = false
+
+    def initialize(@hand, @item_id, @sequence = nil, @ticks_left = 0); end
+
+    def provisional? : Bool
+      !sequence.nil?
+    end
+
+    def confirm : Nil
+      @sequence = nil
+    end
+  end
 
   private HELD_DESTROY_DELAY =  5
   private MINING_MISS_DELAY  = 10
+  private HELD_USE_DELAY     =  4
+  # Vanilla clients never complete a use locally (LivingEntity.updateUsingItem);
+  # these only bound a prediction the server has not confirmed.
+  private PROVISIONAL_USE_TICKS     = 20
+  private PROVISIONAL_USE_ACK_GRACE =  5
   private alias MiningItem = {UInt32, Hash(String, Bytes), Set(String)}
+  private alias InteractionHit = ReachedBlock | ReachedEntity | Nil
 
-  @using_hand = nil
-  @using_hand_started = false
-  @queued_hand_tap = nil
+  @held_use_hand : Hand?
+  @queued_use_hand : Hand?
+  @active_use : ActiveUse?
   getter last_hand_tap_sequence : Int32 = 0
-  @using_hand_delay = 0_i32
-  # Releasing food cancels its repeat delay, but must not bypass the click cooldown.
-  @use_cooldown_ticks = 0_i32
+  @use_repeat_delay = 0
   getter digging_block : ReachedBlock?
   @attack_queued = false
-  @dig_released = false
   @destroy_delay = 0
   @mining_miss_ticks = 0
   @destroying_item : MiningItem?
-  @attack_cooldown_ticks : Int32 = 0
   getter block_damage_progress = 0_f32
   @sent_held_item_index : UInt32?
 
@@ -41,40 +62,61 @@ class Rosegold::Interactions
   def initialize(@client)
   end
 
-  # Activates the "use" button.
-  def start_using_hand(hand : Hand = :main_hand) # TODO: Auto select hand each tick
-    return if @using_hand == hand
+  def start_using_hand(hand : Hand = :main_hand)
+    return if @held_use_hand == hand
 
-    stop_using_hand if @using_hand
-    @using_hand = hand
-    @using_hand_started = false
-    @using_hand_delay = 0
+    @held_use_hand = hand
+    @queued_use_hand = hand
   end
 
-  # Queues one use-button press without holding it.
   def tap_using_hand(hand : Hand = :main_hand)
-    stop_using_hand if @using_hand
-    @queued_hand_tap = hand
+    @held_use_hand = nil
+    @queued_use_hand = hand
   end
 
-  # Deactivates the "use" button.
   def stop_using_hand
-    hand_was_started = @using_hand_started
-
-    @using_hand = nil
-    @using_hand_started = false
-    @queued_hand_tap = nil
-    @using_hand_delay = 0
-    finish_using_hand if hand_was_started
+    @held_use_hand = nil
+    @queued_use_hand = nil
   end
 
-  private def finish_using_hand
-    client.player.using_item = false
-    sequence = client.next_sequence
-    operation = BlockOperation.new(Vec3i::ORIGIN, :use)
-    client.pending_block_operations[sequence] = operation
+  def use_release_pending? : Bool
+    @held_use_hand.nil? && active_use?
+  end
 
-    send_packet Serverbound::PlayerAction.new :finish_using_hand, Vec3i::ORIGIN, :bottom, sequence
+  def sync_using_item(hand : Hand?) : Nil
+    client.player.using_item = !hand.nil?
+    active = @active_use
+    if hand
+      if active && active.hand == hand
+        active.confirm
+      else
+        @active_use = ActiveUse.new(hand, hand_slot(hand).item_id_int)
+      end
+    elsif !active || !active.provisional? || active.acknowledged?
+      @active_use = nil
+    end
+  end
+
+  def acknowledge_use(sequence : Int32) : Nil
+    return unless (active = @active_use) && (pending = active.sequence)
+    return if active.acknowledged? || pending > sequence
+
+    active.acknowledged = true
+    active.ticks_left = Math.min(active.ticks_left, PROVISIONAL_USE_ACK_GRACE)
+  end
+
+  private def clear_active_use : Nil
+    client.player.using_item = false
+    @active_use = nil
+  end
+
+  private def active_use? : Bool
+    !@active_use.nil? || client.player.using_item?
+  end
+
+  private def release_using_item
+    clear_active_use
+    send_packet Serverbound::PlayerAction.new(:finish_using_hand, Vec3i::ORIGIN, :bottom)
   end
 
   # Activates the "attack" button.
@@ -87,30 +129,56 @@ class Rosegold::Interactions
 
   # Deactivates the "attack" button.
   def stop_digging
-    return unless digging?
-
     self.digging = false
-    @dig_released = true
   end
 
   def reset_mining
     self.digging = false
     @attack_queued = false
-    @dig_released = false
     @destroy_delay = 0
     @mining_miss_ticks = 0
     @sent_held_item_index = nil
     clear_dig_target
   end
 
+  def reset_use
+    stop_using_hand
+    clear_active_use
+    @use_repeat_delay = 0
+    @last_hand_tap_sequence = 0
+  end
+
   def tick
     return unless client.connected?
     tick_held_item
-    # Vanilla order: attack presses, use, then the held attack, so use sees a
-    # staged break that this tick's press started.
-    continuation = tick_attack
-    tick_using_hand
-    tick_continue_attack(continuation)
+    @use_repeat_delay -= 1 if @use_repeat_delay > 0
+
+    attack_pressed, @attack_queued = @attack_queued, false
+    use_pressed, @queued_use_hand = @queued_use_hand, nil
+    if active = @active_use
+      slot = hand_slot(active.hand)
+      if slot.empty? || slot.item_id_int != active.item_id
+        clear_active_use
+      elsif active.provisional? && (active.ticks_left -= 1) <= 0
+        @active_use = nil
+      end
+    end
+
+    hit = reach_block_or_entity if attack_pressed || use_pressed || digging? || @held_use_hand
+    instant_attack = false
+    if active_use?
+      held = @held_use_hand
+      active_hand = @active_use.try(&.hand)
+      release_using_item if !held || (active_hand && active_hand != held)
+    else
+      instant_attack = start_attack(hit) if attack_pressed
+      start_use(use_pressed, hit, hand_tap: @held_use_hand.nil?) if use_pressed
+    end
+    if (held = @held_use_hand) && @use_repeat_delay == 0 && !active_use?
+      start_use(held, hit, hand_tap: false)
+    end
+    continue_attack(digging? && !instant_attack, hit)
+    @mining_miss_ticks -= 1 if @mining_miss_ticks > 0
   end
 
   private def tick_held_item
@@ -125,95 +193,61 @@ class Rosegold::Interactions
     send_packet Serverbound::PlayerAction.new :swap_hands
   end
 
-  # Returns the press's cached block hit to continue on, true to continue a
-  # held attack on a fresh ray, or false to skip the held attack this tick.
-  private def tick_attack : ReachedBlock | Bool
-    click_ready = @attack_cooldown_ticks == 0
-    @attack_cooldown_ticks -= 1 unless click_ready
-
-    if @dig_released
-      @dig_released = false
-      @mining_miss_ticks = 0
-      cancel_digging
-    end
-
-    miss_delayed = @mining_miss_ticks > 0
-    @mining_miss_ticks -= 1 if miss_delayed
-
-    if client.player.using_item?
-      @attack_queued = false
-      return false
-    end
-
-    fresh_click = click_ready && @attack_queued
-    if fresh_click
-      @attack_queued = false
-      if (entity = reach_block_or_entity).is_a?(Entity)
-        if Client.protocol_version >= 775_u32
-          send_packet Serverbound::Attack.new entity.entity_id
-        else
-          send_packet Serverbound::InteractEntity.new entity.entity_id, :attack
-        end
-        send_swing attack: true
-        @attack_cooldown_ticks = rand(ATTACK_COOLDOWN_RANGE)
-        @destroy_delay = HELD_DESTROY_DELAY if Client.protocol_version >= 777_u32 && client.player.creative_mode?
-        cancel_digging
-        return false
+  private def start_attack(hit : InteractionHit) : Bool
+    return false if @mining_miss_ticks > 0
+    if client.player.gamemode == 3
+      return true if Client.protocol_version >= 775_u32
+      if hit.is_a?(ReachedEntity)
+        send_entity_attack(hit.entity)
+      elsif !hit || mining_air?(hit)
+        register_attack_miss
       end
-    end
-
-    return false if miss_delayed
-    fresh_click ? start_attack_block : true
-  end
-
-  private def start_attack_block : ReachedBlock | Bool
-    unless can_mine?
-      cancel_digging
+      send_swing attack: true if Client.protocol_version <= 773_u32
       return false
     end
+    return true if piercing_weapon?
 
-    reached = reach_block_or_entity_unified(mining: true)
-    unless reached.is_a?(ReachedBlock)
-      if reached.nil? && digging? && client.player.gamemode != 1
-        @mining_miss_ticks = MINING_MISS_DELAY - 1
-      end
-      cancel_digging
-      return false
-    end
-
-    if start_digging(reached)
-      return reached if @digging_block
-      return reached if client.player.creative_mode? && !mining_air?(reached)
-    end
-    cancel_digging unless digging?
-    false
-  end
-
-  private def tick_continue_attack(continuation : ReachedBlock | Bool) : Nil
-    return if client.player.using_item?
-
-    case continuation
+    instant_attack = false
+    case hit
+    when ReachedEntity
+      send_entity_attack(hit.entity)
+      @destroy_delay = HELD_DESTROY_DELAY if Client.protocol_version >= 777_u32 && client.player.creative_mode?
     when ReachedBlock
-      digging? ? continue_digging(continuation) : cancel_digging
-    when true
-      continue_held_attack
+      if mining_air?(hit)
+        register_attack_miss
+      elsif can_mine?
+        start_digging(hit)
+        instant_attack = mining_air?(hit)
+      end
+    else
+      register_attack_miss
+    end
+    send_swing attack: true
+    instant_attack
+  end
+
+  private def send_entity_attack(entity : Entity)
+    if Client.protocol_version >= 775_u32
+      send_packet Serverbound::Attack.new entity.entity_id
+    else
+      send_packet Serverbound::InteractEntity.new entity.entity_id, :attack, sneaking: client.player.sneaking?
     end
   end
 
-  private def continue_held_attack
-    unless digging? && can_mine?
-      cancel_digging
-      return
-    end
+  private def register_attack_miss
+    @mining_miss_ticks = MINING_MISS_DELAY unless client.player.gamemode == 1
+  end
 
-    reached = reach_block_or_entity_unified(mining: true)
-    unless reached.is_a?(ReachedBlock)
-      cancel_digging
-      return
-    end
+  private def continue_attack(down : Bool, hit : InteractionHit)
+    @mining_miss_ticks = 0 unless down
+    return if @mining_miss_ticks > 0 || active_use? || piercing_weapon?
 
-    @attack_queued = false
-    continue_digging(reached)
+    if down && hit.is_a?(ReachedBlock)
+      return if mining_air?(hit) || !can_mine?
+      continue_digging(hit)
+    else
+      cancel_digging
+    end
   end
 
   private def continue_digging(reached : ReachedBlock)
@@ -225,7 +259,7 @@ class Rosegold::Interactions
 
     active = @digging_block
     if client.player.creative_mode? || !active || !same_dig_target?(reached)
-      start_digging(reached)
+      send_swing(attack: true) if start_digging(reached)
       return
     end
 
@@ -244,68 +278,46 @@ class Rosegold::Interactions
     send_swing attack: true
   end
 
-  private def tick_using_hand
-    @using_hand_delay -= 1 if @using_hand_delay > 0
-    @use_cooldown_ticks -= 1 if @use_cooldown_ticks > 0
-    # Vanilla ignores use presses during a staged break; a held use retries.
-    if @digging_block
-      @queued_hand_tap = nil
-      return
-    end
-    return if @using_hand_delay > 0 || @use_cooldown_ticks > 0
+  private def start_use(hand : Hand, hit : InteractionHit, *, hand_tap : Bool)
+    return if @digging_block
 
-    if using_hand = @using_hand || @queued_hand_tap
-      hand_tap = @using_hand.nil?
-      held_slot = using_hand.main_hand? ? inventory.main_hand : inventory.off_hand
-      @using_hand_delay = using_hand_delay_for held_slot
-      @use_cooldown_ticks = 4
-      @queued_hand_tap = nil
-      case reached = reach_block_or_entity
-      when Entity
-        Log.debug { "Interacting with entity #{reached.entity_id}" }
-        send_packet Serverbound::InteractEntity.new reached.entity_id.to_u64, :interact, hand: using_hand
-        send_swing using_hand
-      when ReachedBlock
-        Log.debug { "Reached block: #{reached.block} at #{reached.intercept} face #{reached.face}" }
-        place_block using_hand, reached, hand_tap: hand_tap
-
-        # Vanilla falls through to UseItem when the block-use result is PASS.
-        # Sneaking with an item in either hand bypasses block-use entirely.
-        bypass_block_use = client.player.sneaking? &&
-                           (inventory.main_hand.present? || inventory.off_hand.present?)
-        if bypass_block_use || !block_use_consumes_click?(reached, using_hand)
-          sequence = client.next_sequence
-          operation = BlockOperation.new(Vec3i::ORIGIN, :use)
-          client.pending_block_operations[sequence] = operation
-          @last_hand_tap_sequence = sequence if hand_tap
-
-          send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
-        end
-      else
-        Log.debug { "No block or entity reached" }
-
-        sequence = client.next_sequence
-        operation = BlockOperation.new(Vec3i::ORIGIN, :use)
-        client.pending_block_operations[sequence] = operation
-        @last_hand_tap_sequence = sequence if hand_tap
-
-        send_packet Serverbound::UseItem.new using_hand, sequence, client.player.look.yaw, client.player.look.pitch
-      end
-      if @using_hand
-        @using_hand_started = true
-      else
-        finish_using_hand
-        @using_hand_delay = 0
-      end
-    end
+    @use_repeat_delay = HELD_USE_DELAY
+    route_use(hand, hit, hand_tap: hand_tap)
   end
 
-  def using_hand_delay_for(slot)
-    if slot.edible?
-      32
-    else
-      4
+  private def send_use_item(hand : Hand, hand_tap : Bool)
+    sequence = client.next_sequence
+    client.pending_block_operations[sequence] = BlockOperation.new(Vec3i::ORIGIN, :use)
+    @last_hand_tap_sequence = sequence if hand_tap
+
+    slot = hand_slot(hand)
+    if starts_consuming?(slot)
+      @active_use = ActiveUse.new(hand, slot.item_id_int, sequence, PROVISIONAL_USE_TICKS)
     end
+    send_packet Serverbound::UseItem.new hand, sequence, client.player.look.yaw, client.player.look.pitch
+  end
+
+  private def hand_slot(hand : Hand)
+    hand.main_hand? ? inventory.main_hand : inventory.off_hand
+  end
+
+  private def starts_consuming?(slot : Slot) : Bool
+    return false if slot.empty? || client.player.gamemode == 3
+    return false if slot.components_to_remove.includes?("consumable") || slot.components_to_add.has_key?("use_cooldown")
+    return false unless (name = held_item_name(slot)) && slot.edible?
+    return false if name == "chorus_fruit" && !slot.components_to_remove.includes?("use_cooldown")
+
+    consumable = slot.components_to_add["consumable"]?
+    if consumable.is_a?(DataComponents::Consumable)
+      return false unless consumable.consume_seconds * 20_f32 >= 1_f32
+    end
+
+    return true if client.player.invulnerable? || client.player.food < 20
+    food = slot.components_to_add["food"]?
+    return food.can_always_eat? if food.is_a?(DataComponents::Food)
+    return true if slot.components_to_remove.includes?("food")
+
+    {"golden_apple", "enchanted_golden_apple", "honey_bottle", "suspicious_stew", "chorus_fruit"}.includes?(name)
   end
 
   private def send_packet(packet)
@@ -331,7 +343,7 @@ class Rosegold::Interactions
     return default_swing_animation if slot.components_to_remove.includes?(component_name)
     return default_swing_animation unless attack
 
-    case slot.name
+    case held_item_name(slot)
     when "wooden_spear"    then DataComponents::SwingAnimation.new(2_u32, 13_u32)
     when "stone_spear"     then DataComponents::SwingAnimation.new(2_u32, 15_u32)
     when "copper_spear"    then DataComponents::SwingAnimation.new(2_u32, 17_u32)
@@ -347,23 +359,10 @@ class Rosegold::Interactions
     DataComponents::SwingAnimation.new(1_u32, 6_u32)
   end
 
-  private def place_block(hand : Hand, reached : ReachedBlock, hand_tap : Bool = false)
-    cursor = (reached.intercept - reached.block.to_f64).to_f32
-
-    sequence = client.next_sequence
-    operation = BlockOperation.new(reached.block, :place)
-    client.pending_block_operations[sequence] = operation
-    @last_hand_tap_sequence = sequence if hand_tap
-
-    send_packet Serverbound::PlayerBlockPlacement.new \
-      hand, reached.block, reached.face, cursor, reached.inside_block?, sequence
-    send_swing hand
-  end
-
   # Suppress UseItem fall-through when vanilla consumes the block interaction.
   # Unknown/unloaded block states do not consume.
   private def block_use_consumes_click?(reached : ReachedBlock, hand : Hand) : Bool
-    block_state = client.dimension.block_state(reached.block)
+    block_state = client.dimension.interaction_block_state(reached.block)
     return false unless block_state
     block = Block.from_block_state_id(block_state)
     case block.id_str
@@ -424,7 +423,6 @@ class Rosegold::Interactions
       @destroying_item = mining_item_snapshot(inventory.main_hand)
       send_dig_action(:start, reached, predict: false)
     end
-    send_swing attack: true
     true
   end
 
@@ -444,16 +442,20 @@ class Rosegold::Interactions
 
   private def can_mine? : Bool
     held = inventory.main_hand
-    return false if held.components_to_add.has_key?("piercing_weapon")
-    if Client.protocol_version >= 774_u32 && !held.empty? && !held.components_to_remove.includes?("piercing_weapon")
-      return false if held_item_name(held).try(&.ends_with?("_spear"))
-    end
-
     case client.player.gamemode
     when 0, 1 then true
     when 2    then held.components_to_add.has_key?("can_break")
     else           false
     end
+  end
+
+  private def piercing_weapon? : Bool
+    held = inventory.main_hand
+    return false if held.empty?
+    return true if held.components_to_add.has_key?("piercing_weapon")
+
+    Client.protocol_version >= 774_u32 && !held.components_to_remove.includes?("piercing_weapon") &&
+      !!held_item_name(held).try(&.ends_with?("_spear"))
   end
 
   private def held_item_name(held : Slot) : String?
@@ -527,86 +529,111 @@ class Rosegold::Interactions
     @block_damage_progress = 0_f32
   end
 
-  private def reach_block_or_entity : ReachedBlock? | Rosegold::Entity?
-    reach_block_or_entity_unified
+  private def reach_block_or_entity : ReachedBlock | ReachedEntity | Nil
+    player = client.player
+    eyes = player.eyes
+    block_range = player.block_interaction_range
+    entity_range = player.entity_interaction_range
+    trace_range = Math.max(block_range, entity_range)
+    return if trace_range.zero?
+
+    look = player.look.to_vec3
+    block_hit = reach_block_along(eyes, look * trace_range)
+    block_distance_sq = block_hit ? eyes.dist_sq(block_hit.intercept) : trace_range ** 2
+    entity_hit = reach_entity_along(eyes, look * Math.sqrt(block_distance_sq), block_distance_sq)
+
+    if entity_hit && (distance_sq = eyes.dist_sq(entity_hit.intercept)) < block_distance_sq
+      entity_hit if distance_sq < entity_range ** 2
+    elsif block_hit && block_distance_sq < block_range ** 2
+      block_hit
+    end
   end
 
-  private def reach_block : ReachedBlock?
-    eyes = client.player.eyes
-    reach_block_along eyes, reach_vec
-  end
+  private def reach_entity_along(eyes : Vec3d, reach : Vec3d, nearest : Float64) : ReachedEntity?
+    player_id = client.player.entity_id.to_u32
+    entities = client.dimension.entities
+    player_box = client.player.aabb
+    search = AABBd.containing_all(player_box, player_box.offset(reach)).grow(1.0, 1.0, 1.0)
+    vehicles = interaction_vehicles(player_id)
+    player_root = vehicles ? interaction_root_vehicle(player_id, vehicles) : player_id
+    hit = nil
 
-  private def reach_entity : Rosegold::Entity?
-    client.dimension.raycast_entity client.player.eyes, entity_reach_vec, entity_reach_length, client.player.entity_id.to_u32
-  end
+    entities.each_value do |entity|
+      next if entity.entity_id == player_id || !entity.pickable?
+      next if client.player_list[entity.uuid]?.try(&.gamemode) == 3 && entity.metadata.try(&.name) == "player"
+      box = entity.bounding_box
+      next unless search.intersects?(box)
 
-  # Unified raytracing that properly handles both entities and blocks
-  # ensuring entities cannot be hit through blocks
-  private def reach_block_or_entity_unified(*, mining : Bool = false) : ReachedBlock? | Rosegold::Entity?
-    eyes = client.player.eyes
-    reach_vector = mining ? client.player.look.to_vec3 * client.player.block_interaction_range : reach_vec
-
-    entity_boxes = [] of AABBd
-    entity_map = [] of Rosegold::Entity
-
-    reach_aabb = AABBd.new(eyes, eyes + reach_vector)
-    client.dimension.entities.each_value do |entity|
-      next unless entity.pickable?
-
-      entity_bounding_box = entity.bounding_box
-      if entity.passenger_ids.includes?(client.player.entity_id.to_u32)
-        return entity if entity_bounding_box.contains?(eyes)
-        next
-      end
-      # Vanilla picks an entity around the eyes, which an entry-face ray misses.
-      return entity if mining && entity_bounding_box.contains?(eyes)
-      if reach_aabb.intersects?(entity_bounding_box)
-        entity_boxes << entity_bounding_box
-        entity_map << entity
+      if (box.min.x <= eyes.x < box.max.x) &&
+         (box.min.y <= eyes.y < box.max.y) &&
+         (box.min.z <= eyes.z < box.max.z)
+        hit = ReachedEntity.new(entity, eyes)
+        return hit if entity.passenger_ids.includes?(player_id)
+        nearest = 0.0
+      elsif intercept = entity_intercept(eyes, reach, box)
+        distance_sq = eyes.dist_sq(intercept)
+        # ProjectileUtil treats zero as a sentinel when scanning later candidates.
+        next unless distance_sq < nearest || nearest.zero?
+        if vehicles && interaction_root_vehicle(entity.entity_id, vehicles) == player_root
+          next unless nearest.zero?
+        else
+          nearest = distance_sq
+        end
+        hit = ReachedEntity.new(entity, intercept)
       end
     end
-
-    block_hit = reach_block_along eyes, reach_vector, mining: mining
-    entity_hit = Raytrace.raytrace(eyes, reach_vector, entity_boxes)
-    return block_hit unless entity_hit
-
-    entity_distance_sq = eyes.dist_sq(entity_hit.intercept)
-    return block_hit if block_hit && entity_distance_sq >= eyes.dist_sq(block_hit.intercept)
-
-    entity_map[entity_hit.box_nr] if entity_distance_sq < entity_reach_length ** 2
+    hit
   end
 
-  private def block_reach_length
-    client.player.gamemode == 1 ? 5.0 : 4.5
+  private def interaction_vehicles(player_id : UInt32) : Hash(UInt32, UInt32)?
+    entities = client.dimension.entities
+    return unless entities.each_value.any?(&.passenger_ids.includes?(player_id))
+
+    vehicles = {} of UInt32 => UInt32
+    entities.each_value do |entity|
+      entity.passenger_ids.each { |passenger| vehicles[passenger] = entity.entity_id }
+    end
+    vehicles
   end
 
-  private def entity_reach_length
-    client.player.gamemode == 1 ? 5.0 : 3.0
+  private def interaction_root_vehicle(id : UInt32, vehicles : Hash(UInt32, UInt32)) : UInt32
+    vehicles.size.times do
+      id = vehicles[id]? || return id
+    end
+    id
   end
 
-  private def reach_vec
-    client.player.look.to_vec3 * block_reach_length
-  end
+  private def entity_intercept(eyes : Vec3d, reach : Vec3d, box : AABBd) : Vec3d?
+    epsilon = 1e-7
+    nearest = 1.0
+    hit = nil
+    3.times do |axis|
+      delta = reach[axis]
+      next if delta.abs <= epsilon
+      plane = delta > 0 ? box.min[axis] : box.max[axis]
+      scalar = (plane - eyes[axis]) / delta
+      next unless 0.0 < scalar < nearest
 
-  private def entity_reach_vec
-    client.player.look.to_vec3 * entity_reach_length
+      point = eyes + reach * scalar
+      u = (axis + 1) % 3
+      v = (axis + 2) % 3
+      next unless (box.min[u] - epsilon < point[u] < box.max[u] + epsilon) &&
+                  (box.min[v] - epsilon < point[v] < box.max[v] + epsilon)
+      nearest = scalar
+      hit = point
+    end
+    hit
   end
 
   # Like vanilla's BlockGetter.clip: visits the cells the ray passes through in
   # order and returns the first whose outline is hit. A cell owns its outline even
   # where it extends outside the cell (piston arms, offset plants).
-  private def reach_block_along(start : Vec3d, reach : Vec3d, *, mining : Bool = false) : ReachedBlock?
+  private def reach_block_along(start : Vec3d, reach : Vec3d) : ReachedBlock?
     mcdata = MCData.default
     held = inventory.main_hand
     held_id = held.item_id_int unless held.empty?
     each_traversed_cell(start, reach) do |cell_x, cell_y, cell_z|
-      # outside world or outside loaded chunks
-      state = if mining
-                client.dimension.mining_block_state(cell_x, cell_y, cell_z)
-              else
-                client.dimension.block_state(cell_x, cell_y, cell_z)
-              end
-      next unless block_state = state
+      next unless block_state = client.dimension.interaction_block_state(cell_x, cell_y, cell_z)
       shape = mcdata.block_state_outline_shapes[block_state]
       if held_id && (by_item = mcdata.held_outline_shapes[block_state]?)
         shape = by_item[held_id]? || shape

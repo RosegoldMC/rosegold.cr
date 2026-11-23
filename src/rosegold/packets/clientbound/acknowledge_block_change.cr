@@ -24,6 +24,7 @@ class Rosegold::Clientbound::AcknowledgeBlockChange < Rosegold::Clientbound::Pac
   def callback(client)
     Log.debug { "dig ack sequence=#{sequence}" }
     client.pending_block_operations.reject! { |pending, _| pending <= sequence }
-    client.dimension.acknowledge_mining_predictions sequence
+    client.dimension.acknowledge_interaction_predictions sequence
+    client.acknowledge_use sequence
   end
 end

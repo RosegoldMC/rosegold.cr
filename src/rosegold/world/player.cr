@@ -137,22 +137,26 @@ class Rosegold::Player
   end
 
   def mining_efficiency : Float32?
-    block_attribute_value(20_u32, 24_u32, 1024.0).try(&.to_f32)
+    player_attribute_value(20_u32, 24_u32, 1024.0).try(&.to_f32)
   end
 
   def block_break_speed : Float32
-    block_attribute_value(5_u32, 7_u32, 1024.0).try(&.to_f32) || 1.0_f32
+    player_attribute_value(5_u32, 7_u32, 1024.0).try(&.to_f32) || 1.0_f32
   end
 
   def submerged_mining_speed(aqua_affinity : Bool) : Float32
-    block_attribute_value(29_u32, 34_u32, 20.0).try(&.to_f32) || (aqua_affinity ? 1.0_f32 : 0.2_f32)
+    player_attribute_value(29_u32, 34_u32, 20.0).try(&.to_f32) || (aqua_affinity ? 1.0_f32 : 0.2_f32)
   end
 
   def block_interaction_range : Float64
-    block_attribute_value(6_u32, 8_u32, 64.0) || (gamemode == 1 ? 5.0 : 4.5)
+    player_attribute_value(6_u32, 8_u32, 64.0) || (gamemode == 1 ? 5.0 : 4.5)
   end
 
-  private def block_attribute_value(legacy_id : UInt32, current_id : UInt32, max : Float64) : Float64?
+  def entity_interaction_range : Float64
+    player_attribute_value(10_u32, 13_u32, 64.0) || (gamemode == 1 ? 5.0 : 3.0)
+  end
+
+  private def player_attribute_value(legacy_id : UInt32, current_id : UInt32, max : Float64) : Float64?
     id = case Client.protocol_version
          when 772, 773, 774, 775 then legacy_id
          when 776, 777           then current_id
