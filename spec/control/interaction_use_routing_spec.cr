@@ -3,6 +3,7 @@ require "../spec_helper"
 class InteractionUseRoutingSpecClient < Rosegold::Client
   getter sent_packets = [] of Rosegold::Serverbound::Packet
   getter placement_states = [] of UInt16?
+  getter placement_above_states = [] of UInt16?
 
   def connected?
     true
@@ -12,6 +13,7 @@ class InteractionUseRoutingSpecClient < Rosegold::Client
     sent_packets << packet
     if packet.is_a?(Rosegold::Serverbound::PlayerBlockPlacement)
       placement_states << dimension.interaction_block_state(packet.location)
+      placement_above_states << dimension.interaction_block_state(packet.location.up)
     end
   end
 
@@ -120,6 +122,54 @@ Spectator.describe "Interaction use routing" do
       expect(bot_client.pending_block_operations).to be_empty
       expect(dimension.block_state(target)).to eq(before)
       expect(dimension.interaction_block_state(target)).to eq(before)
+    end
+
+    it "predicts both door halves before the packet and keeps the latest toggle until its acknowledgement" do
+      Rosegold::Client.protocol_version = protocol
+      lower_closed = state("oak_door", "facing=north", "half=lower", "hinge=left", "open=false", "powered=false")
+      upper_closed = state("oak_door", "facing=north", "half=upper", "hinge=left", "open=false", "powered=false")
+      lower_open = state("oak_door", "facing=north", "half=lower", "hinge=left", "open=true", "powered=false")
+      upper_open = state("oak_door", "facing=north", "half=upper", "hinge=left", "open=true", "powered=false")
+      dimension.set_block_state(target, lower_closed)
+      dimension.set_block_state(target.up, upper_closed)
+      hold("apple", off)
+      aim(x: 2.125)
+
+      tap(nil)
+
+      swing = protocol < 777 ? [{"swing", main, 0}] : [] of {String, Rosegold::Hand, Int32}
+      expect(wire).to eq([{"on", main, 1}] + swing)
+      expect(swings.map(&.hand)).to eq([main])
+      expect(bot_client.placement_states).to eq([lower_open])
+      expect(bot_client.placement_above_states).to eq([upper_open])
+      expect(dimension.block_state(target)).to eq(lower_closed)
+      expect(dimension.block_state(target.up)).to eq(upper_closed)
+      opened = placement.sequence
+
+      packets.clear
+      aim(x: 2.125, y: 1.5)
+      tap(nil)
+
+      closed = placement.sequence
+      expect(wire).to eq([{"on", main, 2}] + swing)
+      expect(placement.location).to eq(target.up)
+      expect(swings.map(&.hand)).to eq([main, main])
+      expect(dimension.interaction_block_state(target)).to eq(lower_closed)
+      expect(dimension.interaction_block_state(target.up)).to eq(upper_closed)
+
+      Rosegold::Clientbound::BlockChange.new(target, lower_open).callback(bot_client)
+      Rosegold::Clientbound::BlockChange.new(target.up, upper_open).callback(bot_client)
+      Rosegold::Clientbound::AcknowledgeBlockChange.new(opened).callback(bot_client)
+      expect(bot_client.pending_block_operations.keys).to eq([closed])
+      expect(dimension.block_state(target)).to eq(lower_open)
+      expect(dimension.block_state(target.up)).to eq(upper_open)
+      expect(dimension.interaction_block_state(target)).to eq(lower_closed)
+      expect(dimension.interaction_block_state(target.up)).to eq(upper_closed)
+
+      Rosegold::Clientbound::AcknowledgeBlockChange.new(closed).callback(bot_client)
+      expect(bot_client.pending_block_operations).to be_empty
+      expect(dimension.interaction_block_state(target)).to eq(lower_open)
+      expect(dimension.interaction_block_state(target.up)).to eq(upper_open)
     end
 
     it "sends a relative entity hit with the selected hand and sneaking flag" do
