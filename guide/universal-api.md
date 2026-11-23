@@ -51,9 +51,9 @@ that it remains current across respawns or dimension changes.
 player's server-reported experience. Movement and interaction methods still use
 vanilla physics, reach, collision, and occlusion. Native attack, dig, and use
 may target from a short-lived local prediction. For example, opening a door by
-hand in Survival or Creative can change what the next click targets before the
-server confirms either half. World reads, physics, and queries still use
-server-confirmed state.
+hand in Survival, Creative, or Adventure can change what the next click targets
+before the server confirms either half. World reads, physics, and queries still
+use server-confirmed state.
 Scripted taps such as `use_hand` choose the hand automatically unless given an
 explicit one. They queue for the next tick.
 
