@@ -1512,6 +1512,21 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/EntityUseRules" data-name="rosegold::entityuserules">
+      <a href="Rosegold/EntityUseRules.html">EntityUseRules</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/EntityUseRules/Result" data-name="rosegold::entityuserules::result">
+      <a href="Rosegold/EntityUseRules/Result.html">Result</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/Event" data-name="rosegold::event">
       <a href="Rosegold/Event.html">Event</a>
       
@@ -1664,6 +1679,26 @@
   
   <li class=" " data-id="rosegold/Rosegold/ItemConstants" data-name="rosegold::itemconstants">
       <a href="Rosegold/ItemConstants.html">ItemConstants</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/ItemUseRules" data-name="rosegold::itemuserules">
+      <a href="Rosegold/ItemUseRules.html">ItemUseRules</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/ItemUseRules/Decision" data-name="rosegold::itemuserules::decision">
+      <a href="Rosegold/ItemUseRules/Decision.html">Decision</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ItemUseRules/Result" data-name="rosegold::itemuserules::result">
+      <a href="Rosegold/ItemUseRules/Result.html">Result</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -2592,7 +2627,7 @@ bot <span class="o">=</span> <span class="t">Rosegold</span><span class="t">::</
 <span class="k">ensure</span>
   bot.disconnect(<span class="s">&quot;Script finished&quot;</span>) <span class="k">if</span> bot.connected?
 <span class="k">end</span></code></pre>
-<p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result. A <code>use_hand</code> tap is dropped during an active use or a block break that takes multiple ticks, while a held <code>start_using_hand</code> keeps retrying (every four ticks when idle). <code>stop_digging</code> and <code>stop_using_hand</code> are processed on the next tick, so wait one tick after <code>stop_digging</code> before a tap. Attack, dig, and use share a short-lived local prediction that never changes what the world, physics, or queries report; those stay server-confirmed.</p>
+<p>That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. <code>use_hand</code> and <code>start_using_hand</code> choose the hand automatically when <code>hand:</code> is omitted (main first, then off hand only when the previous local result permits); pass <code>:main_hand</code> or <code>:off_hand</code> to use exactly one. Taps such as <code>attack</code> and <code>use_hand</code> queue an action; they do not wait for its result. A <code>use_hand</code> tap is dropped during an active use or a block break that takes multiple ticks, while a held <code>start_using_hand</code> keeps retrying (every four ticks when idle). <code>stop_digging</code> and <code>stop_using_hand</code> are processed on the next tick, so wait one tick after <code>stop_digging</code> before a tap. Attack, dig, and use share a short-lived local prediction that never changes what the world, physics, or queries report; those stay server-confirmed.</p>
 <p>For automatic reconnects, use <code>Bot.run</code>. It waits for spawn and gives the block a
 fresh bot for each session:</p>
 <pre><code class="language-crystal"><span class="t">Rosegold</span><span class="t">::</span><span class="t">Bot</span>.run(<span class="s">&quot;play.example.net&quot;</span>) <span class="k">do</span> <span class="o">|</span>bot<span class="o">|</span>
