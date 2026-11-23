@@ -52,7 +52,7 @@ player's server-reported experience. Movement and interaction methods still use
 vanilla physics, reach, collision, and occlusion. Native attack, dig, and use
 may target from a short-lived local prediction, but every observation the API
 returns (world, physics, queries) stays server-confirmed. Scripted taps such as
-`use_hand` take an explicit hand and queue for the next tick, which differs from
+`use_hand` choose the hand automatically unless given an explicit one, and queue for the next tick, which differs from
 desktop input.
 
 ## CivMC boundary

@@ -14,10 +14,12 @@ end
 
 class CleanupEatBot < Rosegold::Bot
   getter starts = 0
+  getter started_hands = [] of Rosegold::Hand?
   getter stops = 0
 
-  def start_using_hand : Nil
+  def start_using_hand(hand : Rosegold::Hand? = nil) : Nil
     @starts += 1
+    @started_hands << hand
   end
 
   def stop_using_hand : Nil
@@ -155,6 +157,7 @@ Spectator.describe "Rosegold::Bot#eat" do
 
     expect(bot.eat).to be_nil
     expect(bot.starts).to eq(1)
+    expect(bot.started_hands).to eq([Rosegold::Hand::MainHand] of Rosegold::Hand?)
     expect(bot.stops).to eq(1)
   end
 

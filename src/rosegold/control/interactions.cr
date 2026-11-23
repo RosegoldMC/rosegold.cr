@@ -33,6 +33,8 @@ class Rosegold::Interactions
     end
   end
 
+  private record UseRequest, hand : Hand?
+
   private HELD_DESTROY_DELAY =  5
   private MINING_MISS_DELAY  = 10
   private HELD_USE_DELAY     =  4
@@ -43,8 +45,9 @@ class Rosegold::Interactions
   private alias MiningItem = {UInt32, Hash(String, Bytes), Set(String)}
   private alias InteractionHit = ReachedBlock | ReachedEntity | Nil
 
-  @held_use_hand : Hand?
-  @queued_use_hand : Hand?
+  @held_use : UseRequest?
+  @queued_use : UseRequest?
+  @use_revision = 0_u64
   @active_use : ActiveUse?
   getter last_hand_tap_sequence : Int32 = 0
   @use_repeat_delay = 0
@@ -62,25 +65,29 @@ class Rosegold::Interactions
   def initialize(@client)
   end
 
-  def start_using_hand(hand : Hand = :main_hand)
-    return if @held_use_hand == hand
+  # A nil *hand* tries the main hand, then the off hand when the main hand passes.
+  def start_using_hand(hand : Hand? = :main_hand)
+    return if (held = @held_use) && held.hand == hand
 
-    @held_use_hand = hand
-    @queued_use_hand = hand
+    @use_revision += 1
+    @held_use = @queued_use = UseRequest.new(hand)
   end
 
-  def tap_using_hand(hand : Hand = :main_hand)
-    @held_use_hand = nil
-    @queued_use_hand = hand
+  # A nil *hand* tries the main hand, then the off hand when the main hand passes.
+  def tap_using_hand(hand : Hand? = :main_hand)
+    @use_revision += 1
+    @held_use = nil
+    @queued_use = UseRequest.new(hand)
   end
 
   def stop_using_hand
-    @held_use_hand = nil
-    @queued_use_hand = nil
+    @use_revision += 1
+    @held_use = nil
+    @queued_use = nil
   end
 
   def use_release_pending? : Bool
-    @held_use_hand.nil? && active_use?
+    @held_use.nil? && active_use?
   end
 
   def sync_using_item(hand : Hand?) : Nil
@@ -154,7 +161,9 @@ class Rosegold::Interactions
     @use_repeat_delay -= 1 if @use_repeat_delay > 0
 
     attack_pressed, @attack_queued = @attack_queued, false
-    use_pressed, @queued_use_hand = @queued_use_hand, nil
+    use_pressed, @queued_use = @queued_use, nil
+    held = @held_use
+    revision = @use_revision
     if active = @active_use
       slot = hand_slot(active.hand)
       if slot.empty? || slot.item_id_int != active.item_id
@@ -164,18 +173,18 @@ class Rosegold::Interactions
       end
     end
 
-    hit = reach_block_or_entity if attack_pressed || use_pressed || digging? || @held_use_hand
+    hit = reach_block_or_entity if attack_pressed || use_pressed || digging? || held
     instant_attack = false
     if active_use?
-      held = @held_use_hand
       active_hand = @active_use.try(&.hand)
-      release_using_item if !held || (active_hand && active_hand != held)
+      wanted = held.try(&.hand)
+      release_using_item if !held || (active_hand && wanted && active_hand != wanted)
     else
       instant_attack = start_attack(hit) if attack_pressed
-      start_use(use_pressed, hit, hand_tap: @held_use_hand.nil?) if use_pressed
+      start_use(use_pressed, hit, revision, hand_tap: held.nil?) if use_pressed && use_continues?(revision)
     end
-    if (held = @held_use_hand) && @use_repeat_delay == 0 && !active_use?
-      start_use(held, hit, hand_tap: false)
+    if held && @use_repeat_delay == 0 && use_continues?(revision)
+      start_use(held, hit, revision, hand_tap: false)
     end
     continue_attack(digging? && !instant_attack, hit)
     @mining_miss_ticks -= 1 if @mining_miss_ticks > 0
@@ -278,23 +287,38 @@ class Rosegold::Interactions
     send_swing attack: true
   end
 
-  private def start_use(hand : Hand, hit : InteractionHit, *, hand_tap : Bool)
+  private def start_use(request : UseRequest, hit : InteractionHit, revision : UInt64, *, hand_tap : Bool)
     return if @digging_block
 
     @use_repeat_delay = HELD_USE_DELAY
-    route_use(hand, hit, hand_tap: hand_tap)
+    if hand = request.hand
+      route_use(hand, hit, revision, hand_tap: hand_tap)
+    elsif route_use(:main_hand, hit, revision, hand_tap: hand_tap) && use_continues?(revision)
+      route_use(:off_hand, hit, revision, hand_tap: hand_tap)
+    end
   end
 
-  private def send_use_item(hand : Hand, hand_tap : Bool)
-    sequence = client.next_sequence
-    client.pending_block_operations[sequence] = BlockOperation.new(Vec3i::ORIGIN, :use)
-    @last_hand_tap_sequence = sequence if hand_tap
+  # Callbacks during a send may stop, reset or replace the press being routed.
+  private def use_current?(revision : UInt64) : Bool
+    @use_revision == revision
+  end
 
-    slot = hand_slot(hand)
-    if starts_consuming?(slot)
+  private def allocate_use_sequence(location : Vec3i, operation : Symbol, hand_tap : Bool) : Int32
+    sequence = client.next_sequence
+    client.pending_block_operations[sequence] = BlockOperation.new(location, operation)
+    @last_hand_tap_sequence = Math.max(@last_hand_tap_sequence, sequence) if hand_tap
+    sequence
+  end
+
+  private def send_use_item(hand : Hand, slot : Slot, hand_tap : Bool) : ItemUseRules::Result
+    decision = ItemUseRules.evaluate(client.player, slot)
+    sequence = allocate_use_sequence(Vec3i::ORIGIN, :use, hand_tap)
+    starts_use = decision.result.unknown? ? starts_consuming?(slot) : decision.starts_sustained_use?
+    if starts_use
       @active_use = ActiveUse.new(hand, slot.item_id_int, sequence, PROVISIONAL_USE_TICKS)
     end
     send_packet Serverbound::UseItem.new hand, sequence, client.player.look.yaw, client.player.look.pitch
+    decision.result
   end
 
   private def hand_slot(hand : Hand)
@@ -393,9 +417,9 @@ class Rosegold::Interactions
   end
 
   private def cauldron_use_consumes_click?(block : Block, block_state : UInt16, hand : Hand) : Bool
-    held_item_name = (hand.main_hand? ? inventory.main_hand : inventory.off_hand).name
-    return true if {"water_bucket", "lava_bucket", "powder_snow_bucket"}.includes?(held_item_name)
-    return false unless held_item_name == "bucket"
+    name = held_item_name(hand_slot(hand))
+    return true if {"water_bucket", "lava_bucket", "powder_snow_bucket"}.includes?(name)
+    return false unless name == "bucket"
 
     case block.id_str
     when "lava_cauldron"

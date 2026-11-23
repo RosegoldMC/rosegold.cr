@@ -207,7 +207,7 @@ cadence and creative tool limits follow the synchronized instabuild ability; a
 game mode change resets it, and PlayerAbilities can override it.
 
 Attack presses run before use presses, and a held attack continues after use
-each tick. A tap (`use_hand`, hand defaults to main) is queued for the next tick,
+each tick. A tap (`use_hand`; omitted or `nil` hand means automatic) is queued for the next tick,
 coalesces with other taps, and has no hold-repeat cooldown. It is dropped during
 an existing active use or a staged survival break. A held use retries each tick
 and, once idle, repeats every four ticks. `stop_digging` and `stop_using_hand`
@@ -341,6 +341,17 @@ one use on the next eligible tick. `Bot#start_using_hand` holds use until
 `#stop_using_hand`; interaction timing and release packets belong to
 `Interactions`. Do not describe a tap as a start followed by an immediate
 release, and do not copy timing assumptions from another protocol or server.
+
+Omitted or `nil` `hand` on `Bot#use_hand` and `Bot#start_using_hand` delegates
+to automatic fallback: main hand first, then the off hand only when the previous
+local result permits it. Unknown or modded results never trigger an unproven
+off-hand use. Both hand attempts are part of the same click and logical tick, and the
+single held repeat interval applies once per logical use. This claims no broader
+vanilla parity. Explicit `:main_hand` or `:off_hand` stays
+single. Selected-action workflows (`enchant`, container helpers,
+`place_block_against`, `eat!`, crafting tables) pin `:main_hand` through the
+public `use_hand`/`start_using_hand`. Bot subclasses and forwarders that
+override these must accept `Hand?` with a `nil` default and forward it.
 
 When public behavior, examples, supported versions, or workflows change, update
 the relevant README, examples, specs, and this guide in the same change. Keep

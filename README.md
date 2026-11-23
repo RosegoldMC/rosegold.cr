@@ -88,7 +88,7 @@ ensure
 end
 ```
 
-That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result. A `use_hand` tap is dropped during an active use or a block break that takes multiple ticks, while a held `start_using_hand` keeps retrying (every four ticks when idle). `stop_digging` and `stop_using_hand` are processed on the next tick, so wait one tick after `stop_digging` before a tap. Attack, dig, and use share a short-lived local prediction that never changes what the world, physics, or queries report; those stay server-confirmed.
+That is deliberately a small DSL. Movement and inventory operations read sequentially and yield through game ticks. `use_hand` and `start_using_hand` choose the hand automatically when `hand:` is omitted (main first, then off hand only when the previous local result permits); pass `:main_hand` or `:off_hand` to use exactly one. Taps such as `attack` and `use_hand` queue an action; they do not wait for its result. A `use_hand` tap is dropped during an active use or a block break that takes multiple ticks, while a held `start_using_hand` keeps retrying (every four ticks when idle). `stop_digging` and `stop_using_hand` are processed on the next tick, so wait one tick after `stop_digging` before a tap. Attack, dig, and use share a short-lived local prediction that never changes what the world, physics, or queries report; those stay server-confirmed.
 
 For automatic reconnects, use `Bot.run`. It waits for spawn and gives the block a
 fresh bot for each session:
