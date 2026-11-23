@@ -39,7 +39,7 @@ module Rosegold::BlockUseRules
 
   def self.evaluate(dimension : Dimension, player : Player, clicked : Vec3i, face : BlockFace, hand : Hand, main_hand : Slot, off_hand : Slot) : Decision
     unknown = Decision.new(Result::Unknown)
-    return unknown unless {0, 1}.includes?(player.gamemode) && player.creative_mode? == (player.gamemode == 1)
+    return unknown unless {0, 1, 2}.includes?(player.gamemode) && player.creative_mode? == (player.gamemode == 1)
     return unknown unless state = block_state(dimension, clicked)
     mc = MCData.default
     return unknown unless block = block_for(mc, state)
@@ -84,6 +84,7 @@ module Rosegold::BlockUseRules
     return unknown unless INERT_BLOCKS.includes?(name) || plain_cube?(mc, block) || mc.air_states.includes?(state)
     return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
     return unknown unless plain_cube?(mc, block) || mc.air_states.includes?(state)
+    return unknown if player.gamemode == 2
     return unknown unless item && PLAIN_CUBES.includes?(item.name)
     return unknown if patched?(held)
 

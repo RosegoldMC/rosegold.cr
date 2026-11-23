@@ -123,6 +123,48 @@ Spectator.describe Rosegold::BlockUseRules do
     expect(evaluate(item("stone")).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
   end
 
+  context "in Adventure" do
+    before_each do
+      player.gamemode = 2_i8
+      player.creative_mode = false
+    end
+
+    it "toggles both door halves with the main hand, empty or holding a placement item" do
+      lower = "oak_door[facing=east, half=lower, hinge=right, open=false, powered=false]"
+      put lower
+      put lower.sub("half=lower", "half=upper"), above
+      open_lower = state(lower.sub("open=false", "open=true"))
+      open_upper = state(lower.sub("half=lower", "half=upper").sub("open=false", "open=true"))
+      [empty_hand, item("stone")].each do |held|
+        decision = evaluate(held)
+        expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Success)
+        expect(decision.writes).to eq([{clicked, open_lower}, {above, open_upper}])
+        decision = evaluate(held, position: above)
+        expect(decision.writes).to eq([{above, open_upper}, {clicked, open_lower}])
+      end
+    end
+
+    it "toggles a fence gate toward the player's yaw" do
+      put "oak_fence_gate[facing=west, in_wall=false, open=false, powered=false]"
+      player.look = Rosegold::Look.new(-90_f32, 0_f32)
+      decision = evaluate
+      expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Success)
+      expect(decision.writes).to eq([{clicked, state("oak_fence_gate[facing=east, in_wall=false, open=true, powered=false]")}])
+    end
+
+    it "does not predict item placement or the sneaking-with-item fallback" do
+      put "stone"
+      expect(evaluate(item("stone")).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+      expect(evaluate(item("stone")).writes).to be_empty
+      expect(evaluate(empty_hand).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+      put "oak_door[facing=east, half=lower, hinge=right, open=false, powered=false]"
+      player.sneaking = true
+      decision = evaluate(item("stone"))
+      expect(decision.writes).to be_empty
+      expect(decision.result).not_to eq(Rosegold::BlockUseRules::Result::Success)
+    end
+  end
+
   it "toggles only OPEN on verified hand-openable trapdoors, including waterlogged and powered states" do
     names = %w(oak_trapdoor warped_trapdoor waxed_oxidized_copper_trapdoor)
     names << "poplar_trapdoor" if Rosegold::Client.protocol_version >= 777_u32

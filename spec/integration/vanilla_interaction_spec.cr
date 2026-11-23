@@ -98,6 +98,15 @@ module VanillaInteractionFixture
     wait_until(bot) { powered?(bot.client) == false }
   end
 
+  def self.place_closed_door(lower : Rosegold::Vec3i, door : String)
+    upper = lower.up
+    closed = ["lower", "upper"].map { |half| "#{door}[facing=south, half=#{half}, hinge=left, open=false, powered=false]" }
+    admin.setblock lower.x, lower.y, lower.z, "air"
+    admin.setblock lower.x, lower.y, lower.z, closed[0].delete(' ')
+    admin.setblock upper.x, upper.y, upper.z, closed[1].delete(' ')
+    closed
+  end
+
   def self.watch_use_flags(client : Rosegold::Client) : Array(UInt8)
     use_flags = [] of UInt8
     client.on Rosegold::Clientbound::SetEntityData do |packet|
@@ -257,11 +266,8 @@ Spectator.describe "Rosegold::Bot vanilla interaction ordering" do
       }).to be_true
 
       {"oak_door", "waxed_copper_door"}.each do |door|
-        closed = ["lower", "upper"].map { |half| "#{door}[facing=south, half=#{half}, hinge=left, open=false, powered=false]" }
+        closed = VanillaInteractionFixture.place_closed_door(lower, door)
         opened = closed.map &.sub("open=false", "open=true")
-        admin.setblock lower.x, lower.y, lower.z, "air"
-        admin.setblock lower.x, lower.y, lower.z, closed[0].delete(' ')
-        admin.setblock upper.x, upper.y, upper.z, closed[1].delete(' ')
         expect(VanillaInteractionFixture.wait_until(bot, 40) {
           observed_client.confirmed_states == closed
         }).to be_true
@@ -271,6 +277,38 @@ Spectator.describe "Rosegold::Bot vanilla interaction ordering" do
         bot.look_at lower.to_f64.plus(0.9375, 0.5, 0.5)
         expect_block_use(bot, observed_client, lower, opened, closed)
         expect(bot.inventory.off_hand.name).to eq("cobblestone")
+      end
+    end
+  end
+
+  it "predicts and confirms an Adventure door opening with one main-hand use" do
+    observed_client = VanillaInteractionFixture.observed_client
+    observed_client.join_game do |client|
+      bot = Rosegold::Bot.new(client)
+      begin
+        expect(VanillaInteractionFixture.prepare(bot)).to be_true
+        lower = VanillaInteractionFixture::ORIGIN.south(2)
+        upper = lower.up
+        observed_client.watched_blocks = [lower, upper]
+        closed = VanillaInteractionFixture.place_closed_door(lower, "oak_door")
+        opened = closed.map &.sub("open=false", "open=true")
+        admin.chat "/gamemode adventure #{AdminBot::TEST_PLAYER}"
+        admin.item_replace "weapon.mainhand", "stone"
+        admin.item_replace "weapon.offhand", "shield"
+        expect(VanillaInteractionFixture.wait_until(bot, 40) {
+          client.player.gamemode == 2_i8 && observed_client.confirmed_states == closed &&
+            bot.main_hand.name == "stone" && bot.inventory.off_hand.name == "shield"
+        }).to be_true
+
+        bot.look_at upper.to_f64.plus(0.5, 0.5, 0.1)
+        expect_block_use(bot, observed_client, upper, closed, opened)
+      ensure
+        admin.chat "/gamemode survival #{AdminBot::TEST_PLAYER}"
+        admin.clear
+        restored = VanillaInteractionFixture.wait_until(bot, 40) do
+          bot.gamemode == 0_i8 && bot.main_hand.empty? && bot.inventory.off_hand.empty?
+        end
+        expect(restored).to_eventually be_true, "Expected Survival mode and empty hands before disconnecting"
       end
     end
   end
