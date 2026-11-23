@@ -9,6 +9,7 @@ class Rosegold::PalettedContainer
 
   getter size : Index
   private getter num_bits_direct : UInt8
+  private getter direct_write_bits : UInt8
   private getter bits_per_entry : UInt8
   private getter entries_per_long : UInt8
   private getter entry_mask : Long
@@ -18,11 +19,12 @@ class Rosegold::PalettedContainer
   # TODO read+write lock
 
   # Creates a container filled with air/default values (ID 0)
-  def self.air_filled(size : Index, num_bits_direct : UInt8 = 9_u8) : PalettedContainer
-    new(size: size, num_bits_direct: num_bits_direct, empty: true)
+  def self.air_filled(size : Index, num_bits_direct : UInt8 = 9_u8, direct_write_bits : UInt8 = num_bits_direct) : PalettedContainer
+    new(size: size, num_bits_direct: num_bits_direct, empty: true, direct_write_bits: direct_write_bits)
   end
 
-  def initialize(size : Index, @num_bits_direct : UInt8, empty : Bool)
+  def initialize(size : Index, @num_bits_direct : UInt8, empty : Bool, direct_write_bits : UInt8 = num_bits_direct)
+    @direct_write_bits = direct_write_bits
     @size = size
     @bits_per_entry = 0_u8 # single state mode
     @palette = [0_u16]     # air block/biome (ID 0)
@@ -31,8 +33,9 @@ class Rosegold::PalettedContainer
     @long_array = [] of Long
   end
 
-  def initialize(io : Minecraft::IO, num_bits_direct, @size)
+  def initialize(io : Minecraft::IO, num_bits_direct, @size, direct_write_bits = num_bits_direct)
     @num_bits_direct = num_bits_direct.to_u8
+    @direct_write_bits = direct_write_bits.to_u8
     @bits_per_entry = io.read_byte
     if bits_per_entry == 0 # single state mode
       @palette = [io.read_var_int.to_u16]
@@ -180,7 +183,7 @@ class Rosegold::PalettedContainer
   end
 
   private def transition_to_direct_mode : Nil
-    new_bits_per_entry = num_bits_direct
+    new_bits_per_entry = direct_write_bits
     new_entries_per_long = 64_u8 // new_bits_per_entry
     new_entry_mask = (1_u64 << new_bits_per_entry) - 1
     new_num_longs = (size + new_entries_per_long - 1) // new_entries_per_long
