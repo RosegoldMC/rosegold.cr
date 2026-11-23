@@ -29,12 +29,16 @@ Spectator.describe Rosegold::BlockUseRules do
     dimension.set_block_state position, state(name)
   end
 
+  def put_first(name : String)
+    dimension.set_block_state clicked, mc.blocks.find! { |block| block.id_str == name }.min_state_id
+  end
+
   def item(name : String)
     Rosegold::Slot.new(1_u32, mc.items.find! { |entry| entry.name == name }.id)
   end
 
-  def evaluate(main = empty_hand, off = empty_hand, hand : Rosegold::Hand = Rosegold::Hand::MainHand, position = clicked, face : BlockFace = BlockFace::Top)
-    Rosegold::BlockUseRules.evaluate(dimension, player, position, face, hand, main, off)
+  def evaluate(main = empty_hand, off = empty_hand, hand : Rosegold::Hand = Rosegold::Hand::MainHand, position = clicked, face : BlockFace = BlockFace::Top, cooled = false)
+    Rosegold::BlockUseRules.evaluate(dimension, player, position, face, hand, main, off, cooled: cooled)
   end
 
   it "places known ordinary cubes using each enabled version's item and block data" do
@@ -70,6 +74,33 @@ Spectator.describe Rosegold::BlockUseRules do
     player.sneaking = true
     expect(evaluate(empty_hand, item("oak_planks")).result).to eq(Rosegold::BlockUseRules::Result::Pass)
     expect(evaluate(item("stone"), item("oak_planks"), Rosegold::Hand::OffHand).writes).to eq([{above, state("oak_planks")}])
+  end
+
+  it "passes for a cooled item on an inert or plain block, including a patched one and secondary use" do
+    put "stone"
+    patched = item("stone")
+    patched.components_to_add["max_stack_size"] = Rosegold::DataComponents::MaxStackSize.new(16_u32)
+    {item("stone"), patched}.each do |held|
+      decision = evaluate(held, cooled: true)
+      expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Pass)
+      expect(decision.writes).to be_empty
+    end
+    expect(evaluate(empty_hand, cooled: true).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+    put_first "grass_block"
+    expect(evaluate(item("stone"), cooled: true).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+    player.sneaking = true
+    put_first "note_block"
+    expect(evaluate(item("stone"), cooled: true).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+  end
+
+  it "leaves block-owned results and unknown blocks alone for a cooled item" do
+    put_first "oak_door"
+    expect(evaluate(item("stone"), cooled: true).result).to_not eq(Rosegold::BlockUseRules::Result::Pass)
+    put_first "note_block"
+    expect(evaluate(item("stone"), cooled: true).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+    player.gamemode = 3_i8
+    put "stone"
+    expect(evaluate(item("stone"), cooled: true).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
   end
 
   it "fails on confirmed own-player overlap but not on a merely touching face" do
