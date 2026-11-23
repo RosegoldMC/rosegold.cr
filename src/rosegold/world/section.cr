@@ -14,8 +14,12 @@ class Rosegold::Section
     # 26.1+: fluid count is now sent on the wire (was implicit before)
     @fluid_count = Client.protocol_version >= 775_u32 ? io.read_short : 0_i16
 
-    @blocks = PalettedContainer.new io, 9, 4096
+    @blocks = PalettedContainer.new io, 9, 4096, Section.block_direct_bits
     @biomes = PalettedContainer.new io, 4, 64
+  end
+
+  protected def self.block_direct_bits : UInt8
+    (32 - (MCData.default.block_state_names.size - 1).to_u32.leading_zeros_count).to_u8
   end
 
   # Creates an empty section (for when no section data is sent)
@@ -26,7 +30,7 @@ class Rosegold::Section
   def initialize(empty : Bool)
     @block_count = 0_i16
     @fluid_count = 0_i16
-    @blocks = PalettedContainer.air_filled(4096, 9_u8)
+    @blocks = PalettedContainer.air_filled(4096, 9_u8, Section.block_direct_bits)
     @biomes = PalettedContainer.air_filled(64, 4_u8)
   end
 
