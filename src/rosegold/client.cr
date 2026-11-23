@@ -35,6 +35,10 @@ class Rosegold::Client < Rosegold::EventEmitter
     @@protocol_version_explicit = true
   end
 
+  protected def self.detected_protocol_version=(version : UInt32)
+    @@protocol_version = version
+  end
+
   def self.reset_protocol_version!
     @@protocol_version = LATEST_PROTOCOL
     @@protocol_version_explicit = false
@@ -496,10 +500,10 @@ class Rosegold::Client < Rosegold::EventEmitter
       if server_protocol = protocol_info["protocol"]?.try(&.as_i?)
         server_version = server_protocol.to_u32
         if SUPPORTED_PROTOCOLS.includes?(server_version)
-          @@protocol_version = server_version
+          Client.detected_protocol_version = server_version
           Log.info { "Auto-detected server protocol version: #{server_version}" }
         else
-          @@protocol_version = LATEST_PROTOCOL
+          Client.detected_protocol_version = LATEST_PROTOCOL
           Log.warn { "Server protocol #{server_version} not supported, falling back to #{LATEST_PROTOCOL}" }
         end
       else
