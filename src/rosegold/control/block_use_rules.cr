@@ -34,6 +34,8 @@ module Rosegold::BlockUseRules
     anvil chipped_anvil damaged_anvil enchanting_table brewing_stand beacon hopper dispenser dropper
     crafter loom stonecutter grindstone smithing_table cartography_table shulker_box
   ) + %w(white orange magenta light_blue yellow lime pink gray light_gray cyan purple blue brown green red black).map { |color| "#{color}_shulker_box" }
+  private BEDS = %w(white orange magenta light_blue yellow lime pink gray light_gray cyan purple blue brown green red black)
+    .map { |color| "#{color}_bed" } + %w(straw_bed)
   private CAULDRONS = {"cauldron", "water_cauldron", "lava_cauldron", "powder_snow_cauldron"}
   private FULL_CUBE = AABBd.new(0, 0, 0, 1, 1, 1)
 
@@ -71,6 +73,9 @@ module Rosegold::BlockUseRules
       return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
     elsif name == "lever" || MENUS.includes?(name)
       return Decision.new(Result::Success) if hand.main_hand?
+      return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
+    elsif BEDS.includes?(name)
+      return Decision.new(Result::Consume) if hand.main_hand?
       return Decision.new(Result::Pass) if item_use_on_passes?(item, held)
     elsif name == "lectern"
       return Decision.new(Result::Success) if hand.main_hand? && mc.block_state_names[state].includes?("has_book=true")
