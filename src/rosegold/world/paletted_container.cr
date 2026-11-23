@@ -117,7 +117,7 @@ class Rosegold::PalettedContainer
       encoded = palette.index(value)
       unless encoded
         max_palette_size = 1_u64 << bits_per_entry
-        if palette.size + 1 >= max_palette_size
+        if palette.size >= max_palette_size
           grow_palette
           # After growing, we need to try again since the palette structure may have changed
           self[index] = value
