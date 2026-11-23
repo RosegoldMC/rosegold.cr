@@ -54,7 +54,9 @@ hand in Survival, Creative, or Adventure can change what the next click targets
 before the server confirms either half. World reads, physics, and queries still
 use server-confirmed state.
 Scripted taps such as `use_hand` choose the hand automatically unless given an
-explicit one. They queue for the next tick.
+explicit one. They queue for the next tick. For generic item use, a known
+group on server-reported cooldown still sends the use packet and allows automatic
+hand fallback; block and entity actions keep their existing rules.
 
 ## Server libraries
 
