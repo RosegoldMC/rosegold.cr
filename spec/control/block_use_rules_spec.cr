@@ -436,6 +436,57 @@ Spectator.describe Rosegold::BlockUseRules do
     end
   end
 
+  it "consumes a main-hand use on every regular bed block (first and last state) and never writes" do
+    colors = %w(white orange magenta light_blue yellow lime pink gray light_gray cyan purple blue brown green red black)
+    Rosegold::Client::SUPPORTED_PROTOCOLS.each do |protocol|
+      Rosegold::Client.protocol_version = protocol
+      colors.each do |color|
+        block = mc.blocks.find! { |entry| entry.id_str == "#{color}_bed" }
+        {block.min_state_id, block.max_state_id}.each do |id|
+          dimension.set_block_state clicked, id
+          {empty_hand, item("apple"), item("stone")}.each do |held|
+            decision = evaluate(held)
+            expect(decision.result).to eq(Rosegold::BlockUseRules::Result::Consume)
+            expect(decision.writes).to be_empty
+          end
+          expect(dimension.block_state(clicked)).to eq(id)
+        end
+      end
+    end
+  end
+
+  it "keeps beds on the selected hand: offhand passes only for known default no-ops" do
+    put "red_bed[facing=north, occupied=false, part=head]"
+    expect(evaluate(empty_hand, item("apple"), Rosegold::Hand::OffHand).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+    expect(evaluate(item("apple"), empty_hand, Rosegold::Hand::OffHand).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+    expect(evaluate(item("apple"), item("flint_and_steel"), Rosegold::Hand::OffHand).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+    expect(evaluate(item("apple"), Rosegold::Slot.new(1_u32, 999_999_u32), Rosegold::Hand::OffHand).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+  end
+
+  it "applies secondary use before the bed's block action" do
+    put "blue_bed[facing=east, occupied=false, part=foot]"
+    player.sneaking = true
+    expect(evaluate(item("apple")).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+    expect(evaluate(empty_hand, item("apple")).result).to eq(Rosegold::BlockUseRules::Result::Pass)
+    expect(evaluate(item("flint_and_steel")).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+    expect(evaluate.result).to eq(Rosegold::BlockUseRules::Result::Consume)
+  end
+
+  it "consumes empty-hand use on straw beds and leaves unknown held items on white beds unresolved" do
+    straws = Rosegold::Client::SUPPORTED_PROTOCOLS.compact_map do |protocol|
+      Rosegold::Client.protocol_version = protocol
+      mc.blocks.find { |entry| entry.id_str == "straw_bed" }.try { |block| {protocol, block} }
+    end
+    expect(straws).not_to be_empty
+    straws.each do |protocol, block|
+      Rosegold::Client.protocol_version = protocol
+      dimension.set_block_state clicked, block.min_state_id
+      expect(evaluate.result).to eq(Rosegold::BlockUseRules::Result::Consume)
+    end
+    put "white_bed[facing=north, occupied=false, part=head]"
+    expect(evaluate(Rosegold::Slot.new(1_u32, 999_999_u32)).result).to eq(Rosegold::BlockUseRules::Result::Unknown)
+  end
+
   it "uses only the selected bucket for cauldron results and never writes their states" do
     put "cauldron"
     expect(evaluate(empty_hand, item("water_bucket")).result).to eq(Rosegold::BlockUseRules::Result::Pass)

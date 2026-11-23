@@ -369,6 +369,64 @@ Spectator.describe "Interaction use routing" do
     expect(swings.map(&.hand)).to eq([off])
   end
 
+  sample Rosegold::Client::SUPPORTED_PROTOCOLS do |protocol|
+    it "sends one block placement for a regular bed without a swing, use, or state write" do
+      Rosegold::Client.protocol_version = protocol
+      head = state("red_bed", "facing=north", "occupied=false", "part=head")
+      foot = state("red_bed", "facing=north", "occupied=false", "part=foot")
+      dimension.set_block_state(target, head)
+      dimension.set_block_state(target.south, foot)
+      hold("apple", off)
+      sequence = 0
+
+      {"apple", "stone"}.each do |item|
+        hold(item)
+        4.times { input.tick }
+        packets.clear
+        swings.clear
+
+        tap(nil)
+
+        sequence += 1
+        expect(wire).to eq([{"on", main, sequence}])
+        expect(placement.location).to eq(target)
+        expect(swings).to be_empty
+        expect(bot_client.pending_block_operations[sequence].operation_type).to eq(:place)
+        expect(dimension.interaction_block_state(target)).to eq(head)
+        expect(dimension.interaction_block_state(target.south)).to eq(foot)
+        Rosegold::Clientbound::AcknowledgeBlockChange.new(sequence).callback(bot_client)
+        expect(bot_client.pending_block_operations).to be_empty
+      end
+    end
+  end
+
+  it "does not run the bed's main-hand action for an explicit offhand use" do
+    bed = state("red_bed", "facing=north", "occupied=false", "part=foot")
+    dimension.set_block_state(target, bed)
+    hold("flint_and_steel")
+
+    tap(off)
+
+    expect(wire).to eq([{"on", off, 1}])
+    expect(swings).to be_empty
+    expect(dimension.interaction_block_state(target)).to eq(bed)
+  end
+
+  it "suppresses the bed action during secondary use and continues after a known pass" do
+    bed = state("red_bed", "facing=north", "occupied=false", "part=foot")
+    dimension.set_block_state(target, bed)
+    player.sneaking = true
+    aim
+    player.food = 20
+    hold("apple")
+    hold("apple", off)
+
+    tap(nil)
+
+    expect(wire).to eq([{"on", main, 1}, {"use", main, 2}, {"on", off, 3}, {"use", off, 4}])
+    expect(dimension.interaction_block_state(target)).to eq(bed)
+  end
+
   it "keeps explicit hands single for a pass" do
     dimension.set_block_state(target, state("stone"))
     hold("apple", off)
