@@ -137,6 +137,5 @@ class Rosegold::Clientbound::PlayerChatMessage < Rosegold::Clientbound::Packet
     if sig = signature
       client.chat_manager.add_last_seen_signature(sig)
     end
-    client.chat_manager.increment_message_count
   end
 end

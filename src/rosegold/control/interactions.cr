@@ -53,10 +53,17 @@ class Rosegold::Interactions
   @use_repeat_delay = 0
   getter digging_block : ReachedBlock?
   @attack_queued = false
+  @manual_use_held = false
+  @staged_action_release_pending = false
   @destroy_delay = 0
   @mining_miss_ticks = 0
   @destroying_item : MiningItem?
   getter block_damage_progress = 0_f32
+
+  def block_break_target : Vec3i?
+    @digging_block.try(&.block)
+  end
+
   @sent_held_item_index : UInt32?
 
   getter client : Client
@@ -67,20 +74,35 @@ class Rosegold::Interactions
 
   # A nil *hand* tries the main hand, then the off hand when the main hand passes.
   def start_using_hand(hand : Hand? = :main_hand)
+    return unless client.manual_control.script_write_allowed?("start_using_hand")
+    hold_use hand
+  end
+
+  # A nil *hand* tries the main hand, then the off hand when the main hand passes.
+  def tap_using_hand(hand : Hand? = :main_hand)
+    return unless client.manual_control.script_write_allowed?("tap_using_hand")
+    press_use hand
+  end
+
+  def stop_using_hand
+    return unless client.manual_control.script_write_allowed?("stop_using_hand")
+    release_use
+  end
+
+  private def hold_use(hand : Hand?)
     return if (held = @held_use) && held.hand == hand
 
     @use_revision += 1
     @held_use = @queued_use = UseRequest.new(hand)
   end
 
-  # A nil *hand* tries the main hand, then the off hand when the main hand passes.
-  def tap_using_hand(hand : Hand? = :main_hand)
+  private def press_use(hand : Hand?)
     @use_revision += 1
     @held_use = nil
     @queued_use = UseRequest.new(hand)
   end
 
-  def stop_using_hand
+  private def release_use
     @use_revision += 1
     @held_use = nil
     @queued_use = nil
@@ -128,6 +150,7 @@ class Rosegold::Interactions
 
   # Activates the "attack" button.
   def start_digging
+    return unless client.manual_control.script_write_allowed?("start_digging")
     return if digging?
 
     self.digging = true
@@ -136,6 +159,7 @@ class Rosegold::Interactions
 
   # Deactivates the "attack" button.
   def stop_digging
+    return unless client.manual_control.script_write_allowed?("stop_digging")
     self.digging = false
   end
 
@@ -149,15 +173,56 @@ class Rosegold::Interactions
   end
 
   def reset_use
-    stop_using_hand
+    release_use
+    @manual_use_held = false
+    @staged_action_release_pending = false
     clear_active_use
     @use_repeat_delay = 0
     @last_hand_tap_sequence = 0
   end
 
+  # Drops scripted attack and use intent; an active use releases on the next tick.
+  def clear_input
+    self.digging = false
+    @attack_queued = false
+    release_use
+    @manual_use_held = false
+  end
+
+  def queue_staged_action_release : Nil
+    @staged_action_release_pending = true
+  end
+
+  def apply_manual_input(input : ManualControl::Input)
+    @attack_queued = true if input.attack_taps > 0 || (input.attack? && !digging?)
+    self.digging = input.attack?
+
+    if input.use?
+      hold_use nil
+      @manual_use_held = true
+    elsif input.use_taps > 0
+      press_use nil
+      @manual_use_held = false
+    elsif @manual_use_held
+      release_use
+      @manual_use_held = false
+    end
+  end
+
+  # Ends the previous owner's staged break and active use. Miss, destroy and use
+  # cooldowns carry over; only a session reset clears them.
+  private def release_staged_actions : Nil
+    return unless @staged_action_release_pending
+
+    @staged_action_release_pending = false
+    release_using_item if active_use?
+    cancel_digging
+  end
+
   def tick
     return unless client.connected?
     tick_held_item
+    release_staged_actions
     @use_repeat_delay -= 1 if @use_repeat_delay > 0
 
     attack_pressed, @attack_queued = @attack_queued, false
@@ -197,9 +262,18 @@ class Rosegold::Interactions
     end
   end
 
-  def swap_hands : Nil
-    tick_held_item
-    send_packet Serverbound::PlayerAction.new :swap_hands
+  # Sends the held-slot sync, if due, and then the swap, each only while
+  # *session* is current, no container is open and `authorized` approves under
+  # the write lock. The sync cache moves only with a written sync. Returns
+  # whether the swap was written.
+  def swap_hands(session : Client::PlaySession? = nil, &authorized : -> Bool) : Bool
+    guard = -> { client.container_menu.same?(client.inventory_menu) && authorized.call }
+    selection = client.player.hotbar_selection
+    if @sent_held_item_index != selection
+      return false unless client.send_packet_if!(Serverbound::HeldItemChange.new(selection), session, &guard)
+      @sent_held_item_index = selection
+    end
+    client.send_packet_if!(Serverbound::PlayerAction.new(:swap_hands), session, &guard)
   end
 
   private def start_attack(hit : InteractionHit) : Bool

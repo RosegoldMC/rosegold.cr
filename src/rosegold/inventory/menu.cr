@@ -48,6 +48,7 @@ abstract class Rosegold::Menu
   abstract def player_inventory_start : Int32
 
   property state_id : UInt32 = 0
+  getter? content_loaded = false
   property properties = Hash(Int16, Int16).new
   @player_inventory : PlayerInventory
   @cursor : Rosegold::Slot = Rosegold::Slot.new
@@ -580,6 +581,18 @@ abstract class Rosegold::Menu
   end
 
   # --- State sync ---
+
+  def receive_content(packet : Clientbound::SetContainerContent) : Nil
+    return unless packet.window_id == menu_id
+
+    @content_loaded = false
+    update_all_slots(packet.slots.map(&.as(Rosegold::Slot)), packet.cursor.as(Rosegold::Slot), packet.state_id)
+    @content_loaded = packet.slots.size == total_slots
+  end
+
+  def invalidate_content : Nil
+    @content_loaded = false
+  end
 
   def update_all_slots(slots : Array(Rosegold::Slot), cursor : Rosegold::Slot, packet_state_id : UInt32)
     @state_id = packet_state_id

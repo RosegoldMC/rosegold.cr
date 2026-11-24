@@ -149,6 +149,7 @@ class Rosegold::Bot
 
   # Clears a pending jump without changing other movement inputs.
   def stop_jump : Nil
+    return unless client.manual_control.script_write_allowed?("stop_jump")
     client.physics.jump_queued = false
   end
 

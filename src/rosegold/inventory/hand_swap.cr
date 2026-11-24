@@ -11,11 +11,18 @@ class Rosegold::HandSwap
     @expected_offhand = fingerprint(@client.inventory_menu[@main_slot])
   end
 
-  def run(timeout : Time::Span, &) : Nil
+  # The block sends the swap in *session* and returns whether it was written.
+  # *authorized* gates the container close and the swap; once it lapses or the
+  # session ends, nothing more is sent.
+  def run(timeout : Time::Span, session : Client::PlaySession?, authorized : -> Bool, &) : Nil
     raise ArgumentError.new("Hand swap timeout must be positive") unless timeout > Time::Span.zero
     raise Client::NotConnected.new unless @client.connected?
     return if @client.player.gamemode == 3
-    @client.container_menu.close unless @client.container_menu == @client.inventory_menu
+    return unless session
+    if (menu = @client.container_menu).is_a?(ContainerMenu)
+      menu.close(session, &authorized)
+    end
+    return unless authorized.call
     if @expected_main == @expected_offhand
       # Vanilla still sends the action, but unchanged stacks produce no slot deltas.
       yield
@@ -31,7 +38,7 @@ class Rosegold::HandSwap
     end
 
     begin
-      yield
+      return unless yield
       until confirmed?
         raise Client::NotConnected.new("Disconnected while swapping hands") unless @client.connected?
         raise "Timed out waiting for hand swap confirmation after #{timeout}" if Time.monotonic >= deadline

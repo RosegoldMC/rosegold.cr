@@ -81,6 +81,7 @@ class Rosegold::Inventory
   #   Rosegold::Slot.max_repair_cost = 15  # retire tools past "Prior Work: 15"
   #   Rosegold::Slot.max_repair_cost = 0   # never preserve — use everything to breakage
   def pick(spec)
+    return false unless client.manual_control.script_write_allowed?("inventory.pick")
     return true if main_hand.matches?(spec) && !main_hand.needs_repair?
 
     # Sort hotbar by durability (lower durability first) while preserving index mapping
@@ -98,6 +99,7 @@ class Rosegold::Inventory
     sorted_hotbar.each do |slot_index_pair|
       slot, index = slot_index_pair
       if slot.matches?(spec) && !slot.needs_repair?
+        return false unless client.manual_control.script_write_allowed?("inventory.pick")
         client.player.hotbar_selection = index.to_u8
         return true
       end
@@ -106,6 +108,7 @@ class Rosegold::Inventory
     # Sort all slots by durability for main inventory
     sort_by_durability_and_count(slots).each do |slot|
       if slot.matches?(spec) && !slot.needs_repair?
+        return false unless client.manual_control.script_write_allowed?("inventory.pick")
         swap_hotbar client.player.hotbar_selection, slot
         return true
       end

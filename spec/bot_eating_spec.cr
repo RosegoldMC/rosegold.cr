@@ -43,18 +43,32 @@ class EatingTickClient < Rosegold::Client
     interactions.tick
     emit_event Rosegold::Event::Tick.new
   end
+
+  # One real tick while the hand is held: the interaction phase, the server's
+  # using-item confirmation, then the Tick that ends `Bot#wait_tick`.
+  def run_eating_tick : Rosegold::Event::Tick
+    interactions.tick
+    sync_using_item(:main_hand)
+    Rosegold::Event::Tick.new.tap { |tick| emit_event tick }
+  end
+
+  # `Bot#eat!` waits one `wait_tick` per eating tick while it holds use, then
+  # waits for the release tick once it lets go.
+  def waiting_for_release? : Bool
+    interactions.use_release_pending?
+  end
 end
 
 class StalledEatingTickClient < EatingTickClient
   getter release_waits = 0
   property during_release_wait : Proc(Nil)?
 
-  def wait_ticks(ticks : Int32)
-    run_tick
-    player.food = 18_u32
-  end
-
   def wait_tick(timeout : Time::Span = 1.second)
+    unless waiting_for_release?
+      player.food = 18_u32
+      return run_eating_tick
+    end
+
     @release_waits += 1
     during_release_wait.try(&.call)
     nil
@@ -66,17 +80,23 @@ class SplitTickEatingClient < EatingTickClient
   getter eating_wait_done = Channel(Nil).new
   getter release_waits = Channel(Time::Span).new
   getter release_wakeups = Channel(Rosegold::Event::Tick?).new
+  @eating_ticks = 0
 
   def run_interaction_phase
     interactions.tick
   end
 
-  def wait_ticks(ticks : Int32)
-    eating_waits.send(nil)
-    eating_wait_done.receive
-  end
-
+  # The spec drives the first eating tick; the rest of the batch passes quietly.
   def wait_tick(timeout : Time::Span = 1.second)
+    unless waiting_for_release?
+      @eating_ticks += 1
+      if @eating_ticks == 1
+        eating_waits.send(nil)
+        eating_wait_done.receive
+      end
+      return Rosegold::Event::Tick.new
+    end
+
     release_waits.send(timeout)
     release_wakeups.receive
   end
@@ -86,6 +106,8 @@ class UnreleasedTickEatingClient < StalledEatingTickClient
   getter release_timeouts = [] of Time::Span
 
   def wait_tick(timeout : Time::Span = 1.second)
+    return super unless waiting_for_release?
+
     @release_timeouts << timeout
     sleep({timeout, 150.milliseconds}.min)
     Rosegold::Event::Tick.new
@@ -150,6 +172,14 @@ Spectator.describe "Rosegold::Bot#eat" do
     expect(bot.eat).to be_nil
     expect(bot.eat_calls).to eq(1)
     expect { bot.eat! }.to raise_error(Exception, "unexpected failure")
+  end
+
+  it "propagates a manual control cancellation and an operator restart" do
+    bot = EatSpyBot.new(eating_test_client)
+    bot.error = Rosegold::ManualControl::Cancelled.new(Rosegold::ManualControl::Reason::SessionChanged, true)
+    expect { bot.eat }.to raise_error(Rosegold::ManualControl::Cancelled)
+    bot.error = Rosegold::Intervention::RestartRequested.new
+    expect { bot.eat }.to raise_error(Rosegold::Intervention::RestartRequested)
   end
 
   it "stops using the hand when eat suppresses an interaction failure" do

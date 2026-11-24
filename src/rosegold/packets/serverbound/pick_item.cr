@@ -23,7 +23,7 @@ class Rosegold::Serverbound::PickItemFromBlock < Rosegold::Serverbound::Packet
     Minecraft::IO::Memory.new.tap do |buffer|
       buffer.write self.class.packet_id_for_protocol(Client.protocol_version)
       buffer.write pos
-      buffer.write include_data
+      buffer.write include_data?
     end.to_slice
   end
 end

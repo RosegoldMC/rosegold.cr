@@ -61,6 +61,11 @@ class Rosegold::Client < Rosegold::EventEmitter
     interactions : Interactions,
     enchantment_workflow : EnchantmentWorkflow
 
+  # Transport-independent owner of gameplay input for a human controller.
+  getter manual_control : ManualControl
+  # Opt-in operator takeover of a running script.
+  getter intervention : Intervention
+
   property \
     player : Player = Player.new,
     access_token : String = "",
@@ -92,6 +97,8 @@ class Rosegold::Client < Rosegold::EventEmitter
   @item_cooldowns = ItemCooldowns.new
   @boss_bars = Hash(UUID, BossBarState).new
   @boss_bars_mutex = Mutex.new
+  @reader_fiber : Fiber?
+  @ticker_fiber : Fiber?
 
   def protocol_version
     Client.protocol_version
@@ -116,6 +123,10 @@ class Rosegold::Client < Rosegold::EventEmitter
   def reset_mining_session
     dimension.clear_mining_predictions
     pending_block_operations.clear
+    manual_control.reset
+    intervention.reset
+    inventory_menu.invalidate_content
+    container_menu.invalidate_content unless container_menu.same?(inventory_menu)
     interactions.reset_mining
     interactions.reset_use
     @item_cooldowns = ItemCooldowns.new
@@ -212,6 +223,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
     @physics = uninitialized Physics
     @interactions = uninitialized Interactions
+    @manual_control = uninitialized ManualControl
+    @intervention = uninitialized Intervention
     @enchantment_workflow = uninitialized EnchantmentWorkflow
     @player_inventory = uninitialized PlayerInventory
     @inventory_menu = uninitialized PlayerMenu
@@ -219,6 +232,8 @@ class Rosegold::Client < Rosegold::EventEmitter
     @chat_manager = uninitialized ChatManager
     @physics = Physics.new self
     @interactions = Interactions.new self
+    @manual_control = ManualControl.new self
+    @intervention = Intervention.new self
     @enchantment_workflow = EnchantmentWorkflow.new self
     @player_inventory = PlayerInventory.new
     @inventory_menu = PlayerMenu.new self
@@ -228,8 +243,9 @@ class Rosegold::Client < Rosegold::EventEmitter
       # Shared emitter: a late event from a replaced connection must not reset the live one.
       next unless @connection.try(&.closed?)
       clear_boss_bars
-      reset_mining_session
+      retired = end_play_session
       physics.handle_disconnect
+      announce_retired retired
     end
   end
 
@@ -255,12 +271,40 @@ class Rosegold::Client < Rosegold::EventEmitter
   end
 
   def set_protocol_state(protocol_state : ProtocolState)
+    retired = nil
     if @current_protocol_state == ProtocolState::PLAY && protocol_state == ProtocolState::CONFIGURATION
       clear_boss_bars
-      reset_mining_session
+      retired = end_play_session
     end
-    @current_protocol_state = protocol_state
-    connection.protocol_state = protocol_state
+    begin
+      @current_protocol_state = protocol_state
+      connection.protocol_state = protocol_state
+    ensure
+      announce_retired retired
+    end
+  end
+
+  # PLAY teardown. The reset samples unresolved inventory from the departing
+  # menu first; the server discards that menu with the session, so it is retired
+  # locally with no CloseWindow. Returns the retired menu, which the caller
+  # announces with one `ContainerClosed` only after finishing its own teardown,
+  # so a listener that disconnects cannot interrupt or repeat it.
+  private def end_play_session : ContainerMenu?
+    departing = container_menu
+    reset_mining_session
+    chat_manager.reset_session
+    enchantment_workflow.end_play_session
+    return unless departing.is_a?(ContainerMenu) && container_menu.same?(departing)
+    departing.handle_close
+    departing
+  end
+
+  # Teardown runs on the packet reader or inside a disconnect, so a listener
+  # failure is logged rather than stranding the reader or later handlers.
+  private def announce_retired(menu : ContainerMenu?) : Nil
+    emit_event Event::ContainerClosed.new(menu.menu_id.to_u32) if menu
+  rescue error
+    Log.error(exception: error) { "ContainerClosed listener failed during PLAY teardown" }
   end
 
   def apply_boss_event(event : Clientbound::BossEvent)
@@ -334,7 +378,7 @@ class Rosegold::Client < Rosegold::EventEmitter
     @ticker_done = Channel(Nil).new(1)
     done = @ticker_done
     session = connection
-    spawn do
+    @ticker_fiber = spawn do
       next_tick_time = Time.instant
 
       loop do
@@ -393,8 +437,10 @@ class Rosegold::Client < Rosegold::EventEmitter
     cooldowns = @item_cooldowns
     cooldowns.begin_frame(physics.running?)
     if should_tick
+      manual_control.before_tick
       interactions.tick
       physics.tick
+      manual_control.after_tick
     end
     cooldowns.advance
     return unless should_tick
@@ -408,6 +454,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     clear_boss_bars
     reset_mining_session
+    chat_manager.reset_session
 
     @authentication_failure = nil
     @authentication_cache_reused = false
@@ -433,20 +480,7 @@ class Rosegold::Client < Rosegold::EventEmitter
 
     queue_packet Serverbound::LoginStart.new player.username.not_nil!, player.uuid, protocol_version # ameba:disable Lint/NotNil
 
-    spawn do
-      while connection.open? && @connection == connection
-        read_packet
-      end
-    rescue error : Minecraft::AuthenticationError
-      @authentication_failure = error
-      connection.disconnect("Authentication failed")
-    rescue e : IO::Error | NotConnected
-      if connected?
-        Log.warn { "Reader stopped unexpectedly: #{e}" }
-      else
-        Log.debug { "Reader stopped: cleanly disconnected" }
-      end
-    end
+    start_reader connection
   rescue error
     if socket
       socket.close
@@ -591,6 +625,66 @@ class Rosegold::Client < Rosegold::EventEmitter
     end
     Log.trace { "[#{current_protocol_state.name}] SEND #{packet}" }
     connection.send_packet packet
+  end
+
+  # One PLAY session of one connection; a reconfiguration or reconnect ends it.
+  record PlaySession, connection : Connection::Client, id : UInt64
+
+  # The current PLAY session, or nil when disconnected or outside PLAY.
+  def play_session? : PlaySession?
+    return unless connected? && current_protocol_state == ProtocolState::PLAY
+    conn = connection
+    PlaySession.new(conn, conn.play_session)
+  end
+
+  def current_play_session?(session : PlaySession) : Bool
+    conn = session.connection
+    connection?.same?(conn) && conn.writable? && conn.play_session == session.id && !conn.play_ended? &&
+      current_protocol_state == ProtocolState::PLAY
+  end
+
+  # The PLAY packets `send_packet_if!` accepts; none of them changes phase.
+  alias GuardedPacket = Serverbound::CloseWindow | Serverbound::PlayerAction | Serverbound::HeldItemChange |
+                        Serverbound::PickItemFromBlock | Serverbound::SwingArm | Serverbound::ChatCommand |
+                        Serverbound::PlayerLook | Serverbound::PlayerPositionAndLook
+
+  # Writes *packet* only if *session* (default: the current one) is still
+  # current and `guard` approves, all checked under the write lock right before
+  # the write; the session is checked again after the guard. Waits behind other
+  # writers but never retries. Returns whether it was written; a write failure
+  # disconnects and raises. *committed* runs under the write lock right after
+  # the write.
+  def send_packet_if!(packet : GuardedPacket, session : PlaySession? = nil, committed : (-> Nil)? = nil, &guard : -> Bool) : Bool
+    raise NotConnected.new unless connected?
+    return false unless session ||= play_session?
+
+    ready = -> { current_play_session?(session) && guard.call && current_play_session?(session) }
+    session.connection.send_packet(-> { packet.write }, committed || -> { }, ready).tap do |sent|
+      Log.trace { "[#{current_protocol_state.name}] #{sent ? "SEND" : "DROP"} #{packet}" }
+    end
+  end
+
+  private def start_reader(connection : Connection::Client) : Nil
+    @reader_fiber = spawn do
+      while connection.open? && @connection == connection
+        read_packet
+      end
+    rescue error : Minecraft::AuthenticationError
+      @authentication_failure = error
+      connection.disconnect("Authentication failed")
+    rescue e : IO::Error | NotConnected
+      if connected?
+        Log.warn { "Reader stopped unexpectedly: #{e}" }
+      else
+        Log.debug { "Reader stopped: cleanly disconnected" }
+      end
+    end
+  end
+
+  # Whether *fiber* is this client's packet reader or ticker. Neither may wait
+  # for gameplay state that only the ticker can advance.
+  def service_fiber?(fiber : Fiber = Fiber.current) : Bool
+    fiber == @reader_fiber || fiber == @ticker_fiber
   end
 
   private def read_packet
