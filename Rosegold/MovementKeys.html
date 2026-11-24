@@ -217,8 +217,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/ChatManager" data-name="rosegold::chatmanager">
+  <li class="parent " data-id="rosegold/Rosegold/ChatManager" data-name="rosegold::chatmanager">
       <a href="../Rosegold/ChatManager.html">ChatManager</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/ChatManager/Acknowledgment" data-name="rosegold::chatmanager::acknowledgment">
+      <a href="../Rosegold/ChatManager/Acknowledgment.html">Acknowledgment</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -262,8 +272,18 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/Client/GuardedPacket" data-name="rosegold::client::guardedpacket">
+      <a href="../Rosegold/Client/GuardedPacket.html">GuardedPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Client/NotConnected" data-name="rosegold::client::notconnected">
       <a href="../Rosegold/Client/NotConnected.html">NotConnected</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Client/PlaySession" data-name="rosegold::client::playsession">
+      <a href="../Rosegold/Client/PlaySession.html">PlaySession</a>
       
     </li>
   
@@ -1667,6 +1687,26 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/Intervention" data-name="rosegold::intervention">
+      <a href="../Rosegold/Intervention.html">Intervention</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Intervention/RestartRequested" data-name="rosegold::intervention::restartrequested">
+      <a href="../Rosegold/Intervention/RestartRequested.html">RestartRequested</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Intervention/State" data-name="rosegold::intervention::state">
+      <a href="../Rosegold/Intervention/State.html">State</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/Inventory" data-name="rosegold::inventory">
       <a href="../Rosegold/Inventory.html">Inventory</a>
       
@@ -1714,6 +1754,36 @@
   
   <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
       <a href="../Rosegold/Look.html">Look</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/ManualControl" data-name="rosegold::manualcontrol">
+      <a href="../Rosegold/ManualControl.html">ManualControl</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Cancelled" data-name="rosegold::manualcontrol::cancelled">
+      <a href="../Rosegold/ManualControl/Cancelled.html">Cancelled</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Host" data-name="rosegold::manualcontrol::host">
+      <a href="../Rosegold/ManualControl/Host.html">Host</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Input" data-name="rosegold::manualcontrol::input">
+      <a href="../Rosegold/ManualControl/Input.html">Input</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Reason" data-name="rosegold::manualcontrol::reason">
+      <a href="../Rosegold/ManualControl/Reason.html">Reason</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -1999,6 +2069,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/SendResult" data-name="rosegold::sendresult">
+      <a href="../Rosegold/SendResult.html">SendResult</a>
       
     </li>
   
@@ -2613,7 +2688,7 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L1" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L1" target="_blank">
         rosegold/control/movement_keys.cr
       </a>
     
@@ -2625,6 +2700,25 @@
 
 
   
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28writable%3A-%3EBool%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(writable :  -> Bool | Nil = <span class="n">nil</span>)</a>
+        
+          <div class="summary"><p>Decides whether script writes apply; nil allows all.</p></div>
+        
+      </li>
+    
+  </ul>
+
 
   
 
@@ -2698,6 +2792,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#replace%28value%3AKey%29%3ANil-instance-method" class="signature"><strong>#replace</strong>(value : Key) : Nil</a>
+        
+          <div class="summary"><p>Replaces the pressed keys for the physics engine and the manual owner, bypassing the script gate.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#right%3F-instance-method" class="signature"><strong>#right?</strong></a>
         
           <div class="summary"><p>Whether right strafe is currently pressed.</p></div>
@@ -2712,9 +2813,9 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#state%3D%28state%3AKey%29-instance-method" class="signature"><strong>#state=</strong>(state : Key)</a>
+        <a href="#state%3D%28value%3AKey%29-instance-method" class="signature"><strong>#state=</strong>(value : Key)</a>
         
-          <div class="summary"><p>The currently pressed directional keys.</p></div>
+          <div class="summary"><p>Sets the pressed keys.</p></div>
         
       </li>
     
@@ -2753,6 +2854,39 @@
   </div>
 
   
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(writable:-&gt;Bool|Nil=nil)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(writable :  -> Bool | Nil = <span class="n">nil</span>)
+
+        <a class="method-permalink" href="#new%28writable%3A-%3EBool%7CNil%3Dnil%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Decides whether script writes apply; nil allows all. For the physics keys,
+the script-facing mutators below follow <code><a href="../Rosegold/ManualControl.html#script_write_allowed%3F%28operation%3AString%29%3ABool-instance-method">ManualControl#script_write_allowed?</a></code>:
+ignored while a controller holds input, and waiting for a pending release.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L21" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
   
 
@@ -2784,7 +2918,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2805,7 +2939,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L62" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2826,7 +2960,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L72" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2847,7 +2981,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2868,7 +3002,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2889,7 +3023,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2910,7 +3044,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2931,7 +3065,29 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L42" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="replace(value:Key):Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>replace</strong>(value : <a href="../Rosegold/MovementKeys/Key.html">Key</a>) : Nil
+
+        <a class="method-permalink" href="#replace%28value%3AKey%29%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Replaces the pressed keys for the physics engine and the manual owner,
+bypassing the script gate.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2952,7 +3108,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L77" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2973,28 +3129,28 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="state=(state:Key)-instance-method">
+    <div class="entry-detail" id="state=(value:Key)-instance-method">
       <div class="signature">
         
-        def <strong>state=</strong>(state : <a href="../Rosegold/MovementKeys/Key.html">Key</a>)
+        def <strong>state=</strong>(value : <a href="../Rosegold/MovementKeys/Key.html">Key</a>)
 
-        <a class="method-permalink" href="#state%3D%28state%3AKey%29-instance-method">#</a>
+        <a class="method-permalink" href="#state%3D%28value%3AKey%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>The currently pressed directional keys.</p>
+          <p>Sets the pressed keys. Ignored while a manual controller owns input.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/movement_keys.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/movement_keys.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>

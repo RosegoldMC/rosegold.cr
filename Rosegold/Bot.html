@@ -217,8 +217,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/ChatManager" data-name="rosegold::chatmanager">
+  <li class="parent " data-id="rosegold/Rosegold/ChatManager" data-name="rosegold::chatmanager">
       <a href="../Rosegold/ChatManager.html">ChatManager</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/ChatManager/Acknowledgment" data-name="rosegold::chatmanager::acknowledgment">
+      <a href="../Rosegold/ChatManager/Acknowledgment.html">Acknowledgment</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -262,8 +272,18 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/Client/GuardedPacket" data-name="rosegold::client::guardedpacket">
+      <a href="../Rosegold/Client/GuardedPacket.html">GuardedPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Client/NotConnected" data-name="rosegold::client::notconnected">
       <a href="../Rosegold/Client/NotConnected.html">NotConnected</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Client/PlaySession" data-name="rosegold::client::playsession">
+      <a href="../Rosegold/Client/PlaySession.html">PlaySession</a>
       
     </li>
   
@@ -1667,6 +1687,26 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/Intervention" data-name="rosegold::intervention">
+      <a href="../Rosegold/Intervention.html">Intervention</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Intervention/RestartRequested" data-name="rosegold::intervention::restartrequested">
+      <a href="../Rosegold/Intervention/RestartRequested.html">RestartRequested</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Intervention/State" data-name="rosegold::intervention::state">
+      <a href="../Rosegold/Intervention/State.html">State</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/Inventory" data-name="rosegold::inventory">
       <a href="../Rosegold/Inventory.html">Inventory</a>
       
@@ -1714,6 +1754,36 @@
   
   <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
       <a href="../Rosegold/Look.html">Look</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/ManualControl" data-name="rosegold::manualcontrol">
+      <a href="../Rosegold/ManualControl.html">ManualControl</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Cancelled" data-name="rosegold::manualcontrol::cancelled">
+      <a href="../Rosegold/ManualControl/Cancelled.html">Cancelled</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Host" data-name="rosegold::manualcontrol::host">
+      <a href="../Rosegold/ManualControl/Host.html">Host</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Input" data-name="rosegold::manualcontrol::input">
+      <a href="../Rosegold/ManualControl/Input.html">Input</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Reason" data-name="rosegold::manualcontrol::reason">
+      <a href="../Rosegold/ManualControl/Reason.html">Reason</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -1999,6 +2069,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/SendResult" data-name="rosegold::sendresult">
+      <a href="../Rosegold/SendResult.html">SendResult</a>
       
     </li>
   
@@ -2690,14 +2765,14 @@ waits for ticks or more packets.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L70" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L70" target="_blank">
         rosegold/bot.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L1" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L1" target="_blank">
         rosegold/bot/world_api.cr
       </a>
     
@@ -2755,7 +2830,7 @@ waits for ticks or more packets.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#run%28address%3AString%2Cport%3AInt32%3D25565%2Coffline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil%3Dnil%2Ctimeout_ticks%3AInt32%3D1200%2C%26%29-class-method" class="signature"><strong>.run</strong>(address : String, port : Int32 = <span class="n">25565</span>, offline : NamedTuple(uuid: String, username: String) | Nil = <span class="n">nil</span>, timeout_ticks : Int32 = <span class="n">1200</span>, &)</a>
+        <a href="#run%28address%3AString%2Cport%3AInt32%3D25565%2Coffline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil%3Dnil%2Ctimeout_ticks%3AInt32%3D1200%2Con_session%3AProc%28Bot%2CNil%29%7CNil%3Dnil%2C%26%29-class-method" class="signature"><strong>.run</strong>(address : String, port : Int32 = <span class="n">25565</span>, offline : NamedTuple(uuid: String, username: String) | Nil = <span class="n">nil</span>, timeout_ticks : Int32 = <span class="n">1200</span>, on_session : Proc(Bot, Nil) | Nil = <span class="n">nil</span>, &)</a>
         
           <div class="summary"><p>Joins <em>address</em> and runs the block with a fresh bot after each reconnect.</p></div>
         
@@ -2813,6 +2888,20 @@ waits for ticks or more packets.</p>
       </li>
     
       <li class="entry-summary">
+        <a href="#block_break_progress%3AFloat32-instance-method" class="signature"><strong>#block_break_progress</strong> : Float32</a>
+        
+          <div class="summary"><p>Fraction (0..1) of the local in-progress block break.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#block_break_target%3AVec3i%7CNil-instance-method" class="signature"><strong>#block_break_target</strong> : Vec3i | Nil</a>
+        
+          <div class="summary"><p>Block position of the local in-progress break, or nil when none is staged.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#can_craft%3F%28recipe%3ARecipeDisplayEntry%29%3ABool-instance-method" class="signature"><strong>#can_craft?</strong>(recipe : RecipeDisplayEntry) : Bool</a>
         
           <div class="summary"><p>Whether the player inventory has one complete set of ingredients for <em>recipe</em>.</p></div>
@@ -2823,6 +2912,13 @@ waits for ticks or more packets.</p>
         <a href="#chat%28message%3AString%29-instance-method" class="signature"><strong>#chat</strong>(message : String)</a>
         
           <div class="summary"><p>Sends a chat message or slash command without waiting for a response.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#claim_script_owner%3ANil-instance-method" class="signature"><strong>#claim_script_owner</strong> : Nil</a>
+        
+          <div class="summary"><p>Registers the calling fiber as the script that an operator may park with <code><a href="../Rosegold/Client.html#intervention%3AIntervention-instance-method">Client#intervention</a></code>.</p></div>
         
       </li>
     
@@ -3209,6 +3305,27 @@ waits for ticks or more packets.</p>
         <a href="#main_hand-instance-method" class="signature"><strong>#main_hand</strong></a>
         
           <div class="summary"><p>The stack currently held in the main hand.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#manual_control%3D%28enabled%3ABool%29-instance-method" class="signature"><strong>#manual_control=</strong>(enabled : Bool)</a>
+        
+          <div class="summary"><p>Grants (true) or revokes (false) manual gameplay control without blocking.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#manual_control%3F%3ABool-instance-method" class="signature"><strong>#manual_control?</strong> : Bool</a>
+        
+          <div class="summary"><p>Whether a manual controller currently holds a grant.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#manual_debug_until_button_pressed_in_menu%3ASymbol-instance-method" class="signature"><strong>#manual_debug_until_button_pressed_in_menu</strong> : Symbol</a>
+        
+          <div class="summary"><p>Grants manual control and suspends only the calling fiber until the controller presses Return to script, then returns <code>:returned</code>.</p></div>
         
       </li>
     
@@ -3691,7 +3808,7 @@ Call <code><a href="../Rosegold/Bot.html#join_game%28timeout_ticks%3D1200%29-ins
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L121" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L121" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3712,7 +3829,7 @@ Call <code><a href="../Rosegold/Bot.html#join_game%28timeout_ticks%3D1200%29-ins
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L88" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L88" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3746,17 +3863,17 @@ Raises if joining does not complete within <em>timeout_ticks</em> game ticks.</p
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L127" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L127" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="run(address:String,port:Int32=25565,offline:NamedTuple(uuid:String,username:String)|Nil=nil,timeout_ticks:Int32=1200,&amp;)-class-method">
+    <div class="entry-detail" id="run(address:String,port:Int32=25565,offline:NamedTuple(uuid:String,username:String)|Nil=nil,timeout_ticks:Int32=1200,on_session:Proc(Bot,Nil)|Nil=nil,&amp;)-class-method">
       <div class="signature">
         
-        def self.<strong>run</strong>(address : String, port : <a href="../Int32.html">Int32</a> = <span class="n">25565</span>, offline : NamedTuple(uuid: String, username: String) | Nil = <span class="n">nil</span>, timeout_ticks : <a href="../Int32.html">Int32</a> = <span class="n">1200</span>, &)
+        def self.<strong>run</strong>(address : String, port : <a href="../Int32.html">Int32</a> = <span class="n">25565</span>, offline : NamedTuple(uuid: String, username: String) | Nil = <span class="n">nil</span>, timeout_ticks : <a href="../Int32.html">Int32</a> = <span class="n">1200</span>, on_session : Proc(<a href="../Rosegold/Bot.html">Bot</a>, Nil) | Nil = <span class="n">nil</span>, &)
 
-        <a class="method-permalink" href="#run%28address%3AString%2Cport%3AInt32%3D25565%2Coffline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil%3Dnil%2Ctimeout_ticks%3AInt32%3D1200%2C%26%29-class-method">#</a>
+        <a class="method-permalink" href="#run%28address%3AString%2Cport%3AInt32%3D25565%2Coffline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil%3Dnil%2Ctimeout_ticks%3AInt32%3D1200%2Con_session%3AProc%28Bot%2CNil%29%7CNil%3Dnil%2C%26%29-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -3764,6 +3881,15 @@ Raises if joining does not complete within <em>timeout_ticks</em> game ticks.</p
           <p>Joins <em>address</em> and runs the block with a fresh bot after each reconnect.
 A server disconnect or network error retries with backoff; authentication
 failures honor provider cooldowns. Other script errors propagate.
+<em>on_session</em> runs with each fresh bot before the block, so a companion can
+rebind. An operator takeover can park the block at <code>#wait_tick(s)</code> and either
+resume it or restart it from the top on a new connection; the unwound
+block's <code>ensure</code> clauses run first. A restart raises
+<code><a href="../Rosegold/Intervention/RestartRequested.html">Intervention::RestartRequested</a></code> once, so a broad <code>rescue</code> that retries must
+re-raise it first; swallowing it blocks further intervention until the block
+exits. A <code><a href="../Rosegold/ManualControl/Cancelled.html">ManualControl::Cancelled</a></code> for a session change retries like a
+lost connection only when the connection is actually closed; otherwise it
+propagates, and the interrupted block is never resumed.
 Return while connected or call <code><a href="../Rosegold/Bot.html#disconnect%28reason%3AString%29-instance-method">Bot#disconnect</a></code> to stop. The block must
 check <code><a href="../Rosegold/Bot.html#connected%3F-instance-method">#connected?</a></code> or perform network operations to notice a disconnect.
 Re-establish script-owned state each time the block runs.</p>
@@ -3772,7 +3898,7 @@ Re-establish script-owned state each time the block runs.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L137" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L146" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3807,7 +3933,7 @@ Re-establish script-owned state each time the block runs.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L1173" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1416" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3829,7 +3955,7 @@ Enabled by default.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3851,7 +3977,7 @@ Enabled by default.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3873,7 +3999,7 @@ Properties use the versioned game data's string values.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3894,7 +4020,54 @@ Properties use the versioned game data's string values.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L33" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block_break_progress:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>block_break_progress</strong> : Float32
+
+        <a class="method-permalink" href="#block_break_progress%3AFloat32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Fraction (0..1) of the local in-progress block break. 0 when idle or after a
+reset. The target may complete before it is sampled, and this is local
+progress, not a server acknowledgment.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1393" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block_break_target:Vec3i|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>block_break_target</strong> : <a href="../Rosegold/Vec3i.html">Vec3i</a> | Nil
+
+        <a class="method-permalink" href="#block_break_target%3AVec3i%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Block position of the local in-progress break, or nil when none is staged.
+Cleared by the same state as <code><a href="../Rosegold/Bot.html#block_break_progress%3AFloat32-instance-method">#block_break_progress</a></code>; this is a local
+prediction, not a server acknowledgment, and the block may complete or be
+refused before it is sampled.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1401" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3916,7 +4089,7 @@ Returns <code>false</code> for recipe display types that cannot be crafted in a 
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L908" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1125" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3939,7 +4112,30 @@ Returns <code>true</code> when sent, <code>false</code> if sending fails or a ch
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L423" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L456" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="claim_script_owner:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>claim_script_owner</strong> : Nil
+
+        <a class="method-permalink" href="#claim_script_owner%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Registers the calling fiber as the script that an operator may park with
+<code><a href="../Rosegold/Client.html#intervention%3AIntervention-instance-method">Client#intervention</a></code>. <code><a href="../Rosegold/Bot.html#run%28address%3AString%2Cport%3AInt32%3D25565%2Coffline%3ANamedTuple%28uuid%3AString%2Cusername%3AString%29%7CNil%3Dnil%2Ctimeout_ticks%3AInt32%3D1200%2Con_session%3AProc%28Bot%2CNil%29%7CNil%3Dnil%2C%26%29-class-method">Bot.run</a></code> does this itself with restart support; a
+custom runner can resume only.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L463" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3960,7 +4156,7 @@ Returns <code>true</code> when sent, <code>false</code> if sending fails or a ch
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L75" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L75" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3983,7 +4179,7 @@ the next operation needs world state.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L198" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L231" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4004,7 +4200,7 @@ the next operation needs world state.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L203" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L236" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4025,7 +4221,7 @@ the next operation needs world state.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L361" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L394" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4052,7 +4248,7 @@ Inspect inventory counts when the exact produced amount matters.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L959" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1176" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4076,7 +4272,7 @@ if materials or a required crafting table position are unavailable.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L971" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1188" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4098,7 +4294,7 @@ Raises <code><a href="../Rosegold/Bot/CraftingError.html">CraftingError</a></cod
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L980" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1197" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4120,7 +4316,7 @@ Raises <code><a href="../Rosegold/Bot/CraftingError.html">CraftingError</a></cod
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L990" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1207" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4150,7 +4346,7 @@ invalid pattern, missing item, or missing table position.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L1088" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1302" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4171,7 +4367,7 @@ invalid pattern, missing item, or missing table position.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L403" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L436" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4187,13 +4383,15 @@ invalid pattern, missing item, or missing table position.</p>
         <div class="doc">
           
           <p>Optionally aims at <em>target</em>, holds attack for <em>ticks</em>, then releases it.
-Performs <em>ticks</em> tick waits; an individual wait can time out.</p>
+Performs <em>ticks</em> tick waits; an individual wait can time out.
+The release is skipped when the hold was refused or a manual grant or
+session reset happened meanwhile, since either already ended the hold.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L1166" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1409" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4214,7 +4412,7 @@ Performs <em>ticks</em> tick waits; an individual wait can time out.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L208" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L241" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4235,7 +4433,7 @@ Performs <em>ticks</em> tick waits; an individual wait can time out.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L398" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L431" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4250,13 +4448,16 @@ Performs <em>ticks</em> tick waits; an individual wait can time out.</p>
       
         <div class="doc">
           
-          <p>Drops the full main-hand stack. Queues packets without waiting.</p>
+          <p>Drops the full main-hand stack. Queues the packets without waiting for
+delivery; it may first wait for a pending manual release.
+Ignored while a manual controller owns input; a grant or PLAY session
+change before the queued write drops it.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L659" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L751" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4271,13 +4472,16 @@ Performs <em>ticks</em> tick waits; an individual wait can time out.</p>
       
         <div class="doc">
           
-          <p>Drops one item from the main-hand stack. Queues packets without waiting.</p>
+          <p>Drops one item from the main-hand stack. Queues the packets without
+waiting for delivery; it may first wait for a pending manual release.
+Ignored while a manual controller owns input; a grant or PLAY session
+change before the queued write drops it.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L653" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L743" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4294,6 +4498,7 @@ Performs <em>ticks</em> tick waits; an individual wait can time out.</p>
           
           <p>Best-effort version of <code><a href="../Rosegold/Bot.html#eat%21-instance-method">#eat!</a></code>. Logs a warning if eating raises, including
 when no allowed food is available, and returns <code>nil</code> without re-raising.
+An operator restart or <code><a href="../Rosegold/ManualControl/Cancelled.html">ManualControl::Cancelled</a></code> still propagates.
 Uses the same hunger thresholds and food selection as <code><a href="../Rosegold/Bot.html#eat%21-instance-method">#eat!</a></code>.
 This blocks while eating; returning does not guarantee hunger was restored.</p>
         </div>
@@ -4301,7 +4506,7 @@ This blocks while eating; returning does not guarantee hunger was restored.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L815" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1030" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4330,7 +4535,7 @@ after eating stops. Propagates interaction errors. Use <code><a href="../Rosegol
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L830" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1047" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4352,7 +4557,7 @@ Returns <code>nil</code> when the effect is absent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L283" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L316" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4373,7 +4578,7 @@ Returns <code>nil</code> when the effect is absent.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L277" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L310" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4396,14 +4601,21 @@ enchantments through <code><a href="../Rosegold/Slot.html#stored_enchantments-in
 <pre><code class="language-crystal">enchanted <span class="o">=</span> bot.enchant(<span class="s">&quot;diamond_pickaxe&quot;</span>, option: <span class="n">2</span>)</code></pre>
 <p>A timeout does not undo a server-applied enchantment. This does not retry,
 discover a table, or predict enchantments beyond the displayed offer clue.
-A timed-out opening closes a late table response. Another enchant attempt
-is rejected until a response, acknowledgement, or disconnect settles it.</p>
+Only one enchant runs per client, even across bots wrapping it; an
+overlapping call raises. A timed-out opening closes a late table response only while the original
+script authority and PLAY session still hold. Another enchant attempt is
+rejected until a response, acknowledgement, or the end of that PLAY session
+(reconfiguration or disconnect) settles it; ending the session closes
+nothing.
+A manual grant or session reset before the table is ready raises without
+claiming a menu the controller opens, and no table is closed while a
+controller owns input.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L636" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L730" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4424,7 +4636,7 @@ is rejected until a response, acknowledgement, or disconnect settles it.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L648" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L735" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4445,7 +4657,7 @@ is rejected until a response, acknowledgement, or disconnect settles it.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L111" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L111" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4466,7 +4678,7 @@ is rejected until a response, acknowledgement, or disconnect settles it.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L116" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L116" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4499,7 +4711,7 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L1196" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1439" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4520,7 +4732,7 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L136" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L136" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4541,7 +4753,7 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L141" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L141" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4562,7 +4774,7 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L242" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L275" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4584,7 +4796,7 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L393" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L426" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4605,7 +4817,7 @@ bot.estimated_break_ticks(<span class="s">&quot;stone&quot;</span>, buffer_ticks
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L106" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L106" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4627,7 +4839,7 @@ Distances use block coordinates. Equal distances sort by x, y, then z.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4648,7 +4860,7 @@ Distances use block coordinates. Equal distances sort by x, y, then z.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L252" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L285" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4669,7 +4881,7 @@ Distances use block coordinates. Equal distances sort by x, y, then z.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L897" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1114" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4690,7 +4902,7 @@ Distances use block coordinates. Equal distances sort by x, y, then z.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L262" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L295" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4711,7 +4923,7 @@ Distances use block coordinates. Equal distances sort by x, y, then z.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L303" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L336" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4732,7 +4944,7 @@ Distances use block coordinates. Equal distances sort by x, y, then z.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L247" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L280" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4753,7 +4965,7 @@ Distances use block coordinates. Equal distances sort by x, y, then z.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L186" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L219" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4774,7 +4986,7 @@ Distances use block coordinates. Equal distances sort by x, y, then z.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L598" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L679" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4796,7 +5008,7 @@ Raises <code>ArgumentError</code> for an index outside that range.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L604" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L685" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4817,7 +5029,7 @@ Raises <code>ArgumentError</code> for an index outside that range.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L78" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L78" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4839,7 +5051,7 @@ Raises if joining exceeds <em>timeout_ticks</em> or the connection closes.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L215" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L248" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4862,7 +5074,7 @@ disconnecting; use an explicit <code>ensure</code> for unconditional cleanup.</p
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L222" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L255" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4883,7 +5095,7 @@ disconnecting; use an explicit <code>ensure</code> for unconditional cleanup.</p
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L298" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L331" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4906,7 +5118,7 @@ Raises if the player cannot rise or does not reach that height before
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L554" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L634" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4927,7 +5139,7 @@ Raises if the player cannot rise or does not reach that height before
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L498" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L543" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4949,7 +5161,7 @@ Raises if this does not happen within <em>timeout_ticks</em>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L569" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L650" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4970,7 +5182,7 @@ Raises if this does not happen within <em>timeout_ticks</em>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L592" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L673" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -4991,7 +5203,7 @@ Raises if this does not happen within <em>timeout_ticks</em>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L308" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L341" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5012,7 +5224,7 @@ Raises if this does not happen within <em>timeout_ticks</em>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L367" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L400" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5033,7 +5245,7 @@ Raises if this does not happen within <em>timeout_ticks</em>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L440" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L483" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5057,7 +5269,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L462" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L507" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5075,13 +5287,15 @@ Waits for the new look to be sent to the server.</p>
           <p>Sets the look direction. <code><a href="../Rosegold/Look.html">Look</a></code> is a yaw/pitch pair in degrees
 (see <code><a href="../Rosegold/Look.html">Rosegold::Look</a></code> for the angle convention and constants like
 <code><a href="../Rosegold/Look.html#NORTH">Look::NORTH</a></code>, <code>Look::SOUTH.down</code>, etc.).
-Waits for the new look to be sent to the server.</p>
+Waits for the new look to be sent to the server. A manual control grant,
+operator takeover, or session reset (login, respawn, reconfiguration)
+ends the wait early without applying the look.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L448" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L493" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5103,7 +5317,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L454" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L499" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5124,7 +5338,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L487" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L532" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5146,7 +5360,7 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L493" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L538" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5167,7 +5381,82 @@ Waits for the new look to be sent to the server.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L323" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L356" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="manual_control=(enabled:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>manual_control=</strong>(enabled : Bool)
+
+        <a class="method-permalink" href="#manual_control%3D%28enabled%3ABool%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Grants (true) or revokes (false) manual gameplay control without blocking.
+Granting cancels scripted movement, look, attack and use intent and never
+restores it on revoke; revoking clears only the controller's input. Scripts
+can keep observing and revoke when their own stuck predicate clears.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L598" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="manual_control?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>manual_control?</strong> : Bool
+
+        <a class="method-permalink" href="#manual_control%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Whether a manual controller currently holds a grant. While it does,
+scripted movement, look, attack, use, sneak, sprint, jump and hotbar writes
+are ignored with a warning. False means the grant was revoked, not that the
+neutral release tick has run: scripted writes still wait for that tick.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L590" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="manual_debug_until_button_pressed_in_menu:Symbol-instance-method">
+      <div class="signature">
+        
+        def <strong>manual_debug_until_button_pressed_in_menu</strong> : Symbol
+
+        <a class="method-permalink" href="#manual_debug_until_button_pressed_in_menu%3ASymbol-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Grants manual control and suspends only the calling fiber until the
+controller presses Return to script, then returns <code>:returned</code>. Ticks,
+rendering and network traffic continue. Requires an enabled host bound to
+<code><a href="../Rosegold/Client.html#manual_control%3AManualControl-instance-method">Client#manual_control</a></code>; raises <code><a href="../Rosegold/ManualControl/Cancelled.html">ManualControl::Cancelled</a></code> without one or
+when the grant ends any other way (script revoke, lost controller, world or
+session change, disabled host). Inside a synchronous event handler, <code>spawn</code>
+the waiting work first.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L613" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5184,14 +5473,16 @@ Waits for the new look to be sent to the server.</p>
           
           <p>Moves straight towards the exact <code><a href="../Rosegold/Bot.html#location-instance-method">#location</a></code> (decimal coordinates are
 honored verbatim).
-Waits for arrival.
+Waits for arrival. A manual control grant or operator takeover ends the
+wait early without raising: the move is not complete and is never replayed,
+so check the position before relying on it. Pending looks end the same way.
 <code>stuck_timeout_ticks</code> specifies how many consecutive stuck ticks before throwing MovementStuck.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L506" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L553" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5214,7 +5505,7 @@ if you need to land on an exact non-centered position.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L513" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L560" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5238,7 +5529,7 @@ Waits for arrival.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L521" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L568" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5260,7 +5551,7 @@ Use the <code>Float</code> overload to target an exact non-centered position.</p
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L527" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L574" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5284,7 +5575,7 @@ Waits for arrival.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L535" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L582" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5305,7 +5596,7 @@ Waits for arrival.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L122" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L122" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5326,7 +5617,7 @@ Waits for arrival.
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L127" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L127" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5349,14 +5640,18 @@ executes the provided block, then closes the container.</p>
   bot.inventory.withdraw_at_least(<span class="n">5</span>, <span class="s">&quot;emerald&quot;</span>)
 <span class="k">end</span></code></pre>
 <p>Caller must already be looking at the container block. Raises
-<code><a href="../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a></code> if its content does not arrive within <em>timeout</em>.
-The container is closed even if the block raises.</p>
+<code><a href="../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a></code> if its content does not arrive within <em>timeout</em> in the
+PLAY session where the opening started, or when a manual grant or session
+reset interrupts the opening before its content is accepted.
+The container is closed even if the block raises, unless it raises
+<code><a href="../Rosegold/ManualControl/Cancelled.html">ManualControl::Cancelled</a></code> with unresolved inventory or a controller owns
+input at the close. A replacement menu opened meanwhile is never closed.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L717" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L850" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5382,14 +5677,18 @@ typed menu access (as_chest, as_furnace, etc.).</p>
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 <p>Caller must already be looking at the container block. Raises
-<code><a href="../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a></code> if its content does not arrive within <em>timeout</em>.
-The handle is closed even if the block raises.</p>
+<code><a href="../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a></code> if its content does not arrive within <em>timeout</em> in the
+PLAY session where the opening started, or when a manual grant or session
+reset interrupts the opening before its content is accepted.
+The handle is closed even if the block raises, unless it raises
+<code><a href="../Rosegold/ManualControl/Cancelled.html">ManualControl::Cancelled</a></code> with unresolved inventory or a controller owns
+input at the close.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L748" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L963" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5406,14 +5705,18 @@ The handle is closed even if the block raises.</p>
           
           <p>Runs <em>command</em>, waits for it to open a container, then yields its handle.</p>
 <p>This is for servers that expose a container through a command rather than a
-block interaction. Raises <code><a href="../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a></code> on timeout and closes the
-handle even if the block raises.</p>
+block interaction. The command is written only in the PLAY session of the
+call and script authority. Raises <code><a href="../Rosegold/Bot/ContainerOpenError.html">ContainerOpenError</a></code> when it is not sent,
+on timeout, or when that session ends or a manual grant interrupts the
+opening first. Closes the handle even if the block raises, unless it raises
+<code><a href="../Rosegold/ManualControl/Cancelled.html">ManualControl::Cancelled</a></code> with unresolved inventory or a controller owns
+input at the close.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L768" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L983" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5430,13 +5733,16 @@ handle even if the block raises.</p>
           
           <p>Pick the item at the given block position (middle-click on a block).
 The server finds the matching item in the player's inventory,
-moves it to the hotbar, and sends the appropriate slot update packets.</p>
+moves it to the hotbar, and sends the appropriate slot update packets.
+Queues the packet without waiting for delivery; it may first wait for a
+pending manual release. Ignored while a manual controller owns input; a
+grant or PLAY session change before the queued write drops it.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L667" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L761" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5457,7 +5763,7 @@ moves it to the hotbar, and sends the appropriate slot update packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L482" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L527" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5478,7 +5784,7 @@ moves it to the hotbar, and sends the appropriate slot update packets.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L472" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L517" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5501,7 +5807,7 @@ It queues the placement attempt without waiting for confirmation.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L786" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1000" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5522,7 +5828,7 @@ It queues the placement attempt without waiting for confirmation.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L191" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L224" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5543,7 +5849,7 @@ It queues the placement attempt without waiting for confirmation.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L356" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L389" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5564,7 +5870,7 @@ It queues the placement attempt without waiting for confirmation.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L902" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1119" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5586,7 +5892,7 @@ Does nothing while alive. Raises if spawning exceeds <em>timeout_ticks</em>.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L409" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L442" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5608,7 +5914,7 @@ Unknown entity type IDs have a <code>nil</code> type. No other entity data is ex
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L373" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L406" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5630,7 +5936,7 @@ Accepts names with or without the <code>minecraft:</code> prefix.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L384" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L417" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5665,7 +5971,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L1224" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1467" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5686,7 +5992,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L257" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L290" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5707,7 +6013,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L791" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1005" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5728,7 +6034,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L293" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L326" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5749,7 +6055,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L313" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L346" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5770,7 +6076,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L267" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L300" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5791,7 +6097,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L227" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L260" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5812,7 +6118,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L288" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L321" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5833,7 +6139,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L318" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L351" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5854,7 +6160,7 @@ attempts, <code>false</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L272" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L305" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5871,13 +6177,14 @@ attempts, <code>false</code> otherwise.</p>
           
           <p>Optionally aims at <em>target</em>, then holds the attack button to begin digging.
 Call <code><a href="../Rosegold/Bot.html#stop_digging-instance-method">#stop_digging</a></code> to release it; the release is processed on the next
-tick. Login, respawn, reconfiguration, and disconnect also release the hold.</p>
+tick. Login, respawn, reconfiguration, and disconnect also release the hold.
+With a <em>target</em>, a manual grant or session reset during the aim drops the hold.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L1158" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L1373" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5898,7 +6205,7 @@ tick. Login, respawn, reconfiguration, and disconnect also release the hold.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L546" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L625" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5927,7 +6234,7 @@ to resume.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L680" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L799" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5949,7 +6256,7 @@ same-tick <code><a href="../Rosegold/Bot.html#use_hand%28target%3AVec3d%7CNil%7C
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L336" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L369" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5970,7 +6277,7 @@ same-tick <code><a href="../Rosegold/Bot.html#use_hand%28target%3AVec3d%7CNil%7C
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L151" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L151" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -5991,7 +6298,7 @@ same-tick <code><a href="../Rosegold/Bot.html#use_hand%28target%3AVec3d%7CNil%7C
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L540" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L618" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6014,7 +6321,7 @@ tick is dropped while the use is still active; wait one tick before it.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L330" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L363" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6037,7 +6344,7 @@ with <code>#on</code> to the events already forwarded during initialization.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L113" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6053,13 +6360,15 @@ with <code>#on</code> to the events already forwarded during initialization.</p>
         <div class="doc">
           
           <p>Closes any container and waits for the server to confirm both hands.
-Unchanged stacks need no confirmation. A timeout does not undo the swap.</p>
+Unchanged stacks need no confirmation. A timeout does not undo the swap.
+Ignored while a manual controller owns input; a controller grant before the
+close or swap is written stops the rest without waiting.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L611" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L695" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6080,7 +6389,7 @@ Unchanged stacks need no confirmation. A timeout does not undo the swap.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L146" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L146" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6101,7 +6410,7 @@ Unchanged stacks need no confirmation. A timeout does not undo the swap.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L582" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L663" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6122,7 +6431,7 @@ Unchanged stacks need no confirmation. A timeout does not undo the swap.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L587" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L668" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6147,13 +6456,14 @@ on the next tick, with no hold-repeat cooldown. The target raytrace happens on
 that tick. An active use or a staged block break drops the queued tap.
 Predicted instant breaks do not block use this way. Call <code><a href="../Rosegold/Bot.html#stop_digging-instance-method">#stop_digging</a></code> and
 wait one tick before the tap to give it priority. This does not wait for a
-world-result confirmation.</p>
+world-result confirmation. With a <em>target</em>, the aim and the tap share one
+script authority: a manual grant or session reset before the tap drops it.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L695" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L815" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6174,7 +6484,7 @@ world-result confirmation.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L237" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L270" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6195,7 +6505,7 @@ world-result confirmation.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L232" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L265" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6217,7 +6527,7 @@ A timeout does not raise, including when disconnected.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L429" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L469" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6239,7 +6549,7 @@ as <code><a href="../Rosegold/Bot.html#wait_tick-instance-method">#wait_tick</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L435" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L478" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6260,7 +6570,7 @@ as <code><a href="../Rosegold/Bot.html#wait_tick-instance-method">#wait_tick</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot/world_api.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot/world_api.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6281,7 +6591,7 @@ as <code><a href="../Rosegold/Bot.html#wait_tick-instance-method">#wait_tick</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L341" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L374" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6302,7 +6612,7 @@ as <code><a href="../Rosegold/Bot.html#wait_tick-instance-method">#wait_tick</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L346" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L379" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6323,7 +6633,7 @@ as <code><a href="../Rosegold/Bot.html#wait_tick-instance-method">#wait_tick</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L477" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L522" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6344,7 +6654,7 @@ as <code><a href="../Rosegold/Bot.html#wait_tick-instance-method">#wait_tick</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L467" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L512" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -6365,7 +6675,7 @@ as <code><a href="../Rosegold/Bot.html#wait_tick-instance-method">#wait_tick</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/bot.cr#L351" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/bot.cr#L384" target="_blank">View source</a>]
         
       </div>
     </div>

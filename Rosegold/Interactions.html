@@ -217,8 +217,18 @@
       
     </li>
   
-  <li class=" " data-id="rosegold/Rosegold/ChatManager" data-name="rosegold::chatmanager">
+  <li class="parent " data-id="rosegold/Rosegold/ChatManager" data-name="rosegold::chatmanager">
       <a href="../Rosegold/ChatManager.html">ChatManager</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/ChatManager/Acknowledgment" data-name="rosegold::chatmanager::acknowledgment">
+      <a href="../Rosegold/ChatManager/Acknowledgment.html">Acknowledgment</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -262,8 +272,18 @@
       
         <ul>
   
+  <li class=" " data-id="rosegold/Rosegold/Client/GuardedPacket" data-name="rosegold::client::guardedpacket">
+      <a href="../Rosegold/Client/GuardedPacket.html">GuardedPacket</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/Client/NotConnected" data-name="rosegold::client::notconnected">
       <a href="../Rosegold/Client/NotConnected.html">NotConnected</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Client/PlaySession" data-name="rosegold::client::playsession">
+      <a href="../Rosegold/Client/PlaySession.html">PlaySession</a>
       
     </li>
   
@@ -1667,6 +1687,26 @@
       
     </li>
   
+  <li class="parent " data-id="rosegold/Rosegold/Intervention" data-name="rosegold::intervention">
+      <a href="../Rosegold/Intervention.html">Intervention</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/Intervention/RestartRequested" data-name="rosegold::intervention::restartrequested">
+      <a href="../Rosegold/Intervention/RestartRequested.html">RestartRequested</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/Intervention/State" data-name="rosegold::intervention::state">
+      <a href="../Rosegold/Intervention/State.html">State</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class="parent " data-id="rosegold/Rosegold/Inventory" data-name="rosegold::inventory">
       <a href="../Rosegold/Inventory.html">Inventory</a>
       
@@ -1714,6 +1754,36 @@
   
   <li class=" " data-id="rosegold/Rosegold/Look" data-name="rosegold::look">
       <a href="../Rosegold/Look.html">Look</a>
+      
+    </li>
+  
+  <li class="parent " data-id="rosegold/Rosegold/ManualControl" data-name="rosegold::manualcontrol">
+      <a href="../Rosegold/ManualControl.html">ManualControl</a>
+      
+        <ul>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Cancelled" data-name="rosegold::manualcontrol::cancelled">
+      <a href="../Rosegold/ManualControl/Cancelled.html">Cancelled</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Host" data-name="rosegold::manualcontrol::host">
+      <a href="../Rosegold/ManualControl/Host.html">Host</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Input" data-name="rosegold::manualcontrol::input">
+      <a href="../Rosegold/ManualControl/Input.html">Input</a>
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/ManualControl/Reason" data-name="rosegold::manualcontrol::reason">
+      <a href="../Rosegold/ManualControl/Reason.html">Reason</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -1999,6 +2069,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="rosegold/Rosegold/SendResult" data-name="rosegold::sendresult">
+      <a href="../Rosegold/SendResult.html">SendResult</a>
       
     </li>
   
@@ -2613,14 +2688,14 @@
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interaction_use.cr#L1" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interaction_use.cr#L1" target="_blank">
         rosegold/control/interaction_use.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L6" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L6" target="_blank">
         rosegold/control/interactions.cr
       </a>
     
@@ -2671,7 +2746,24 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#apply_manual_input%28input%3AManualControl%3A%3AInput%29-instance-method" class="signature"><strong>#apply_manual_input</strong>(input : ManualControl::Input)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#block_break_target%3AVec3i%7CNil-instance-method" class="signature"><strong>#block_break_target</strong> : Vec3i | Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#block_damage_progress%3AFloat32-instance-method" class="signature"><strong>#block_damage_progress</strong> : Float32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#clear_input-instance-method" class="signature"><strong>#clear_input</strong></a>
+        
+          <div class="summary"><p>Drops scripted attack and use intent; an active use releases on the next tick.</p></div>
         
       </li>
     
@@ -2697,6 +2789,11 @@
     
       <li class="entry-summary">
         <a href="#last_hand_tap_sequence%3AInt32-instance-method" class="signature"><strong>#last_hand_tap_sequence</strong> : Int32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#queue_staged_action_release%3ANil-instance-method" class="signature"><strong>#queue_staged_action_release</strong> : Nil</a>
         
       </li>
     
@@ -2737,7 +2834,9 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#swap_hands%3ANil-instance-method" class="signature"><strong>#swap_hands</strong> : Nil</a>
+        <a href="#swap_hands%28session%3AClient%3A%3APlaySession%7CNil%3Dnil%2C%26authorized%3A-%3EBool%29%3ABool-instance-method" class="signature"><strong>#swap_hands</strong>(session : Client::PlaySession | Nil = <span class="n">nil</span>, &authorized :  -> Bool) : Bool</a>
+        
+          <div class="summary"><p>Sends the held-slot sync, if due, and then the swap, each only while <em>session</em> is current, no container is open and <code>authorized</code> approves under the write lock.</p></div>
         
       </li>
     
@@ -2818,7 +2917,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L65" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L72" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2850,7 +2949,39 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L107" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L129" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="apply_manual_input(input:ManualControl::Input)-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_manual_input</strong>(input : <a href="../Rosegold/ManualControl/Input.html">ManualControl::Input</a>)
+
+        <a class="method-permalink" href="#apply_manual_input%28input%3AManualControl%3A%3AInput%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L196" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="block_break_target:Vec3i|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>block_break_target</strong> : <a href="../Rosegold/Vec3i.html">Vec3i</a> | Nil
+
+        <a class="method-permalink" href="#block_break_target%3AVec3i%7CNil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L63" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2866,7 +2997,28 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L61" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="clear_input-instance-method">
+      <div class="signature">
+        
+        def <strong>clear_input</strong>
+
+        <a class="method-permalink" href="#clear_input-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Drops scripted attack and use intent; an active use releases on the next tick.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L185" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2882,7 +3034,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L62" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2898,7 +3050,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L63" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2914,7 +3066,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L63" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2930,7 +3082,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2946,7 +3098,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L52" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L52" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="queue_staged_action_release:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>queue_staged_action_release</strong> : Nil
+
+        <a class="method-permalink" href="#queue_staged_action_release%3ANil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L192" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2962,7 +3130,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L142" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L166" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2978,7 +3146,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L151" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L175" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2999,7 +3167,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L130" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L152" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3020,7 +3188,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L76" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3041,7 +3209,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L138" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L161" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3057,23 +3225,31 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L87" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="swap_hands:Nil-instance-method">
+    <div class="entry-detail" id="swap_hands(session:Client::PlaySession|Nil=nil,&amp;authorized:-&gt;Bool):Bool-instance-method">
       <div class="signature">
         
-        def <strong>swap_hands</strong> : Nil
+        def <strong>swap_hands</strong>(session : <a href="../Rosegold/Client/PlaySession.html">Client::PlaySession</a> | Nil = <span class="n">nil</span>, &authorized :  -> Bool) : Bool
 
-        <a class="method-permalink" href="#swap_hands%3ANil-instance-method">#</a>
+        <a class="method-permalink" href="#swap_hands%28session%3AClient%3A%3APlaySession%7CNil%3Dnil%2C%26authorized%3A-%3EBool%29%3ABool-instance-method">#</a>
       </div>
+      
+        <div class="doc">
+          
+          <p>Sends the held-slot sync, if due, and then the swap, each only while
+<em>session</em> is current, no container is open and <code>authorized</code> approves under
+the write lock. The sync cache moves only with a written sync. Returns
+whether the swap was written.</p>
+        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L200" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L269" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3089,7 +3265,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L115" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3110,7 +3286,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3126,7 +3302,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L158" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L222" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3142,7 +3318,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/d04f3a3568a634271ae96003923ad8db1c1f053a/src/rosegold/control/interactions.cr#L89" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/control/interactions.cr#L111" target="_blank">View source</a>]
         
       </div>
     </div>
