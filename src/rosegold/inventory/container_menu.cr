@@ -103,9 +103,20 @@ abstract class Rosegold::ContainerMenu < Rosegold::Menu
   end
 
   def close
-    @client.send_packet!(Serverbound::CloseWindow.new(menu_id.to_u16))
-    @client.emit_event Event::ContainerClosed.new(menu_id.to_u32)
+    close { true }
+  end
+
+  # Closes this menu only while it is still the open one in the PLAY session
+  # (*session*, default the current one) and `authorized` approves, rechecked
+  # under the write lock. A refused close sends nothing and is not retried. A
+  # sent close retires this menu before `ContainerClosed` listeners run.
+  def close(session : Client::PlaySession? = nil, &authorized : -> Bool) : Nil
+    return unless @client.container_menu.same?(self) && authorized.call
+    packet = Serverbound::CloseWindow.new(menu_id.to_u16)
+    return unless @client.send_packet_if!(packet, session) { @client.container_menu.same?(self) && authorized.call }
+    return unless @client.container_menu.same?(self)
     handle_close
+    @client.emit_event Event::ContainerClosed.new(menu_id.to_u32)
   end
 
   def handle_close

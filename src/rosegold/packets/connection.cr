@@ -13,6 +13,15 @@ class Rosegold::Event::Disconnected < Rosegold::Event
   def initialize(@reason); end
 end
 
+# Outcome of a guarded, non-queuing send.
+enum Rosegold::SendResult
+  Sent
+  # Another writer was active; nothing was written.
+  Busy
+  # The guard declined under the write lock; nothing was written.
+  Refused
+end
+
 # Something that packets can be read from and sent to.
 # Can be used for client and server.
 # Caller of #read_packet must update #state= appropriately.
@@ -30,6 +39,10 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   property close_reason : TextComponent?
   private getter read_mutex : Mutex = Mutex.new
   private getter write_mutex : Mutex = Mutex.new
+  @writers = Atomic(Int32).new(0)
+  @play_ended = false
+  @play_session = 0_u64
+  @write_failed = false
 
   def initialize(@io, @protocol_state, @protocol_version, @handler = nil); end
 
@@ -42,7 +55,17 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def protocol_state=(state)
+    if state == ProtocolState::PLAY
+      @play_session += 1
+      @play_ended = false
+    end
     @protocol_state = state
+  end
+
+  # Identifies one PLAY session of this connection; entering PLAY again after a
+  # reconfiguration starts a new one, so writes queued earlier stay refused.
+  def play_session : UInt64
+    @play_session
   end
 
   def open?
@@ -169,38 +192,143 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   end
 
   def send_packet(packet : OutboundPacket)
-    send_packet packet.write
+    send_packet packet.write, packet.is_a?(Serverbound::AcknowledgeConfiguration)
   end
 
-  def send_packet(packet_bytes : Bytes)
+  # True once AcknowledgeConfiguration was written in the current PLAY session: no PLAY frame may follow it.
+  def play_ended? : Bool
+    @play_ended
+  end
+
+  def send_packet(packet_bytes : Bytes, ends_play : Bool = false)
     raise Rosegold::Client::NotConnected.new if close_reason
 
-    if compress?
-      Minecraft::IO::Memory.new.tap do |buffer|
-        size = packet_bytes.size
-
-        if size > compression_threshold
-          buffer.write size.to_u32
-
-          Compress::Zlib::Writer.open(buffer) do |zlib|
-            zlib.write packet_bytes
-          end
-        else
-          buffer.write 0_u32
-          buffer.write packet_bytes
-        end
-      end.to_slice
-    else
-      packet_bytes
-    end.try do |bytes_compressed|
+    bytes_compressed = compressed_frame(packet_bytes)
+    @writers.add 1
+    begin
       write_mutex.synchronize do
-        io.write bytes_compressed.size.to_u32
-        io.write bytes_compressed
-        io.flush
+        raise Rosegold::Client::NotConnected.new unless writable?
+        write_frame bytes_compressed
+        @play_ended = true if ends_play
       end
+    ensure
+      @writers.sub 1
     end
+  rescue e : Rosegold::Client::NotConnected
+    raise e
   rescue e
     disconnect "IO Error: #{e.message}"
     raise_without_backtrace e
+  end
+
+  # Builds the packet under the write lock so state captured by `build` cannot
+  # go stale behind another writer; `written` runs under the lock after the
+  # frame is written and is skipped if the write raises. An error from `build`
+  # or `written` propagates without closing the connection; a write failure
+  # closes it and raises, so delivery is unknown. `ready` is rechecked under the
+  # lock; when it declines, or `ready` or `build` leaves the connection closed
+  # or unusable, nothing is written and false is returned.
+  def send_packet(build : -> Bytes, written : -> Nil, ready : -> Bool) : Bool
+    raise Rosegold::Client::NotConnected.new if close_reason
+    sent = false
+    failure = nil
+
+    @writers.add 1
+    begin
+      write_mutex.synchronize do
+        if writable? && ready.call
+          frame = compressed_frame(build.call)
+          next unless writable?
+          begin
+            write_frame frame
+          rescue e
+            failure = e
+          end
+          unless failure
+            sent = true
+            written.call
+          end
+        end
+      end
+    ensure
+      @writers.sub 1
+    end
+    if failure
+      disconnect "IO Error: #{failure.message}"
+      raise_without_backtrace failure
+    end
+    sent
+  end
+
+  # Writes only if no other writer is active and the guard still approves while
+  # the write lock is held. Never waits behind a queued writer and never retries.
+  # A guard that raises refuses without closing the connection. A write failure
+  # closes the connection and raises; delivery is then unknown. `written` runs
+  # under the lock after a successful write.
+  def try_send_packet(packet : OutboundPacket, written : (-> Nil)? = nil, & : -> Bool) : SendResult
+    raise Rosegold::Client::NotConnected.new if close_reason
+
+    bytes_compressed = compressed_frame(packet.write)
+    result = SendResult::Busy
+    begin
+      if @writers.add(1) == 0
+        write_mutex.synchronize do
+          approved = begin
+            writable? && yield && writable?
+          rescue
+            false
+          end
+          if !approved
+            result = SendResult::Refused
+          else
+            write_frame bytes_compressed
+            result = SendResult::Sent
+            written.try &.call
+          end
+        end
+      end
+    ensure
+      @writers.sub 1
+    end
+    result
+  rescue e
+    disconnect "IO Error: #{e.message}"
+    raise_without_backtrace e
+  end
+
+  # Whether the connection is open and no write to it has failed.
+  def writable? : Bool
+    !close_reason && !@write_failed
+  end
+
+  # A failed write marks the stream unusable while the write lock is still held,
+  # so no queued writer reaches it. Callers disconnect only after releasing the
+  # lock: `Disconnected` listeners run synchronously and may wait on a writer.
+  private def write_frame(bytes_compressed : Bytes) : Nil
+    io.write bytes_compressed.size.to_u32
+    io.write bytes_compressed
+    io.flush
+  rescue e
+    @write_failed = true
+    raise e
+  end
+
+  private def compressed_frame(packet_bytes : Bytes) : Bytes
+    return packet_bytes unless compress?
+
+    Minecraft::IO::Memory.new.tap do |buffer|
+      size = packet_bytes.size
+
+      if size > compression_threshold
+        buffer.write size.to_u32
+
+        Compress::Zlib::Writer.open(buffer) do |zlib|
+          zlib.write packet_bytes
+        end
+      else
+        buffer.write 0_u32
+        buffer.write packet_bytes
+      end
+    end.to_slice
   end
 end

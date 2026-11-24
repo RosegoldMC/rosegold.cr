@@ -1,5 +1,7 @@
 require "./spec_helper"
 
+RECONNECT_SPEC_LOG = [] of String
+
 class ReconnectSpecClient < Rosegold::Client
   getter transport = Minecraft::IO::Memory.new
   getter join_timeouts = [] of Int32
@@ -15,6 +17,7 @@ class ReconnectSpecClient < Rosegold::Client
 
   def join_game(timeout_ticks = 1200)
     @join_timeouts << timeout_ticks
+    RECONNECT_SPEC_LOG << "join"
     if error = @join_error
       raise error
     end
@@ -275,5 +278,191 @@ Spectator.describe "Rosegold::Bot.run" do
 
     expect(ReconnectSpecBot.delays).to eq([10.seconds, 5.minutes])
     expect(clients.all?(&.transport.closed?)).to be_true
+  end
+
+  def takeover_and_park(client, &)
+    until client.intervention.restartable?
+      sleep 1.millisecond
+    end
+    client.intervention.permitted = true
+    client.intervention.request_takeover
+    until client.intervention.parked?
+      client.emit_event Rosegold::Event::Tick.new
+      sleep 1.millisecond
+    end
+    yield
+  end
+
+  it "parks inside Bot.run and restarts: ensure runs before the fresh join, no backoff, one live runner" do
+    RECONNECT_SPEC_LOG.clear
+    first = ReconnectSpecClient.new
+    second = ReconnectSpecClient.new
+    ReconnectSpecBot.configure([first, second])
+    sessions = [] of Rosegold::Bot
+    live = 0
+    max_live = 0
+    restarts = [] of Bool
+
+    spawn do
+      takeover_and_park(first) do
+        RECONNECT_SPEC_LOG << "parked"
+        restarts << first.intervention.restart
+        restarts << first.intervention.restart
+      end
+    end
+
+    ReconnectSpecBot.run("localhost", on_session: ->(bot : Rosegold::Bot) { sessions << bot; nil }) do |bot|
+      live += 1
+      max_live = {max_live, live}.max
+      RECONNECT_SPEC_LOG << "start"
+      begin
+        loop { bot.wait_tick } if sessions.size == 1
+      ensure
+        RECONNECT_SPEC_LOG << "ensure"
+        live -= 1
+      end
+    end
+
+    expect(RECONNECT_SPEC_LOG).to eq(["join", "start", "parked", "ensure", "join", "start", "ensure"])
+    expect(sessions.map(&.client)).to eq([first, second])
+    expect(sessions.first).not_to be(sessions.last)
+    expect(max_live).to eq 1
+    expect(restarts).to eq([true, false])
+    expect(ReconnectSpecBot.delays).to be_empty
+    expect(first.transport.closed?).to be_true
+    expect(first.intervention.active?).to be_false
+  end
+
+  it "resumes a parked Bot.run block at the same point without rejoining" do
+    RECONNECT_SPEC_LOG.clear
+    client = ReconnectSpecClient.new
+    ReconnectSpecBot.configure([client])
+    steps = [] of String
+
+    spawn do
+      takeover_and_park(client) do
+        steps << "parked"
+        client.intervention.resume
+      end
+    end
+
+    ReconnectSpecBot.run("localhost") do |bot|
+      steps << "before"
+      loop do
+        bot.wait_tick
+        break if steps.includes?("parked")
+      end
+      bot.wait_tick
+      steps << "after"
+    end
+
+    expect(steps).to eq(["before", "parked", "after"])
+    expect(RECONNECT_SPEC_LOG).to eq(["join"])
+    expect(client.join_timeouts.size).to eq 1
+    expect(ReconnectSpecBot.delays).to be_empty
+    expect(client.manual_control.granted?).to be_false
+  end
+
+  def unresolved_cursor(client)
+    item = Rosegold::MCData.default.items.find! { |candidate| candidate.name == "stone" }
+    client.container_menu.cursor = Rosegold::Slot.new(1_u32, item.id)
+  end
+
+  it "retries an unresolved session-change cancellation only after the connection is actually lost" do
+    first = ReconnectSpecClient.new
+    second = ReconnectSpecClient.new
+    ReconnectSpecBot.configure([first, second])
+    starts = 0
+
+    spawn do
+      takeover_and_park(first) do
+        unresolved_cursor(first)
+        first.disconnect("Connection reset")
+      end
+    end
+
+    ReconnectSpecBot.run("localhost") do |bot|
+      starts += 1
+      loop { bot.wait_tick } if starts == 1
+    end
+
+    expect(starts).to eq 2
+    expect(ReconnectSpecBot.delays).to eq([10.seconds])
+    expect(first.transport.closed?).to be_true
+  end
+
+  it "propagates an unresolved session-change cancellation while the connection stays open" do
+    first = ReconnectSpecClient.new
+    ReconnectSpecBot.configure([first])
+    starts = 0
+
+    spawn do
+      takeover_and_park(first) do
+        unresolved_cursor(first)
+        first.reset_mining_session
+      end
+    end
+
+    expect do
+      ReconnectSpecBot.run("localhost") do |bot|
+        starts += 1
+        loop { bot.wait_tick }
+      end
+    end.to raise_error(Rosegold::ManualControl::Cancelled)
+    expect(starts).to eq 1
+    expect(ReconnectSpecBot.delays).to be_empty
+  end
+
+  it "still restarts when the block swallows RestartRequested and returns normally" do
+    RECONNECT_SPEC_LOG.clear
+    first = ReconnectSpecClient.new
+    second = ReconnectSpecClient.new
+    ReconnectSpecBot.configure([first, second])
+    starts = 0
+
+    spawn do
+      takeover_and_park(first) { first.intervention.restart }
+    end
+
+    ReconnectSpecBot.run("localhost") do |bot|
+      starts += 1
+      if starts == 1
+        begin
+          loop { bot.wait_tick }
+        rescue Rosegold::Intervention::RestartRequested
+          bot.wait_tick
+        end
+      end
+    end
+
+    expect(starts).to eq 2
+    expect(first.transport.closed?).to be_true
+    expect(ReconnectSpecBot.delays).to be_empty
+  end
+
+  it "keeps an accepted restart through a session reset after the block swallows RestartRequested" do
+    RECONNECT_SPEC_LOG.clear
+    first = ReconnectSpecClient.new
+    second = ReconnectSpecClient.new
+    ReconnectSpecBot.configure([first, second])
+    starts = 0
+
+    spawn do
+      takeover_and_park(first) { first.intervention.restart }
+    end
+
+    ReconnectSpecBot.run("localhost") do |bot|
+      starts += 1
+      if starts == 1
+        begin
+          loop { bot.wait_tick }
+        rescue Rosegold::Intervention::RestartRequested
+          first.reset_mining_session
+        end
+      end
+    end
+
+    expect(starts).to eq 2
+    expect(ReconnectSpecBot.delays).to be_empty
   end
 end

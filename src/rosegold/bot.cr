@@ -81,8 +81,8 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Enabled by default.
   property? auto_respawn : Bool = true
   protected getter? disconnect_requested = false
-  @swapping_hands = false
-  @enchanting = false
+  @hand_swap : UInt64?
+  @hand_swap_seq = 0_u64
 
   # Wraps an existing client. The client may be connected later with `#join_game`.
   def initialize(@client)
@@ -131,13 +131,23 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Joins *address* and runs the block with a fresh bot after each reconnect.
   # A server disconnect or network error retries with backoff; authentication
   # failures honor provider cooldowns. Other script errors propagate.
+  # *on_session* runs with each fresh bot before the block, so a companion can
+  # rebind. An operator takeover can park the block at `#wait_tick(s)` and either
+  # resume it or restart it from the top on a new connection; the unwound
+  # block's `ensure` clauses run first. A restart raises
+  # `Intervention::RestartRequested` once, so a broad `rescue` that retries must
+  # re-raise it first; swallowing it blocks further intervention until the block
+  # exits. A `ManualControl::Cancelled` for a session change retries like a
+  # lost connection only when the connection is actually closed; otherwise it
+  # propagates, and the interrupted block is never resumed.
   # Return while connected or call `Bot#disconnect` to stop. The block must
   # check `#connected?` or perform network operations to notice a disconnect.
   # Re-establish script-owned state each time the block runs.
   def self.run(address : String, port : Int32 = 25565,
                offline : NamedTuple(uuid: String, username: String)? = nil,
-               timeout_ticks : Int32 = 1200, &)
+               timeout_ticks : Int32 = 1200, on_session : Proc(Bot, Nil)? = nil, &)
     reconnect = ReconnectPolicy.new
+    restarting = false
 
     loop do
       client = build_client(address, port, offline)
@@ -150,18 +160,41 @@ class Rosegold::Bot < Rosegold::EventEmitter
       begin
         bot.join_game(timeout_ticks)
         connected_at = Time.instant
+        client.intervention.register_owner(restartable: true)
+        on_session.try &.call(bot)
         yield bot
-        return if bot.connected? || bot.disconnect_requested?
+        if client.intervention.restart_requested?
+          restarting = true
+        else
+          return if bot.connected? || bot.disconnect_requested?
+        end
+      rescue Intervention::RestartRequested
+        restarting = true
       rescue error : Minecraft::AuthenticationError
         raise error if error.phase == "microsoft_device" && !error.transient?
         failure = error
       rescue error : File::Error
         raise error
       rescue error : Client::NotConnected | IO::Error | Socket::Error
+        if client.intervention.restart_requested?
+          restarting = true
+        else
+          return if bot.disconnect_requested?
+          Log.warn { "Connection lost: #{error.message}" }
+        end
+      rescue error : ManualControl::Cancelled
+        raise error if !error.reason.session_changed? || client.connected?
         return if bot.disconnect_requested?
         Log.warn { "Connection lost: #{error.message}" }
       ensure
+        client.intervention.release_owner
         client.connection?.try &.disconnect("Session finished")
+        client.intervention.finish_restart if restarting
+      end
+
+      if restarting
+        restarting = false
+        next
       end
 
       failure ||= client.authentication_failure
@@ -424,16 +457,26 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.chat_manager.send_chat(message)
   end
 
+  # Registers the calling fiber as the script that an operator may park with
+  # `Client#intervention`. `Bot.run` does this itself with restart support; a
+  # custom runner can resume only.
+  def claim_script_owner : Nil
+    client.intervention.register_owner
+  end
+
   # Waits for one client game tick, returning the event or `nil` after one second.
   # A timeout does not raise, including when disconnected.
   def wait_tick
-    client.wait_tick
+    client.intervention.checkpoint
+    event = client.wait_tick
+    client.intervention.checkpoint
+    event
   end
 
   # Waits for *ticks* client game ticks. Each tick has the same one-second timeout
   # as `#wait_tick`.
   def wait_ticks(ticks : Int32)
-    client.wait_ticks ticks
+    ticks.times { wait_tick }
   end
 
   # The player's current `Look` direction as a yaw/pitch pair in degrees.
@@ -444,7 +487,9 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Sets the look direction. `Look` is a yaw/pitch pair in degrees
   # (see `Rosegold::Look` for the angle convention and constants like
   # `Look::NORTH`, `Look::SOUTH.down`, etc.).
-  # Waits for the new look to be sent to the server.
+  # Waits for the new look to be sent to the server. A manual control grant,
+  # operator takeover, or session reset (login, respawn, reconfiguration)
+  # ends the wait early without applying the look.
   def look=(look : Look)
     client.physics.look = look
   end
@@ -501,7 +546,9 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Moves straight towards the exact `location` (decimal coordinates are
   # honored verbatim).
-  # Waits for arrival.
+  # Waits for arrival. A manual control grant or operator takeover ends the
+  # wait early without raising: the move is not complete and is never replayed,
+  # so check the position before relying on it. Pending looks end the same way.
   # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
   def move_to(location : Vec3d, stuck_timeout_ticks : Int32 = 60)
     client.physics.move location, stuck_timeout_ticks
@@ -536,14 +583,47 @@ class Rosegold::Bot < Rosegold::EventEmitter
     client.physics.move block.call(feet), stuck_timeout_ticks
   end
 
+  # Whether a manual controller currently holds a grant. While it does,
+  # scripted movement, look, attack, use, sneak, sprint, jump and hotbar writes
+  # are ignored with a warning. False means the grant was revoked, not that the
+  # neutral release tick has run: scripted writes still wait for that tick.
+  def manual_control? : Bool
+    client.manual_control.granted?
+  end
+
+  # Grants (true) or revokes (false) manual gameplay control without blocking.
+  # Granting cancels scripted movement, look, attack and use intent and never
+  # restores it on revoke; revoking clears only the controller's input. Scripts
+  # can keep observing and revoke when their own stuck predicate clears.
+  def manual_control=(enabled : Bool)
+    if enabled
+      client.manual_control.grant || Log.warn { "Manual control is unavailable until the previous release finishes" }
+    else
+      client.manual_control.revoke
+    end
+  end
+
+  # Grants manual control and suspends only the calling fiber until the
+  # controller presses Return to script, then returns `:returned`. Ticks,
+  # rendering and network traffic continue. Requires an enabled host bound to
+  # `Client#manual_control`; raises `ManualControl::Cancelled` without one or
+  # when the grant ends any other way (script revoke, lost controller, world or
+  # session change, disabled host). Inside a synchronous event handler, `spawn`
+  # the waiting work first.
+  def manual_debug_until_button_pressed_in_menu : Symbol
+    client.manual_control.debug_until_returned
+  end
+
   # Cancels `#move_to`, releases movement keys, and clears a pending jump.
   def stop_moving
     client.physics.stop_moving
+    return unless client.manual_control.script_write_allowed?("stop_moving")
     client.physics.jump_queued = false
   end
 
   # Queues a jump for the next tick on which the player is on the ground.
   def start_jump
+    return unless client.manual_control.script_write_allowed?("start_jump")
     client.physics.jump_queued = true
     client.physics.reset_jump_delay
   end
@@ -552,6 +632,7 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Raises if the player cannot rise or does not reach that height before
   # *timeout_ticks*. It does not wait for landing.
   def jump_by_height(height = 1, timeout_ticks = 20)
+    return unless client.manual_control.script_write_allowed?("jump_by_height")
     target_y = location.y + height
     prev_y = location.y
     client.physics.jump_queued = true
@@ -603,19 +684,25 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Raises `ArgumentError` for an index outside that range.
   def hotbar_selection=(index : UInt8)
     raise ArgumentError.new("Hotbar index must be between 1 and 9, got #{index}") unless (1_u8..9_u8).includes?(index)
+    return unless client.manual_control.script_write_allowed?("hotbar_selection")
     client.player.hotbar_selection = index - 1
   end
 
   # Closes any container and waits for the server to confirm both hands.
   # Unchanged stacks need no confirmation. A timeout does not undo the swap.
+  # Ignored while a manual controller owns input; a controller grant before the
+  # close or swap is written stops the rest without waiting.
   def swap_hands(timeout : Time::Span = 5.seconds) : Nil
-    raise "A hand swap is already in progress" if @swapping_hands
-
-    @swapping_hands = true
+    raise "A hand swap is already in progress" if @hand_swap
+    reservation = @hand_swap = (@hand_swap_seq += 1)
     begin
-      HandSwap.new(client).run(timeout) { client.interactions.swap_hands }
+      session = client.play_session?
+      authority = client.manual_control.script_authority("swap_hands") || return
+      session = nil unless session && client.current_play_session?(session)
+      authorized = -> { client.manual_control.script_authority?(authority) }
+      HandSwap.new(client).run(timeout, session, authorized) { client.interactions.swap_hands(session, &authorized) }
     ensure
-      @swapping_hands = false
+      @hand_swap = nil if @hand_swap == reservation
     end
   end
 
@@ -631,17 +718,17 @@ class Rosegold::Bot < Rosegold::EventEmitter
   #
   # A timeout does not undo a server-applied enchantment. This does not retry,
   # discover a table, or predict enchantments beyond the displayed offer clue.
-  # A timed-out opening closes a late table response. Another enchant attempt
-  # is rejected until a response, acknowledgement, or disconnect settles it.
+  # Only one enchant runs per client, even across bots wrapping it; an
+  # overlapping call raises. A timed-out opening closes a late table response only while the original
+  # script authority and PLAY session still hold. Another enchant attempt is
+  # rejected until a response, acknowledgement, or the end of that PLAY session
+  # (reconfiguration or disconnect) settles it; ending the session closes
+  # nothing.
+  # A manual grant or session reset before the table is ready raises without
+  # claiming a menu the controller opens, and no table is closed while a
+  # controller owns input.
   def enchant(spec, *, option : Int32, timeout : Time::Span = 5.seconds) : Slot
-    raise "An enchantment operation is already in progress" if @enchanting
-
-    @enchanting = true
-    begin
-      client.enchantment_workflow.run(spec, option, timeout) { use_hand(hand: :main_hand) }
-    ensure
-      @enchanting = false
-    end
+    client.enchantment_workflow.run(spec, option, timeout) { use_hand(hand: :main_hand) }
   end
 
   # Enchants the first inventory item for which the block returns truthy.
@@ -649,23 +736,55 @@ class Rosegold::Bot < Rosegold::EventEmitter
     enchant(spec, option: option, timeout: timeout)
   end
 
-  # Drops one item from the main-hand stack. Queues packets without waiting.
+  # Drops one item from the main-hand stack. Queues the packets without
+  # waiting for delivery; it may first wait for a pending manual release.
+  # Ignored while a manual controller owns input; a grant or PLAY session
+  # change before the queued write drops it.
   def drop_hand_single
-    client.queue_packet Serverbound::PlayerAction.new :drop_hand_single
-    client.queue_packet Serverbound::SwingArm.new if Client.protocol_version < 777_u32
+    queue_hand_mutation "drop_hand_single", Serverbound::PlayerAction.new(:drop_hand_single), drop_swing
   end
 
-  # Drops the full main-hand stack. Queues packets without waiting.
+  # Drops the full main-hand stack. Queues the packets without waiting for
+  # delivery; it may first wait for a pending manual release.
+  # Ignored while a manual controller owns input; a grant or PLAY session
+  # change before the queued write drops it.
   def drop_hand_full
-    client.queue_packet Serverbound::PlayerAction.new :drop_hand_full
-    client.queue_packet Serverbound::SwingArm.new if Client.protocol_version < 777_u32
+    queue_hand_mutation "drop_hand_full", Serverbound::PlayerAction.new(:drop_hand_full), drop_swing
   end
 
   # Pick the item at the given block position (middle-click on a block).
   # The server finds the matching item in the player's inventory,
   # moves it to the hotbar, and sends the appropriate slot update packets.
+  # Queues the packet without waiting for delivery; it may first wait for a
+  # pending manual release. Ignored while a manual controller owns input; a
+  # grant or PLAY session change before the queued write drops it.
   def pick_item_from_block(pos : Vec3i, include_data : Bool = false)
-    client.queue_packet Serverbound::PickItemFromBlock.new pos, include_data
+    queue_hand_mutation "pick_item_from_block", Serverbound::PickItemFromBlock.new(pos, include_data)
+  end
+
+  private def drop_swing : Serverbound::SwingArm?
+    Serverbound::SwingArm.new if Client.protocol_version < 777_u32
+  end
+
+  # Queues *packets* in order under the PLAY session of the call and the script
+  # authority; each write rechecks both under the write lock, and a refusal
+  # ends the rest. A session that ends during the release wait sends nothing.
+  private def queue_hand_mutation(operation : String, *packets : Client::GuardedPacket?) : Nil
+    session = client.play_session?
+    authority = client.manual_control.script_authority(operation) || return
+    unless session && client.current_play_session?(session)
+      Log.warn { "Not in the original PLAY session, not sending #{operation}" }
+      return
+    end
+    spawn do
+      Fiber.yield
+      packets.each do |packet|
+        next unless packet
+        break unless client.send_packet_if!(packet, session) { client.manual_control.script_authority?(authority) }
+      end
+    rescue Client::NotConnected
+      Log.warn { "Not connected, not sending queued #{operation}" }
+    end
   end
 
   # Holds the use button until `#stop_using_hand`. With no *hand*, or `nil`, the
@@ -691,11 +810,21 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # that tick. An active use or a staged block break drops the queued tap.
   # Predicted instant breaks do not block use this way. Call `#stop_digging` and
   # wait one tick before the tap to give it priority. This does not wait for a
-  # world-result confirmation.
+  # world-result confirmation. With a *target*, the aim and the tap share one
+  # script authority: a manual grant or session reset before the tap drops it.
   def use_hand(target : Vec3d? | Look? = nil, hand : Hand? = nil)
-    look_at target if target.is_a? Vec3d
-    self.look = target if target.is_a? Look
-    client.interactions.tap_using_hand hand
+    return client.interactions.tap_using_hand(hand) unless target
+    client.interactions.tap_using_hand hand if aim_under_authority("use_hand", target)
+  end
+
+  # Aims at *target* under one script authority, returned while it still holds.
+  private def aim_under_authority(operation : String, target : Vec3d | Look) : UInt64?
+    authority = client.manual_control.script_authority(operation) || return
+    case target
+    in Vec3d then look_at target
+    in Look  then self.look = target
+    end
+    authority if client.manual_control.script_authority?(authority)
   end
 
   # Raised when a container does not send its initial content before the timeout.
@@ -712,20 +841,102 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # end
   # ```
   # Caller must already be looking at the container block. Raises
-  # `ContainerOpenError` if its content does not arrive within *timeout*.
-  # The container is closed even if the block raises.
+  # `ContainerOpenError` if its content does not arrive within *timeout* in the
+  # PLAY session where the opening started, or when a manual grant or session
+  # reset interrupts the opening before its content is accepted.
+  # The container is closed even if the block raises, unless it raises
+  # `ManualControl::Cancelled` with unresolved inventory or a controller owns
+  # input at the close. A replacement menu opened meanwhile is never closed.
   def open_container(timeout : Time::Span = 5.seconds, &)
-    begin
-      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand(hand: :main_hand) }
+    menu, session = begin
+      await_opened_menu(timeout, "open_container") { use_hand(hand: :main_hand) }
+    rescue ex : Intervention::RestartRequested
+      raise ex
     rescue ex
       raise ContainerOpenError.new("Failed to open container: #{ex.message}")
     end
     # A chest left open desyncs the next world interaction, so close even on error.
+    with_opened_menu(menu, session) { yield }
+  end
+
+  # Waits for the authoritative content of the container this opening shows and
+  # captures that menu with its PLAY session as the content arrives. A player
+  # inventory resync or content for another window does not count, and an
+  # opening that another menu or session replaced before the wait resumes is
+  # rejected rather than returned. The opening belongs to the PLAY session it
+  # started in, which is yielded to the initiating action; once that session
+  # ends, the wait fails without claiming content. The opening also belongs to
+  # one script authority (*authority*, or one taken for *operation*), yielded
+  # as a guard for the initiating write. A manual grant or session reset after
+  # it fails the wait, so a menu the controller opens is never claimed, even
+  # after the controller returns control. Only a menu object that replaced the
+  # one open when the wait began counts, so a resync of a menu left open
+  # earlier is never claimed; a new menu that reuses its window id is.
+  private def await_opened_menu(timeout : Time::Span, operation : String, authority : UInt64? = nil, &) : {ContainerMenu, Client::PlaySession}
+    interrupted = "Manual control or a session change interrupted the opening"
+    granted = authority || client.manual_control.script_authority(operation) || raise interrupted
+    authorized = -> { client.manual_control.script_authority?(granted) }
+    session = client.play_session?
+    raise "Not in a PLAY session" unless session
+    raise interrupted unless authorized.call
+    initial = client.container_menu
+    opened = nil.as(ContainerMenu?)
+    started = Time.instant
+    listener = client.on(Clientbound::SetContainerContent) do |packet|
+      next if opened || packet.window_id == 0 || !client.current_play_session?(session) || !authorized.call
+      current = client.container_menu
+      next if current.same?(initial)
+      opened = current if current.is_a?(ContainerMenu) && current.id == packet.window_id
+    end
+    menu = begin
+      yield session, authorized
+      loop do
+        raise "PLAY session ended before the container opened" unless client.current_play_session?(session)
+        raise interrupted unless authorized.call
+        if found = opened
+          break found
+        end
+        raise "Timed out waiting for #{Clientbound::SetContainerContent} after #{timeout}" if Time.instant - started > timeout
+        sleep 1.millisecond
+      end
+    ensure
+      client.off(Clientbound::SetContainerContent, listener)
+    end
+    raise "Container was replaced before it could be used" unless client.container_menu.same?(menu) && client.current_play_session?(session)
+    raise interrupted unless authorized.call
+    {menu, session}
+  end
+
+  # Closes only *menu*, never a replacement, after the block, even when the
+  # cleanup tick wait raises. A `ManualControl::Cancelled` with unresolved
+  # inventory, from the block or the cleanup wait, propagates with no close.
+  # The close needs script authority at the write, so a menu a controller is
+  # holding is left to it.
+  private def with_opened_menu(menu : ContainerMenu, session : Client::PlaySession, &)
+    unresolved = false
     begin
       yield
+    rescue ex : ManualControl::Cancelled
+      unresolved = ex.unresolved_inventory?
+      raise ex
     ensure
+      close_opened_menu menu, session unless unresolved
+    end
+  end
+
+  private def close_opened_menu(menu : ContainerMenu, session : Client::PlaySession) : Nil
+    unresolved = false
+    begin
       wait_tick
-      inventory.close
+    rescue ex : ManualControl::Cancelled
+      unresolved = ex.unresolved_inventory?
+      raise ex
+    ensure
+      unless unresolved
+        if cleanup = client.manual_control.script_authority("close container")
+          menu.close(session) { client.manual_control.script_authority?(cleanup) }
+        end
+      end
     end
   end
 
@@ -743,41 +954,44 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # end
   # ```
   # Caller must already be looking at the container block. Raises
-  # `ContainerOpenError` if its content does not arrive within *timeout*.
-  # The handle is closed even if the block raises.
+  # `ContainerOpenError` if its content does not arrive within *timeout* in the
+  # PLAY session where the opening started, or when a manual grant or session
+  # reset interrupts the opening before its content is accepted.
+  # The handle is closed even if the block raises, unless it raises
+  # `ManualControl::Cancelled` with unresolved inventory or a controller owns
+  # input at the close.
   def open_container_handle(timeout : Time::Span = 5.seconds, &)
-    begin
-      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { use_hand(hand: :main_hand) }
+    menu, session = begin
+      await_opened_menu(timeout, "open_container") { use_hand(hand: :main_hand) }
+    rescue ex : Intervention::RestartRequested
+      raise ex
     rescue ex
       raise ContainerOpenError.new("Failed to open container: #{ex.message}")
     end
-    handle = ContainerHandle.new(client, client.container_menu)
-    begin
-      yield handle
-    ensure
-      wait_tick
-      handle.close
-    end
+    with_opened_menu(menu, session) { yield ContainerHandle.new(client, menu) }
   end
 
   # Runs *command*, waits for it to open a container, then yields its handle.
   #
   # This is for servers that expose a container through a command rather than a
-  # block interaction. Raises `ContainerOpenError` on timeout and closes the
-  # handle even if the block raises.
+  # block interaction. The command is written only in the PLAY session of the
+  # call and script authority. Raises `ContainerOpenError` when it is not sent,
+  # on timeout, or when that session ends or a manual grant interrupts the
+  # opening first. Closes the handle even if the block raises, unless it raises
+  # `ManualControl::Cancelled` with unresolved inventory or a controller owns
+  # input at the close.
   def open_container_handle(command : String, timeout : Time::Span = 5.seconds, &)
-    begin
-      wait_for(Rosegold::Clientbound::SetContainerContent, timeout: timeout) { chat(command) }
+    menu, session = begin
+      await_opened_menu(timeout, "open_container_handle") do |opening, authorized|
+        sent = client.chat_manager.send_chat(command, opening, authorized)
+        raise "Command was not sent in the PLAY session and script authority where the opening started" unless sent
+      end
+    rescue ex : Intervention::RestartRequested
+      raise ex
     rescue ex
       raise ContainerOpenError.new("Failed to open container: #{ex.message}")
     end
-    handle = ContainerHandle.new(client, client.container_menu)
-    begin
-      yield handle
-    ensure
-      wait_tick
-      handle.close
-    end
+    with_opened_menu(menu, session) { yield ContainerHandle.new(client, menu) }
   end
 
   # Aims at *face* of *block*, then presses and releases use with the main hand
@@ -810,10 +1024,13 @@ class Rosegold::Bot < Rosegold::EventEmitter
 
   # Best-effort version of `eat!`. Logs a warning if eating raises, including
   # when no allowed food is available, and returns `nil` without re-raising.
+  # An operator restart or `ManualControl::Cancelled` still propagates.
   # Uses the same hunger thresholds and food selection as `eat!`.
   # This blocks while eating; returning does not guarantee hunger was restored.
   def eat : Nil
     eat!
+  rescue ex : Intervention::RestartRequested | ManualControl::Cancelled
+    raise ex
   rescue ex
     Log.warn { "Eating failed: #{ex.message}" }
   end
@@ -1040,14 +1257,11 @@ class Rosegold::Bot < Rosegold::EventEmitter
   end
 
   private def with_table(table_pos : Vec3i, &)
-    look_at Vec3d.new(table_pos.x + 0.5, table_pos.y + 0.5, table_pos.z + 0.5)
-    wait_for(Rosegold::Clientbound::SetContainerContent, timeout: 5.seconds) { use_hand(hand: :main_hand) }
-    begin
-      yield
-    ensure
-      wait_tick
-      inventory.close
-    end
+    refused = "Manual control or a session change interrupted opening the crafting table"
+    authority = aim_under_authority("craft", Vec3d.new(table_pos.x + 0.5, table_pos.y + 0.5, table_pos.z + 0.5))
+    raise CraftingError.new(refused) unless authority
+    menu, session = await_opened_menu(5.seconds, "craft", authority) { use_hand(hand: :main_hand) }
+    with_opened_menu(menu, session) { yield }
   end
 
   private def place_recipe_loop(menu : Menu, recipe : RecipeDisplayEntry, count : Int32, use_max : Bool)
@@ -1155,18 +1369,47 @@ class Rosegold::Bot < Rosegold::EventEmitter
   # Optionally aims at *target*, then holds the attack button to begin digging.
   # Call `#stop_digging` to release it; the release is processed on the next
   # tick. Login, respawn, reconfiguration, and disconnect also release the hold.
+  # With a *target*, a manual grant or session reset during the aim drops the hold.
   def start_digging(target : Vec3d? | Look? = nil)
-    look_at target if target.is_a? Vec3d
-    self.look = target if target.is_a? Look
-    client.interactions.start_digging
+    _, started = begin_digging target
+    started
+  end
+
+  # Starts the hold under one script authority. Returns that authority (nil when
+  # refused) and the interaction result: true only for a newly queued hold.
+  private def begin_digging(target : Vec3d? | Look?) : {UInt64?, Bool?}
+    authority = if target
+                  aim_under_authority("start_digging", target)
+                else
+                  client.manual_control.script_authority("start_digging")
+                end
+    return {nil, nil} unless authority
+    {authority, client.interactions.start_digging}
+  end
+
+  # Fraction (0..1) of the local in-progress block break. 0 when idle or after a
+  # reset. The target may complete before it is sampled, and this is local
+  # progress, not a server acknowledgment.
+  def block_break_progress : Float32
+    client.interactions.block_damage_progress
+  end
+
+  # Block position of the local in-progress break, or nil when none is staged.
+  # Cleared by the same state as `#block_break_progress`; this is a local
+  # prediction, not a server acknowledgment, and the block may complete or be
+  # refused before it is sampled.
+  def block_break_target : Vec3i?
+    client.interactions.block_break_target
   end
 
   # Optionally aims at *target*, holds attack for *ticks*, then releases it.
   # Performs *ticks* tick waits; an individual wait can time out.
+  # The release is skipped when the hold was refused or a manual grant or
+  # session reset happened meanwhile, since either already ended the hold.
   def dig(ticks : Int32, target : Vec3d? | Look? = nil)
-    start_digging target
+    authority, _ = begin_digging target
     wait_ticks ticks
-    stop_digging
+    stop_digging if authority && client.manual_control.script_authority?(authority)
   end
 
   # Optionally aims at *target*, then presses and releases attack immediately.

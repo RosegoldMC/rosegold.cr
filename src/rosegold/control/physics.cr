@@ -66,9 +66,12 @@ class Rosegold::Physics
   private getter client : Rosegold::Client
   property? paused : Bool = true
   property? jump_queued : Bool = false
-  getter keys : MovementKeys = MovementKeys.new
+  getter keys : MovementKeys
   private getter movement_action : Action(Vec3d)?
   private getter look_action : Action(Look)?
+  # Script authority and PLAY session the pending look was requested under.
+  @look_authority : UInt64?
+  @look_session : Client::PlaySession?
   private getter action_mutex : Mutex = Mutex.new
 
   private property jump_trigger_time : Int32 = 0   # For double-tap mechanics
@@ -106,20 +109,26 @@ class Rosegold::Physics
     look_action.try &.target
   end
 
-  def initialize(@client : Rosegold::Client); end
+  def initialize(@client : Rosegold::Client)
+    @keys = MovementKeys.new(-> { @client.manual_control.script_write_allowed?("movement keys") })
+  end
 
   def pending_velocity=(velocity : Vec3d)
     @pending_velocity_mutex.synchronize { @pending_velocity = velocity }
   end
 
+  # Applies *target* on a later tick and waits for it. A manual grant or
+  # session reset before the frame carrying the look is written ends the wait
+  # without applying the look.
   def look=(target : Look)
+    authority = client.manual_control.script_authority("look") || return
     if paused?
       Log.warn { "Ignoring look of #{target} because physics is paused" }
       return
     end
 
     action = Action.new(target)
-    replace_look_action(action)
+    replace_look_action(action, authority, client.play_session?)
     action.join
   end
 
@@ -173,6 +182,7 @@ class Rosegold::Physics
   # Set `target=nil` to stop moving and cancel any current movement.
   # `stuck_timeout_ticks` specifies how many consecutive stuck ticks before throwing MovementStuck.
   def move(target : Vec3d?, stuck_timeout_ticks : Int32 = 10)
+    return unless client.manual_control.script_write_allowed?("move")
     if paused?
       Log.warn { "Ignoring movement to #{target} because physics is paused" }
       return
@@ -198,14 +208,71 @@ class Rosegold::Physics
   end
 
   def stop_moving
+    return unless client.manual_control.script_write_allowed?("stop_moving")
     replace_movement_action(nil)
     keys.release_all
   end
 
+  # Cancels scripted movement and look goals, waking their waiters.
+  def cancel_goals
+    replace_movement_action(nil)
+    replace_look_action(nil)
+  end
+
+  # Cancels a pending scripted look, waking its waiter without applying it.
+  # Lock-free because a session reset runs on the packet reader, which must not
+  # wait for the action mutex.
+  def cancel_look
+    @look_action.try &.cancel
+    @look_action = nil
+    @look_authority = nil
+    @look_session = nil
+  end
+
+  # Synchronously clears desired keys, queued jump and requested sprint, with no
+  # packets, events or yields. Sneak and sprint state changes reach the server
+  # on the next tick, which re-applies the neutral manual input.
+  def clear_input
+    keys.replace MovementKeys::Key::None
+    @jump_queued = false
+    @sprint_requested = false
+  end
+
+  # Clears input state without packets or events, for a closing connection.
+  def reset_input_locally
+    keys.replace MovementKeys::Key::None
+    @jump_queued = false
+    @sprint_requested = false
+    player.sprinting = false
+    player.sneaking = false
+  end
+
+  def apply_manual_input(input : ManualControl::Input)
+    state = MovementKeys::Key::None
+    state |= MovementKeys::Key::Forward if input.forward?
+    state |= MovementKeys::Key::Backward if input.backward?
+    state |= MovementKeys::Key::Left if input.left?
+    state |= MovementKeys::Key::Right if input.right?
+    keys.replace state
+    @jump_queued = input.jump? || input.jump_tap?
+    # Vanilla clears the jump delay whenever jump is up; a tap was a release and press.
+    @no_jump_delay = 0 if !@jump_queued || input.jump_tap?
+    @sprint_requested = input.sprint? && !input.sneak?
+    apply_sneak(input.sneak?)
+  end
+
   def sneak(sneaking = true)
+    return unless client.manual_control.script_write_allowed?("sneak")
+    apply_sneak(sneaking)
+  end
+
+  private def apply_sneak(sneaking : Bool)
     return if player.sneaking? == sneaking
 
-    sprint false if sneaking
+    if sneaking
+      @sprint_requested = false
+      apply_sprint_state(false)
+    end
 
     player.sneaking = sneaking
     client.emit_event Event::SneakChanged.new(sneaking)
@@ -213,6 +280,7 @@ class Rosegold::Physics
   end
 
   def sprint(sprinting = true)
+    return unless client.manual_control.script_write_allowed?("sprint")
     @sprint_requested = sprinting
     apply_sprint_state(sprinting)
   end
@@ -287,11 +355,83 @@ class Rosegold::Physics
     end
   end
 
-  private def replace_look_action(new_action : Action(Look)?)
+  private def replace_look_action(new_action : Action(Look)?, authority : UInt64? = nil, session : Client::PlaySession? = nil)
     action_mutex.synchronize do
       @look_action.try &.cancel
       @look_action = new_action
+      @look_authority = authority
+      @look_session = session
     end
+  end
+
+  # The pending look, unless its authority or PLAY session lapsed; a lapsed one
+  # is cancelled.
+  private def authorized_look_action : Action(Look)?
+    return unless look_action = @look_action
+    return look_action if look_authorized?(look_action)
+
+    drop_look look_action
+    nil
+  end
+
+  # A look requested with no PLAY session (an unconnected client) stays valid
+  # only while there is still none.
+  private def look_authorized?(action : Action(Look)) : Bool
+    return false unless @look_action.same?(action) && (authority = @look_authority)
+    return false unless client.manual_control.script_authority?(authority)
+    if session = @look_session
+      client.current_play_session?(session)
+    else
+      client.play_session?.nil?
+    end
+  end
+
+  private def drop_look(action : Action(Look)) : Nil
+    action_mutex.synchronize do
+      if @look_action.same?(action)
+        action.cancel
+        @look_action = nil
+        @look_authority = nil
+        @look_session = nil
+      end
+    end
+  end
+
+  # Writes the frame that first carries a scripted look only while its PLAY
+  # session and authority still hold under the write lock, and only then
+  # commits the look locally, unless a newer pose replaced it meanwhile.
+  # Returns whether the look was written; a refused look is cancelled and the
+  # caller sends its ordinary frame instead.
+  private def send_scripted_look(action : Action(Look), riding : Bool) : Bool
+    session = @look_session
+    look = action.target
+    return false if session.nil? || look == player.look
+    feet = player.feet
+    on_ground = player.on_ground?
+    if !riding && look == last_sent_look
+      player.look = look
+      return false
+    end
+
+    packet = if !riding && feet != last_sent_feet
+               Serverbound::PlayerPositionAndLook.new(feet, look, on_ground)
+             else
+               Serverbound::PlayerLook.new(look, on_ground)
+             end
+    before = player.look
+    commit = -> { player.look = look if player.look == before; nil }
+    unless client.send_packet_if!(packet, session, commit) { look_authorized?(action) }
+      drop_look action
+      return false
+    end
+
+    unless riding
+      @last_sent_feet = feet
+      @last_sent_look = look
+      @last_sent_on_ground = on_ground
+    end
+    client.emit_event Event::PlayerPositionUpdate.new(feet, look)
+    true
   end
 
   private def current_player_aabb : AABBf
@@ -306,6 +446,8 @@ class Rosegold::Physics
 
   def tick
     return if paused? || !client.connected?
+
+    client.manual_control.enforce_physics
 
     if @pending_velocity
       @pending_velocity_mutex.synchronize do
@@ -359,9 +501,9 @@ class Rosegold::Physics
     if curr_movement
       move_direction = (curr_movement.target - player.feet).with_y(0)
 
-      keys.release_all
+      keys.replace MovementKeys::Key::None
       if move_direction.length >= VERY_CLOSE
-        keys.press MovementKeys::Key::Forward
+        keys.replace MovementKeys::Key::Forward
         target_yaw = Math.atan2(-move_direction.x, move_direction.z) * (180.0 / Math::PI)
         target_look = Look.new(target_yaw.to_f32, player.look.pitch)
         player.look = target_look
@@ -455,7 +597,7 @@ class Rosegold::Physics
     end
 
     if input.sneak? != player.sneaking?
-      sneak(input.sneak?)
+      apply_sneak(input.sneak?)
     end
   end
 
@@ -745,13 +887,25 @@ class Rosegold::Physics
   end
 
   private def sync_with_server(riding : Bool = false)
-    if look_action = @look_action
-      player.look = look_action.target
+    scripted = false
+    if look_action = authorized_look_action
+      if @look_session
+        scripted = send_scripted_look(look_action, riding)
+      else
+        player.look = look_action.target
+      end
     end
 
     if riding
-      client.send_packet! Serverbound::PlayerLook.new player.look, player.on_ground?
-      client.emit_event Event::PlayerPositionUpdate.new(player.feet, player.look)
+      unless scripted
+        client.send_packet! Serverbound::PlayerLook.new player.look, player.on_ground?
+        client.emit_event Event::PlayerPositionUpdate.new(player.feet, player.look)
+      end
+      return
+    end
+
+    if scripted
+      @ticks_since_last_packet = 0
       return
     end
 
@@ -776,7 +930,7 @@ class Rosegold::Physics
           end
           movement_action.succeed
           @movement_action = nil
-          keys.release_all
+          keys.replace MovementKeys::Key::None
         end
       end
 
