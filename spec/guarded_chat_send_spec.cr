@@ -156,7 +156,7 @@ Spectator.describe "guarded chat send" do
   it "builds vanilla last-seen acknowledgments: newest signature is bit 19, offsets and checksum match" do
     manager = client.chat_manager
     first = Bytes.new(256, 1_u8)
-    second = Bytes.new(256) { |index| index.to_u8 }
+    second = Bytes.new(256, &.to_u8)
 
     empty = manager.acknowledgment
     expect({empty.offset, empty.bitset.to_a, empty.checksum}).to eq({0_u32, [0_u8, 0_u8, 0_u8], 1_u8})
@@ -289,7 +289,6 @@ Spectator.describe "guarded chat send" do
   end
 
   it "keeps the connection open when the packet builder raises" do
-    manager = client.chat_manager
     conn = client.connection
     expect { conn.send_packet(-> : Bytes { raise "build" }, -> : Nil { }, -> { true }) }.to raise_error(Exception, "build")
     expect(conn.open?).to be_true

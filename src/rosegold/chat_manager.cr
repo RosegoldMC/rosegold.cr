@@ -124,9 +124,9 @@ class Rosegold::ChatManager
   # after a raised failure is unknown and must not be retried.
   def try_send_command(command : String, & : -> Bool) : SendResult
     body = command.lchop('/')
-    return SendResult::Refused unless command.starts_with?('/') && !body.blank? && body.bytesize <= 256 &&
-                                      !body.each_char.any? { |char| char.control? || char == '§' } &&
-                                      Serverbound::ChatCommand::PROTOCOL_PACKET_IDS.has_key?(client.class.protocol_version)
+    return SendResult::Refused if !command.starts_with?('/') || body.blank? || body.bytesize > 256 ||
+                                  body.each_char.any? { |char| char.control? || char == '§' } ||
+                                  !Serverbound::ChatCommand::PROTOCOL_PACKET_IDS.has_key?(client.class.protocol_version)
 
     raise Client::NotConnected.new unless client.connected?
     return SendResult::Refused unless client.current_protocol_state == ProtocolState::PLAY

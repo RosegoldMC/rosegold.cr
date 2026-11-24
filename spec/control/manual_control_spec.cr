@@ -101,7 +101,7 @@ Spectator.describe Rosegold::ManualControl do
        -136_f32 => -180_f32, -134_f32 => -90_f32}.each do |from, expected|
         local = ManualControlSpecClient.new("localhost")
         local.player.look = Rosegold::Look.new(from, -33_f32)
-        id = local.manual_control.grant.not_nil!
+        id = local.manual_control.grant || fail("grant refused")
         local.manual_control.submit(id, 1_u64, Input.new(ice_road_toggle: true))
         tick local
         expect(local.manual_control.ice_road?).to be_true
@@ -114,7 +114,7 @@ Spectator.describe Rosegold::ManualControl do
       {45_f32 => 90_f32, -45_f32 => -90_f32, 135_f32 => -180_f32, -135_f32 => -180_f32}.each do |from, expected|
         local = ManualControlSpecClient.new("localhost")
         local.player.look = Rosegold::Look.new(from, 0_f32)
-        id = local.manual_control.grant.not_nil!
+        id = local.manual_control.grant || fail("grant refused")
         local.manual_control.submit(id, 1_u64, Input.new(ice_road_toggle: true))
         tick local
         expect(local.player.look.yaw).to eq(expected)
