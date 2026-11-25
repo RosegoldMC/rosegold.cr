@@ -48,6 +48,8 @@ abstract class Rosegold::Menu
   abstract def player_inventory_start : Int32
 
   property state_id : UInt32 = 0
+  protected getter content_revision : UInt64 = 0
+  protected getter invalidation_revision : UInt64 = 0
   getter? content_loaded = false
   property properties = Hash(Int16, Int16).new
   @player_inventory : PlayerInventory
@@ -298,16 +300,7 @@ abstract class Rosegold::Menu
 
   def send_click(slot_index : Int32, operation : ClickOperation)
     mode, button = operation.to_mode_and_button
-    click_type = case mode
-                 when .click?  then :click
-                 when .shift?  then :shift
-                 when .swap?   then :swap
-                 when .middle? then :middle
-                 when .drop?   then :drop
-                 when .double? then :double
-                 else               :click
-                 end
-    send_click(slot_index, button.to_i32, click_type)
+    send_ordinary_click { build_click(slot_index, button.to_i32, mode) }
   end
 
   def send_click(slot_index : Int32, button : Int32, click_type)
@@ -319,23 +312,134 @@ abstract class Rosegold::Menu
            when :drop   then Serverbound::ClickWindow::Mode::Drop
            when :drag   then Serverbound::ClickWindow::Mode::Drag
            when :double then Serverbound::ClickWindow::Mode::Double
-           else              Serverbound::ClickWindow::Mode::Click
            end
+    send_ordinary_click { build_click(slot_index, button, mode) }
+  end
 
+  # Writes a click only if this menu, its content and *session* are still
+  # current under the write lock and `authorized` approves. Check the caller's
+  # authority and view revision in that block; it may run again after the
+  # click is built. Refused at once while another guarded menu write or an
+  # ordinary click is in progress, and if an ordinary click predicts before
+  # the write. A false result writes nothing.
+  # An IO failure disconnects and raises, and delivery may be unknown.
+  def send_click_if!(slot_index : Int32, operation : ClickOperation, session : Client::PlaySession, &authorized : -> Bool) : Bool
+    dispatch = @client.inventory_dispatch
+    revision = {dispatch.revision, click_content_revision}
+    current = -> { click_menu_current?(session) && {dispatch.revision, click_content_revision} == revision }
+    return false unless current.call
+
+    mode, button = operation.to_mode_and_button
+    build, committed = stage_click(session) { |menu| menu.build_click(slot_index, button.to_i32, mode) }
+    guarded_write(session, build, committed) { current.call && authorized.call && current.call }
+  end
+
+  private def guarded_write(session : Client::PlaySession, build : -> Bytes, committed : -> Nil, &ready : -> Bool) : Bool
+    dispatch = @client.inventory_dispatch
+    dispatch.guarded do
+      flush = nil
+      prepare = -> { bytes = build.call; bytes if ready.call && (flush = dispatch.begin_flush) }
+      session.connection.send_packet(prepare, committed, ready, -> { dispatch.end_flush(flush) })
+    end
+  end
+
+  # Predicts, then dispatches through `send_packet!` with no lock held, so a
+  # hook sees the packet it writes and may wait on other fibers. A click that
+  # waited out a guarded write needs the PLAY session it started in to still
+  # be current, and is skipped if the menu it started on was retired.
+  private def send_ordinary_click(& : -> Serverbound::ClickWindow)
+    dispatch = @client.inventory_dispatch
+    session = @client.play_session?
+    open = @client.container_menu.same?(self)
+    dispatch.ordinary do |waited|
+      if waited
+        raise Client::NotConnected.new unless session && @client.current_play_session?(session)
+        next if open && !@client.container_menu.same?(self)
+      end
+      dispatch.predicted
+      @client.send_packet!(yield)
+    end
+  end
+
+  private def stage_click(session : Client::PlaySession, &build : Menu -> Serverbound::ClickWindow) : {(-> Bytes), (-> Nil)}
+    packet = nil
+    invalidation = invalidation_revision
+    changed_slots = [] of {Rosegold::WindowSlot, {UInt64, UInt64}}
+    cursor_revision = nil
+    prepare = -> {
+      revisions = Array.new(total_slots) { |i| click_slot_revision(i) }
+      before_cursor_revision = @remote_cursor.revision
+      before_cursor = copy_slot(@cursor)
+      click = build.call(click_snapshot)
+      click.changed_slots.each { |slot| changed_slots << {slot, revisions[slot.slot_number]} }
+      cursor_revision = before_cursor_revision unless slots_match?(before_cursor, click.cursor)
+      packet = click
+      click.write
+    }
+    committed = -> : Nil {
+      if (click = packet) && click_menu_current?(session) && invalidation_revision == invalidation
+        changed_slots.each do |slot, revision|
+          index = slot.slot_number
+          self[index] = slot.as(Rosegold::Slot) if click_slot_revision(index) == revision
+        end
+        @cursor = click.cursor if @remote_cursor.revision == cursor_revision
+      end
+    }
+    {prepare, committed}
+  end
+
+  private def click_menu_current?(session : Client::PlaySession) : Bool
+    @client.current_play_session?(session) && @client.container_menu.same?(self)
+  end
+
+  private def click_content_revision
+    {state_id, content_revision, @client.inventory_menu.content_revision, @player_inventory.authoritative_revision}
+  end
+
+  private def click_slot_revision(index : Int32) : {UInt64, UInt64}
+    shared = player_inventory_index(index).try { |cell| @player_inventory.authoritative_revision(cell) }
+    {@remote_slots[index].revision, shared || 0_u64}
+  end
+
+  private def player_inventory_index(index : Int32) : Int32?
+    offset = index - player_inventory_start
+    return unless 0 <= offset < PlayerInventory::INVENTORY_SIZE
+
+    offset < PlayerInventory::MAIN_INVENTORY_SIZE ? offset + PlayerInventory::HOTBAR_SIZE : offset - PlayerInventory::MAIN_INVENTORY_SIZE
+  end
+
+  private def record_authoritative_slot(index : Int32, slot : Rosegold::Slot) : Nil
+    @remote_slots[index].force(slot)
+    player_inventory_index(index).try { |cell| @player_inventory.record_authoritative(cell) }
+  end
+
+  private def click_snapshot : Menu
+    snapshot = dup
+    snapshot.detach_click_storage
+    total_slots.times { |i| snapshot[i] = copy_slot(self[i]) }
+    snapshot.cursor = copy_slot(@cursor)
+    snapshot
+  end
+
+  protected def detach_click_storage : Nil
+    @player_inventory = PlayerInventory.new
+  end
+
+  protected def build_click(slot_index : Int32, button : Int32, mode : Serverbound::ClickWindow::Mode?) : Serverbound::ClickWindow
     before_slots = Array.new(total_slots) do |i|
       copy_slot(self[i])
     end
 
     if slot_index == -999
       perform_cursor_drop_operation(button)
-    elsif click_type == :swap && button == 40
+    elsif mode.try(&.swap?) && button == 40
       perform_offhand_swap_operation(slot_index)
-    else
-      case click_type
-      when :shift then perform_shift_click(slot_index)
-      when :click then perform_regular_click(slot_index, button)
-      when :swap  then perform_hotbar_swap(slot_index, button)
-      when :drop  then perform_drop_operation(slot_index, button)
+    elsif mode
+      case mode
+      when .shift? then perform_shift_click(slot_index)
+      when .click? then perform_regular_click(slot_index, button)
+      when .swap?  then perform_hotbar_swap(slot_index, button)
+      when .drop?  then perform_drop_operation(slot_index, button)
       end
     end
 
@@ -349,9 +453,10 @@ abstract class Rosegold::Menu
     end
 
     send_state_id = @state_id.to_i32
+    mode ||= Serverbound::ClickWindow::Mode::Click
     packet = Serverbound::ClickWindow.new(mode, button.to_i8, slot_index.to_i16, changed_slots, menu_id, send_state_id, @cursor)
-    Log.for("send_click").debug { "ClickWindow: slot=#{slot_index}, mode=#{click_type}, state_id=#{send_state_id}, changed=#{changed_slots.map { |slot| "#{slot.slot_number}:#{slot.name}x#{slot.count}" }}" }
-    @client.send_packet!(packet)
+    Log.for("send_click").debug { "ClickWindow: slot=#{slot_index}, mode=#{mode}, state_id=#{send_state_id}, changed=#{changed_slots.map { |slot| "#{slot.slot_number}:#{slot.name}x#{slot.count}" }}" }
+    packet
   end
 
   def perform_cursor_drop_operation(button : Int32)
@@ -542,6 +647,10 @@ abstract class Rosegold::Menu
   def swap_hotbar(hotbar_nr, slot_number)
     return if slot_number < 0 || slot_number >= total_slots || hotbar_nr < 0 || hotbar_nr >= 9
 
+    send_ordinary_click { build_hotbar_swap(hotbar_nr, slot_number) }
+  end
+
+  private def build_hotbar_swap(hotbar_nr, slot_number) : Serverbound::ClickWindow
     before_slots = Array.new(total_slots) do |i|
       copy_slot(self[i])
     end
@@ -564,7 +673,7 @@ abstract class Rosegold::Menu
     end
 
     send_state_id = @state_id.to_i32
-    packet = Serverbound::ClickWindow.new(
+    Serverbound::ClickWindow.new(
       Serverbound::ClickWindow::Mode::Swap,
       hotbar_nr.to_i8,
       slot_number.to_i16,
@@ -573,7 +682,6 @@ abstract class Rosegold::Menu
       send_state_id,
       @cursor
     )
-    @client.send_packet!(packet)
   end
 
   def swap_hotbar(hotbar_nr, slot : Rosegold::WindowSlot)
@@ -585,16 +693,19 @@ abstract class Rosegold::Menu
   def receive_content(packet : Clientbound::SetContainerContent) : Nil
     return unless packet.window_id == menu_id
 
-    @content_loaded = false
+    invalidate_content
     update_all_slots(packet.slots.map(&.as(Rosegold::Slot)), packet.cursor.as(Rosegold::Slot), packet.state_id)
     @content_loaded = packet.slots.size == total_slots
   end
 
   def invalidate_content : Nil
+    @invalidation_revision &+= 1
+    @content_revision &+= 1
     @content_loaded = false
   end
 
   def update_all_slots(slots : Array(Rosegold::Slot), cursor : Rosegold::Slot, packet_state_id : UInt32)
+    @content_revision &+= 1
     @state_id = packet_state_id
 
     slots.each_with_index do |slot, index|
@@ -607,19 +718,20 @@ abstract class Rosegold::Menu
 
     slots.each_with_index do |slot, index|
       if index < @remote_slots.size
-        @remote_slots[index].force(slot)
+        record_authoritative_slot(index, slot)
       end
     end
     @remote_cursor.force(cursor)
   end
 
   def update_slot(index : Int32, slot : Rosegold::Slot, packet_state_id : UInt32)
+    @content_revision &+= 1
     @state_id = packet_state_id
 
     if index >= 0 && index < total_slots
       self[index] = slot
       if index < @remote_slots.size
-        @remote_slots[index].force(slot)
+        record_authoritative_slot(index, slot)
       end
     elsif index == -1
       @cursor = slot

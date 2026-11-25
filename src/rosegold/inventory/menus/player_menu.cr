@@ -32,6 +32,12 @@ class Rosegold::PlayerMenu < Rosegold::Menu
     super(@client, @player_inventory)
   end
 
+  protected def detach_click_storage : Nil
+    super
+    @armor_slots = @armor_slots.dup
+    @crafting_slots = @crafting_slots.dup
+  end
+
   def menu_id : UInt8
     0_u8
   end

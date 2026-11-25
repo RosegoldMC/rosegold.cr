@@ -4,6 +4,7 @@ require "./slot"
 # This tracks what the server thinks each slot should contain
 class Rosegold::RemoteSlot
   getter slot : Rosegold::Slot
+  getter revision = 0_u64
 
   def initialize(@slot = Rosegold::Slot.new)
   end
@@ -21,6 +22,7 @@ class Rosegold::RemoteSlot
 
   # Force update remote slot (when server sends updates)
   def force(slot : Slot)
+    @revision &+= 1
     @slot = slot
   end
 end
