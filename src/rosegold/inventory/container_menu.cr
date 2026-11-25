@@ -102,6 +102,11 @@ abstract class Rosegold::ContainerMenu < Rosegold::Menu
     original
   end
 
+  protected def detach_click_storage : Nil
+    super
+    @container_slots_array = @container_slots_array.dup
+  end
+
   def close
     close { true }
   end
@@ -117,6 +122,28 @@ abstract class Rosegold::ContainerMenu < Rosegold::Menu
     return unless @client.container_menu.same?(self)
     handle_close
     @client.emit_event Event::ContainerClosed.new(menu_id.to_u32)
+  end
+
+  # Returns whether a close was written for this menu in *session*. Checks
+  # that this menu is still open and `authorized` approves under the write
+  # lock. Refused at once while another guarded menu write or an ordinary
+  # click is in progress. Never retires a replacement menu. An IO failure
+  # disconnects and raises, and delivery may be unknown.
+  def close_if!(session : Client::PlaySession, &authorized : -> Bool) : Bool
+    current = -> { @client.current_play_session?(session) && @client.container_menu.same?(self) }
+    return false unless current.call
+
+    packet = Serverbound::CloseWindow.new(menu_id.to_u16)
+    retired = false
+    committed = -> : Nil {
+      if current.call
+        handle_close
+        retired = true
+      end
+    }
+    sent = guarded_write(session, -> { packet.write }, committed) { current.call && authorized.call && current.call }
+    @client.emit_event Event::ContainerClosed.new(menu_id.to_u32) if retired
+    sent
   end
 
   def handle_close

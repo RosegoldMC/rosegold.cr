@@ -11,9 +11,22 @@ class Rosegold::PlayerInventory
   # Persistent inventory items - matches vanilla Player.inventory.items
   @items : Array(Rosegold::Slot)
 
+  getter authoritative_revision = 0_u64
+  @authoritative_revisions = Array(UInt64).new(INVENTORY_SIZE, 0_u64)
+
   def initialize
     # Initialize with empty slots (36 total: 27 main + 9 hotbar)
     @items = Array.new(INVENTORY_SIZE) { Rosegold::Slot.new }
+  end
+
+  # Counts server writes to *index* through any menu that shows it.
+  def authoritative_revision(index : Int32) : UInt64
+    @authoritative_revisions[index]
+  end
+
+  def record_authoritative(index : Int32) : Nil
+    @authoritative_revisions[index] &+= 1
+    @authoritative_revision &+= 1
   end
 
   # Direct access to inventory items (like vanilla)

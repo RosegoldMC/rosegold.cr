@@ -325,7 +325,9 @@ Spectator.describe "Rosegold::Bot inventory" do
           admin.item_replace "weapon.offhand", "shield"
           wait_for_inventory_setup(bot) do
             bot.inventory.hotbar[0].name == "diamond_axe" &&
-              bot.inventory.off_hand.name == "shield"
+              bot.inventory.off_hand.name == "shield" &&
+              (bot.location - Rosegold::Vec3d.new(30.5, -60, 30.5)).length < 0.5 &&
+              bot.world.block_state(30, -61, 30).try { |state| Rosegold::MCData.default.block_state_names[state].split('[').first } == "chest"
           end
 
           expect(bot.inventory.hotbar[0].name).to eq "diamond_axe"

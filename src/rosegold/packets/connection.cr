@@ -226,9 +226,10 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
   # frame is written and is skipped if the write raises. An error from `build`
   # or `written` propagates without closing the connection; a write failure
   # closes it and raises, so delivery is unknown. `ready` is rechecked under the
-  # lock; when it declines, or `ready` or `build` leaves the connection closed
-  # or unusable, nothing is written and false is returned.
-  def send_packet(build : -> Bytes, written : -> Nil, ready : -> Bool) : Bool
+  # lock. Returns false if `ready` declines, `build` returns nil, or either
+  # callback leaves the connection closed or unusable. `settled` runs last
+  # under the lock, even if a callback or the write raised.
+  def send_packet(build : (-> Bytes) | (-> Bytes?), written : -> Nil, ready : -> Bool, settled : (-> Nil)? = nil) : Bool
     raise Rosegold::Client::NotConnected.new if close_reason
     sent = false
     failure = nil
@@ -236,18 +237,23 @@ class Rosegold::Connection(InboundPacket, OutboundPacket)
     @writers.add 1
     begin
       write_mutex.synchronize do
-        if writable? && ready.call
-          frame = compressed_frame(build.call)
-          next unless writable?
-          begin
-            write_frame frame
-          rescue e
-            failure = e
+        begin
+          if writable? && ready.call
+            next unless bytes = build.call
+            frame = compressed_frame(bytes)
+            next unless writable?
+            begin
+              write_frame frame
+            rescue e
+              failure = e
+            end
+            unless failure
+              sent = true
+              written.call
+            end
           end
-          unless failure
-            sent = true
-            written.call
-          end
+        ensure
+          settled.try &.call
         end
       end
     ensure

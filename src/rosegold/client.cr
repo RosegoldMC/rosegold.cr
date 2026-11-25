@@ -65,6 +65,8 @@ class Rosegold::Client < Rosegold::EventEmitter
   getter manual_control : ManualControl
   # Opt-in operator takeover of a running script.
   getter intervention : Intervention
+  # :nodoc:
+  getter inventory_dispatch = InventoryDispatch.new
 
   property \
     player : Player = Player.new,

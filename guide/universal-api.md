@@ -151,6 +151,28 @@ reset before an opening's content arrives fails the opening, so the helper never
 claims a menu the controller opens, even after control returns; its cleanup
 closes only its own menu, and only while no controller owns input.
 
+A manual control host can call `menu.send_click_if!(slot, operation, session)`
+with the active menu and the `client.play_session?` it captured for the input.
+Check the control grant and the revision shown to the player in the guard block,
+which can run twice for one click. It refuses at once while another guarded
+menu write or an ordinary `send_click` is still in progress. Otherwise it waits
+for the writer and refuses the click if its session, menu or inventory has
+changed, including an ordinary click that started predicting in the meantime,
+even one that raised. After a successful write, it applies each predicted slot
+and cursor change that the server has not already superseded.
+
+An ordinary click predicts as soon as it is called, then runs `send_packet!`
+without holding a lock. It waits only if a guarded write is already being
+written, and then predicts from the committed state. A click that waited
+raises `NotConnected` unless the PLAY session it was called in is still
+current, so a click called outside PLAY never reaches a later session. If its open menu was closed or
+replaced, it returns `nil` without predicting or writing.
+`container.close_if!(session)` takes the same kind of guard and reports whether
+it wrote a close, even if a replacement menu opened during the write. `close`
+still returns `nil`. A `false` result means nothing was written. A `true` result
+means the write completed, so wait for server updates rather than treating it
+as acknowledgment. A write error can leave delivery unknown; don't retry it.
+
 `experience_level`, `experience_progress`, and `total_experience` expose the
 player's server-reported experience. Movement and interaction methods still use
 vanilla physics, reach, collision, and occlusion. Native attack, dig, and use
