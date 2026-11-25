@@ -1722,6 +1722,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/InventoryDispatch" data-name="rosegold::inventorydispatch">
+      <a href="../Rosegold/InventoryDispatch.html">InventoryDispatch</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ItemConstants" data-name="rosegold::itemconstants">
       <a href="../Rosegold/ItemConstants.html">ItemConstants</a>
       
@@ -2702,7 +2707,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L29" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L29" target="_blank">
         rosegold/packets/connection.cr
       </a>
     
@@ -2873,7 +2878,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#send_packet%28build%3A-%3EBytes%2Cwritten%3A-%3ENil%2Cready%3A-%3EBool%29%3ABool-instance-method" class="signature"><strong>#send_packet</strong>(build :  -> Bytes, written :  -> Nil, ready :  -> Bool) : Bool</a>
+        <a href="#send_packet%28build%3A-%3EBytes%7C-%3EBytes%7CNil%2Cwritten%3A-%3ENil%2Cready%3A-%3EBool%2Csettled%3A-%3ENil%7CNil%3Dnil%29%3ABool-instance-method" class="signature"><strong>#send_packet</strong>(build :  -> Bytes |  -> Bytes | Nil, written :  -> Nil, ready :  -> Bool, settled :  -> Nil | Nil = <span class="n">nil</span>) : Bool</a>
         
           <div class="summary"><p>Builds the packet under the write lock so state captured by <code>build</code> cannot go stale behind another writer; <code>written</code> runs under the lock after the frame is written and is skipped if the write raises.</p></div>
         
@@ -2958,7 +2963,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2991,7 +2996,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L124" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L124" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3012,7 +3017,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L177" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L177" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3042,7 +3047,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3058,7 +3063,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3074,7 +3079,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L75" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L75" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3090,7 +3095,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3106,7 +3111,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3122,7 +3127,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L79" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L79" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3138,7 +3143,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3154,7 +3159,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L36" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3170,7 +3175,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3186,7 +3191,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L33" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3202,7 +3207,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3218,7 +3223,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L71" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L71" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3239,7 +3244,7 @@ Useless after disconnect; create a new instance to reconnect.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L199" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L199" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3261,7 +3266,7 @@ reconfiguration starts a new one, so writes queued earlier stay refused.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3277,7 +3282,7 @@ reconfiguration starts a new one, so writes queued earlier stay refused.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3293,7 +3298,7 @@ reconfiguration starts a new one, so writes queued earlier stay refused.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3309,7 +3314,7 @@ reconfiguration starts a new one, so writes queued earlier stay refused.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3325,7 +3330,7 @@ reconfiguration starts a new one, so writes queued earlier stay refused.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L92" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L92" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3341,17 +3346,17 @@ reconfiguration starts a new one, so writes queued earlier stay refused.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L96" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L96" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="send_packet(build:-&gt;Bytes,written:-&gt;Nil,ready:-&gt;Bool):Bool-instance-method">
+    <div class="entry-detail" id="send_packet(build:-&gt;Bytes|-&gt;Bytes|Nil,written:-&gt;Nil,ready:-&gt;Bool,settled:-&gt;Nil|Nil=nil):Bool-instance-method">
       <div class="signature">
         
-        def <strong>send_packet</strong>(build :  -> Bytes, written :  -> Nil, ready :  -> Bool) : Bool
+        def <strong>send_packet</strong>(build :  -> Bytes |  -> Bytes | Nil, written :  -> Nil, ready :  -> Bool, settled :  -> Nil | Nil = <span class="n">nil</span>) : Bool
 
-        <a class="method-permalink" href="#send_packet%28build%3A-%3EBytes%2Cwritten%3A-%3ENil%2Cready%3A-%3EBool%29%3ABool-instance-method">#</a>
+        <a class="method-permalink" href="#send_packet%28build%3A-%3EBytes%7C-%3EBytes%7CNil%2Cwritten%3A-%3ENil%2Cready%3A-%3EBool%2Csettled%3A-%3ENil%7CNil%3Dnil%29%3ABool-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -3361,14 +3366,15 @@ go stale behind another writer; <code>written</code> runs under the lock after t
 frame is written and is skipped if the write raises. An error from <code>build</code>
 or <code>written</code> propagates without closing the connection; a write failure
 closes it and raises, so delivery is unknown. <code>ready</code> is rechecked under the
-lock; when it declines, or <code>ready</code> or <code>build</code> leaves the connection closed
-or unusable, nothing is written and false is returned.</p>
+lock. Returns false if <code>ready</code> declines, <code>build</code> returns nil, or either
+callback leaves the connection closed or unusable. <code>settled</code> runs last
+under the lock, even if a callback or the write raised.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L231" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L232" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3384,7 +3390,7 @@ or unusable, nothing is written and false is returned.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L203" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L203" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3400,7 +3406,7 @@ or unusable, nothing is written and false is returned.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L194" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L194" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3425,7 +3431,7 @@ under the lock after a successful write.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L268" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L274" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3446,7 +3452,7 @@ under the lock after a successful write.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/packets/connection.cr#L300" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/packets/connection.cr#L306" target="_blank">View source</a>]
         
       </div>
     </div>

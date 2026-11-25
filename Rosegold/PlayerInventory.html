@@ -1722,6 +1722,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/InventoryDispatch" data-name="rosegold::inventorydispatch">
+      <a href="../Rosegold/InventoryDispatch.html">InventoryDispatch</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ItemConstants" data-name="rosegold::itemconstants">
       <a href="../Rosegold/ItemConstants.html">ItemConstants</a>
       
@@ -2700,7 +2705,7 @@ This inventory never changes structure (always 36 slots) and persists across con
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L6" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L6" target="_blank">
         rosegold/inventory/player_inventory.cr
       </a>
     
@@ -2789,6 +2794,18 @@ This inventory never changes structure (always 36 slots) and persists across con
       </li>
     
       <li class="entry-summary">
+        <a href="#authoritative_revision%28index%3AInt32%29%3AUInt64-instance-method" class="signature"><strong>#authoritative_revision</strong>(index : Int32) : UInt64</a>
+        
+          <div class="summary"><p>Counts server writes to <em>index</em> through any menu that shows it.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#authoritative_revision%3AUInt64-instance-method" class="signature"><strong>#authoritative_revision</strong> : UInt64</a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#count%28%26block%3ARosegold%3A%3ASlot-%3EBool%29%3AInt32-instance-method" class="signature"><strong>#count</strong>(&block : Rosegold::Slot -> Bool) : Int32</a>
         
           <div class="summary"><p>Count items matching predicate</p></div>
@@ -2827,6 +2844,11 @@ This inventory never changes structure (always 36 slots) and persists across con
         <a href="#main_inventory%3AArray%28Rosegold%3A%3ASlot%29-instance-method" class="signature"><strong>#main_inventory</strong> : Array(Rosegold::Slot)</a>
         
           <div class="summary"><p>Main inventory slots (indices 9-35) - matches vanilla Player.inventory.items</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#record_authoritative%28index%3AInt32%29%3ANil-instance-method" class="signature"><strong>#record_authoritative</strong>(index : Int32) : Nil</a>
         
       </li>
     
@@ -2911,7 +2933,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2948,7 +2970,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2969,7 +2991,44 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L53" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="authoritative_revision(index:Int32):UInt64-instance-method">
+      <div class="signature">
+        
+        def <strong>authoritative_revision</strong>(index : <a href="../Int32.html">Int32</a>) : UInt64
+
+        <a class="method-permalink" href="#authoritative_revision%28index%3AInt32%29%3AUInt64-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Counts server writes to <em>index</em> through any menu that shows it.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L23" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="authoritative_revision:UInt64-instance-method">
+      <div class="signature">
+        
+        def <strong>authoritative_revision</strong> : UInt64
+
+        <a class="method-permalink" href="#authoritative_revision%3AUInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -2990,7 +3049,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L80" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3011,7 +3070,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L72" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3032,7 +3091,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L72" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3053,7 +3112,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L30" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3074,7 +3133,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3095,7 +3154,23 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L38" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="record_authoritative(index:Int32):Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>record_authoritative</strong>(index : <a href="../Int32.html">Int32</a>) : Nil
+
+        <a class="method-permalink" href="#record_authoritative%28index%3AInt32%29%3ANil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3116,7 +3191,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3132,7 +3207,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L95" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3153,7 +3228,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L58" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3174,7 +3249,7 @@ This inventory never changes structure (always 36 slots) and persists across con
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/player_inventory.cr#L52" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/player_inventory.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>

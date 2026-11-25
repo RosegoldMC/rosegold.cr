@@ -1722,6 +1722,11 @@
       
     </li>
   
+  <li class=" " data-id="rosegold/Rosegold/InventoryDispatch" data-name="rosegold::inventorydispatch">
+      <a href="../Rosegold/InventoryDispatch.html">InventoryDispatch</a>
+      
+    </li>
+  
   <li class=" " data-id="rosegold/Rosegold/ItemConstants" data-name="rosegold::itemconstants">
       <a href="../Rosegold/ItemConstants.html">ItemConstants</a>
       
@@ -2731,7 +2736,7 @@ Subclasses only need to define named accessors and override behavior that differ
   </h2>
   
     
-      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L6" target="_blank">
+      <a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L6" target="_blank">
         rosegold/inventory/container_menu.cr
       </a>
     
@@ -2802,6 +2807,13 @@ Subclasses only need to define named accessors and override behavior that differ
         <a href="#close%28session%3AClient%3A%3APlaySession%7CNil%3Dnil%2C%26authorized%3A-%3EBool%29%3ANil-instance-method" class="signature"><strong>#close</strong>(session : Client::PlaySession | Nil = <span class="n">nil</span>, &authorized :  -> Bool) : Nil</a>
         
           <div class="summary"><p>Closes this menu only while it is still the open one in the PLAY session (<em>session</em>, default the current one) and <code>authorized</code> approves, rechecked under the write lock.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#close_if%21%28session%3AClient%3A%3APlaySession%2C%26authorized%3A-%3EBool%29%3ABool-instance-method" class="signature"><strong>#close_if!</strong>(session : Client::PlaySession, &authorized :  -> Bool) : Bool</a>
+        
+          <div class="summary"><p>Returns whether a close was written for this menu in <em>session</em>.</p></div>
         
       </li>
     
@@ -3139,6 +3151,11 @@ Subclasses only need to define named accessors and override behavior that differ
     send_click</a>, 
     
   
+    <a href="../Rosegold/Menu.html#send_click_if%21%28slot_index%3AInt32%2Coperation%3AClickOperation%2Csession%3AClient%3A%3APlaySession%2C%26authorized%3A-%3EBool%29%3ABool-instance-method" class="tooltip">
+      <span>send_click_if!(slot_index : Int32, operation : ClickOperation, session : Client::PlaySession, &authorized :  -> Bool) : Bool</span>
+    send_click_if!</a>, 
+    
+  
     <a href="../Rosegold/Menu.html#slots%3AArray%28Rosegold%3A%3AWindowSlot%29-instance-method" class="tooltip">
       <span>slots : Array(Rosegold::WindowSlot)</span>
     slots</a>, 
@@ -3259,7 +3276,7 @@ Subclasses only need to define named accessors and override behavior that differ
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3300,7 +3317,7 @@ Subclasses only need to define named accessors and override behavior that differ
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3316,7 +3333,7 @@ Subclasses only need to define named accessors and override behavior that differ
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L38" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3332,7 +3349,7 @@ Subclasses only need to define named accessors and override behavior that differ
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L81" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3348,7 +3365,7 @@ Subclasses only need to define named accessors and override behavior that differ
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L105" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3372,7 +3389,32 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L118" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="close_if!(session:Client::PlaySession,&amp;authorized:-&gt;Bool):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>close_if!</strong>(session : <a href="../Rosegold/Client/PlaySession.html">Client::PlaySession</a>, &authorized :  -> Bool) : Bool
+
+        <a class="method-permalink" href="#close_if%21%28session%3AClient%3A%3APlaySession%2C%26authorized%3A-%3EBool%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns whether a close was written for this menu in <em>session</em>. Checks
+that this menu is still open and <code>authorized</code> approves under the write
+lock. Refused at once while another guarded menu write or an ordinary
+click is in progress. Never retires a replacement menu. An IO failure
+disconnects and raises, and delivery may be unknown.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L132" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3388,7 +3430,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3404,7 +3446,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L61" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3420,7 +3462,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L85" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3436,7 +3478,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L122" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L149" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3452,7 +3494,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L57" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3468,7 +3510,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3484,7 +3526,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L65" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3500,7 +3542,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L77" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3525,7 +3567,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L73" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L73" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3541,7 +3583,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3566,7 +3608,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L53" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L53" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3591,7 +3633,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3616,7 +3658,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L89" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L89" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -3632,7 +3674,7 @@ sent close retires this menu before <code>ContainerClosed</code> listeners run.<
       <br/>
       <div>
         
-          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/b21c8f6317be130fe9646bcc4f5e15b9640785ef/src/rosegold/inventory/container_menu.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/RosegoldMC/rosegold.cr/blob/225f3ddee082412afa9f063d1bd8e22998294367/src/rosegold/inventory/container_menu.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
