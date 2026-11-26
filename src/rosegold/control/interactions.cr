@@ -365,6 +365,8 @@ class Rosegold::Interactions
     return if @digging_block
 
     @use_repeat_delay = HELD_USE_DELAY
+    return if hit.is_a?(ReachedBlock) && client.dimension.world_border.outside?(hit.block)
+
     if hand = request.hand
       route_use(hand, hit, revision, hand_tap: hand_tap)
     elsif route_use(:main_hand, hit, revision, hand_tap: hand_tap) && use_continues?(revision)

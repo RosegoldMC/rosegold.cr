@@ -4,6 +4,7 @@ class InteractionUseRoutingSpecClient < Rosegold::Client
   getter sent_packets = [] of Rosegold::Serverbound::Packet
   getter placement_states = [] of UInt16?
   getter placement_above_states = [] of UInt16?
+  property on_send : Proc(Rosegold::Serverbound::Packet, Nil)? = nil
 
   def connected?
     true
@@ -15,6 +16,7 @@ class InteractionUseRoutingSpecClient < Rosegold::Client
       placement_states << dimension.interaction_block_state(packet.location)
       placement_above_states << dimension.interaction_block_state(packet.location.up)
     end
+    on_send.try &.call(packet)
   end
 
   def use_input
@@ -490,6 +492,73 @@ Spectator.describe "Interaction use routing" do
     expect(placement.face).to eq(BlockFace::North)
     expect(placement.cursor).to eq(Rosegold::Vec3f.new(0.5, 0.5, 0.0))
     expect(swings).to be_empty
+  end
+
+  it "ends a press outside the border before placement, generic use, or the offhand" do
+    dimension.set_block_state(target, state("stone"))
+    adjacent = Rosegold::Vec3i.new(2, 0, 1)
+    air = state("air")
+    cobblestone = state("cobblestone")
+    hold("cobblestone")
+    hold("shield", off)
+    Rosegold::Clientbound::InitializeBorder.new(4.25, 2.0, 4.0, 4.0, 0_i64, 100, 5, 15).callback(bot_client)
+
+    tap(nil)
+    expect(dimension.interaction_block_state(adjacent)).to eq(air)
+
+    hold("apple")
+    player.food = 20
+    tap(nil)
+    expect(packets).to be_empty
+    expect(swings).to be_empty
+    expect(input.last_hand_tap_sequence).to eq(0)
+    expect(bot_client.pending_block_operations).to be_empty
+
+    Rosegold::Clientbound::SetBorderCenter.new(4.0, 2.0).callback(bot_client)
+    hold("cobblestone")
+    tap(nil)
+    expect(wire).to eq([{"on", main, 1}])
+    expect(placement.location).to eq(target)
+    expect(swings.map(&.hand)).to eq([main])
+    expect(dimension.interaction_block_state(adjacent)).to eq(cobblestone)
+    expect(dimension.block_state(adjacent)).to eq(air)
+  end
+
+  it "applies a border resize during the main-hand send only to the next press" do
+    dimension.set_block_state(target, state("stone"))
+    player.food = 20
+    hold("apple")
+    hold("apple", off)
+    Rosegold::Clientbound::SetBorderSize.new(8.0).callback(bot_client)
+    bot_client.on_send = ->(packet : Rosegold::Serverbound::Packet) do
+      if packet.is_a?(Rosegold::Serverbound::PlayerBlockPlacement) && packet.hand.main_hand?
+        Rosegold::Clientbound::SetBorderSize.new(4.0).callback(bot_client)
+      end
+    end
+
+    tap(nil)
+
+    expect(wire).to eq([{"on", main, 1}, {"use", main, 2}, {"on", off, 3}, {"use", off, 4}])
+    expect(dimension.world_border.outside?(target)).to be_true
+
+    packets.clear
+    tap(nil)
+
+    expect(wire).to be_empty
+  end
+
+  it "sends use for an inside clicked block even if the adjacent cell is outside" do
+    dimension.set_block_state(target, state("stone"))
+    hold("cobblestone")
+    Rosegold::Clientbound::SetBorderCenter.new(2.0, 4.0).callback(bot_client)
+    Rosegold::Clientbound::SetBorderSize.new(4.0).callback(bot_client)
+
+    expect(dimension.world_border.outside?(Rosegold::Vec3i.new(2, 0, 1))).to be_true
+    tap(nil)
+
+    expect(placement.location).to eq(target)
+    expect(placement.face).to eq(BlockFace::North)
+    expect(placement.sequence).to eq(1)
   end
 
   it "does not swing or use again when placement would intersect the player" do
